@@ -194,8 +194,13 @@ var
 // old save description before edit
   saveOldString: string;
 
+var
+  p_leftarrow: Ppatch_t;
+  p_rightarrow: Ppatch_t;
+
 const
-  ARROWXOFF = -8;
+  ARROWXOFFS = -8;
+  ARROWYOFFS = -1;
   BIGLINEHEIGHT = 16;
   SMALLLINEHEIGHT = 8;
 
@@ -3355,7 +3360,7 @@ begin
   end;
 
   if currentMenu.flags and FLG_MN_DRAWITEMON <> 0 then
-    M_WriteSmallWhiteText(x + ARROWXOFF, currentMenu.y + itemOn * currentMenu.itemheight, '-');
+    V_DrawPatch(x + ARROWXOFFS, currentMenu.y + itemOn * currentMenu.itemheight + ARROWYOFFS, SCN_TMP, p_rightarrow, false);
 
   M_FinishUpdate(200);
 end;
@@ -3543,6 +3548,10 @@ begin
   gammamsg[2] := GAMMALVL2;
   gammamsg[3] := GAMMALVL3;
   gammamsg[4] := GAMMALVL4;
+
+////////////////////////////////////////////////////////////////////////////////
+  p_leftarrow := W_CacheLumpName('LeftArrow', PU_STATIC);
+  p_rightarrow := W_CacheLumpName('RightArrow', PU_STATIC);
 
 ////////////////////////////////////////////////////////////////////////////////
 // MainMenu
