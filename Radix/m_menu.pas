@@ -387,7 +387,7 @@ type
     mm_loadgame,
     mm_savegame,
     mm_readthis,
-    mm_quitdoom,
+    mm_quitradix,
     main_end
   );
 
@@ -776,8 +776,10 @@ type
   soundvol_e = (
     sfx_vol,
     sfx_empty1,
-    music_vol,
     sfx_empty2,
+    music_vol,
+    sfx_empty3,
+    sfx_empty4,
     soundvol_end
   );
 
@@ -1151,7 +1153,9 @@ procedure M_DrawLoad;
 var
   i: integer;
 begin
-  M_WriteBigTextRedCenter(LoadDef.y - 26, 'Load Game');
+  V_DrawPatch(0, 0, SCN_TMP, 'SaveLoadScreen', false);
+  M_WriteSmallText(270, 96, 'LOAD');
+
   for i := 0 to Ord(load_end) - 1 do
   begin
     M_DrawSaveLoadBorder(LoadDef.x, LoadDef.y + LoadDef.itemheight * i);
@@ -1193,7 +1197,9 @@ procedure M_DrawSave;
 var
   i: integer;
 begin
-  M_WriteBigTextRedCenter(LoadDef.y - 26, 'Save Game');
+  V_DrawPatch(0, 0, SCN_TMP, 'SaveLoadScreen', false);
+  M_WriteSmallText(270, 96, 'SAVE');
+
   for i := 0 to Ord(load_end) - 1 do
   begin
     M_DrawSaveLoadBorder(LoadDef.x, LoadDef.y + LoadDef.itemheight * i);
@@ -1914,7 +1920,7 @@ begin
   Z_ChangeTag(p, PU_CACHE);
 
   y := DEF_MENU_ITEMS_START_Y;
-  for i := Ord(mm_newgame) to Ord(mm_quitdoom) do
+  for i := Ord(mm_newgame) to Ord(mm_quitradix) do
   begin
     if itemOn = i then
       M_WriteBigTextOrangeCenter(y, MainMenu[i].name)
@@ -2444,7 +2450,7 @@ begin
 end;
 
 //
-// M_QuitDOOM
+// M_QuitRADIX
 //
 const
   quitsounds: array[0..7] of integer = (
@@ -2474,14 +2480,9 @@ begin
   M_CmdQuit;
 end;
 
-procedure M_QuitDOOM(choice: integer);
+procedure M_QuitRADIX(choice: integer);
 begin
-  // We pick index 0 which is language sensitive,
-  //  or one at random, between 1 and maximum number.
-  if language <> english then
-    sprintf(endstring, '%s'#13#10#13#10 + DOSY, [endmsg[0]])
-  else
-    sprintf(endstring,'%s'#13#10#13#10 + DOSY, [endmsg[(gametic mod (NUM_QUITMESSAGES - 2)) + 1]]);
+  sprintf(endstring, '%s'#13#10#13#10 + DOSY, [QUITMSG]);
 
   M_StartMessage(endstring, @M_QuitResponse, true);
 end;
@@ -2944,7 +2945,7 @@ begin
       KEY_F10:  // Quit DOOM
         begin
           M_SwtchnSound;
-          M_QuitDOOM(0);
+          M_QuitRADIX(0);
           result := true;
           exit;
         end;
@@ -3600,7 +3601,7 @@ begin
   pmi.status := 1;
   pmi.name := 'Quit';
   pmi.cmd := '';
-  pmi.routine := @M_QuitDOOM;
+  pmi.routine := @M_QuitRADIX;
   pmi.pBoolVal := nil;
   pmi.alphaKey := 'q';
 
@@ -4919,7 +4920,7 @@ begin
 //SoundVolMenu
   pmi := @SoundVolMenu[0];
   pmi.status := 2;
-  pmi.name := 'Sound FX Volume';
+  pmi.name := '!Sound FX Volume';
   pmi.cmd := '';
   pmi.routine := @M_SfxVol;
   pmi.pBoolVal := nil;
@@ -4934,12 +4935,28 @@ begin
   pmi.alphaKey := #0;
 
   inc(pmi);
+  pmi.status := -1;
+  pmi.name := '';
+  pmi.cmd := '';
+  pmi.routine := nil;
+  pmi.pBoolVal := nil;
+  pmi.alphaKey := #0;
+
+  inc(pmi);
   pmi.status := 2;
-  pmi.name := 'Music Volume';
+  pmi.name := '!Music Volume';
   pmi.cmd := '';
   pmi.routine := @M_MusicVol;
   pmi.pBoolVal := nil;
   pmi.alphaKey := 'm';
+
+  inc(pmi);
+  pmi.status := -1;
+  pmi.name := '';
+  pmi.cmd := '';
+  pmi.routine := nil;
+  pmi.pBoolVal := nil;
+  pmi.alphaKey := #0;
 
   inc(pmi);
   pmi.status := -1;
@@ -4958,8 +4975,8 @@ begin
   SoundVolDef.x := DEF_MENU_ITEMS_START_X;
   SoundVolDef.y := DEF_MENU_ITEMS_START_Y;
   SoundVolDef.lastOn := 0; // last item user was on in menu
-  SoundVolDef.itemheight := BIGLINEHEIGHT;
-  SoundVolDef.flags := FLG_MN_TEXTUREBK;
+  SoundVolDef.itemheight := SMALLLINEHEIGHT;
+  SoundVolDef.flags := FLG_MN_TEXTUREBK or FLG_MN_DRAWITEMON;
 
 ////////////////////////////////////////////////////////////////////////////////
 //CompatibilityMenu

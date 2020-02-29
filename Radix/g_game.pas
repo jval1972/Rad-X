@@ -1837,9 +1837,9 @@ begin
       exit;
     end;
   end;
-  
-  if strupper(Copy(name, length(name) - 3, 4)) <> '.DSG' then
-    result := name + '.DSG'
+
+  if strupper(Copy(name, length(name) - 3, 4)) <> '.dsg' then
+    result := name + '.dsg'
   else
     result := name;
 end;

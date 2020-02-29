@@ -2547,18 +2547,8 @@ begin
   end;
 
   DEH_AddString(@deh_strings, @QUITMSG, 'QUITMSG');
-  for i := 0 to 9 do
-  begin
-    DEH_AddString(@deh_strings, @endmsg[i], 'ENDMSG' + itoa(i));
-    DEH_AddString(@deh_strings, @endmsg[i], 'ENDMSG' + IntToStrZFill(2, i));
-  end;
 
   DEH_AddString(@deh_strings, @S_ERR_DIF_NET, 'S_ERR_DIF_NET');
-
-  for i := 10 to NUM_QUITMESSAGES do
-  begin
-    DEH_AddString(@deh_strings, @endmsg[i], 'ENDMSG' + itoa(i));
-  end;
 
   for i := 0 to NUM_STARTUPMESSAGES - 1 do
   begin
