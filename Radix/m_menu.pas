@@ -199,10 +199,8 @@ var
   saveOldString: string;
 
 const
-  SKULLXOFF = -32;
-  SKULLYOFF = -5;
   ARROWXOFF = -8;
-  LINEHEIGHT = 16;
+  BIGLINEHEIGHT = 16;
   SMALLLINEHEIGHT = 8;
 
 
@@ -3636,7 +3634,7 @@ begin
   MainDef.x := DEF_MENU_ITEMS_START_X;
   MainDef.y := DEF_MENU_ITEMS_START_Y;
   MainDef.lastOn := 0;
-  MainDef.itemheight := LINEHEIGHT;
+  MainDef.itemheight := BIGLINEHEIGHT;
   MainDef.flags := 0;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3674,7 +3672,7 @@ begin
   EpiDef.x := DEF_MENU_ITEMS_START_X;
   EpiDef.y := DEF_MENU_ITEMS_START_Y;
   EpiDef.lastOn := Ord(ep1); // last item user was on in menu
-  EpiDef.itemheight := LINEHEIGHT;
+  EpiDef.itemheight := BIGLINEHEIGHT;
   EpiDef.flags := 0;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3720,7 +3718,7 @@ begin
   NewDef.x := DEF_MENU_ITEMS_START_X;
   NewDef.y := DEF_MENU_ITEMS_START_Y;
   NewDef.lastOn := Ord(newg_hurtme); // last item user was on in menu
-  NewDef.itemheight := LINEHEIGHT;
+  NewDef.itemheight := BIGLINEHEIGHT;
   NewDef.flags := 0;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3782,7 +3780,7 @@ begin
   OptionsDef.x := DEF_MENU_ITEMS_START_X;
   OptionsDef.y := DEF_MENU_ITEMS_START_Y;
   OptionsDef.lastOn := 0; // last item user was on in menu
-  OptionsDef.itemheight := LINEHEIGHT;
+  OptionsDef.itemheight := BIGLINEHEIGHT;
   OptionsDef.flags := FLG_MN_TEXTUREBK;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3846,7 +3844,7 @@ begin
   OptionsGeneralDef.x := DEF_MENU_ITEMS_START_X;
   OptionsGeneralDef.y := DEF_MENU_ITEMS_START_Y;
   OptionsGeneralDef.lastOn := 0; // last item user was on in menu
-  OptionsGeneralDef.itemheight := LINEHEIGHT;
+  OptionsGeneralDef.itemheight := BIGLINEHEIGHT;
   OptionsGeneralDef.flags := FLG_MN_TEXTUREBK;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3910,7 +3908,7 @@ begin
   OptionsDisplayDef.x := DEF_MENU_ITEMS_START_X;
   OptionsDisplayDef.y := DEF_MENU_ITEMS_START_Y;
   OptionsDisplayDef.lastOn := 0; // last item user was on in menu
-  OptionsDisplayDef.itemheight := LINEHEIGHT;
+  OptionsDisplayDef.itemheight := BIGLINEHEIGHT;
   OptionsDisplayDef.flags := FLG_MN_TEXTUREBK;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -4834,7 +4832,7 @@ begin
   ReadDef1.x := 330;
   ReadDef1.y := 165; // x,y of menu
   ReadDef1.lastOn := 0; // last item user was on in menu
-  ReadDef1.itemheight := LINEHEIGHT;
+  ReadDef1.itemheight := BIGLINEHEIGHT;
   ReadDef1.flags := 0;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -4856,7 +4854,7 @@ begin
   ReadDef2.x := 330;
   ReadDef2.y := 165; // x,y of menu
   ReadDef2.lastOn := 0; // last item user was on in menu
-  ReadDef2.itemheight := LINEHEIGHT;
+  ReadDef2.itemheight := BIGLINEHEIGHT;
   ReadDef2.flags := 0;
 
 // JVAL 20200122 - Extended help screens
@@ -4879,7 +4877,7 @@ begin
   ReadDefExt.x := 330;
   ReadDefExt.y := 165; // x,y of menu
   ReadDefExt.lastOn := 0; // last item user was on in menu
-  ReadDefExt.itemheight := LINEHEIGHT;
+  ReadDefExt.itemheight := BIGLINEHEIGHT;
   ReadDefExt.flags := 0;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -4981,7 +4979,7 @@ begin
   SoundVolDef.x := DEF_MENU_ITEMS_START_X;
   SoundVolDef.y := DEF_MENU_ITEMS_START_Y;
   SoundVolDef.lastOn := 0; // last item user was on in menu
-  SoundVolDef.itemheight := LINEHEIGHT;
+  SoundVolDef.itemheight := BIGLINEHEIGHT;
   SoundVolDef.flags := FLG_MN_TEXTUREBK;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -5366,7 +5364,7 @@ begin
   LoadDef.x := 80;
   LoadDef.y := 34; // x,y of menu
   LoadDef.lastOn := 0; // last item user was on in menu
-  LoadDef.itemheight := LINEHEIGHT;
+  LoadDef.itemheight := BIGLINEHEIGHT;
   LoadDef.flags := 0;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -5392,7 +5390,7 @@ begin
   SaveDef.x := 80;
   SaveDef.y := 34; // x,y of menu
   SaveDef.lastOn := 0; // last item user was on in menu
-  SaveDef.itemheight := LINEHEIGHT;
+  SaveDef.itemheight := BIGLINEHEIGHT;
   SaveDef.flags := 0;
 
 ////////////////////////////////////////////////////////////////////////////////
