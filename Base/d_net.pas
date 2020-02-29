@@ -886,7 +886,6 @@ begin
 	      {$IFNDEF HEXEN}
         E_Ticker;
         {$ENDIF}
-        M_Ticker;
         exit;
       end;
 
@@ -939,7 +938,6 @@ begin
       {$IFNDEF HEXEN}
       E_Ticker;
       {$ENDIF}
-      M_Ticker;
       C_Ticker;
       interpolationstarttime := I_GetTime * $10000; // I_GetFracTime;
       G_Ticker;
@@ -982,7 +980,6 @@ begin
   {$IFNDEF HEXEN}
   E_Ticker;
   {$ENDIF}
-  M_Ticker;
   C_Ticker;
   G_Ticker;
   inc(gametic);

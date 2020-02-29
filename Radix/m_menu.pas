@@ -50,10 +50,6 @@ uses
 function M_Responder(ev: Pevent_t): boolean;
 
 { Called by main loop, }
-{ only used for menu (skull cursor) animation. }
-procedure M_Ticker;
-
-{ Called by main loop, }
 { draws the menus directly into the screen buffer. }
 procedure M_Drawer;
 
@@ -251,13 +247,7 @@ type
   end;
 
 var
-  itemOn: smallint;             // menu item skull is on
-  skullAnimCounter: smallint;   // skull animation counter
-  whichSkull: smallint;         // which skull to draw
-
-// graphic name of skulls
-// warning: initializer-string for array of chars is too long
-  skullName: array[0..1] of string;
+  itemOn: smallint;             // selected menu item 
 
 // current menudef
   currentMenu: Pmenu_t;
@@ -3370,19 +3360,6 @@ begin
   M_FinishUpdate(200);
 end;
 
-//
-// M_Ticker
-//
-procedure M_Ticker;
-begin
-  dec(skullAnimCounter);
-  if skullAnimCounter <= 0 then
-  begin
-    whichSkull := whichSkull xor 1;
-    skullAnimCounter := 8;
-  end;
-end;
-
 procedure M_CmdSetupNextMenu(menudef: Pmenu_t);
 begin
   menuactive := true;
@@ -3490,8 +3467,6 @@ begin
   currentMenu := @MainDef;
   menuactive := false;
   itemOn := currentMenu.lastOn;
-  whichSkull := 0;
-  skullAnimCounter := 10;
   m_screensize := screenblocks - 4;
   messageToPrint := 0;
   messageString := '';
@@ -3568,11 +3543,6 @@ begin
   gammamsg[2] := GAMMALVL2;
   gammamsg[3] := GAMMALVL3;
   gammamsg[4] := GAMMALVL4;
-
-////////////////////////////////////////////////////////////////////////////////
-//skullName
-  skullName[0] := 'M_SKULL1';
-  skullName[1] := 'M_SKULL2';
 
 ////////////////////////////////////////////////////////////////////////////////
 // MainMenu
