@@ -1559,6 +1559,17 @@ begin
   // MT_BATTLEDRONE3
   MakeRotatingSprite('DroneA', _MTRX_BATTLEDRONE3, 1, nil, 91, 50, false, false);
 
+  // MT_ROTATINGLIGHT
+  MakeOneSprite('RotatingLight2', _MTRX_ROTATINGLIGHT, nil, 10, 61, true, true, 'A');
+  MakeOneSprite('RotatingLight3', _MTRX_ROTATINGLIGHT, nil, 10, 61, true, true, 'B');
+  MakeOneSprite('RotatingLight4', _MTRX_ROTATINGLIGHT, nil, 10, 61, true, true, 'C');
+  MakeOneSprite('RotatingLight5', _MTRX_ROTATINGLIGHT, nil, 10, 61, true, true, 'D');
+  MakeOneSprite('RotatingLight6', _MTRX_ROTATINGLIGHT, nil, 10, 61, true, true, 'E');
+  MakeOneSprite('RotatingLight7', _MTRX_ROTATINGLIGHT, nil, 10, 61, true, true, 'F');
+  MakeOneSprite('RotatingLight8', _MTRX_ROTATINGLIGHT, nil, 10, 61, true, true, 'G');
+  MakeOneSprite('RotatingLight9', _MTRX_ROTATINGLIGHT, nil, 10, 61, true, true, 'H');
+  MakeOneSprite('RotatingLightBUST', _MTRX_ROTATINGLIGHT, nil, 10, 37, true, true, 'I');
+
   bmp := TRadixBitmap.Create;
 
   for j := 0 to numsprinfo - 1 do
