@@ -347,6 +347,13 @@ begin
     put := @put[1];
     PLongWord(put)^ := li.renderflags;
     put := @put[2];
+    // JVAL: 20200301 - Radix specific data
+    PInteger(put)^ := li.radixflags;
+    put := @put[2];
+    PInteger(put)^ := li.radixhitpoints;
+    put := @put[2];
+    PInteger(put)^ := li.radixtrigger;
+    put := @put[2];
     for j := 0 to 1 do
     begin
       if li.sidenum[j] = -1 then
@@ -433,80 +440,40 @@ begin
     sec.lightingdata := nil;
     sec.soundtarget := nil;
 
-    if savegameversion > VERSION115 then
-    begin
-      if savegameversion <= VERSION121 then
-      begin
-        sec.floor_xoffs := get[0] * FRACUNIT;
-        get := @get[1];
-        sec.floor_yoffs := get[0] * FRACUNIT;
-        get := @get[1];
-        sec.ceiling_xoffs := get[0] * FRACUNIT;
-        get := @get[1];
-        sec.ceiling_yoffs := get[0] * FRACUNIT;
-        get := @get[1];
-      end
-      else
-      begin
-        sec.floor_xoffs := PInteger(get)^;
-        get := @get[2];
-        sec.floor_yoffs := PInteger(get)^;
-        get := @get[2];
-        sec.ceiling_xoffs := PInteger(get)^;
-        get := @get[2];
-        sec.ceiling_yoffs := PInteger(get)^;
-        get := @get[2];
-        sec.renderflags := PLongWord(get)^;
-        get := @get[2];
-        sec.flags := PLongWord(get)^;
-        get := @get[2];
-      end
-    end
-    else
-    begin
-      sec.floor_xoffs := 0;
-      sec.floor_yoffs := 0;
-      sec.ceiling_xoffs := 0;
-      sec.ceiling_yoffs := 0;
-    end;
+    sec.floor_xoffs := PInteger(get)^;
+    get := @get[2];
+    sec.floor_yoffs := PInteger(get)^;
+    get := @get[2];
+    sec.ceiling_xoffs := PInteger(get)^;
+    get := @get[2];
+    sec.ceiling_yoffs := PInteger(get)^;
+    get := @get[2];
+    sec.renderflags := PLongWord(get)^;
+    get := @get[2];
+    sec.flags := PLongWord(get)^;
+    get := @get[2];
     // JVAL: 3d Floors
-    if savegameversion >= VERSION122 then
-    begin
-      sec.midsec := PInteger(get)^;
-      get := @get[2];
-      sec.midline := PInteger(get)^;
-      get := @get[2];
-    end
-    else
-    begin
-      sec.midsec := -1;
-      sec.midline := -1;
-    end;
+    sec.midsec := PInteger(get)^;
+    get := @get[2];
+    sec.midline := PInteger(get)^;
+    get := @get[2];
     // JVAL: sector gravity (VERSION 204)
-    if savegameversion >= VERSION204 then
-    begin
-      sec.gravity := PInteger(get)^;
-      get := @get[2];
-    end
-    else
-      sec.gravity := GRAVITY;
+    sec.gravity := PInteger(get)^;
+    get := @get[2];
 
     // JVAL: 20200221 - Texture angle
     sec.floorangle := PLongWord(get)^;
-      get := @get[2];
+    get := @get[2];
     sec.ceilingangle := PLongWord(get)^;
-      get := @get[2];
+    get := @get[2];
 
-    if savegameversion >= VERSION122 then
+    sec.num_saffectees := PInteger(get)^;
+    get := @get[2];
+    Z_Realloc(sec.saffectees, sec.num_saffectees * SizeOf(integer), PU_LEVEL, nil);
+    for j := 0 to sec.num_saffectees - 1 do
     begin
-      sec.num_saffectees := PInteger(get)^;
+      sec.saffectees[j] := PInteger(get)^;
       get := @get[2];
-      Z_Realloc(sec.saffectees, sec.num_saffectees * SizeOf(integer), PU_LEVEL, nil);
-      for j := 0 to sec.num_saffectees - 1 do
-      begin
-        sec.saffectees[j] := PInteger(get)^;
-        get := @get[2];
-      end;
     end;
 
     sec.touching_thinglist := nil;
@@ -525,52 +492,41 @@ begin
     get := @get[1];
     li.tag := get[0];
     get := @get[1];
-    if savegameversion >= VERSION122 then
-    begin
-      li.renderflags := PLongWord(get)^;
-      get := @get[2];
-    end;
+    li.renderflags := PLongWord(get)^;
+    get := @get[2];
+    // JVAL: 20200301 - Radix specific data
+    li.radixflags := PInteger(get)^;
+    get := @get[2];
+    li.radixhitpoints := PInteger(get)^;
+    get := @get[2];
+    li.radixtrigger := PInteger(get)^;
+    get := @get[2];
+
     for j := 0 to 1 do
     begin
       if li.sidenum[j] = -1 then
         continue;
       si := @sides[li.sidenum[j]];
 
-      if savegameversion <= VERSION121 then
-      begin
-        si.textureoffset := get[0] * FRACUNIT;
-        get := @get[1];
-        si.rowoffset := get[0] * FRACUNIT;
-        get := @get[1];
-        si.toptexture := get[0];
-        get := @get[1];
-        si.bottomtexture := get[0];
-        get := @get[1];
-        si.midtexture := get[0];
-        get := @get[1];
-      end
-      else
-      begin
-        si.textureoffset := PInteger(get)^;
-        get := @get[2];
-        si.rowoffset := PInteger(get)^;
-        get := @get[2];
+      si.textureoffset := PInteger(get)^;
+      get := @get[2];
+      si.rowoffset := PInteger(get)^;
+      get := @get[2];
 
-        si.toptexture := R_SafeTextureNumForName(Pchar8_t(get)^);
-        if si.toptexture = 0 then
-          si.toptexture := -1 - R_CustomColorMapForName(Pchar8_t(get)^);
-        get := @get[SizeOf(char8_t) div SizeOf(SmallInt)];
+      si.toptexture := R_SafeTextureNumForName(Pchar8_t(get)^);
+      if si.toptexture = 0 then
+        si.toptexture := -1 - R_CustomColorMapForName(Pchar8_t(get)^);
+      get := @get[SizeOf(char8_t) div SizeOf(SmallInt)];
 
-        si.bottomtexture := R_SafeTextureNumForName(Pchar8_t(get)^);
-        if si.bottomtexture = 0 then
-          si.bottomtexture := -1 - R_CustomColorMapForName(Pchar8_t(get)^);
-        get := @get[SizeOf(char8_t) div SizeOf(SmallInt)];
+      si.bottomtexture := R_SafeTextureNumForName(Pchar8_t(get)^);
+      if si.bottomtexture = 0 then
+        si.bottomtexture := -1 - R_CustomColorMapForName(Pchar8_t(get)^);
+      get := @get[SizeOf(char8_t) div SizeOf(SmallInt)];
 
-        si.midtexture := R_SafeTextureNumForName(Pchar8_t(get)^);
-        if si.midtexture = 0 then
-          si.midtexture := -1 - R_CustomColorMapForName(Pchar8_t(get)^);
-        get := @get[SizeOf(char8_t) div SizeOf(SmallInt)];
-      end;
+      si.midtexture := R_SafeTextureNumForName(Pchar8_t(get)^);
+      if si.midtexture = 0 then
+        si.midtexture := -1 - R_CustomColorMapForName(Pchar8_t(get)^);
+      get := @get[SizeOf(char8_t) div SizeOf(SmallInt)];
     end;
     inc(i);
   end;

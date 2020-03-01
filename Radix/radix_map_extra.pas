@@ -138,6 +138,7 @@ var
   token: string;
   token_idx: integer;
   cursector: integer;
+  curline: integer;
   a, b, c, d: integer;
   ang: LongWord;
 begin
@@ -159,9 +160,14 @@ begin
   tokens.Add('HEIGHTNODESY'); // 14
   tokens.Add('FLOORHEIGHTS'); // 15
   tokens.Add('CEILINGHEIGHTS'); // 16
+  tokens.Add('WALLID'); // 17
+  tokens.Add('WALLFLAGS'); // 18
+  tokens.Add('WALLHITPOINTS'); // 19
+  tokens.Add('WALLTRIGGER'); // 20
 
 
   cursector := 0;
+  curline := 0;
   sc := TScriptEngine.Create(W_TextLumpNum(lumpnum));
   while sc.GetString do
   begin
@@ -317,6 +323,26 @@ begin
           sc.MustGetInteger;
           sectors[cursector].radixceilingheights[2] := sc._Integer;
           RX_CalcCeilingSlope(@sectors[cursector]);
+        end;
+     17:  // wallid
+        begin
+          sc.MustGetInteger;
+          curline := sc._Integer;
+        end;
+     18:  // wallflags
+        begin
+          sc.MustGetInteger;
+          lines[curline].radixflags := sc._Integer;
+        end;
+     19:  // wallhitpoints
+        begin
+          sc.MustGetInteger;
+          lines[curline].radixhitpoints := sc._Integer;
+        end;
+     20:  // walltrigger
+        begin
+          sc.MustGetInteger;
+          lines[curline].radixtrigger := sc._Integer;
         end;
     end;  // case
   end;

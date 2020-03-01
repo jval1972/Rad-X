@@ -664,7 +664,7 @@ var
           else
             midtex := stringtochar8('-');
         end;
-        s2 := AddSidedefToWAD(0, 0, toptex, bottomtex, midtex, w.backsector);
+        s2 := AddSidedefToWAD(w.bitmapoffset, 0, toptex, bottomtex, midtex, w.backsector);
         news2 := s2 = numdoomsidedefs - 1;
       end;
     end
@@ -678,7 +678,6 @@ var
     // Add Doom lidedef
     realloc(pointer(doomlinedefs), numdoomlinedefs * SizeOf(maplinedef_t), (numdoomlinedefs  + 1) * SizeOf(maplinedef_t));
     dline := @doomlinedefs[numdoomlinedefs];
-    inc(numdoomlinedefs);
 
     if s1 < 0 then
     begin
@@ -729,6 +728,15 @@ var
           dline.sidenum[0] := AddSidedefToWAD(0, 0, stringtochar8('-'), stringtochar8('-'), doomsidedefs[dline.sidenum[0]].toptexture, doomsidedefs[dline.sidenum[0]].sector);
       end;
     end;
+
+    // Create extra data stored in MAP header
+    doommapscript.Add('wallid ' + itoa(numdoomlinedefs));
+    doommapscript.Add('wallflags ' + itoa(w.flags and not RWF_STUBWALL));
+    doommapscript.Add('wallhitpoints ' + itoa(w.hitpoints));
+    doommapscript.Add('walltrigger ' + itoa(w.trigger));
+    doommapscript.Add('');
+
+    inc(numdoomlinedefs);
   end;
 
   function fix_level_v10: boolean;

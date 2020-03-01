@@ -39,8 +39,15 @@ uses
 
 var
   radixgrid: radixgrid_t;
+  radixsprites: Pradixsprite_tArray;
+  numradixsprites: integer;
+  radixtriggers: Pradixtrigger_tArray;
+  numradixtriggers: integer;
 
-procedure RX_SetGridSize(const x, y: integer);
+//
+// JVAL: 20200203 -  Initialize Radix Trigger Grid
+//
+procedure RX_InitRadixGrid(const x, y: integer);
 
 implementation
 
@@ -52,7 +59,7 @@ var
   grid_X_size: integer;
   grid_Y_size: integer;
 
-procedure RX_SetGridSize(const x, y: integer);
+procedure RX_InitRadixGrid(const x, y: integer);
 var
   sz: integer;
 begin

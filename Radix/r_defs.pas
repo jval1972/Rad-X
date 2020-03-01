@@ -318,6 +318,10 @@ type
 
     clslopestep: array[0..1] of float; // JVAL: Slopes
     flslopestep: array[0..1] of float; // JVAL: Slopes
+
+    radixflags: integer; // JVAL: 20200301 - Radix flags
+    radixhitpoints: integer;  // JVAL: 20200301 - Radix hitpoints
+    radixtrigger: integer // JVAL: 20200301 - Radix trigger
   end;
   PPline_t = ^Pline_t;
   line_tArray = packed array[0..$FFFF] of line_t;
