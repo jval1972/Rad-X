@@ -234,6 +234,8 @@ type
     load6,
     load7,
     load8,
+    load9,
+    load10,
     load_end
   );
 
@@ -257,7 +259,7 @@ var
   dog_jumping, default_dog_jumping: integer;  // killough 10/98
 
 const
-  SAVESTRINGSIZE = 26;
+  SAVESTRINGSIZE = 23;
   
 implementation
 
@@ -1833,13 +1835,13 @@ begin
   begin
     if name = itoa(i) then
     begin
-      sprintf(result, SAVEGAMENAME + '%s.dsg', [name]);
+      sprintf(result, SAVEGAMENAME + '%s.sav', [name]);
       exit;
     end;
   end;
 
-  if strupper(Copy(name, length(name) - 3, 4)) <> '.dsg' then
-    result := name + '.dsg'
+  if strupper(Copy(name, length(name) - 3, 4)) <> '.SAV' then
+    result := name + '.sav'
   else
     result := name;
 end;
@@ -2131,7 +2133,7 @@ begin
     name := savename
   else
   begin
-    sprintf(name, M_SaveFileName(SAVEGAMENAME) + '%d.dsg', [savegameslot]);
+    sprintf(name, M_SaveFileName(SAVEGAMENAME) + '%d.sav', [savegameslot]);
   end;
 
   G_DoSaveGameInFile(name);

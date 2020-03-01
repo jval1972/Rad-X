@@ -2187,7 +2187,7 @@ begin
   p := M_CheckParm('-loadgame');
   if (p <> 0) and (p < myargc - 1) then
   begin
-    sprintf(filename, M_SaveFileName(SAVEGAMENAME) + '%s.dsg', [myargv[p + 1][1]]);
+    sprintf(filename, M_SaveFileName(SAVEGAMENAME) + '%s.sav', [myargv[p + 1][1]]);
     G_LoadGame(filename);
   end;
 

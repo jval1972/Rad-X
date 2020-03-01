@@ -202,11 +202,12 @@ const
   ARROWXOFFS = -8;
   ARROWYOFFS = -1;
   BIGLINEHEIGHT = 16;
+  SAVELOADLINEHEIGHT = 15;
   SMALLLINEHEIGHT = 8;
 
 
 var
-  savegamestrings: array[0..9] of string;
+  savegamestrings: array[0..Ord(load_end) - 1] of string;
   endstring: string;
 
 type
@@ -1123,7 +1124,7 @@ var
 begin
   for i := 0 to Ord(load_end) - 1 do
   begin
-    sprintf(name, M_SaveFileName(SAVEGAMENAME) + '%d.dsg', [i]);
+    sprintf(name, M_SaveFileName(SAVEGAMENAME) + '%d.sav', [i]);
 
     if not fopen(handle, name, fOpenReadOnly) then
     begin
@@ -1154,11 +1155,15 @@ var
   i: integer;
 begin
   V_DrawPatch(0, 0, SCN_TMP, 'SaveLoadScreen', false);
-  M_WriteSmallText(270, 95, 'LOAD');
+  M_WriteSmallText(270, 96, 'LOAD');
 
   for i := 0 to Ord(load_end) - 1 do
   begin
-    M_DrawSaveLoadBorder(LoadDef.x, LoadDef.y + LoadDef.itemheight * i);
+    if itemon = i then
+    begin
+      V_DrawPatch(LoadDef.x + ARROWXOFFS, LoadDef.y + i * LoadDef.itemheight + ARROWYOFFS, SCN_TMP, p_rightarrow, false);
+      V_DrawPatch(LoadDef.x + (1 + SAVESTRINGSIZE) * 5 + ARROWXOFFS, LoadDef.y + i * LoadDef.itemheight + ARROWYOFFS, SCN_TMP, p_leftarrow, false);
+    end;
     M_WriteSmallText(LoadDef.x, LoadDef.y + LoadDef.itemheight * i, savegamestrings[i]);
   end;
 end;
@@ -1170,7 +1175,7 @@ procedure M_LoadSelect(choice: integer);
 var
   name: string;
 begin
-  sprintf(name, M_SaveFileName(SAVEGAMENAME) + '%d.dsg', [choice]);
+  sprintf(name, M_SaveFileName(SAVEGAMENAME) + '%d.sav', [choice]);
   G_LoadGame(name);
   M_ClearMenus;
 end;
@@ -1198,20 +1203,25 @@ var
   i: integer;
 begin
   V_DrawPatch(0, 0, SCN_TMP, 'SaveLoadScreen', false);
-  M_WriteSmallText(270, 95, 'SAVE');
+  M_WriteSmallText(270, 96, 'SAVE');
 
   for i := 0 to Ord(load_end) - 1 do
   begin
-    M_DrawSaveLoadBorder(LoadDef.x, LoadDef.y + LoadDef.itemheight * i);
-    M_WriteSmallText(LoadDef.x, LoadDef.y + LoadDef.itemheight * i, savegamestrings[i]);
+    if itemon = i then
+    begin
+      V_DrawPatch(SaveDef.x + ARROWXOFFS, SaveDef.y + i * SaveDef.itemheight + ARROWYOFFS, SCN_TMP, p_rightarrow, false);
+      V_DrawPatch(SaveDef.x + (1 + SAVESTRINGSIZE) * 5 + ARROWXOFFS, SaveDef.y + i * SaveDef.itemheight + ARROWYOFFS, SCN_TMP, p_leftarrow, false);
+    end;
+    M_WriteSmallText(SaveDef.x, SaveDef.y + SaveDef.itemheight * i, savegamestrings[i]);
   end;
 
   if saveStringEnter <> 0 then
-  begin
-    i := M_SmallStringWidth(savegamestrings[saveSlot]);
-    if (gametic div 18) mod 2 = 0 then
-      M_WriteSmallText(LoadDef.x + i, LoadDef.y + LoadDef.itemheight * saveSlot, '_');
-  end;
+    if Length(savegamestrings[saveSlot]) < SAVESTRINGSIZE then
+    begin
+      i := M_SmallStringWidth(savegamestrings[saveSlot]);
+      if (gametic div 18) mod 2 = 0 then
+        M_WriteSmallText(LoadDef.x + i, LoadDef.y + LoadDef.itemheight * saveSlot, '_');
+    end;
 end;
 
 //
@@ -5357,10 +5367,10 @@ begin
   LoadDef.prevMenu := @MainDef; // previous menu
   LoadDef.menuitems := Pmenuitem_tArray(@LoadMenu);  // menu items
   LoadDef.drawproc := @M_DrawLoad;  // draw routine
-  LoadDef.x := 80;
-  LoadDef.y := 34; // x,y of menu
+  LoadDef.x := 26;
+  LoadDef.y := 10; // x,y of menu
   LoadDef.lastOn := 0; // last item user was on in menu
-  LoadDef.itemheight := BIGLINEHEIGHT;
+  LoadDef.itemheight := SAVELOADLINEHEIGHT;
   LoadDef.flags := 0;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -5383,10 +5393,10 @@ begin
   SaveDef.prevMenu := @MainDef; // previous menu
   SaveDef.menuitems := Pmenuitem_tArray(@SaveMenu);  // menu items
   SaveDef.drawproc := M_DrawSave;  // draw routine
-  SaveDef.x := 80;
-  SaveDef.y := 34; // x,y of menu
+  SaveDef.x := 26;
+  SaveDef.y := 10; // x,y of menu
   SaveDef.lastOn := 0; // last item user was on in menu
-  SaveDef.itemheight := BIGLINEHEIGHT;
+  SaveDef.itemheight := SAVELOADLINEHEIGHT;
   SaveDef.flags := 0;
 
 ////////////////////////////////////////////////////////////////////////////////

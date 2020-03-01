@@ -112,7 +112,7 @@ const
 
   // Savegame slot numbers
   //  occupy the second byte of buttons.
-  BTS_SAVEMASK = 4 + 8 + 16;
+  BTS_SAVEMASK = 4 + 8 + 16 + 32;
   BTS_SAVESHIFT = 2;
 
 {$IFDEF STRIFE}
