@@ -238,11 +238,10 @@ type
 
   radixtrigger_t = packed record
     _unknown1: byte; // always 1
-    enabled: byte;  // 0-> disabled/hiden, 1 -> enabled/shown
+    hidden: byte;  // 1-> hidden (on briefing ?)
     nameid: packed array[0..25] of char;
-    numsprites: smallint;
-    _unknown2: smallint; // Always 0
-    _unknown3: word; // 20200217
+    numsprites: integer;
+    _unknown2: word; // 20200217
     sprites: packed array[0..MAX_RADIX_TRIGGER_SPRITES - 1] of radixspritetrigger_t;
   end;
   Pradixtrigger_t = ^radixtrigger_t;
@@ -1294,7 +1293,7 @@ var
   begin
     if csvtriggers.Count = 0 then
     begin
-      stmp := 'id,unknown1,enabled,name,numsprites,unknown2,unknown3,';
+      stmp := 'id,unknown1,hidden,name,numsprites,unknown2,';
       for ii := 0 to 47 {MAX_RADIX_TRIGGER_SPRITES - 1} do
       begin
         stmp := stmp + 's_unk_1_' + itoa(ii) + ',';
@@ -1307,7 +1306,7 @@ var
     end;
 
     stmp := itoa(id) + ',' + itoa(tr._unknown1) + ',';
-    stmp := stmp + itoa(tr.enabled) + ',';
+    stmp := stmp + itoa(tr.hidden) + ',';
 
     for ii := 0 to 25 do
     begin
@@ -1319,8 +1318,7 @@ var
     stmp := stmp + ',';
 
     stmp := stmp + itoa(tr.numsprites) + ',';
-    stmp := stmp + itoa(tr._unknown2) + ',';
-    stmp := stmp + uitoa(tr._unknown3) + ',';
+    stmp := stmp + uitoa(tr._unknown2) + ',';
 
     for ii := 0 to 47 {MAX_RADIX_TRIGGER_SPRITES - 1} do
     begin
