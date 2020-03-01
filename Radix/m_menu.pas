@@ -1154,7 +1154,7 @@ var
   i: integer;
 begin
   V_DrawPatch(0, 0, SCN_TMP, 'SaveLoadScreen', false);
-  M_WriteSmallText(270, 96, 'LOAD');
+  M_WriteSmallText(270, 95, 'LOAD');
 
   for i := 0 to Ord(load_end) - 1 do
   begin
@@ -1198,7 +1198,7 @@ var
   i: integer;
 begin
   V_DrawPatch(0, 0, SCN_TMP, 'SaveLoadScreen', false);
-  M_WriteSmallText(270, 96, 'SAVE');
+  M_WriteSmallText(270, 95, 'SAVE');
 
   for i := 0 to Ord(load_end) - 1 do
   begin
