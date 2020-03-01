@@ -1223,7 +1223,7 @@ begin
   M_ClearMenus;
 
   // PICK QUICKSAVE SLOT YET?
-  if (quickSaveSlot = -2) then
+  if quickSaveSlot = -2 then
     quickSaveSlot := slot;
 end;
 

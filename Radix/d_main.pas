@@ -1319,16 +1319,12 @@ begin
   C_AddCmd('startthinkers', @D_StartThinkers);
   C_AddCmd('stopthinkers', @D_StopThinkers);
 
-  {$IFNDEF FPC}
   SUC_Progress(1);
-  {$ENDIF}
 
   printf('M_InitArgv: Initializing command line parameters.'#13#10);
   M_InitArgv;
 
-  {$IFNDEF FPC}
   SUC_Progress(2);
-  {$ENDIF}
 
   FindResponseFile;
 
@@ -1338,17 +1334,13 @@ begin
   printf('I_InitTempFiles: Initializing temporary file managment.'#13#10);
   I_InitTempFiles;
 
-  {$IFNDEF FPC}
   SUC_Progress(3);
-  {$ENDIF}
 
   D_AddSystemWAD; // Add system wad first
 
   D_AddRadixDAT; // Add RADIX.DAT
 
-  {$IFNDEF FPC}
   SUC_Progress(5);
-  {$ENDIF}
 
   IdentifyVersion;
 
@@ -1361,9 +1353,7 @@ begin
   hackshareware := M_CheckParm('-hackshareware') > 0;
   debugmode := M_CheckParm('-debugmode') > 0;
 
-  {$IFNDEF FPC}
   SUC_Progress(6);
-  {$ENDIF}
 
   if M_CheckParm('-altdeath') > 0 then
     deathmatch := 2
@@ -1426,9 +1416,7 @@ begin
     sidemove[1] := sidemove[1] * scale div 100;
   end;
 
-  {$IFNDEF FPC}
   SUC_Progress(7);
-  {$ENDIF}
 
   // add any files specified on the command line with -file wadfile
   // to the wad list
@@ -1451,45 +1439,33 @@ begin
     end;
   end;
 
-  {$IFNDEF FPC}
   SUC_Progress(8);
-  {$ENDIF}
 
   D_AddWADFiles('-file');
   for p := 1 to 9 do
     D_AddWADFiles('-file' + itoa(p));
   D_AddWADFiles('-lfile');  // JVAL launcher specific
 
-  {$IFNDEF FPC}
   SUC_Progress(9);
-  {$ENDIF}
 
   printf('PAK_InitFileSystem: Init PAK/ZIP/PK3/PK4 files.'#13#10);
   PAK_InitFileSystem;
 
-  {$IFNDEF FPC}
   SUC_Progress(10);
-  {$ENDIF}
 
   PAK_LoadPendingPaks;
 
-  {$IFNDEF FPC}
   SUC_Progress(11);
-  {$ENDIF}
 
   D_AddPAKFiles('-pakfile');
   for p := 1 to 9 do
     D_AddPAKFiles('-pakfile' + itoa(p));
 
-  {$IFNDEF FPC}
   SUC_Progress(15);
-  {$ENDIF}
 
   D_AddPAKFiles('-lpakfile'); // JVAL launcher specific
 
-  {$IFNDEF FPC}
   SUC_Progress(16);
-  {$ENDIF}
 
   p := M_CheckParm('-playdemo');
 
@@ -1545,9 +1521,7 @@ begin
   D_WadsAutoLoad(wads_autoload);
   D_PaksAutoload(paks_autoload);
 
-  {$IFNDEF FPC}
   SUC_Progress(20);
-  {$ENDIF}
 
   p := M_CheckParm('-fullscreen');
   if (p <> 0) and (p <= myargc - 1) then
@@ -1774,9 +1748,7 @@ begin
   p := M_CheckParm('-autoscreenshot');
   autoscreenshot := p > 0;
 
-  {$IFNDEF FPC}
   SUC_Progress(25);
-  {$ENDIF}
 
   nodrawers := M_CheckParm('-nodraw') <> 0;
   noblit := M_CheckParm('-noblit') <> 0;
@@ -1830,9 +1802,7 @@ begin
   printf('Z_Init: Init zone memory allocation daemon, allocation %d MB.'#13#10, [mb_used]);
   Z_Init;
 
-  {$IFNDEF FPC}
   SUC_Progress(30);
-  {$ENDIF}
 
   p := M_CheckParm('-nothinkers');
   if p = 0 then
@@ -1846,16 +1816,12 @@ begin
     Info_Init(false);
   end;
 
-  {$IFNDEF FPC}
   SUC_Progress(31);
-  {$ENDIF}
 
   printf('Info_InitStateOwners(): Initialize State Owners.'#13#10);
   Info_InitStateOwners;
 
-  {$IFNDEF FPC}
   SUC_Progress(32);
-  {$ENDIF}
 
   for p := 1 to myargc do
     if (strupper(fext(myargv[p])) = '.WAD') or (strupper(fext(myargv[p])) = '.OUT') then
@@ -1908,12 +1874,12 @@ begin
   printf('RX_InitRadixAlias: Initialize RADIX alias entries.'#13#10);
   RX_InitRadixAlias;
 
+  SUC_Progress(35);
+
   printf('W_AutoLoadPakFiles: Autoload required pak files.'#13#10);
   W_AutoLoadPakFiles;
 
-  {$IFNDEF FPC}
   SUC_Progress(40);
-  {$ENDIF}
 
   printf('DEH_Init: Initializing dehacked subsystem.'#13#10);
   DEH_Init;
@@ -1922,9 +1888,7 @@ begin
     if not DEH_ParseLumpName('GAMEDEF') then
       I_Warning('DEH_ParseLumpName(): GAMEDEF lump not found, using defaults.'#13#10);
 
-  {$IFNDEF FPC}
   SUC_Progress(41);
-  {$ENDIF}
 
   printf('SC_Init: Initializing script engine.'#13#10);
   SC_Init;
@@ -1932,16 +1896,12 @@ begin
   printf('PS_Init: Initializing pascal script compiler.'#13#10);
   PS_Init;
 
-  {$IFNDEF FPC}
   SUC_Progress(43);
-  {$ENDIF}
 
   printf('SC_ParseSndInfoLumps: Parsing SNDINFO lumps.'#13#10);
   SC_ParseSndInfoLumps;
 
-  {$IFNDEF FPC}
   SUC_Progress(44);
-  {$ENDIF}
 
   p := M_CheckParm('-noactordef');
   if p <= 0 then
@@ -1950,9 +1910,7 @@ begin
     SC_ParseActordefLumps;
   end;
 
-  {$IFNDEF FPC}
   SUC_Progress(45);
-  {$ENDIF}
 
   if M_CheckParm('-nowaddehacked') = 0 then
     if not DEH_ParseLumpName('DEHACKED') then
@@ -1965,31 +1923,23 @@ begin
   printf('Info_CheckStates: Check states tables'#13#10);
   Info_CheckStates;
 
-  {$IFNDEF FPC}
   SUC_Progress(50);
-  {$ENDIF}
 
   for i := 0 to NUM_STARTUPMESSAGES - 1 do
     if startmsg[i] <> '' then
       printf('%s'#13#10, [startmsg[i]]);
 
-  {$IFNDEF FPC}
   SUC_Progress(51);
-  {$ENDIF}
 
   printf('T_Init: Initializing texture manager.'#13#10);
   T_Init;
 
-  {$IFNDEF FPC}
   SUC_Progress(55);
-  {$ENDIF}
 
   printf('V_Init: allocate screens.'#13#10);
   V_Init;
 
-  {$IFNDEF FPC}
   SUC_Progress(56);
-  {$ENDIF}
 
   printf('AM_Init: initializing automap.'#13#10);
   AM_Init;
@@ -1997,9 +1947,7 @@ begin
   printf('MObj_Init: initializing mobj commands.'#13#10);
   MObj_Init;
 
-  {$IFNDEF FPC}
   SUC_Progress(57);
-  {$ENDIF}
 
   p := M_CheckParm('-autoexec');
   if (p <> 0) and (p < myargc - 1) then
@@ -2010,40 +1958,30 @@ begin
   printf('M_InitMenus: Initializing menus.'#13#10);
   M_InitMenus;
 
-  {$IFNDEF FPC}
   SUC_Progress(58);
-  {$ENDIF}
 
   if gamemode = indetermined then
   begin
     if W_CheckNumForName('e3m1') <> -1 then
     begin
       gamemode := registered;
-      {$IFNDEF FPC}
       SUC_SetGameMode('Registered Doom');
-      {$ENDIF}
     end
     else if W_CheckNumForName('e1m1') <> -1 then
     begin
       gamemode := shareware;
-      {$IFNDEF FPC}
       SUC_SetGameMode('Shareware Doom');
-      {$ENDIF}
     end
     else
       I_Error('Game mode indetermined'#13#10);
   end;
 
-  {$IFNDEF FPC}
   SUC_Progress(59);
-  {$ENDIF}
 
   printf('D_IdentifyGameDirectories: Identify game directories.'#13#10);
   D_IdentifyGameDirectories;
 
-  {$IFNDEF FPC}
   SUC_Progress(60);
-  {$ENDIF}
 
   p := M_CheckParm('-warp');
   if (p <> 0) and (p < myargc - 2) then
@@ -2053,9 +1991,7 @@ begin
     autostart := true;
   end;
 
-  {$IFNDEF FPC}
   SUC_Progress(61);
-  {$ENDIF}
 
   // Check for -file in shareware
   // JVAL
@@ -2099,9 +2035,7 @@ begin
     end;
   end;
 
-  {$IFNDEF FPC}
   SUC_Progress(65);
-  {$ENDIF}
 
   case gamemode of
     shareware,
@@ -2115,23 +2049,17 @@ begin
     end;
   end;
 
-  {$IFNDEF FPC}
   SUC_Progress(66);
-  {$ENDIF}
 
   printf('Info_InitRandom: Initializing randomizers.'#13#10);
   Info_InitRandom;
 
-  {$IFNDEF FPC}
   SUC_Progress(67);
-  {$ENDIF}
 
   printf('M_Init: Init miscellaneous info.'#13#10);
   M_Init;
 
-  {$IFNDEF FPC}
   SUC_Progress(68);
-  {$ENDIF}
 
   p := M_CheckParm('-mmx');
   if p > 0 then
@@ -2149,51 +2077,37 @@ begin
   printf('MT_Init: Initializing multithreading utilities.'#13#10);
   MT_Init;
 
-  {$IFNDEF FPC}
   SUC_Progress(69);
-  {$ENDIF}
 
   printf('R_Init: Init DOOM refresh daemon.'#13#10);
   R_Init;
 
-  {$IFNDEF FPC}
   SUC_Progress(80);
-  {$ENDIF}
 
   printf('P_Init: Init Playloop state.'#13#10);
   P_Init;
 
-  {$IFNDEF FPC}
   SUC_Progress(81);
-  {$ENDIF}
 
   printf('D_CheckNetGame: Checking network game status.'#13#10);
   D_CheckNetGame;
 
-  {$IFNDEF FPC}
   SUC_Progress(87);
-  {$ENDIF}
 
   printf('S_Init: Setting up sound.'#13#10);
   S_Init(snd_SfxVolume, snd_MusicVolume);
 
-  {$IFNDEF FPC}
   SUC_Progress(90);
-  {$ENDIF}
 
   printf('HU_Init: Setting up heads up display.'#13#10);
   HU_Init;
 
-  {$IFNDEF FPC}
   SUC_Progress(91);
-  {$ENDIF}
 
   printf('ST_Init: Init status bar.'#13#10);
   ST_Init;
 
-  {$IFNDEF FPC}
   SUC_Progress(92);
-  {$ENDIF}
 
   //    // check for a driver that wants intermission stats
   p := M_CheckParm('-statcopy');
@@ -2219,16 +2133,12 @@ begin
   I_InitGraphics;
 {$ENDIF}
 
-  {$IFNDEF FPC}
   SUC_Progress(95);
-  {$ENDIF}
 
   printf('I_Init: Setting up machine state.'#13#10);
   I_Init;
 
-  {$IFNDEF FPC}
   SUC_Progress(96);
-  {$ENDIF}
 
   printf('C_Init: Initializing console.'#13#10);
   C_Init;
@@ -2246,18 +2156,15 @@ begin
       M_SetKeyboardMode(2);
   end;
 
-  // JVAL: PascalScript
-  {$IFNDEF FPC}
   SUC_Progress(97);
-  {$ENDIF}
+
+  // JVAL: PascalScript
   printf('PS_CompileAllScripts: Compiling all scripts.'#13#10);
   PS_CompileAllScripts;
 
-  {$IFNDEF FPC}
   SUC_Progress(100);
 
   SUC_Close;
-  {$ENDIF}
 
   p := M_CheckParm('-playdemo');
   if (p <> 0) and (p < myargc - 1) then
