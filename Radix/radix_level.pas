@@ -337,6 +337,8 @@ var
   rsectors: Pradixsector_tArray;
   rwalls: Pradixwall_tArray;
   rthings: Pradixthing_tArray;
+  rsprites: Pradixsprite_tArray;
+  rtriggers: Pradixtrigger_tArray;
   doomthings: Pmapthing_tArray;
   numdoomthings: integer;
   doomlinedefs: Pmaplinedef_tArray;
@@ -348,7 +350,7 @@ var
   doomsectors: Pmapsector_tArray;
   numdoomsectors: integer;
   doommapscript: TDStringList;
-  i: integer;
+  i, j: integer;
   minx, maxx, miny, maxy: integer;
   sectormapped: PBooleanArray;
   tmpwall: radixwall_t;
@@ -1027,6 +1029,26 @@ begin
   rthings := malloc(header.numthings * SizeOf(radixthing_t));
   ms.Read(rthings^, header.numthings * SizeOf(radixthing_t));
 
+  // Read Trigger's grid
+  ReadRadixGrid;
+
+  // Read Radix sprites
+  rsprites := mallocz(header.numsprites * SizeOf(radixsprite_t)); // SOS -> use mallocz
+  for i := 0 to header.numsprites - 1 do
+  begin
+    ms.Read(rsprites[i], 40); // Read the first 40 bytes
+    ms.Read(rsprites[i].params, rsprites[i].extradata);
+  end;
+
+  // Read Radix triggers
+  rtriggers := mallocz(header.numtriggers * SizeOf(radixtrigger_t)); // SOS -> use mallocz
+  for i := 0 to header.numtriggers - 1 do
+  begin
+    ms.Read(rtriggers[i], 34); // Read the first 34 bytes
+    for j := 0 to rtriggers[i].numsprites - 1 do
+      ms.Read(rtriggers[i].sprites[j], SizeOf(radixspritetrigger_t));
+  end;
+
   // Read Radix player starts
   ms.Seek(header.playerstartoffsets, sFromBeginning);
   ms.Read(rplayerstarts, SizeOf(rplayerstarts));
@@ -1140,6 +1162,8 @@ begin
   memfree(pointer(rsectors), header.numsectors * SizeOf(radixsector_t));
   memfree(pointer(rwalls), header.numwalls * SizeOf(radixwall_t));
   memfree(pointer(rthings), header.numthings * SizeOf(radixthing_t));
+  memfree(pointer(rsprites), header.numsprites * SizeOf(radixsprite_t));
+  memfree(pointer(rtriggers), header.numtriggers * SizeOf(radixtrigger_t));
 
   // Free Doom data
   memfree(pointer(doomthings), numdoomthings * SizeOf(mapthing_t));
