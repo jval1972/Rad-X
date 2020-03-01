@@ -1556,6 +1556,8 @@ begin
   // MT_MISSILEBOAT2
   MakeRotatingSprite('DroneC', _MTRX_MISSILEBOAT2, 1, nil, 83, 68, false, false);
 
+  // MT_BATTLEDRONE3
+  MakeRotatingSprite('DroneA', _MTRX_BATTLEDRONE3, 1, nil, 91, 50, false, false);
 
   bmp := TRadixBitmap.Create;
 
