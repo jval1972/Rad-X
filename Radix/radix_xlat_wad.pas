@@ -1553,6 +1553,9 @@ begin
   // MT_ROTATINGRADAR2
   MakeRotatingSprite('RadarDish', _MTRX_ROTATINGRADAR2, 1, nil, 53, 91, false, false);
 
+  // MT_MISSILEBOAT2
+  MakeRotatingSprite('DroneC', _MTRX_MISSILEBOAT2, 1, nil, 83, 68, false, false);
+
 
   bmp := TRadixBitmap.Create;
 
