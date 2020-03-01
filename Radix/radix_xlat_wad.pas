@@ -1610,6 +1610,9 @@ begin
   for j := 0 to numsprinfo - 1 do
   begin
     spr := @SPRITEINFO[j];
+    if spr.dname = 'XR63A7' then
+      continue;
+      
     bl := nil;
     for i := 0 to bnumlumps - 1 do
       if radixlumpname(blumps[i]) = spr.rname then
@@ -1669,6 +1672,18 @@ begin
       for x := 0 to bmp.width - 1 do
         if bmp.Pixels[x, bmp.height - 1] = 0 then
           bmp.Pixels[x, bmp.height - 1] := 254;
+    end
+    else if (spr.dname = 'XR63A3') then
+      spr.dname = 'XR63A3A7'
+    else if (spr.dname = 'XR64A4') or (spr.dname = 'XR64A6') then
+    begin
+      for x := 0 to bmp.width - 1 do
+      begin
+        if bmp.Pixels[x, bmp.height - 1] = 0 then
+          bmp.Pixels[x, bmp.height - 1] := 254;
+        if bmp.Pixels[x, bmp.height - 2] = 0 then
+          bmp.Pixels[x, bmp.height - 1] := 254;
+      end;
     end;
 
     if spr.defaultoffs then
