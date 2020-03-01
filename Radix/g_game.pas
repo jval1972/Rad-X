@@ -1995,7 +1995,7 @@ end;
 //
 // G_SaveGame
 // Called by the menu task.
-// Description is a 24 byte text string
+// Description is a 26 byte text string
 //
 procedure G_SaveGame(slot: integer; const description: string);
 begin
