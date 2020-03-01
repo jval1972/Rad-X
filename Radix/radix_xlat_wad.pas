@@ -1533,17 +1533,16 @@ begin
   MakeRotatingSprite('DroneB', _MTRX_DEFENCEDRONE2, 1, nil, 63, 67, false, false);
 
   // MT_RUI
-  MakeNonRotatingSprite('Rui', _MTRX_RUI, 1, nil, 16, 58, true, true, 'A');
-  MakeNonRotatingSprite('Rui', _MTRX_RUI, 1, nil, 25, 58, true, true, 'B');
-  MakeNonRotatingSprite('Rui', _MTRX_RUI, 1, nil, 31, 64, true, true, 'C');
-//  MakeNonRotatingSprite('RuiBust', _MTRX_RUI, 5, nil, 32, 58, true, true, 'D');
+  MakeOneSprite('Rui_1', _MTRX_RUI, nil, 16, 58, true, true, 'A');
+  MakeOneSprite('Rui_2', _MTRX_RUI, nil, 25, 58, true, true, 'B');
+  MakeOneSprite('Rui_3', _MTRX_RUI, nil, 31, 64, true, true, 'C');
 
-  MakeOneSprite('RuiBust_1', _MTRX_RUI, nil, 32, 64, true, true, 'D');
-  MakeOneSprite('RuiBust_2', _MTRX_RUI, nil, 32, 64, true, true, 'E');
-  MakeOneSprite('RuiBust_3', _MTRX_RUI, nil, 32, 64, true, true, 'F');
+  MakeOneSprite('RuiBust_1', _MTRX_RUI, nil, 32, 58, true, true, 'D');
+  MakeOneSprite('RuiBust_2', _MTRX_RUI, nil, 32, 58, true, true, 'E');
+  MakeOneSprite('RuiBust_3', _MTRX_RUI, nil, 32, 58, true, true, 'F');
 
   MakeOneSprite('RuiFall', _MTRX_RUI, nil, 42, 52, true, true, 'G');
-  MakeOneSprite('RuiDead', _MTRX_RUI, nil, 54, 20, true, true, 'H');
+  MakeOneSprite('RuiDead', _MTRX_RUI, nil, 54, 19, true, true, 'H');
 
   // MT_SHIELDGENERATOR2
   MakeNonRotatingSprite('ShldGenerator', _MTRX_SHIELDGENERATOR2, 3, nil, 44, 176, false, false);
