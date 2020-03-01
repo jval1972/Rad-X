@@ -198,7 +198,7 @@ const
 type
   radixsprite_t = packed record
     unknown1: byte; // always 1
-    issprite: byte;  // 0-> is trigger, 1 -> is sprite ?
+    enabled: byte;  // 0-> disabled/hiden, 1 -> enabled/shown
     nameid: packed array[0..25] of char;
     extradata: smallint;
     // Offset to parameters
@@ -217,11 +217,20 @@ type
 const
   MAX_RADIX_TRIGGER_SPRITES = 150; // 133 max in radix.dat v2 remix
 
+const
+// activationflags of radixspritetrigger_t
+  SPR_FLG_ACTIVATE = 0;
+  SPR_FLG_DEACTIVATE = 1;
+  SPR_FLG_ACTIVATEONSPACE = 2;
+  SPR_FLG_TONGLE = 3;
+
 type
   radixspritetrigger_t = packed record
     _unknown1: smallint;
     spriteid: smallint;
-    _unknown2: packed array[0..3] of smallint;
+    trigger: smallint;
+    activationflags: smallint;  // JVAL: 20200301 - SPR_FLG_ flags
+    _unknown2: packed array[0..1] of smallint;
   end;
   Pradixspritetrigger_t = ^radixspritetrigger_t;
   radixspritetrigger_tArray = array[0..$FFF] of radixspritetrigger_t;
@@ -229,7 +238,7 @@ type
 
   radixtrigger_t = packed record
     _unknown1: byte; // always 1
-    issprite: byte;  // 0-> is trigger, 1 -> is sprite ?
+    enabled: byte;  // 0-> disabled/hiden, 1 -> enabled/shown
     nameid: packed array[0..25] of char;
     numsprites: smallint;
     _unknown2: smallint; // Always 0
@@ -1244,7 +1253,7 @@ var
   begin
     if csvsprites.Count = 0 then
     begin
-      stmp := 'id,unknown1,issprite,name,extradata,dataoffset,type,';
+      stmp := 'id,unknown1,enabled,name,extradata,dataoffset,type,';
       for ii := 0 to 1 do
         stmp := stmp + 'unknown3_' + itoa(ii) + ',';
       stmp := stmp +'unknown4' + ',';
@@ -1254,7 +1263,7 @@ var
     end;
 
     stmp := itoa(id) + ',' + itoa(spr.unknown1) + ',';
-    stmp := stmp + itoa(spr.issprite) + ',';
+    stmp := stmp + itoa(spr.enabled) + ',';
 
     for ii := 0 to 25 do
     begin
@@ -1285,18 +1294,20 @@ var
   begin
     if csvtriggers.Count = 0 then
     begin
-      stmp := 'id,unknown1,issprite,name,numsprites,unknown2,unknown3,';
-      for ii := 0 to 63 {MAX_RADIX_TRIGGER_SPRITES - 1} do
+      stmp := 'id,unknown1,enabled,name,numsprites,unknown2,unknown3,';
+      for ii := 0 to 47 {MAX_RADIX_TRIGGER_SPRITES - 1} do
       begin
         stmp := stmp + 's_unk_1_' + itoa(ii) + ',';
         stmp := stmp + 'sprite_' + itoa(ii) + ',';
+        stmp := stmp + 'trigger_' + itoa(ii) + ',';
+        stmp := stmp + 'activationflags_' + itoa(ii) + ',';
         stmp := stmp + 'spritedata_' + itoa(ii) + ',';
       end;
       csvtriggers.Add(stmp);
     end;
 
     stmp := itoa(id) + ',' + itoa(tr._unknown1) + ',';
-    stmp := stmp + itoa(tr.issprite) + ',';
+    stmp := stmp + itoa(tr.enabled) + ',';
 
     for ii := 0 to 25 do
     begin
@@ -1311,11 +1322,13 @@ var
     stmp := stmp + itoa(tr._unknown2) + ',';
     stmp := stmp + uitoa(tr._unknown3) + ',';
 
-    for ii := 0 to 63 {MAX_RADIX_TRIGGER_SPRITES - 1} do
+    for ii := 0 to 47 {MAX_RADIX_TRIGGER_SPRITES - 1} do
     begin
       stmp := stmp + itoa(tr.sprites[ii]._unknown1) + ',';
       stmp := stmp + itoa(tr.sprites[ii].spriteid) + ',';
-      for jj := 0 to 3 do
+      stmp := stmp + itoa(tr.sprites[ii].trigger) + ',';
+      stmp := stmp + itoa(tr.sprites[ii].activationflags) + ',';
+      for jj := 0 to 1 do
         stmp := stmp + itoa(tr.sprites[ii]._unknown2[jj]) + ' ';
       stmp := stmp + ',';
     end;
