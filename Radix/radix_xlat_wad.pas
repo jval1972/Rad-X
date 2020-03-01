@@ -1687,6 +1687,7 @@ begin
     else if (spr.dname = 'XR64A4') or (spr.dname = 'XR64A6') then
     begin
       bmp.height := 96;
+      bl.height := 96;
     end;
 
     if spr.defaultoffs then
