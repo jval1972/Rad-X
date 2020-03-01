@@ -44,6 +44,7 @@ procedure Radix2CSV(const fin: string; const pathout: string);
 implementation
 
 uses
+  i_system,
   radix_defs,
   radix_palette,
   radix_patch,
@@ -1259,6 +1260,8 @@ type
   Pspriteinfo_t = ^spriteinfo_t;
 
 function TRadixToWADConverter.GenerateSprites: boolean;
+const
+  MAX_SPR_INFO = 1024;
 var
   position: integer;
   bstart: integer;
@@ -1268,7 +1271,7 @@ var
   i, j: integer;
   buf: PByteArray;
   stmp: string;
-  SPRITEINFO: array[0..1000] of spriteinfo_t;
+  SPRITEINFO: array[0..MAX_SPR_INFO - 1] of spriteinfo_t;
   spr: Pspriteinfo_t;
   numsprinfo: integer;
   bmp: TRadixBitmap;
@@ -1298,6 +1301,9 @@ var
   begin
     for ii := 1 to numframes do
     begin
+      if numsprinfo >= MAX_SPR_INFO then
+        I_Error('TRadixToWADConverter.GenerateSprites(): Sprite table overflow, numsprinfo=%d', [numsprinfo]);
+
       spr.rname := rprefix + '_' + itoa(ii);
       spr.dname := 'XR' + IntToStrzFill(2, r_id) + Chr(Ord(startframe) + ii - 1) + '0';
       spr.translation := trans;
@@ -1321,6 +1327,9 @@ var
     for ii := 1 to numframes do
       for jj := 1 to 8 do
       begin
+        if numsprinfo >= MAX_SPR_INFO then
+          I_Error('TRadixToWADConverter.GenerateSprites(): Sprite table overflow, numsprinfo=%d', [numsprinfo]);
+          
         spr.rname := rprefix + '_' + itoa(jj + (ii - 1) * 8);
         spr.dname := 'XR' + IntToStrzFill(2, r_id) + Chr(Ord('A') + ii - 1) + itoa(jj);
         spr.translation := trans;
@@ -1339,6 +1348,9 @@ var
     const cofs: boolean = true; const defofs: boolean = true;
     const frm: char = 'A');
   begin
+    if numsprinfo >= MAX_SPR_INFO then
+      I_Error('TRadixToWADConverter.GenerateSprites(): Sprite table overflow, numsprinfo=%d', [numsprinfo]);
+
     spr.rname := rname;
     spr.dname := 'XR' + IntToStrzFill(2, r_id) + frm + '0';
     spr.translation := trans;
@@ -1590,6 +1602,8 @@ begin
   // MT_DOZZER
   MakeRotatingSprite('Dozer', _MTRX_DOZZER, 1, nil, 100, 70, false, false);
 
+  // MT_LIFT
+  MakeRotatingSprite('Lift', _MTRX_LIFT, 1, nil, 110, 88, false, false);
 
   bmp := TRadixBitmap.Create;
 
