@@ -1570,6 +1570,11 @@ begin
   MakeOneSprite('RotatingLight9', _MTRX_ROTATINGLIGHT, nil, 10, 61, true, true, 'H');
   MakeOneSprite('RotatingLightBUST', _MTRX_ROTATINGLIGHT, nil, 10, 37, true, true, 'I');
 
+  // MT_EGG
+  MakeOneSprite('Egg', _MTRX_EGG, nil, 62, 82, true, true, 'A');
+  MakeOneSprite('Eggbust', _MTRX_EGG, nil, 62, 82, true, true, 'B');
+
+
   bmp := TRadixBitmap.Create;
 
   for j := 0 to numsprinfo - 1 do
