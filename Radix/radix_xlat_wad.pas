@@ -1550,6 +1550,9 @@ begin
   // MT_COOLANDGENERATOR
   MakeNonRotatingSprite('CoolantGener', _MTRX_COOLANDGENERATOR, 1, nil, 55, 108, false, false);
 
+  // MT_ROTATINGRADAR2
+  MakeRotatingSprite('RadarDish', _MTRX_ROTATINGRADAR2, 1, nil, 53, 91, false, false);
+
 
   bmp := TRadixBitmap.Create;
 
