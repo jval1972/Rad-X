@@ -257,7 +257,7 @@ var
   dog_jumping, default_dog_jumping: integer;  // killough 10/98
 
 const
-  SAVESTRINGSIZE = 36;
+  SAVESTRINGSIZE = 26;
   
 implementation
 
