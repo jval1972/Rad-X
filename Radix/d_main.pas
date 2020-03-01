@@ -2226,7 +2226,7 @@ begin
   printf('SC_ShutDown: Shut down script engine.'#13#10);
   SC_ShutDown;
   // JVAL: PascalScript
-  printf('PS_ShutDown: Shut down pascal script compiler.'#13#10);
+  printf('PS_ShutDown: Shut down Pascal Script compiler.'#13#10);
   PS_ShutDown;
   printf('DEH_ShutDown: Shut down dehacked subsystem.'#13#10);
   DEH_ShutDown;
