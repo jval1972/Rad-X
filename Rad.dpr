@@ -373,7 +373,8 @@ uses
   i_modmusic in 'Base\i_modmusic.pas',
   radix_map_extra in 'Radix\radix_map_extra.pas',
   mn_font in 'Radix\mn_font.pas',
-  radix_alias in 'Radix\radix_alias.pas';
+  radix_alias in 'Radix\radix_alias.pas',
+  radix_grid in 'Radix\radix_grid.pas';
 
 var
   Saved8087CW: Word;

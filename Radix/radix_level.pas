@@ -45,16 +45,6 @@ function RX_CreateDoomLevel(const levelname: string;
 function RX_CreateRadixMapCSV(const levelname: string; const apath: string;
   const rlevel: pointer; const rsize: integer): boolean;
 
-implementation
-
-uses
-  doomdef,
-  radix_defs,
-  radix_things,
-  m_crc32,
-  doomdata,
-  w_wad;
-
 const
   RADIXMAPMAGIC = $FFFFFEE7;
   RADIXSECTORNAMESIZE = 26;
@@ -104,13 +94,6 @@ type
     x, y, z: integer;
     angle: byte;
   end;
-
-const
-  RADIXGRIDSIZE = 40960;
-
-type
-  radixgrid_t = packed array[0..RADIXGRIDSIZE - 1] of smallint;
-  Pradixgrid_t = ^radixgrid_t;
 
 type
   // Radix sector - size is 142 bytes
@@ -193,6 +176,13 @@ type
   Pradixthing_tArray = ^radixthing_tArray;
 
 const
+  RADIXGRIDSIZE = 40960;
+
+type
+  radixgrid_t = packed array[0..RADIXGRIDSIZE - 1] of smallint;
+  Pradixgrid_t = ^radixgrid_t;
+
+const
   MAX_RADIX_SPRITE_PARAMS = 64;
 
 type
@@ -247,6 +237,18 @@ type
   Pradixtrigger_t = ^radixtrigger_t;
   radixtrigger_tArray = packed array[0..$FFF] of radixtrigger_t;
   Pradixtrigger_tArray = ^radixtrigger_tArray;
+
+
+implementation
+
+uses
+  doomdef,
+  radix_defs,
+  radix_things,
+  radix_grid,
+  m_crc32,
+  doomdata,
+  w_wad;
 
 const
   RADIX_MAP_X_MULT = 1;
