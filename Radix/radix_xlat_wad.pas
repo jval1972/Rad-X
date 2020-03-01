@@ -70,6 +70,7 @@ type
     redfromblue_tr: array[0..255] of byte;
     greenfromblue_tr: array[0..255] of byte;
     yellowfromblue_tr: array[0..255] of byte;
+    texturewidths: PIntegerArray;
     aliases: TDStringList;
     textures: TDStringList;
     markflats: PBooleanArray;
@@ -119,6 +120,7 @@ begin
   textures := nil;
   markflats := nil;
   numflats := 0;
+  texturewidths := nil;
   Inherited;
 end;
 
@@ -143,7 +145,10 @@ begin
     textures.Free;
 
   if markflats <> nil then
-    memfree(pointer(markflats), numflats);
+    memfree(pointer(markflats), numflats * SizeOf(boolean));
+
+  if texturewidths <> nil then
+    memfree(pointer(texturewidths), numflats * SizeOf(integer));
 
   if numlumps <> 0 then
   begin
@@ -309,7 +314,8 @@ begin
 
   // Keep flats after loading levels
   numflats := bnumlumps + 1;
-  markflats := mallocz(numflats);
+  markflats := mallocz(numflats * SizeOf(boolean));
+  texturewidths := mallocz(numflats * SizeOf(integer));
 
   f.Read(bstart, SizeOf(integer));
   f.Seek(bstart, sFromBeginning);
@@ -346,6 +352,7 @@ begin
   // Stub texture
   buf := mallocz(32 * 32);
   RX_CreateDoomPatch(buf, 32, 32, true, p, size);
+  texturewidths[0] := 32;
   stmp := RX_WALL_PREFIX + '0000';
   wadwriter.AddData(stmp, p, size);
   memfree(p, size);
@@ -373,6 +380,7 @@ begin
     f.Read(buf^, blumps[i].width * blumps[i].height);
 
     RX_CreateDoomPatch(buf, blumps[i].width, blumps[i].height, true, p, size);
+    texturewidths[i + 1] := blumps[i].width;
     if blumps[i].width = blumps[i].height then
       markflats[i + 1] := true;
 
@@ -500,7 +508,7 @@ begin
     begin
       if ReadLump(lumps, numlumps, 'WorldData[' + itoa(i) +'][' + itoa(j) + ']', rlevel, rsize) then
       begin
-        ret := RX_CreateDoomLevel('E' + itoa(i) + 'M' + itoa(j), rlevel, rsize, markflats, wadwriter);
+        ret := RX_CreateDoomLevel('E' + itoa(i) + 'M' + itoa(j), rlevel, rsize, markflats, texturewidths, wadwriter);
         result := result or ret;
         memfree(rlevel, rsize);
       end;
