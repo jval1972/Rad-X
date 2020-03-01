@@ -1545,22 +1545,22 @@ begin
   MakeRotatingSprite('DroneB', _MTRX_DEFENCEDRONE2, 1, nil, 63, 67, false, false);
 
   // MT_RUI
-  MakeOneSprite('Rui_1', _MTRX_RUI, nil, 16, 58, true, true, 'A');
-  MakeOneSprite('Rui_2', _MTRX_RUI, nil, 25, 58, true, true, 'B');
-  MakeOneSprite('Rui_3', _MTRX_RUI, nil, 31, 64, true, true, 'C');
+  MakeOneSprite('Rui_1', _MTRX_RUI, nil, 16, 58, false, false, 'A');
+  MakeOneSprite('Rui_2', _MTRX_RUI, nil, 25, 58, false, false, 'B');
+  MakeOneSprite('Rui_3', _MTRX_RUI, nil, 31, 64, false, false, 'C');
 
-  MakeOneSprite('RuiBust_1', _MTRX_RUI, nil, 32, 58, true, true, 'D');
-  MakeOneSprite('RuiBust_2', _MTRX_RUI, nil, 32, 58, true, true, 'E');
-  MakeOneSprite('RuiBust_3', _MTRX_RUI, nil, 32, 58, true, true, 'F');
+  MakeOneSprite('RuiBust_1', _MTRX_RUI, nil, 32, 58, false, false, 'D');
+  MakeOneSprite('RuiBust_2', _MTRX_RUI, nil, 32, 58, false, false, 'E');
+  MakeOneSprite('RuiBust_3', _MTRX_RUI, nil, 32, 58, false, false, 'F');
 
-  MakeOneSprite('RuiFall', _MTRX_RUI, nil, 42, 52, true, true, 'G');
-  MakeOneSprite('RuiDead', _MTRX_RUI, nil, 54, 19, true, true, 'H');
+  MakeOneSprite('RuiFall', _MTRX_RUI, nil, 42, 52, false, false, 'G');
+  MakeOneSprite('RuiDead', _MTRX_RUI, nil, 54, 19, false, false, 'H');
 
   // MT_SHIELDGENERATOR2
   MakeNonRotatingSprite('ShldGenerator', _MTRX_SHIELDGENERATOR2, 3, nil, 44, 176, false, false);
 
   // MT_COOLANDGENERATOR
-  MakeNonRotatingSprite('CoolantGener', _MTRX_COOLANDGENERATOR, 1, nil, 55, 108, false, false);
+  MakeNonRotatingSprite('CoolantGener', _MTRX_COOLANDGENERATOR, 1, nil, 55, 190, false, false);
 
   // MT_ROTATINGRADAR2
   MakeRotatingSprite('RadarDish', _MTRX_ROTATINGRADAR2, 1, nil, 53, 91, false, false);
@@ -1686,11 +1686,11 @@ begin
     end
     else if (spr.dname = 'XR64A4') or (spr.dname = 'XR64A6') then
     begin
-      bmp.height := 96;
       bl.height := 96;
+      bmp.Crop(bmp.width, 96);
     end;
 
-    if spr.defaultoffs then
+    if spr.defaultoffs then                             
       RX_CreateDoomPatch(bmp.Image, bl.width, bl.height, false, p, size)
     else if spr.centeroffs then
       RX_CreateDoomPatch(bmp.Image, bl.width, bl.height, false, p, size, bl.width div 2, bl.height div 2)

@@ -61,6 +61,7 @@ type
     procedure ApplyTranslationTable(const trans: PByteArray);
     procedure AttachImage(const buf: PByteArray; const awidth, aheight: integer);
     procedure Clear(const color: byte);
+    procedure Crop(const nw, nh: integer);
     property width: integer read fwidth write SetWidth;
     property height: integer read fheight write SetHeight;
     property Pixels[x, y: integer]: byte read GetPixel write SetPixel; default;
@@ -179,11 +180,29 @@ var
 begin
   for i := 0 to fwidth * fheight - 1 do
     fimg[i] := color;
-end;    
+end;
 
 function TRadixBitmap.pos2idx(const x, y: integer): integer;
 begin
   result := x * fheight + y;
+end;
+
+procedure TRadixBitmap.Crop(const nw, nh: integer);
+var
+  tmp: TRadixBitmap;
+  i, j: integer;
+  w, h: integer;
+begin
+  tmp := TRadixBitmap.Create;
+  tmp.AttachImage(fimg, fwidth, fheight);
+  SetWidth(nw);
+  SetHeight(nh);
+  w := mini(fwidth, nw);
+  h := mini(fheight, nh);
+  for i := 0 to w - 1 do
+    for j := 0 to h - 1 do
+      fimg[pos2idx(i, j)] := tmp.Pixels[i, j];
+  tmp.Free;
 end;
 
 procedure TRadixBitmap.SetWidth(const awidth: integer);
