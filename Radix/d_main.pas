@@ -2079,7 +2079,7 @@ begin
 
   SUC_Progress(69);
 
-  printf('R_Init: Init DOOM refresh daemon.'#13#10);
+  printf('R_Init: Init Rendering Engine.'#13#10);
   R_Init;
 
   SUC_Progress(80);
@@ -2215,7 +2215,7 @@ var
 begin
   printf('C_ShutDown: Shut down console.'#13#10);
   C_ShutDown;
-  printf('R_ShutDown: Shut down DOOM refresh daemon.');
+  printf('R_ShutDown: Shut down Rendering Engine.');
   R_ShutDown;
   printf('Info_ShutDownRandom: Shut down randomizers.'#13#10);
   Info_ShutDownRandom;
