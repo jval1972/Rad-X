@@ -1587,6 +1587,9 @@ begin
   MakeOneSprite('BarrelRotate7', _MTRX_BARREL, nil, 41, 77, true, true, 'I');
   MakeOneSprite('BarrelRotate8', _MTRX_BARREL, nil, 41, 77, true, true, 'J');
 
+  // MT_DOZZER
+  MakeRotatingSprite('Dozer', _MTRX_DOZZER, 1, nil, 100, 70, false, false);
+
 
   bmp := TRadixBitmap.Create;
 
