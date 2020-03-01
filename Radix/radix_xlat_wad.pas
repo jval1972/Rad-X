@@ -1291,14 +1291,15 @@ var
   procedure MakeNonRotatingSprite(const rprefix: string; const r_id: integer;
     const numframes: integer; const trans: PByteArray = nil;
     const xofs: integer = -255; const yofs: integer = -255;
-    const cofs: boolean = true; const defofs: boolean = true);
+    const cofs: boolean = true; const defofs: boolean = true;
+    const startframe: char = 'A');
   var
     ii: integer;
   begin
     for ii := 1 to numframes do
     begin
       spr.rname := rprefix + '_' + itoa(ii);
-      spr.dname := 'XR' + IntToStrzFill(2, r_id) + Chr(Ord('A') + ii - 1) + '0';
+      spr.dname := 'XR' + IntToStrzFill(2, r_id) + Chr(Ord(startframe) + ii - 1) + '0';
       spr.translation := trans;
       spr.xoffs := xofs;
       spr.yoffs := yofs;
@@ -1335,10 +1336,11 @@ var
   procedure MakeOneSprite(const rname: string; const r_id: integer;
     const trans: PByteArray = nil;
     const xofs: integer = -255; const yofs: integer = -255;
-    const cofs: boolean = true; const defofs: boolean = true);
+    const cofs: boolean = true; const defofs: boolean = true;
+    const frm: char = 'A');
   begin
     spr.rname := rname;
-    spr.dname := 'XR' + IntToStrzFill(2, r_id) + 'A0';
+    spr.dname := 'XR' + IntToStrzFill(2, r_id) + frm + '0';
     spr.translation := trans;
     spr.xoffs := xofs;
     spr.yoffs := yofs;
@@ -1529,6 +1531,26 @@ begin
 
   // MT_DEFENCEDRONE2
   MakeRotatingSprite('DroneB', _MTRX_DEFENCEDRONE2, 1, nil, 63, 67, false, false);
+
+  // MT_RUI
+  MakeNonRotatingSprite('Rui', _MTRX_RUI, 1, nil, 16, 58, true, true, 'A');
+  MakeNonRotatingSprite('Rui', _MTRX_RUI, 1, nil, 25, 58, true, true, 'B');
+  MakeNonRotatingSprite('Rui', _MTRX_RUI, 1, nil, 31, 64, true, true, 'C');
+//  MakeNonRotatingSprite('RuiBust', _MTRX_RUI, 5, nil, 32, 58, true, true, 'D');
+
+  MakeOneSprite('RuiBust_1', _MTRX_RUI, nil, 32, 64, true, true, 'D');
+  MakeOneSprite('RuiBust_2', _MTRX_RUI, nil, 32, 64, true, true, 'E');
+  MakeOneSprite('RuiBust_3', _MTRX_RUI, nil, 32, 64, true, true, 'F');
+
+  MakeOneSprite('RuiFall', _MTRX_RUI, nil, 42, 52, true, true, 'G');
+  MakeOneSprite('RuiDead', _MTRX_RUI, nil, 54, 20, true, true, 'H');
+
+  // MT_SHIELDGENERATOR2
+  MakeNonRotatingSprite('ShldGenerator', _MTRX_SHIELDGENERATOR2, 3, nil, 44, 176, false, false);
+
+  // MT_COOLANDGENERATOR
+  MakeNonRotatingSprite('CoolantGener', _MTRX_COOLANDGENERATOR, 1, nil, 55, 108, false, false);
+
 
   bmp := TRadixBitmap.Create;
 
