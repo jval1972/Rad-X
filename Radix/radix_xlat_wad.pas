@@ -1574,6 +1574,19 @@ begin
   MakeOneSprite('Egg', _MTRX_EGG, nil, 62, 82, true, true, 'A');
   MakeOneSprite('Eggbust', _MTRX_EGG, nil, 62, 82, true, true, 'B');
 
+  // MT_BARREL
+  MakeOneSprite('Barrel', _MTRX_BARREL, nil, 25, 57, true, true, 'A');
+  MakeOneSprite('BarrelDUDbust', _MTRX_BARREL, nil, 22, 23, true, true, 'B');
+
+  MakeOneSprite('BarrelRotate1', _MTRX_BARREL, nil, 41, 77, true, true, 'C');
+  MakeOneSprite('BarrelRotate2', _MTRX_BARREL, nil, 41, 77, true, true, 'D');
+  MakeOneSprite('BarrelRotate3', _MTRX_BARREL, nil, 41, 77, true, true, 'E');
+  MakeOneSprite('BarrelRotate4', _MTRX_BARREL, nil, 41, 77, true, true, 'F');
+  MakeOneSprite('BarrelRotate5', _MTRX_BARREL, nil, 41, 77, true, true, 'G');
+  MakeOneSprite('BarrelRotate6', _MTRX_BARREL, nil, 41, 77, true, true, 'H');
+  MakeOneSprite('BarrelRotate7', _MTRX_BARREL, nil, 41, 77, true, true, 'I');
+  MakeOneSprite('BarrelRotate8', _MTRX_BARREL, nil, 41, 77, true, true, 'J');
+
 
   bmp := TRadixBitmap.Create;
 
