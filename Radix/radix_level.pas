@@ -40,7 +40,7 @@ uses
 
 function RX_CreateDoomLevel(const levelname: string;
   const rlevel: pointer; const rsize: integer; const markflats: PBooleanArray;
-  const texturewidths: PIntegerArray; const wadwriter: TWadWriter): boolean;
+  const texturewidths, textureheights: PIntegerArray; const wadwriter: TWadWriter): boolean;
 
 function RX_CreateRadixMapCSV(const levelname: string; const apath: string;
   const rlevel: pointer; const rsize: integer): boolean;
@@ -340,7 +340,7 @@ end;
 
 function RX_CreateDoomLevel(const levelname: string;
   const rlevel: pointer; const rsize: integer; const markflats: PBooleanArray;
-  const texturewidths: PIntegerArray; const wadwriter: TWadWriter): boolean;
+  const texturewidths, textureheights: PIntegerArray; const wadwriter: TWadWriter): boolean;
 var
   ms: TAttachableMemoryStream;
   header: radixlevelheader_t;
@@ -557,23 +557,32 @@ var
     inc(numdoomvertexes);
   end;
 
-  function AddSidedefToWAD(const boff: smallint; const texid: integer;
-    const toptex, bottomtex, midtex: char8_t; const sector: smallint): integer;
+  function AddSidedefToWAD(const boff: smallint; const ftexid, ctexid: integer;
+    const wflags: integer; const toptex, bottomtex, midtex: char8_t;
+    const sector: smallint; var lnflags: integer): integer;
   var
     j: integer;
     pside: Pmapsidedef_t;
     toff, roff: smallint;
   begin
-    if texid < 0 then
+    toff := 0;
+    if ftexid <> 0 then
+      toff := boff mod texturewidths[ftexid];
+
+    roff := 0;
+    if ctexid <> 0 then
     begin
-      toff := 0;
-      roff := 0;
-    end
-    else
-    begin
-      toff := boff mod texturewidths[texid + 1];
-      roff := 0;
+      if wflags and (RWF_PEGTOP_FLOOR or RWF_PEGBOTTOM_FLOOR) = 0 then
+        roff := doomsectors[sector].ceilingheight mod textureheights[ftexid]
+      else if (wflags and RWF_PEGBOTTOM_FLOOR) <> 0 then
+        lnflags := lnflags or ML_DONTPEGBOTTOM;
+        
+      if wflags and (RWF_PEGTOP_CEILING or RWF_PEGBOTTOM_CEILING) = 0 then
+        roff := doomsectors[sector].ceilingheight mod textureheights[ctexid]
+      else if (wflags and RWF_PEGBOTTOM_CEILING) <> 0 then
+        lnflags := lnflags or ML_DONTPEGTOP;
     end;
+
     for j := 0 to numdoomsidedefs - 1 do
       if (doomsidedefs[j].textureoffset = toff) and (doomsidedefs[j].rowoffset = roff) and
          (doomsidedefs[j].toptexture = toptex) and (doomsidedefs[j].bottomtexture = bottomtex) and (doomsidedefs[j].midtexture = midtex) and
@@ -602,10 +611,12 @@ var
     news1, news2: boolean;
     toptex, bottomtex, midtex: char8_t;
     ftex, ctex: integer;
+    lnflags: integer;
   begin
     // Front Sidedef
     news1 := true;
     news2 := true;
+    lnflags := 0;
     ftex := w.wfloortexture + 1; // Add 1 to compensate for stub texture RDXW0000
     ctex := w.wceilingtexture + 1; // Add 1 to compensate for stub texture RDXW0000
     if w.frontsector >= 0 then
@@ -638,7 +649,7 @@ var
           else
             midtex := stringtochar8('-');
         end;
-        s1 := AddSidedefToWAD(w.bitmapoffset, ftex, toptex, bottomtex, midtex, w.frontsector);
+        s1 := AddSidedefToWAD(w.bitmapoffset, ftex, ctex, ctex, toptex, bottomtex, midtex, w.frontsector, lnflags);
         news1 := s1 = numdoomsidedefs - 1;
       end;
     end
@@ -675,7 +686,7 @@ var
           else
             midtex := stringtochar8('-');
         end;
-        s2 := AddSidedefToWAD(w.bitmapoffset, ctex, toptex, bottomtex, midtex, w.backsector);
+        s2 := AddSidedefToWAD(w.bitmapoffset, ftex, ctex, w.flags, toptex, bottomtex, midtex, w.backsector, lnflags);
         news2 := s2 = numdoomsidedefs - 1;
       end;
     end
@@ -736,10 +747,11 @@ var
         if news1 and news2 then
           doomsidedefs[dline.sidenum[0]].midtexture := doomsidedefs[dline.sidenum[0]].toptexture
         else
-          dline.sidenum[0] := AddSidedefToWAD(w.bitmapoffset, ctex, stringtochar8('-'), stringtochar8('-'), doomsidedefs[dline.sidenum[0]].toptexture, doomsidedefs[dline.sidenum[0]].sector);
+          dline.sidenum[0] := AddSidedefToWAD(w.bitmapoffset, ftex, ctex, w.flags, stringtochar8('-'), stringtochar8('-'), doomsidedefs[dline.sidenum[0]].toptexture, doomsidedefs[dline.sidenum[0]].sector, lnflags);
       end;
     end;
 
+    dline.flags := dline.flags or lnflags;
     // Create extra data stored in MAP header
     doommapscript.Add('wallid ' + itoa(numdoomlinedefs));
     doommapscript.Add('wallflags ' + itoa(w.flags and not RWF_STUBWALL));
