@@ -195,11 +195,11 @@ type
     extradata: smallint;
     // Offset to parameters
     // All parameters from all sprites are stored in a table
-    // dataoffset point to the first item (from _unknown3 to the last of the params)
+    // dataoffset point to the first item (from ::suspend to the last of the params)
     dataoffset: smallint;
     sprite_type: smallint;
-    _unknown3: packed array[0..1] of smallint;
-    _unknown4: word; // 20200217
+    suspend: integer; // 0 -> Run at level start, -1 -> Run on trigger
+    _unknown3: word; // 20200217
     params: packed array[0..MAX_RADIX_SPRITE_PARAMS - 1] of smallint;
   end;
   Pradixsprite_t = ^radixsprite_t;
@@ -697,12 +697,6 @@ var
     dline.flags := 0;
     if (s1 >= 0) and (s2 >= 0) then
       dline.flags := dline.flags or ML_TWOSIDED;
-//    if w.flags and RWF_PEGTOP_FLOOR <> 0 then
-//    if w.flags and RWF_PEGBOTTOM_FLOOR <> 0 then
-//    if w.flags and RWF_PEGTOP_CEILING <> 0 then
-//    if w.flags and RWF_PEGBOTTOM_CEILING <> 0 then
-//      dline.flags := dline.flags or ML_DONTPEGBOTTOM;
-//      dline.flags := dline.flags or ML_DONTPEGTOP;
 
     if w.flags and RWF_STUBWALL <> 0 then
       dline.flags := dline.flags or ML_DONTDRAW;
@@ -1266,9 +1260,7 @@ var
   begin
     if csvsprites.Count = 0 then
     begin
-      stmp := 'id,unknown1,enabled,name,extradata,dataoffset,type,';
-      for ii := 0 to 1 do
-        stmp := stmp + 'unknown3_' + itoa(ii) + ',';
+      stmp := 'id,unknown1,enabled,name,extradata,dataoffset,type,suspend';
       stmp := stmp +'unknown4' + ',';
       for ii := 0 to MAX_RADIX_SPRITE_PARAMS - 1 do
         stmp := stmp + 'param_' + itoa(ii) + ',';
@@ -1290,10 +1282,9 @@ var
     stmp := stmp + itoa(spr.extradata) + ',';
     stmp := stmp + itoa(spr.dataoffset) + ',';
     stmp := stmp + itoa(spr.sprite_type) + ',';
+    stmp := stmp + itoa(spr.suspend) + ',';
 
-    for ii := 0 to 1 do
-      stmp := stmp + itoa(spr._unknown3[ii]) + ',';
-    stmp := stmp + uitoa(spr._unknown4) + ',';
+    stmp := stmp + uitoa(spr._unknown3) + ',';
     for ii := 0 to MAX_RADIX_SPRITE_PARAMS - 1 do
       stmp := stmp + itoa(spr.params[ii]) + ',';
 
