@@ -96,6 +96,7 @@ uses
   r_span,
   r_span32,
   r_things,
+  radix_map_extra,
   r_utils,
   tables,
   i_system,
@@ -1064,7 +1065,11 @@ begin
     // single sided line
     midtexture := texturetranslation[sidedef.midtexture];
 
-    rw_midtexturemid := frontsector.ceilingheight - textureheight[sidedef.midtexture] - viewz;
+    // JVAL: 20200302 - Calculate texture offset of RADIX line
+    if linedef.radixflags <> 0 then
+      rw_midtexturemid := RX_CalculateRadixSlopeMidOffs(pds.curline)
+    else
+      rw_midtexturemid := frontsector.ceilingheight - textureheight[sidedef.midtexture] - viewz;
 
     rw_midtexturemid := rw_midtexturemid + FixedMod(sidedef.rowoffset, texturecolumnheightfrac[sidedef.midtexture]);
     rw_midtexturemid := FixedMod(rw_midtexturemid, texturecolumnheightfrac[sidedef.midtexture]);
@@ -1082,13 +1087,21 @@ begin
     if (sc11 > sc1) or (sc22 > sc2) then
     begin
       toptexture := texturetranslation[sidedef.toptexture];
-      rw_toptexturemid := frontsector.ceilingheight - viewz;
+      // JVAL: 20200302 - Calculate texture offset of RADIX line
+      if linedef.radixflags <> 0 then
+        rw_toptexturemid := RX_CalculateRadixSlopeTopOffs(pds.curline)
+      else
+        rw_toptexturemid := frontsector.ceilingheight - viewz;
     end;
 
     if (sf11 < sf1) or (sf22 < sf2) then
     begin
       bottomtexture := texturetranslation[sidedef.bottomtexture];
-      rw_bottomtexturemid := frontsector.floorheight - viewz;
+      // JVAL: 20200302 - Calculate texture offset of RADIX line
+      if linedef.radixflags <> 0 then
+        rw_bottomtexturemid := RX_CalculateRadixSlopeBottomOffs(pds.curline)
+      else
+        rw_bottomtexturemid := frontsector.floorheight - viewz;
     end;
 
     rw_toptexturemid := rw_toptexturemid + FixedMod(sidedef.rowoffset, texturecolumnheightfrac[sidedef.toptexture]);

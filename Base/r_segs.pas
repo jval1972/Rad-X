@@ -159,6 +159,7 @@ uses
   r_wall32,
   r_scale,
   r_segs2,
+  radix_map_extra,
 {$IFDEF STRIFE}
   r_col_fz,
 {$ENDIF}
@@ -628,17 +629,25 @@ begin
     // a single sided line is terminal, so it must mark ends
     markfloor := true;
     markceiling := true;
-    if linedef.flags and ML_DONTPEGBOTTOM <> 0 then
-    begin
-      vtop := frontsector.floorheight + textureheight[sidedef.midtexture];
-      // bottom of texture at bottom
-      rw_midtexturemid := vtop - viewz;
-    end
+
+    // JVAL: 20200302 - Calculate texture offset of RADIX line
+    if linedef.radixflags <> 0 then
+      rw_midtexturemid := RX_CalculateRadixMidOffs(pds.curline)
     else
     begin
-      // top of texture at top
-      rw_midtexturemid := worldtop;
+      if linedef.flags and ML_DONTPEGBOTTOM <> 0 then
+      begin
+        vtop := frontsector.floorheight + textureheight[sidedef.midtexture];
+        // bottom of texture at bottom
+        rw_midtexturemid := vtop - viewz;
+      end
+      else
+      begin
+        // top of texture at top
+        rw_midtexturemid := worldtop;
+      end;
     end;
+
     rw_midtexturemid := rw_midtexturemid + FixedMod(sidedef.rowoffset, textureheight[midtexture]);
     rw_midtexturemid := FixedMod(rw_midtexturemid, texturecolumnheightfrac[midtexture]);
 
@@ -769,18 +778,26 @@ begin
         topwallcolfunc  := basewallcolfunc
       else
         topwallcolfunc := tallwallcolfunc;
-      if linedef.flags and ML_DONTPEGTOP <> 0 then
-      begin
-        // top of texture at top
-        rw_toptexturemid := worldtop;
-      end
+
+      // JVAL: 20200302 - Calculate texture offset of RADIX line
+      if linedef.radixflags <> 0 then
+        rw_toptexturemid := RX_CalculateRadixTopOffs(pds.curline)
       else
       begin
-        vtop := backsector.ceilingheight + textureheight[sidedef.toptexture];
+        if linedef.flags and ML_DONTPEGTOP <> 0 then
+        begin
+          // top of texture at top
+          rw_toptexturemid := worldtop;
+        end
+        else
+        begin
+          vtop := backsector.ceilingheight + textureheight[sidedef.toptexture];
 
-        // bottom of texture
-        rw_toptexturemid := vtop - viewz;
-      end
+          // bottom of texture
+          rw_toptexturemid := vtop - viewz;
+        end;
+      end;
+
     end;
 
     if worldlow > worldbottom then
@@ -792,14 +809,22 @@ begin
         bottomwallcolfunc  := basewallcolfunc
       else
         bottomwallcolfunc := tallwallcolfunc;
-      if linedef.flags and ML_DONTPEGBOTTOM <> 0 then
+
+      // JVAL: 20200302 - Calculate texture offset of RADIX line
+      if linedef.radixflags <> 0 then
+        rw_bottomtexturemid := RX_CalculateRadixBottomOffs(pds.curline)
+      else
       begin
-        // bottom of texture at bottom
-        // top of texture at top
-        rw_bottomtexturemid := worldtop;
-      end
-      else // top of texture at top
-        rw_bottomtexturemid := worldlow;
+        if linedef.flags and ML_DONTPEGBOTTOM <> 0 then
+        begin
+          // bottom of texture at bottom
+          // top of texture at top
+          rw_bottomtexturemid := worldtop;
+        end
+        else // top of texture at top
+          rw_bottomtexturemid := worldlow;
+      end;
+
     end;
     rw_toptexturemid := rw_toptexturemid + FixedMod(sidedef.rowoffset, textureheight[toptexture]);
     rw_toptexturemid := FixedMod(rw_toptexturemid, texturecolumnheightfrac[toptexture]);
@@ -971,14 +996,11 @@ begin
     worldhigh_dbl := worldhigh / WORLDUNIT;
     worldlow_dbl := worldlow / WORLDUNIT;
     worldhigh := worldhigh div WORLDUNIT;
-//    worldhigh := worldhigh shr WORLDBITS;
     worldlow := worldlow div WORLDUNIT;
-//    worldlow := worldlow shr WORLDBITS;
 
     if worldhigh_dbl < worldtop_dbl then
     begin
       pixhigh := (centeryfrac div WORLDUNIT) - FixedMul(worldhigh, rw_scale);
-//      pixhigh := (centeryfrac shr WORLDBITS) - FixedMul(worldhigh, rw_scale);
       pixhighstep := -FixedMul(rw_scalestep, worldhigh);
       pixhigh_dbl := (centeryfrac / WORLDUNIT) - worldhigh_dbl / FRACUNIT * rw_scale_dbl;
       pixhighstep_dbl := -rw_scalestep_dbl / FRACUNIT * worldhigh_dbl;
@@ -1195,17 +1217,25 @@ begin
     // a single sided line is terminal, so it must mark ends
     markfloor := true;
     markceiling := true;
-    if linedef.flags and ML_DONTPEGBOTTOM <> 0 then
-    begin
-      vtop := frontsector.floorheight + textureheight[sidedef.midtexture];
-      // bottom of texture at bottom
-      rw_midtexturemid := vtop - viewz;
-    end
+
+    // JVAL: 20200302 - Calculate texture offset of RADIX line
+    if linedef.radixflags <> 0 then
+      rw_midtexturemid := RX_CalculateRadixMidOffs(pds.curline)
     else
     begin
-      // top of texture at top
-      rw_midtexturemid := worldtop;
+      if linedef.flags and ML_DONTPEGBOTTOM <> 0 then
+      begin
+        vtop := frontsector.floorheight + textureheight[sidedef.midtexture];
+        // bottom of texture at bottom
+        rw_midtexturemid := vtop - viewz;
+      end
+      else
+      begin
+        // top of texture at top
+        rw_midtexturemid := worldtop;
+      end;
     end;
+
     rw_midtexturemid := rw_midtexturemid + FixedMod(sidedef.rowoffset, textureheight[midtexture]);
     rw_midtexturemid := FixedMod(rw_midtexturemid, texturecolumnheightfrac[midtexture]);
 
@@ -1336,18 +1366,26 @@ begin
         topwallcolfunc  := basewallcolfunc
       else
         topwallcolfunc := tallwallcolfunc;
-      if linedef.flags and ML_DONTPEGTOP <> 0 then
-      begin
-        // top of texture at top
-        rw_toptexturemid := worldtop;
-      end
+
+      // JVAL: 20200302 - Calculate texture offset of RADIX line
+      if linedef.radixflags <> 0 then
+        rw_toptexturemid := RX_CalculateRadixTopOffs(pds.curline)
       else
       begin
-        vtop := backsector.ceilingheight + textureheight[sidedef.toptexture];
+        if linedef.flags and ML_DONTPEGTOP <> 0 then
+        begin
+          // top of texture at top
+          rw_toptexturemid := worldtop;
+        end
+        else
+        begin
+          vtop := backsector.ceilingheight + textureheight[sidedef.toptexture];
 
-        // bottom of texture
-        rw_toptexturemid := vtop - viewz;
-      end
+          // bottom of texture
+          rw_toptexturemid := vtop - viewz;
+        end;
+      end;
+
     end;
 
     if worldlow > worldbottom then
@@ -1359,14 +1397,22 @@ begin
         bottomwallcolfunc  := basewallcolfunc
       else
         bottomwallcolfunc := tallwallcolfunc;
-      if linedef.flags and ML_DONTPEGBOTTOM <> 0 then
+
+      // JVAL: 20200302 - Calculate texture offset of RADIX line
+      if linedef.radixflags <> 0 then
+        rw_bottomtexturemid := RX_CalculateRadixBottomOffs(pds.curline)
+      else
       begin
-        // bottom of texture at bottom
-        // top of texture at top
-        rw_bottomtexturemid := worldtop;
-      end
-      else // top of texture at top
-        rw_bottomtexturemid := worldlow;
+        if linedef.flags and ML_DONTPEGBOTTOM <> 0 then
+        begin
+          // bottom of texture at bottom
+          // top of texture at top
+          rw_bottomtexturemid := worldtop;
+        end
+        else // top of texture at top
+          rw_bottomtexturemid := worldlow;
+      end;
+
     end;
     rw_toptexturemid := rw_toptexturemid + FixedMod(sidedef.rowoffset, textureheight[toptexture]);
     rw_toptexturemid := FixedMod(rw_toptexturemid, texturecolumnheightfrac[toptexture]);
@@ -1530,9 +1576,7 @@ begin
   if backsector <> nil then
   begin
     worldhigh := worldhigh div WORLDUNIT;
-//    worldhigh := worldhigh shr WORLDBITS;
     worldlow := worldlow div WORLDUNIT;
-//    worldlow := worldlow shr WORLDBITS;
 
     if worldhigh < worldtop then
     begin

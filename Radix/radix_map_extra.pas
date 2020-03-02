@@ -35,6 +35,7 @@ unit radix_map_extra;
 interface
 
 uses
+  m_fixed,
   r_defs;
 
 function RX_RadixX2Doom(const sec: Psector_t; const x: integer): integer;
@@ -48,12 +49,27 @@ procedure RX_CalcCeilingSlope(const sec: Psector_t);
 // Parse map lump for extra information about radix level
 procedure RX_LoadRadixMapInfo(const lumpnum: integer);
 
+function RX_CalculateRadixMidOffs(const seg: PSeg_t): fixed_t;
+
+function RX_CalculateRadixTopOffs(const seg: PSeg_t): fixed_t;
+
+function RX_CalculateRadixBottomOffs(const seg: PSeg_t): fixed_t;
+
+function RX_CalculateRadixSlopeMidOffs(const seg: PSeg_t): fixed_t;
+
+function RX_CalculateRadixSlopeTopOffs(const seg: PSeg_t): fixed_t;
+
+function RX_CalculateRadixSlopeBottomOffs(const seg: PSeg_t): fixed_t;
+
 implementation
 
 uses
   d_delphi,
-  m_fixed,
   p_setup,
+  r_data,
+  r_main,
+  r_segs,
+  radix_level,
   sc_engine,
   sc_tokens,
   w_wad;
@@ -164,7 +180,6 @@ begin
   tokens.Add('WALLFLAGS'); // 18
   tokens.Add('WALLHITPOINTS'); // 19
   tokens.Add('WALLTRIGGER'); // 20
-
 
   cursector := 0;
   curline := 0;
@@ -350,5 +365,86 @@ begin
   sc.Free;
   tokens.Free;
 end;
+
+function RX_CalculateRadixMidOffs(const seg: PSeg_t): fixed_t;
+var
+  line: Pline_t;
+begin
+  line := seg.linedef;
+  if line.radixflags and (RWF_PEGBOTTOM_FLOOR or RWF_PEGTOP_FLOOR) = 0 then
+    result := -viewz
+  else if line.radixflags and RWF_PEGBOTTOM_FLOOR <> 0 then
+    result := worldlow
+  else
+    result := worldtop;
+end;
+
+function RX_CalculateRadixTopOffs(const seg: PSeg_t): fixed_t;
+var
+  line: Pline_t;
+begin
+  line := seg.linedef;
+  if line.radixflags and (RWF_PEGBOTTOM_CEILING or RWF_PEGTOP_CEILING) = 0 then
+    result := - viewz
+  else if line.radixflags and RWF_PEGBOTTOM_CEILING <> 0 then
+    result := worldlow
+  else
+    result := worldtop;
+end;
+
+function RX_CalculateRadixBottomOffs(const seg: PSeg_t): fixed_t;
+var
+  line: Pline_t;
+begin
+  line := seg.linedef;
+  if line.radixflags and (RWF_PEGBOTTOM_FLOOR or RWF_PEGTOP_FLOOR) = 0 then
+    result := -viewz
+  else if line.radixflags and RWF_PEGBOTTOM_FLOOR <> 0 then
+    result := worldlow
+  else
+    result := worldtop;
+end;
+
+function RX_CalculateRadixSlopeMidOffs(const seg: PSeg_t): fixed_t;
+{var
+  line: Pline_t;}
+begin
+{  line := seg.linedef;
+  if line.radixflags and (RWF_PEGBOTTOM_FLOOR or RWF_PEGTOP_FLOOR) = 0 then
+    result := -viewz
+  else if line.radixflags and RWF_PEGBOTTOM_FLOOR <> 0 then
+    result := seg.sidedef.sector.floorheight - viewz
+  else
+    result := seg.sidedef.sector.ceilingheight - viewz;}
+  result := -viewz;
+end;
+
+function RX_CalculateRadixSlopeTopOffs(const seg: PSeg_t): fixed_t;
+var
+  line: Pline_t;
+begin
+  line := seg.linedef;
+  if line.radixflags and (RWF_PEGBOTTOM_CEILING or RWF_PEGTOP_CEILING) = 0 then
+    result := - viewz
+  else if line.radixflags and RWF_PEGBOTTOM_CEILING <> 0 then
+    result := line.backsector.ceilingheight - viewz
+  else
+    result := line.frontsector.ceilingheight - viewz;
+end;
+
+function RX_CalculateRadixSlopeBottomOffs(const seg: PSeg_t): fixed_t;
+var
+  line: Pline_t;
+begin
+  line := seg.linedef;
+  if line.radixflags and (RWF_PEGBOTTOM_FLOOR or RWF_PEGTOP_FLOOR) = 0 then
+    result := -viewz
+  else if line.radixflags and RWF_PEGBOTTOM_FLOOR <> 0 then
+    result := line.frontsector.floorheight - viewz
+  else
+    result := line.backsector.floorheight - viewz;
+end;
+
+
 
 end.
