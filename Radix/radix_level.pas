@@ -196,10 +196,11 @@ type
     // Offset to parameters
     // All parameters from all sprites are stored in a table
     // dataoffset point to the first item (from ::suspend to the last of the params)
+    // dataoffset = "[last dataoffset] + [extradata] + 6" 
     dataoffset: smallint;
     sprite_type: smallint;
     suspend: integer; // 0 -> Run at level start, -1 -> Run on trigger
-    _unknown3: word; // 20200217
+    _unknown2: word; // 20200217
     params: packed array[0..MAX_RADIX_SPRITE_PARAMS - 1] of smallint;
   end;
   Pradixsprite_t = ^radixsprite_t;
@@ -218,7 +219,7 @@ const
 
 type
   radixspritetrigger_t = packed record
-    _unknown1: smallint;
+    dataoffset: smallint;
     spriteid: smallint;
     trigger: smallint;
     activationflags: smallint;  // JVAL: 20200301 - SPR_FLG_ flags
@@ -1260,8 +1261,8 @@ var
   begin
     if csvsprites.Count = 0 then
     begin
-      stmp := 'id,unknown1,enabled,name,extradata,dataoffset,type,suspend';
-      stmp := stmp +'unknown4' + ',';
+      stmp := 'id,unknown1,enabled,name,extradata,dataoffset,type,suspend,';
+      stmp := stmp +'unknown2' + ',';
       for ii := 0 to MAX_RADIX_SPRITE_PARAMS - 1 do
         stmp := stmp + 'param_' + itoa(ii) + ',';
       csvsprites.Add(stmp);
@@ -1284,7 +1285,7 @@ var
     stmp := stmp + itoa(spr.sprite_type) + ',';
     stmp := stmp + itoa(spr.suspend) + ',';
 
-    stmp := stmp + uitoa(spr._unknown3) + ',';
+    stmp := stmp + uitoa(spr._unknown2) + ',';
     for ii := 0 to MAX_RADIX_SPRITE_PARAMS - 1 do
       stmp := stmp + itoa(spr.params[ii]) + ',';
 
@@ -1301,7 +1302,7 @@ var
       stmp := 'id,unknown1,hidden,name,numsprites,unknown2,';
       for ii := 0 to 47 {MAX_RADIX_TRIGGER_SPRITES - 1} do
       begin
-        stmp := stmp + 's_unk_1_' + itoa(ii) + ',';
+        stmp := stmp + 'dataoffset_' + itoa(ii) + ',';
         stmp := stmp + 'sprite_' + itoa(ii) + ',';
         stmp := stmp + 'trigger_' + itoa(ii) + ',';
         stmp := stmp + 'activationflags_' + itoa(ii) + ',';
@@ -1327,7 +1328,7 @@ var
 
     for ii := 0 to 47 {MAX_RADIX_TRIGGER_SPRITES - 1} do
     begin
-      stmp := stmp + itoa(tr.sprites[ii]._unknown1) + ',';
+      stmp := stmp + itoa(tr.sprites[ii].dataoffset) + ',';
       stmp := stmp + itoa(tr.sprites[ii].spriteid) + ',';
       stmp := stmp + itoa(tr.sprites[ii].trigger) + ',';
       stmp := stmp + itoa(tr.sprites[ii].activationflags) + ',';
