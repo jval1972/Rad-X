@@ -103,7 +103,7 @@ procedure ATR_MultLightOscilate(const params: pointer);
 
 procedure ATR_MultRandLightsFlicker(const params: pointer);
 
-procedure ATR_SkillRation(const params: pointer);
+procedure ATR_SkillRatio(const params: pointer);
 
 procedure ATR_HurtPlayerExplosion(const params: pointer);
 
@@ -194,12 +194,16 @@ begin
   parms := radixswitchsecbitmap_p(params)^;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+// Sprite type = 4 - Not presend in radix.dat
 procedure ATR_ToggleWallBitmap(const params: pointer);
 var
   element_number, switch_bitmap, do_floor: integer;
 begin
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+// Sprite type = 5 - Not presend in radix.dat
 procedure ATR_ToggleSecBitmap(const params: pointer);
 var
   element_number, switch_bitmap, do_floor: integer;
@@ -224,10 +228,23 @@ begin
   parms := radixcirclebitmap_p(params)^;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+// Sprite type = 7
+type
+  radixlightflicker_t = packed record
+    off_delay: smallint;
+    on_delay: integer;
+    off_light_level: smallint;  // 0-63
+    on_light_level: smallint; // 0-63
+    sector: smallint;
+  end;
+  radixlightflicker_p = ^radixlightflicker_t;
+
 procedure ATR_LightFlicker(const params: pointer);
 var
-  off_delay, on_delay, off_light_level, on_light_level, sector: integer;
+  parms: radixlightflicker_t;
 begin
+  parms := radixlightflicker_p(params)^;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -283,10 +300,27 @@ begin
   parms := radixlightoscilate_p(params)^;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+// Sprite type = 11
+type
+  radixplaneteleport_t = packed record
+    new_angle: smallint; // 0-256
+    new_x: LongWord;
+    new_y: LongWord;
+    change_height: byte;
+    new_height: smallint;
+    change_speed: byte;
+    new_speed:  smallint;
+    new_height_angle: smallint; // 0-256
+    delay: smallint;
+  end;
+  radixplaneteleport_p = ^radixplaneteleport_t;
+
 procedure ATR_PlaneTeleport(const params: pointer);
 var
-  new_angle, new_x, new_y, change_height, new_height, change_speed, new_speed, new_height_angle, delay: integer;
+  parms: radixplaneteleport_t;
 begin
+  parms := radixplaneteleport_p(params)^;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -398,10 +432,20 @@ begin
   parms := radixendoflevel_p(params)^;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+// Sprite type = 17
+type
+  radixspritetriggeractivate_t = packed record
+    trigger: integer;
+    sprites: packed array[0..4] of integer;
+  end;
+  radixspritetriggeractivate_p = ^radixspritetriggeractivate_t;
+
 procedure ATR_SpriteTriggerActivate(const params: pointer);
 var
-  trigger, sprite_1, sprite_2, sprite_3, sprite_4, sprite_5: integer;
+  parms: radixspritetriggeractivate_t;
 begin
+  parms := radixspritetriggeractivate_p(params)^;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -453,16 +497,34 @@ begin
   parms := radixactivatetrigger_p(params)^;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+// Sprite type = 21
+type
+  radixcompletemissilewall_t = packed record
+    wall_number: smallint;
+  end;
+  radixcompletemissilewall_p = ^radixcompletemissilewall_t;
+
 procedure ATR_CompleteMissileWall(const params: pointer);
 var
-  wall_number: integer;
+  parms: radixcompletemissilewall_t;
 begin
+  parms := radixcompletemissilewall_p(params)^;
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+// Sprite type = 22
+type
+  radixscannerjam_t = packed record
+    on_off: smallint; // 1-> jam radar, 0-> enable radar
+  end;
+  radixscannerjam_p = ^radixscannerjam_t;
 
 procedure ATR_ScannerJam(const params: pointer);
 var
-  on_off: integer;
+  parms: radixscannerjam_t;
 begin
+  parms := radixscannerjam_p(params)^;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -480,16 +542,34 @@ begin
   parms := radixprintmessage_p(params)^;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+// Sprite type 24
+type
+  radixfloormissilewall_t = packed record
+    wall_number: smallint;
+  end;
+  radixfloormissilewall_p = ^radixfloormissilewall_t;
+
 procedure ATR_FloorMissileWall(const params: pointer);
 var
-  wall_number: integer;
+  parms: radixfloormissilewall_t;
 begin
+  parms := radixfloormissilewall_p(params)^;
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+// Sprite type 25
+type
+  radixceilingmissilewall_t = packed record
+    wall_number: smallint;
+  end;
+  radixceilingmissilewall_p = ^radixceilingmissilewall_t;
 
 procedure ATR_CeilingMissileWall(const params: pointer);
 var
-  wall_number: integer;
+  parms: radixceilingmissilewall_t;
 begin
+  parms := radixceilingmissilewall_p(params)^;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -562,10 +642,19 @@ begin
   parms := radixsecondaryobjective_p(params)^;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+// Sprite type 30
+type
+  radixseekcompletemissilewall_t = packed record
+    wall_number: smallint;
+  end;
+  radixseekcompletemissilewall_p = ^radixseekcompletemissilewall_t;
+
 procedure ATR_SeekCompleteMissileWall(const params: pointer);
 var
-  wall_number: integer;
+  parms: radixseekcompletemissilewall_t;
 begin
+  parms := radixseekcompletemissilewall_p(params)^;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -624,7 +713,6 @@ type
   end;
   radixmultrandlightsflicker_p = ^radixmultrandlightsflicker_t;
 
-
 procedure ATR_MultRandLightsFlicker(const params: pointer);
 var
   parms: radixmultrandlightsflicker_t;
@@ -632,16 +720,43 @@ begin
   parms := radixmultrandlightsflicker_p(params)^;
 end;
 
-procedure ATR_SkillRation(const params: pointer);
+////////////////////////////////////////////////////////////////////////////////
+// Sprite type = 34
+type
+  radixskillratio_t = packed record
+    trigger: integer;
+    percentage: smallint;
+  end;
+  radixskillratio_p = ^radixskillratio_t;
+
+procedure ATR_SkillRatio(const params: pointer);
 var
-  trigger, percentage: integer;
+  parms: radixskillratio_t;
 begin
+  parms := radixskillratio_p(params)^;
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+// Sprite type = 35
+type
+  radixhurtplayerexplosion_t = packed record
+    hit_points_at_center: integer;
+    number_of_explosions: integer;
+    x_coord: LongWord;
+    y_coord: LongWord;
+    height: integer;
+    delta_x: integer;
+    delta_y: integer;
+    delay_length: integer;
+    radious_one_third: integer;
+  end;
+  radixhurtplayerexplosion_p = ^radixhurtplayerexplosion_t;
 
 procedure ATR_HurtPlayerExplosion(const params: pointer);
 var
-  hit_points_at_center, number_of_explosions, x_coord, y_coord, height, delta_x, delta_y, delay_length, radious_one_third: integer;
+  parms: radixhurtplayerexplosion_t;
 begin
+  parms := radixhurtplayerexplosion_p(params)^;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -660,17 +775,40 @@ begin
   parms := radixswitchshadetype_p(params)^;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+// Sprite type = 37
+type
+  radix6lightmovement_t = packed record
+    on_level: smallint; // 0-63
+    off_level: smallint;  // 0-63
+    delay: smallint; // 1-20 in radix.dat v2
+    the_sectors: packed array[0..11] of  smallint; // -1 -> no sector
+  end;
+  radix6lightmovement_p = ^radix6lightmovement_t;
+
 procedure ATR_SixLightMovement(const params: pointer);
 var
-  on_level, off_level, delay: integer;
-  the_sectors: array[1..12] of integer;
+  parms: radix6lightmovement_t;
 begin
+  parms := radix6lightmovement_p(params)^;
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+// Sprite type = 38
+type
+  radixsurfacepowerup_t = packed record
+    sector_id: smallint;
+    armour_inc: smallint;
+    shield_inc: smallint;
+    energy_inc: smallint;
+  end;
+  radixsurfacepowerup_p = ^radixsurfacepowerup_t;
 
 procedure ATR_SurfacePowerUp(const params: pointer);
 var
-  sector_id, armour_inc, shield_inc, energy_inc: integer;
+  parms: radixsurfacepowerup_t;
 begin
+  parms := radixsurfacepowerup_p(params)^;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -688,10 +826,19 @@ begin
   parms := radixsecretsprite_p(params)^;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+// Sprite type 40
+type
+  radixbosseyehandler_t = packed record
+    wall_number: smallint;
+  end;
+  radixbosseyehandler_p = ^radixbosseyehandler_t;
+
 procedure ATR_BossEyeHandler(const params: pointer);
 var
-  wall_number: integer;
+  parms: radixbosseyehandler_t;
 begin
+  parms := radixbosseyehandler_p(params)^;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
