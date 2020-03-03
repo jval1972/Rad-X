@@ -818,26 +818,59 @@ end;
 //
 // P_LoadThings
 //
-procedure P_LoadThings(lump: integer);
+procedure P_LoadThings(lump, lumpextra: integer);
 var
   data: pointer;
+  extradata: Pradixmapthingextra_tArray;
   i: integer;
-  mt: Pmapthing_t;
+  dmt: Pdoommapthing_t;
+  mt: mapthing_t;
   numthings: integer;
+  hasextra: boolean;
 begin
   data := W_CacheLumpNum(lump, PU_STATIC);
-  numthings := W_LumpLength(lump) div SizeOf(mapthing_t);
+  numthings := W_LumpLength(lump) div SizeOf(doommapthing_t);
 
-  mt := Pmapthing_t(data);
+  hasextra := false;
+  if lumpextra >= 0 then
+  begin
+    extradata := W_CacheLumpNum(lumpextra, PU_STATIC);
+    if numthings * SizeOf(radixmapthingextra_t) = W_LumpLength(lumpextra) then
+      hasextra := true;
+  end
+  else
+    extradata := nil;
+
+  dmt := Pdoommapthing_t(data);
   for i := 0 to numthings - 1 do
   begin
-    if P_GameValidThing(mt._type) then // Do spawn all other stuff.
-      P_SpawnMapThing(mt);
+    mt.x := dmt.x;
+    mt.y := dmt.y;
+    mt.angle := dmt.angle;
+    mt._type := dmt._type;
+    mt.options := dmt.options;
+    if hasextra then
+    begin
+      mt.z := extradata[i].z;
+      mt.height_speed := extradata[i].height_speed;
+      mt.radix_skill := extradata[i].radix_skill;
+    end
+    else
+    begin
+      mt.z := -1;
+      mt.height_speed := 0;
+      mt.radix_skill := -1;
+    end;
 
-    inc(mt);
+    if P_GameValidThing(mt._type) then // Do spawn all other stuff.
+      P_SpawnMapThing(@mt);
+
+    inc(dmt);
   end;
 
   Z_Free(data);
+  if extradata <> nil then
+    Z_Free(extradata);
 
   P_CheckThings;
 end;
@@ -1633,6 +1666,15 @@ begin
   memfree(pointer(hit), numvertexes);
 end;
 
+function P_RadixLump(const lumpnum: integer; const lumpname: string): integer;
+begin
+  result := -1;
+  if lumpnum >= W_NumLumps then
+    exit;
+  if strupper(stringtochar8(W_GetNameForNum(lumpnum))) = strupper(lumpname) then
+    result := lumpnum;
+end;
+
 //
 // P_SetupLevel
 //
@@ -1659,6 +1701,7 @@ begin
 
   wminfo.maxfrags := 0;
   wminfo.partime := 180;
+
   for i := 0 to MAXPLAYERS - 1 do
   begin
     players[i].killcount := 0;
@@ -1816,7 +1859,7 @@ begin
 
   if devparm then
     printf('P_LoadThings()'#13#10);
-  P_LoadThings(lumpnum + Ord(ML_THINGS));
+  P_LoadThings(lumpnum + Ord(ML_THINGS), P_RadixLump(lumpnum + Ord(ML_THINGSZ), 'RTHINGS'));
 
   // if deathmatch, randomly spawn the active players
   if deathmatch <> 0 then

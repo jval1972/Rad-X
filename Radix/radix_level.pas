@@ -184,6 +184,13 @@ type
   radixgrid_t = packed array[0..RADIXGRIDSIZE - 1] of smallint;
   Pradixgrid_t = ^radixgrid_t;
 
+type
+  radixgridinfo_t = packed record
+    x, y: integer;
+    grid: radixgrid_t;
+  end;
+  Pradixgridinfo_t = ^radixgridinfo_t;
+
 const
   MAX_RADIX_SPRITE_PARAMS = 64;
 
@@ -196,7 +203,7 @@ type
     // Offset to parameters
     // All parameters from all sprites are stored in a table
     // dataoffset point to the first item (from ::suspend to the last of the params)
-    // dataoffset = "[last dataoffset] + [extradata] + 6" 
+    // dataoffset = "[last dataoffset] + [extradata] + 6"
     dataoffset: smallint;
     sprite_type: smallint;
     suspend: integer; // 0 -> Run at level start, -1 -> Run on trigger
@@ -352,7 +359,8 @@ var
   rthings: Pradixthing_tArray;
   rsprites: Pradixsprite_tArray;
   rtriggers: Pradixtrigger_tArray;
-  doomthings: Pmapthing_tArray;
+  doomthings: Pdoommapthing_tArray;
+  doomthingsextra: Pradixmapthingextra_tArray; // Extra lump 'THINGSEX'
   numdoomthings: integer;
   doomlinedefs: Pmaplinedef_tArray;
   numdoomlinedefs: integer;
@@ -362,6 +370,7 @@ var
   numdoomvertexes: integer;
   doomsectors: Pmapsector_tArray;
   numdoomsectors: integer;
+  gridinfoextra: Pradixgridinfo_t;
   doommapscript: TDStringList;
   i, j: integer;
   minx, maxx, miny, maxy: integer;
@@ -397,24 +406,30 @@ var
   end;
 
   // angle is in 0-256
-  procedure AddThingToWad(const x, y, z: smallint; const angle: smallint; const mtype: word; const options: smallint);
+  procedure AddThingToWad(const x, y, z: smallint; const height_speed: smallint;
+    const angle: smallint; const mtype: word; const options: smallint; const radix_skill: integer);
   var
-    mthing: Pmapthing_t;
+    mthing: Pdoommapthing_t;
     xx, yy: integer;
   begin
-    realloc(pointer(doomthings), numdoomthings * SizeOf(mapthing_t), (numdoomthings + 1) * SizeOf(mapthing_t));
+    realloc(pointer(doomthings), numdoomthings * SizeOf(doommapthing_t), (numdoomthings + 1) * SizeOf(doommapthing_t));
     mthing := @doomthings[numdoomthings];
-    inc(numdoomthings);
     xx := x;
     yy := y;
     fix_wall_coordX(xx);
     fix_wall_coordY(yy);
     mthing.x := xx;
     mthing.y := yy;
-    // z ?
     mthing.angle := round((angle / 256) * 360);
     mthing._type := mtype;
     mthing.options := options;
+
+    realloc(pointer(doomthingsextra), numdoomthings * SizeOf(radixmapthingextra_t), (numdoomthings + 1) * SizeOf(radixmapthingextra_t));
+    doomthingsextra[numdoomthings].z := z;
+    doomthingsextra[numdoomthings].height_speed := height_speed;
+    doomthingsextra[numdoomthings].radix_skill := radix_skill;
+
+    inc(numdoomthings);
   end;
 
   procedure AddPlayerStarts;
@@ -423,19 +438,20 @@ var
   begin
     // Player starts - DoomEdNum 1 thru 4
     for j := 0 to 3 do
-      AddThingToWad(rplayerstarts[j].x, rplayerstarts[j].y, rplayerstarts[j].z, rplayerstarts[j].angle, j + 1, 7);
+      AddThingToWad(rplayerstarts[j].x, rplayerstarts[j].y, rplayerstarts[j].z, 0, rplayerstarts[j].angle, j + 1, 7, -1);
     // Deathmatch starts - DoomEdNum 11
     for j := 4 to RADIXNUMPLAYERSTARTS - 1 do
-      AddThingToWad(rplayerstarts[j].x, rplayerstarts[j].y, rplayerstarts[j].z, rplayerstarts[j].angle, 11, 7);
+      AddThingToWad(rplayerstarts[j].x, rplayerstarts[j].y, rplayerstarts[j].z, 0, rplayerstarts[j].angle, 11, 7, -1);
   end;
 
-  procedure ReadRadixGrid;
+  procedure ReadRadixGrid(const pgrid: Pradixgridinfo_t);
   var
     grid: Pradixgrid_t;
     grid_X_size: integer;
     grid_Y_size: integer;
     i_grid_x, i_grid_y: integer;
     g, l, k: smallint;
+    ii: integer;
   begin
     if header.orthogonalmap <> 0 then
     begin
@@ -470,6 +486,14 @@ var
           inc(i_grid_x);
         end;
       until i_grid_x >= grid_X_size;
+    end;
+
+    if pgrid <> nil then
+    begin
+      pgrid.x := grid_X_size;
+      pgrid.y := grid_Y_size;
+      for ii := 0 to RADIXGRIDSIZE - 1 do
+        pgrid.grid[ii] := grid[ii];
     end;
 
     memfree(pointer(grid), grid_X_size * grid_Y_size * SizeOf(smallint));
@@ -1040,14 +1064,17 @@ begin
 
   // Read and unpack the 320x128 or 1280x32 grid (RLE compressed)
   // Used for advancing the position of input stream
-  ReadRadixGrid;
+  ReadRadixGrid(nil); // Line blocking information (unused in doom engine)
 
   // Read Radix things
   rthings := malloc(header.numthings * SizeOf(radixthing_t));
   ms.Read(rthings^, header.numthings * SizeOf(radixthing_t));
 
+  // Allocate grid trigger grid structure
+  gridinfoextra := malloc(SizeOf(radixgridinfo_t));
+
   // Read Trigger's grid
-  ReadRadixGrid;
+  ReadRadixGrid(gridinfoextra);
 
   // Read Radix sprites
   rsprites := mallocz(header.numsprites * SizeOf(radixsprite_t)); // SOS -> use mallocz
@@ -1071,6 +1098,7 @@ begin
   ms.Read(rplayerstarts, SizeOf(rplayerstarts));
 
   doomthings := nil;
+  doomthingsextra := nil;
   numdoomthings := 0;
   doomlinedefs := nil;
   numdoomlinedefs := 0;
@@ -1098,7 +1126,9 @@ begin
   for i := 0 to header.numthings - 1 do
   begin
     if rthings[i].radix_type > 0 then
-      AddThingToWad(rthings[i].x, rthings[i].y, 0, rthings[i].angle, rthings[i].radix_type + _DOOM_THING_2_RADIX_, RadixSkillToDoomSkill(rthings[i].skill));
+      AddThingToWad(
+        rthings[i].x, rthings[i].y, rthings[i].ground, rthings[i].height_speed,
+        rthings[i].angle, rthings[i].radix_type + _DOOM_THING_2_RADIX_, RadixSkillToDoomSkill(rthings[i].skill), rthings[i].skill);
   end;
 
   // Find Doom map bounding box;
@@ -1164,7 +1194,7 @@ begin
   memfree(pointer(sectormapped), numdoomsectors);
 
   wadwriter.AddString(levelname, doommapscript.Text);
-  wadwriter.AddData('THINGS', doomthings, numdoomthings * SizeOf(mapthing_t));
+  wadwriter.AddData('THINGS', doomthings, numdoomthings * SizeOf(doommapthing_t));
   wadwriter.AddData('LINEDEFS', doomlinedefs, numdoomlinedefs * SizeOf(maplinedef_t));
   wadwriter.AddData('SIDEDEFS', doomsidedefs, numdoomsidedefs * SizeOf(mapsidedef_t));
   wadwriter.AddData('VERTEXES', doomvertexes, numdoomvertexes * SizeOf(mapvertex_t));
@@ -1174,6 +1204,11 @@ begin
   wadwriter.AddData('SECTORS', doomsectors, numdoomsectors * SizeOf(mapsector_t));
   wadwriter.AddSeparator('REJECT');
   wadwriter.AddSeparator('BLOCKMAP');
+  // Radix extra lumps
+  // THINGS extra stuff
+  wadwriter.AddData('RTHINGS', doomthingsextra, numdoomthings * SizeOf(radixmapthingextra_t));
+  // Trigger grid
+  wadwriter.AddData('RGRID', gridinfoextra, SizeOf(radixgridinfo_t));
 
   // Free Radix data
   memfree(pointer(rsectors), header.numsectors * SizeOf(radixsector_t));
@@ -1183,11 +1218,14 @@ begin
   memfree(pointer(rtriggers), header.numtriggers * SizeOf(radixtrigger_t));
 
   // Free Doom data
-  memfree(pointer(doomthings), numdoomthings * SizeOf(mapthing_t));
+  memfree(pointer(doomthings), numdoomthings * SizeOf(doommapthing_t));
   memfree(pointer(doomlinedefs), numdoomlinedefs * SizeOf(maplinedef_t));
   memfree(pointer(doomsidedefs), numdoomsidedefs * SizeOf(mapsidedef_t));
   memfree(pointer(doomvertexes), numdoomvertexes * SizeOf(mapvertex_t));
   memfree(pointer(doomsectors), numdoomsectors * SizeOf(mapsector_t));
+  // Free extra lumps
+  memfree(pointer(doomthingsextra), numdoomthings * SizeOf(radixmapthingextra_t));
+  memfree(pointer(gridinfoextra), SizeOf(radixgridinfo_t));
 
   // Free Extra Radix Scripted Data
   doommapscript.Free;

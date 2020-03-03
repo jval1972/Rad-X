@@ -65,7 +65,7 @@ type
     ML_SECTORS,   // Sectors, from editing
     ML_REJECT,    // LUT, sector-sector visibility
     ML_BLOCKMAP,  // LUT, motion clipping, walls/grid element
-    ML_CODE       // JVAL: script goes here
+    ML_THINGSZ    // JVAL: Z information lump (Radix)
   );
 
   mapvertex_t = record
@@ -221,9 +221,12 @@ type
 
 // Thing definition, position, orientation and type,
 // plus skill/visibility flags and attributes.
-  mapthing_t = record
+  mapthing_t = packed record
     x: smallint;
     y: smallint;
+    z: smallint;
+    height_speed: smallint;
+    radix_skill: smallint;
     angle: smallint;
     _type: word;
     options: smallint;
@@ -231,6 +234,26 @@ type
   Pmapthing_t = ^mapthing_t;
   mapthing_tArray = array[0..$FFFF] of mapthing_t;
   Pmapthing_tArray = ^mapthing_tArray;
+
+  radixmapthingextra_t = packed record
+    z: smallint;
+    height_speed: smallint;
+    radix_skill: smallint;
+  end;
+  Pradixmapthingextra_t = ^radixmapthingextra_t;
+  radixmapthingextra_tArray = array[0..$FFFF] of radixmapthingextra_t;
+  Pradixmapthingextra_tArray = ^radixmapthingextra_tArray;
+
+  doommapthing_t = packed record
+    x: smallint;
+    y: smallint;
+    angle: smallint;
+    _type: word;
+    options: smallint;
+  end;
+  Pdoommapthing_t = ^doommapthing_t;
+  doommapthing_tArray = array[0..$FFFF] of doommapthing_t;
+  Pdoommapthing_tArray = ^doommapthing_tArray;
 
 implementation
 

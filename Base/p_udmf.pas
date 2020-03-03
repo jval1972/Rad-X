@@ -56,7 +56,7 @@ uses
 type
   TUDMFManager = class
   private
-    fthings: Pmapthing_tArray;
+    fthings: Pdoommapthing_tArray;
     fnumthings: integer;
     fmaplinedefs: Pmaplinedef_tArray;
     fnummaplinedefs: integer;
@@ -148,7 +148,7 @@ procedure TUDMFManager.LoadFromString(const atext: string);
 var
   sc: TScriptEngine;
   token: string;
-  pthing: Pmapthing_t;
+  pthing: Pdoommapthing_t;
   pmaplinedef: Pmaplinedef_t;
   pmapsidedef: Pmapsidedef_t;
   pmapvertex: Pmapvertex_t;
@@ -180,9 +180,9 @@ begin
     end;
     if token = 'THING' then
     begin
-      realloc(Pointer(fthings), fnumthings * SizeOf(mapthing_t), (fnumthings + 1) * SizeOf(mapthing_t));
+      realloc(Pointer(fthings), fnumthings * SizeOf(doommapthing_t), (fnumthings + 1) * SizeOf(doommapthing_t));
       pthing := @fthings[fnumthings];
-      ZeroMemory(pthing, SizeOf(mapthing_t));
+      ZeroMemory(pthing, SizeOf(doommapthing_t));
       {$IFNDEF HEXEN}pthing.options := 16{$ENDIF};
       inc(fnumthings);
       GetToken; // _BEGINBLOCK
@@ -742,9 +742,9 @@ begin
   infotable[0].name := stringtochar8(amapname);
 
   infotable[1].filepos := f.Position;
-  infotable[1].size := fnumthings * SizeOf(mapthing_t);
+  infotable[1].size := fnumthings * SizeOf(doommapthing_t);
   infotable[1].name := stringtochar8('THINGS');
-  f.Write(fthings^, fnumthings * SizeOf(mapthing_t));
+  f.Write(fthings^, fnumthings * SizeOf(doommapthing_t));
 
   infotable[2].filepos := f.Position;
   infotable[2].size := fnummaplinedefs * SizeOf(maplinedef_t);
@@ -810,7 +810,7 @@ end;
 
 procedure TUDMFManager.Clear;
 begin
-  memfree(Pointer(fthings), fnumthings * SizeOf(mapthing_t));
+  memfree(Pointer(fthings), fnumthings * SizeOf(doommapthing_t));
   memfree(Pointer(fmaplinedefs), fnummaplinedefs * SizeOf(maplinedef_t));
   memfree(Pointer(fmapsidedefs), fnummapsidedefs * SizeOf(mapsidedef_t));
   memfree(Pointer(fmapvertexes), fnummapvertexes * SizeOf(mapvertex_t));

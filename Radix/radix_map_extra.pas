@@ -406,16 +406,7 @@ begin
 end;
 
 function RX_CalculateRadixSlopeMidOffs(const seg: PSeg_t): fixed_t;
-{var
-  line: Pline_t;}
 begin
-{  line := seg.linedef;
-  if line.radixflags and (RWF_PEGBOTTOM_FLOOR or RWF_PEGTOP_FLOOR) = 0 then
-    result := -viewz
-  else if line.radixflags and RWF_PEGBOTTOM_FLOOR <> 0 then
-    result := seg.sidedef.sector.floorheight - viewz
-  else
-    result := seg.sidedef.sector.ceilingheight - viewz;}
   result := -viewz;
 end;
 
