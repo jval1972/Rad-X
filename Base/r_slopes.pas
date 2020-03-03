@@ -571,6 +571,12 @@ begin
   ds_x1 := x1;
   cnt := 0;
 
+  tsin := sin(-ds_angle / ANGLE_MAX * 2 * pi);
+  tcos := cos(-ds_angle / ANGLE_MAX * 2 * pi);
+
+  tviewx := Round(viewx * tcos - viewy * tsin);
+  tviewy := Round(viewx * tsin + viewy * tcos);
+
   for x := x1 to x2 do
   begin
     Inc(cnt);
@@ -591,29 +597,11 @@ begin
       length := FixedMul(distance, distscale[x]);
       angle := (viewangle + xtoviewangle[x] - ds_angle) shr FRACBITS;
 
-  tsin := sin(-ds_angle / ANGLE_MAX * 2 * pi);
-  tcos := cos(-ds_angle / ANGLE_MAX * 2 * pi);
-
-  tviewx := Round(viewx * tcos - viewy * tsin);
-  tviewy := Round(viewx * tsin + viewy * tcos);
-
       xfrac1 := tviewx + FixedMul(fixedcosine[angle], length)
       {$IFDEF DOOM_OR_STRIFE} + xoffs{$ENDIF} {$IFDEF HEXEN} + ds_xoffset{$ENDIF};
       yfrac1 := -tviewy - FixedMul(fixedsine[angle], length)
       {$IFDEF DOOM_OR_STRIFE} + yoffs{$ENDIF} {$IFDEF HEXEN} + ds_yoffset{$ENDIF};
 
-
-////////////////////////////////////////////////////////////////////////////////////////////
-{  pviewsin := sin((viewangle + ds_angle) / ANGLE_MAX * 2 * pi);
-  pviewcos := cos((viewangle + ds_angle) / ANGLE_MAX * 2 * pi);
-
-  xfrac1 :=  tviewx + xoffs + round(pviewcos * distance);// + (x1 - centerx) * ds_xstep;
-  yfrac1 := -tviewy + yoffs - round(pviewsin * distance);// + (x1 - centerx) * ds_ystep;
-
-  xfrac1 :=  tviewx + xoffs + round(pviewcos * distance);// + (x1 - centerx) * ds_xstep;
-  yfrac1 := -tviewy + yoffs - round(pviewsin * distance);// + (x1 - centerx) * ds_ystep;}
-
-////////////////////////////////////////////////////////////////////////////////////
       if x = x1 then
       begin
         xfrac2 := xfrac1;
@@ -726,7 +714,7 @@ begin
   ds_angle := pl.angle;
   if ds_angle <> 0 then
   begin
-    // Slow but accurate lighting
+    // Slope with angle
     for x := pl.minx to stop do
     begin
       R_MakeSpans(x, pl.top[x - 1], pl.bottom[x - 1], pl.top[x], pl.bottom[x], @R_MapSlopeAngle);
