@@ -1859,7 +1859,7 @@ begin
 
   if devparm then
     printf('P_LoadThings()'#13#10);
-  P_LoadThings(lumpnum + Ord(ML_THINGS), P_RadixLump(lumpnum + Ord(ML_THINGSZ), 'RTHINGS'));
+  P_LoadThings(lumpnum + Ord(ML_THINGS), P_RadixLump(lumpnum + Ord(ML_RTHINGS), 'RTHINGS'));
 
   // if deathmatch, randomly spawn the active players
   if deathmatch <> 0 then
