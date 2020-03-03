@@ -245,29 +245,11 @@ type
     genBlazeCdO
   );
 
-  vldoor_t115 = record
-    thinker: thinker_t;
-    _type: vldoor_e;
-    sector: Psector_t;
-    topheight: fixed_t;
-    speed: fixed_t;
-
-    // 1 = up, 0 = waiting at top, -1 = down
-    direction: integer;
-
-    // tics to wait at the top
-    topwait: integer;
-    // (keep in case a door going down is reset)
-    // when it reaches 0, start going down
-    topcountdown: integer;
-  end;
-  Pvldoor_t115 = ^vldoor_t115;
-
   vldoor_t = record
     thinker: thinker_t;
     _type: vldoor_e;
     sector: Psector_t;
-    line: Pline_t; 
+    line: Pline_t;
     topheight: fixed_t;
     speed: fixed_t;
 
@@ -310,23 +292,6 @@ type
     genCrusher,
     genSilentCrusher
   );
-
-  ceiling_t115 = record
-    thinker: thinker_t;
-    _type: ceiling_e;
-    sector: Psector_t;
-    bottomheight: fixed_t;
-    topheight: fixed_t;
-    speed: fixed_t;
-    crush: boolean;
-    // 1 = up, 0 = waiting, -1 = down
-    direction: integer;
-
-    // ID
-    tag: integer;
-    olddirection: integer;
-  end;
-  Pceiling_t115 = ^ceiling_t115;
 
   ceiling_t = record
     thinker: thinker_t;
@@ -418,19 +383,6 @@ type
     build8, // slowly build by 8
     turbo16 // quickly build by 16
   );
-
-  floormove_t115 = record
-    thinker: thinker_t;
-    _type: floor_e;
-    crush: boolean;
-    sector: Psector_t;
-    direction: integer;
-    newspecial: integer;
-    texture: smallint;
-    floordestheight: fixed_t;
-    speed: fixed_t;
-  end;
-  Pfloormove_t115 = ^floormove_t115;
 
   floormove_t = record
     thinker: thinker_t;
