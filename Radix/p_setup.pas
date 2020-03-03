@@ -192,6 +192,8 @@ uses
   nd_main,
   s_sound,
   doomstat,
+  radix_level,
+  radix_grid,
   radix_map_extra;
 
 {$IFDEF OPENGL}
@@ -1669,10 +1671,29 @@ end;
 function P_RadixLump(const lumpnum: integer; const lumpname: string): integer;
 begin
   result := -1;
-  if lumpnum >= W_NumLumps then
+  if (lumpnum < 0) or (lumpnum >= W_NumLumps) then
     exit;
   if strupper(stringtochar8(W_GetNameForNum(lumpnum))) = strupper(lumpname) then
     result := lumpnum;
+end;
+
+//
+// P_LoadGrid
+// JVAL: 20200303 - Load radix grid from RGRID lump
+//
+procedure P_LoadGrid(lump: integer);
+var
+  data: Pradixgridinfo_t;
+begin
+  if lump = -1 then
+  begin
+    RX_InitRadixGrid(0, 0, nil);
+    exit;
+  end;
+
+  data := W_CacheLumpNum(lump, PU_STATIC);
+  RX_InitRadixGrid(data.x, data.y, @data.grid);
+  Z_Free(data);
 end;
 
 //
@@ -1860,6 +1881,8 @@ begin
   if devparm then
     printf('P_LoadThings()'#13#10);
   P_LoadThings(lumpnum + Ord(ML_THINGS), P_RadixLump(lumpnum + Ord(ML_RTHINGS), 'RTHINGS'));
+
+  P_LoadGrid(P_RadixLump(lumpnum + Ord(ML_RGRID), 'RGRID'));
 
   // if deathmatch, randomly spawn the active players
   if deathmatch <> 0 then

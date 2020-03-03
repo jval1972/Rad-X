@@ -65,7 +65,8 @@ type
     ML_SECTORS,   // Sectors, from editing
     ML_REJECT,    // LUT, sector-sector visibility
     ML_BLOCKMAP,  // LUT, motion clipping, walls/grid element
-    ML_RTHINGS    // JVAL: Extra things information (Radix)
+    ML_RTHINGS,   // JVAL: Extra things information (Radix)
+    ML_RGRID      // JVAL: Trigger's grid (Radix) - unpacked from WorldData[x][y] lumps
   );
 
   mapvertex_t = record

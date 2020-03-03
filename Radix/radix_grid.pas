@@ -47,7 +47,7 @@ var
 //
 // JVAL: 20200203 -  Initialize Radix Trigger Grid
 //
-procedure RX_InitRadixGrid(const x, y: integer);
+procedure RX_InitRadixGrid(const x, y: integer; const pgrid: Pradixgrid_t);
 
 implementation
 
@@ -59,7 +59,7 @@ var
   grid_X_size: integer;
   grid_Y_size: integer;
 
-procedure RX_InitRadixGrid(const x, y: integer);
+procedure RX_InitRadixGrid(const x, y: integer; const pgrid: Pradixgrid_t);
 var
   sz: integer;
 begin
@@ -70,7 +70,11 @@ begin
 
   grid_X_size := x;
   grid_Y_size := y;
-  ZeroMemory(@radixgrid, RADIXGRIDSIZE * SizeOf(smallint));
+
+  if pgrid = nil then
+    memsetsi(@radixgrid, -1, RADIXGRIDSIZE)
+  else
+    memcpy(@radixgrid, pgrid, RADIXGRIDSIZE * SizeOf(smallint));
 end;
 
 end.
