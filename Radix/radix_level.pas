@@ -1212,6 +1212,10 @@ begin
   wadwriter.AddData('RTHINGS', doomthingsextra, numdoomthings * SizeOf(radixmapthingextra_t));
   // Trigger grid (binary)
   wadwriter.AddData('RGRID', gridinfoextra, SizeOf(radixgridinfo_t));
+  // Sprites/Actions (binary)
+  wadwriter.AddData('RSPRITE', rsprites, header.numsprites * SizeOf(radixsprite_t));
+  // Triggers (binary)
+  wadwriter.AddData('RTRIGGER', rtriggers, header.numtriggers * SizeOf(radixtrigger_t));
 
   // Free Radix data
   memfree(pointer(rsectors), header.numsectors * SizeOf(radixsector_t));
@@ -1226,6 +1230,7 @@ begin
   memfree(pointer(doomsidedefs), numdoomsidedefs * SizeOf(mapsidedef_t));
   memfree(pointer(doomvertexes), numdoomvertexes * SizeOf(mapvertex_t));
   memfree(pointer(doomsectors), numdoomsectors * SizeOf(mapsector_t));
+  
   // Free extra lumps
   memfree(pointer(doomthingsextra), numdoomthings * SizeOf(radixmapthingextra_t));
   memfree(pointer(gridinfoextra), SizeOf(radixgridinfo_t));

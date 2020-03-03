@@ -1697,6 +1697,40 @@ begin
 end;
 
 //
+// P_LoadRadixSprites
+// JVAL: 20200303 - Load radix sprites/actions from RSPRITE lump
+//
+procedure P_LoadRadixSprites(lump: integer);
+begin
+  if lump = -1 then
+  begin
+    radixsprites := nil;
+    numradixsprites := 0;
+    exit;
+  end;
+
+  radixsprites := W_CacheLumpNum(lump, PU_LEVEL);
+  numradixsprites := W_LumpLength(lump) div SizeOf(radixsprite_t);
+end;
+
+//
+// P_LoadRadixTriggers
+// JVAL: 20200303 - Load radix triggers from RTRIGGER lump
+//
+procedure P_LoadRadixTriggers(lump: integer);
+begin
+  if lump = -1 then
+  begin
+    radixtriggers := nil;
+    numradixtriggers := 0;
+    exit;
+  end;
+
+  radixtriggers := W_CacheLumpNum(lump, PU_LEVEL);
+  numradixtriggers := W_LumpLength(lump) div SizeOf(radixtrigger_t);
+end;
+
+//
 // P_SetupLevel
 //
 procedure P_SetupLevel(episode, map, playermask: integer; skill: skill_t);
@@ -1882,7 +1916,11 @@ begin
     printf('P_LoadThings()'#13#10);
   P_LoadThings(lumpnum + Ord(ML_THINGS), P_RadixLump(lumpnum + Ord(ML_RTHINGS), 'RTHINGS'));
 
-  P_LoadGrid(P_RadixLump(lumpnum + Ord(ML_RGRID), 'RGRID'));
+  P_LoadGrid(P_RadixLump(lumpnum + Ord(ML_RGRID), 'RGRID')); // JVAL: 20200303 - Load radix grid
+
+  P_LoadRadixSprites(P_RadixLump(lumpnum + Ord(ML_RSPRITE), 'RSPRITE')); // JVAL: 20200303 - Load radix sprites/actions
+
+  P_LoadRadixTriggers(P_RadixLump(lumpnum + Ord(ML_RTRIGGER), 'RTRIGGER'));  // JVAL: 20200303 - Load radix triggers
 
   // if deathmatch, randomly spawn the active players
   if deathmatch <> 0 then
