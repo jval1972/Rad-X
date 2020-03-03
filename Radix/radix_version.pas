@@ -64,7 +64,7 @@ const
     (version: rv10sha; crc32: '745cf789'; gamemode: shareware; versionstring: 'Radix v1.0 Shareware'),
     (version: rv10reg; crc32: 'f7d737a5'; gamemode: registered; versionstring: 'Radix v1.0 Registered'),
     (version: rv11sha; crc32: '681b6be8'; gamemode: shareware; versionstring: 'Radix v1.1 Shareware'),
-    (version: rv10reg; crc32: '4947eb68'; gamemode: shareware; versionstring: 'Radix v1.1 Registered'),
+    (version: rv11reg; crc32: '4947eb68'; gamemode: registered; versionstring: 'Radix v1.1 Registered'),
     (version: rv20sha; crc32: '593759be'; gamemode: shareware; versionstring: 'Radix v2.0 Remix Shareware'),
     (version: rv20reg; crc32: '67f5000c'; gamemode: registered; versionstring: 'Radix v2.0 Remix Registered')
   );
