@@ -1296,7 +1296,7 @@ end;
 
 const
   SLOPESPLITFACTOR = 2;
-  SLOPECOEFF = 256 * FRACUNIT;
+  SLOPECOEFF = 1024 * FRACUNIT;
 
 function R_VisSlopeFromSubsector(const ssector: Psubsector_t;
   const virtualfloor: boolean): Pvisslope_t;
