@@ -238,6 +238,7 @@ type
 
   radixmapthingextra_t = packed record
     z: smallint;
+    speed: smallint;
     height_speed: smallint;
     radix_skill: smallint;
   end;
