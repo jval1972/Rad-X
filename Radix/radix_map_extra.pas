@@ -158,6 +158,9 @@ var
   a, b, c, d: integer;
   ang: LongWord;
 begin
+  if lumpnum < 0 then
+    exit;
+
   tokens := TTokenList.Create;
   tokens.Add('SECTORID'); // 0
   tokens.Add('FLOORSLOPE'); // 1

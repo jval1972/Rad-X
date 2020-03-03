@@ -1194,7 +1194,7 @@ begin
 
   memfree(pointer(sectormapped), numdoomsectors);
 
-  wadwriter.AddString(levelname, doommapscript.Text);
+  wadwriter.AddSeparator(levelname);
   wadwriter.AddData('THINGS', doomthings, numdoomthings * SizeOf(doommapthing_t));
   wadwriter.AddData('LINEDEFS', doomlinedefs, numdoomlinedefs * SizeOf(maplinedef_t));
   wadwriter.AddData('SIDEDEFS', doomsidedefs, numdoomsidedefs * SizeOf(mapsidedef_t));
@@ -1206,9 +1206,11 @@ begin
   wadwriter.AddSeparator('REJECT');
   wadwriter.AddSeparator('BLOCKMAP');
   // Radix extra lumps
-  // THINGS extra stuff
+  // Sectors & walls extra data (scripted)
+  wadwriter.AddString('RMAP', doommapscript.Text);
+  // THINGS extra stuff (binary)
   wadwriter.AddData('RTHINGS', doomthingsextra, numdoomthings * SizeOf(radixmapthingextra_t));
-  // Trigger grid
+  // Trigger grid (binary)
   wadwriter.AddData('RGRID', gridinfoextra, SizeOf(radixgridinfo_t));
 
   // Free Radix data

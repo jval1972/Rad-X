@@ -1862,8 +1862,8 @@ begin
   R_PrecalcSegs; // https://www.doomworld.com/forum/topic/70288-dynamic-wiggletall-sector-fix-for-fixed-point-software-renderer/?do=findComment&comment=1340433
 {$ENDIF}
 
-  RX_LoadRadixMapInfo(lumpnum); // JVAL: 20200225 - Load radix map information
-  
+  RX_LoadRadixMapInfo(P_RadixLump(lumpnum + Ord(ML_RMAP), 'RMAP')); // JVAL: 20200225 - Load radix map information
+
   P_SlopesSetup;// JVAL: Slopes
 
   P_SetupSectorAffectees;

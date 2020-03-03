@@ -65,6 +65,7 @@ type
     ML_SECTORS,   // Sectors, from editing
     ML_REJECT,    // LUT, sector-sector visibility
     ML_BLOCKMAP,  // LUT, motion clipping, walls/grid element
+    ML_RMAP,      // JVAL: Extra sectors and walls information (scripted)
     ML_RTHINGS,   // JVAL: Extra things information (Radix)
     ML_RGRID      // JVAL: Trigger's grid (Radix) - unpacked from WorldData[x][y] lumps
   );
@@ -222,6 +223,7 @@ type
 
 // Thing definition, position, orientation and type,
 // plus skill/visibility flags and attributes.
+// Extended thing definition (RADIX)
   mapthing_t = packed record
     x: smallint;
     y: smallint;
@@ -236,6 +238,7 @@ type
   mapthing_tArray = array[0..$FFFF] of mapthing_t;
   Pmapthing_tArray = ^mapthing_tArray;
 
+// Extra radix things information (RTHINGS lump)  
   radixmapthingextra_t = packed record
     z: smallint;
     speed: smallint;
@@ -246,6 +249,7 @@ type
   radixmapthingextra_tArray = array[0..$FFFF] of radixmapthingextra_t;
   Pradixmapthingextra_tArray = ^radixmapthingextra_tArray;
 
+// Doom Engine map thing
   doommapthing_t = packed record
     x: smallint;
     y: smallint;
