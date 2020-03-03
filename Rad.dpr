@@ -375,7 +375,8 @@ uses
   mn_font in 'Radix\mn_font.pas',
   radix_alias in 'Radix\radix_alias.pas',
   radix_grid in 'Radix\radix_grid.pas',
-  radix_messages in 'Radix\radix_messages.pas';
+  radix_messages in 'Radix\radix_messages.pas',
+  mn_screenshot in 'Radix\mn_screenshot.pas';
 
 var
   Saved8087CW: Word;

@@ -67,6 +67,22 @@ procedure P_ArchiveOverlay;
 
 procedure P_UnArchiveOverlay;
 
+procedure P_ArchiveGrid;
+
+procedure P_UnArchiveGrid;
+
+procedure P_ArchiveRadixSprites;
+
+procedure P_UnArchiveRadixSprites;
+
+procedure P_ArchiveRadixTriggers;
+
+procedure P_UnArchiveRadixTriggers;
+
+procedure P_ArchiveScreenShot;
+
+procedure P_UnArchiveScreenShot;
+
 var
   save_p: PByteArray;
   savegameversion: integer;
@@ -80,6 +96,7 @@ uses
   d_think,
   g_game,
   m_fixed,
+  mn_screenshot,
   info_h,
   info,
   i_tmp,
@@ -105,6 +122,8 @@ uses
   ps_main,
   psi_globals,
   psi_overlay,
+  radix_grid,
+  radix_level,
   r_defs,
   r_data,
   r_colormaps,
@@ -1005,6 +1024,124 @@ end;
 procedure P_UnArchiveOverlay;
 begin
   overlay.LoadFromBuffer(Pointer(save_p));
+end;
+
+procedure P_ArchiveGrid;
+var
+  i, x, y: integer;
+begin
+  x := RX_RadixGridX;
+  PInteger(save_p)^ := x;
+  incp(pointer(save_p), SizeOf(integer));
+
+  if x = 0 then
+    exit;
+
+  y := RX_RadixGridY;
+  PInteger(save_p)^ := y;
+  incp(pointer(save_p), SizeOf(integer));
+
+  for i := 0 to RADIXGRIDSIZE - 1 do
+  begin
+    PSmallInt(save_p)^ := radixgrid[i];
+    incp(pointer(save_p), SizeOf(smallint));
+  end;
+end;
+
+procedure P_UnArchiveGrid;
+var
+  x, y: integer;
+begin
+  x := PInteger(save_p)^;
+  incp(pointer(save_p), SizeOf(integer));
+  if x <> RX_RadixGridX then
+    I_Error('P_UnArchiveGrid(): Invalid grid x size %d', [x]);
+  if x = 0 then
+    exit;
+
+  y := PInteger(save_p)^;
+  incp(pointer(save_p), SizeOf(integer));
+  if y <> RX_RadixGridY then
+    I_Error('P_UnArchiveGrid(): Invalid grid y size %d', [y]);
+
+  RX_InitRadixGrid(x, y, Pradixgrid_t(save_p));
+  incp(pointer(save_p), SizeOf(radixgrid_t));
+end;
+
+procedure P_ArchiveRadixSprites;
+var
+  i: integer;
+begin
+  PInteger(save_p)^ := numradixsprites;
+  incp(pointer(save_p), SizeOf(integer));
+
+  for i := 0 to numradixsprites - 1 do
+  begin
+    Pradixsprite_t(save_p)^ := radixsprites[i];
+    incp(pointer(save_p), SizeOf(radixsprite_t));
+  end;
+end;
+
+procedure P_UnArchiveRadixSprites;
+var
+  i, x: integer;
+begin
+  x := PInteger(save_p)^;
+  incp(pointer(save_p), SizeOf(integer));
+  if x <> numradixsprites then
+    I_Error('P_UnArchiveRadixSprites(): Invalid sprites number %d', [x]);
+
+  for i := 0 to x - 1 do
+  begin
+    radixsprites[i] := Pradixsprite_t(save_p)^;
+    incp(pointer(save_p), SizeOf(radixsprite_t));
+  end;
+end;
+
+procedure P_ArchiveRadixTriggers;
+var
+  i: integer;
+begin
+  PInteger(save_p)^ := numradixtriggers;
+  incp(pointer(save_p), SizeOf(integer));
+
+  for i := 0 to numradixtriggers - 1 do
+  begin
+    Pradixtrigger_t(save_p)^ := radixtriggers[i];
+    incp(pointer(save_p), SizeOf(radixtrigger_t));
+  end;
+end;
+
+procedure P_UnArchiveRadixTriggers;
+var
+  i, x: integer;
+begin
+  x := PInteger(save_p)^;
+  incp(pointer(save_p), SizeOf(integer));
+  if x <> numradixtriggers then
+    I_Error('P_UnArchiveRadixTriggers(): Invalid triggers number %d', [x]);
+
+  for i := 0 to x - 1 do
+  begin
+    radixtriggers[i] := Pradixtrigger_t(save_p)^;
+    incp(pointer(save_p), SizeOf(radixtrigger_t));
+  end;
+end;
+
+procedure P_ArchiveScreenShot;
+var
+  i: integer;
+begin
+  for i := 0 to MN_SCREENSHOTSIZE - 1 do
+    save_p[i] := mn_screenshotbuffer[i];
+
+  incp(pointer(save_p), SizeOf(menuscreenbuffer_t));
+end;
+
+procedure P_UnArchiveScreenShot;
+begin
+  // Nothing to do, just inc the buffer
+  incp(pointer(save_p), SizeOf(menuscreenbuffer_t));
 end;
 
 end.

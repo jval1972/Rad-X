@@ -109,6 +109,7 @@ uses
   m_misc,
   m_fixed,
   mn_font,
+  mn_screenshot,
   mt_utils,
   i_system,
   i_threads,
@@ -208,6 +209,7 @@ const
 
 var
   savegamestrings: array[0..Ord(load_end) - 1] of string;
+  savegameshots: array[0..Ord(load_end) - 1] of menuscreenbuffer_t;
   endstring: string;
 
 type
@@ -349,6 +351,7 @@ begin
   else
     messageRoutine := nil;
   messageNeedsInput := input;
+  MN_ScreenShotFromBlitBuffer;
   menuactive := true;
 end;
 
@@ -1129,11 +1132,14 @@ begin
     if not fopen(handle, name, fOpenReadOnly) then
     begin
       savegamestrings[i] := '';
+      ZeroMemory(@savegameshots[i], SizeOf(menuscreenbuffer_t));
       LoadMenu[i].status := 0;
       continue;
     end;
     SetLength(savegamestrings[i], SAVESTRINGSIZE);
     BlockRead(handle, (@savegamestrings[i][1])^, SAVESTRINGSIZE);
+    seek(handle, SAVESTRINGSIZE + SAVEVERSIONSIZE);
+    BlockRead(handle, savegameshots[i], SizeOf(menuscreenbuffer_t));
     close(handle);
     LoadMenu[i].status := 1;
   end;
@@ -1145,6 +1151,35 @@ end;
 procedure M_DrawSaveLoadBorder(x, y: integer);
 begin
   M_Frame3d(x - 4, y - 4, x + 23 * 8 - 4, y + 10, 64, 80, 251);
+end;
+
+//
+// M_DrawSaveLoadScreenShot
+// JVAL: 20200303 - Draw Game Screenshot in Load/Save screens
+//
+procedure M_DrawSaveLoadScreenShot(const screenshot: Pmenuscreenbuffer_t);
+const
+  SHOT_X = 196;
+  SHOT_Y = 14;
+var
+  x, y, spos: integer;
+  b: byte;
+begin
+  if screenshot = nil then
+    exit;
+
+  // Draw screenshot starting at (SHOT_X,SHOT_Y) position
+  for y := 0 to MN_SCREENSHOTHEIGHT - 1 do
+  begin
+    spos := (y + SHOT_Y) * 320 + SHOT_X;
+    for x := 0 to MN_SCREENSHOTWIDTH - 1 do
+    begin
+      b := screenshot[y * MN_SCREENSHOTWIDTH + x];
+      if b <> 0 then
+        screens[SCN_TMP][spos] := b;
+      inc(spos);
+    end;
+  end;
 end;
 
 //
@@ -1163,6 +1198,7 @@ begin
     begin
       V_DrawPatch(LoadDef.x + ARROWXOFFS, LoadDef.y + i * LoadDef.itemheight + ARROWYOFFS, SCN_TMP, p_rightarrow, false);
       V_DrawPatch(LoadDef.x + (1 + SAVESTRINGSIZE) * 5 + ARROWXOFFS, LoadDef.y + i * LoadDef.itemheight + ARROWYOFFS, SCN_TMP, p_leftarrow, false);
+      M_DrawSaveLoadScreenShot(@savegameshots[i]);
     end;
     M_WriteSmallText(LoadDef.x, LoadDef.y + LoadDef.itemheight * i, savegamestrings[i]);
   end;
@@ -1222,6 +1258,8 @@ begin
       if (gametic div 18) mod 2 = 0 then
         M_WriteSmallText(LoadDef.x + i, LoadDef.y + LoadDef.itemheight * saveSlot, '_');
     end;
+
+  M_DrawSaveLoadScreenShot(@mn_screenshotbuffer);
 end;
 
 //
@@ -3166,6 +3204,7 @@ begin
   if menuactive then
     exit;
 
+  MN_ScreenShotFromBlitBuffer;
   menuactive := true;
   currentMenu := @MainDef;// JDC
   itemOn := currentMenu.lastOn; // JDC

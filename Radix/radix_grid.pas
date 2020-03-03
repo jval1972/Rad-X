@@ -49,6 +49,10 @@ var
 //
 procedure RX_InitRadixGrid(const x, y: integer; const pgrid: Pradixgrid_t);
 
+function RX_RadixGridX: integer;
+
+function RX_RadixGridY: integer;
+
 implementation
 
 uses
@@ -75,6 +79,16 @@ begin
     memsetsi(@radixgrid, -1, RADIXGRIDSIZE)
   else
     memcpy(@radixgrid, pgrid, RADIXGRIDSIZE * SizeOf(smallint));
+end;
+
+function RX_RadixGridX: integer;
+begin
+  result := grid_X_size;
+end;
+
+function RX_RadixGridY: integer;
+begin
+  result := grid_Y_size;
 end;
 
 end.

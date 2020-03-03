@@ -260,7 +260,8 @@ var
 
 const
   SAVESTRINGSIZE = 23;
-  
+  SAVEVERSIONSIZE = 16;
+
 implementation
 
 uses
@@ -1554,9 +1555,6 @@ begin
   gameaction := ga_loadgame;
 end;
 
-const
-  VERSIONSIZE = 16;
-
 procedure G_DoLoadGame;
 var
   len: integer;
@@ -1598,29 +1596,7 @@ begin
         vsaved := vsaved + Chr(save_p[j]);
       // JVAL
       // Check for compatible game versions here
-      if vsaved = 'version 113' then
-        savegameversion := VERSION113
-      else if vsaved = 'version 114' then
-        savegameversion := VERSION114
-      else if vsaved = 'version 115' then
-        savegameversion := VERSION115
-      else if vsaved = 'version 116' then
-        savegameversion := VERSION116
-      else if vsaved = 'version 117' then
-        savegameversion := VERSION117
-      else if vsaved = 'version 118' then
-        savegameversion := VERSION118
-      else if vsaved = 'version 119' then
-        savegameversion := VERSION119
-      else if vsaved = 'version 120' then
-        savegameversion := VERSION120
-      else if vsaved = 'version 121' then
-        savegameversion := VERSION121
-      else if vsaved = 'version 122' then
-        savegameversion := VERSION122
-      else if vsaved = 'version 203' then
-        savegameversion := VERSION203
-      else if vsaved = 'version 204' then
+      if vsaved = 'version 204' then
         savegameversion := VERSION204
       else
       begin
@@ -1631,7 +1607,9 @@ begin
       break;
     end;
 
-  save_p := PByteArray(integer(save_p) + VERSIONSIZE);
+  save_p := PByteArray(integer(save_p) + SAVEVERSIONSIZE);
+
+  P_UnArchiveScreenShot;
 
   gameskill := skill_t(save_p[0]);
   save_p := PByteArray(integer(save_p) + 1);
@@ -1668,6 +1646,9 @@ begin
   P_UnArchiveWorld;
   P_UnArchiveThinkers;
   P_UnArchiveSpecials;
+  P_UnArchiveGrid;
+  P_UnArchiveRadixSprites;
+  P_UnArchiveRadixTriggers;
   P_UnArchiveVariables;
   P_UnArchivePSMapScript;
   P_UnArchiveOverlay;
@@ -1729,11 +1710,13 @@ begin
 
   savegameversion := VERSION;
   sprintf(name2, 'version %d', [VERSION]);
-  while length(name2) < VERSIONSIZE do
+  while length(name2) < SAVEVERSIONSIZE do
     name2 := name2 + ' ';
 
-  memcpy(save_p, @name2[1], VERSIONSIZE);
-  save_p := PByteArray(integer(save_p) + VERSIONSIZE);
+  memcpy(save_p, @name2[1], SAVEVERSIONSIZE);
+  save_p := PByteArray(integer(save_p) + SAVEVERSIONSIZE);
+
+  P_ArchiveScreenShot;
 
   save_p[0] := Ord(gameskill);
   save_p := PByteArray(integer(save_p) + 1);
@@ -1763,6 +1746,10 @@ begin
   M_WriteFile(name, savebuffer, len);
   save_p := savebuffer;
 
+  len := integer(save_p) - integer(savebuffer);
+  M_AppendFile(name, savebuffer, len);
+  save_p := savebuffer;
+
   P_ArchivePlayers;
 
   len := integer(save_p) - integer(savebuffer);
@@ -1782,6 +1769,24 @@ begin
   save_p := savebuffer;
 
   P_ArchiveSpecials;
+
+  len := integer(save_p) - integer(savebuffer);
+  M_AppendFile(name, savebuffer, len);
+  save_p := savebuffer;
+
+  P_ArchiveGrid;
+
+  len := integer(save_p) - integer(savebuffer);
+  M_AppendFile(name, savebuffer, len);
+  save_p := savebuffer;
+
+  P_ArchiveRadixSprites;
+
+  len := integer(save_p) - integer(savebuffer);
+  M_AppendFile(name, savebuffer, len);
+  save_p := savebuffer;
+
+  P_ArchiveRadixTriggers;
 
   len := integer(save_p) - integer(savebuffer);
   M_AppendFile(name, savebuffer, len);
