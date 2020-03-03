@@ -379,18 +379,33 @@ var
   rplayerstarts: packed array[0..RADIXNUMPLAYERSTARTS - 1] of radixplayerstart_t;
   lcrc32: string;
   islevel_v: integer;
+  v1x, v1y, v2x, v2y: integer;
+  v1xx, v1yy, v2xx, v2yy: integer;
 
-  procedure fix_wall_coordX(var xx: integer);
+  procedure fix_wall_coordX(var xx: integer; const yy: integer);
   begin
     if levelname = 'E3M2' then
-      xx := xx div 4
+    begin
+      if xx < 48000 then
+        xx := RADIX_MAP_X_MULT * xx + RADIX_MAP_X_ADD
+      else
+        xx := RADIX_MAP_X_MULT * xx - 48000 - 32000;
+    end
     else
       xx := RADIX_MAP_X_MULT * xx + RADIX_MAP_X_ADD;
   end;
 
-  procedure fix_wall_coordY(var yy: integer);
+  procedure fix_wall_coordY(const xx: integer; var yy: integer);
   begin
-    yy := RADIX_MAP_Y_MULT * yy + RADIX_MAP_Y_ADD;
+    if levelname = 'E3M2' then
+    begin
+      if xx < 48000 then
+        yy := RADIX_MAP_Y_MULT * yy + RADIX_MAP_Y_ADD
+      else
+        yy := RADIX_MAP_Y_MULT * yy + RADIX_MAP_Y_ADD - 8192;
+    end
+    else
+      yy := RADIX_MAP_Y_MULT * yy + RADIX_MAP_Y_ADD;
   end;
 
   function RadixSkillToDoomSkill(const sk: integer): integer;
@@ -414,12 +429,17 @@ var
   begin
     realloc(pointer(doomthings), numdoomthings * SizeOf(doommapthing_t), (numdoomthings + 1) * SizeOf(doommapthing_t));
     mthing := @doomthings[numdoomthings];
+
     xx := x;
     yy := y;
-    fix_wall_coordX(xx);
-    fix_wall_coordY(yy);
+    fix_wall_coordX(xx, yy);
     mthing.x := xx;
+
+    xx := x;
+    yy := y;
+    fix_wall_coordY(xx, yy);
     mthing.y := yy;
+
     mthing.angle := round((angle / 256) * 360);
     mthing._type := mtype;
     mthing.options := options;
@@ -1057,10 +1077,30 @@ begin
   ms.Read(rwalls^, header.numwalls * SizeOf(radixwall_t));
   for i := 0 to header.numwalls - 1 do
   begin
-    fix_wall_coordX(rwalls[i].v1_x);
-    fix_wall_coordY(rwalls[i].v1_y);
-    fix_wall_coordX(rwalls[i].v2_x);
-    fix_wall_coordY(rwalls[i].v2_y);
+    v1x := rwalls[i].v1_x;
+    v1y := rwalls[i].v1_y;
+    fix_wall_coordX(v1x, v1y);
+    v1xx := v1x;
+
+    v1x := rwalls[i].v1_x;
+    v1y := rwalls[i].v1_y;
+    fix_wall_coordY(v1x, v1y);
+    v1yy := v1y;
+
+    v2x := rwalls[i].v2_x;
+    v2y := rwalls[i].v2_y;
+    fix_wall_coordX(v2x, v2y);
+    v2xx := v2x;
+
+    v2x := rwalls[i].v2_x;
+    v2y := rwalls[i].v2_y;
+    fix_wall_coordY(v2x, v2y);
+    v2yy := v2y;
+
+    rwalls[i].v1_x := v1xx;
+    rwalls[i].v1_y := v1yy;
+    rwalls[i].v2_x := v2xx;
+    rwalls[i].v2_y := v2yy;
   end;
 
   // Read and unpack the 320x128 or 1280x32 grid (RLE compressed)
