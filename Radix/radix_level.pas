@@ -351,6 +351,14 @@ begin
   result := strupper(result);
 end;
 
+type
+  radixmapsectorextra_t = packed record
+    xmul, xadd, ymul, yadd: integer;
+  end;
+  Pradixmapsectorextra_t = ^radixmapsectorextra_t;
+  radixmapsectorextra_tArray = array[0..$FFFF] of radixmapsectorextra_t;
+  Pradixmapsectorextra_tArray = ^radixmapsectorextra_tArray;
+
 function RX_CreateDoomLevel(const levelname: string;
   const rlevel: pointer; const rsize: integer; const markflats: PBooleanArray;
   const texturewidths, textureheights: PIntegerArray; const wadwriter: TWadWriter): boolean;
@@ -372,6 +380,7 @@ var
   doomvertexes: Pmapvertex_tArray;
   numdoomvertexes: integer;
   doomsectors: Pmapsector_tArray;
+  doomsectorsextra: Pradixmapsectorextra_tArray;
   numdoomsectors: integer;
   gridinfoextra: Pradixgridinfo_t;
   doommapscript: TDStringList;
@@ -542,10 +551,10 @@ var
 
     // Create extra data stored in MAP header
     doommapscript.Add('sectorid ' + itoa(numdoomsectors));
-    doommapscript.Add('xmul ' + itoa(RADIX_MAP_X_MULT));
-    doommapscript.Add('xadd ' + itoa(RADIX_MAP_X_ADD));
-    doommapscript.Add('ymul ' + itoa(RADIX_MAP_Y_MULT));
-    doommapscript.Add('yadd ' + itoa(RADIX_MAP_Y_ADD));
+    doommapscript.Add('xmul ' + itoa(doomsectorsextra[numdoomsectors].xmul));
+    doommapscript.Add('xadd ' + itoa(doomsectorsextra[numdoomsectors].xadd));
+    doommapscript.Add('ymul ' + itoa(doomsectorsextra[numdoomsectors].ymul));
+    doommapscript.Add('yadd ' + itoa(doomsectorsextra[numdoomsectors].yadd));
 
     if ss.flags and RSF_FLOORSLOPE <> 0 then
       doommapscript.Add('floorslope ' + itoa(ss.fa) + ' ' + itoa(ss.fb) + ' ' + itoa(ss.fc) + ' ' + itoa(ss.fd));
@@ -992,52 +1001,6 @@ var
     end;
   end;
 
-  // Slpit long linedefs
-  function split_long_lidedefs: boolean;
-  const
-//    SPLITDELTA = 520.0;
-//    SPLITSIZE = 512.0;
-    SPLITDELTA = 260.0;
-    SPLITSIZE = 256.0;
-  var
-    j: integer;
-    cnt: integer;
-    flen: float;
-    dx, dy: integer;
-    dline1, dline2: Pmaplinedef_t;
-    newx, newy: integer;
-    newv: integer;
-  begin
-    cnt := numdoomlinedefs;
-    result := false;
-    for j := 0 to cnt - 1 do
-    begin
-      dline1 := @doomlinedefs[j];
-      dx := doomvertexes[dline1.v1].x - doomvertexes[dline1.v2].x;
-      dy := doomvertexes[dline1.v1].y - doomvertexes[dline1.v2].y;
-      flen := sqr(dx) + sqr(dy);
-      if flen > SPLITDELTA * SPLITDELTA then
-      begin
-        flen := sqrt(flen);
-
-        newx := doomvertexes[dline1.v1].x - round(SPLITSIZE * dx / flen);
-        newy := doomvertexes[dline1.v1].y - round(SPLITSIZE * dy / flen);
-
-        newv := AddVertexToWAD(newx, newy);
-
-        realloc(pointer(doomlinedefs), numdoomlinedefs * SizeOf(maplinedef_t), (numdoomlinedefs  + 1) * SizeOf(maplinedef_t));
-        dline2 := @doomlinedefs[numdoomlinedefs];
-        inc(numdoomlinedefs);
-
-        dline2^ := dline1^;
-
-        dline1.v2 := newv;
-        dline2.v1 := newv;
-        result := true;
-      end;
-    end;
-  end;
-
 begin
   ms := TAttachableMemoryStream.Create;
   ms.Attach(rlevel, rsize);
@@ -1064,8 +1027,18 @@ begin
 
   // Read Radix sectors
   rsectors := malloc(header.numsectors * SizeOf(radixsector_t));
+  doomsectorsextra := malloc(header.numsectors * SizeOf(radixmapsectorextra_t));
+
   ms.Read(rsectors^, header.numsectors * SizeOf(radixsector_t));
 
+  for i := 0 to header.numsectors - 1 do
+  begin
+    doomsectorsextra[i].xmul := RADIX_MAP_X_MULT;
+    doomsectorsextra[i].xadd := RADIX_MAP_X_ADD;
+    doomsectorsextra[i].ymul := RADIX_MAP_Y_MULT;
+    doomsectorsextra[i].yadd := RADIX_MAP_Y_ADD;
+  end;
+  
   // Read Radix walls
   rwalls := malloc(header.numwalls * SizeOf(radixwall_t));
   ms.Read(rwalls^, header.numwalls * SizeOf(radixwall_t));
@@ -1084,6 +1057,23 @@ begin
       fix_wall_coordXY(v2x, v2y);
       rwalls[i].v2_x := v2x;
       rwalls[i].v2_y := v2y;
+
+      if rwalls[i].frontsector >= 0 then
+      begin
+        doomsectorsextra[rwalls[i].frontsector].xmul := RADIX_MAP_X_MULT;
+        doomsectorsextra[rwalls[i].frontsector].xadd := RADIX_MAP_X_ADD2;
+        doomsectorsextra[rwalls[i].frontsector].ymul := RADIX_MAP_Y_MULT;
+        doomsectorsextra[rwalls[i].frontsector].yadd := RADIX_MAP_Y_ADD2;
+      end;
+
+      if rwalls[i].backsector >= 0 then
+      begin
+        doomsectorsextra[rwalls[i].backsector].xmul := RADIX_MAP_X_MULT;
+        doomsectorsextra[rwalls[i].backsector].xadd := RADIX_MAP_X_ADD2;
+        doomsectorsextra[rwalls[i].backsector].ymul := RADIX_MAP_Y_MULT;
+        doomsectorsextra[rwalls[i].backsector].yadd := RADIX_MAP_Y_ADD2;
+      end;
+
     end
     else
     begin
@@ -1193,8 +1183,6 @@ begin
     fix_level_v11
   else if islevel_v = 10 then
     fix_level_v10;
-
-//  repeat until not split_long_lidedefs;
 
   // Find mapped sectors
   sectormapped := mallocz(numdoomsectors);
