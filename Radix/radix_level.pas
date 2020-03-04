@@ -1038,7 +1038,7 @@ begin
     doomsectorsextra[i].ymul := RADIX_MAP_Y_MULT;
     doomsectorsextra[i].yadd := RADIX_MAP_Y_ADD;
   end;
-  
+
   // Read Radix walls
   rwalls := malloc(header.numwalls * SizeOf(radixwall_t));
   ms.Read(rwalls^, header.numwalls * SizeOf(radixwall_t));
@@ -1256,12 +1256,13 @@ begin
   memfree(pointer(doomsidedefs), numdoomsidedefs * SizeOf(mapsidedef_t));
   memfree(pointer(doomvertexes), numdoomvertexes * SizeOf(mapvertex_t));
   memfree(pointer(doomsectors), numdoomsectors * SizeOf(mapsector_t));
-  
+
   // Free extra lumps
   memfree(pointer(doomthingsextra), numdoomthings * SizeOf(radixmapthingextra_t));
   memfree(pointer(gridinfoextra), SizeOf(radixgridinfo_t));
 
-  // Free Extra Radix Scripted Data
+  // Free Extra Radix Data
+  memfree(pointer(doomsectorsextra), numdoomsectors * SizeOf(radixmapsectorextra_t));
   doommapscript.Free;
 
   ms.Free;
