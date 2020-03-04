@@ -261,10 +261,13 @@ uses
   w_wad;
 
 const
+  E3M2_SPLIT_X = 48000;
   RADIX_MAP_X_MULT = 1;
   RADIX_MAP_X_ADD = -32767;
+  RADIX_MAP_X_ADD2 = -65536;
   RADIX_MAP_Y_MULT = -1;
   RADIX_MAP_Y_ADD = 0;
+  RADIX_MAP_Y_ADD2 = -4096;
 
 function Radix_v10_levelCRC(const lname: string): string;
 begin
@@ -380,32 +383,25 @@ var
   lcrc32: string;
   islevel_v: integer;
   v1x, v1y, v2x, v2y: integer;
-  v1xx, v1yy, v2xx, v2yy: integer;
 
-  procedure fix_wall_coordX(var xx: integer; const yy: integer);
+  procedure fix_wall_coordXYdef(var xx: integer; var yy: integer);
   begin
-    if levelname = 'E3M2' then
-    begin
-      if xx < 48000 then
-        xx := RADIX_MAP_X_MULT * xx + RADIX_MAP_X_ADD
-      else
-        xx := RADIX_MAP_X_MULT * xx - 48000 - 32000;
-    end
-    else
-      xx := RADIX_MAP_X_MULT * xx + RADIX_MAP_X_ADD;
+    xx := RADIX_MAP_X_MULT * xx + RADIX_MAP_X_ADD;
+    yy := RADIX_MAP_Y_MULT * yy + RADIX_MAP_Y_ADD;
   end;
 
-  procedure fix_wall_coordY(const xx: integer; var yy: integer);
+  procedure fix_wall_coordXY(var xx: integer; var yy: integer);
   begin
-    if levelname = 'E3M2' then
+    if xx >= E3M2_SPLIT_X then
     begin
-      if xx < 48000 then
-        yy := RADIX_MAP_Y_MULT * yy + RADIX_MAP_Y_ADD
-      else
-        yy := RADIX_MAP_Y_MULT * yy + RADIX_MAP_Y_ADD - 8192;
-    end
-    else
-      yy := RADIX_MAP_Y_MULT * yy + RADIX_MAP_Y_ADD;
+      if levelname = 'E3M2' then
+      begin
+        xx := RADIX_MAP_X_MULT * xx + RADIX_MAP_X_ADD2;
+        yy := RADIX_MAP_Y_MULT * yy + RADIX_MAP_Y_ADD2;
+        exit;
+      end;
+    end;
+    fix_wall_coordXYdef(xx, yy);
   end;
 
   function RadixSkillToDoomSkill(const sk: integer): integer;
@@ -421,7 +417,7 @@ var
   end;
 
   // angle is in 0-256
-  procedure AddThingToWad(const x, y, z: smallint; const speed, height_speed: smallint;
+  procedure AddThingToWad(const x, y, z: integer; const speed, height_speed: smallint;
     const angle: smallint; const mtype: word; const options: smallint; const radix_skill: integer);
   var
     mthing: Pdoommapthing_t;
@@ -432,12 +428,8 @@ var
 
     xx := x;
     yy := y;
-    fix_wall_coordX(xx, yy);
+    fix_wall_coordXY(xx, yy);
     mthing.x := xx;
-
-    xx := x;
-    yy := y;
-    fix_wall_coordY(xx, yy);
     mthing.y := yy;
 
     mthing.angle := round((angle / 256) * 360);
@@ -783,6 +775,46 @@ var
     inc(numdoomlinedefs);
   end;
 
+  procedure fix_changevertexes(const x1, y1, x2, y2: integer);
+  var
+    v1, v2, j: integer;
+  begin
+    v1 := -1;
+    for j := 0 to numdoomvertexes - 1 do
+      if (doomvertexes[j].x = x1) and (doomvertexes[j].y = y1) then
+      begin
+        v1 := j;
+        break;
+      end;
+    v2 := -1;
+    for j := 0 to numdoomvertexes - 1 do
+      if (doomvertexes[j].x = x2) and (doomvertexes[j].y = y2) then
+      begin
+        v2 := j;
+        break;
+      end;
+    if (v1 >= 0) and (v2 >= 0) then
+      for j := 0 to numdoomlinedefs - 1 do
+      begin
+        if doomlinedefs[j].v1 = v1 then
+          doomlinedefs[j].v1 := v2;
+        if doomlinedefs[j].v2 = v1 then
+          doomlinedefs[j].v2 := v2;
+      end;
+  end;
+
+  procedure fix_cloneandmovewall(const wid: integer; const dx, dy: integer);
+  var
+    wall: radixwall_t;
+  begin
+    wall := rwalls[wid];
+    wall.v1_x := wall.v1_x + dx;
+    wall.v1_y := wall.v1_y + dy;
+    wall.v2_x := wall.v2_x + dx;
+    wall.v2_y := wall.v2_y + dy;
+    AddWallToWad(@wall);
+  end;
+
   function fix_level_v10: boolean;
   begin
     result := false;
@@ -812,7 +844,6 @@ var
   function fix_level_v2: boolean;
   var
     j: integer;
-    v1, v2: integer;
     sd: integer;
   begin
     result := false;
@@ -835,29 +866,8 @@ var
     else if levelname = 'E2M4' then
     begin
       result := true;
-      v1 := -1;
-      for j := 0 to numdoomvertexes - 1 do
-        if (doomvertexes[j].x = 1473) and (doomvertexes[j].y = -1344) then
-        begin
-          v1 := j;
-          break;
-        end;
-      v2 := -1;
-      for j := 0 to numdoomvertexes - 1 do
-        if (doomvertexes[j].x = 1537) and (doomvertexes[j].y = -1344) then
-        begin
-          v2 := j;
-          break;
-        end;
 
-      if (v1 >= 0) and (v2 >= 0) then
-        for j := 0 to numdoomlinedefs - 1 do
-        begin
-          if doomlinedefs[j].v1 = v1 then
-            doomlinedefs[j].v1 := v2;
-          if doomlinedefs[j].v2 = v1 then
-            doomlinedefs[j].v2 := v2;
-        end;
+      fix_changevertexes(1473, -1344, 1537, -1344);
     end
     else if levelname = 'E2M5' then
     begin
@@ -873,29 +883,7 @@ var
         if doomsidedefs[j].sector = 102 then
           doomsidedefs[j].sector := 52;
 
-      v1 := -1;
-      for j := 0 to numdoomvertexes - 1 do
-        if (doomvertexes[j].x = -19135) and (doomvertexes[j].y = -4096) then
-        begin
-          v1 := j;
-          break;
-        end;
-      v2 := -1;
-      for j := 0 to numdoomvertexes - 1 do
-        if (doomvertexes[j].x = -19135) and (doomvertexes[j].y = -4160) then
-        begin
-          v2 := j;
-          break;
-        end;
-
-      if (v1 >= 0) and (v2 >= 0) then
-        for j := 0 to numdoomlinedefs - 1 do
-        begin
-          if doomlinedefs[j].v1 = v1 then
-            doomlinedefs[j].v1 := v2;
-          if doomlinedefs[j].v2 = v1 then
-            doomlinedefs[j].v2 := v2;
-        end;
+      fix_changevertexes(-19135, -4096, -19135, -4160);
 
       sd := doomlinedefs[19].sidenum[1];
       if sd >= 0 then
@@ -936,6 +924,33 @@ var
       doomlinedefs[86].flags := doomlinedefs[86].flags and not ML_TWOSIDED;
       doomlinedefs[86].flags := doomlinedefs[86].flags or ML_BLOCKING;
     end
+    else if levelname = 'E3M2' then
+    begin
+      result := true;
+
+      fix_changevertexes(10112, -4160, 10176, -4160);
+      fix_changevertexes(13120, -4160, 13056, -4160);
+
+      // Fix sector 142
+      fix_cloneandmovewall(184, RADIX_MAP_X_ADD2 - RADIX_MAP_X_ADD, RADIX_MAP_Y_ADD2 - RADIX_MAP_Y_ADD);
+      fix_cloneandmovewall(429, RADIX_MAP_X_ADD2 - RADIX_MAP_X_ADD, RADIX_MAP_Y_ADD2 - RADIX_MAP_Y_ADD);
+      fix_cloneandmovewall(534, RADIX_MAP_X_ADD2 - RADIX_MAP_X_ADD, RADIX_MAP_Y_ADD2 - RADIX_MAP_Y_ADD);
+
+      // Clone sector 141
+      fix_cloneandmovewall(665, RADIX_MAP_X_ADD2 - RADIX_MAP_X_ADD, RADIX_MAP_Y_ADD2 - RADIX_MAP_Y_ADD);
+      fix_cloneandmovewall(665, RADIX_MAP_X_ADD2 - RADIX_MAP_X_ADD, RADIX_MAP_Y_ADD2 - RADIX_MAP_Y_ADD);
+      fix_cloneandmovewall(536, RADIX_MAP_X_ADD2 - RADIX_MAP_X_ADD, RADIX_MAP_Y_ADD2 - RADIX_MAP_Y_ADD);
+      fix_cloneandmovewall(538, RADIX_MAP_X_ADD2 - RADIX_MAP_X_ADD, RADIX_MAP_Y_ADD2 - RADIX_MAP_Y_ADD);
+      fix_cloneandmovewall(535, RADIX_MAP_X_ADD2 - RADIX_MAP_X_ADD, RADIX_MAP_Y_ADD2 - RADIX_MAP_Y_ADD);
+      fix_cloneandmovewall(537, RADIX_MAP_X_ADD2 - RADIX_MAP_X_ADD, RADIX_MAP_Y_ADD2 - RADIX_MAP_Y_ADD);
+
+      // Clone sector 143
+      fix_cloneandmovewall(573, RADIX_MAP_X_ADD - RADIX_MAP_X_ADD2, RADIX_MAP_Y_ADD - RADIX_MAP_Y_ADD2);
+      fix_cloneandmovewall(610, RADIX_MAP_X_ADD - RADIX_MAP_X_ADD2, RADIX_MAP_Y_ADD - RADIX_MAP_Y_ADD2);
+      fix_cloneandmovewall(570, RADIX_MAP_X_ADD - RADIX_MAP_X_ADD2, RADIX_MAP_Y_ADD - RADIX_MAP_Y_ADD2);
+      fix_cloneandmovewall(574, RADIX_MAP_X_ADD - RADIX_MAP_X_ADD2, RADIX_MAP_Y_ADD - RADIX_MAP_Y_ADD2);
+      fix_cloneandmovewall(609, RADIX_MAP_X_ADD - RADIX_MAP_X_ADD2, RADIX_MAP_Y_ADD - RADIX_MAP_Y_ADD2);
+    end
     else if levelname = 'E3M3' then
     begin
       result := true;
@@ -958,29 +973,8 @@ var
     else if levelname = 'E3M7' then
     begin
       result := true;
-      v1 := -1;
-      for j := 0 to numdoomvertexes - 1 do
-        if (doomvertexes[j].x = -32703) and (doomvertexes[j].y = -3520) then
-        begin
-          v1 := j;
-          break;
-        end;
-      v2 := -1;
-      for j := 0 to numdoomvertexes - 1 do
-        if (doomvertexes[j].x = -32703) and (doomvertexes[j].y = -3584) then
-        begin
-          v2 := j;
-          break;
-        end;
 
-      if (v1 >= 0) and (v2 >= 0) then
-        for j := 0 to numdoomlinedefs - 1 do
-        begin
-          if doomlinedefs[j].v1 = v1 then
-            doomlinedefs[j].v1 := v2;
-          if doomlinedefs[j].v2 = v1 then
-            doomlinedefs[j].v2 := v2;
-        end;
+      fix_changevertexes(-32703, -3520, -32703, -3584);
 
       doomlinedefs[410].sidenum[1] := -1;
       doomlinedefs[410].flags := doomlinedefs[86].flags and not ML_TWOSIDED;
@@ -1077,30 +1071,34 @@ begin
   ms.Read(rwalls^, header.numwalls * SizeOf(radixwall_t));
   for i := 0 to header.numwalls - 1 do
   begin
-    v1x := rwalls[i].v1_x;
-    v1y := rwalls[i].v1_y;
-    fix_wall_coordX(v1x, v1y);
-    v1xx := v1x;
+    if (rwalls[i].v1_x > E3M2_SPLIT_X) and (rwalls[i].v2_x > E3M2_SPLIT_X) then
+    begin
+      v1x := rwalls[i].v1_x;
+      v1y := rwalls[i].v1_y;
+      fix_wall_coordXY(v1x, v1y);
+      rwalls[i].v1_x := v1x;
+      rwalls[i].v1_y := v1y;
 
-    v1x := rwalls[i].v1_x;
-    v1y := rwalls[i].v1_y;
-    fix_wall_coordY(v1x, v1y);
-    v1yy := v1y;
+      v2x := rwalls[i].v2_x;
+      v2y := rwalls[i].v2_y;
+      fix_wall_coordXY(v2x, v2y);
+      rwalls[i].v2_x := v2x;
+      rwalls[i].v2_y := v2y;
+    end
+    else
+    begin
+      v1x := rwalls[i].v1_x;
+      v1y := rwalls[i].v1_y;
+      fix_wall_coordXYdef(v1x, v1y);
+      rwalls[i].v1_x := v1x;
+      rwalls[i].v1_y := v1y;
 
-    v2x := rwalls[i].v2_x;
-    v2y := rwalls[i].v2_y;
-    fix_wall_coordX(v2x, v2y);
-    v2xx := v2x;
-
-    v2x := rwalls[i].v2_x;
-    v2y := rwalls[i].v2_y;
-    fix_wall_coordY(v2x, v2y);
-    v2yy := v2y;
-
-    rwalls[i].v1_x := v1xx;
-    rwalls[i].v1_y := v1yy;
-    rwalls[i].v2_x := v2xx;
-    rwalls[i].v2_y := v2yy;
+      v2x := rwalls[i].v2_x;
+      v2y := rwalls[i].v2_y;
+      fix_wall_coordXYdef(v2x, v2y);
+      rwalls[i].v2_x := v2x;
+      rwalls[i].v2_y := v2y;
+    end;
   end;
 
   // Read and unpack the 320x128 or 1280x32 grid (RLE compressed)
