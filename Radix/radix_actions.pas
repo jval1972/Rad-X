@@ -125,7 +125,10 @@ procedure RA_VertExplosion(const action: Pradixaction_t);
 implementation
 
 uses
+  m_rnd,
+  p_setup,
   radix_defs,
+  radix_map_extra,
   r_data;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -445,11 +448,13 @@ end;
 // Sprite type = 15
 type
   radixrandlightsflicker_t = packed record
-    foo: LongWord;
+    off_countdown: smallint;  // RTL
+    on_countdown: smallint;   // RTL
     off_min_delay: smallint;
     off_max_delay: smallint;
     on_min_delay: smallint;
-    on_max_delay: integer;
+    on_max_delay: smallint;
+    on_off: smallint;         // RTL
     off_light_level: smallint;
     on_light_level: smallint;
     sector: smallint;
@@ -461,6 +466,29 @@ var
   parms: radixrandlightsflicker_p;
 begin
   parms := radixrandlightsflicker_p(@action.params);
+
+  if parms.on_off = 0 then
+  begin
+    if parms.off_countdown = 0 then
+    begin
+      sectors[parms.sector].lightlevel := RX_LightLevel(parms.on_light_level);
+      parms.on_countdown := P_RandomInRange(parms.on_min_delay, parms.on_max_delay);
+      parms.on_off := 1;
+    end
+    else
+      dec(parms.off_countdown);
+  end
+  else
+  begin
+    if parms.on_countdown = 0 then
+    begin
+      sectors[parms.sector].lightlevel := RX_LightLevel(parms.off_light_level);
+      parms.off_countdown := P_RandomInRange(parms.off_min_delay, parms.off_max_delay);
+      parms.on_off := 0;
+    end
+    else
+      dec(parms.on_countdown);
+  end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

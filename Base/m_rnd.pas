@@ -67,6 +67,8 @@ procedure P_RestoreRandom;
 // JVAL: Random number for seed
 function P_RandomFromSeed(const seed: integer): integer;
 
+function P_RandomInRange(const l, h: integer): integer;
+
 var
   rndindex: integer = 0;
   prndindex: integer = 0;
@@ -846,6 +848,11 @@ begin
   {$IFDEF DEBUG}
   printf('P_RandomFromSeed(): %3d, tic=%10d, seed = %3d'#13#10, [Result, gametic, seed]);
   {$ENDIF}
+end;
+
+function P_RandomInRange(const l, h: integer): integer;
+begin
+  result := l + round((h - l) / 255 * P_Random);
 end;
 
 var

@@ -61,6 +61,8 @@ function RX_CalculateRadixSlopeTopOffs(const seg: PSeg_t): fixed_t;
 
 function RX_CalculateRadixSlopeBottomOffs(const seg: PSeg_t): fixed_t;
 
+function RX_LightLevel(const l: integer): byte;
+
 implementation
 
 uses
@@ -437,6 +439,11 @@ begin
     result := line.frontsector.floorheight - viewz
   else
     result := line.backsector.floorheight - viewz;
+end;
+
+function RX_LightLevel(const l: integer): byte;
+begin
+  result := l * 4 + 2;
 end;
 
 end.

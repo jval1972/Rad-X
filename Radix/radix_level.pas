@@ -256,6 +256,7 @@ uses
   radix_defs,
   radix_things,
   radix_grid,
+  radix_map_extra,
   m_crc32,
   doomdata,
   w_wad;
@@ -544,7 +545,7 @@ var
       dsec.ceilingpic := stringtochar8('F_SKY1')
     else
       dsec.ceilingpic := get_flat_texture(ss.ceilingtexture);
-    dsec.lightlevel := ss.lightlevel * 4 + 2;
+    dsec.lightlevel := RX_LightLevel(ss.lightlevel);
     dsec.special := 0;
     dsec.tag := 0;
 
