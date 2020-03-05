@@ -743,14 +743,56 @@ type
     off_level: smallint;  // light level from 0 to 63
     delay: smallint;
     the_sectors: packed array[0..3] of smallint;  // Sector can be -1
+    // RTL
+    tick: integer;
   end;
   radixspritelightmovement_p = ^radixspritelightmovement_t;
 
 procedure RA_LightMovement(const action: Pradixaction_t);
 var
   parms: radixspritelightmovement_p;
+  l_off, l_on: integer;
 begin
   parms := radixspritelightmovement_p(@action.params);
+
+  if parms.tick = 0 then
+    parms.tick := 4 * parms.delay;
+
+  dec(parms.tick);
+
+  l_off := RX_LightLevel(parms.off_level);
+  l_on := RX_LightLevel(parms.on_level);
+  case parms.tick div parms.delay of
+    0:
+      begin
+        sectors[parms.the_sectors[0]].lightlevel := l_on;
+        sectors[parms.the_sectors[1]].lightlevel := l_off;
+        sectors[parms.the_sectors[2]].lightlevel := l_off;
+        sectors[parms.the_sectors[3]].lightlevel := l_off;
+      end;
+    1:
+      begin
+        sectors[parms.the_sectors[0]].lightlevel := l_off;
+        sectors[parms.the_sectors[1]].lightlevel := l_on;
+        sectors[parms.the_sectors[2]].lightlevel := l_off;
+        sectors[parms.the_sectors[3]].lightlevel := l_off;
+      end;
+    2:
+      begin
+        sectors[parms.the_sectors[0]].lightlevel := l_off;
+        sectors[parms.the_sectors[1]].lightlevel := l_off;
+        sectors[parms.the_sectors[2]].lightlevel := l_on;
+        sectors[parms.the_sectors[3]].lightlevel := l_off;
+      end;
+    3:
+      begin
+        sectors[parms.the_sectors[0]].lightlevel := l_off;
+        sectors[parms.the_sectors[1]].lightlevel := l_off;
+        sectors[parms.the_sectors[2]].lightlevel := l_off;
+        sectors[parms.the_sectors[3]].lightlevel := l_on;
+      end;
+  end;
+
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
