@@ -39,10 +39,6 @@ uses
 
 var
   radixgrid: radixgrid_t;
-  radixactions: Pradixaction_tArray;
-  numradixactions: integer;
-  radixtriggers: Pradixtrigger_tArray;
-  numradixtriggers: integer;
 
 //
 // JVAL: 20200203 -  Initialize Radix Trigger Grid

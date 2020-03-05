@@ -194,6 +194,7 @@ uses
   doomstat,
   radix_level,
   radix_grid,
+  radix_logic,
   radix_map_extra;
 
 {$IFDEF OPENGL}

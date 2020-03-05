@@ -34,6 +34,15 @@ unit radix_logic;
 
 interface
 
+uses
+  radix_level;
+
+var
+  radixactions: Pradixaction_tArray;
+  numradixactions: integer;
+  radixtriggers: Pradixtrigger_tArray;
+  numradixtriggers: integer;
+
 implementation
 
 end.
