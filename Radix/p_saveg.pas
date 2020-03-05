@@ -71,9 +71,9 @@ procedure P_ArchiveGrid;
 
 procedure P_UnArchiveGrid;
 
-procedure P_ArchiveRadixSprites;
+procedure P_ArchiveRadixActions;
 
-procedure P_UnArchiveRadixSprites;
+procedure P_UnArchiveRadixActions;
 
 procedure P_ArchiveRadixTriggers;
 
@@ -1068,33 +1068,33 @@ begin
   incp(pointer(save_p), SizeOf(radixgrid_t));
 end;
 
-procedure P_ArchiveRadixSprites;
+procedure P_ArchiveRadixActions;
 var
   i: integer;
 begin
-  PInteger(save_p)^ := numradixsprites;
+  PInteger(save_p)^ := numradixactions;
   incp(pointer(save_p), SizeOf(integer));
 
-  for i := 0 to numradixsprites - 1 do
+  for i := 0 to numradixactions - 1 do
   begin
-    Pradixsprite_t(save_p)^ := radixsprites[i];
-    incp(pointer(save_p), SizeOf(radixsprite_t));
+    Pradixaction_t(save_p)^ := radixactions[i];
+    incp(pointer(save_p), SizeOf(radixaction_t));
   end;
 end;
 
-procedure P_UnArchiveRadixSprites;
+procedure P_UnArchiveRadixActions;
 var
   i, x: integer;
 begin
   x := PInteger(save_p)^;
   incp(pointer(save_p), SizeOf(integer));
-  if x <> numradixsprites then
-    I_Error('P_UnArchiveRadixSprites(): Invalid sprites number %d', [x]);
+  if x <> numradixactions then
+    I_Error('P_UnArchiveRadixActions(): Invalid actions number %d', [x]);
 
   for i := 0 to x - 1 do
   begin
-    radixsprites[i] := Pradixsprite_t(save_p)^;
-    incp(pointer(save_p), SizeOf(radixsprite_t));
+    radixactions[i] := Pradixaction_t(save_p)^;
+    incp(pointer(save_p), SizeOf(radixaction_t));
   end;
 end;
 

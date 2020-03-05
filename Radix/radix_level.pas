@@ -80,7 +80,7 @@ type
   radixlevelheader_t = packed record
     id: LongWord;
     numtriggers: integer;
-    numsprites: integer;
+    numactions: integer;
     _unknown1: packed array[0..16] of byte;
     numwalls: integer;
     numsectors: integer;
@@ -192,57 +192,57 @@ type
   Pradixgridinfo_t = ^radixgridinfo_t;
 
 const
-  MAX_RADIX_SPRITE_PARAMS = 64;
+  MAX_RADIX_ACTION_PARAMS = 64;
 
 type
-  radixsprite_t = packed record
+  radixaction_t = packed record
     unknown1: byte; // always 1
     enabled: byte;  // 0-> disabled/hiden, 1 -> enabled/shown
     nameid: packed array[0..25] of char;
     extradata: smallint;
     // Offset to parameters
-    // All parameters from all sprites are stored in a table
+    // All parameters from all sprites/actions are stored in a table
     // dataoffset point to the first item (from ::suspend to the last of the params)
     // dataoffset = "[last dataoffset] + [extradata] + 6"
     dataoffset: smallint;
-    sprite_type: smallint;
+    action_type: smallint;
     suspend: integer; // 0 -> Run at level start, -1 -> Run on trigger
     _unknown2: word; // 20200217
-    params: packed array[0..MAX_RADIX_SPRITE_PARAMS - 1] of smallint;
+    params: packed array[0..MAX_RADIX_ACTION_PARAMS - 1] of smallint;
   end;
-  Pradixsprite_t = ^radixsprite_t;
-  radixsprite_tArray = array[0..$FFF] of radixsprite_t;
-  Pradixsprite_tArray = ^radixsprite_tArray;
+  Pradixaction_t = ^radixaction_t;
+  radixaction_tArray = array[0..$FFF] of radixaction_t;
+  Pradixaction_tArray = ^radixaction_tArray;
 
 const
-  MAX_RADIX_TRIGGER_SPRITES = 150; // 133 max in radix.dat v2 remix
+  MAX_RADIX_TRIGGER_ACTIONS = 150; // 133 max in radix.dat v2 remix
 
 const
-// activationflags of radixspritetrigger_t
+// activationflags of radixtriggeraction_t
   SPR_FLG_ACTIVATE = 0;
   SPR_FLG_DEACTIVATE = 1;
   SPR_FLG_ACTIVATEONSPACE = 2;
   SPR_FLG_TONGLE = 3;
 
 type
-  radixspritetrigger_t = packed record
+  radixtriggeraction_t = packed record
     dataoffset: smallint;
-    spriteid: smallint;
+    actionid: smallint;
     trigger: smallint;
     activationflags: smallint;  // JVAL: 20200301 - SPR_FLG_ flags
     _unknown2: packed array[0..1] of smallint;
   end;
-  Pradixspritetrigger_t = ^radixspritetrigger_t;
-  radixspritetrigger_tArray = array[0..$FFF] of radixspritetrigger_t;
-  Pradixspritetrigger_tArray = ^radixspritetrigger_tArray;
+  Pradixtriggeraction_t = ^radixtriggeraction_t;
+  radixtriggeraction_tArray = array[0..$FFF] of radixtriggeraction_t;
+  Pradixtriggeraction_tArray = ^radixtriggeraction_tArray;
 
   radixtrigger_t = packed record
     _unknown1: byte; // always 1
     hidden: byte;  // 1-> hidden (on briefing ?)
     nameid: packed array[0..25] of char;
-    numsprites: integer;
+    numactions: integer;
     _unknown2: word; // 20200217
-    sprites: packed array[0..MAX_RADIX_TRIGGER_SPRITES - 1] of radixspritetrigger_t;
+    actions: packed array[0..MAX_RADIX_TRIGGER_ACTIONS - 1] of radixtriggeraction_t;
   end;
   Pradixtrigger_t = ^radixtrigger_t;
   radixtrigger_tArray = packed array[0..$FFF] of radixtrigger_t;
@@ -368,7 +368,7 @@ var
   rsectors: Pradixsector_tArray;
   rwalls: Pradixwall_tArray;
   rthings: Pradixthing_tArray;
-  rsprites: Pradixsprite_tArray;
+  ractions: Pradixaction_tArray;
   rtriggers: Pradixtrigger_tArray;
   doomthings: Pdoommapthing_tArray;
   doomthingsextra: Pradixmapthingextra_tArray; // Extra lump 'THINGSEX'
@@ -1105,12 +1105,12 @@ begin
   // Read Trigger's grid
   ReadRadixGrid(gridinfoextra);
 
-  // Read Radix sprites
-  rsprites := mallocz(header.numsprites * SizeOf(radixsprite_t)); // SOS -> use mallocz
-  for i := 0 to header.numsprites - 1 do
+  // Read Radix sprites/actions
+  ractions := mallocz(header.numactions * SizeOf(radixaction_t)); // SOS -> use mallocz
+  for i := 0 to header.numactions - 1 do
   begin
-    ms.Read(rsprites[i], 40); // Read the first 40 bytes
-    ms.Read(rsprites[i].params, rsprites[i].extradata);
+    ms.Read(ractions[i], 40); // Read the first 40 bytes
+    ms.Read(ractions[i].params, ractions[i].extradata);
   end;
 
   // Read Radix triggers
@@ -1118,8 +1118,8 @@ begin
   for i := 0 to header.numtriggers - 1 do
   begin
     ms.Read(rtriggers[i], 34); // Read the first 34 bytes
-    for j := 0 to rtriggers[i].numsprites - 1 do
-      ms.Read(rtriggers[i].sprites[j], SizeOf(radixspritetrigger_t));
+    for j := 0 to rtriggers[i].numactions - 1 do
+      ms.Read(rtriggers[i].actions[j], SizeOf(radixtriggeraction_t));
   end;
 
   // Read Radix player starts
@@ -1239,7 +1239,7 @@ begin
   // Trigger grid (binary)
   wadwriter.AddData('RGRID', gridinfoextra, SizeOf(radixgridinfo_t));
   // Sprites/Actions (binary)
-  wadwriter.AddData('RSPRITE', rsprites, header.numsprites * SizeOf(radixsprite_t));
+  wadwriter.AddData('RACTION', ractions, header.numactions * SizeOf(radixaction_t));
   // Triggers (binary)
   wadwriter.AddData('RTRIGGER', rtriggers, header.numtriggers * SizeOf(radixtrigger_t));
 
@@ -1247,7 +1247,7 @@ begin
   memfree(pointer(rsectors), header.numsectors * SizeOf(radixsector_t));
   memfree(pointer(rwalls), header.numwalls * SizeOf(radixwall_t));
   memfree(pointer(rthings), header.numthings * SizeOf(radixthing_t));
-  memfree(pointer(rsprites), header.numsprites * SizeOf(radixsprite_t));
+  memfree(pointer(ractions), header.numactions * SizeOf(radixaction_t));
   memfree(pointer(rtriggers), header.numtriggers * SizeOf(radixtrigger_t));
 
   // Free Doom data
@@ -1276,12 +1276,12 @@ var
   rsectors: Pradixsector_tArray;
   rwalls: Pradixwall_tArray;
   rthings: Pradixthing_tArray;
-  rsprites: Pradixsprite_tArray;
+  ractions: Pradixaction_tArray;
   rtriggers: Pradixtrigger_tArray;
   csvsectors: TDStringList;
   csvwalls: TDStringList;
   csvthings: TDStringList;
-  csvsprites: TDStringList;
+  csvactions: TDStringList;
   csvtriggers: TDStringList;
   i, j: integer;
   path: string;
@@ -1327,18 +1327,18 @@ var
     csvthings.Add(stmp);
   end;
 
-  procedure AddSpriteToCSV(const spr: Pradixsprite_t; const id: integer);
+  procedure AddActionToCSV(const spr: Pradixaction_t; const id: integer);
   var
     stmp: string;
     ii: integer;
   begin
-    if csvsprites.Count = 0 then
+    if csvactions.Count = 0 then
     begin
       stmp := 'id,unknown1,enabled,name,extradata,dataoffset,type,suspend,';
       stmp := stmp +'unknown2' + ',';
-      for ii := 0 to MAX_RADIX_SPRITE_PARAMS - 1 do
+      for ii := 0 to MAX_RADIX_ACTION_PARAMS - 1 do
         stmp := stmp + 'param_' + itoa(ii) + ',';
-      csvsprites.Add(stmp);
+      csvactions.Add(stmp);
     end;
 
     stmp := itoa(id) + ',' + itoa(spr.unknown1) + ',';
@@ -1355,14 +1355,14 @@ var
 
     stmp := stmp + itoa(spr.extradata) + ',';
     stmp := stmp + itoa(spr.dataoffset) + ',';
-    stmp := stmp + itoa(spr.sprite_type) + ',';
+    stmp := stmp + itoa(spr.action_type) + ',';
     stmp := stmp + itoa(spr.suspend) + ',';
 
     stmp := stmp + uitoa(spr._unknown2) + ',';
-    for ii := 0 to MAX_RADIX_SPRITE_PARAMS - 1 do
+    for ii := 0 to MAX_RADIX_ACTION_PARAMS - 1 do
       stmp := stmp + itoa(spr.params[ii]) + ',';
 
-    csvsprites.Add(stmp);
+    csvactions.Add(stmp);
   end;
 
   procedure AddTriggerToCSV(const tr: Pradixtrigger_t; const id: integer);
@@ -1372,14 +1372,14 @@ var
   begin
     if csvtriggers.Count = 0 then
     begin
-      stmp := 'id,unknown1,hidden,name,numsprites,unknown2,';
-      for ii := 0 to 47 {MAX_RADIX_TRIGGER_SPRITES - 1} do
+      stmp := 'id,unknown1,hidden,name,numactions,unknown2,';
+      for ii := 0 to 47 {MAX_RADIX_TRIGGER_ACTIONS - 1} do
       begin
         stmp := stmp + 'dataoffset_' + itoa(ii) + ',';
-        stmp := stmp + 'sprite_' + itoa(ii) + ',';
+        stmp := stmp + 'action_' + itoa(ii) + ',';
         stmp := stmp + 'trigger_' + itoa(ii) + ',';
         stmp := stmp + 'activationflags_' + itoa(ii) + ',';
-        stmp := stmp + 'spritedata_' + itoa(ii) + ',';
+        stmp := stmp + 'actiondata_' + itoa(ii) + ',';
       end;
       csvtriggers.Add(stmp);
     end;
@@ -1396,17 +1396,17 @@ var
     end;
     stmp := stmp + ',';
 
-    stmp := stmp + itoa(tr.numsprites) + ',';
+    stmp := stmp + itoa(tr.numactions) + ',';
     stmp := stmp + uitoa(tr._unknown2) + ',';
 
-    for ii := 0 to 47 {MAX_RADIX_TRIGGER_SPRITES - 1} do
+    for ii := 0 to 47 {MAX_RADIX_TRIGGER_ACTIONS - 1} do
     begin
-      stmp := stmp + itoa(tr.sprites[ii].dataoffset) + ',';
-      stmp := stmp + itoa(tr.sprites[ii].spriteid) + ',';
-      stmp := stmp + itoa(tr.sprites[ii].trigger) + ',';
-      stmp := stmp + itoa(tr.sprites[ii].activationflags) + ',';
+      stmp := stmp + itoa(tr.actions[ii].dataoffset) + ',';
+      stmp := stmp + itoa(tr.actions[ii].actionid) + ',';
+      stmp := stmp + itoa(tr.actions[ii].trigger) + ',';
+      stmp := stmp + itoa(tr.actions[ii].activationflags) + ',';
       for jj := 0 to 1 do
-        stmp := stmp + itoa(tr.sprites[ii]._unknown2[jj]) + ' ';
+        stmp := stmp + itoa(tr.actions[ii]._unknown2[jj]) + ' ';
       stmp := stmp + ',';
     end;
 
@@ -1686,12 +1686,12 @@ begin
   // Read trigger's grid
   ReadRadixGridAndCreateCSV(2);
 
-  // Read Radix sprites
-  rsprites := mallocz(header.numsprites * SizeOf(radixsprite_t)); // SOS -> use mallocz
-  for i := 0 to header.numsprites - 1 do
+  // Read Radix sprites/actions
+  ractions := mallocz(header.numactions * SizeOf(radixaction_t)); // SOS -> use mallocz
+  for i := 0 to header.numactions - 1 do
   begin
-    ms.Read(rsprites[i], 40); // Read the first 40 bytes
-    ms.Read(rsprites[i].params, rsprites[i].extradata);
+    ms.Read(ractions[i], 40); // Read the first 40 bytes
+    ms.Read(ractions[i].params, ractions[i].extradata);
   end;
 
   // Read Radix triggers
@@ -1699,8 +1699,8 @@ begin
   for i := 0 to header.numtriggers - 1 do
   begin
     ms.Read(rtriggers[i], 34); // Read the first 34 bytes
-    for j := 0 to rtriggers[i].numsprites - 1 do
-      ms.Read(rtriggers[i].sprites[j], SizeOf(radixspritetrigger_t));
+    for j := 0 to rtriggers[i].numactions - 1 do
+      ms.Read(rtriggers[i].actions[j], SizeOf(radixtriggeraction_t));
   end;
 
   // Read final grid ?
@@ -1709,7 +1709,7 @@ begin
   csvsectors := TDStringList.Create;
   csvwalls := TDStringList.Create;
   csvthings := TDStringList.Create;
-  csvsprites := TDStringList.Create;
+  csvactions := TDStringList.Create;
   csvtriggers := TDStringList.Create;
 
   // Add Sectors to CSV
@@ -1727,9 +1727,9 @@ begin
       AddThingToCSV(@rthings[i]);
   end;
 
-  // Add Sprites to CSV
-  for i := 0 to header.numsprites - 1 do
-    AddSpriteToCSV(@rsprites[i], i);
+  // Add Sprites/actions to CSV
+  for i := 0 to header.numactions - 1 do
+    AddActionToCSV(@ractions[i], i);
 
   // Add Triggers to CSV
   for i := 0 to header.numtriggers - 1 do
@@ -1738,20 +1738,20 @@ begin
   csvsectors.SaveToFile(path + levelname + '_sectors.txt');
   csvwalls.SaveToFile(path + levelname + '_walls.txt');
   csvthings.SaveToFile(path + levelname + '_things.txt');
-  csvsprites.SaveToFile(path + levelname + '_sprites.txt');
+  csvactions.SaveToFile(path + levelname + '_actions.txt');
   csvtriggers.SaveToFile(path + levelname + '_triggers.txt');
 
   csvsectors.Free;
   csvwalls.Free;
   csvthings.Free;
-  csvsprites.Free;
+  csvactions.Free;
   csvtriggers.Free;
 
   // Free Radix data
   memfree(pointer(rsectors), header.numsectors * SizeOf(radixsector_t));
   memfree(pointer(rwalls), header.numwalls * SizeOf(radixwall_t));
   memfree(pointer(rthings), header.numthings * SizeOf(radixthing_t));
-  memfree(pointer(rsprites), header.numsprites * SizeOf(radixsprite_t));
+  memfree(pointer(ractions), header.numactions * SizeOf(radixaction_t));
   memfree(pointer(rtriggers), header.numtriggers * SizeOf(radixtrigger_t));
 
 

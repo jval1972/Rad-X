@@ -39,8 +39,8 @@ uses
 
 var
   radixgrid: radixgrid_t;
-  radixsprites: Pradixsprite_tArray;
-  numradixsprites: integer;
+  radixactions: Pradixaction_tArray;
+  numradixactions: integer;
   radixtriggers: Pradixtrigger_tArray;
   numradixtriggers: integer;
 

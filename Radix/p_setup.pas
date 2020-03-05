@@ -1704,13 +1704,13 @@ procedure P_LoadRadixSprites(lump: integer);
 begin
   if lump = -1 then
   begin
-    radixsprites := nil;
-    numradixsprites := 0;
+    radixactions := nil;
+    numradixactions := 0;
     exit;
   end;
 
-  radixsprites := W_CacheLumpNum(lump, PU_LEVEL);
-  numradixsprites := W_LumpLength(lump) div SizeOf(radixsprite_t);
+  radixactions := W_CacheLumpNum(lump, PU_LEVEL);
+  numradixactions := W_LumpLength(lump) div SizeOf(radixaction_t);
 end;
 
 //
@@ -1918,7 +1918,7 @@ begin
 
   P_LoadGrid(P_RadixLump(lumpnum + Ord(ML_RGRID), 'RGRID')); // JVAL: 20200303 - Load radix grid
 
-  P_LoadRadixSprites(P_RadixLump(lumpnum + Ord(ML_RSPRITE), 'RSPRITE')); // JVAL: 20200303 - Load radix sprites/actions
+  P_LoadRadixSprites(P_RadixLump(lumpnum + Ord(ML_RACTION), 'RACTION')); // JVAL: 20200303 - Load radix sprites/actions
 
   P_LoadRadixTriggers(P_RadixLump(lumpnum + Ord(ML_RTRIGGER), 'RTRIGGER'));  // JVAL: 20200303 - Load radix triggers
 

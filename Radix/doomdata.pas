@@ -68,7 +68,7 @@ type
     ML_RMAP,      // JVAL: Extra sectors and walls information (scripted)
     ML_RTHINGS,   // JVAL: Extra things information (Radix)
     ML_RGRID,     // JVAL: Trigger's grid (Radix) - unpacked from WorldData[x][y] lumps
-    ML_RSPRITE,   // JVAL: Sprite/actions (Radix) - unpacked from WorldData[x][y] lumps
+    ML_RACTION,   // JVAL: Sprite/actions (Radix) - unpacked from WorldData[x][y] lumps
     ML_RTRIGGER   // JVAL: Triggers (Radix) - unpacked from WorldData[x][y] lumps
   );
 

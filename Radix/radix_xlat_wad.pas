@@ -587,7 +587,7 @@ begin
     end;
 
   CreateAll('sectors');
-  CreateAll('sprites');
+  CreateAll('actions');
   CreateAll('things');
   CreateAll('walls');
   CreateAll('triggers');
@@ -1307,6 +1307,12 @@ var
         result := result + s[ii];
   end;
 
+  procedure check_sprite_overflow;
+  begin
+    if numsprinfo >= MAX_SPR_INFO then
+      I_Error('TRadixToWADConverter.GenerateSprites(): Sprite table overflow, numsprinfo=%d', [numsprinfo]);
+  end;
+
   procedure MakeNonRotatingSprite(const rprefix: string; const r_id: integer;
     const numframes: integer; const trans: PByteArray = nil;
     const xofs: integer = -255; const yofs: integer = -255;
@@ -1317,8 +1323,7 @@ var
   begin
     for ii := 1 to numframes do
     begin
-      if numsprinfo >= MAX_SPR_INFO then
-        I_Error('TRadixToWADConverter.GenerateSprites(): Sprite table overflow, numsprinfo=%d', [numsprinfo]);
+      check_sprite_overflow;
 
       spr.rname := rprefix + '_' + itoa(ii);
       spr.dname := 'XR' + IntToStrzFill(2, r_id) + Chr(Ord(startframe) + ii - 1) + '0';
@@ -1343,9 +1348,8 @@ var
     for ii := 1 to numframes do
       for jj := 1 to 8 do
       begin
-        if numsprinfo >= MAX_SPR_INFO then
-          I_Error('TRadixToWADConverter.GenerateSprites(): Sprite table overflow, numsprinfo=%d', [numsprinfo]);
-          
+        check_sprite_overflow;
+        
         spr.rname := rprefix + '_' + itoa(jj + (ii - 1) * 8);
         spr.dname := 'XR' + IntToStrzFill(2, r_id) + Chr(Ord('A') + ii - 1) + itoa(jj);
         spr.translation := trans;
@@ -1364,8 +1368,7 @@ var
     const cofs: boolean = true; const defofs: boolean = true;
     const frm: char = 'A');
   begin
-    if numsprinfo >= MAX_SPR_INFO then
-      I_Error('TRadixToWADConverter.GenerateSprites(): Sprite table overflow, numsprinfo=%d', [numsprinfo]);
+    check_sprite_overflow;
 
     spr.rname := rname;
     spr.dname := 'XR' + IntToStrzFill(2, r_id) + frm + '0';

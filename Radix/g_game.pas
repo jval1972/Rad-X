@@ -1647,7 +1647,7 @@ begin
   P_UnArchiveThinkers;
   P_UnArchiveSpecials;
   P_UnArchiveGrid;
-  P_UnArchiveRadixSprites;
+  P_UnArchiveRadixActions;
   P_UnArchiveRadixTriggers;
   P_UnArchiveVariables;
   P_UnArchivePSMapScript;
@@ -1780,7 +1780,7 @@ begin
   M_AppendFile(name, savebuffer, len);
   save_p := savebuffer;
 
-  P_ArchiveRadixSprites;
+  P_ArchiveRadixActions;
 
   len := integer(save_p) - integer(savebuffer);
   M_AppendFile(name, savebuffer, len);
