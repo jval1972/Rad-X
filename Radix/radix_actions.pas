@@ -38,89 +38,89 @@ uses
   d_delphi,
   radix_level;
 
-procedure ATR_ScrollingWall(const action: Pradixaction_t);
+procedure RA_ScrollingWall(const action: Pradixaction_t);
 
-procedure ATR_MovingSurface(const action: Pradixaction_t);
+procedure RA_MovingSurface(const action: Pradixaction_t);
 
-procedure ATR_SwitchWallBitmap(const action: Pradixaction_t);
+procedure RA_SwitchWallBitmap(const action: Pradixaction_t);
 
-procedure ATR_SwitchSecBitmap(const action: Pradixaction_t);
+procedure RA_SwitchSecBitmap(const action: Pradixaction_t);
 
-procedure ATR_ToggleWallBitmap(const action: Pradixaction_t);
+procedure RA_ToggleWallBitmap(const action: Pradixaction_t);
 
-procedure ATR_ToggleSecBitmap(const action: Pradixaction_t);
+procedure RA_ToggleSecBitmap(const action: Pradixaction_t);
 
-procedure ATR_CircleBitmap(const action: Pradixaction_t);
+procedure RA_CircleBitmap(const action: Pradixaction_t);
 
-procedure ATR_LightFlicker(const action: Pradixaction_t);
+procedure RA_LightFlicker(const action: Pradixaction_t);
 
-procedure ATR_LightsOff(const action: Pradixaction_t);
+procedure RA_LightsOff(const action: Pradixaction_t);
 
-procedure ATR_LightsOn(const action: Pradixaction_t);
+procedure RA_LightsOn(const action: Pradixaction_t);
 
-procedure ATR_LightOscilate(const action: Pradixaction_t);
+procedure RA_LightOscilate(const action: Pradixaction_t);
 
-procedure ATR_PlaneTeleport(const action: Pradixaction_t);
+procedure RA_PlaneTeleport(const action: Pradixaction_t);
 
-procedure ATR_PlaneTranspo(const action: Pradixaction_t);
+procedure RA_PlaneTranspo(const action: Pradixaction_t);
 
-procedure ATR_NewMovingSurface(const action: Pradixaction_t);
+procedure RA_NewMovingSurface(const action: Pradixaction_t);
 
-procedure ATR_PlaySound(const action: Pradixaction_t);
+procedure RA_PlaySound(const action: Pradixaction_t);
 
-procedure ATR_RandLightsFlicker(const action: Pradixaction_t);
+procedure RA_RandLightsFlicker(const action: Pradixaction_t);
 
-procedure ATR_EndOfLevel(const action: Pradixaction_t);
+procedure RA_EndOfLevel(const action: Pradixaction_t);
 
-procedure ATR_SpriteTriggerActivate(const action: Pradixaction_t);
+procedure RA_SpriteTriggerActivate(const action: Pradixaction_t);
 
-procedure ATR_SectorBasedGravity(const action: Pradixaction_t);
+procedure RA_SectorBasedGravity(const action: Pradixaction_t);
 
-procedure ATR_DeactivateTrigger(const action: Pradixaction_t);
+procedure RA_DeactivateTrigger(const action: Pradixaction_t);
 
-procedure ATR_ActivateTrigger(const action: Pradixaction_t);
+procedure RA_ActivateTrigger(const action: Pradixaction_t);
 
-procedure ATR_CompleteMissileWall(const action: Pradixaction_t);
+procedure RA_CompleteMissileWall(const action: Pradixaction_t);
 
-procedure ATR_ScannerJam(const action: Pradixaction_t);
+procedure RA_ScannerJam(const action: Pradixaction_t);
 
-procedure ATR_PrintMessage(const action: Pradixaction_t);
+procedure RA_PrintMessage(const action: Pradixaction_t);
 
-procedure ATR_FloorMissileWall(const action: Pradixaction_t);
+procedure RA_FloorMissileWall(const action: Pradixaction_t);
 
-procedure ATR_CeilingMissileWall(const action: Pradixaction_t);
+procedure RA_CeilingMissileWall(const action: Pradixaction_t);
 
-procedure ATR_BigSpriteTrig(const action: Pradixaction_t);
+procedure RA_BigSpriteTrig(const action: Pradixaction_t);
 
-procedure ATR_MassiveExplosion(const action: Pradixaction_t);
+procedure RA_MassiveExplosion(const action: Pradixaction_t);
 
-procedure ATR_WallDeadCheck(const action: Pradixaction_t);
+procedure RA_WallDeadCheck(const action: Pradixaction_t);
 
-procedure ATR_SecondaryObjective(const action: Pradixaction_t);
+procedure RA_SecondaryObjective(const action: Pradixaction_t);
 
-procedure ATR_SeekCompleteMissileWall(const action: Pradixaction_t);
+procedure RA_SeekCompleteMissileWall(const action: Pradixaction_t);
 
-procedure ATR_LightMovement(const action: Pradixaction_t);
+procedure RA_LightMovement(const action: Pradixaction_t);
 
-procedure ATR_MultLightOscilate(const action: Pradixaction_t);
+procedure RA_MultLightOscilate(const action: Pradixaction_t);
 
-procedure ATR_MultRandLightsFlicker(const action: Pradixaction_t);
+procedure RA_MultRandLightsFlicker(const action: Pradixaction_t);
 
-procedure ATR_SkillRatio(const action: Pradixaction_t);
+procedure RA_SkillRatio(const action: Pradixaction_t);
 
-procedure ATR_HurtPlayerExplosion(const action: Pradixaction_t);
+procedure RA_HurtPlayerExplosion(const action: Pradixaction_t);
 
-procedure ATR_SwitchShadeType(const action: Pradixaction_t);
+procedure RA_SwitchShadeType(const action: Pradixaction_t);
 
-procedure ATR_SixLightMovement(const action: Pradixaction_t);
+procedure RA_SixLightMovement(const action: Pradixaction_t);
 
-procedure ATR_SurfacePowerUp(const action: Pradixaction_t);
+procedure RA_SurfacePowerUp(const action: Pradixaction_t);
 
-procedure ATR_SecretSprite(const action: Pradixaction_t);
+procedure RA_SecretSprite(const action: Pradixaction_t);
 
-procedure ATR_BossEyeHandler(const action: Pradixaction_t);
+procedure RA_BossEyeHandler(const action: Pradixaction_t);
 
-procedure ATR_VertExplosion(const action: Pradixaction_t);
+procedure RA_VertExplosion(const action: Pradixaction_t);
 
 implementation
 
@@ -134,7 +134,7 @@ type
   end;
   radixscrollingwall_p = ^radixscrollingwall_t;
 
-procedure ATR_ScrollingWall(const action: Pradixaction_t);
+procedure RA_ScrollingWall(const action: Pradixaction_t);
 var
   parms: radixscrollingwall_p;
 begin
@@ -156,7 +156,7 @@ type
   end;
   radixmovingsurface_p = ^radixmovingsurface_t;
 
-procedure ATR_MovingSurface(const action: Pradixaction_t);
+procedure RA_MovingSurface(const action: Pradixaction_t);
 var
   parms: radixmovingsurface_p;
 begin
@@ -173,7 +173,7 @@ type
   end;
   radixswitchwallbitmap_p = ^radixswitchwallbitmap_t;
 
-procedure ATR_SwitchWallBitmap(const action: Pradixaction_t);
+procedure RA_SwitchWallBitmap(const action: Pradixaction_t);
 var
   parms: radixswitchwallbitmap_p;
 begin
@@ -190,7 +190,7 @@ type
   end;
   radixswitchsecbitmap_p = ^radixswitchsecbitmap_t;
 
-procedure ATR_SwitchSecBitmap(const action: Pradixaction_t);
+procedure RA_SwitchSecBitmap(const action: Pradixaction_t);
 var
   parms: radixswitchsecbitmap_p;
 begin
@@ -199,7 +199,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Sprite type = 4 - Not presend in radix.dat
-procedure ATR_ToggleWallBitmap(const action: Pradixaction_t);
+procedure RA_ToggleWallBitmap(const action: Pradixaction_t);
 var
   element_number, switch_bitmap, do_floor: integer;
 begin
@@ -207,7 +207,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Sprite type = 5 - Not presend in radix.dat
-procedure ATR_ToggleSecBitmap(const action: Pradixaction_t);
+procedure RA_ToggleSecBitmap(const action: Pradixaction_t);
 var
   element_number, switch_bitmap, do_floor: integer;
 begin
@@ -224,7 +224,7 @@ type
   end;
   radixcirclebitmap_p = ^radixcirclebitmap_t;
 
-procedure ATR_CircleBitmap(const action: Pradixaction_t);
+procedure RA_CircleBitmap(const action: Pradixaction_t);
 var
   parms: radixcirclebitmap_p;
 begin
@@ -243,7 +243,7 @@ type
   end;
   radixlightflicker_p = ^radixlightflicker_t;
 
-procedure ATR_LightFlicker(const action: Pradixaction_t);
+procedure RA_LightFlicker(const action: Pradixaction_t);
 var
   parms: radixlightflicker_p;
 begin
@@ -260,7 +260,7 @@ type
   end;
   radixlightsoff_p = ^radixlightsoff_t;
 
-procedure ATR_LightsOff(const action: Pradixaction_t);
+procedure RA_LightsOff(const action: Pradixaction_t);
 var
   parms: radixlightsoff_p;
 begin
@@ -277,7 +277,7 @@ type
   end;
   radixlightson_p = ^radixlightson_t;
 
-procedure ATR_LightsOn(const action: Pradixaction_t);
+procedure RA_LightsOn(const action: Pradixaction_t);
 var
   parms: radixlightson_p;
 begin
@@ -296,7 +296,7 @@ type
   end;
   radixlightoscilate_p = ^radixlightoscilate_t;
 
-procedure ATR_LightOscilate(const action: Pradixaction_t);
+procedure RA_LightOscilate(const action: Pradixaction_t);
 var
   parms: radixlightoscilate_p;
 begin
@@ -319,7 +319,7 @@ type
   end;
   radixplaneteleport_p = ^radixplaneteleport_t;
 
-procedure ATR_PlaneTeleport(const action: Pradixaction_t);
+procedure RA_PlaneTeleport(const action: Pradixaction_t);
 var
   parms: radixplaneteleport_p;
 begin
@@ -341,7 +341,7 @@ type
   end;
   radixplanetranspo_p = ^radixplanetranspo_t;
 
-procedure ATR_PlaneTranspo(const action: Pradixaction_t);
+procedure RA_PlaneTranspo(const action: Pradixaction_t);
 var
   parms: radixplanetranspo_p;
 begin
@@ -369,7 +369,7 @@ type
   end;
   radixnewmovingsurface_p = ^radixnewmovingsurface_t;
 
-procedure ATR_NewMovingSurface(const action: Pradixaction_t);
+procedure RA_NewMovingSurface(const action: Pradixaction_t);
 var
   parms: radixnewmovingsurface_p;
 begin
@@ -387,7 +387,7 @@ type
   end;
   radixplaysound_p = ^radixplaysound_t;
 
-procedure ATR_PlaySound(const action: Pradixaction_t);
+procedure RA_PlaySound(const action: Pradixaction_t);
 var
   parms: radixplaysound_p;
 begin
@@ -409,7 +409,7 @@ type
   end;
   radixrandlightsflicker_p = ^radixrandlightsflicker_t;
 
-procedure ATR_RandLightsFlicker(const action: Pradixaction_t);
+procedure RA_RandLightsFlicker(const action: Pradixaction_t);
 var
   parms: radixrandlightsflicker_p;
 begin
@@ -428,7 +428,7 @@ type
   end;
   radixendoflevel_p = ^radixendoflevel_t;
 
-procedure ATR_EndOfLevel(const action: Pradixaction_t);
+procedure RA_EndOfLevel(const action: Pradixaction_t);
 var
   parms: radixendoflevel_p;
 begin
@@ -444,7 +444,7 @@ type
   end;
   radixspritetriggeractivate_p = ^radixspritetriggeractivate_t;
 
-procedure ATR_SpriteTriggerActivate(const action: Pradixaction_t);
+procedure RA_SpriteTriggerActivate(const action: Pradixaction_t);
 var
   parms: radixspritetriggeractivate_p;
 begin
@@ -463,7 +463,7 @@ type
   end;
   radixsectorbasedgravity_p = ^radixsectorbasedgravity_t;
 
-procedure ATR_SectorBasedGravity(const action: Pradixaction_t);
+procedure RA_SectorBasedGravity(const action: Pradixaction_t);
 var
   parms: radixsectorbasedgravity_p;
 begin
@@ -478,7 +478,7 @@ type
   end;
   radixdeactivatetrigger_p = ^radixdeactivatetrigger_t;
 
-procedure ATR_DeactivateTrigger(const action: Pradixaction_t);
+procedure RA_DeactivateTrigger(const action: Pradixaction_t);
 var
   parms: radixdeactivatetrigger_p;
 begin
@@ -493,7 +493,7 @@ type
   end;
   radixactivatetrigger_p = ^radixactivatetrigger_t;
 
-procedure ATR_ActivateTrigger(const action: Pradixaction_t);
+procedure RA_ActivateTrigger(const action: Pradixaction_t);
 var
   parms: radixactivatetrigger_p;
 begin
@@ -508,7 +508,7 @@ type
   end;
   radixcompletemissilewall_p = ^radixcompletemissilewall_t;
 
-procedure ATR_CompleteMissileWall(const action: Pradixaction_t);
+procedure RA_CompleteMissileWall(const action: Pradixaction_t);
 var
   parms: radixcompletemissilewall_p;
 begin
@@ -523,7 +523,7 @@ type
   end;
   radixscannerjam_p = ^radixscannerjam_t;
 
-procedure ATR_ScannerJam(const action: Pradixaction_t);
+procedure RA_ScannerJam(const action: Pradixaction_t);
 var
   parms: radixscannerjam_p;
 begin
@@ -538,7 +538,7 @@ type
   end;
   radixprintmessage_p = ^radixprintmessage_t;
 
-procedure ATR_PrintMessage(const action: Pradixaction_t);
+procedure RA_PrintMessage(const action: Pradixaction_t);
 var
   parms: radixprintmessage_p;
 begin
@@ -553,7 +553,7 @@ type
   end;
   radixfloormissilewall_p = ^radixfloormissilewall_t;
 
-procedure ATR_FloorMissileWall(const action: Pradixaction_t);
+procedure RA_FloorMissileWall(const action: Pradixaction_t);
 var
   parms: radixfloormissilewall_p;
 begin
@@ -568,7 +568,7 @@ type
   end;
   radixceilingmissilewall_p = ^radixceilingmissilewall_t;
 
-procedure ATR_CeilingMissileWall(const action: Pradixaction_t);
+procedure RA_CeilingMissileWall(const action: Pradixaction_t);
 var
   parms: radixceilingmissilewall_p;
 begin
@@ -584,7 +584,7 @@ type
   end;
   radixbigspritetrig_p = ^radixbigspritetrig_t;
 
-procedure ATR_BigSpriteTrig(const action: Pradixaction_t);
+procedure RA_BigSpriteTrig(const action: Pradixaction_t);
 var
   parms: radixbigspritetrig_p;
 begin
@@ -607,7 +607,7 @@ type
   end;
   radixmassiveexplosion_p = ^radixmassiveexplosion_t;
 
-procedure ATR_MassiveExplosion(const action: Pradixaction_t);
+procedure RA_MassiveExplosion(const action: Pradixaction_t);
 var
   parms: radixmassiveexplosion_p;
 begin
@@ -623,7 +623,7 @@ type
   end;
   radixwalldeadcheck_p = ^radixwalldeadcheck_t;
 
-procedure ATR_WallDeadCheck(const action: Pradixaction_t);
+procedure RA_WallDeadCheck(const action: Pradixaction_t);
 var
   parms: radixwalldeadcheck_p;
 begin
@@ -638,7 +638,7 @@ type
   end;
   radixsecondaryobjective_p = ^radixsecondaryobjective_t;
 
-procedure ATR_SecondaryObjective(const action: Pradixaction_t);
+procedure RA_SecondaryObjective(const action: Pradixaction_t);
 var
   parms: radixsecondaryobjective_p;
 begin
@@ -653,7 +653,7 @@ type
   end;
   radixseekcompletemissilewall_p = ^radixseekcompletemissilewall_t;
 
-procedure ATR_SeekCompleteMissileWall(const action: Pradixaction_t);
+procedure RA_SeekCompleteMissileWall(const action: Pradixaction_t);
 var
   parms: radixseekcompletemissilewall_p;
 begin
@@ -671,7 +671,7 @@ type
   end;
   radixspritelightmovement_p = ^radixspritelightmovement_t;
 
-procedure ATR_LightMovement(const action: Pradixaction_t);
+procedure RA_LightMovement(const action: Pradixaction_t);
 var
   parms: radixspritelightmovement_p;
 begin
@@ -690,7 +690,7 @@ type
   end;
   radixmultlightoscilate_p = ^radixmultlightoscilate_t;
 
-procedure ATR_MultLightOscilate(const action: Pradixaction_t);
+procedure RA_MultLightOscilate(const action: Pradixaction_t);
 var
   parms: radixmultlightoscilate_p;
 begin
@@ -716,7 +716,7 @@ type
   end;
   radixmultrandlightsflicker_p = ^radixmultrandlightsflicker_t;
 
-procedure ATR_MultRandLightsFlicker(const action: Pradixaction_t);
+procedure RA_MultRandLightsFlicker(const action: Pradixaction_t);
 var
   parms: radixmultrandlightsflicker_p;
 begin
@@ -732,7 +732,7 @@ type
   end;
   radixskillratio_p = ^radixskillratio_t;
 
-procedure ATR_SkillRatio(const action: Pradixaction_t);
+procedure RA_SkillRatio(const action: Pradixaction_t);
 var
   parms: radixskillratio_p;
 begin
@@ -755,7 +755,7 @@ type
   end;
   radixhurtplayerexplosion_p = ^radixhurtplayerexplosion_t;
 
-procedure ATR_HurtPlayerExplosion(const action: Pradixaction_t);
+procedure RA_HurtPlayerExplosion(const action: Pradixaction_t);
 var
   parms: radixhurtplayerexplosion_p;
 begin
@@ -771,7 +771,7 @@ type
   end;
   radixswitchshadetype_p = ^radixswitchshadetype_t;
 
-procedure ATR_SwitchShadeType(const action: Pradixaction_t);
+procedure RA_SwitchShadeType(const action: Pradixaction_t);
 var
   parms: radixswitchshadetype_p;
 begin
@@ -789,7 +789,7 @@ type
   end;
   radix6lightmovement_p = ^radix6lightmovement_t;
 
-procedure ATR_SixLightMovement(const action: Pradixaction_t);
+procedure RA_SixLightMovement(const action: Pradixaction_t);
 var
   parms: radix6lightmovement_p;
 begin
@@ -807,7 +807,7 @@ type
   end;
   radixsurfacepowerup_p = ^radixsurfacepowerup_t;
 
-procedure ATR_SurfacePowerUp(const action: Pradixaction_t);
+procedure RA_SurfacePowerUp(const action: Pradixaction_t);
 var
   parms: radixsurfacepowerup_p;
 begin
@@ -822,7 +822,7 @@ type
   end;
   radixsecretsprite_p = ^radixsecretsprite_t;
 
-procedure ATR_SecretSprite(const action: Pradixaction_t);
+procedure RA_SecretSprite(const action: Pradixaction_t);
 var
   parms: radixsecretsprite_p;
 begin
@@ -837,7 +837,7 @@ type
   end;
   radixbosseyehandler_p = ^radixbosseyehandler_t;
 
-procedure ATR_BossEyeHandler(const action: Pradixaction_t);
+procedure RA_BossEyeHandler(const action: Pradixaction_t);
 var
   parms: radixbosseyehandler_p;
 begin
@@ -861,7 +861,7 @@ type
   end;
   radixvertexplosion_p = ^radixvertexplosion_t;
 
-procedure ATR_VertExplosion(const action: Pradixaction_t);
+procedure RA_VertExplosion(const action: Pradixaction_t);
 var
   parms: radixvertexplosion_p;
 begin
