@@ -439,6 +439,4 @@ begin
     result := line.backsector.floorheight - viewz;
 end;
 
-
-
 end.

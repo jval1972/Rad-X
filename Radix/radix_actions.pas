@@ -124,6 +124,10 @@ procedure RA_VertExplosion(const action: Pradixaction_t);
 
 implementation
 
+uses
+  radix_defs,
+  r_data;
+
 ////////////////////////////////////////////////////////////////////////////////
 // Sprite type = 0
 type
@@ -221,6 +225,15 @@ type
     bitmap_1: smallint;
     bitmap_2: smallint;
     bitmap_3: smallint;
+    // RTL params here
+    calced: boolean;
+    flat_1: integer;
+    flat_2: integer;
+    flat_3: integer;
+    texture_1: integer;
+    texture_2: integer;
+    texture_3: integer;
+    tick: integer;
   end;
   radixcirclebitmap_p = ^radixcirclebitmap_t;
 
@@ -229,6 +242,40 @@ var
   parms: radixcirclebitmap_p;
 begin
   parms := radixcirclebitmap_p(@action.params);
+
+  if not parms.calced then
+  begin
+    parms.flat_1 := R_FlatNumForName(RX_FLAT_PREFIX + IntToStrzFill(4, parms.bitmap_1 + 1));
+    parms.flat_2 := R_FlatNumForName(RX_FLAT_PREFIX + IntToStrzFill(4, parms.bitmap_2 + 1));
+    parms.flat_3 := R_FlatNumForName(RX_FLAT_PREFIX + IntToStrzFill(4, parms.bitmap_3 + 1));
+    parms.texture_1 := R_TextureNumForName(RX_WALL_PREFIX + IntToStrzFill(4, parms.bitmap_1 + 1));
+    parms.texture_2 := R_TextureNumForName(RX_WALL_PREFIX + IntToStrzFill(4, parms.bitmap_2 + 1));
+    parms.texture_3 := R_TextureNumForName(RX_WALL_PREFIX + IntToStrzFill(4, parms.bitmap_3 + 1));
+    parms.calced := true;
+    parms.tick := 0;
+  end;
+
+  if parms.tick = 0 then
+    parms.tick := 3 * parms.max_delay;
+
+  dec(parms.tick);
+  case parms.tick div parms.max_delay of
+    0:
+      begin
+        flats[parms.flat_1].translation := parms.flat_1;
+        texturetranslation[parms.texture_1] := parms.texture_1;
+      end;
+    1:
+      begin
+        flats[parms.flat_1].translation := parms.flat_2;
+        texturetranslation[parms.texture_1] := parms.texture_2;
+      end;
+    2:
+      begin
+        flats[parms.flat_1].translation := parms.flat_3;
+        texturetranslation[parms.texture_1] := parms.texture_3;
+      end;
+  end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
