@@ -76,6 +76,7 @@ uses
   p_mobj,
   p_mobj_h,
   p_mobjlist,
+  radix_logic,
   ps_main,  // JVAL: Script Events
   z_zone;
 
@@ -211,6 +212,7 @@ begin
   P_RunThinkers;
   if not isgamefreezed then
   begin
+    RX_RunActions;
     P_UpdateSpecials;
     P_RespawnSpecials;
 
