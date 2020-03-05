@@ -238,7 +238,7 @@ type
 
   radixtrigger_t = packed record
     _unknown1: byte; // always 1
-    hidden: byte;  // 1-> hidden (on briefing ?)
+    suspended: byte;  // 1-> hidden/suspended
     nameid: packed array[0..25] of char;
     numactions: integer;
     _unknown2: word; // 20200217
@@ -1373,7 +1373,7 @@ var
   begin
     if csvtriggers.Count = 0 then
     begin
-      stmp := 'id,unknown1,hidden,name,numactions,unknown2,';
+      stmp := 'id,unknown1,suspended,name,numactions,unknown2,';
       for ii := 0 to 47 {MAX_RADIX_TRIGGER_ACTIONS - 1} do
       begin
         stmp := stmp + 'dataoffset_' + itoa(ii) + ',';
@@ -1386,7 +1386,7 @@ var
     end;
 
     stmp := itoa(id) + ',' + itoa(tr._unknown1) + ',';
-    stmp := stmp + itoa(tr.hidden) + ',';
+    stmp := stmp + itoa(tr.suspended) + ',';
 
     for ii := 0 to 25 do
     begin

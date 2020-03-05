@@ -35,6 +35,8 @@ unit radix_grid;
 interface
 
 uses
+  r_defs,
+  p_mobj_h,
   radix_level;
 
 var
@@ -49,10 +51,13 @@ function RX_RadixGridX: integer;
 
 function RX_RadixGridY: integer;
 
+function RX_PosInGrid(const mo: Pmobj_t): integer;
+
 implementation
 
 uses
   d_delphi,
+  m_fixed,
   i_system;
 
 var
@@ -85,6 +90,26 @@ end;
 function RX_RadixGridY: integer;
 begin
   result := grid_Y_size;
+end;
+
+function RX_PosInGrid(const mo: Pmobj_t): integer;
+var
+  sec: Psector_t;
+  rx, ry: integer;
+begin
+  if (grid_X_size = 0) or (grid_Y_size = 0) or (mo = nil) then
+  begin
+    result := -1;
+    exit;
+  end;
+
+  sec := Psubsector_t(mo.subsector).sector;
+
+  // JVAL: 20200305 - Works only when ::radixmapXmult & ::radixmapYmult are -1 or 1
+  rx := (sec.radixmapXmult * (mo.x div FRACUNIT) - sec.radixmapXadd) div 64;
+  ry := (sec.radixmapYmult * (mo.y div FRACUNIT) - sec.radixmapYadd) div 64;
+
+  result := ry * grid_X_size + rx;
 end;
 
 end.

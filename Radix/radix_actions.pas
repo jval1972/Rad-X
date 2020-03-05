@@ -129,6 +129,7 @@ uses
   p_setup,
   radix_defs,
   radix_map_extra,
+  radix_logic,
   r_data;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -558,6 +559,8 @@ var
   parms: radixdeactivatetrigger_p;
 begin
   parms := radixdeactivatetrigger_p(@action.params);
+  radixtriggers[parms.trigger].suspended := 1;
+  action.suspend := 1;  // JVAL: 202003 - Disable action
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -573,6 +576,8 @@ var
   parms: radixactivatetrigger_p;
 begin
   parms := radixactivatetrigger_p(@action.params);
+  radixtriggers[parms.trigger].suspended := 0;
+  action.suspend := 1;  // JVAL: 202003 - Disable action
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

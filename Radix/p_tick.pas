@@ -212,7 +212,8 @@ begin
   P_RunThinkers;
   if not isgamefreezed then
   begin
-    RX_RunActions;
+    RX_RunTriggers; // JVAL: 20200305 - Run radix triggers
+    RX_RunActions;  // JVAL: 20200305 - Run radix actions
     P_UpdateSpecials;
     P_RespawnSpecials;
 

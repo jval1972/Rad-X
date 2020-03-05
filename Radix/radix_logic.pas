@@ -43,12 +43,68 @@ var
   radixtriggers: Pradixtrigger_tArray;
   numradixtriggers: integer;
 
+procedure RX_RunTriggers;
+
 procedure RX_RunActions;
 
 implementation
 
 uses
-  radix_actions;
+  doomdef,
+  d_player,
+  g_game,
+  radix_actions,
+  radix_grid;
+
+procedure RX_RunTriggerAction(const ra: Pradixtriggeraction_t);
+begin
+  case ra.activationflags of
+    SPR_FLG_ACTIVATE:
+      radixactions[ra.actionid].suspend := 0;
+    SPR_FLG_DEACTIVATE:
+      radixactions[ra.actionid].suspend := 1; // Distinguist from $FFFF in radix.dat
+    SPR_FLG_ACTIVATEONSPACE: ; // ?
+    SPR_FLG_TONGLE:
+      if radixactions[ra.actionid].suspend = 0 then
+        radixactions[ra.actionid].suspend := 1
+      else
+        radixactions[ra.actionid].suspend := 0
+  end;
+end;
+
+procedure RX_RunTrigger(const trig_id: integer);
+var
+  trig: Pradixtrigger_t;
+  i: integer;
+begin
+  trig := @radixtriggers[trig_id];
+  if trig.suspended = 0 then
+    for i := 0 to trig.numactions - 1 do
+      RX_RunTriggerAction(@trig.actions[i]);
+end;
+
+//
+// JVAL: Handle radix triggers
+// Note: No voodoo dolls
+//
+procedure RX_RunTriggers;
+var
+  i: integer;
+  grid_id: integer;
+  trig_id: integer;
+begin
+  for i := 0 to MAXPLAYERS - 1 do
+    if playeringame[i] then
+    begin
+      grid_id := RX_PosInGrid(players[i].mo);
+      if grid_id >= 0 then
+      begin
+        trig_id := radixgrid[grid_id];
+        if trig_id >= 0 then
+          RX_RunTrigger(trig_id);
+      end;
+    end;
+end;
 
 procedure RX_RunAction(const action: Pradixaction_t);
 begin
