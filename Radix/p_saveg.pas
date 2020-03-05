@@ -1057,7 +1057,10 @@ begin
   if x <> RX_RadixGridX then
     I_Error('P_UnArchiveGrid(): Invalid grid x size %d', [x]);
   if x = 0 then
+  begin
+    RX_InitRadixGrid(0, 0, nil); // JVAL: 20200305 - Unused
     exit;
+  end;
 
   y := PInteger(save_p)^;
   incp(pointer(save_p), SizeOf(integer));

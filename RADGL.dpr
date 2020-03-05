@@ -347,7 +347,11 @@ uses
   radix_bitmap in 'Radix\radix_bitmap.pas',
   i_modmusic in 'Base\i_modmusic.pas',
   radix_map_extra in 'Radix\radix_map_extra.pas',
-  radix_version in 'Radix\radix_version.pas';
+  radix_version in 'Radix\radix_version.pas',
+  radix_actions in 'Radix\radix_actions.pas',
+  radix_alias in 'Radix\radix_alias.pas',
+  radix_grid in 'Radix\radix_grid.pas',
+  radix_messages in 'Radix\radix_messages.pas';
 
 var
   Saved8087CW: Word;

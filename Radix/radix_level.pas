@@ -371,7 +371,7 @@ var
   ractions: Pradixaction_tArray;
   rtriggers: Pradixtrigger_tArray;
   doomthings: Pdoommapthing_tArray;
-  doomthingsextra: Pradixmapthingextra_tArray; // Extra lump 'THINGSEX'
+  doomthingsextra: Pradixmapthingextra_tArray; // Extra lump 'RTHINGS'
   numdoomthings: integer;
   doomlinedefs: Pmaplinedef_tArray;
   numdoomlinedefs: integer;
