@@ -52,6 +52,7 @@ uses
   radix_things,
   radix_bitmap,
   radix_font,
+  radix_sounds,
   r_defs,
   v_video,
   w_wadwriter,
@@ -102,6 +103,7 @@ type
     function GenerateSprites: boolean;
     function GenerateMusic: boolean;
     function GenerateCockpitOverlay: boolean;
+    function GenerateSounds: boolean;
     procedure WritePK3Entry;
   public
     constructor Create; virtual;
@@ -1845,6 +1847,33 @@ begin
   bmp.Free;
 end;
 
+function TRadixToWADConverter.GenerateSounds: boolean;
+var
+  i: integer;
+  l: integer;
+  sbuffer: pointer;
+  ssize: integer;
+  wname, rname: string;
+begin
+  result := false;
+  for i := 0 to Ord(sfx_NumRadixSnd) - 1 do
+  begin
+    l := FindLump(lumps, numlumps, 'CockPitOverlay');
+    if l >= 0 then
+    begin
+      rname := radixsounds[i];
+      if ReadLump(lumps, numlumps, rname, sbuffer, ssize) then
+      begin
+        wname := 'DS_' + IntToStrzFill(5, i);
+        wadwriter.AddData(wname, sbuffer, ssize);
+        memfree(sbuffer, ssize);
+        aliases.Add(wname + '=' + rname);
+        result := true;
+      end;
+    end;
+  end;
+end;
+
 procedure TRadixToWADConverter.WritePK3Entry;
 begin
   if aliases = nil then
@@ -1883,6 +1912,7 @@ begin
   GenerateSprites;
   GenerateMusic;
   GenerateCockpitOverlay;
+  GenerateSounds;
   WritePK3Entry;
 end;
 
