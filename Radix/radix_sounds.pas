@@ -34,6 +34,9 @@ unit radix_sounds;
 
 interface
 
+uses
+  p_mobj_h;
+
 type
   radixsound_t = (
     sfx_SndScrape,
@@ -132,7 +135,36 @@ const
     'SndSecComplete',
     'SndSplash'
   );
+
+function S_AmbientSound(const x, y: integer; const sndname: string): Pmobj_t;
+
 implementation
 
+uses
+  info_common,
+  p_local,
+  p_mobj,
+  s_sound;
+
+var
+  m_ambient: integer = -1;
+
+const
+  STR_AMBIENTSOUND = 'AMBIENTSOUND';
+
+function S_AmbientSound(const x, y: integer; const sndname: string): Pmobj_t;
+begin
+  if m_ambient = -1 then
+    m_ambient := Info_GetMobjNumForName(STR_AMBIENTSOUND);
+
+  if m_ambient = -1 then
+  begin
+    result := nil;
+    exit;
+  end;
+
+  result := P_SpawnMobj(x, y, ONFLOATZ, m_ambient);
+  S_StartSound(result, sndname);
+end;
+
 end.
- 

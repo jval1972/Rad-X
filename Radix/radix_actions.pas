@@ -126,11 +126,14 @@ implementation
 
 uses
   m_rnd,
+  m_fixed,
   p_setup,
   radix_defs,
   radix_map_extra,
   radix_logic,
-  r_data;
+  radix_sounds,
+  r_data,
+  r_defs;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Sprite type = 0
@@ -408,7 +411,7 @@ type
     min_height: smallint;
     max_delay: integer;
     speed: byte;
-    surface_type: byte; // 1-> floor, 2-> ceiling
+    surface_type: byte; // 1-> floor, 0-> ceiling
     direction: byte;  // 1-> up, 0-> delayed, -1 -> down
     stop_position: byte; // 0-> no stop, 1-> maxstop, 2-> minstop, 3-> allstop
     approx_x: LongWord;
@@ -417,14 +420,95 @@ type
     stop_sound: smallint;
     activate_trig: smallint;
     trigger_number: smallint;
+    // RTL
+    initialized: boolean;
   end;
   radixnewmovingsurface_p = ^radixnewmovingsurface_t;
 
 procedure RA_NewMovingSurface(const action: Pradixaction_t);
 var
   parms: radixnewmovingsurface_p;
+  sec: Psector_t;
+  dest_height: fixed_t;
+  step: fixed_t;
+  finished: boolean;
+label
+  finish_move;
 begin
   parms := radixnewmovingsurface_p(@action.params);
+
+  if parms.max_delay > 0 then
+  begin
+    dec(parms.max_delay);
+    exit;
+  end;
+
+  sec := @sectors[parms.surface];
+
+  if not parms.initialized then
+  begin
+    S_AmbientSound(
+      RX_RadixX2Doom(sec, parms.approx_x) * FRACUNIT,
+      RX_RadixY2Doom(sec, parms.approx_y) * FRACUNIT,
+      radixsounds[parms.start_sound]);
+    if parms.activate_trig <> 0 then
+      radixtriggers[parms.trigger_number].suspended := 0;
+    parms.initialized := true;
+  end;
+
+  if parms.direction = 1 then // Up
+  begin
+    dest_height := parms.max_height * FRACUNIT;
+    step := parms.speed * FRACUNIT;
+  end
+  else if parms.direction = -1 then // Down
+  begin
+    dest_height := parms.min_height * FRACUNIT;
+    step := -parms.speed * FRACUNIT;
+  end
+  else
+    exit; // ouch
+
+  case parms.surface_type of
+    1: // floor
+      begin
+        sec.floorheight := sec.floorheight + step;
+
+        if parms.direction = 1 then // Up
+          finished := sec.floorheight >= dest_height
+        else // if parms.direction = -1 then // Down
+          finished := sec.floorheight <= dest_height;
+        if finished then
+        begin
+          sec.floorheight := dest_height;
+          goto finish_move;
+        end;
+      end;
+    0: // ceiling
+      begin
+        sec.ceilingheight := sec.ceilingheight + step;
+
+        if parms.direction = 1 then // Up
+          finished := sec.ceilingheight >= dest_height
+        else // if parms.direction = -1 then // Down
+          finished := sec.ceilingheight <= dest_height;
+        if finished then
+        begin
+          sec.ceilingheight := dest_height;
+          goto finish_move;
+        end;
+      end;
+  end;
+
+  exit;
+
+finish_move:
+  S_AmbientSound(
+    RX_RadixX2Doom(sec, parms.approx_x) * FRACUNIT,
+    RX_RadixY2Doom(sec, parms.approx_y) * FRACUNIT,
+    radixsounds[parms.stop_sound]);
+  parms.initialized := false;
+  action.suspend := 1;  // JVAL: 202003 - Disable action
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
