@@ -408,9 +408,9 @@ type
     min_height: smallint;
     max_delay: integer;
     speed: byte;
-    surface_type: byte;
-    direction: byte;
-    stop_position: byte;
+    surface_type: byte; // 1-> floor, 2-> ceiling
+    direction: byte;  // 1-> up, 0-> delayed, -1 -> down
+    stop_position: byte; // 0-> no stop, 1-> maxstop, 2-> minstop, 3-> allstop
     approx_x: LongWord;
     approx_y: LongWord;
     start_sound: smallint;
