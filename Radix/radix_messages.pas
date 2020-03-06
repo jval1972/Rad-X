@@ -48,6 +48,26 @@ const
   S_RADIX_MESSAGE_10 = 'Primary Objective Incomplete';
   S_RADIX_MESSAGE_11 = 'Kill all Skyfires to continue';
 
+const
+  NUMRADIXMESSAGES = 12;
+
+var
+  radixmessages: array[0..NUMRADIXMESSAGES - 1] of string;
+
 implementation
+
+initialization
+  radixmessages[0] := S_RADIX_MESSAGE_0;
+  radixmessages[1] := S_RADIX_MESSAGE_1;
+  radixmessages[2] := S_RADIX_MESSAGE_2;
+  radixmessages[3] := S_RADIX_MESSAGE_3;
+  radixmessages[4] := S_RADIX_MESSAGE_4;
+  radixmessages[5] := S_RADIX_MESSAGE_5;
+  radixmessages[6] := S_RADIX_MESSAGE_6;
+  radixmessages[7] := S_RADIX_MESSAGE_7;
+  radixmessages[8] := S_RADIX_MESSAGE_8;
+  radixmessages[9] := S_RADIX_MESSAGE_9;
+  radixmessages[10] := S_RADIX_MESSAGE_10;
+  radixmessages[11] := S_RADIX_MESSAGE_11;
 
 end.

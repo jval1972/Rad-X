@@ -125,12 +125,14 @@ procedure RA_VertExplosion(const action: Pradixaction_t);
 implementation
 
 uses
+  d_player,
   m_rnd,
   m_fixed,
   p_mobj_h,
   p_setup,
   radix_defs,
   radix_map_extra,
+  radix_messages,
   radix_logic,
   radix_sounds,
   r_data,
@@ -775,6 +777,10 @@ var
   parms: radixprintmessage_p;
 begin
   parms := radixprintmessage_p(@action.params);
+
+  if IsIntegerInRange(parms.message_id, 0, NUMRADIXMESSAGES - 1) then
+    players[radixplayer]._message := radixmessages[parms.message_id];
+  action.suspend := 1;  // JVAL: 20200306 - Disable action
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

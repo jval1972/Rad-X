@@ -47,6 +47,9 @@ procedure RX_RunTriggers;
 
 procedure RX_RunActions;
 
+var
+  radixplayer: integer; // The player that activates a radix trigger
+
 implementation
 
 uses
@@ -96,6 +99,7 @@ begin
   for i := 0 to MAXPLAYERS - 1 do
     if playeringame[i] then
     begin
+      radixplayer := i;
       grid_id := RX_PosInGrid(players[i].mo);
       if grid_id >= 0 then
       begin

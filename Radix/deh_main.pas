@@ -122,6 +122,7 @@ uses
   p_pspr,
   p_inter,
   p_musinfo,
+  radix_messages,
   r_renderstyle,
   sounds,
   sound_data,
@@ -2501,6 +2502,9 @@ begin
       DEH_AddString(@deh_strings, @mapnames[k], 'HUSTR_E' + itoa(i) + 'M' + itoa(j));
       inc(k);
     end;
+
+  for i := 0 to NUMRADIXMESSAGES - 1 do
+    DEH_AddString(@deh_strings, @radixmessages[k], 'S_RADIX_MESSAGE_' + itoa(i));
 
   DEH_AddString(@deh_strings, @castorder[0].name, 'CC_ZOMBIE');
   DEH_AddString(@deh_strings, @castorder[1].name, 'CC_SHOTGUN');
