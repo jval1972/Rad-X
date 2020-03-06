@@ -186,6 +186,7 @@ uses
   r_camera,
   r_lights,
   sounds,
+  sound_data,
   s_sound,
   sc_actordef,
   t_main,

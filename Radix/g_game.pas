@@ -307,6 +307,7 @@ uses
   dstrings,
   d_englsh,
   sounds,
+  sound_data,
   r_data,
 // SKY handling - still the wrong place.
   r_sky,

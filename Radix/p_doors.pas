@@ -67,7 +67,8 @@ uses
   p_lights,
   p_tick,
   p_setup,
-  p_floor;
+  p_floor,
+  sound_data;
 
 //
 // VERTICAL DOORS

@@ -133,6 +133,7 @@ uses
   dstrings,
   d_englsh,
   sounds,
+  sound_data,
 // for mapnames
   hu_stuff;
 

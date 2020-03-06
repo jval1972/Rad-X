@@ -64,6 +64,7 @@ uses
   p_setup,
   p_levelinfo,
   sounds,
+  sound_data,
   s_sound,
   sc_engine,
   w_wad;

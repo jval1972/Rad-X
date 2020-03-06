@@ -158,6 +158,7 @@ uses
   hu_stuff,
   s_sound,
   sounds,
+  sound_data,
   w_wad,
   z_zone;
 

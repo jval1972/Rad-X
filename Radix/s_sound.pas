@@ -131,6 +131,7 @@ uses
   p_mobj_h,
   p_mobj,
   p_tick,
+  sound_data,
   sounds,
   z_zone,
   w_folders,

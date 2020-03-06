@@ -142,6 +142,7 @@ uses
   hu_stuff,
   s_sound,
   sounds,
+  sound_data,
   info,
   info_rnd,
   info_common;

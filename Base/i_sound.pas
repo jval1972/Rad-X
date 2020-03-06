@@ -35,7 +35,7 @@ unit i_sound;
 interface
 
 uses
-  sounds;
+  sound_data;
 
 // Init at program start...
 procedure I_InitSound;
@@ -84,7 +84,7 @@ uses
   d_delphi,
   MMSystem,
   z_zone,
-  m_argv, 
+  m_argv,
   i_system,
 {$IFDEF OPENGL}
   gl_main,
@@ -93,6 +93,7 @@ uses
 {$ENDIF}
   DirectX,
   s_sound,
+  sounds,
   w_wad,
   w_folders,
   w_pak,

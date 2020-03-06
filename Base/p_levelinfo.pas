@@ -58,6 +58,7 @@ uses
   p_setup,
   sounds,
   s_sound,
+  sound_data,
   z_zone;
 
 var

@@ -63,7 +63,8 @@ uses
   p_tick,
   p_setup,
   p_slopes,
-  p_floor;
+  p_floor,
+  sound_data;
 
 //
 // Add an active ceiling

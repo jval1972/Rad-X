@@ -71,6 +71,7 @@ uses
   r_defs, 
   doomstat,
   sounds,
+  sound_data,
   v_data,
   v_video;
 

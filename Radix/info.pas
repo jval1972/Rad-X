@@ -73,7 +73,7 @@ uses
   p_common,
   info_common,
   r_renderstyle,
-  sounds;
+  sound_data;
 
 const
   DEFPUSHFACTOR = FRACUNIT div 4;

@@ -70,6 +70,7 @@ uses
   z_zone,
 // Data
   sounds,
+  sound_data,
 // State
   doomstat;
 

@@ -68,6 +68,7 @@ uses
   p_setup,
   s_sound,
   sounds,
+  sound_data,
   z_zone;
 
 procedure T_PlatRaise(plat: Pplat_t);

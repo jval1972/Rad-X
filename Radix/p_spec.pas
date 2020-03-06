@@ -544,7 +544,8 @@ uses
   p_tick,
   s_sound,
 // Data.
-  sounds;
+  sounds,
+  sound_data;
 
 //
 // Animating textures and planes

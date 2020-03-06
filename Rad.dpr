@@ -378,7 +378,8 @@ uses
   radix_messages in 'Radix\radix_messages.pas',
   mn_screenshot in 'Radix\mn_screenshot.pas',
   radix_actions in 'Radix\radix_actions.pas',
-  radix_sounds in 'Radix\radix_sounds.pas';
+  radix_sounds in 'Radix\radix_sounds.pas',
+  sound_data in 'Radix\sound_data.pas';
 
 var
   Saved8087CW: Word;

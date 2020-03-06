@@ -88,7 +88,8 @@ uses
   ps_main, // JVAL: Script Events
   r_defs,
   r_main,
-  tables;
+  tables,
+  sound_data;
 
 const
   BONUSADD = 6;

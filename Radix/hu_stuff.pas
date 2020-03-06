@@ -148,6 +148,7 @@ uses
   p_tick,
   r_draw,
   s_sound,
+  sound_data,
   sounds,
   v_data,
   v_video;

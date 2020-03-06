@@ -102,6 +102,7 @@ uses
   dstrings,
   d_englsh,
   sounds,
+  sound_data,
   doomdef,
   doomstat,
   hu_stuff;

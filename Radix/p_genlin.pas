@@ -299,6 +299,7 @@ uses
   p_spec,
   p_tick,
   sounds,
+  sound_data,
   s_sound,
   z_zone;
 

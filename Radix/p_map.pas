@@ -138,6 +138,7 @@ uses
   r_main,
   r_sky,
   r_intrpl,
+  sound_data,
   z_zone;
 
 var

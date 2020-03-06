@@ -73,7 +73,8 @@ uses
   p_mobj_h,
   p_setup,
   p_slopes,
-  r_data;
+  r_data,
+  sound_data;
 
 //
 // Move a plane (floor or ceiling) and check for crushing

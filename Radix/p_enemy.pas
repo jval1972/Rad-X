@@ -218,7 +218,8 @@ uses
   p_sounds,
   ps_main,
   r_defs,
-  r_main;
+  r_main,
+  sound_data;
 
 const
   opposite: array[0..8] of dirtype_t = (

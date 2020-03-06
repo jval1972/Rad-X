@@ -124,6 +124,7 @@ uses
   p_musinfo,
   r_renderstyle,
   sounds,
+  sound_data,
   sc_params,
   sc_engine,
   v_data,
