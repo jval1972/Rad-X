@@ -449,10 +449,13 @@ begin
 
   if not parms.initialized then
   begin
-    S_AmbientSound(
+  S_StartSound(
+    Pmobj_t(@sec.soundorg),
+    radixsounds[parms.start_sound]);
+{    S_AmbientSound(
       RX_RadixX2Doom(sec, parms.approx_x) * FRACUNIT,
       RX_RadixY2Doom(sec, parms.approx_y) * FRACUNIT,
-      radixsounds[parms.start_sound]);
+      radixsounds[parms.start_sound]);}
     if parms.activate_trig <> 0 then
       radixtriggers[parms.trigger_number].suspended := 0;
     parms.initialized := true;
