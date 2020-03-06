@@ -151,14 +151,12 @@ const
 
 // when to clip out sounds
 // Does not fit the large outdoor areas.
-  S_CLIPPING_DIST = 1200 * $10000;
+  S_CLIPPING_DIST = 3000 * $10000; // JVAL: 20200306 - Changed to fit large outdoor areas
 
 // Distance tp origin when sounds should be maxed out.
 // This should relate to movement clipping resolution
 // (see BLOCKMAP handling).
-// Originally: (200*0x10000).
-  S_CLOSE_DIST = 160 * $10000;
-//  S_CLOSE_DIST = 200 * $10000;
+  S_CLOSE_DIST = 512 * $10000;   // JVAL: 20200306 - Changed to fit large outdoor areas
 
   S_ATTENUATOR = (S_CLIPPING_DIST - S_CLOSE_DIST) div FRACUNIT;
 

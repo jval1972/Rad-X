@@ -186,12 +186,9 @@ begin
     sfxinfo := sfxinfo.link;
 {$ENDIF}    
     
-  result := -1;
-
   sprintf(namebuf, 'ds%s', [sfxinfo.name]);
-  if Length(namebuf) <= 8 then
-    result := W_CheckNumForName(namebuf);
-
+  result := W_CheckNumForName(namebuf);
+  
   if result = -1 then // JVAL, search without the ds prefix
     result := W_CheckNumForName(sfxinfo.name);
 end;

@@ -127,13 +127,15 @@ implementation
 uses
   m_rnd,
   m_fixed,
+  p_mobj_h,
   p_setup,
   radix_defs,
   radix_map_extra,
   radix_logic,
   radix_sounds,
   r_data,
-  r_defs;
+  r_defs,
+  s_sound;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Sprite type = 0
@@ -503,10 +505,13 @@ begin
   exit;
 
 finish_move:
-  S_AmbientSound(
+  S_StartSound(
+    Pmobj_t(@sec.soundorg),
+    radixsounds[parms.stop_sound]);
+{  S_AmbientSound(
     RX_RadixX2Doom(sec, parms.approx_x) * FRACUNIT,
     RX_RadixY2Doom(sec, parms.approx_y) * FRACUNIT,
-    radixsounds[parms.stop_sound]);
+    radixsounds[parms.stop_sound]);}
   parms.initialized := false;
   action.suspend := 1;  // JVAL: 202003 - Disable action
 end;
