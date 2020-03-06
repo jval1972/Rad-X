@@ -376,7 +376,7 @@ var
   line: Pline_t;
 begin
   line := seg.linedef;
-  if line.radixflags and (RWF_PEGBOTTOM_FLOOR or RWF_PEGTOP_FLOOR) = 0 then
+  if line.radixflags and RWF_PEGTOP_FLOOR = 0 then
     result := -viewz
   else if line.radixflags and RWF_PEGBOTTOM_FLOOR <> 0 then
     result := worldlow
@@ -389,8 +389,8 @@ var
   line: Pline_t;
 begin
   line := seg.linedef;
-  if line.radixflags and (RWF_PEGBOTTOM_CEILING or RWF_PEGTOP_CEILING) = 0 then
-    result := - viewz
+  if line.radixflags and RWF_PEGTOP_CEILING = 0 then
+    result := seg.linedef.backsector.ceilingheight - viewz
   else if line.radixflags and RWF_PEGBOTTOM_CEILING <> 0 then
     result := worldlow
   else
@@ -402,7 +402,7 @@ var
   line: Pline_t;
 begin
   line := seg.linedef;
-  if line.radixflags and (RWF_PEGBOTTOM_FLOOR or RWF_PEGTOP_FLOOR) = 0 then
+  if line.radixflags and RWF_PEGTOP_FLOOR = 0 then
     result := -viewz
   else if line.radixflags and RWF_PEGBOTTOM_FLOOR <> 0 then
     result := worldlow
