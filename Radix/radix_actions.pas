@@ -166,14 +166,74 @@ type
     surface_type: byte;
     direction: byte;
     stop_position: byte;
+    // RTL
+    initialized: boolean;
   end;
   radixmovingsurface_p = ^radixmovingsurface_t;
 
 procedure RA_MovingSurface(const action: Pradixaction_t);
 var
   parms: radixmovingsurface_p;
+  sec: Psector_t;
+  dest_height: fixed_t;
+  step: fixed_t;
+  finished: boolean;
 begin
   parms := radixmovingsurface_p(@action.params);
+
+  if parms.max_delay > 0 then
+  begin
+    dec(parms.max_delay);
+    exit;
+  end;
+
+  sec := @sectors[parms.surface];
+
+  if parms.direction = 1 then // Up
+  begin
+    dest_height := parms.max_height * FRACUNIT;
+    step := parms.speed * FRACUNIT;
+  end
+  else if parms.direction = $FF then // Down
+  begin
+    dest_height := parms.min_height * FRACUNIT;
+    step := -parms.speed * FRACUNIT;
+  end
+  else
+    exit; // ouch
+
+  case parms.surface_type of
+    1: // floor
+      begin
+        sec.floorheight := sec.floorheight + step;
+
+        if parms.direction = 1 then // Up
+          finished := sec.floorheight >= dest_height
+        else // if parms.direction = -1 then // Down
+          finished := sec.floorheight <= dest_height;
+        if finished then
+        begin
+          sec.floorheight := dest_height;
+          action.suspend := 1;  // JVAL: 202003 - Disable action
+          exit;
+        end;
+      end;
+    0: // ceiling
+      begin
+        sec.ceilingheight := sec.ceilingheight + step;
+
+        if parms.direction = 1 then // Up
+          finished := sec.ceilingheight >= dest_height
+        else // if parms.direction = -1 then // Down
+          finished := sec.ceilingheight <= dest_height;
+        if finished then
+        begin
+          sec.ceilingheight := dest_height;
+          action.suspend := 1;  // JVAL: 202003 - Disable action
+          exit;
+        end;
+      end;
+  end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
