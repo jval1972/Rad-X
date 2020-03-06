@@ -141,13 +141,6 @@ begin
     exit;
   end;
 
-  if length(snd) > 8 then
-  begin
-    I_Warning('SC_SoundAlias(): Sound %s has length %d > 8.'#13#10, [snd, length(snd)]);
-    result := '0';
-    exit;
-  end;
-
   result := snd;
 end;
 
