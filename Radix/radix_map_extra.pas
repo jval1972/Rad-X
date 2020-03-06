@@ -376,12 +376,12 @@ var
   line: Pline_t;
 begin
   line := seg.linedef;
-  if line.radixflags and RWF_PEGTOP_FLOOR = 0 then
-    result := -viewz
+  if line.radixflags and RWF_PEGTOP_FLOOR <> 0 then
+    result := worldtop
   else if line.radixflags and RWF_PEGBOTTOM_FLOOR <> 0 then
     result := worldlow
   else
-    result := worldtop;
+    result := -viewz;
 end;
 
 function RX_CalculateRadixTopOffs(const seg: PSeg_t): fixed_t;
@@ -389,12 +389,12 @@ var
   line: Pline_t;
 begin
   line := seg.linedef;
-  if line.radixflags and RWF_PEGTOP_CEILING = 0 then
-    result := seg.linedef.backsector.ceilingheight - viewz
+  if line.radixflags and RWF_PEGTOP_CEILING <> 0 then
+    result := worldtop
   else if line.radixflags and RWF_PEGBOTTOM_CEILING <> 0 then
-    result := worldlow
+    result := line.backsector.ceilingheight - viewz
   else
-    result := worldtop;
+    result := worldlow;
 end;
 
 function RX_CalculateRadixBottomOffs(const seg: PSeg_t): fixed_t;
@@ -402,12 +402,12 @@ var
   line: Pline_t;
 begin
   line := seg.linedef;
-  if line.radixflags and RWF_PEGTOP_FLOOR = 0 then
-    result := -viewz
+  if line.radixflags and RWF_PEGTOP_FLOOR <> 0 then
+    result := line.backsector.floorheight - viewz
   else if line.radixflags and RWF_PEGBOTTOM_FLOOR <> 0 then
-    result := worldlow
+    result := worldtop //
   else
-    result := worldtop;
+    result := worldlow;
 end;
 
 function RX_CalculateRadixSlopeMidOffs(const seg: PSeg_t): fixed_t;
