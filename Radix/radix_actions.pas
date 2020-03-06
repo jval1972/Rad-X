@@ -463,7 +463,7 @@ begin
     dest_height := parms.max_height * FRACUNIT;
     step := parms.speed * FRACUNIT;
   end
-  else if parms.direction = -1 then // Down
+  else if parms.direction = $FF then // Down
   begin
     dest_height := parms.min_height * FRACUNIT;
     step := -parms.speed * FRACUNIT;
