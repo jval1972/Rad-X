@@ -637,6 +637,7 @@ begin
   begin
     m_type := m_mod;
     I_PlayMod(data, size);
+    I_SetMusicVolumeMod(snd_MusicVolume);
   end
   else if Pmp3header_t(data).ID = MP3MAGIC then
   begin

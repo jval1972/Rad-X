@@ -121,6 +121,10 @@ type
     byte5, byte6, byte7, byte8: byte;
   end;
 
+  twowords_t = packed record
+    word1, word2: word;
+  end;
+
   twointegers_t = packed record
     int1, int2: integer;
   end;

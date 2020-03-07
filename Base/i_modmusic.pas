@@ -1182,10 +1182,12 @@ begin
   end;
 end;
 
+var
+  WaveOutHandle: HWaveOut;
+
 procedure PlayModule;
 var
   WaveFormat: TWaveFormatEx;
-  WaveOutHandle: HWaveOut;
   WaveHeaders: array of TWaveHdr;
   WaveBuffers: array of array of smallint;
   PWaveHeader: PWaveHdr;
@@ -1338,8 +1340,23 @@ begin
   mod_thread.Free;
 end;
 
+const
+  MOD_VOLUME_CONTROL: array[0..15] of word = (
+        0,     4369,     8738,    13107,
+    17476,    21845,    26214,    30583,
+    34952,    39321,    43690,    48059,
+    52428,    56797,    61166,    65535
+  );
+
 procedure I_SetMusicVolumeMod(volume: integer);
+var
+  vol: integer;
+  v: twowords_t;
 begin
+  vol := GetIntegerInRange(volume, 0, 15);
+  v.word1 := MOD_VOLUME_CONTROL[vol];
+  v.word2 := v.word1;
+  waveOutSetVolume(WaveOutHandle, PLongWord(@v)^);
 end;
 
 procedure I_ProcessMod;
