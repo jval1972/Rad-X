@@ -144,7 +144,7 @@ uses
 type
   radixscrollingwall_t = packed record
     wall_number: smallint;
-    direction: byte; // left/right/top/bottom ?
+    direction: byte; // Only 0 (right) in radix.dat - Extended to left, up & down
     speed: byte;
   end;
   radixscrollingwall_p = ^radixscrollingwall_t;
@@ -152,8 +152,64 @@ type
 procedure RA_ScrollingWall(const action: Pradixaction_t);
 var
   parms: radixscrollingwall_p;
+  li: Pline_t;
+  s1, s2: Pside_t;
+  dx: fixed_t;
 begin
   parms := radixscrollingwall_p(@action.params);
+
+  dx := parms.speed * FRACUNIT;
+  if dx = 0 then
+    exit; // No scroll
+
+  li := @lines[parms.wall_number];
+
+  // JVAL: 20200307 - Set interpolate flag
+  li.radixflags := li.radixflags or RWF_FORCEINTERPOLATE;
+
+  if li.sidenum[0] > 0 then
+    s1 := @sides[li.sidenum[0]]
+  else
+    s1 := nil;
+  if li.sidenum[1] > 0 then
+    s2 := @sides[li.sidenum[1]]
+  else
+    s2 := nil;
+
+  case parms.direction of
+    0:  // Only 0 in radix.dat v2 remix (right)
+      begin
+        if s1 <> nil then
+          s1.textureoffset := s1.textureoffset - dx;
+        if s2 <> nil then
+          s2.textureoffset := s2.textureoffset - dx;
+      end;
+    // JVAL: 20200307 - Let's extend the direction field
+    //   1 -> scroll left
+    //   2 -> scroll up
+    //   3 -> scroll down
+    1:  // left
+      begin
+        if s1 <> nil then
+          s1.textureoffset := s1.textureoffset + dx;
+        if s2 <> nil then
+          s2.textureoffset := s2.textureoffset + dx;
+      end;
+    2:  // up
+      begin
+        if s1 <> nil then
+          s1.rowoffset := s1.rowoffset + dx;
+        if s2 <> nil then
+          s2.rowoffset := s2.rowoffset + dx;
+      end;
+    3:  // down
+      begin
+        if s1 <> nil then
+          s1.rowoffset := s1.rowoffset - dx;
+        if s2 <> nil then
+          s2.rowoffset := s2.rowoffset - dx;
+      end;
+  end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -216,7 +272,7 @@ begin
         if finished then
         begin
           sec.floorheight := dest_height;
-          action.suspend := 1;  // JVAL: 202003 - Disable action
+          action.suspend := 1;  // JVAL: 20200306 - Disable action
           exit;
         end;
       end;

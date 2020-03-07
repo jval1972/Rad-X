@@ -76,6 +76,7 @@ uses
   p_mobj,
   p_mobj_h,
   p_pspr_h,
+  radix_level,
   r_defs,
   r_main,
   tables;
@@ -385,7 +386,7 @@ begin
   li := @lines[0];
   for i := 0 to numlines - 1 do
   begin
-    if li.special <> 0 then
+    if (li.special <> 0) or (li.radixflags and RWF_FORCEINTERPOLATE <> 0) then
       for j := 0 to 1 do
       begin
         if li.sidenum[j] > -1 then
