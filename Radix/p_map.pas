@@ -135,6 +135,7 @@ uses
   p_tick,
   p_terrain,
   ps_main,  // JVAL: Script Events
+  radix_map_extra, // JVAL: 20200307 - Wall Damage
   r_main,
   r_sky,
   r_intrpl,
@@ -1647,6 +1648,7 @@ var
           result := false;
           exit;
         end;
+
       // JVAL: Spawn puff to lower textures.
         if G_NeedsCompatibilityMode then
         begin
@@ -1655,8 +1657,10 @@ var
           if zoffs > dist div 2 then
             zoffs := dist div 2;
           P_SpawnPuff(x, y, z + zoffs);
+
           P_RestoreRandom;
           result := false;
+
           exit;
         end;
       end;
@@ -1679,6 +1683,10 @@ begin
 
     if li.special <> 0 then
       P_ShootSpecialLine(shootthing, li);
+
+    // JVAL: 20200307 - Damage Wall
+   if la_damage > 0 then
+     RX_DamageLine(li, la_damage);
 
     if li.flags and ML_TWOSIDED = 0 then
     begin

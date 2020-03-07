@@ -63,6 +63,8 @@ function RX_CalculateRadixSlopeBottomOffs(const seg: PSeg_t): fixed_t;
 
 function RX_LightLevel(const l: integer): byte;
 
+procedure RX_DamageLine(const l: Pline_t; const damage: integer);
+
 implementation
 
 uses
@@ -72,6 +74,7 @@ uses
   r_main,
   r_segs,
   radix_level,
+  radix_logic,
   sc_engine,
   sc_tokens,
   w_wad;
@@ -444,6 +447,19 @@ end;
 function RX_LightLevel(const l: integer): byte;
 begin
   result := l * 4 + 2;
+end;
+
+procedure RX_DamageLine(const l: Pline_t; const damage: integer);
+begin
+  if l.radixflags and RWF_ACTIVATETRIGGER = 0 then
+    exit;
+
+  l.radixhitpoints := l.radixhitpoints - damage;
+  if l.radixhitpoints <= 0 then
+  begin
+    l.radixflags := l.radixflags and not RWF_ACTIVATETRIGGER;
+    radixtriggers[l.radixtrigger].suspended := 0;
+  end;
 end;
 
 end.
