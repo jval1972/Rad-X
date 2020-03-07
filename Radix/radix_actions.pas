@@ -307,8 +307,63 @@ type
 procedure RA_SwitchWallBitmap(const action: Pradixaction_t);
 var
   parms: radixswitchwallbitmap_p;
+  li: Pline_t;
+  s1, s2: Pside_t;
+  texid: integer;
 begin
   parms := radixswitchwallbitmap_p(@action.params);
+
+  li := @lines[parms.element_number];
+
+  if li.sidenum[0] > 0 then
+    s1 := @sides[li.sidenum[0]]
+  else
+    s1 := nil;
+  if li.sidenum[1] > 0 then
+    s2 := @sides[li.sidenum[1]]
+  else
+    s2 := nil;
+
+  texid := R_TextureNumForName(RX_WALL_PREFIX + IntToStrzFill(4, parms.switch_bitmap + 1));
+
+  case parms.do_floor of
+    0:  // Ceiling
+      begin
+        if s1 <> nil then
+        begin
+          if s1.toptexture <> 0 then
+            s1.toptexture := texid;
+          if s1.midtexture <> 0 then
+            s1.midtexture := texid;
+        end;
+        if s2 <> nil then
+        begin
+          if s2.toptexture <> 0 then
+            s2.toptexture := texid;
+          if s2.midtexture <> 0 then
+            s2.midtexture := texid;
+        end;
+      end;
+    1:  // Floor or mid
+      begin
+        if s1 <> nil then
+        begin
+          if s1.bottomtexture <> 0 then
+            s1.bottomtexture := texid;
+          if s1.midtexture <> 0 then
+            s1.midtexture := texid;
+        end;
+        if s2 <> nil then
+        begin
+          if s2.bottomtexture <> 0 then
+            s2.bottomtexture := texid;
+          if s2.midtexture <> 0 then
+            s2.midtexture := texid;
+        end;
+      end;
+  end;
+
+  action.suspend := 1;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -574,8 +629,6 @@ begin
       RX_RadixX2Doom(sec, parms.approx_x) * FRACUNIT,
       RX_RadixY2Doom(sec, parms.approx_y) * FRACUNIT,
       radixsounds[parms.start_sound]);}
-    if parms.activate_trig <> 0 then
-      radixtriggers[parms.trigger_number].suspended := 0;
     parms.initialized := true;
   end;
 
@@ -635,6 +688,11 @@ finish_move:
     radixsounds[parms.stop_sound]);}
   parms.initialized := false;
   action.suspend := 1;  // JVAL: 202003 - Disable action
+  if parms.activate_trig <> 0 then
+  begin
+    radixtriggers[parms.trigger_number].suspended := 0;
+    RX_RunTrigger(parms.trigger_number);
+  end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -787,6 +845,7 @@ var
 begin
   parms := radixactivatetrigger_p(@action.params);
   radixtriggers[parms.trigger].suspended := 0;
+  RX_RunTrigger(parms.trigger);
   action.suspend := 1;  // JVAL: 202003 - Disable action
 end;
 

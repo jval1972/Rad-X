@@ -45,6 +45,8 @@ var
 
 procedure RX_RunTriggers;
 
+procedure RX_RunTrigger(const trig_id: integer);
+
 procedure RX_RunActions;
 
 var

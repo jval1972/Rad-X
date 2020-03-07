@@ -459,6 +459,7 @@ begin
   begin
     l.radixflags := l.radixflags and not RWF_ACTIVATETRIGGER;
     radixtriggers[l.radixtrigger].suspended := 0;
+    RX_RunTrigger(l.radixtrigger);
   end;
 end;
 
