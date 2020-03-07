@@ -125,6 +125,7 @@ procedure RA_VertExplosion(const action: Pradixaction_t);
 implementation
 
 uses
+  doomdef,
   d_player,
   m_rnd,
   m_fixed,
@@ -695,6 +696,11 @@ type
     repeating: smallint;
     x_pos: LongWord;
     y_pos: LongWord;
+    // RTL
+    doom_x: fixed_t;
+    doom_y: fixed_t;
+    countdown: integer;
+    calced: boolean;
   end;
   radixplaysound_p = ^radixplaysound_t;
 
@@ -703,6 +709,29 @@ var
   parms: radixplaysound_p;
 begin
   parms := radixplaysound_p(@action.params);
+
+  if parms.countdown > 0 then
+  begin
+    dec(parms.countdown);
+    exit;
+  end;
+
+  if not parms.calced then
+  begin
+    parms.doom_x := RX_RadixX2Doom(parms.x_pos, parms.y_pos) * FRACUNIT;
+    parms.doom_y := RX_RadixY2Doom(parms.x_pos, parms.y_pos) * FRACUNIT;
+    parms.calced := true;
+  end;
+
+  S_AmbientSound(
+      parms.doom_x,
+      parms.doom_y,
+      radixsounds[parms.sound_number]);
+
+  if parms.repeating = 0 then
+    action.suspend := 1
+  else
+    parms.countdown := 10 * TICRATE; // JVAL: 10 seconds to replay sound
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -822,12 +851,6 @@ var
 begin
   parms := radixdeactivatetrigger_p(@action.params);
   radixtriggers[parms.trigger].suspended := 1;
-  for i := 0 to radixtriggers[parms.trigger].numactions - 1 do
-  begin
-    act := radixtriggers[parms.trigger].actions[i].actionid;
-    if act >= 0 then
-      radixactions[act].suspend := 1;
-  end;
   action.suspend := 1;  // JVAL: 202003 - Disable action
 end;
 

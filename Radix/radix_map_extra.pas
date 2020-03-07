@@ -72,6 +72,9 @@ procedure RX_DamageLine(const l: Pline_t; const damage: integer);
 var
   level_position_hack: boolean;
 
+const
+  RADIX_TICRATE = 35;
+
 implementation
 
 uses
