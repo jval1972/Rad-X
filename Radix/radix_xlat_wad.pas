@@ -734,7 +734,7 @@ begin
   result := true;
 
   bufsize := lumps[lump].length;
-  buf := malloc(size);
+  buf := malloc(bufsize);
   f.Seek(lumps[lump].position, sFromBeginning);
   f.Read(buf^, bufsize);
 
