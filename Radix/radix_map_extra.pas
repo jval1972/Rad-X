@@ -38,9 +38,13 @@ uses
   m_fixed,
   r_defs;
 
-function RX_RadixX2Doom(const sec: Psector_t; const x: integer): integer;
+function RX_RadixX2Doom(const sec: Psector_t; const x: integer): integer; overload;
 
-function RX_RadixY2Doom(const sec: Psector_t; const y: integer): integer;
+function RX_RadixX2Doom(const x, y: integer): integer; overload;
+
+function RX_RadixY2Doom(const sec: Psector_t; const y: integer): integer; overload;
+
+function RX_RadixY2Doom(const x, y: integer): integer; overload;
 
 procedure RX_CalcFloorSlope(const sec: Psector_t);
 
@@ -65,6 +69,9 @@ function RX_LightLevel(const l: integer): byte;
 
 procedure RX_DamageLine(const l: Pline_t; const damage: integer);
 
+var
+  level_position_hack: boolean;
+
 implementation
 
 uses
@@ -85,9 +92,35 @@ begin
   result := x * sec.radixmapXmult + sec.radixmapXadd;
 end;
 
+function RX_RadixX2Doom(const x, y: integer): integer;
+begin
+  if level_position_hack then
+  begin
+    if x > E3M2_SPLIT_X then
+      result := x * RADIX_MAP_X_MULT + RADIX_MAP_X_ADD2
+    else
+      result := x * RADIX_MAP_X_MULT + RADIX_MAP_X_ADD;
+  end
+  else
+    result := x * RADIX_MAP_X_MULT + RADIX_MAP_X_ADD;
+end;
+
 function RX_RadixY2Doom(const sec: Psector_t; const y: integer): integer;
 begin
-  result := y * sec.radixmapYmult + sec.radixmapYadd;
+  result := y * RADIX_MAP_Y_MULT + RADIX_MAP_Y_ADD;
+end;
+
+function RX_RadixY2Doom(const x, y: integer): integer;
+begin
+  if level_position_hack then
+  begin
+    if x > E3M2_SPLIT_X then
+      result := y * RADIX_MAP_Y_MULT + RADIX_MAP_Y_ADD2
+    else
+      result := y * RADIX_MAP_Y_MULT + RADIX_MAP_Y_ADD;
+  end
+  else
+    result := y * RADIX_MAP_Y_MULT + RADIX_MAP_Y_ADD;
 end;
 
 //
@@ -273,6 +306,8 @@ begin
         begin
           sc.MustGetInteger;
           sectors[cursector].radixmapYAdd := sc._Integer;
+          if sectors[cursector].radixmapYAdd = RADIX_MAP_Y_ADD2 then
+            level_position_hack := true;
         end;
       7: // floorangle
         begin

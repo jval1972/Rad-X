@@ -622,13 +622,9 @@ begin
 
   if not parms.initialized then
   begin
-  S_StartSound(
-    Pmobj_t(@sec.soundorg),
-    radixsounds[parms.start_sound]);
-{    S_AmbientSound(
-      RX_RadixX2Doom(sec, parms.approx_x) * FRACUNIT,
-      RX_RadixY2Doom(sec, parms.approx_y) * FRACUNIT,
-      radixsounds[parms.start_sound]);}
+    S_StartSound(
+      Pmobj_t(@sec.soundorg),
+      radixsounds[parms.start_sound]);
     parms.initialized := true;
   end;
 
@@ -682,10 +678,6 @@ finish_move:
   S_StartSound(
     Pmobj_t(@sec.soundorg),
     radixsounds[parms.stop_sound]);
-{  S_AmbientSound(
-    RX_RadixX2Doom(sec, parms.approx_x) * FRACUNIT,
-    RX_RadixY2Doom(sec, parms.approx_y) * FRACUNIT,
-    radixsounds[parms.stop_sound]);}
   parms.initialized := false;
   action.suspend := 1;  // JVAL: 202003 - Disable action
   if parms.activate_trig <> 0 then
@@ -825,9 +817,17 @@ type
 procedure RA_DeactivateTrigger(const action: Pradixaction_t);
 var
   parms: radixdeactivatetrigger_p;
+  i: integer;
+  act: integer;
 begin
   parms := radixdeactivatetrigger_p(@action.params);
   radixtriggers[parms.trigger].suspended := 1;
+  for i := 0 to radixtriggers[parms.trigger].numactions - 1 do
+  begin
+    act := radixtriggers[parms.trigger].actions[i].actionid;
+    if act >= 0 then
+      radixactions[act].suspend := 1;
+  end;
   action.suspend := 1;  // JVAL: 202003 - Disable action
 end;
 

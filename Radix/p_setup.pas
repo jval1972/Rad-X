@@ -1750,6 +1750,8 @@ begin
   totalitems := 0;
   totalsecret := 0;
 
+  level_position_hack := false; // JVAL: 20200307 - Radix
+
   isgamefreezed := false;
 
   if not preparingdemoplayback then
