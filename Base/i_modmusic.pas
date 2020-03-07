@@ -122,6 +122,7 @@ uses
   Windows,
   d_delphi,
   d_main,
+  m_fixed,
   i_system,
   i_threads,
   w_wad,
@@ -1158,9 +1159,13 @@ begin
   SetLength(ModuleData, 0);
 end;
 
+var
+  modvolume: integer = $FFFF;
+
 procedure GetAudio(var OutputBuffer: array of smallint; Length: longint);
 var
   OutOffset, OutRemain, Count: longint;
+  i: integer;
 begin
   OutOffset := 0;
   while OutOffset < Length do
@@ -1171,6 +1176,8 @@ begin
       Count := OutRemain;
     Move(MixBuffer[MixIndex * 2], OutputBuffer[OutOffset * 2],
       Count * 2 * SizeOf(smallint));
+    for i := 0 to 2 * Count - 1 do
+      OutputBuffer[OutOffset * 2 + i] := FixedMul(OutputBuffer[OutOffset * 2 + i], modvolume);
 
     MixIndex := MixIndex + Count;
     if MixIndex >= MixLength then
@@ -1182,12 +1189,10 @@ begin
   end;
 end;
 
-var
-  WaveOutHandle: HWaveOut;
-
 procedure PlayModule;
 var
   WaveFormat: TWaveFormatEx;
+  WaveOutHandle: HWaveOut;
   WaveHeaders: array of TWaveHdr;
   WaveBuffers: array of array of smallint;
   PWaveHeader: PWaveHdr;
@@ -1351,12 +1356,9 @@ const
 procedure I_SetMusicVolumeMod(volume: integer);
 var
   vol: integer;
-  v: twowords_t;
 begin
   vol := GetIntegerInRange(volume, 0, 15);
-  v.word1 := MOD_VOLUME_CONTROL[vol];
-  v.word2 := v.word1;
-  waveOutSetVolume(WaveOutHandle, PLongWord(@v)^);
+  modvolume := MOD_VOLUME_CONTROL[vol];
 end;
 
 procedure I_ProcessMod;
