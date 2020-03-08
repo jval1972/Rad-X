@@ -536,6 +536,8 @@ var
   parms: radixlightson_p;
 begin
   parms := radixlightson_p(@action.params);
+
+  sectors[parms.sector].lightlevel := RX_LightLevel(parms.on_light_level);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
