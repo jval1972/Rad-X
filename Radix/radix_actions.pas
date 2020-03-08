@@ -544,8 +544,8 @@ end;
 // Sprite type = 10
 type
   radixlightoscilate_t = packed record
-    max_light: smallint;
-    min_light: smallint;
+    max_light: smallint; // JVAL: Values > 63 in radix.dat (fog ?)
+    min_light: smallint; // JVAL: Values > 63 in radix.dat (fog ?)
     direction: smallint;
     speed: smallint;
     sector: smallint;
