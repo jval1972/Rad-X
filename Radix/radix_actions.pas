@@ -470,6 +470,9 @@ type
     off_light_level: smallint;  // 0-63
     on_light_level: smallint; // 0-63
     sector: smallint;
+    // RTL
+    countdown: integer;
+    oncountdown: boolean;
   end;
   radixlightflicker_p = ^radixlightflicker_t;
 
@@ -478,6 +481,25 @@ var
   parms: radixlightflicker_p;
 begin
   parms := radixlightflicker_p(@action.params);
+
+  if parms.countdown > 0 then
+  begin
+    dec(parms.countdown);
+    exit;
+  end;
+
+  if parms.oncountdown then
+  begin
+    sectors[parms.sector].lightlevel := RX_LightLevel(parms.on_light_level);
+    parms.countdown := parms.on_delay;
+  end
+  else
+  begin
+    sectors[parms.sector].lightlevel := RX_LightLevel(parms.off_light_level);
+    parms.countdown := parms.off_delay;
+  end;
+
+  parms.oncountdown := not parms.oncountdown;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
