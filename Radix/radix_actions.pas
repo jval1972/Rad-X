@@ -549,6 +549,8 @@ type
     direction: smallint;
     speed: smallint;
     sector: smallint;
+    // RTL
+    curlevel: integer;
   end;
   radixlightoscilate_p = ^radixlightoscilate_t;
 
@@ -557,6 +559,23 @@ var
   parms: radixlightoscilate_p;
 begin
   parms := radixlightoscilate_p(@action.params);
+
+  if parms.direction = 0 then
+  begin
+    inc(parms.curlevel);
+    parms.curlevel := GetIntegerInRange(parms.curlevel, parms.min_light, parms.max_light);
+    if parms.curlevel = parms.max_light then
+      parms.direction := 1;
+  end
+  else
+  begin
+    dec(parms.curlevel);
+    parms.curlevel := GetIntegerInRange(parms.curlevel, parms.min_light, parms.max_light);
+    if parms.curlevel = parms.min_light then
+      parms.direction := 0;
+  end;
+
+  sectors[parms.sector].lightlevel := RX_LightLevel(parms.curlevel);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
