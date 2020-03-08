@@ -110,7 +110,7 @@ end;
 
 function RX_RadixY2Doom(const sec: Psector_t; const y: integer): integer;
 begin
-  result := y * RADIX_MAP_Y_MULT + RADIX_MAP_Y_ADD;
+  result := y * sec.radixmapYmult + sec.radixmapYadd;
 end;
 
 function RX_RadixY2Doom(const x, y: integer): integer;
