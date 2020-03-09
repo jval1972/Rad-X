@@ -1060,6 +1060,8 @@ begin
 
   radixtriggers[parms.trigger].suspended := 0;
   RX_RunTrigger(parms.trigger);
+
+  action.suspend := 1;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
