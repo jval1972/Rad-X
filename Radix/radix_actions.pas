@@ -189,7 +189,7 @@ begin
     //   1 -> scroll left
     //   2 -> scroll up
     //   3 -> scroll down
-    1:  // left
+    1, 255:  // left
       begin
         if s1 <> nil then
           s1.textureoffset := s1.textureoffset + dx;
