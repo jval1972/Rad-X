@@ -251,12 +251,12 @@ begin
   if parms.direction = 1 then // Up
   begin
     dest_height := parms.max_height * FRACUNIT;
-    step := parms.speed * FRACUNIT;
+    step := (1 shl parms.speed) * FRACUNIT;
   end
   else if parms.direction = $FF then // Down
   begin
     dest_height := parms.min_height * FRACUNIT;
-    step := -parms.speed * FRACUNIT;
+    step := -(1 shl parms.speed) * FRACUNIT;
   end
   else
     exit; // ouch
@@ -675,12 +675,12 @@ begin
   if parms.direction = 1 then // Up
   begin
     dest_height := parms.max_height * FRACUNIT;
-    step := parms.speed * FRACUNIT;
+    step := (1 shl parms.speed) * FRACUNIT;
   end
   else if parms.direction = $FF then // Down
   begin
     dest_height := parms.min_height * FRACUNIT;
-    step := -parms.speed * FRACUNIT;
+    step := -(1 shl parms.speed) * FRACUNIT;
   end
   else
     exit; // ouch
