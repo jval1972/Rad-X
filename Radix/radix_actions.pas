@@ -301,7 +301,7 @@ type
   radixswitchwallbitmap_t = packed record
     element_number: smallint;
     switch_bitmap: smallint;
-    do_floor: byte;
+    do_floor: smallint;
   end;
   radixswitchwallbitmap_p = ^radixswitchwallbitmap_t;
 
@@ -327,41 +327,39 @@ begin
 
   texid := R_TextureNumForName(RX_WALL_PREFIX + IntToStrzFill(4, parms.switch_bitmap + 1));
 
-  case parms.do_floor of
-    0:  // Ceiling
-      begin
-        if s1 <> nil then
-        begin
-          if s1.toptexture <> 0 then
-            s1.toptexture := texid;
-          if s1.midtexture <> 0 then
-            s1.midtexture := texid;
-        end;
-        if s2 <> nil then
-        begin
-          if s2.toptexture <> 0 then
-            s2.toptexture := texid;
-          if s2.midtexture <> 0 then
-            s2.midtexture := texid;
-        end;
-      end;
-    1:  // Floor or mid
-      begin
-        if s1 <> nil then
-        begin
-          if s1.bottomtexture <> 0 then
-            s1.bottomtexture := texid;
-          if s1.midtexture <> 0 then
-            s1.midtexture := texid;
-        end;
-        if s2 <> nil then
-        begin
-          if s2.bottomtexture <> 0 then
-            s2.bottomtexture := texid;
-          if s2.midtexture <> 0 then
-            s2.midtexture := texid;
-        end;
-      end;
+  if parms.do_floor = 0 then  // Ceiling or mid
+  begin
+    if s1 <> nil then
+    begin
+      if s1.toptexture <> 0 then
+        s1.toptexture := texid;
+      if s1.midtexture <> 0 then
+        s1.midtexture := texid;
+    end;
+    if s2 <> nil then
+    begin
+      if s2.toptexture <> 0 then
+        s2.toptexture := texid;
+      if s2.midtexture <> 0 then
+        s2.midtexture := texid;
+    end;
+  end
+  else if parms.do_floor = 256 then  // Floor or mid
+  begin
+    if s1 <> nil then
+    begin
+      if s1.bottomtexture <> 0 then
+        s1.bottomtexture := texid;
+      if s1.midtexture <> 0 then
+        s1.midtexture := texid;
+    end;
+    if s2 <> nil then
+    begin
+      if s2.bottomtexture <> 0 then
+        s2.bottomtexture := texid;
+      if s2.midtexture <> 0 then
+        s2.midtexture := texid;
+    end;
   end;
 
   action.suspend := 1;

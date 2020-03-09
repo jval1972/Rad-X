@@ -609,21 +609,24 @@ var
   end;
 
   function AddSidedefToWAD(const toff: smallint; const toptex, bottomtex, midtex: char8_t;
-    const sector: smallint): integer;
+    const sector: smallint; const force_new: boolean = true): integer;
   var
     j: integer;
     pside: Pmapsidedef_t;
     roff: smallint;
   begin
     roff := 0;
-    for j := 0 to numdoomsidedefs - 1 do
-      if (doomsidedefs[j].textureoffset = toff) and (doomsidedefs[j].rowoffset = roff) and
-         (doomsidedefs[j].toptexture = toptex) and (doomsidedefs[j].bottomtexture = bottomtex) and (doomsidedefs[j].midtexture = midtex) and
-         (doomsidedefs[j].sector = sector) then
-      begin
-        result := j;
-        exit;
-      end;
+
+    if not force_new then // JVAL: 20200309 - If we pack sidedefs of radix level, the triggers may not work :(
+      for j := 0 to numdoomsidedefs - 1 do
+        if (doomsidedefs[j].textureoffset = toff) and (doomsidedefs[j].rowoffset = roff) and
+           (doomsidedefs[j].toptexture = toptex) and (doomsidedefs[j].bottomtexture = bottomtex) and (doomsidedefs[j].midtexture = midtex) and
+           (doomsidedefs[j].sector = sector) then
+        begin
+          result := j;
+          exit;
+        end;
+
     realloc(pointer(doomsidedefs), numdoomsidedefs * SizeOf(mapsidedef_t), (numdoomsidedefs  + 1) * SizeOf(mapsidedef_t));
     pside := @doomsidedefs[numdoomsidedefs];
     pside.textureoffset := toff;
