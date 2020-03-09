@@ -1047,8 +1047,21 @@ type
 procedure RA_WallDeadCheck(const action: Pradixaction_t);
 var
   parms: radixwalldeadcheck_p;
+  i: integer;
+  w: integer;
 begin
   parms := radixwalldeadcheck_p(@action.params);
+
+  for i := 0 to 4 do
+  begin
+    w := parms.the_walls[i];
+    if w >= 0 then
+      if lines[w].radixhitpoints > 0 then
+        exit;
+  end;
+
+  radixtriggers[parms.trigger].suspended := 0;
+  RX_RunTrigger(parms.trigger);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
