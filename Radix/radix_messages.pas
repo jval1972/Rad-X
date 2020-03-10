@@ -47,9 +47,10 @@ const
   S_RADIX_MESSAGE_9 = 'Primary Objective Completed';
   S_RADIX_MESSAGE_10 = 'Primary Objective Incomplete';
   S_RADIX_MESSAGE_11 = 'Kill all Skyfires to continue';
+  S_RADIX_MESSAGE_12 = 'Secondary Objective Completed';
 
 const
-  NUMRADIXMESSAGES = 12;
+  NUMRADIXMESSAGES = 13;
 
 var
   radixmessages: array[0..NUMRADIXMESSAGES - 1] of string;

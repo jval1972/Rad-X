@@ -1854,7 +1854,11 @@ var
   sbuffer: pointer;
   ssize: integer;
   wname, rname: string;
+  sndinfo: TDStringList;
 begin
+  sndinfo := TDStringList.Create;
+  sndinfo.Add('// Radix Sounds');
+  sndinfo.Add('');
   result := false;
   for i := 0 to Ord(sfx_NumRadixSnd) - 1 do
   begin
@@ -1868,10 +1872,13 @@ begin
         wadwriter.AddData(wname, sbuffer, ssize);
         memfree(sbuffer, ssize);
         aliases.Add(wname + '=' + rname);
+        sndinfo.Add('radix/' + rname + ' ' + wname);
         result := true;
       end;
     end;
   end;
+  wadwriter.AddString('SNDINFO', sndinfo.Text);
+  sndinfo.Free;
 end;
 
 procedure TRadixToWADConverter.WritePK3Entry;
