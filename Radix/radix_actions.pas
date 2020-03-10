@@ -384,7 +384,7 @@ begin
 
   texid := R_FlatNumForName(RX_FLAT_PREFIX + IntToStrzFill(4, parms.switch_bitmap + 1));
 
-  if parms.do_floor = 1 then  // floor texture
+  if parms.do_floor = 257 then  // floor texture
     sectors[parms.element_number].floorpic := texid
   else
     sectors[parms.element_number].ceilingpic := texid;
