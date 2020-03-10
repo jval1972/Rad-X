@@ -378,6 +378,7 @@ type
 procedure RA_SwitchSecBitmap(const action: Pradixaction_t);
 var
   parms: radixswitchsecbitmap_p;
+  texid: integer;
 begin
   parms := radixswitchsecbitmap_p(@action.params);
 
@@ -861,15 +862,21 @@ end;
 type
   radixspritetriggeractivate_t = packed record
     trigger: integer;
-    sprites: packed array[0..4] of integer;
+    actions: packed array[0..4] of integer; // JVAL: 20200310 - sprite in editor
   end;
   radixspritetriggeractivate_p = ^radixspritetriggeractivate_t;
 
 procedure RA_SpriteTriggerActivate(const action: Pradixaction_t);
 var
   parms: radixspritetriggeractivate_p;
+  i: integer;
+  act: integer;
 begin
   parms := radixspritetriggeractivate_p(@action.params);
+
+  for i := 0 to 4 do
+    if parms.actions[i] >= 0 then
+      radixactions[parms.actions[i]].suspend := 0;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
