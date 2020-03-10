@@ -371,7 +371,7 @@ type
   radixswitchsecbitmap_t = packed record
     element_number: smallint; // sector id
     switch_bitmap: smallint;
-    do_floor: byte;
+    do_floor: smallint;
   end;
   radixswitchsecbitmap_p = ^radixswitchsecbitmap_t;
 
@@ -380,6 +380,15 @@ var
   parms: radixswitchsecbitmap_p;
 begin
   parms := radixswitchsecbitmap_p(@action.params);
+
+  texid := R_FlatNumForName(RX_FLAT_PREFIX + IntToStrzFill(4, parms.switch_bitmap + 1));
+
+  if parms.do_floor = 1 then  // floor texture
+    sectors[parms.element_number].floorpic := texid
+  else
+    sectors[parms.element_number].ceilingpic := texid;
+
+  action.suspend := 1; // Disable action
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -517,6 +526,8 @@ begin
   parms := radixlightsoff_p(@action.params);
 
   sectors[parms.sector].lightlevel := RX_LightLevel(parms.off_light_level);
+
+  action.suspend := 1; // Disable action
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -536,6 +547,8 @@ begin
   parms := radixlightson_p(@action.params);
 
   sectors[parms.sector].lightlevel := RX_LightLevel(parms.on_light_level);
+
+  action.suspend := 1; // Disable action
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -484,7 +484,10 @@ end;
 
 function RX_LightLevel(const l: integer): byte;
 begin
-  result := l * 4 + 2;
+  if l > 63 then
+    result := 255
+  else
+    result := l * 4 + 2;
 end;
 
 procedure RX_DamageLine(const l: Pline_t; const damage: integer);
