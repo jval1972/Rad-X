@@ -857,6 +857,8 @@ var
   parms: radixendoflevel_p;
 begin
   parms := radixendoflevel_p(@action.params);
+
+  G_ExitRadixLevel(parms.return_value);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

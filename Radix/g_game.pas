@@ -83,6 +83,8 @@ procedure G_ExitLevel;
 
 procedure G_SecretExitLevel;
 
+procedure G_ExitRadixLevel(const nextlevel: integer);
+
 procedure G_WorldDone;
 
 procedure G_Ticker;
@@ -1412,10 +1414,12 @@ end;
 //
 var
   secretexit: boolean;
+  radixexit: integer = -2;
 
 procedure G_ExitLevel;
 begin
   secretexit := false;
+  radixexit := -2;
   gameaction := ga_completed;
 end;
 
@@ -1424,6 +1428,14 @@ procedure G_SecretExitLevel;
 begin
   // IF NO WOLF3D LEVELS, NO SECRET EXIT!
   secretexit := true;
+  radixexit := -2;
+  gameaction := ga_completed;
+end;
+
+procedure G_ExitRadixLevel(const nextlevel: integer);
+begin
+  secretexit := nextlevel = 9;
+  radixexit := nextlevel;
   gameaction := ga_completed;
 end;
 
@@ -1441,6 +1453,13 @@ begin
   begin
     amstate := am_inactive;
     AM_Stop;
+  end;
+
+  // JVAL: 20200311 - Radix Exit Level Action
+  if radixexit = -1 then
+  begin
+    gameaction := ga_victory;
+    exit;
   end;
 
   case gamemap of
@@ -1461,7 +1480,11 @@ begin
   wminfo.last := gamemap - 1;
 
   // wminfo.next is 0 biased, unlike gamemap
-  if secretexit then
+  if radixexit = 0 then
+    wminfo.next := gamemap // JVAL: 20200311 - Radix Exit Level Action - Normal exit
+  else if radixexit > 0 then
+    wminfo.next := radixexit - 1 // JVAL: 20200311 - Radix Exit Level Action - Exit to secret level or exit from secret level
+  else if secretexit then
     wminfo.next := 8  // go to secret level
   else if gamemap = 9 then
   begin
