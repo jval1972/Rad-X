@@ -1056,9 +1056,12 @@ begin
         end;
 
         mo := Pmobj_t(think);
-        if mo.spawnpoint.radix_id = radix_id then
-          if mo.health > 0 then
-            exit;
+        if mo.player = nil then
+          if mo.spawnpoint.options or MTF_RADIXTHING <> 0 then
+            if mo.spawnpoint.radix_id = radix_id then
+              if mo.flags and MF_SHOOTABLE <> 0 then
+                if mo.health > 0 then
+                  exit;
 
         think := think.next;
       end;
