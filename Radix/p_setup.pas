@@ -857,12 +857,15 @@ begin
       mt.z := extradata[i].z;
       mt.height_speed := extradata[i].height_speed;
       mt.radix_skill := extradata[i].radix_skill;
+      mt.radix_id := extradata[i].radix_id;
+      mt.options := mt.options or MTF_RADIXTHING;
     end
     else
     begin
       mt.z := -1;
       mt.height_speed := 0;
       mt.radix_skill := -1;
+      mt.radix_id := -1;
     end;
 
     if P_GameValidThing(mt._type) then // Do spawn all other stuff.

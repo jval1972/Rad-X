@@ -985,6 +985,7 @@ begin
 
   if IsIntegerInRange(parms.message_id, 0, NUMRADIXMESSAGES - 1) then
     players[radixplayer]._message := radixmessages[parms.message_id];
+    
   action.suspend := 1;  // JVAL: 20200306 - Disable action
 end;
 

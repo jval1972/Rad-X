@@ -429,7 +429,8 @@ var
 
   // angle is in 0-256
   procedure AddThingToWad(const x, y, z: integer; const speed, height_speed: smallint;
-    const angle: smallint; const mtype: word; const options: smallint; const radix_skill: integer);
+    const angle: smallint; const mtype: word; const options: smallint; const radix_skill: integer;
+    const radix_id: integer);
   var
     mthing: Pdoommapthing_t;
     xx, yy: integer;
@@ -452,6 +453,7 @@ var
     doomthingsextra[numdoomthings].speed := speed;
     doomthingsextra[numdoomthings].height_speed := height_speed;
     doomthingsextra[numdoomthings].radix_skill := radix_skill;
+    doomthingsextra[numdoomthings].radix_id := radix_id;
 
     inc(numdoomthings);
   end;
@@ -462,10 +464,10 @@ var
   begin
     // Player starts - DoomEdNum 1 thru 4
     for j := 0 to 3 do
-      AddThingToWad(rplayerstarts[j].x, rplayerstarts[j].y, rplayerstarts[j].z, 0, 0, rplayerstarts[j].angle, j + 1, 7, -1);
+      AddThingToWad(rplayerstarts[j].x, rplayerstarts[j].y, rplayerstarts[j].z, 0, 0, rplayerstarts[j].angle, j + 1, 7, -1, -1);
     // Deathmatch starts - DoomEdNum 11
     for j := 4 to RADIXNUMPLAYERSTARTS - 1 do
-      AddThingToWad(rplayerstarts[j].x, rplayerstarts[j].y, rplayerstarts[j].z, 0, 0, rplayerstarts[j].angle, 11, 7, -1);
+      AddThingToWad(rplayerstarts[j].x, rplayerstarts[j].y, rplayerstarts[j].z, 0, 0, rplayerstarts[j].angle, 11, 7, -1, -1);
   end;
 
   procedure ReadRadixGrid(const pgrid: Pradixgridinfo_t);
@@ -1162,7 +1164,8 @@ begin
     if rthings[i].radix_type > 0 then
       AddThingToWad(
         rthings[i].x, rthings[i].y, rthings[i].ground, rthings[i].speed, rthings[i].height_speed,
-        rthings[i].angle, rthings[i].radix_type + _DOOM_THING_2_RADIX_, RadixSkillToDoomSkill(rthings[i].skill), rthings[i].skill);
+        rthings[i].angle, rthings[i].radix_type + _DOOM_THING_2_RADIX_, RadixSkillToDoomSkill(rthings[i].skill),
+        rthings[i].skill, rthings[i].thing_key);
   end;
 
   // Find Doom map bounding box;

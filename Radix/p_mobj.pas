@@ -1212,38 +1212,60 @@ begin
     end;
   end;
 
-  // check for apropriate skill level
-  if (not netgame) and (mthing.options and 16 <> 0) then
+  if mthing.options and MTF_RADIXTHING <> 0 then
   begin
-    result := nil;
-    exit;
-  end;
-
-  //jff 3/30/98 implement "not deathmatch" thing flag
-  if netgame and (deathmatch <> 0) and (mthing.options and 32 <> 0) then
-  begin
-    result := nil;
-    exit;
-  end;
-
-  //jff 3/30/98 implement "not cooperative" thing flag
-  if netgame and (deathmatch = 0) and (mthing.options and 64 <> 0) then
-  begin
-    result := nil;
-    exit;
-  end;
-
-  if gameskill = sk_baby then
-    bit := 1
-  else if gameskill = sk_nightmare then
-    bit := 4
+    if mthing.radix_skill > Ord(gameskill) then
+    begin
+      if netgame then
+      begin
+        if mthing.radix_skill <> 4 then
+        begin
+          result := nil;
+          exit;
+        end;
+      end
+      else
+      begin
+        result := nil;
+        exit;
+      end;
+    end;
+  end
   else
-    bit := _SHL(1, Ord(gameskill) - 1);
-
-  if mthing.options and bit = 0 then
   begin
-    result := nil;
-    exit;
+    // check for apropriate skill level
+    if (not netgame) and (mthing.options and 16 <> 0) then
+    begin
+      result := nil;
+      exit;
+    end;
+
+    //jff 3/30/98 implement "not deathmatch" thing flag
+    if netgame and (deathmatch <> 0) and (mthing.options and 32 <> 0) then
+    begin
+      result := nil;
+      exit;
+    end;
+
+    //jff 3/30/98 implement "not cooperative" thing flag
+    if netgame and (deathmatch = 0) and (mthing.options and 64 <> 0) then
+    begin
+      result := nil;
+      exit;
+    end;
+
+    if gameskill = sk_baby then
+      bit := 1
+    else if gameskill = sk_nightmare then
+      bit := 4
+    else
+      bit := _SHL(1, Ord(gameskill) - 1);
+
+    if mthing.options and bit = 0 then
+    begin
+      result := nil;
+      exit;
+    end;
   end;
 
   musinfoparam := -1;
@@ -1291,35 +1313,43 @@ begin
   if spawnrandommonsters and Info_IsMonster(i) then
     i := Info_SelectRandomMonster(i);
 
-  if mobjinfo[i].flags and MF_SPAWNCEILING <> 0 then
-    z := ONCEILINGZ
-  else if mobjinfo[i].flags_ex and MF_EX_SPAWNFLOAT <> 0 then
-    z := ONFLOATZ
-  else
-    z := ONFLOORZ;
-
-// JVAL: 3d floors
-  ss := R_PointInSubsector(x, y);
-  if ss.sector.midsec >= 0 then
+  if mthing.options and MTF_RADIXTHING <> 0 then
   begin
-    msec := @sectors[ss.sector.midsec];
-    if mthing.options and MTF_ONMIDSECTOR <> 0 then
-    begin
-      if z = ONFLOATZ then
-        z := (msec.ceilingheight + P_CeilingHeight(ss.sector, x, y)) div 2
-      else if z = ONFLOORZ then
-        z := msec.ceilingheight;
-    end
+    ss := R_PointInSubsector(x, y);
+    result := P_SpawnMobj(x, y, ss.sector.floorheight + integer(mthing.z) * FRACUNIT, i, mthing);
+  end
+  else
+  begin
+    if mobjinfo[i].flags and MF_SPAWNCEILING <> 0 then
+      z := ONCEILINGZ
+    else if mobjinfo[i].flags_ex and MF_EX_SPAWNFLOAT <> 0 then
+      z := ONFLOATZ
     else
+      z := ONFLOORZ;
+
+  // JVAL: 3d floors
+    ss := R_PointInSubsector(x, y);
+    if ss.sector.midsec >= 0 then
     begin
-      if z = ONFLOATZ then
-        z := (P_FloorHeight(ss.sector, x, y) + msec.floorheight) div 2
-      else if z = ONCEILINGZ then
-        z := msec.floorheight;
+      msec := @sectors[ss.sector.midsec];
+      if mthing.options and MTF_ONMIDSECTOR <> 0 then
+      begin
+        if z = ONFLOATZ then
+          z := (msec.ceilingheight + P_CeilingHeight(ss.sector, x, y)) div 2
+        else if z = ONFLOORZ then
+          z := msec.ceilingheight;
+      end
+      else
+      begin
+        if z = ONFLOATZ then
+          z := (P_FloorHeight(ss.sector, x, y) + msec.floorheight) div 2
+        else if z = ONCEILINGZ then
+          z := msec.floorheight;
+      end;
     end;
+    result := P_SpawnMobj(x, y, z, i, mthing);
   end;
 
-  result := P_SpawnMobj(x, y, z, i, mthing);
   result.spawnpoint := mthing^;
 
   if mthing.options and MTF_FRIEND <> 0 then

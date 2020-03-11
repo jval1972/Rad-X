@@ -153,6 +153,7 @@ const
   MTF_ONMIDSECTOR = 128;  // JVAL: 3d floors
   MTF_DONOTTRIGGERSCRIPTS = 256;  // JVAL: Script Events
   MTF_FRIEND = 512; // JVAL: version 205
+  MTF_RADIXTHING = 1024; // JVAL: 20201103 - Spawned from Radix map 
 
 type
   skill_t = (

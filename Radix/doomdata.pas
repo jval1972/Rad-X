@@ -232,6 +232,7 @@ type
     z: smallint;
     height_speed: smallint;
     radix_skill: smallint;
+    radix_id: smallint;
     angle: smallint;
     _type: word;
     options: smallint;
@@ -246,6 +247,7 @@ type
     speed: smallint;
     height_speed: smallint;
     radix_skill: smallint;
+    radix_id: smallint;
   end;
   Pradixmapthingextra_t = ^radixmapthingextra_t;
   radixmapthingextra_tArray = array[0..$FFFF] of radixmapthingextra_t;
