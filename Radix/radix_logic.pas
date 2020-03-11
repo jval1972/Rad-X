@@ -103,7 +103,7 @@ begin
     begin
       radixplayer := i;
       grid_id := RX_PosInGrid(players[i].mo);
-      if grid_id >= 0 then
+      if (grid_id >= 0) and (grid_id < RADIXGRIDSIZE) then
       begin
         trig_id := radixgrid[grid_id];
         if trig_id >= 0 then
