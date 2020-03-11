@@ -127,10 +127,12 @@ implementation
 uses
   doomdef,
   d_player,
+  g_game,
   m_rnd,
   m_fixed,
   p_mobj_h,
   p_setup,
+  p_genlin,
   radix_defs,
   radix_map_extra,
   radix_messages,
@@ -1356,8 +1358,22 @@ type
 procedure RA_SecretSprite(const action: Pradixaction_t);
 var
   parms: radixsecretsprite_p;
+  i: integer;
+  secid: integer;
 begin
   parms := radixsecretsprite_p(@action.params);
+
+  for i := 0 to 14 do
+  begin
+    secid := parms.the_sectors[i];
+    if secid > 0 then
+    begin
+      sectors[secid].special := sectors[secid].special or SECRET_MASK; // JVAL: 20200311 -> Use BOOM generalized type
+      inc(totalsecret);
+    end;
+  end;
+
+  action.suspend := 1;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
