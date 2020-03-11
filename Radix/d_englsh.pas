@@ -170,7 +170,7 @@ var
   GOTSHOTGUN: string = 'You got the shotgun!';
   GOTSHOTGUN2: string = 'You got the super shotgun!';
 
-  MSGSECRETSECTOR: string = 'You found a secret area.';
+  MSGSECRETSECTOR: string = 'Found a secret area!!';
 
 //
 // P_Doors.C
