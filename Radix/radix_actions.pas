@@ -1188,14 +1188,40 @@ type
     direction: smallint;
     speed: smallint;
     the_sectors: packed array[0..29] of smallint; // Negative values (-1) means no sector
+    // RTL
+    curlevel: integer;
   end;
   radixmultlightoscilate_p = ^radixmultlightoscilate_t;
 
 procedure RA_MultLightOscilate(const action: Pradixaction_t);
 var
   parms: radixmultlightoscilate_p;
+  i: integer;
+  secid: integer;
 begin
   parms := radixmultlightoscilate_p(@action.params);
+
+  if parms.direction = 0 then
+  begin
+    inc(parms.curlevel);
+    parms.curlevel := GetIntegerInRange(parms.curlevel, parms.min_light, parms.max_light);
+    if parms.curlevel = parms.max_light then
+      parms.direction := 1;
+  end
+  else
+  begin
+    dec(parms.curlevel);
+    parms.curlevel := GetIntegerInRange(parms.curlevel, parms.min_light, parms.max_light);
+    if parms.curlevel = parms.min_light then
+      parms.direction := 0;
+  end;
+
+  for i := 0 to 29 do
+  begin
+    secid := parms.the_sectors[i];
+    if secid >= 0 then
+      sectors[secid].lightlevel := RX_LightLevel(parms.curlevel);
+  end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
