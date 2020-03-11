@@ -127,10 +127,13 @@ implementation
 uses
   doomdef,
   d_player,
+  d_think,
   g_game,
   m_rnd,
   m_fixed,
   p_mobj_h,
+  p_mobj,
+  p_tick,
   p_setup,
   p_genlin,
   radix_defs,
@@ -1023,7 +1026,7 @@ end;
 // Sprite type = 26
 type
   radixbigspritetrig_t = packed record
-    trigger: integer;
+    trigger_number: integer;
     the_sprites: packed array[0..19] of integer; // Zero and negative do not count
   end;
   radixbigspritetrig_p = ^radixbigspritetrig_t;
@@ -1031,8 +1034,39 @@ type
 procedure RA_BigSpriteTrig(const action: Pradixaction_t);
 var
   parms: radixbigspritetrig_p;
+  i: integer;
+  radix_id: integer;
+  think: Pthinker_t;
+  mo: Pmobj_t;
 begin
   parms := radixbigspritetrig_p(@action.params);
+
+  for i := 0 to 19 do
+  begin
+    radix_id := parms.the_sprites[i];
+    if radix_id >= 0 then
+    begin
+      think := thinkercap.next;
+      while think <> @thinkercap do
+      begin
+        if @think._function.acp1 <> @P_MobjThinker then
+        begin
+          think := think.next;
+          continue;
+        end;
+
+        mo := Pmobj_t(think);
+        if mo.spawnpoint.radix_id = radix_id then
+          if mo.health > 0 then
+            exit;
+
+        think := think.next;
+      end;
+    end;
+  end;
+
+  radixtriggers[parms.trigger_number].suspended := 0;
+  RX_RunTrigger(parms.trigger_number);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
