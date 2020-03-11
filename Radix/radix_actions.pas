@@ -1303,6 +1303,10 @@ var
   parms: radixswitchshadetype_p;
 begin
   parms := radixswitchshadetype_p(@action.params);
+
+  sectors[parms.sector_id].lightlevel := RX_LightLevel(parms.new_light_level);
+
+  action.suspend := 1;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
