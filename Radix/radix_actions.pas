@@ -1366,7 +1366,7 @@ begin
   for i := 0 to 14 do
   begin
     secid := parms.the_sectors[i];
-    if secid > 0 then
+    if secid >= 0 then
     begin
       sectors[secid].special := sectors[secid].special or SECRET_MASK; // JVAL: 20200311 -> Use BOOM generalized type
       inc(totalsecret);
