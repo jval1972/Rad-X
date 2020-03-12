@@ -435,7 +435,7 @@ begin
   else if line.radixflags and RWF_PEGBOTTOM_CEILING <> 0 then
     result := line.backsector.ceilingheight - viewz
   else
-    result := worldlow;
+    result := -viewz;
 end;
 
 function RX_CalculateRadixBottomOffs(const seg: PSeg_t): fixed_t;
@@ -448,7 +448,7 @@ begin
   else if line.radixflags and RWF_PEGBOTTOM_FLOOR <> 0 then
     result := worldtop //
   else
-    result := worldlow;
+    result := -viewz;
 end;
 
 function RX_CalculateRadixSlopeMidOffs(const seg: PSeg_t): fixed_t;
