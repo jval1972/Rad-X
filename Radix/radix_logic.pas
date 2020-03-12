@@ -107,7 +107,10 @@ begin
       begin
         trig_id := radixgrid[grid_id];
         if trig_id >= 0 then
+        begin
           RX_RunTrigger(trig_id);
+          radixgrid[grid_id] := -1; // Clear trigger from grid
+        end;
       end;
     end;
 end;
