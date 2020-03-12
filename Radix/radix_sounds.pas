@@ -87,64 +87,77 @@ type
     sfx_NumRadixSnd
   );
 
+type
+  radixsoundinfo_t = record
+    name: string[32];
+    duration: integer; // in tics
+  end;
+
 const
-  radixsounds: array[0..Ord(sfx_NumRadixSnd) - 1] of string[32] = (
-    'SndScrape',
-    'SndShot',
-    'SndMoveSurface',
-    'SndStopSurface',
-    'SndMissle',
-    'SndExplode',
-    'SndExplodeShort',
-    'SndMissile',
-    'SndMissileOther',
-    'SndGravityWell',
-    'SndExplodeOther',
-    'SndGravityWave',
-    'SndPlasma',
-    'SndSiren',
-    'SndTelePort',
-    'SndPowerUp',
-    'SndEndOfLevel',
-    'SndButtonClick',
-    'SndAlert',
-    'SndSpawnShot',
-    'SndEngine',
-    'SndEngineAfter',
-    'SndShip',
-    'SndPlanet',
-    'SndDroid',
-    'SndPlaneHit',
-    'SndGenAlarm',
-    'SndEOLAlarm',
-    'SndBioSpawn',
-    'SndRadar',
-    'SndAlienHum',
-    'SndLoudHum',
-    'SndFodderExp',
-    'SndPlasmaBomb',
-    'SndCannon',
-    'SndTranspo',
-    'SndEnemyFire',
-    'SndPrimAhead',
-    'SndPrimComplete',
-    'SndPrimInComplete',
-    'SndTargetsAhead',
-    'SndEnemy',
-    'SndSecAhead',
-    'SndSecComplete',
-    'SndSplash'
+  radixsounds: array[0..Ord(sfx_NumRadixSnd) - 1] of radixsoundinfo_t = (
+    (name: 'SndScrape'; duration: -1),
+    (name: 'SndShot'; duration: -1),
+    (name: 'SndMoveSurface'; duration: -1),
+    (name: 'SndStopSurface'; duration: -1),
+    (name: 'SndMissle'; duration: -1),
+    (name: 'SndExplode'; duration: -1),
+    (name: 'SndExplodeShort'; duration: -1),
+    (name: 'SndMissile'; duration: -1),
+    (name: 'SndMissileOther'; duration: -1),
+    (name: 'SndGravityWell'; duration: -1),
+    (name: 'SndExplodeOther'; duration: -1),
+    (name: 'SndGravityWave'; duration: -1),
+    (name: 'SndPlasma'; duration: -1),
+    (name: 'SndSiren'; duration: -1),
+    (name: 'SndTelePort'; duration: -1),
+    (name: 'SndPowerUp'; duration: -1),
+    (name: 'SndEndOfLevel'; duration: -1),
+    (name: 'SndButtonClick'; duration: -1),
+    (name: 'SndAlert'; duration: -1),
+    (name: 'SndSpawnShot'; duration: -1),
+    (name: 'SndEngine'; duration: -1),
+    (name: 'SndEngineAfter'; duration: -1),
+    (name: 'SndShip'; duration: -1),
+    (name: 'SndPlanet'; duration: -1),
+    (name: 'SndDroid'; duration: -1),
+    (name: 'SndPlaneHit'; duration: -1),
+    (name: 'SndGenAlarm'; duration: -1),
+    (name: 'SndEOLAlarm'; duration: -1),
+    (name: 'SndBioSpawn'; duration: -1),
+    (name: 'SndRadar'; duration: -1),
+    (name: 'SndAlienHum'; duration: -1),
+    (name: 'SndLoudHum'; duration: -1),
+    (name: 'SndFodderExp'; duration: -1),
+    (name: 'SndPlasmaBomb'; duration: -1),
+    (name: 'SndCannon'; duration: -1),
+    (name: 'SndTranspo'; duration: -1),
+    (name: 'SndEnemyFire'; duration: -1),
+    (name: 'SndPrimAhead'; duration: -1),
+    (name: 'SndPrimComplete'; duration: -1),
+    (name: 'SndPrimInComplete'; duration: -1),
+    (name: 'SndTargetsAhead'; duration: -1),
+    (name: 'SndEnemy'; duration: -1),
+    (name: 'SndSecAhead'; duration: -1),
+    (name: 'SndSecComplete'; duration: -1),
+    (name: 'SndSplash'; duration: -1)
   );
 
 function S_AmbientSound(const x, y: integer; const sndname: string): Pmobj_t;
 
+// Returns duration of sound in tics
+function S_RadixSoundDuration(const radix_snd: integer): integer;
+
 implementation
 
 uses
+  d_delphi,
+  doomdef,
   info_common,
   p_local,
   p_mobj,
-  s_sound;
+  s_sound,
+  w_wad,
+  z_zone;
 
 var
   m_ambient: integer = -1;
@@ -165,6 +178,110 @@ begin
 
   result := P_SpawnMobj(x, y, ONFLOATZ, m_ambient);
   S_StartSound(result, sndname);
+end;
+
+type
+  char4_t = packed array[0..3] of char;
+
+function char4tostring(const c4: char4_t): string;
+var
+  i: integer;
+begin
+  result := '';
+  for i := 0 to 3 do
+  begin
+    if c4[i] in [#0, ' '] then
+      exit;
+    result := result + c4[i];
+  end;
+end;
+
+function S_GetWaveLength(const wavename: string): integer;
+var
+  groupID: char4_t;
+  riffType: char4_t;
+  BytesPerSec: integer;
+  Stream: TAttachableMemoryStream;
+  dataSize: integer;
+  lump: integer;
+  p: pointer;
+  size: integer;
+  // chunk seeking function,
+  // -1 means: chunk not found
+
+  function GotoChunk(const ID: string): Integer;
+  var
+    chunkID: char4_t;
+    chunkSize: integer;
+  begin
+    result := -1;
+
+    Stream.Seek(12, sFromBeginning);
+    repeat
+      // read next chunk
+      Stream.Read(chunkID, 4);
+      Stream.Read(chunkSize, 4);
+      if char4tostring(chunkID) <> ID then
+      // skip chunk
+        Stream.Seek(Stream.Position + chunkSize, sFromBeginning);
+    until (char4tostring(chunkID) = ID) or (Stream.Position >= Stream.Size);
+    if char4tostring(chunkID) = ID then
+      result := chunkSize;
+  end;
+
+begin
+  Result := -1;
+
+  lump := W_CheckNumForName(wavename);
+  if lump < 0 then
+    exit;
+
+  size := W_LumpLength(lump);
+  if size < 12 then
+    exit;
+
+  p := W_CacheLumpNum(lump, PU_STATIC);
+
+  Stream := TAttachableMemoryStream.Create;
+  Stream.Attach(p, size);
+  Stream.Read(groupID, 4);
+  Stream.Seek(8, sFromBeginning); // skip four bytes (file size)
+  Stream.Read(riffType, 4);
+
+  if (char4tostring(groupID) = 'RIFF') and (char4tostring(riffType) = 'WAVE') then
+  begin
+    // search for format chunk
+    if GotoChunk('fmt') <> -1 then
+    begin
+      // found it
+      Stream.Seek(Stream.Position + 8, sFromBeginning);
+      Stream.Read(BytesPerSec, 4);
+      //search for data chunk
+      dataSize := GotoChunk('data');
+
+      if dataSize > 0 then
+        result := round(dataSize / BytesPerSec * TICRATE);
+    end;
+  end;
+  Stream.Free;
+  Z_ChangeTag(p, PU_CACHE);
+end;
+
+// Returns duration of sound in tics
+function S_RadixSoundDuration(const radix_snd: integer): integer;
+begin
+  if (radix_snd < Ord(sfx_SndScrape)) or (radix_snd >= Ord(sfx_NumRadixSnd)) then
+  begin
+    result := -1;
+    exit;
+  end;
+
+  result := radixsounds[radix_snd].duration;
+  if result < 0 then
+  begin
+    result := S_GetWaveLength(radixsounds[radix_snd].name);
+    radixsounds[radix_snd].duration := result;
+  end;
 end;
 
 end.

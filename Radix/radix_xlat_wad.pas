@@ -1850,7 +1850,6 @@ end;
 function TRadixToWADConverter.GenerateSounds: boolean;
 var
   i: integer;
-  l: integer;
   sbuffer: pointer;
   ssize: integer;
   wname, rname: string;
@@ -1862,22 +1861,19 @@ begin
   result := false;
   for i := 0 to Ord(sfx_NumRadixSnd) - 1 do
   begin
-    l := FindLump(lumps, numlumps, 'CockPitOverlay');
-    if l >= 0 then
+    rname := radixsounds[i].name;
+    if ReadLump(lumps, numlumps, rname, sbuffer, ssize) then
     begin
-      rname := radixsounds[i];
-      if ReadLump(lumps, numlumps, rname, sbuffer, ssize) then
-      begin
-        wname := 'DS_' + IntToStrzFill(5, i);
-        wadwriter.AddData(wname, sbuffer, ssize);
-        memfree(sbuffer, ssize);
-        aliases.Add(wname + '=' + rname);
-        sndinfo.Add('radix/' + rname + ' ' + wname);
-        result := true;
-      end;
+      wname := 'DS_' + IntToStrzFill(5, i);
+      wadwriter.AddData(wname, sbuffer, ssize);
+      memfree(sbuffer, ssize);
+      aliases.Add(wname + '=' + rname);
+      sndinfo.Add('radix/' + rname + ' ' + wname);
+      result := true;
     end;
   end;
-  wadwriter.AddString('SNDINFO', sndinfo.Text);
+  if result then
+    wadwriter.AddString('SNDINFO', sndinfo.Text);
   sndinfo.Free;
 end;
 

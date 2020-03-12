@@ -687,7 +687,7 @@ begin
   begin
     S_StartSound(
       Pmobj_t(@sec.soundorg),
-      radixsounds[parms.start_sound]);
+      radixsounds[parms.start_sound].name);
     parms.initialized := true;
   end;
 
@@ -740,7 +740,7 @@ begin
 finish_move:
   S_StartSound(
     Pmobj_t(@sec.soundorg),
-    radixsounds[parms.stop_sound]);
+    radixsounds[parms.stop_sound].name);
   parms.initialized := false;
   action.suspend := 1;  // JVAL: 202003 - Disable action
   if parms.activate_trig <> 0 then
@@ -769,6 +769,7 @@ type
 procedure RA_PlaySound(const action: Pradixaction_t);
 var
   parms: radixplaysound_p;
+  cnt: integer;
 begin
   parms := radixplaysound_p(@action.params);
 
@@ -788,12 +789,18 @@ begin
   S_AmbientSound(
       parms.doom_x,
       parms.doom_y,
-      radixsounds[parms.sound_number]);
+      radixsounds[parms.sound_number].name);
 
   if parms.repeating = 0 then
     action.suspend := 1
   else
-    parms.countdown := 10 * TICRATE; // JVAL: 10 seconds to replay sound
+  begin
+    cnt := S_RadixSoundDuration(parms.sound_number);
+    if cnt < 0 then
+      parms.countdown := 10 * TICRATE // JVAL: 10 seconds to replay sound
+    else
+      parms.countdown := cnt; // JVAL: 20200312 - Restart sound after it finishes 
+  end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
