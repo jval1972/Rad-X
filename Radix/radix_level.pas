@@ -393,6 +393,7 @@ var
   rplayerstarts: packed array[0..RADIXNUMPLAYERSTARTS - 1] of radixplayerstart_t;
   lcrc32: string;
   islevel_v: integer;
+  e3m2special: boolean;
   v1x, v1y, v2x, v2y: integer;
 
   procedure fix_wall_coordXYdef(var xx: integer; var yy: integer);
@@ -405,7 +406,7 @@ var
   begin
     if xx >= E3M2_SPLIT_X then
     begin
-      if levelname = 'E3M2' then
+      if e3m2special then
       begin
         xx := RADIX_MAP_X_MULT * xx + RADIX_MAP_X_ADD2;
         yy := RADIX_MAP_Y_MULT * yy + RADIX_MAP_Y_ADD2;
@@ -1021,6 +1022,7 @@ begin
   else
     islevel_v := 0;
 
+  e3m2special := (levelname = 'E3M2') and (islevel_v = 2);
 
   // Read Radix level header
   ms.Read(header, SizeOf(radixlevelheader_t));
@@ -1051,7 +1053,7 @@ begin
   ms.Read(rwalls^, header.numwalls * SizeOf(radixwall_t));
   for i := 0 to header.numwalls - 1 do
   begin
-    if (rwalls[i].v1_x > E3M2_SPLIT_X) and (rwalls[i].v2_x > E3M2_SPLIT_X) then
+    if e3m2special and (rwalls[i].v1_x > E3M2_SPLIT_X) and (rwalls[i].v2_x > E3M2_SPLIT_X) then
     begin
       v1x := rwalls[i].v1_x;
       v1y := rwalls[i].v1_y;
