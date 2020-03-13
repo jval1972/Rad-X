@@ -1246,6 +1246,7 @@ begin
   p.weaponowned[Ord(wp_fist)] := 1;
   p.weaponowned[Ord(wp_pistol)] := 1;
   p.ammo[Ord(am_clip)] := p_initialbullets;
+  p.last_grid_trigger := -1;
 
   for i := 0 to Ord(NUMAMMO) - 1 do
     p.maxammo[i] := maxammo[i];

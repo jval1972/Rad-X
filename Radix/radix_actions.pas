@@ -131,6 +131,7 @@ uses
   g_game,
   m_rnd,
   m_fixed,
+  tables,
   p_map,
   p_mobj_h,
   p_mobj,
@@ -630,15 +631,36 @@ type
     approx_start_y: LongWord;
     approx_start_height: integer; // can be negative ?
     tick_count: smallint;
-    line_angle: smallint;
+    line_angle: word;
   end;
   radixplanetranspo_p = ^radixplanetranspo_t;
 
 procedure RA_PlaneTranspo(const action: Pradixaction_t);
 var
   parms: radixplanetranspo_p;
+  p: Pplayer_t;
 begin
   parms := radixplanetranspo_p(@action.params);
+
+  p := @players[radixplayer];
+
+  if p.planetranspo_tics > 0 then
+    exit; // Already transported
+
+  p.planetranspo_start_x := p.mo.x;
+  p.planetranspo_start_y := p.mo.y;
+  p.planetranspo_start_z := p.mo.z;
+  p.planetranspo_start_a := p.mo.angle;
+
+  p.planetranspo_target_x := RX_RadixX2Doom(parms.target_x, parms.target_y) * FRACUNIT;
+  p.planetranspo_target_y := RX_RadixY2Doom(parms.target_x, parms.target_y) * FRACUNIT;
+  p.planetranspo_target_z := parms.target_height * FRACUNIT;
+  p.planetranspo_target_a := parms.line_angle * (ANGLE_MAX div 256);
+
+  p.planetranspo_start_tics := parms.tick_count;
+  p.planetranspo_tics := parms.tick_count;
+
+  action.suspend := 1;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

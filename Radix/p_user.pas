@@ -329,6 +329,43 @@ begin
 end;
 
 //
+// JVAL: 20200313 - New function (RA_PlaneTranspo action)
+// P_PlaneTranspoMove
+//
+procedure P_PlaneTranspoMove(player: Pplayer_t);
+var
+  dx, dy, dz: int64;
+  a1, a2: int64;
+  da: int64;
+begin
+  dec(player.planetranspo_tics);
+  if player.planetranspo_tics <= 0 then
+  begin
+    player.mo.momx := 0;
+    player.mo.momy := 0;
+    player.mo.momz := 0;
+    player.mo.angle := player.planetranspo_target_a;
+    exit;
+  end;
+
+  dx := (int64(player.planetranspo_target_x) - int64(player.planetranspo_start_x)) div player.planetranspo_start_tics;
+  dy := (int64(player.planetranspo_target_y) - int64(player.planetranspo_start_y)) div player.planetranspo_start_tics;
+  dz := (int64(player.planetranspo_target_z) - int64(player.planetranspo_start_z)) div player.planetranspo_start_tics;
+  a1 := player.planetranspo_target_a;
+  a2 := player.planetranspo_start_a;
+  da := (a1 - a2) div player.planetranspo_start_tics;
+  if da < 0 then
+    da := da + $100000000
+  else if da > $100000000 then
+    da := da - $100000000;
+
+  player.mo.momx := dx * (player.planetranspo_start_tics - player.planetranspo_tics) div (player.planetranspo_start_tics div 2);
+  player.mo.momy := dy * (player.planetranspo_start_tics - player.planetranspo_tics) div (player.planetranspo_start_tics div 2);
+  player.mo.momz := dz * (player.planetranspo_start_tics - player.planetranspo_tics) div (player.planetranspo_start_tics div 2);
+  player.mo.angle := player.mo.angle + da;
+end;
+
+//
 // P_MovePlayer
 //
 procedure P_MovePlayer(player: Pplayer_t);
@@ -340,6 +377,12 @@ var
   movefactor: fixed_t;
 begin
   cmd := @player.cmd;
+
+  if player.planetranspo_tics > 0 then
+  begin
+    P_PlaneTranspoMove(player);
+    exit;
+  end;
 
   player.mo.angle := player.mo.angle + _SHLW(cmd.angleturn, 16);
 

@@ -106,10 +106,11 @@ begin
       if (grid_id >= 0) and (grid_id < RADIXGRIDSIZE) then
       begin
         trig_id := radixgrid[grid_id];
-        if trig_id >= 0 then
+        if players[i].last_grid_trigger <> trig_id then // JVAL: 20200313 - Don't trigger twice the trigger
         begin
-          RX_RunTrigger(trig_id);
-          radixgrid[grid_id] := -1; // Clear trigger from grid
+          players[i].last_grid_trigger := trig_id;
+          if trig_id >= 0 then
+            RX_RunTrigger(trig_id);
         end;
       end;
     end;

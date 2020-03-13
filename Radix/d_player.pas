@@ -45,6 +45,7 @@ uses
 // as commands per game tick.
   d_ticcmd,
   m_fixed,
+  tables,
   doomdef;
 
 //
@@ -177,6 +178,19 @@ type
     lastsoundstepy: fixed_t;
     lastbreath: integer;
     hardbreathtics: integer;
+
+    planetranspo_start_x: fixed_t;    // JVAL: 20200313 - Radix (RA_PlaneTranspo)
+    planetranspo_start_y: fixed_t;    // JVAL: 20200313 - Radix (RA_PlaneTranspo)
+    planetranspo_start_z: fixed_t;    // JVAL: 20200313 - Radix (RA_PlaneTranspo)
+    planetranspo_start_a: angle_t;    // JVAL: 20200313 - Radix (RA_PlaneTranspo)
+    planetranspo_target_x: fixed_t;   // JVAL: 20200313 - Radix (RA_PlaneTranspo)
+    planetranspo_target_y: fixed_t;   // JVAL: 20200313 - Radix (RA_PlaneTranspo)
+    planetranspo_target_z: fixed_t;   // JVAL: 20200313 - Radix (RA_PlaneTranspo)
+    planetranspo_target_a: angle_t;   // JVAL: 20200313 - Radix (RA_PlaneTranspo)
+    planetranspo_start_tics: integer; // JVAL: 20200313 - Radix (RA_PlaneTranspo)
+    planetranspo_tics: integer;       // JVAL: 20200313 - Radix (RA_PlaneTranspo)
+
+    last_grid_trigger: integer;
 
     angletargetx: fixed_t;
     angletargety: fixed_t;
