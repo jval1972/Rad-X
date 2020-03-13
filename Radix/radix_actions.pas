@@ -131,6 +131,7 @@ uses
   g_game,
   m_rnd,
   m_fixed,
+  p_map,
   p_mobj_h,
   p_mobj,
   p_tick,
@@ -279,7 +280,6 @@ begin
         begin
           sec.floorheight := dest_height;
           action.suspend := 1;  // JVAL: 20200306 - Disable action
-          exit;
         end;
       end;
     0: // ceiling
@@ -294,10 +294,11 @@ begin
         begin
           sec.ceilingheight := dest_height;
           action.suspend := 1;  // JVAL: 202003 - Disable action
-          exit;
         end;
       end;
   end;
+
+  P_ChangeSector(sec, true);  // JVAL: 20200313
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -735,9 +736,11 @@ begin
       end;
   end;
 
+  P_ChangeSector(sec, true);  // JVAL: 20200313
   exit;
 
 finish_move:
+  P_ChangeSector(sec, true);  // JVAL: 20200313
   S_StartSound(
     Pmobj_t(@sec.soundorg),
     radixsounds[parms.stop_sound].name);
