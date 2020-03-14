@@ -112,13 +112,16 @@ type
     // Armor type is 0-2.
     armortype: integer;
 
+    shield: integer;  // JVAL: 20200314 - Radix shield
+    energy: integer;  // JVAL: 20200314 - Radix energy
+
     // Power ups. invinc and invis are tic counters.
     powers: array[0..Ord(NUMPOWERS) - 1] of integer;
     cards: array[0..Ord(NUMCARDS) - 1] of boolean;
     backpack: boolean;
 
     // Frags, kills of other players.
-    frags: array[0..(MAXPLAYERS)-1] of integer;
+    frags: array[0..MAXPLAYERS - 1] of integer;
     readyweapon: weapontype_t;
 
     // Is wp_nochange if not changing.
