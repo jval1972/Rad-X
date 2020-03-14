@@ -101,7 +101,7 @@ begin
   t := t mod 3600;
   result := result + ':' + IntToStrzFill(2, t div 60); // Minutes
   t := t mod 60;
-  result := result + ':' + IntToStrzFill(2, t div 60); // Seconds
+  result := result + ':' + IntToStrzFill(2, t); // Seconds
 end;
 
 procedure RX_Intermission_Drawer;
