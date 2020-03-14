@@ -180,6 +180,8 @@ var
 
   totalkills, totalitems, totalsecret: integer; // for intermission
 
+  levelhassecondaryobjective: boolean;
+
   wminfo: wbstartstruct_t; // parms for world map / intermission
 
   gameskill: skill_t;
@@ -1506,6 +1508,7 @@ begin
   wminfo.maxfrags := 0;
   wminfo.partime := TICRATE * pars[gameepisode][gamemap];
   wminfo.pnum := consoleplayer;
+  wminfo.hassecondaryobjective := levelhassecondaryobjective;
 
   for i := 0 to MAXPLAYERS - 1 do
   begin
@@ -1514,6 +1517,7 @@ begin
     wminfo.plyr[i].sitems := players[i].itemcount;
     wminfo.plyr[i].ssecret := players[i].secretcount;
     wminfo.plyr[i].stime := leveltime;
+    wminfo.plyr[i].secondaryobjective := players[i].secondaryobjective;
     memcpy(@wminfo.plyr[i].frags, @players[i].frags, SizeOf(wminfo.plyr[i].frags));
   end;
 

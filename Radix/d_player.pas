@@ -144,6 +144,8 @@ type
     itemcount: integer;
     secretcount: integer;
 
+    secondaryobjective: boolean;
+
     // Hint messages.
     _message: string[255];
 
@@ -219,6 +221,7 @@ type
     sitems: integer;
     ssecret: integer;
     stime: integer;
+    secondaryobjective: boolean;
     frags: array[0..3] of integer;
     score: integer; // current score on entry, modified on return
   end;
@@ -240,6 +243,7 @@ type
     maxitems: integer;
     maxsecret: integer;
     maxfrags: integer;
+    hassecondaryobjective: boolean;
 
     // the par time
     partime: integer;

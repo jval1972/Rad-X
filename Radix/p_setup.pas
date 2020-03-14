@@ -1705,6 +1705,8 @@ end;
 // JVAL: 20200303 - Load radix sprites/actions from RSPRITE lump
 //
 procedure P_LoadRadixSprites(lump: integer);
+var
+  i: integer;
 begin
   if lump = -1 then
   begin
@@ -1715,6 +1717,13 @@ begin
 
   radixactions := W_CacheLumpNum(lump, PU_LEVEL);
   numradixactions := W_LumpLength(lump) div SizeOf(radixaction_t);
+
+  for i := 0 to numradixactions - 1 do
+    if radixactions[i].action_type = 29 then
+    begin
+      levelhassecondaryobjective := true;
+      exit;
+    end;
 end;
 
 //
@@ -1754,6 +1763,7 @@ begin
   totalsecret := 0;
 
   level_position_hack := false; // JVAL: 20200307 - Radix
+  levelhassecondaryobjective := false; // JVAL: 20200314 - Radix secondary objective
 
   isgamefreezed := false;
 

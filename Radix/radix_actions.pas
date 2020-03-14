@@ -1172,6 +1172,7 @@ var
 begin
   parms := radixsecondaryobjective_p(@action.params);
 
+  players[radixplayer].secondaryobjective := true;
   players[radixplayer]._message := radixmessages[12];
   S_StartSound(nil, 'SndSecComplete');
 

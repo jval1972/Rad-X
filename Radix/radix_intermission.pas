@@ -108,16 +108,28 @@ procedure RX_Intermission_Drawer;
 var
   backscreen: string;
   skillplace: integer;
+  sobj: string;
 begin
   sprintf(backscreen, 'DebriefScreen%d', [gameepisode]);
   V_DrawPatchFullScreenTMP320x200(backscreen);
 
   M_WriteSmallTextCenter(30, 'MISSION ' + itoa(in_struct.last + 1) + ' COMPLETED');
 
-  M_WriteSmallTextCenter(50, 'AT YOUR CURRENT SKILL RATING');
+  M_WriteSmallTextCenter(52, 'AT YOUR CURRENT SKILL RATING');
 
   skillplace := 10;
   M_WriteSmallTextCenter(60, 'YOU WILL ACHIEVE ' + itoa(skillplace) + ' PLACE IN THE TOP TEN');
+
+  if in_struct.hassecondaryobjective then
+  begin
+    if in_struct.plyr[consoleplayer].secondaryobjective then
+      sobj := 'COMPLETE'
+    else
+      sobj := 'INCOMPLETE';
+  end
+  else
+    sobj := 'NOT APPLICABLE';
+  M_WriteSmallText(157, 81, sobj);
 
   M_WriteSmallText(108, 91, IntToStrBfill(3, in_struct.plyr[consoleplayer].skills));
   M_WriteSmallText(130, 91, itoa(in_struct.maxkills));
