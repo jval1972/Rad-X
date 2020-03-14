@@ -60,6 +60,9 @@ var
   cockpit: Ppatch_t;
   statusbarimage: Ppatch_t;
   weaponimages: array[0..6] of Ppatch_t;
+  WeaponNumOn: array[0..6] of Ppatch_t;
+  WeaponNumOff: array[0..6] of Ppatch_t;
+  WeaponNumUse: array[0..6] of Ppatch_t;
   treatimages: array[boolean] of Ppatch_t;
   hud_player: Pplayer_t;
 
@@ -74,6 +77,12 @@ begin
   begin
     sprintf(stmp, 'Weapon%dImage', [i + 1]);
     weaponimages[i] := W_CacheLumpName(stmp, PU_STATIC);
+    sprintf(stmp, 'WeaponNumOn%d', [i + 1]);
+    WeaponNumOn[i] := W_CacheLumpName(stmp, PU_STATIC);
+    sprintf(stmp, 'WeaponNumOff%d', [i + 1]);
+    WeaponNumOff[i] := W_CacheLumpName(stmp, PU_STATIC);
+    sprintf(stmp, 'WeaponNumUse%d', [i + 1]);
+    WeaponNumUse[i] := W_CacheLumpName(stmp, PU_STATIC);
   end;
   treatimages[true] := W_CacheLumpName('ThreatOnMap', PU_STATIC);
   treatimages[false] := W_CacheLumpName('ThreatOffMap', PU_STATIC);
@@ -82,6 +91,7 @@ end;
 procedure RX_HudDrawerStatusbar;
 var
   p: Ppatch_t;
+  i: integer;
 begin
   // Draw statusbar
   V_DrawPatch(0, 200 - STATUSBAR_HEIGHT, SCN_TMP, statusbarimage, false);
@@ -98,6 +108,18 @@ begin
     p := weaponimages[6];
   end;
   V_DrawPatch(5, 200 - STATUSBAR_HEIGHT + 4, SCN_TMP, p, false);
+
+  // Draw weapon indicators
+  for i := 0 to 6 do
+  begin
+    if Ord(hud_player.readyweapon) = i then
+      p := WeaponNumUse[i]
+    else if hud_player.weaponowned[i] <> 0 then
+      p := WeaponNumOn[i]
+    else
+      p := WeaponNumOff[i];
+    V_DrawPatch(6 + i * 8, 200 - STATUSBAR_HEIGHT + 31, SCN_TMP, p, false);
+  end;
 
   // Draw threat indicator
   V_DrawPatch(290, 200 - STATUSBAR_HEIGHT + 16, SCN_TMP, treatimages[hud_player.threat], false);
