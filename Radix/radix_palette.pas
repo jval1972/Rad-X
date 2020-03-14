@@ -37,6 +37,8 @@ uses
   d_delphi,
   v_video;
 
+function RX_ScaleRadixPalette(const inppal: PByteArray): boolean;
+
 procedure RX_CreateDoomPalette(const inppal: PByteArray; const outpal: PByteArray; const colormap: PByteArray);
 
 // From palette frompal to palette topal create translation table
@@ -116,6 +118,26 @@ begin
   result := bestcolor;
 end;
 
+function RX_ScaleRadixPalette(const inppal: PByteArray): boolean;
+var
+  i: integer;
+  mx: integer;
+begin
+  mx := inppal[0];
+  for i := 1 to 767 do
+    if inppal[i] > mx then
+      mx := inppal[i];
+
+  if mx < 64 then
+  begin
+    for i := 0 to 767 do
+      inppal[i] := 4 * inppal[i];
+    result := true;
+  end
+  else
+    result := false;
+end;
+
 procedure RX_CreateDoomPalette(const inppal: PByteArray; const outpal: PByteArray; const colormap: PByteArray);
 const
   NUMLIGHTS = 32;
@@ -125,16 +147,8 @@ var
   red, green, blue: integer;
   palsrc: PByte;
   gray: double;
-  mx: integer;
 begin
-  mx := inppal[0];
-  for i := 1 to 767 do
-    if inppal[i] > mx then
-      mx := inppal[i];
-
-  if mx < 64 then
-    for i := 0 to 767 do
-      inppal[i] := 4 * inppal[i];
+  RX_ScaleRadixPalette(inppal);
 
   RX_CopyPalette(inppal, outpal);
 

@@ -261,12 +261,15 @@ var
 begin
   ret1 := ReadLump(lumps, numlumps, 'RedFromBluePal', p1, size1);
   pal1 := p1;
+  RX_ScaleRadixPalette(pal1);
 
   ret2 := ReadLump(lumps, numlumps, 'GreenFromBluePal', p2, size2);
   pal2 := p2;
+  RX_ScaleRadixPalette(pal2);
 
   ret3 := ReadLump(lumps, numlumps, 'YellowFromBluePal', p3, size3);
   pal3 := p3;
+  RX_ScaleRadixPalette(pal3);
 
   result := ret1 and ret2 and ret3;
 
