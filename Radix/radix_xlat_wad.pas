@@ -828,6 +828,61 @@ var
     end;
   end;
 
+  function AddWeaponNums(const lumpname: string): boolean;
+  var
+    lump: integer;
+    buf: pointer;
+    bufsize: integer;
+    imginp: PByteArray;
+    imgout: PByteArray;
+    j: integer;
+    p: pointer;
+    size: integer;
+    wname: string;
+    rname: string;
+  begin
+    lump := FindLump(lumps, numlumps, lumpname);
+    if lump < 0 then
+    begin
+      result := false;
+      exit;
+    end;
+    if lumps[lump].length <> 508 then
+    begin
+      result := false;
+      exit;
+    end;
+    result := true;
+
+    bufsize := lumps[lump].length;
+    buf := malloc(lumps[lump].length);
+    f.Seek(lumps[lump].position, sFromBeginning);
+    f.Read(buf^, bufsize);
+
+    imginp := @PByteArray(buf)[4];
+    RX_ColorReplace(imginp, 56, 9, 254, 252);
+    RX_RotatebitmapBuffer90(imginp, 56, 9);
+    imgout := malloc(8 * 9);
+
+    for j := 1 to 7 do
+    begin
+      RX_BltImageBuffer(imginp, 56, 9, imgout, (j - 1) * 8, j * 8 - 1, 0, 8);
+      RX_CreateDoomPatch(imgout, 8, 9, false, p, size, 0, 0);
+
+      wname := 'RADIX' + IntToStrzFill(3, patchid);
+      rname := lumpname + itoa(j);
+      inc(patchid);
+
+      wadwriter.AddData(wname, p, size);
+      memfree(p, size);
+
+      aliases.Add(wname + '=' + rname);
+    end;
+
+    memfree(pointer(imgout), 8 * 9);
+    memfree(pointer(buf), lumps[lump].length);
+  end;
+
 begin
   result := true;
 
@@ -945,6 +1000,10 @@ begin
       AddGraphicWithOutPalette('MissionPrimary[' + itoa(i) + '][' + itoa(j) + ']');
       AddGraphicWithOutPalette('MissionSecondary[' + itoa(i) + '][' + itoa(j) + ']');
     end;
+
+  AddWeaponNums('WeaponNumOn');
+  AddWeaponNums('WeaponNumOff');
+  AddWeaponNums('WeaponNumUse');
 end;
 
 function TRadixToWADConverter.GenerateSmallFont: boolean;
