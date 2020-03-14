@@ -168,7 +168,6 @@ uses
   nd_main,
   g_game,
   hu_stuff,
-  wi_stuff,
   st_stuff,
   am_map,
   p_setup,
@@ -178,6 +177,7 @@ uses
   psi_overlay,
   radix_alias,
   radix_version,
+  radix_intermission,
   r_draw,
   r_main,
   r_hires,
@@ -413,7 +413,7 @@ begin
         end;
       end;
     GS_INTERMISSION:
-      WI_Drawer;
+      RX_Intermission_Drawer;
     GS_FINALE:
       F_Drawer;
     GS_DEMOSCREEN:

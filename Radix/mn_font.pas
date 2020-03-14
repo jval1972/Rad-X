@@ -48,7 +48,11 @@ function M_SmallStringHeight(const str: string): integer;
 
 function M_WriteSmallText(x, y: integer; const str: string): menupos_t;
 
+function M_WriteSmallTextCenter(y: integer; const str: string): menupos_t;
+
 function M_WriteSmallWhiteText(x, y: integer; const str: string): menupos_t;
+
+function M_WriteSmallWhiteTextCenter(y: integer; const str: string): menupos_t;
 
 function M_BigStringWidth(const str: string; const font_array: Ppatch_tPArray): integer;
 
@@ -178,6 +182,23 @@ begin
   result.y := cy;
 end;
 
+function M_WriteSmallTextCenter(y: integer; const str: string): menupos_t;
+var
+  i, x, w: integer;
+  lst: TDStringList;
+begin
+  lst := TDStringList.Create;
+  lst.Text := str;
+  for i := 0 to lst.Count - 1 do
+  begin
+    w := M_SmallStringWidth(lst.Strings[i]);
+    x := (320 - w) div 2;
+    M_WriteSmallText(x, y, lst.Strings[i]);
+    y := y + 14;
+  end;
+  lst.Free;
+end;
+
 function M_WriteSmallWhiteText(x, y: integer; const str: string): menupos_t;
 var
   w: integer;
@@ -243,6 +264,23 @@ begin
 
   result.x := cx;
   result.y := cy;
+end;
+
+function M_WriteSmallWhiteTextCenter(y: integer; const str: string): menupos_t;
+var
+  i, x, w: integer;
+  lst: TDStringList;
+begin
+  lst := TDStringList.Create;
+  lst.Text := str;
+  for i := 0 to lst.Count - 1 do
+  begin
+    w := M_SmallStringWidth(lst.Strings[i]);
+    x := (320 - w) div 2;
+    M_WriteSmallWhiteText(x, y, lst.Strings[i]);
+    y := y + 14;
+  end;
+  lst.Free;
 end;
 
 //

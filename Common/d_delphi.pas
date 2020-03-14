@@ -188,6 +188,8 @@ var
 
 function IntToStrZfill(const z: integer; const x: integer): string;
 
+function IntToStrBfill(const z: integer; const x: integer): string;
+
 function intval(const b: boolean): integer;
 
 function decide(const condition: boolean;
@@ -1603,6 +1605,17 @@ begin
   len := Length(result);
   for i := len + 1 to z do
     result := '0' + result;
+end;
+
+function IntToStrBfill(const z: integer; const x: integer): string;
+var
+  i: integer;
+  len: integer;
+begin
+  result := itoa(x);
+  len := Length(result);
+  for i := len + 1 to z do
+    result := ' ' + result;
 end;
 
 function intval(const b: boolean): integer;
