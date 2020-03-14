@@ -128,6 +128,7 @@ end;
 procedure RX_HudDrawerCockpit;
 var
   p: Ppatch_t;
+  i: integer;
 begin
   // Draw cockpit
   V_DrawPatchFullScreenTMP320x200(cockpit);
@@ -144,6 +145,18 @@ begin
     p := weaponimages[6];
   end;
   V_DrawPatch(23, 142, SCN_TMP, p, false);
+
+  // Draw weapon indicators
+  for i := 0 to 6 do
+  begin
+    if Ord(hud_player.readyweapon) = i then
+      p := WeaponNumUse[i]
+    else if hud_player.weaponowned[i] <> 0 then
+      p := WeaponNumOn[i]
+    else
+      continue; // Already in cockpit patch
+    V_DrawPatchStencil(26 + i * 8, 162, SCN_TMP, p, false, 0);
+  end;
 
   // Draw threat indicator
   V_DrawPatch(147, 23, SCN_TMP, treatimages[hud_player.threat], false);

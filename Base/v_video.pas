@@ -2639,8 +2639,10 @@ var
   sheight: integer;
   delta, prevdelta: integer;
   tallpatch: boolean;
+  tstencil: byte;
 begin
   swidth := V_GetScreenWidth(scrn);
+  tstencil := v_translation[stencil];
   if not V_NeedsPreserve(scrn, SCN_320x200, preserve) then
   begin
     y := y - patch.topoffset;
@@ -2667,7 +2669,7 @@ begin
 
         while count > 0 do
         begin
-          if dest^ <> stencil then
+          if dest^ <> tstencil then
             dest^ := v_translation[source^];
           inc(source);
           inc(dest, swidth);
@@ -2735,7 +2737,7 @@ begin
 
           while count > 0 do
           begin
-            if dest^ <> stencil then
+            if dest^ <> tstencil then
               dest^ := vs;
             inc(dest, swidth);
             fracy := fracy + fracystep;
@@ -2791,8 +2793,10 @@ var
   vs: LongWord;
   delta, prevdelta: integer;
   tallpatch: boolean;
+  tstencil: LongWord;
 begin
   swidth := V_GetScreenWidth(SCN_FG);
+  tstencil := videopal[stencil];
   x := x - patch.leftoffset;
   y := y - patch.topoffset;
 
@@ -2820,7 +2824,7 @@ begin
 
         while count > 0 do
         begin
-          if dest^ <> videopal[stencil] then
+          if dest^ <> tstencil then
             dest^ := videopal[source^];
           inc(source);
           inc(dest, swidth);
@@ -2885,7 +2889,7 @@ begin
 
           while count > 0 do
           begin
-            if dest^ <> videopal[stencil] then
+            if dest^ <> tstencil then
               dest^ := vs;
             inc(dest, swidth);
             fracy := fracy + fracystep;
