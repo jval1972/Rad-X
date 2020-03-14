@@ -395,6 +395,7 @@ var
   islevel_v: integer;
   e3m2special: boolean;
   v1x, v1y, v2x, v2y: integer;
+  stubx, stuby: integer;
 
   procedure fix_wall_coordXYdef(var xx: integer; var yy: integer);
   begin
@@ -1229,6 +1230,18 @@ begin
     end;
 
   memfree(pointer(sectormapped), numdoomsectors);
+
+  // Move stub linedefs
+  stubx := minx + 64;
+  stuby := maxy + 256;
+  for i := 0 to numdoomlinedefs - 1 do
+    if doomlinedefs[i].sidenum[0] < 0 then
+      if doomlinedefs[i].sidenum[1] < 0 then
+      begin
+        doomlinedefs[i].v1 := AddVertexToWAD(stubx, stuby);
+        doomlinedefs[i].v2 := AddVertexToWAD(stubx + 32, stuby);
+        stubx := stubx + 64;
+      end;
 
   wadwriter.AddSeparator(levelname);
   wadwriter.AddData('THINGS', doomthings, numdoomthings * SizeOf(doommapthing_t));
