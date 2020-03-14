@@ -203,6 +203,9 @@ begin
   Pchar8_t(put)^ := levelinf.skyflat;
   put := @put[SizeOf(char8_t) div SizeOf(SmallInt)];
 
+  PInteger(put)^ := totalsecret;
+  put := @put[2];
+
   // do sectors
   i := 0;
   while i < numsectors do
@@ -324,6 +327,9 @@ begin
   get := @get[SizeOf(char8_t) div SizeOf(SmallInt)];
   levelinf.skyflat := Pchar8_t(get)^;
   get := @get[SizeOf(char8_t) div SizeOf(SmallInt)];
+
+  totalsecret := PInteger(get)^;
+  get := @get[2];
 
   // do sectors
   i := 0;
