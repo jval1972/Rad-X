@@ -128,6 +128,8 @@ procedure V_DrawPatch(x, y: integer; scrn: integer; const patchname: string; pre
 
 procedure V_DrawPatch(x, y: integer; scrn: integer; const lump: integer; preserve: boolean); overload;
 
+procedure V_DrawPatchStencil(x, y: integer; scrn: integer; patch: Ppatch_t; preserve: boolean; const stencil: byte);
+
 procedure V_DrawPatchTransparent(x, y: integer; scrn: integer; patch: Ppatch_t; preserve: boolean);
 
 {$IFNDEF OPENGL}
@@ -2613,6 +2615,316 @@ begin
   patch := W_CacheLumpNum(lump, PU_STATIC);
   V_DrawPatch(x, y, scrn, patch, preserve);
   Z_ChangeTag(patch, PU_CACHE);
+end;
+
+procedure V_DrawPatch8Stencil(x, y: integer; scrn: integer; patch: Ppatch_t; preserve: boolean; const stencil: byte);
+var
+  count: integer;
+  col: integer;
+  column: Pcolumn_t;
+  desttop: PByte;
+  dest: PByte;
+  vs: byte;
+  source: PByte;
+  w: integer;
+  pw: integer;
+  ph: integer;
+  fracx: fixed_t;
+  fracy: fixed_t;
+  fracxstep: fixed_t;
+  fracystep: fixed_t;
+  lasty: integer;
+  cury: integer;
+  swidth: integer;
+  sheight: integer;
+  delta, prevdelta: integer;
+  tallpatch: boolean;
+begin
+  swidth := V_GetScreenWidth(scrn);
+  if not V_NeedsPreserve(scrn, SCN_320x200, preserve) then
+  begin
+    y := y - patch.topoffset;
+    x := x - patch.leftoffset;
+
+    col := 0;
+
+    desttop := PByte(integer(screens[scrn]) + y * swidth + x);
+
+    w := patch.width;
+
+    while col < w do
+    begin
+      column := Pcolumn_t(integer(patch) + patch.columnofs[col]);
+      delta := 0;
+      tallpatch := false;
+    // step through the posts in a column
+      while column.topdelta <> $ff do
+      begin
+        source := PByte(integer(column) + 3);
+        delta := delta + column.topdelta;
+        dest := PByte(integer(desttop) + delta * swidth);
+        count := column.length;
+
+        while count > 0 do
+        begin
+          if dest^ <> stencil then
+            dest^ := v_translation[source^];
+          inc(source);
+          inc(dest, swidth);
+          dec(count);
+        end;
+        if not tallpatch then
+        begin
+          prevdelta := column.topdelta;
+          column := Pcolumn_t(integer(column) + column.length + 4);
+          if column.topdelta > prevdelta then
+            delta := 0
+          else
+            tallpatch := true;
+        end
+        else
+          column := Pcolumn_t(integer(column) + column.length + 4);
+      end;
+      inc(col);
+      inc(desttop);
+    end;
+
+  end
+////////////////////////////////////////////////////
+// Streching Draw, preserving original dimentions
+////////////////////////////////////////////////////
+  else
+  begin
+
+    y := y - patch.topoffset;
+    x := x - patch.leftoffset;
+
+    pw := V_PreserveW(x, patch.width);
+    ph := V_PreserveH(y, patch.height);
+
+    if (pw > 0) and (ph > 0) then
+    begin
+
+      x := V_PreserveX(x);
+      y := V_PreserveY(y);
+
+      fracx := 0;
+      fracxstep := FRACUNIT * patch.width div pw;
+      fracystep := FRACUNIT * patch.height div ph;
+
+      col := 0;
+      desttop := PByte(integer(screens[scrn]) + y * swidth + x);
+
+      sheight := V_GetScreenHeight(scrn);
+
+      while col < pw do
+      begin
+        column := Pcolumn_t(integer(patch) + patch.columnofs[LongWord(fracx) shr FRACBITS]);
+        delta := 0;
+        tallpatch := false;
+      // step through the posts in a column
+        while column.topdelta <> $ff do
+        begin
+          source := PByte(integer(column) + 3);
+          vs := v_translation[source^];
+          delta := delta + column.topdelta;
+          dest := PByte(integer(desttop) + ((delta * sheight) div 200) * swidth);
+          count := column.length;
+          fracy := 0;
+          lasty := 0;
+
+          while count > 0 do
+          begin
+            if dest^ <> stencil then
+              dest^ := vs;
+            inc(dest, swidth);
+            fracy := fracy + fracystep;
+            cury := LongWord(fracy) shr FRACBITS;
+            if cury > lasty then
+            begin
+              lasty := cury;
+              inc(source);
+              vs := v_translation[source^];
+              dec(count);
+            end;
+          end;
+          if not tallpatch then
+          begin
+            prevdelta := column.topdelta;
+            column := Pcolumn_t(integer(column) + column.length + 4);
+            if column.topdelta > prevdelta then
+              delta := 0
+            else
+              tallpatch := true;
+          end
+          else
+            column := Pcolumn_t(integer(column) + column.length + 4);
+        end;
+        inc(col);
+        inc(desttop);
+
+        fracx := fracx + fracxstep;
+      end;
+    end;
+  end;
+end;
+
+procedure V_DrawPatch32Stencil(x, y: integer; patch: Ppatch_t; preserve: boolean; const stencil: byte);
+var
+  count: integer;
+  col: integer;
+  column: Pcolumn_t;
+  desttop: PLongWordArray;
+  dest: PLongWord;
+  source: PByte;
+  w: integer;
+  pw: integer;
+  ph: integer;
+  fracx: fixed_t;
+  fracy: fixed_t;
+  fracxstep: fixed_t;
+  fracystep: fixed_t;
+  lasty: integer;
+  cury: integer;
+  swidth: integer;
+  sheight: integer;
+  vs: LongWord;
+  delta, prevdelta: integer;
+  tallpatch: boolean;
+begin
+  swidth := V_GetScreenWidth(SCN_FG);
+  x := x - patch.leftoffset;
+  y := y - patch.topoffset;
+
+  if not V_NeedsPreserve(SCN_FG, SCN_320x200, preserve) then
+  begin
+
+    col := 0;
+
+    desttop := @screen32[y * swidth + x];
+
+    w := patch.width;
+
+    while col < w do
+    begin
+      column := Pcolumn_t(integer(patch) + patch.columnofs[col]);
+      delta := 0;
+      tallpatch := false;
+    // step through the posts in a column
+      while column.topdelta <> $ff do
+      begin
+        source := PByte(integer(column) + 3);
+        delta := delta + column.topdelta;
+        dest := @desttop[delta * swidth];
+        count := column.length;
+
+        while count > 0 do
+        begin
+          if dest^ <> videopal[stencil] then
+            dest^ := videopal[source^];
+          inc(source);
+          inc(dest, swidth);
+          dec(count);
+        end;
+        if not tallpatch then
+        begin
+          prevdelta := column.topdelta;
+          column := Pcolumn_t(integer(column) + column.length + 4);
+          if column.topdelta > prevdelta then
+            delta := 0
+          else
+            tallpatch := true;
+        end
+        else
+          column := Pcolumn_t(integer(column) + column.length + 4);
+      end;
+      inc(col);
+      desttop := @desttop[1];
+    end;
+
+  end
+////////////////////////////////////////////////////
+// Streching Draw, preserving original dimentions
+////////////////////////////////////////////////////
+  else
+  begin
+
+    pw := V_PreserveW(x, patch.width);
+    ph := V_PreserveH(y, patch.height);
+
+    if (pw > 0) and (ph > 0) then
+    begin
+
+      x := V_PreserveX(x);
+      y := V_PreserveY(y);
+
+      fracx := 0;
+      fracxstep := FRACUNIT * patch.width div pw;
+      fracystep := FRACUNIT * patch.height div ph;
+
+      col := 0;
+      desttop := @screen32[y * swidth + x];
+
+      sheight := SCREENHEIGHT;
+
+      while col < pw do
+      begin
+        column := Pcolumn_t(integer(patch) + patch.columnofs[fracx div FRACUNIT]);
+        delta := 0;
+        tallpatch := false;
+      // step through the posts in a column
+        while column.topdelta <> $ff do
+        begin
+          source := PByte(integer(column) + 3);
+          vs := videopal[source^];
+          delta := delta + column.topdelta;
+          dest := @desttop[((delta * sheight div 200) * swidth)];
+          count := column.length;
+          fracy := 0;
+          lasty := 0;
+
+          while count > 0 do
+          begin
+            if dest^ <> videopal[stencil] then
+              dest^ := vs;
+            inc(dest, swidth);
+            fracy := fracy + fracystep;
+            cury := LongWord(fracy) shr FRACBITS;
+            if cury > lasty then
+            begin
+              lasty := cury;
+              inc(source);
+              vs := videopal[source^];
+              dec(count);
+            end;
+          end;
+          if not tallpatch then
+          begin
+            prevdelta := column.topdelta;
+            column := Pcolumn_t(integer(column) + column.length + 4);
+            if column.topdelta > prevdelta then
+              delta := 0
+            else
+              tallpatch := true;
+          end
+          else
+            column := Pcolumn_t(integer(column) + column.length + 4);
+        end;
+        inc(col);
+        desttop := @desttop[1];
+
+        fracx := fracx + fracxstep;
+      end;
+    end;
+  end;
+end;
+
+procedure V_DrawPatchStencil(x, y: integer; scrn: integer; patch: Ppatch_t; preserve: boolean; const stencil: byte);
+begin
+  if {$IFNDEF OPENGL}(videomode = vm32bit) and{$ENDIF} (scrn = SCN_FG) then
+    V_DrawPatch32Stencil(x, y, patch, preserve, 0)
+  else
+    V_DrawPatch8Stencil(x, y, scrn, patch, preserve, 0);
 end;
 
 //
