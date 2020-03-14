@@ -379,7 +379,8 @@ uses
   radix_actions in 'Radix\radix_actions.pas',
   radix_sounds in 'Radix\radix_sounds.pas',
   sound_data in 'Radix\sound_data.pas',
-  radix_intermission in 'Radix\radix_intermission.pas';
+  radix_intermission in 'Radix\radix_intermission.pas',
+  radix_hud in 'Radix\radix_hud.pas';
 
 var
   Saved8087CW: Word;

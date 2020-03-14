@@ -178,6 +178,7 @@ uses
   radix_alias,
   radix_version,
   radix_intermission,
+  radix_hud,
   r_draw,
   r_main,
   r_hires,
@@ -316,6 +317,8 @@ begin
 
   if player <> nil then
     R_RenderPlayerView(player);
+    
+  RX_HudDrawer;
 end;
 
 var
@@ -331,7 +334,6 @@ procedure D_DisplayHU;
 {$ENDIF}
 var
   y: integer;
-  redrawsbar: boolean;
   redrawbkscn: boolean;
   palette: PByteArray;
   drawhu: boolean;
@@ -360,7 +362,6 @@ begin
   if nodrawers then
     exit; // for comparative timing / profiling
 
-  redrawsbar := false;
   redrawbkscn := false;
   drawhu := false;
 
@@ -400,16 +401,11 @@ begin
         if gametic <> 0 then
         begin
           if amstate = am_only then
+          begin
             AM_Drawer;
-          if {$IFNDEF OPENGL}wipe or {$ENDIF}((viewheight <> SCREENHEIGHT) and viewfullscreen) then
-            redrawsbar := true;
-          if inhelpscreensstate and (not inhelpscreens) then
-            redrawsbar := true; // just put away the help screen
-          viewfullscreen := viewheight = SCREENHEIGHT;
-          if viewfullscreen then
-            ST_Drawer(stdo_no, redrawsbar)
-          else
-            ST_Drawer(stdo_full, redrawsbar);
+            RX_HudDrawer;
+          end;
+          ST_DoPaletteStuff;
         end;
       end;
     GS_INTERMISSION:
@@ -470,9 +466,8 @@ begin
           redrawbkscn := true;
           dec(borderdrawcount);
         end;
-      end
-      else if R_FullStOn and (gametic <> 0) then
-        ST_Drawer(stdo_small, redrawsbar);
+      end;
+      ST_DoPaletteStuff;
     end;
   end;
 
@@ -2109,6 +2104,11 @@ begin
   ST_Init;
 
   SUC_Progress(92);
+
+  printf('RX_InitRadixHud: Init RADIX status bar.'#13#10);
+  RX_InitRadixHud;
+
+  SUC_Progress(93);
 
   //    // check for a driver that wants intermission stats
   p := M_CheckParm('-statcopy');

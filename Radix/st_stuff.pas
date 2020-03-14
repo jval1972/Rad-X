@@ -43,7 +43,7 @@ uses
 // Size of statusbar.
 // Now sensitive for scaling.
 const
-  ST_HEIGHT = 32;
+  ST_HEIGHT = 41;
   ST_WIDTH = 320;
   ST_Y = 200 - ST_HEIGHT;
 
@@ -65,8 +65,7 @@ function ST_Responder(ev: Pevent_t): boolean;
 // Called by main loop.
 procedure ST_Ticker;
 
-// Called by main loop.
-procedure ST_Drawer(dopt: stdrawoptions_t; refresh: boolean);
+procedure ST_DoPaletteStuff;
 
 // Called when the console player is spawned on each level.
 procedure ST_Start;
@@ -1394,41 +1393,6 @@ begin
   ST_DrawWidgets(true);
 
   ST_FinishRefresh;
-end;
-
-procedure ST_Drawer(dopt: stdrawoptions_t; refresh: boolean);
-begin
-  // JVAL: 20200218 - RADIX
-  V_DrawPatch(0, 0, SCN_FG, 'COCKPIT', true);
-  exit;
-
-  st_statusbaron := (dopt <> stdo_no) or (amstate = am_only);
-  {$IFDEF OPENGL}
-  if not st_statusbaron then
-  begin
-    ST_DoPaletteStuff;
-    exit;
-  end;
-  {$ENDIF}
-  st_firsttime := st_firsttime or refresh;
-
-  // Do red-/gold-shifts from damage/items
-  ST_DoPaletteStuff;
-  if dopt <> stdo_small then
-  begin
-    if firstinterpolation or (menuactive and (shademenubackground >= 1)) then
-    begin
-      ST_Refresh(st_firsttime);
-      // If just after ST_Start(), refresh all
-      if st_firsttime then
-        ST_DoRefresh
-      // Otherwise, update as little as possible
-      else
-        ST_DiffDraw;
-    end;
-  end
-  else
-    ST_RefreshSmall;
 end;
 
 procedure ST_LoadGraphics;

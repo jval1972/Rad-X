@@ -114,6 +114,7 @@ type
 
     shield: integer;  // JVAL: 20200314 - Radix shield
     energy: integer;  // JVAL: 20200314 - Radix energy
+    threat: boolean;  // JVAL: 20200314 - Any threat nearby?
 
     // Power ups. invinc and invis are tic counters.
     powers: array[0..Ord(NUMPOWERS) - 1] of integer;
