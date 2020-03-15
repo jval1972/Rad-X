@@ -176,7 +176,7 @@ begin
   // Draw threat indicator
   V_DrawPatch(290, 200 - STATUSBAR_HEIGHT + 16, SCN_TMP, treatimages[hud_player.threat], false);
 
-  // Armour, shield and energy bars:
+  // Draw armor, shield and energy bars
   RX_HudDrawBar(189, 200 - STATUSBAR_HEIGHT + 7, ArmourBar, hud_player.armorpoints);
   RX_HudDrawBar(189, 200 - STATUSBAR_HEIGHT + 14, ShieldBar, hud_player.shield);
   RX_HudDrawBar(189, 200 - STATUSBAR_HEIGHT + 21, EnergyBar, hud_player.energy);
@@ -231,6 +231,11 @@ begin
 
   // Draw threat indicator
   V_DrawPatch(147, 23, SCN_TMP, treatimages[hud_player.threat], false);
+
+  // Draw armor, shield and energy bars
+  RX_HudDrawBar(202, 156, ArmourBar, hud_player.armorpoints);
+  RX_HudDrawBar(202, 171, ShieldBar, hud_player.shield);
+  RX_HudDrawBar(233, 186, EnergyBar, hud_player.energy);
 end;
 
 procedure RX_HudDrawer;
