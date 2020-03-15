@@ -46,6 +46,7 @@ uses
   d_player,
   g_game,
   mt_utils,
+  mn_font,
   r_defs,
   r_main,
   v_data,
@@ -129,6 +130,7 @@ procedure RX_HudDrawerCockpit;
 var
   p: Ppatch_t;
   i: integer;
+  stmp: string;
 begin
   // Draw cockpit
   V_DrawPatchFullScreenTMP320x200(cockpit);
@@ -157,6 +159,19 @@ begin
       continue; // Already in cockpit patch
     V_DrawPatchStencil(26 + i * 8, 162, SCN_TMP, p, false, 0);
   end;
+
+  // Draw kills
+  if hud_player.killcount > 998 then
+    stmp := '999'
+  else
+    stmp := IntToStrzFill(3, hud_player.killcount);
+  M_WriteSmallText(144, 141, stmp);
+
+  if totalkills > 998 then
+    stmp := '999'
+  else
+    stmp := IntToStrzFill(3, totalkills);
+  M_WriteSmallText(168, 141, stmp);
 
   // Draw threat indicator
   V_DrawPatch(147, 23, SCN_TMP, treatimages[hud_player.threat], false);
