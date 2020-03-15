@@ -93,6 +93,7 @@ procedure RX_HudDrawerStatusbar;
 var
   p: Ppatch_t;
   i: integer;
+  stmp: string;
 begin
   // Draw statusbar
   V_DrawPatch(0, 200 - STATUSBAR_HEIGHT, SCN_TMP, statusbarimage, false);
@@ -121,6 +122,19 @@ begin
       p := WeaponNumOff[i];
     V_DrawPatch(6 + i * 8, 200 - STATUSBAR_HEIGHT + 31, SCN_TMP, p, false);
   end;
+
+  // Draw kills
+  if hud_player.killcount > 998 then
+    stmp := '999'
+  else
+    stmp := IntToStrzFill(3, hud_player.killcount);
+  M_WriteSmallText(204, 200 - STATUSBAR_HEIGHT + 30, stmp);
+
+  if totalkills > 998 then
+    stmp := '999'
+  else
+    stmp := IntToStrzFill(3, totalkills);
+  M_WriteSmallText(227, 200 - STATUSBAR_HEIGHT + 30, stmp);
 
   // Draw threat indicator
   V_DrawPatch(290, 200 - STATUSBAR_HEIGHT + 16, SCN_TMP, treatimages[hud_player.threat], false);
@@ -165,7 +179,7 @@ begin
     stmp := '999'
   else
     stmp := IntToStrzFill(3, hud_player.killcount);
-  M_WriteSmallText(144, 141, stmp);
+  M_WriteSmallText(145, 141, stmp);
 
   if totalkills > 998 then
     stmp := '999'
