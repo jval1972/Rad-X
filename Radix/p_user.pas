@@ -328,6 +328,42 @@ begin
   end;
 end;
 
+function R_CalcPlaneTranspoAngle(const prev, next: angle_t; const tics, starttics: fixed_t): angle_t;
+var
+  prev_e, next_e, mid_e: float;
+  frac: float;
+begin
+  if prev = next then
+    result := prev
+  else
+  begin
+    frac := 1.0 - tics / starttics;
+    if ((prev < ANG90) and (next > ANG270)) or
+       ((next < ANG90) and (prev > ANG270)) then
+    begin
+      prev_e := prev / ANGLE_MAX;
+      next_e := next / ANGLE_MAX;
+      if prev > next then
+        next_e := next_e + 1.0
+      else
+        prev_e := prev_e + 1.0;
+
+      mid_e := prev_e + (next_e - prev_e) * frac;
+      if mid_e > 1.0 then
+        mid_e := mid_e - 1.0;
+      result := Round(mid_e * ANGLE_MAX);
+    end
+    else if prev > next then
+    begin
+      result := prev - round((prev - next) * frac);
+    end
+    else
+    begin
+      result := prev + round((next - prev) * frac);
+    end;
+  end;
+end;
+
 //
 // JVAL: 20200313 - New function (RA_PlaneTranspo action)
 // P_PlaneTranspoMove
@@ -335,8 +371,6 @@ end;
 procedure P_PlaneTranspoMove(player: Pplayer_t);
 var
   dx, dy, dz: int64;
-  a1, a2: int64;
-  da: int64;
 begin
   dec(player.planetranspo_tics);
   if player.planetranspo_tics <= 0 then
@@ -351,18 +385,10 @@ begin
   dx := (int64(player.planetranspo_target_x) - int64(player.planetranspo_start_x)) div player.planetranspo_start_tics;
   dy := (int64(player.planetranspo_target_y) - int64(player.planetranspo_start_y)) div player.planetranspo_start_tics;
   dz := (int64(player.planetranspo_target_z) - int64(player.planetranspo_start_z)) div player.planetranspo_start_tics;
-  a1 := player.planetranspo_target_a;
-  a2 := player.planetranspo_start_a;
-  da := (a1 - a2) div player.planetranspo_start_tics;
-  if da < 0 then
-    da := da + $100000000
-  else if da > $100000000 then
-    da := da - $100000000;
-
   player.mo.momx := dx * (player.planetranspo_start_tics - player.planetranspo_tics) div (player.planetranspo_start_tics div 2);
   player.mo.momy := dy * (player.planetranspo_start_tics - player.planetranspo_tics) div (player.planetranspo_start_tics div 2);
   player.mo.momz := dz * (player.planetranspo_start_tics - player.planetranspo_tics) div (player.planetranspo_start_tics div 2);
-  player.mo.angle := player.mo.angle + da;
+  player.mo.angle := R_CalcPlaneTranspoAngle(player.planetranspo_start_a, player.planetranspo_target_a, player.planetranspo_tics, player.planetranspo_start_tics);
 end;
 
 //
