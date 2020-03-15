@@ -266,6 +266,10 @@ const
   SAVESTRINGSIZE = 23;
   SAVEVERSIONSIZE = 16;
 
+var
+  PLAYERSPAWNSHIELD: integer = 100;
+  PLAYERSPAWNENERGY: integer = 100;
+
 implementation
 
 uses
@@ -1243,6 +1247,8 @@ begin
   p.attackdown := true;  // don't do anything immediately
   p.playerstate := PST_LIVE;
   p.health := mobjinfo[Ord(MT_PLAYER)].spawnhealth;
+  p.shield := PLAYERSPAWNSHIELD;
+  p.energy := PLAYERSPAWNENERGY;
   p.readyweapon := wp_pistol;
   p.pendingweapon := wp_pistol;
   p.weaponowned[Ord(wp_fist)] := 1;

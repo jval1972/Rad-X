@@ -197,6 +197,8 @@ var
   misc_idx: integer;
   misc_val: integer;
 
+  plyr_val: integer;
+
   par_episode: integer;
   par_map: integer;
   par_time: integer;
@@ -1156,7 +1158,43 @@ begin
     end
 
 
+    ////////////////////////////////////////////////////////////////////////////
+    else if (token1 = '[PLAYER]') or (token1 = 'PLAYER') then // BEX
+    begin
+    ////////////////////////////////////////////////////////////////////////////
+    // Parse player extension //////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+      while true do
+      begin
+        if not DEH_NextLine(s, str, i) then
+          break;
+        if Pos('=', str) = 0 then
+        begin
+          mustnextline := false; // Already got line
+          break;
+        end;
 
+        splitstring(str, token1, token2, '=');
+        plyr_val := atoi(token2, -1);
+
+        if plyr_val < 0 then
+        begin
+          mustnextline := false; // Already got line
+          break;
+        end;
+
+        token1 := strupper(token1);
+        if token1 = 'PLAYERSPAWNSHIELD' then
+          PLAYERSPAWNSHIELD := plyr_val
+        else if token1 = 'PLAYERSPAWNENERGY' then
+          PLAYERSPAWNENERGY := plyr_val
+        else
+        begin
+          mustnextline := false; // Already got line
+          break;
+        end;
+      end;
+    end
 
     ////////////////////////////////////////////////////////////////////////////
     else if (token1 = '[MUSIC]') or (token1 = 'MUSIC') then // BEX
@@ -1534,6 +1572,17 @@ begin
     else
       result.Add('%d = %s', [i, S_music[i].name]);
   end;
+  result.Add('');
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Add player misc
+  //////////////////////////////////////////////////////////////////////////////
+  result.Add('');
+  result.Add('# Player');
+  result.Add('');
+  result.Add('[PLAYER]');
+  result.Add('%s = %d', ['PLAYERSPAWNSHIELD', PLAYERSPAWNSHIELD]);
+  result.Add('%s = %d', ['PLAYERSPAWNENERGY', PLAYERSPAWNENERGY]);
   result.Add('');
 
   //////////////////////////////////////////////////////////////////////////////
