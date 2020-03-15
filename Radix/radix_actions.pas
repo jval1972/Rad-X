@@ -1213,6 +1213,7 @@ procedure RA_LightMovement(const action: Pradixaction_t);
 var
   parms: radixspritelightmovement_p;
   l_off, l_on: integer;
+  sec0, sec1, sec2, sec3: integer;
 begin
   parms := radixspritelightmovement_p(@action.params);
 
@@ -1223,34 +1224,54 @@ begin
 
   l_off := RX_LightLevel(parms.off_level);
   l_on := RX_LightLevel(parms.on_level);
+  sec0 := parms.the_sectors[0];
+  sec1 := parms.the_sectors[1];
+  sec2 := parms.the_sectors[2];
+  sec3 := parms.the_sectors[3];
   case parms.tick div parms.delay of
     0:
       begin
-        sectors[parms.the_sectors[0]].lightlevel := l_on;
-        sectors[parms.the_sectors[1]].lightlevel := l_off;
-        sectors[parms.the_sectors[2]].lightlevel := l_off;
-        sectors[parms.the_sectors[3]].lightlevel := l_off;
+        if sec0 >= 0 then
+          sectors[sec0].lightlevel := l_on;
+        if sec1 >= 0 then
+          sectors[sec1].lightlevel := l_off;
+        if sec2 >= 0 then
+          sectors[sec2].lightlevel := l_off;
+        if sec3 >= 0 then
+          sectors[sec3].lightlevel := l_off;
       end;
     1:
       begin
-        sectors[parms.the_sectors[0]].lightlevel := l_off;
-        sectors[parms.the_sectors[1]].lightlevel := l_on;
-        sectors[parms.the_sectors[2]].lightlevel := l_off;
-        sectors[parms.the_sectors[3]].lightlevel := l_off;
+        if sec0 >= 0 then
+          sectors[sec0].lightlevel := l_off;
+        if sec1 >= 0 then
+          sectors[sec1].lightlevel := l_on;
+        if sec2 >= 0 then
+          sectors[sec2].lightlevel := l_off;
+        if sec3 >= 0 then
+          sectors[sec3].lightlevel := l_off;
       end;
     2:
       begin
-        sectors[parms.the_sectors[0]].lightlevel := l_off;
-        sectors[parms.the_sectors[1]].lightlevel := l_off;
-        sectors[parms.the_sectors[2]].lightlevel := l_on;
-        sectors[parms.the_sectors[3]].lightlevel := l_off;
+        if sec0 >= 0 then
+          sectors[sec0].lightlevel := l_off;
+        if sec1 >= 0 then
+          sectors[sec1].lightlevel := l_off;
+        if sec2 >= 0 then
+          sectors[sec2].lightlevel := l_on;
+        if sec3 >= 0 then
+          sectors[sec3].lightlevel := l_off;
       end;
     3:
       begin
-        sectors[parms.the_sectors[0]].lightlevel := l_off;
-        sectors[parms.the_sectors[1]].lightlevel := l_off;
-        sectors[parms.the_sectors[2]].lightlevel := l_off;
-        sectors[parms.the_sectors[3]].lightlevel := l_on;
+        if sec0 >= 0 then
+          sectors[sec0].lightlevel := l_off;
+        if sec1 >= 0 then
+          sectors[sec1].lightlevel := l_off;
+        if sec2 >= 0 then
+          sectors[sec2].lightlevel := l_off;
+        if sec3 >= 0 then
+          sectors[sec3].lightlevel := l_on;
       end;
   end;
 
