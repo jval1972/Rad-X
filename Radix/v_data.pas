@@ -53,8 +53,9 @@ const
 var
 // Screen 0 is the screen updated by I_Update screen.
 // Screen 1 is an extra buffer.
-// Screen 4 is an extra buffer for finale.
-// Screen 5 is used by status line
+// Screen 2 is console buffer
+// Screen 3 is an extra buffer for finale, menus and radix hud.
+// Screen 4 is used by status line
   screens: array[SCN_FG..SCN_ST] of PByteArray;
   screen32: PLongWordArray;
 
