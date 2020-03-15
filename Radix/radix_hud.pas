@@ -65,6 +65,9 @@ var
   WeaponNumOff: array[0..6] of Ppatch_t;
   WeaponNumUse: array[0..6] of Ppatch_t;
   treatimages: array[boolean] of Ppatch_t;
+  ArmourBar: Ppatch_t;
+  ShieldBar: Ppatch_t;
+  EnergyBar: Ppatch_t;
   hud_player: Pplayer_t;
 
 procedure RX_InitRadixHud;
@@ -87,6 +90,40 @@ begin
   end;
   treatimages[true] := W_CacheLumpName('ThreatOnMap', PU_STATIC);
   treatimages[false] := W_CacheLumpName('ThreatOffMap', PU_STATIC);
+  ArmourBar := W_CacheLumpName('ArmourBar', PU_STATIC);
+  ShieldBar := W_CacheLumpName('ShieldBar', PU_STATIC);
+  EnergyBar := W_CacheLumpName('EnergyBar', PU_STATIC);
+end;
+
+procedure RX_HudDrawBar(const x, y: integer; const bar: Ppatch_t; const pct: integer);
+var
+  i, j: integer;
+  xx: integer;
+  dest: PByte;
+  b: byte;
+  pitch: integer;
+begin
+  if pct <= 0 then
+    exit;
+
+  pitch := V_GetScreenWidth(SCN_TMP);
+  b := screens[SCN_TMP][pitch * y + x];
+  V_DrawPatch(x, y, SCN_TMP, bar, false);
+
+  if pct >= 100 then
+    exit;
+
+  xx := bar.width * pct div 100;
+
+  for j := y to y + bar.height - 1 do
+  begin
+    dest := @screens[SCN_TMP][j * pitch + x + xx];
+    for i := xx to bar.width - 1 do
+    begin
+      dest^ := b;
+      inc(dest);
+    end;
+  end;
 end;
 
 procedure RX_HudDrawerStatusbar;
@@ -138,6 +175,11 @@ begin
 
   // Draw threat indicator
   V_DrawPatch(290, 200 - STATUSBAR_HEIGHT + 16, SCN_TMP, treatimages[hud_player.threat], false);
+
+  // Armour, shield and energy bars:
+  RX_HudDrawBar(189, 200 - STATUSBAR_HEIGHT + 7, ArmourBar, hud_player.armorpoints);
+  RX_HudDrawBar(189, 200 - STATUSBAR_HEIGHT + 14, ShieldBar, hud_player.shield);
+  RX_HudDrawBar(189, 200 - STATUSBAR_HEIGHT + 21, EnergyBar, hud_player.energy);
 end;
 
 procedure RX_HudDrawerCockpit;
@@ -209,3 +251,4 @@ begin
 end;
 
 end.
+
