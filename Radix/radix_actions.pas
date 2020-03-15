@@ -970,7 +970,7 @@ var
 begin
   parms := radixactivatetrigger_p(@action.params);
   radixtriggers[parms.trigger].suspended := 0;
-  RX_RunTrigger(parms.trigger);
+//  RX_RunTrigger(parms.trigger);
   action.suspend := 1;  // JVAL: 202003 - Disable action
 end;
 
@@ -1102,6 +1102,8 @@ begin
 
   radixtriggers[parms.trigger_number].suspended := 0;
   RX_RunTrigger(parms.trigger_number);
+
+  action.suspend := 1; // JVAL: 20200315 - Disable action
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
