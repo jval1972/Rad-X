@@ -49,6 +49,9 @@ procedure P_PlayerFaceMobj(const player: Pplayer_t; const face: Pmobj_t; const t
 var
   allowplayerbreath: Boolean = false;
 
+const
+  MAXMOVETHRESHOLD = 18 * FRACUNIT;
+
 implementation
 
 uses
@@ -451,14 +454,14 @@ begin
     // JVAL: Adjust speed while flying
     if (player.cheats and CF_LOWGRAVITY <> 0) and (player.mo.z > player.mo.floorz) then
     begin
-      if player.mo.momx > 18 * FRACUNIT then
-        player.mo.momx := 18 * FRACUNIT
-      else if player.mo.momx < -18 * FRACUNIT then
-        player.mo.momx := -18 * FRACUNIT;
-      if player.mo.momy > 18 * FRACUNIT then
-        player.mo.momy := 18 * FRACUNIT
-      else if player.mo.momy < -18 * FRACUNIT then
-        player.mo.momy := -18 * FRACUNIT;
+      if player.mo.momx > MAXMOVETHRESHOLD then
+        player.mo.momx := MAXMOVETHRESHOLD
+      else if player.mo.momx < -MAXMOVETHRESHOLD then
+        player.mo.momx := -MAXMOVETHRESHOLD;
+      if player.mo.momy > MAXMOVETHRESHOLD then
+        player.mo.momy := MAXMOVETHRESHOLD
+      else if player.mo.momy < -MAXMOVETHRESHOLD then
+        player.mo.momy := -MAXMOVETHRESHOLD;
 
       if (cmd.forwardmove = 0) and (cmd.sidemove = 0) then
       begin
