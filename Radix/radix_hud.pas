@@ -101,14 +101,14 @@ procedure RX_HudDrawTime(const x, y: integer);
 var
   secs: integer;
 begin
-  if leveltime < 99 * 60 + 59 then
+  if leveltime <= 99 * 60 + 59 then
   begin
     secs := leveltime div TICRATE;
     M_WriteSmallText(x, y, IntToStrzFill(2, secs div 60) + ':');
     M_WriteSmallText(x + 14, y, IntToStrzFill(2, secs mod 60));
   end
   else
-    M_WriteSmallText(x, y, 'SUCKS');
+    M_WriteSmallText(x, y, 'SUCKS'); // JVAL 20200316 - SUCKS easter egg 
 end;
 
 procedure RX_HudDrawBar(const x, y: integer; const bar: Ppatch_t; const pct: integer);
@@ -123,12 +123,13 @@ begin
     exit;
 
   pitch := V_GetScreenWidth(SCN_TMP);
-  b := screens[SCN_TMP][pitch * y + x];
+  b := screens[SCN_TMP][pitch * y + x]; // JVAL: 20200316 - Keep background color
   V_DrawPatch(x, y, SCN_TMP, bar, false);
 
   if pct >= 100 then
     exit;
 
+  // Fill with background color: 
   xx := bar.width * pct div 100;
 
   for j := y to y + bar.height - 1 do

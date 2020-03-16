@@ -100,7 +100,7 @@ Conditionals=DOOM
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
-RunParams=-nofullscreen -geom 640x400 doom_assets.wad -idat RADIX_20_REG.DAT -noactordef -internalgamedef
+RunParams=-nofullscreen -geom 640x400 doom_assets.wad -idat RADIX_20_REG.DAT 
 HostApplication=
 Launcher=
 UseLauncher=0
