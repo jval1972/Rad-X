@@ -46,31 +46,31 @@ function M_SmallStringWidth(const str: string): integer;
 
 function M_SmallStringHeight(const str: string): integer;
 
-function M_WriteSmallText(x, y: integer; const str: string): menupos_t;
+function M_WriteSmallText(x, y: integer; const str: string; const scn: integer): menupos_t;
 
-function M_WriteSmallTextCenter(y: integer; const str: string): menupos_t;
+function M_WriteSmallTextCenter(y: integer; const str: string; const scn: integer): menupos_t;
 
-function M_WriteSmallWhiteText(x, y: integer; const str: string): menupos_t;
+function M_WriteSmallWhiteText(x, y: integer; const str: string; const scn: integer): menupos_t;
 
-function M_WriteSmallWhiteTextCenter(y: integer; const str: string): menupos_t;
+function M_WriteSmallWhiteTextCenter(y: integer; const str: string; const scn: integer): menupos_t;
 
 function M_BigStringWidth(const str: string; const font_array: Ppatch_tPArray): integer;
 
-function M_WriteBigText(x, y: integer; const font_array: Ppatch_tPArray; const str: string): menupos_t;
+function M_WriteBigText(x, y: integer; const font_array: Ppatch_tPArray; const str: string; const scn: integer): menupos_t;
 
-function M_WriteBigTextCenter(y: integer; const font_array: Ppatch_tPArray; const str: string): menupos_t;
+function M_WriteBigTextCenter(y: integer; const font_array: Ppatch_tPArray; const str: string; const scn: integer): menupos_t;
 
-function M_WriteBigTextRed(x, y: integer; const str: string): menupos_t;
+function M_WriteBigTextRed(x, y: integer; const str: string; const scn: integer): menupos_t;
 
-function M_WriteBigTextRedCenter(y: integer; const str: string): menupos_t;
+function M_WriteBigTextRedCenter(y: integer; const str: string; const scn: integer): menupos_t;
 
-function M_WriteBigTextGray(x, y: integer; const str: string): menupos_t;
+function M_WriteBigTextGray(x, y: integer; const str: string; const scn: integer): menupos_t;
 
-function M_WriteBigTextGrayCenter(y: integer; const str: string): menupos_t;
+function M_WriteBigTextGrayCenter(y: integer; const str: string; const scn: integer): menupos_t;
 
-function M_WriteBigTextOrange(x, y: integer; const str: string): menupos_t;
+function M_WriteBigTextOrange(x, y: integer; const str: string; const scn: integer): menupos_t;
 
-function M_WriteBigTextOrangeCenter(y: integer; const str: string): menupos_t;
+function M_WriteBigTextOrangeCenter(y: integer; const str: string; const scn: integer): menupos_t;
 
 implementation
 
@@ -120,7 +120,7 @@ end;
 //
 // Write a string using the hu_font
 //
-function M_WriteSmallText(x, y: integer; const str: string): menupos_t;
+function M_WriteSmallText(x, y: integer; const str: string; const scn: integer): menupos_t;
 var
   w: integer;
   ch: integer;
@@ -174,7 +174,7 @@ begin
     w := hu_font[c].width;
     if (cx + w) > 320 then
       break;
-    V_DrawPatch(cx, cy, SCN_TMP, hu_font[c], false);
+    V_DrawPatch(cx, cy, scn, hu_font[c], false);
     cx := cx + w;
   end;
 
@@ -182,7 +182,7 @@ begin
   result.y := cy;
 end;
 
-function M_WriteSmallTextCenter(y: integer; const str: string): menupos_t;
+function M_WriteSmallTextCenter(y: integer; const str: string; const scn: integer): menupos_t;
 var
   i, x, w: integer;
   lst: TDStringList;
@@ -193,13 +193,13 @@ begin
   begin
     w := M_SmallStringWidth(lst.Strings[i]);
     x := (320 - w) div 2;
-    M_WriteSmallText(x, y, lst.Strings[i]);
+    M_WriteSmallText(x, y, lst.Strings[i], scn);
     y := y + 14;
   end;
   lst.Free;
 end;
 
-function M_WriteSmallWhiteText(x, y: integer; const str: string): menupos_t;
+function M_WriteSmallWhiteText(x, y: integer; const str: string; const scn: integer): menupos_t;
 var
   w: integer;
   ch: integer;
@@ -256,7 +256,7 @@ begin
     w := hu_font[c].width;
     if (cx + w) > 320 then
       break;
-    V_DrawPatch(cx, cy, SCN_TMP, hu_font[c], false);
+    V_DrawPatch(cx, cy, scn, hu_font[c], false);
     cx := cx + w;
   end;
   Z_ChangeTag(v_translation, PU_CACHE);
@@ -266,7 +266,7 @@ begin
   result.y := cy;
 end;
 
-function M_WriteSmallWhiteTextCenter(y: integer; const str: string): menupos_t;
+function M_WriteSmallWhiteTextCenter(y: integer; const str: string; const scn: integer): menupos_t;
 var
   i, x, w: integer;
   lst: TDStringList;
@@ -277,7 +277,7 @@ begin
   begin
     w := M_SmallStringWidth(lst.Strings[i]);
     x := (320 - w) div 2;
-    M_WriteSmallWhiteText(x, y, lst.Strings[i]);
+    M_WriteSmallWhiteText(x, y, lst.Strings[i], scn);
     y := y + 14;
   end;
   lst.Free;
@@ -302,7 +302,7 @@ begin
   end;
 end;
 
-function M_WriteBigText(x, y: integer; const font_array: Ppatch_tPArray; const str: string): menupos_t;
+function M_WriteBigText(x, y: integer; const font_array: Ppatch_tPArray; const str: string; const scn: integer): menupos_t;
 var
   w: integer;
   ch: integer;
@@ -356,7 +356,7 @@ begin
     w := font_array[c].width;
     if (cx + w) > 320 then
       break;
-    V_DrawPatch(cx, cy, SCN_TMP, font_array[c], false);
+    V_DrawPatch(cx, cy, scn, font_array[c], false);
     cx := cx + w;
   end;
 
@@ -364,7 +364,7 @@ begin
   result.y := cy;
 end;
 
-function M_WriteBigTextCenter(y: integer; const font_array: Ppatch_tPArray; const str: string): menupos_t;
+function M_WriteBigTextCenter(y: integer; const font_array: Ppatch_tPArray; const str: string; const scn: integer): menupos_t;
 var
   i, x, w: integer;
   lst: TDStringList;
@@ -375,40 +375,40 @@ begin
   begin
     w := M_BigStringWidth(lst.Strings[i], font_array);
     x := (320 - w) div 2;
-    M_WriteBigText(x, y, font_array, lst.Strings[i]);
+    M_WriteBigText(x, y, font_array, lst.Strings[i], scn);
     y := y + 14;
   end;
   lst.Free;
 end;
 
-function M_WriteBigTextRed(x, y: integer; const str: string): menupos_t;
+function M_WriteBigTextRed(x, y: integer; const str: string; const scn: integer): menupos_t;
 begin
-  result := M_WriteBigText(x, y, @big_fontA, str);
+  result := M_WriteBigText(x, y, @big_fontA, str, scn);
 end;
 
-function M_WriteBigTextRedCenter(y: integer; const str: string): menupos_t;
+function M_WriteBigTextRedCenter(y: integer; const str: string; const scn: integer): menupos_t;
 begin
-  result := M_WriteBigTextCenter(y, @big_fontA, str);
+  result := M_WriteBigTextCenter(y, @big_fontA, str, scn);
 end;
 
-function M_WriteBigTextGray(x, y: integer; const str: string): menupos_t;
+function M_WriteBigTextGray(x, y: integer; const str: string; const scn: integer): menupos_t;
 begin
-  result := M_WriteBigText(x, y, @big_fontB, str);
+  result := M_WriteBigText(x, y, @big_fontB, str, scn);
 end;
 
-function M_WriteBigTextGrayCenter(y: integer; const str: string): menupos_t;
+function M_WriteBigTextGrayCenter(y: integer; const str: string; const scn: integer): menupos_t;
 begin
-  result := M_WriteBigTextCenter(y, @big_fontB, str);
+  result := M_WriteBigTextCenter(y, @big_fontB, str, scn);
 end;
 
-function M_WriteBigTextOrange(x, y: integer; const str: string): menupos_t;
+function M_WriteBigTextOrange(x, y: integer; const str: string; const scn: integer): menupos_t;
 begin
-  result := M_WriteBigText(x, y, @big_fontC, str);
+  result := M_WriteBigText(x, y, @big_fontC, str, scn);
 end;
 
-function M_WriteBigTextOrangeCenter(y: integer; const str: string): menupos_t;
+function M_WriteBigTextOrangeCenter(y: integer; const str: string; const scn: integer): menupos_t;
 begin
-  result := M_WriteBigTextCenter(y, @big_fontC, str);
+  result := M_WriteBigTextCenter(y, @big_fontC, str, scn);
 end;
 
 

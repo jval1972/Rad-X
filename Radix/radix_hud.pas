@@ -110,11 +110,11 @@ begin
   if leveltime <= 99 * 60 + 59 then
   begin
     secs := leveltime div TICRATE;
-    M_WriteSmallText(x, y, IntToStrzFill(2, secs div 60) + ':');
-    M_WriteSmallText(x + 14, y, IntToStrzFill(2, secs mod 60));
+    M_WriteSmallText(x, y, IntToStrzFill(2, secs div 60) + ':', SCN_HUD);
+    M_WriteSmallText(x + 14, y, IntToStrzFill(2, secs mod 60), SCN_HUD);
   end
   else
-    M_WriteSmallText(x, y, 'SUCKS'); // JVAL 20200316 - SUCKS easter egg
+    M_WriteSmallText(x, y, 'SUCKS', SCN_HUD); // JVAL 20200316 - SUCKS easter egg
 end;
 
 procedure RX_HudDrawSpeedIndicator(const x, y: integer; const color: byte);
@@ -225,13 +225,13 @@ begin
     stmp := '999'
   else
     stmp := IntToStrzFill(3, hud_player.killcount);
-  M_WriteSmallText(204, 200 - STATUSBAR_HEIGHT + 30, stmp);
+  M_WriteSmallText(204, 200 - STATUSBAR_HEIGHT + 30, stmp, SCN_HUD);
 
   if totalkills > 998 then
     stmp := '999'
   else
     stmp := IntToStrzFill(3, totalkills);
-  M_WriteSmallText(227, 200 - STATUSBAR_HEIGHT + 30, stmp);
+  M_WriteSmallText(227, 200 - STATUSBAR_HEIGHT + 30, stmp, SCN_HUD);
 
   // Draw threat indicator
   V_DrawPatch(290, 200 - STATUSBAR_HEIGHT + 16, SCN_HUD, treatimages[hud_player.threat], false);
@@ -287,13 +287,13 @@ begin
     stmp := '999'
   else
     stmp := IntToStrzFill(3, hud_player.killcount);
-  M_WriteSmallText(145, 141, stmp);
+  M_WriteSmallText(145, 141, stmp, SCN_HUD);
 
   if totalkills > 998 then
     stmp := '999'
   else
     stmp := IntToStrzFill(3, totalkills);
-  M_WriteSmallText(168, 141, stmp);
+  M_WriteSmallText(168, 141, stmp, SCN_HUD);
 
   // Draw threat indicator
   V_DrawPatch(147, 23, SCN_HUD, treatimages[hud_player.threat], false);

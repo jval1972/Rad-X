@@ -113,12 +113,12 @@ begin
   sprintf(backscreen, 'DebriefScreen%d', [gameepisode]);
   V_DrawPatchFullScreenTMP320x200(backscreen);
 
-  M_WriteSmallTextCenter(30, 'MISSION ' + itoa(in_struct.last + 1) + ' COMPLETED');
+  M_WriteSmallTextCenter(30, 'MISSION ' + itoa(in_struct.last + 1) + ' COMPLETED', SCN_TMP);
 
-  M_WriteSmallTextCenter(52, 'AT YOUR CURRENT SKILL RATING');
+  M_WriteSmallTextCenter(52, 'AT YOUR CURRENT SKILL RATING', SCN_TMP);
 
   skillplace := 10;
-  M_WriteSmallTextCenter(60, 'YOU WILL ACHIEVE ' + itoa(skillplace) + ' PLACE IN THE TOP TEN');
+  M_WriteSmallTextCenter(60, 'YOU WILL ACHIEVE ' + itoa(skillplace) + ' PLACE IN THE TOP TEN', SCN_TMP);
 
   if in_struct.hassecondaryobjective then
   begin
@@ -129,15 +129,15 @@ begin
   end
   else
     sobj := 'NOT APPLICABLE';
-  M_WriteSmallText(157, 81, sobj);
+  M_WriteSmallText(157, 81, sobj, SCN_TMP);
 
-  M_WriteSmallText(108, 91, IntToStrBfill(3, in_struct.plyr[consoleplayer].skills));
-  M_WriteSmallText(130, 91, itoa(in_struct.maxkills));
+  M_WriteSmallText(108, 91, IntToStrBfill(3, in_struct.plyr[consoleplayer].skills), SCN_TMP);
+  M_WriteSmallText(130, 91, itoa(in_struct.maxkills), SCN_TMP);
 
-  M_WriteSmallText(114, 111, RX_TimeToString(in_struct.plyr[consoleplayer].stime div TICRATE));
-  M_WriteSmallText(101, 121, RX_TimeToString(in_struct.partime div TICRATE));
+  M_WriteSmallText(114, 111, RX_TimeToString(in_struct.plyr[consoleplayer].stime div TICRATE), SCN_TMP);
+  M_WriteSmallText(101, 121, RX_TimeToString(in_struct.partime div TICRATE), SCN_TMP);
 
-  M_WriteSmallTextCenter(131, 'YOU HAVE FOUND ' + itoa(in_struct.plyr[consoleplayer].ssecret) + ' OF ' + itoa(in_struct.maxsecret) + ' SECRET AREAS');
+  M_WriteSmallTextCenter(131, 'YOU HAVE FOUND ' + itoa(in_struct.plyr[consoleplayer].ssecret) + ' OF ' + itoa(in_struct.maxsecret) + ' SECRET AREAS', SCN_TMP);
 
   V_CopyRect(0, 0, SCN_TMP, 320, 200, 0, 0, SCN_FG, true);
 

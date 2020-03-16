@@ -301,7 +301,7 @@ begin
   for i := y + 1 to y + 14 do
     M_HorzLine(0, 319, i, 63);
 
-  M_WriteBigTextRedCenter(y, str);
+  M_WriteBigTextRedCenter(y, str, SCN_TMP);
 end;
 
 procedure M_DrawSubHeadLine(const y: integer; const str: string);
@@ -313,7 +313,7 @@ begin
   for i := y + 1 to y + 14 do
     M_HorzLine(0, 319, i, 63);
 
-  M_WriteBigTextGray(25, y, str);
+  M_WriteBigTextGray(25, y, str, SCN_TMP);
 end;
 
 const
@@ -1042,14 +1042,14 @@ begin
   begin
     s := KeyBindingsInfo[start + i].text + ': ';
     len := M_SmallStringWidth(s);
-    M_WriteSmallText(m.x, m.y + m.itemheight * i, s);
+    M_WriteSmallText(m.x, m.y + m.itemheight * i, s, SCN_TMP);
     drawkey := true;
     if bindkeyEnter then
       if i = bindkeySlot - start then
         if (gametic div 18) mod 2 <> 0 then
           drawkey := false;
     if drawkey then
-      M_WriteSmallWhiteText(m.x + len, m.y + m.itemheight * i, M_KeyToString(KeyBindingsInfo[start + i].pkey^));
+      M_WriteSmallWhiteText(m.x + len, m.y + m.itemheight * i, M_KeyToString(KeyBindingsInfo[start + i].pkey^), SCN_TMP);
   end;
 end;
 
@@ -1191,7 +1191,7 @@ var
   i: integer;
 begin
   V_DrawPatch(0, 0, SCN_TMP, 'SaveLoadScreen', false);
-  M_WriteSmallText(270, 96, 'LOAD');
+  M_WriteSmallText(270, 96, 'LOAD', SCN_TMP);
 
   for i := 0 to Ord(load_end) - 1 do
   begin
@@ -1201,7 +1201,7 @@ begin
       V_DrawPatch(LoadDef.x + (1 + SAVESTRINGSIZE) * 5 + ARROWXOFFS, LoadDef.y + i * LoadDef.itemheight + ARROWYOFFS, SCN_TMP, p_leftarrow, false);
       M_DrawSaveLoadScreenShot(@savegameshots[i]);
     end;
-    M_WriteSmallText(LoadDef.x, LoadDef.y + LoadDef.itemheight * i, savegamestrings[i]);
+    M_WriteSmallText(LoadDef.x, LoadDef.y + LoadDef.itemheight * i, savegamestrings[i], SCN_TMP);
   end;
 end;
 
@@ -1240,7 +1240,7 @@ var
   i: integer;
 begin
   V_DrawPatch(0, 0, SCN_TMP, 'SaveLoadScreen', false);
-  M_WriteSmallText(270, 96, 'SAVE');
+  M_WriteSmallText(270, 96, 'SAVE', SCN_TMP);
 
   for i := 0 to Ord(load_end) - 1 do
   begin
@@ -1249,7 +1249,7 @@ begin
       V_DrawPatch(SaveDef.x + ARROWXOFFS, SaveDef.y + i * SaveDef.itemheight + ARROWYOFFS, SCN_TMP, p_rightarrow, false);
       V_DrawPatch(SaveDef.x + (1 + SAVESTRINGSIZE) * 5 + ARROWXOFFS, SaveDef.y + i * SaveDef.itemheight + ARROWYOFFS, SCN_TMP, p_leftarrow, false);
     end;
-    M_WriteSmallText(SaveDef.x, SaveDef.y + SaveDef.itemheight * i, savegamestrings[i]);
+    M_WriteSmallText(SaveDef.x, SaveDef.y + SaveDef.itemheight * i, savegamestrings[i], SCN_TMP);
   end;
 
   if saveStringEnter <> 0 then
@@ -1257,7 +1257,7 @@ begin
     begin
       i := M_SmallStringWidth(savegamestrings[saveSlot]);
       if (gametic div 18) mod 2 = 0 then
-        M_WriteSmallText(LoadDef.x + i, LoadDef.y + LoadDef.itemheight * saveSlot, '_');
+        M_WriteSmallText(LoadDef.x + i, LoadDef.y + LoadDef.itemheight * saveSlot, '_', SCN_TMP);
     end;
 
   M_DrawSaveLoadScreenShot(@mn_screenshotbuffer);
@@ -1464,8 +1464,8 @@ begin
   M_DrawSubHeadLine(40, 'Compatibility');
 
   dogs := GetIntegerInRange(dogs, 0, MAXPLAYERS - 1);
-  ppos := M_WriteSmallText(CompatibilityDef.x, CompatibilityDef.y + CompatibilityDef.itemheight * Ord(cmp_dogs), 'Dogs (Marine Best Friend): ');
-  M_WriteSmallWhiteText(ppos.x, ppos.y, itoa(dogs));
+  ppos := M_WriteSmallText(CompatibilityDef.x, CompatibilityDef.y + CompatibilityDef.itemheight * Ord(cmp_dogs), 'Dogs (Marine Best Friend): ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, itoa(dogs), SCN_TMP);
 end; 
 
 const
@@ -1722,8 +1722,8 @@ begin
   M_DrawHeadLine(15, 'Options');
   M_DrawSubHeadLine(40, 'Controls');
 
-  ppos := M_WriteSmallText(ControlsDef.x, ControlsDef.y + ControlsDef.itemheight * Ord(ctrl_keyboardmode), 'Keyboard preset: ');
-  M_WriteSmallWhiteText(ppos.x, ppos.y, mkeyboardmodes[M_GetKeyboardMode]);
+  ppos := M_WriteSmallText(ControlsDef.x, ControlsDef.y + ControlsDef.itemheight * Ord(ctrl_keyboardmode), 'Keyboard preset: ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, mkeyboardmodes[M_GetKeyboardMode], SCN_TMP);
 end;
 
 procedure M_DrawSound;
@@ -1740,8 +1740,8 @@ begin
   M_DrawSubHeadLine(40, 'System');
 
   M_FixScreenshotFormat;
-  ppos := M_WriteSmallText(SystemDef.x, SystemDef.y + SystemDef.itemheight * Ord(sys_screenshottype), 'Screenshot format: ');
-  M_WriteSmallWhiteText(ppos.x, ppos.y, screenshotformat);
+  ppos := M_WriteSmallText(SystemDef.x, SystemDef.y + SystemDef.itemheight * Ord(sys_screenshottype), 'Screenshot format: ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, screenshotformat, SCN_TMP);
 end;
 
 procedure M_OptionsSound(choice: integer);
@@ -1972,9 +1972,9 @@ begin
   for i := Ord(mm_newgame) to Ord(mm_quitradix) do
   begin
     if itemOn = i then
-      M_WriteBigTextOrangeCenter(y, MainMenu[i].name)
+      M_WriteBigTextOrangeCenter(y, MainMenu[i].name, SCN_TMP)
     else
-      M_WriteBigTextGrayCenter(y, MainMenu[i].name);
+      M_WriteBigTextGrayCenter(y, MainMenu[i].name, SCN_TMP);
     y := y + 14;
   end;
 end;
@@ -2067,9 +2067,9 @@ begin
   for i := Ord(opt_general) to Ord(opt_system) do
   begin
     if itemOn = i then
-      M_WriteBigTextOrangeCenter(y, OptionsMenu[i].name)
+      M_WriteBigTextOrangeCenter(y, OptionsMenu[i].name, SCN_TMP)
     else
-      M_WriteBigTextGrayCenter(y, OptionsMenu[i].name);
+      M_WriteBigTextGrayCenter(y, OptionsMenu[i].name, SCN_TMP);
     y := y + 14;
   end;
 end;
@@ -2092,9 +2092,9 @@ begin
       else
         str := str + ': OFF';
     if itemOn = i then
-      M_WriteBigTextOrangeCenter(y, str)
+      M_WriteBigTextOrangeCenter(y, str, SCN_TMP)
     else
-      M_WriteBigTextGrayCenter(y, str);
+      M_WriteBigTextGrayCenter(y, str, SCN_TMP);
     y := y + 14;
   end;
 
@@ -2131,9 +2131,9 @@ begin
   for i := 0 to Ord(optdisp_end) - 1 do
   begin
     if itemOn = i then
-      M_WriteBigTextOrangeCenter(y, OptionsDisplayMenu[i].name)
+      M_WriteBigTextOrangeCenter(y, OptionsDisplayMenu[i].name, SCN_TMP)
     else
-      M_WriteBigTextGrayCenter(y, OptionsDisplayMenu[i].name);
+      M_WriteBigTextGrayCenter(y, OptionsDisplayMenu[i].name, SCN_TMP);
     y := y + 14;
   end;
 end;
@@ -2150,13 +2150,13 @@ begin
 
   M_DrawSubHeadLine(40, 'Detail');
 
-  ppos := M_WriteSmallText(OptionsDisplayDetailDef.x, OptionsDisplayDetailDef.y + OptionsDisplayDetailDef.itemheight * Ord(od_detaillevel), 'Detail level: ');
+  ppos := M_WriteSmallText(OptionsDisplayDetailDef.x, OptionsDisplayDetailDef.y + OptionsDisplayDetailDef.itemheight * Ord(od_detaillevel), 'Detail level: ', SCN_TMP);
   {$IFDEF OPENGL}
   sprintf(stmp, '%s (%dx%dx32)', [detailStrings[detailLevel], SCREENWIDTH, SCREENHEIGHT]);
   {$ELSE}
   sprintf(stmp, '%s (%dx%dx%s)', [detailStrings[detailLevel], SCREENWIDTH, SCREENHEIGHT, colordepths[videomode = vm32bit]]);
   {$ENDIF}
-  M_WriteSmallWhiteText(ppos.x, ppos.y, stmp);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, stmp, SCN_TMP);
 end;
 
 procedure M_ChangeFullScreen(choice: integer);
@@ -2185,16 +2185,16 @@ begin
   {$IFNDEF OPENGL}
   fullscreen := fullscreen mod NUMFULLSCREEN_MODES;
   {$ENDIF}
-  ppos := M_WriteSmallText(OptionsDisplayVideoModeDef.x, OptionsDisplayVideoModeDef.y + OptionsDisplayVideoModeDef.itemheight * Ord(odm_fullscreen), 'FullScreen: ');
-  M_WriteSmallWhiteText(ppos.x, ppos.y, {$IFDEF OPENGL}yesnoStrings[fullscreen]{$ELSE}strfullscreenmodes[fullscreen]{$ENDIF});
+  ppos := M_WriteSmallText(OptionsDisplayVideoModeDef.x, OptionsDisplayVideoModeDef.y + OptionsDisplayVideoModeDef.itemheight * Ord(odm_fullscreen), 'FullScreen: ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, {$IFDEF OPENGL}yesnoStrings[fullscreen]{$ELSE}strfullscreenmodes[fullscreen]{$ENDIF}, SCN_TMP);
 
   if mdisplaymode_idx < 0 then
     mdisplaymode_idx := 0
   else if mdisplaymode_idx >= numdisplaymodes then
     mdisplaymode_idx := numdisplaymodes - 1;
-  ppos := M_WriteSmallText(OptionsDisplayVideoModeDef.x, OptionsDisplayVideoModeDef.y + OptionsDisplayVideoModeDef.itemheight * Ord(odm_screensize), 'Screen Size: ');
+  ppos := M_WriteSmallText(OptionsDisplayVideoModeDef.x, OptionsDisplayVideoModeDef.y + OptionsDisplayVideoModeDef.itemheight * Ord(odm_screensize), 'Screen Size: ', SCN_TMP);
   sprintf(stmp, '(%dx%d)', [displaymodes[mdisplaymode_idx].width, displaymodes[mdisplaymode_idx].height]);
-  M_WriteSmallWhiteText(ppos.x, ppos.y, stmp);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, stmp, SCN_TMP);
 
   M_DrawThermo(
     OptionsDisplayVideoModeDef.x, OptionsDisplayVideoModeDef.y + OptionsDisplayVideoModeDef.itemheight * (Ord(odm_screensize) + 1), 30, mdisplaymode_idx, numdisplaymodes);
@@ -2203,7 +2203,7 @@ begin
     stmp := 'No change'
   else
     sprintf(stmp, 'Set video mode to %dx%d...', [displaymodes[mdisplaymode_idx].width, displaymodes[mdisplaymode_idx].height]);
-  M_WriteSmallText(OptionsDisplayVideoModeDef.x, OptionsDisplayVideoModeDef.y + OptionsDisplayVideoModeDef.itemheight * Ord(odm_setvideomode), stmp);
+  M_WriteSmallText(OptionsDisplayVideoModeDef.x, OptionsDisplayVideoModeDef.y + OptionsDisplayVideoModeDef.itemheight * Ord(odm_setvideomode), stmp, SCN_TMP);
 end;
 
 procedure M_SwitchShadeMode(choice: integer);
@@ -2223,8 +2223,8 @@ begin
 
   M_DrawSubHeadLine(40, 'Appearence');
 
-  ppos := M_WriteSmallText(OptionsDisplayAppearanceDef.x, OptionsDisplayAppearanceDef.y + OptionsDisplayAppearanceDef.itemheight * Ord(od_shademenubackground), 'Menu background: ');
-  M_WriteSmallWhiteText(ppos.x, ppos.y, menubackrounds[shademenubackground mod 3]);
+  ppos := M_WriteSmallText(OptionsDisplayAppearanceDef.x, OptionsDisplayAppearanceDef.y + OptionsDisplayAppearanceDef.itemheight * Ord(od_shademenubackground), 'Menu background: ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, menubackrounds[shademenubackground mod 3], SCN_TMP);
 end;
 
 procedure M_DrawDisplayAutomapOptions;
@@ -2247,8 +2247,8 @@ begin
   M_DrawSubHeadLine(40, 'Aspect Ratio');
 
   aspectratioidx := _nearest_aspect_index;
-  ppos := M_WriteSmallText(OptionsDisplayAspectRatioDef.x, OptionsDisplayAspectRatioDef.y + OptionsDisplayAspectRatioDef.itemheight * Ord(oda_forceaspectratio), 'Force Aspect Ratio: ');
-  M_WriteSmallWhiteText(ppos.x, ppos.y, straspectratios[_nearest_aspect_index]);
+  ppos := M_WriteSmallText(OptionsDisplayAspectRatioDef.x, OptionsDisplayAspectRatioDef.y + OptionsDisplayAspectRatioDef.itemheight * Ord(oda_forceaspectratio), 'Force Aspect Ratio: ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, straspectratios[_nearest_aspect_index], SCN_TMP);
 end;
 
 procedure M_DrawOptionsDisplayCamera;
@@ -2259,12 +2259,12 @@ begin
   M_DrawSubHeadLine(40, 'Camera');
 
   chasecamera_viewxy := ibetween(chasecamera_viewxy, CHASECAMERA_XY_MIN, CHASECAMERA_XY_MAX);
-  ppos := M_WriteSmallText(OptionsDisplayCameraDef.x, OptionsDisplayCameraDef.y + OptionsDisplayCameraDef.itemheight * Ord(odc_chasecameraxy), 'Chase Camera XY postion: ');
-  M_WriteSmallWhiteText(ppos.x, ppos.y, itoa(chasecamera_viewxy));
+  ppos := M_WriteSmallText(OptionsDisplayCameraDef.x, OptionsDisplayCameraDef.y + OptionsDisplayCameraDef.itemheight * Ord(odc_chasecameraxy), 'Chase Camera XY postion: ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, itoa(chasecamera_viewxy), SCN_TMP);
 
   chasecamera_viewz := ibetween(chasecamera_viewz, CHASECAMERA_Z_MIN, CHASECAMERA_Z_MAX);
-  ppos := M_WriteSmallText(OptionsDisplayCameraDef.x, OptionsDisplayCameraDef.y + OptionsDisplayCameraDef.itemheight * Ord(odc_chasecameraz), 'Chase Camera Z postion: ');
-  M_WriteSmallWhiteText(ppos.x, ppos.y, itoa(chasecamera_viewz));
+  ppos := M_WriteSmallText(OptionsDisplayCameraDef.x, OptionsDisplayCameraDef.y + OptionsDisplayCameraDef.itemheight * Ord(odc_chasecameraz), 'Chase Camera Z postion: ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, itoa(chasecamera_viewz), SCN_TMP);
 
   M_DrawThermo(
     OptionsDisplayCameraDef.x, OptionsDisplayCameraDef.y + OptionsDisplayCameraDef.itemheight * (Ord(odc_chasecameraxy) + 1), 21, (chasecamera_viewxy - CHASECAMERA_XY_MIN) div 8, (CHASECAMERA_XY_MAX - CHASECAMERA_XY_MIN) div 8 + 1);
@@ -2324,16 +2324,16 @@ begin
   r_lightmapfadeoutfunc := ibetween(r_lightmapfadeoutfunc, 0, NUMLIGHTMAPFADEOUTFUNCS - 1);
   lightmapcolorintensityidx := (lightmapcolorintensity - 32) div 8;
 
-  ppos := M_WriteSmallText(OptionsLightmapDef.x, OptionsLightmapDef.y + OptionsLightmapDef.itemheight * Ord(ol_lightmapfunc), 'Fadeout function: ');
-  M_WriteSmallWhiteText(ppos.x, ppos.y, strlightmapfadefunc[r_lightmapfadeoutfunc]);
+  ppos := M_WriteSmallText(OptionsLightmapDef.x, OptionsLightmapDef.y + OptionsLightmapDef.itemheight * Ord(ol_lightmapfunc), 'Fadeout function: ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, strlightmapfadefunc[r_lightmapfadeoutfunc], SCN_TMP);
 
-  ppos := M_WriteSmallText(OptionsLightmapDef.x, OptionsLightmapDef.y + OptionsLightmapDef.itemheight * Ord(ol_colorintensity), 'Color intensity: ');
-  M_WriteSmallWhiteText(ppos.x, ppos.y, itoa((lightmapcolorintensity * 100) div DEFLMCOLORSENSITIVITY) + '%');
+  ppos := M_WriteSmallText(OptionsLightmapDef.x, OptionsLightmapDef.y + OptionsLightmapDef.itemheight * Ord(ol_colorintensity), 'Color intensity: ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, itoa((lightmapcolorintensity * 100) div DEFLMCOLORSENSITIVITY) + '%', SCN_TMP);
   M_DrawThermo(
     OptionsLightmapDef.x, OptionsLightmapDef.y + OptionsLightmapDef.itemheight * (Ord(ol_colorintensity) + 1), 21, lightmapcolorintensityidx, (MAXLMCOLORSENSITIVITY - MINLMCOLORSENSITIVITY) div 8 + 1);
 
-  ppos := M_WriteSmallText(OptionsLightmapDef.x, OptionsLightmapDef.y + OptionsLightmapDef.itemheight * Ord(ol_lightwidthfactor), 'Distance from source: ');
-  M_WriteSmallWhiteText(ppos.x, ppos.y, itoa((lightwidthfactor * 100) div DEFLIGHTWIDTHFACTOR) + '%');
+  ppos := M_WriteSmallText(OptionsLightmapDef.x, OptionsLightmapDef.y + OptionsLightmapDef.itemheight * Ord(ol_lightwidthfactor), 'Distance from source: ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, itoa((lightwidthfactor * 100) div DEFLIGHTWIDTHFACTOR) + '%', SCN_TMP);
   M_DrawThermo(
     OptionsLightmapDef.x, OptionsLightmapDef.y + OptionsLightmapDef.itemheight * (Ord(ol_lightwidthfactor) + 1), 21, lightwidthfactor, MAXLIGHTWIDTHFACTOR + 1);
 end;
@@ -2347,8 +2347,8 @@ begin
   M_DrawSubHeadLine(40, 'True Color Options');
 
   ppos := M_WriteSmallText(OptionsDisplay32bitDef.x, OptionsDisplay32bitDef.y + OptionsDisplay32bitDef.itemheight * Ord(od_flatfiltering),
-    'Flat filtering: ');
-  M_WriteSmallWhiteText(ppos.x, ppos.y, flatfilteringstrings[extremeflatfiltering]);
+    'Flat filtering: ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, flatfilteringstrings[extremeflatfiltering], SCN_TMP);
 end;
 
 {$IFDEF OPENGL}
@@ -3346,7 +3346,7 @@ begin
       else if messageString[i] = #10 then
       begin
         x := (320 - M_SmallStringWidth(str)) div 2;
-        M_WriteSmallText(x, y, str);
+        M_WriteSmallText(x, y, str, SCN_TMP);
         str := '';
       end
       else
@@ -3356,7 +3356,7 @@ begin
     begin
       x := (320 - M_SmallStringWidth(str)) div 2;
       y := y + hu_font[0].height;
-      M_WriteSmallText(x, y, str);
+      M_WriteSmallText(x, y, str, SCN_TMP);
     end;
 
     M_FinishUpdate(mheight);
@@ -3387,11 +3387,11 @@ begin
         delete(str, 1, 1);
         if currentMenu.menuitems[i].pBoolVal <> nil then
         begin
-          ppos := M_WriteSmallText(x, y, str + ': ');
-          M_WriteSmallWhiteText(ppos.x, ppos.y, yesnoStrings[currentMenu.menuitems[i].pBoolVal^]);
+          ppos := M_WriteSmallText(x, y, str + ': ', SCN_TMP);
+          M_WriteSmallWhiteText(ppos.x, ppos.y, yesnoStrings[currentMenu.menuitems[i].pBoolVal^], SCN_TMP);
         end
         else
-          M_WriteSmallText(x, y, str);
+          M_WriteSmallText(x, y, str, SCN_TMP);
       end;
     end;
     y := y + currentMenu.itemheight;
@@ -3401,13 +3401,13 @@ begin
     currentMenu.drawproc; // call Draw routine
 
   if currentMenu.leftMenu <> nil then
-    M_WriteSmallWhiteText(5, 44, '<<');
+    M_WriteSmallWhiteText(5, 44, '<<', SCN_TMP);
 
   if currentMenu.rightMenu <> nil then
   begin
     rstr := '>>';
     rlen := M_SmallStringWidth(rstr);
-    M_WriteSmallWhiteText(315 - rlen, 44, rstr);
+    M_WriteSmallWhiteText(315 - rlen, 44, rstr, SCN_TMP);
   end;
 
   if currentMenu.flags and FLG_MN_DRAWITEMON <> 0 then
