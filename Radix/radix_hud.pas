@@ -44,13 +44,17 @@ uses
   d_delphi,
   doomdef,
   am_map,
+  d_net,
   d_player,
   g_game,
   mt_utils,
   mn_font,
+  m_fixed,
   p_tick,
+  p_user,
   r_defs,
   r_main,
+  r_data,
   v_data,
   v_video,
   w_wad,
@@ -60,6 +64,7 @@ const
   STATUSBAR_HEIGHT = 41;
 
 var
+  hud_speed_factor: float;
   cockpit: Ppatch_t;
   statusbarimage: Ppatch_t;
   weaponimages: array[0..6] of Ppatch_t;
@@ -77,6 +82,7 @@ var
   i: integer;
   stmp: string;
 begin
+  hud_speed_factor := 15 / sqrt(2 * sqr(MAXMOVETHRESHOLD / FRACUNIT));
   cockpit := W_CacheLumpName('COCKPIT', PU_STATIC);
   statusbarimage := W_CacheLumpName('StatusBarImage', PU_STATIC);
   for i := 0 to 6 do
@@ -108,7 +114,44 @@ begin
     M_WriteSmallText(x + 14, y, IntToStrzFill(2, secs mod 60));
   end
   else
-    M_WriteSmallText(x, y, 'SUCKS'); // JVAL 20200316 - SUCKS easter egg 
+    M_WriteSmallText(x, y, 'SUCKS'); // JVAL 20200316 - SUCKS easter egg
+end;
+
+procedure RX_HudDrawSpeedIndicator(const x, y: integer; const color: byte);
+var
+  speed: float;
+  cnt: integer;
+  dest: PByte;
+  pitch: integer;
+  xpos: integer;
+begin
+  speed := sqrt(sqr(hud_player.mo.momx / FRACUNIT) + sqr(hud_player.mo.momy / FRACUNIT) + sqr(hud_player.mo.momz / FRACUNIT));
+
+  cnt := GetIntegerInRange(15 - round(speed * hud_speed_factor), 0, 15);
+  if cnt = 0 then
+    exit;
+
+  xpos := x;
+  while cnt > 0 do
+  begin
+    pitch := V_GetScreenWidth(SCN_HUD);
+    dest := @screens[SCN_HUD][pitch * y + xpos];
+    dest^ := color;
+    inc(dest, pitch);
+    dest^ := color;
+    inc(dest, pitch);
+    dest^ := color;
+    inc(dest, pitch);
+    dest^ := color;
+    inc(dest, pitch);
+    dest^ := color;
+    inc(dest, pitch);
+    dest^ := color;
+    inc(dest, pitch);
+    dest^ := color;
+    dec(cnt);
+    dec(xpos, 2);
+  end;
 end;
 
 procedure RX_HudDrawBar(const x, y: integer; const bar: Ppatch_t; const pct: integer);
@@ -122,19 +165,19 @@ begin
   if pct <= 0 then
     exit;
 
-  pitch := V_GetScreenWidth(SCN_TMP);
-  b := screens[SCN_TMP][pitch * y + x]; // JVAL: 20200316 - Keep background color
-  V_DrawPatch(x, y, SCN_TMP, bar, false);
+  pitch := V_GetScreenWidth(SCN_HUD);
+  b := screens[SCN_HUD][pitch * y + x]; // JVAL: 20200316 - Keep background color
+  V_DrawPatch(x, y, SCN_HUD, bar, false);
 
   if pct >= 100 then
     exit;
 
-  // Fill with background color: 
+  // Fill with background color:
   xx := bar.width * pct div 100;
 
   for j := y to y + bar.height - 1 do
   begin
-    dest := @screens[SCN_TMP][j * pitch + x + xx];
+    dest := @screens[SCN_HUD][j * pitch + x + xx];
     for i := xx to bar.width - 1 do
     begin
       dest^ := b;
@@ -150,7 +193,7 @@ var
   stmp: string;
 begin
   // Draw statusbar
-  V_DrawPatch(0, 200 - STATUSBAR_HEIGHT, SCN_TMP, statusbarimage, false);
+  V_DrawPatch(0, 200 - STATUSBAR_HEIGHT, SCN_HUD, statusbarimage, false);
 
   // Draw ready weapon
   case Ord(hud_player.readyweapon) of
@@ -163,7 +206,7 @@ begin
   else
     p := weaponimages[6];
   end;
-  V_DrawPatch(5, 200 - STATUSBAR_HEIGHT + 4, SCN_TMP, p, false);
+  V_DrawPatch(5, 200 - STATUSBAR_HEIGHT + 4, SCN_HUD, p, false);
 
   // Draw weapon indicators
   for i := 0 to 6 do
@@ -174,7 +217,7 @@ begin
       p := WeaponNumOn[i]
     else
       p := WeaponNumOff[i];
-    V_DrawPatch(6 + i * 8, 200 - STATUSBAR_HEIGHT + 31, SCN_TMP, p, false);
+    V_DrawPatch(6 + i * 8, 200 - STATUSBAR_HEIGHT + 31, SCN_HUD, p, false);
   end;
 
   // Draw kills
@@ -191,7 +234,7 @@ begin
   M_WriteSmallText(227, 200 - STATUSBAR_HEIGHT + 30, stmp);
 
   // Draw threat indicator
-  V_DrawPatch(290, 200 - STATUSBAR_HEIGHT + 16, SCN_TMP, treatimages[hud_player.threat], false);
+  V_DrawPatch(290, 200 - STATUSBAR_HEIGHT + 16, SCN_HUD, treatimages[hud_player.threat], false);
 
   // Draw armor, shield and energy bars
   RX_HudDrawBar(189, 200 - STATUSBAR_HEIGHT + 7, ArmourBar, hud_player.armorpoints);
@@ -200,6 +243,9 @@ begin
 
   // Draw time
   RX_HudDrawTime(93, 200 - STATUSBAR_HEIGHT + 30);
+
+  // Draw speed indicator
+  RX_HudDrawSpeedIndicator(155, 200 - STATUSBAR_HEIGHT + 30, aprox_black);
 end;
 
 procedure RX_HudDrawerCockpit;
@@ -209,7 +255,7 @@ var
   stmp: string;
 begin
   // Draw cockpit
-  V_DrawPatchFullScreenTMP320x200(cockpit);
+  V_DrawPatch(0, 0, SCN_HUD, cockpit, false);
 
   // Draw ready weapon
   case Ord(hud_player.readyweapon) of
@@ -222,7 +268,7 @@ begin
   else
     p := weaponimages[6];
   end;
-  V_DrawPatch(23, 142, SCN_TMP, p, false);
+  V_DrawPatch(23, 142, SCN_HUD, p, false);
 
   // Draw weapon indicators
   for i := 0 to 6 do
@@ -233,7 +279,7 @@ begin
       p := WeaponNumOn[i]
     else
       continue; // Already in cockpit patch
-    V_DrawPatchStencil(26 + i * 8, 162, SCN_TMP, p, false, 0);
+    V_DrawPatchStencil(26 + i * 8, 162, SCN_HUD, p, false, 0);
   end;
 
   // Draw kills
@@ -250,7 +296,7 @@ begin
   M_WriteSmallText(168, 141, stmp);
 
   // Draw threat indicator
-  V_DrawPatch(147, 23, SCN_TMP, treatimages[hud_player.threat], false);
+  V_DrawPatch(147, 23, SCN_HUD, treatimages[hud_player.threat], false);
 
   // Draw armor, shield and energy bars
   RX_HudDrawBar(202, 156, ArmourBar, hud_player.armorpoints);
@@ -259,6 +305,9 @@ begin
 
   // Draw time
   RX_HudDrawTime(107, 183);
+
+  // Draw speed indicator
+  RX_HudDrawSpeedIndicator(136, 148, aprox_black);
 end;
 
 procedure RX_HudDrawer;
@@ -266,16 +315,19 @@ begin
   if (screenblocks > 11) and (amstate <> am_only) then
     exit;
 
-  hud_player := @players[consoleplayer];
+  if firstinterpolation then
+  begin
+    hud_player := @players[consoleplayer];
 
-  MT_ZeroMemory(screens[SCN_TMP], 320 * 200);
+    MT_ZeroMemory(screens[SCN_HUD], 320 * 200);
 
-  if (screenblocks = 11) and (amstate <> am_only) then
-    RX_HudDrawerCockpit
-  else
-    RX_HudDrawerStatusbar;
-
-  V_CopyRectTransparent(0, 0, SCN_TMP, 320, 200, 0, 0, SCN_FG, true);
+    if (screenblocks = 11) and (amstate <> am_only) then
+      RX_HudDrawerCockpit
+    else
+      RX_HudDrawerStatusbar;
+  end;
+  
+  V_CopyRectTransparent(0, 0, SCN_HUD, 320, 200, 0, 0, SCN_FG, true);
 end;
 
 end.

@@ -37,6 +37,7 @@ unit p_user;
 interface
 
 uses
+  m_fixed,
   p_mobj_h,
   d_player;
 
@@ -56,7 +57,6 @@ implementation
 
 uses
   d_delphi,
-  m_fixed,
   m_rnd,
   tables,
   d_ticcmd,
