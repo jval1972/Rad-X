@@ -63,8 +63,14 @@ uses
 const
   STATUSBAR_HEIGHT = 41;
 
+type
+  speedindicatorcolumn_t = packed array[0..6] of byte;
+  Pspeedindicatorcolumn_t = ^speedindicatorcolumn_t;
+
 var
   hud_speed_factor: float;
+  cockpitspeed: speedindicatorcolumn_t;
+  statusbarspeed: speedindicatorcolumn_t;
   cockpit: Ppatch_t;
   statusbarimage: Ppatch_t;
   weaponimages: array[0..6] of Ppatch_t;
@@ -83,6 +89,20 @@ var
   stmp: string;
 begin
   hud_speed_factor := 15 / sqrt(2 * sqr(MAXMOVETHRESHOLD / FRACUNIT));
+  cockpitspeed[0] := aprox_black;
+  cockpitspeed[1] := aprox_black;
+  cockpitspeed[2] := aprox_black;
+  cockpitspeed[3] := aprox_black;
+  cockpitspeed[4] := aprox_black;
+  cockpitspeed[5] := aprox_black;
+  cockpitspeed[6] := aprox_black;
+  statusbarspeed[0] := 244;
+  statusbarspeed[1] := 241;
+  statusbarspeed[2] := 236;
+  statusbarspeed[3] := 239;
+  statusbarspeed[4] := 242;
+  statusbarspeed[5] := 244;
+  statusbarspeed[6] := 247;
   cockpit := W_CacheLumpName('COCKPIT', PU_STATIC);
   statusbarimage := W_CacheLumpName('StatusBarImage', PU_STATIC);
   for i := 0 to 6 do
@@ -117,13 +137,14 @@ begin
     M_WriteSmallText(x, y, 'SUCKS', SCN_HUD); // JVAL 20200316 - SUCKS easter egg
 end;
 
-procedure RX_HudDrawSpeedIndicator(const x, y: integer; const color: byte);
+procedure RX_HudDrawSpeedIndicator(const x, y: integer; const column: Pspeedindicatorcolumn_t; const up: boolean);
 var
   speed: float;
   cnt: integer;
   dest: PByte;
   pitch: integer;
   xpos: integer;
+  xadd: integer;
 begin
   speed := sqrt(sqr(hud_player.mo.momx / FRACUNIT) + sqr(hud_player.mo.momy / FRACUNIT) + sqr(hud_player.mo.momz / FRACUNIT));
 
@@ -132,25 +153,32 @@ begin
     exit;
 
   xpos := x;
+  if up then
+  begin
+    xadd := 2;
+    cnt := 15 - cnt;
+  end
+  else
+    xadd := -2;
   while cnt > 0 do
   begin
     pitch := V_GetScreenWidth(SCN_HUD);
     dest := @screens[SCN_HUD][pitch * y + xpos];
-    dest^ := color;
+    dest^ := column[0];
     inc(dest, pitch);
-    dest^ := color;
+    dest^ := column[1];
     inc(dest, pitch);
-    dest^ := color;
+    dest^ := column[2];
     inc(dest, pitch);
-    dest^ := color;
+    dest^ := column[3];
     inc(dest, pitch);
-    dest^ := color;
+    dest^ := column[4];
     inc(dest, pitch);
-    dest^ := color;
+    dest^ := column[5];
     inc(dest, pitch);
-    dest^ := color;
+    dest^ := column[6];
+    xpos := xpos + xadd;
     dec(cnt);
-    dec(xpos, 2);
   end;
 end;
 
@@ -245,7 +273,7 @@ begin
   RX_HudDrawTime(93, 200 - STATUSBAR_HEIGHT + 30);
 
   // Draw speed indicator
-  RX_HudDrawSpeedIndicator(155, 200 - STATUSBAR_HEIGHT + 30, aprox_black);
+  RX_HudDrawSpeedIndicator(128, 200 - STATUSBAR_HEIGHT + 30, @statusbarspeed, true);
 end;
 
 procedure RX_HudDrawerCockpit;
@@ -307,7 +335,7 @@ begin
   RX_HudDrawTime(107, 183);
 
   // Draw speed indicator
-  RX_HudDrawSpeedIndicator(136, 148, aprox_black);
+  RX_HudDrawSpeedIndicator(136, 148, @cockpitspeed, false);
 end;
 
 procedure RX_HudDrawer;
