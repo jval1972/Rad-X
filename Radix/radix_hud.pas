@@ -42,11 +42,13 @@ implementation
 
 uses
   d_delphi,
+  doomdef,
   am_map,
   d_player,
   g_game,
   mt_utils,
   mn_font,
+  p_tick,
   r_defs,
   r_main,
   v_data,
@@ -93,6 +95,20 @@ begin
   ArmourBar := W_CacheLumpName('ArmourBar', PU_STATIC);
   ShieldBar := W_CacheLumpName('ShieldBar', PU_STATIC);
   EnergyBar := W_CacheLumpName('EnergyBar', PU_STATIC);
+end;
+
+procedure RX_HudDrawTime(const x, y: integer);
+var
+  secs: integer;
+begin
+  if leveltime < 99 * 60 + 59 then
+  begin
+    secs := leveltime div TICRATE;
+    M_WriteSmallText(x, y, IntToStrzFill(2, secs div 60) + ':');
+    M_WriteSmallText(x + 14, y, IntToStrzFill(2, secs mod 60));
+  end
+  else
+    M_WriteSmallText(x, y, 'SUCKS');
 end;
 
 procedure RX_HudDrawBar(const x, y: integer; const bar: Ppatch_t; const pct: integer);
@@ -180,6 +196,9 @@ begin
   RX_HudDrawBar(189, 200 - STATUSBAR_HEIGHT + 7, ArmourBar, hud_player.armorpoints);
   RX_HudDrawBar(189, 200 - STATUSBAR_HEIGHT + 14, ShieldBar, hud_player.shield);
   RX_HudDrawBar(189, 200 - STATUSBAR_HEIGHT + 21, EnergyBar, hud_player.energy);
+
+  // Draw time
+  RX_HudDrawTime(93, 200 - STATUSBAR_HEIGHT + 30);
 end;
 
 procedure RX_HudDrawerCockpit;
@@ -236,6 +255,9 @@ begin
   RX_HudDrawBar(202, 156, ArmourBar, hud_player.armorpoints);
   RX_HudDrawBar(202, 171, ShieldBar, hud_player.shield);
   RX_HudDrawBar(233, 186, EnergyBar, hud_player.energy);
+
+  // Draw time
+  RX_HudDrawTime(107, 183);
 end;
 
 procedure RX_HudDrawer;
