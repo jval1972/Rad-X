@@ -36,6 +36,8 @@ interface
 
 procedure RX_InitRadixHud;
 
+procedure RX_ShutDownRadixHud;
+
 procedure RX_HudDrawer;
 
 implementation
@@ -50,6 +52,11 @@ uses
   mt_utils,
   mn_font,
   m_fixed,
+  tables,
+  p_local,
+  p_maputl,
+  p_mobj_h,
+  p_setup,
   p_tick,
   p_user,
   r_defs,
@@ -69,6 +76,7 @@ type
 
 var
   hud_speed_factor: float;
+  radar_list: TDNumberList;
   cockpitspeed: speedindicatorcolumn_t;
   statusbarspeed: speedindicatorcolumn_t;
   cockpit: Ppatch_t;
@@ -89,6 +97,7 @@ var
   stmp: string;
 begin
   hud_speed_factor := 15 / sqrt(2 * sqr(MAXMOVETHRESHOLD / FRACUNIT));
+  radar_list := TDNumberList.Create;
   cockpitspeed[0] := aprox_black;
   cockpitspeed[1] := aprox_black;
   cockpitspeed[2] := aprox_black;
@@ -121,6 +130,11 @@ begin
   ArmourBar := W_CacheLumpName('ArmourBar', PU_STATIC);
   ShieldBar := W_CacheLumpName('ShieldBar', PU_STATIC);
   EnergyBar := W_CacheLumpName('EnergyBar', PU_STATIC);
+end;
+
+procedure RX_ShutDownRadixHud;
+begin
+  radar_list.Free;
 end;
 
 procedure RX_HudDrawTime(const x, y: integer);
@@ -179,6 +193,75 @@ begin
     dest^ := column[6];
     xpos := xpos + xadd;
     dec(cnt);
+  end;
+end;
+
+function PIT_AddRadarThing(thing: Pmobj_t): boolean;
+begin
+  if thing.flags and MF_COUNTKILL <> 0 then
+    radar_list.Add(integer(thing));
+  result := true;
+end;
+
+procedure RX_DrawRadar(const x, y: integer; const range: integer);
+const
+  RADAR_SHIFT_BITS = 8;
+  RADAR_SHIFT_UNIT = 1 shl RADAR_SHIFT_BITS;
+  RADAR_RANGE_FACTOR = 64 * (1 shl (FRACBITS - RADAR_SHIFT_BITS));
+var
+  r: fixed_t;
+  xl: integer;
+  xh: integer;
+  yl: integer;
+  yh: integer;
+  bx: integer;
+  by: integer;
+  i: integer;
+  mo: Pmobj_t;
+  px, py: integer;
+  xpos, ypos: integer;
+  pitch: integer;
+  sqdist: integer;
+  maxsqdist: integer;
+  tmp: fixed_t;
+  an: angle_t;
+  asin, acos: fixed_t;
+begin
+  r := range * 64 * FRACUNIT;
+  xl := MapBlockInt(hud_player.mo.x - r - bmaporgx);
+  xh := MapBlockInt(hud_player.mo.x + r - bmaporgx);
+  yl := MapBlockInt(hud_player.mo.y - r - bmaporgy);
+  yh := MapBlockInt(hud_player.mo.y + r - bmaporgy);
+
+  radar_list.FastClear;
+  for bx := xl to xh do
+    for by := yl to yh do
+      P_BlockThingsIterator(bx, by, PIT_AddRadarThing);
+
+  pitch := V_GetScreenWidth(SCN_HUD);
+  screens[SCN_HUD][pitch * y + x] := aprox_blue;
+
+  an := (ANG90 - hud_player.mo.angle) div FRACUNIT;
+  asin := fixedsine[an];
+  acos := fixedcosine[an];
+
+  px := hud_player.mo.x div RADAR_SHIFT_UNIT;
+  py := hud_player.mo.y div RADAR_SHIFT_UNIT;
+  maxsqdist := range * range;
+  for i := 0 to radar_list.Count - 1 do
+  begin
+    mo := Pmobj_t(radar_list.Numbers[i]);
+    xpos := (px - mo.x div RADAR_SHIFT_UNIT) div RADAR_RANGE_FACTOR;
+    ypos := (py - mo.y div RADAR_SHIFT_UNIT) div RADAR_RANGE_FACTOR;
+    sqdist := xpos * xpos + ypos * ypos;
+    if sqdist <= maxsqdist then
+    begin
+      tmp := FixedMul(ypos, asin) - FixedMul(xpos, acos);
+      ypos := FixedMul(xpos, asin) + FixedMul(ypos, acos);
+      xpos := x + tmp;
+      ypos := y + ypos;
+      screens[SCN_HUD][pitch * ypos + xpos] := aprox_green;
+    end;
   end;
 end;
 
@@ -274,6 +357,9 @@ begin
 
   // Draw speed indicator
   RX_HudDrawSpeedIndicator(128, 200 - STATUSBAR_HEIGHT + 30, @statusbarspeed, true);
+
+  // Draw radar
+  RX_DrawRadar(269, 200 - STATUSBAR_HEIGHT + 19, 12);
 end;
 
 procedure RX_HudDrawerCockpit;
@@ -336,6 +422,9 @@ begin
 
   // Draw speed indicator
   RX_HudDrawSpeedIndicator(136, 148, @cockpitspeed, false);
+
+  // Draw radar
+  RX_DrawRadar(163, 171, 15);
 end;
 
 procedure RX_HudDrawer;

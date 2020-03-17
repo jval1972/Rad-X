@@ -119,6 +119,8 @@ var
   flats: PflatPArray;
   aprox_black: byte = 63;
   aprox_red: byte = 234;
+  aprox_green: byte = 112;
+  aprox_blue: byte = 156;
 
 implementation
 
@@ -1062,6 +1064,8 @@ begin
 
   aprox_black := V_FindAproxColorIndex(@cpal, $0, 1, 255);
   aprox_red := V_FindAproxColorIndex(@cpal, $FF0000, 1, 255);
+  aprox_green := V_FindAproxColorIndex(@cpal, $00FF00, 1, 255);
+  aprox_blue := V_FindAproxColorIndex(@cpal, $80, 1, 255);
 
   Z_ChangeTag(palette, PU_CACHE);
 
