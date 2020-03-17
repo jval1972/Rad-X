@@ -251,8 +251,18 @@ begin
   for i := 0 to radar_list.Count - 1 do
   begin
     mo := Pmobj_t(radar_list.Numbers[i]);
-    xpos := (px - mo.x div RADAR_SHIFT_UNIT) div RADAR_RANGE_FACTOR;
-    ypos := (py - mo.y div RADAR_SHIFT_UNIT) div RADAR_RANGE_FACTOR;
+    xpos := (px - mo.x div RADAR_SHIFT_UNIT);
+    if xpos < 0 then
+      xpos := xpos - RADAR_RANGE_FACTOR div 2
+     else
+      xpos := xpos + RADAR_RANGE_FACTOR div 2;
+    xpos := xpos div RADAR_RANGE_FACTOR;
+    ypos := (py - mo.y div RADAR_SHIFT_UNIT);
+    if ypos < 0 then
+      ypos := ypos - RADAR_RANGE_FACTOR div 2
+    else
+      ypos := ypos + RADAR_RANGE_FACTOR div 2;
+    ypos := ypos div RADAR_RANGE_FACTOR;
     sqdist := xpos * xpos + ypos * ypos;
     if sqdist <= maxsqdist then
     begin
