@@ -37,11 +37,8 @@ uses
   r_main;
 
 // Column drawers
-procedure R_DrawColumnLowest;
-procedure R_DrawColumnLow;
 procedure R_DrawColumnMedium;
 procedure R_DrawColumnHi;
-procedure R_DrawColumnUltra;
 
 procedure R_DrawColumnBase32;
 
@@ -93,106 +90,6 @@ uses
 // Thus a special case loop for very fast rendering can
 //  be used. It has also been used with Wolfenstein 3D.
 //
-procedure R_DrawColumnLowest;
-var
-  count: integer;
-  i: integer;
-  dest: PByte;
-  frac: fixed_t;
-  fracstep: fixed_t;
-  swidth: integer;
-  buf: twobytes_t;
-begin
-  if odd(dc_x) then
-    exit;
-
-  count := (dc_yh - dc_yl) div 3;
-
-  if count < 0 then
-    exit;
-
-  dest := @((ylookup[dc_yl]^)[columnofs[dc_x]]);
-
-  frac := dc_texturemid + (dc_yl - centery) * dc_iscale;
-  fracstep := 3 * dc_iscale;
-  swidth := SCREENWIDTH;
-
-  for i := 0 to count - 1 do
-  begin
-    buf.byte1 := dc_colormap[dc_source[(LongWord(frac) shr FRACBITS) and 127]];
-    buf.byte2 := buf.byte1;
-
-    PWord(dest)^ := Word(buf);
-    inc(dest, swidth);
-
-    PWord(dest)^ := Word(buf);
-    inc(dest, swidth);
-
-    PWord(dest)^ := Word(buf);
-    inc(dest, swidth);
-
-    inc(frac, fracstep);
-  end;
-
-  count := (dc_yh - dc_yl) mod 3;
-  for i := 0 to count do
-  begin
-    buf.byte1 := dc_colormap[dc_source[(LongWord(frac) shr FRACBITS) and 127]];
-    buf.byte2 := buf.byte1;
-    PWord(dest)^ := Word(buf);
-    inc(dest, swidth);
-
-    inc(frac, dc_iscale);
-  end;
-end;
-
-procedure R_DrawColumnLow;
-var
-  count: integer;
-  i: integer;
-  dest: PByte;
-  bdest: byte;
-  frac: fixed_t;
-  fracstep: fixed_t;
-  swidth: integer;
-begin
-  count := (dc_yh - dc_yl) div 3;
-
-  if count < 0 then
-    exit;
-
-  dest := @((ylookup[dc_yl]^)[columnofs[dc_x]]);
-
-  frac := dc_texturemid + (dc_yl - centery) * dc_iscale;
-  fracstep := 3 * dc_iscale;
-  swidth := SCREENWIDTH;
-
-  for i := 0 to count - 1 do
-  begin
-    bdest := dc_colormap[dc_source[(LongWord(frac) shr FRACBITS) and 127]];
-
-    dest^ := bdest;
-    inc(dest, swidth);
-
-    dest^ := bdest;
-    inc(dest, swidth);
-
-    dest^ := bdest;
-    inc(dest, swidth);
-
-    inc(frac, fracstep);
-  end;
-
-  count := (dc_yh - dc_yl) mod 3;
-  for i := 0 to count do
-  begin
-    dest^ := dc_colormap[dc_source[(LongWord(frac) shr FRACBITS) and 127]];
-    inc(dest, swidth);
-
-    inc(frac, dc_iscale);
-  end;
-end;
-
 procedure R_DrawColumnMedium;
 var
   count: integer;
@@ -431,7 +328,7 @@ begin
       {$I R_DrawColumnHi_SmallStepLoop.inc}
       end;
     end
-    else               
+    else
     begin
       {$DEFINE INVERSECOLORMAPS}
       {$UNDEF MASKEDCOLUMN}
@@ -441,66 +338,6 @@ begin
       {$I R_DrawColumnHi_SmallStepLoop.inc}
       end;
     end;
-  end;
-end;
-
-procedure R_DrawColumnUltra;
-var
-  count: integer;
-  destl: PLongWord;
-  frac: fixed_t;
-  fracstep: fixed_t;
-  fraclimit: fixed_t;
-  cfrac2: fixed_t;
-  spot: integer;
-  swidth: integer;
-
-// For inline color averaging
-  r1, g1, b1: byte;
-  r2, g2, b2: byte;
-  c, c1, c2, r, g, b: LongWord;
-  factor1: fixed_t;
-  factor2: fixed_t;
-  lfactor: integer;
-  and_mask: integer;
-  bf_r: PIntegerArray;
-  bf_g: PIntegerArray;
-  bf_b: PIntegerArray;
-begin
-
-  count := dc_yh - dc_yl;
-
-  if count < 0 then
-    exit;
-
-  destl := @((ylookupl[dc_yl]^)[columnofs[dc_x]]);
-
-  fracstep := dc_iscale;
-  frac := dc_texturemid + (dc_yl - centery) * fracstep;
-
-  if dc_texturefactorbits > 0 then
-  begin
-    fracstep := fracstep * (1 shl dc_texturefactorbits);
-    frac := frac * (1 shl dc_texturefactorbits);
-    and_mask := 128 * (1 shl dc_texturefactorbits) - 1;
-  end
-  else
-    and_mask := 127;
-
-  swidth := SCREENWIDTH32PITCH;
-  lfactor := dc_lightlevel;
-  if lfactor >= 0 then
-  begin
-    R_GetPrecalc32Tables(lfactor, bf_r, bf_g, bf_b);
-    {$UNDEF INVERSECOLORMAPS}
-    {$UNDEF MASKEDCOLUMN}
-    {$I R_DrawColumnUltra.inc}
-  end
-  else
-  begin
-    {$DEFINE INVERSECOLORMAPS}
-    {$UNDEF MASKEDCOLUMN}
-    {$I R_DrawColumnUltra.inc}
   end;
 end;
 

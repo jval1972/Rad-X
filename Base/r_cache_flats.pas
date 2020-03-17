@@ -379,26 +379,6 @@ begin
       end;
       Z_ChangeTag(ds_source, PU_CACHE);
     end;
-    if (detailLevel >= DL_NORMAL) and (pds.scale = ds64x64) then
-    begin
-      if extremeflatfiltering then
-      begin
-        if detailLevel = DL_ULTRARES then
-          R_GrowSpan64to512(pds)
-        else if detailLevel = DL_HIRES then
-          R_GrowSpan64to256(pds)
-        else
-          R_GrowSpan64to128(pds)
-      end
-      else
-      begin
-        if detailLevel = DL_ULTRARES then
-          R_GrowSpan64to256(pds)
-        else if detailLevel = DL_HIRES then
-          R_GrowSpan64to128(pds)
-      end;
-      pds32 := R_Get_ds32(pds);
-    end;
   end
   else
     pds32 := R_Get_ds32(pds);

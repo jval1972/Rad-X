@@ -46,37 +46,25 @@ type
 
 var
   detailLevel: integer;
-  extremeflatfiltering: boolean;
   setdetail: integer = -1;
   videomode: videomode_t = vm8bit;
-  allowlowdetails: boolean = true;
-  allowhidetails: boolean = true;
   optimizedcolumnrendering: Boolean = true;
   usetransparentsprites: boolean;
   useexternaltextures: boolean;
   dc_32bittexturepaletteeffects: boolean;
 
 const
-  DL_LOWEST = 0;
-  DL_LOW = 1;
-  DL_MEDIUM = 2;
-  DL_NORMAL = 3;
-  DL_HIRES = 4;
-  DL_ULTRARES = 5;
-  DL_NUMRESOLUTIONS = 6;
+  DL_MEDIUM = 0;
+  DL_NORMAL = 1;
+  DL_NUMRESOLUTIONS = 2;
 
 const
-  detailStrings: array[0..DL_NUMRESOLUTIONS - 1] of string = ('LOWEST', 'LOW', 'MEDIUM', 'NORMAL', 'HIGH', 'ULTRA');
+  detailStrings: array[0..DL_NUMRESOLUTIONS - 1] of string = ('MEDIUM', 'NORMAL');
   flatfilteringstrings: array[boolean] of string = ('NORMAL', 'EXTREME');
 
-procedure R_CmdLowestRes(const parm1: string = '');
-procedure R_CmdLowRes(const parm1: string = '');
 procedure R_CmdMediumRes(const parm1: string = '');
 procedure R_CmdNormalRes(const parm1: string = '');
-procedure R_CmdHiRes(const parm1: string = '');
-procedure R_CmdUltraRes(const parm1: string = '');
 procedure R_CmdDetailLevel(const parm1: string = '');
-procedure R_CmdExtremeflatfiltering(const parm1: string = '');
 procedure R_CmdFullScreen(const parm1: string = '');
 procedure R_Cmd32bittexturepaletteeffects(const parm1: string = '');
 procedure R_CmdUseExternalTextures(const parm1: string = '');
@@ -161,57 +149,6 @@ uses
 //
 
 //
-// R_CmdLowestRes
-//
-procedure R_CmdLowestRes(const parm1: string = '');
-var
-  newres: boolean;
-begin
-  if parm1 = '' then
-  begin
-    printf('Current setting: lowestres = %s.'#13#10, [truefalseStrings[detailLevel = DL_LOWEST]]);
-    exit;
-  end;
-
-  newres := C_BoolEval(parm1, detailLevel = DL_LOWEST);
-  if newres <> (detailLevel = DL_LOWEST) then
-  begin
-    if newres then
-      detailLevel := DL_LOWEST
-    else
-      detailLevel := DL_MEDIUM;
-    R_SetViewSize;
-  end;
-  R_CmdLowestRes;
-end;
-
-
-//
-// R_CmdLowRes
-//
-procedure R_CmdLowRes(const parm1: string = '');
-var
-  newres: boolean;
-begin
-  if parm1 = '' then
-  begin
-    printf('Current setting: lowres = %s.'#13#10, [truefalseStrings[detailLevel = DL_LOW]]);
-    exit;
-  end;
-
-  newres := C_BoolEval(parm1, detailLevel = DL_LOW);
-  if newres <> (detailLevel = DL_LOW) then
-  begin
-    if newres then
-      detailLevel := DL_LOW
-    else
-      detailLevel := DL_MEDIUM;
-    R_SetViewSize;
-  end;
-  R_CmdLowRes;
-end;
-
-//
 // R_CmdMediumRes
 //
 procedure R_CmdMediumRes(const parm1: string = '');
@@ -259,60 +196,6 @@ begin
     R_SetViewSize;
   end;
   R_CmdNormalRes;
-end;
-
-//
-// R_CmdHiRes
-//
-procedure R_CmdHiRes(const parm1: string = '');
-var
-  newres: boolean;
-begin
-  if parm1 = '' then
-  begin
-    printf('Current setting: hires = %s.'#13#10, [truefalseStrings[detailLevel = DL_HIRES]]);
-    exit;
-  end;
-
-  newres := C_BoolEval(parm1, detailLevel = DL_HIRES);
-  if newres <> (detailLevel = DL_HIRES) then
-  begin
-    if newres then
-      detailLevel := DL_HIRES
-    else
-      detailLevel := DL_NORMAL;
-    R_SetViewSize;
-  end;
-  R_CmdHiRes;
-end;
-
-//
-// R_CmdUltraRes
-//
-procedure R_CmdUltraRes(const parm1: string = '');
-var
-  newres: boolean;
-begin
-  if parm1 = '' then
-  begin
-    printf('Current setting: ultrares = %s.'#13#10, [truefalseStrings[detailLevel = DL_ULTRARES]]);
-    if detailLevel = DL_ULTRARES then
-      printf('true.'#13#10)
-    else
-      printf('false.'#13#10);
-    exit;
-  end;
-
-  newres := C_BoolEval(parm1, detailLevel = DL_ULTRARES);
-  if newres <> (detailLevel = DL_ULTRARES) then
-  begin
-    if newres then
-      detailLevel := DL_ULTRARES
-    else
-      detailLevel := DL_HIRES;
-    R_SetViewSize;
-  end;
-  R_CmdUltraRes;
 end;
 
 //
@@ -398,35 +281,6 @@ begin
   R_CmdFullScreen;
 end;
 {$ENDIF}
-
-procedure R_CmdExtremeflatfiltering(const parm1: string = '');
-var
-  newflatfiltering: boolean;
-  parm: string;
-begin
-  if parm1 = '' then
-  begin
-    printf('Current setting: extremeflatfiltering = %s.'#13#10, [flatfilteringstrings[extremeflatfiltering]]);
-    exit;
-  end;
-
-  parm := strupper(parm1);
-  if parm = flatfilteringstrings[true] then
-    newflatfiltering := true
-  else if parm = flatfilteringstrings[false] then
-    newflatfiltering := false
-  else
-    newflatfiltering := C_BoolEval(parm1, extremeflatfiltering);
-
-  if extremeflatfiltering <> newflatfiltering then
-  begin
-    extremeflatfiltering := newflatfiltering;
-    {$IFNDEF OPENGL}
-    R_ResetDS32Cache;
-    {$ENDIF}
-  end;
-  R_CmdExtremeflatfiltering;
-end;
 
 procedure R_Cmd32bittexturepaletteeffects(const parm1: string = '');
 var

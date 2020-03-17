@@ -489,8 +489,6 @@ type
   optionsdisplaydetail_e = (
     od_setvideomode,
     od_detaillevel,
-    od_allowlowdetails,
-    od_allowhidetails,
     optdispdetail_end
   );
 
@@ -639,7 +637,6 @@ type
     od_use32bitfuzzeffect,
     od_useexternaltextures,
     od_preferetexturesnamesingamedirectory,
-    od_flatfiltering,
     optdisp32bit_end
   );
 
@@ -2345,10 +2342,6 @@ var
 begin
   M_DrawHeadLine(15, 'Display Options');
   M_DrawSubHeadLine(40, 'True Color Options');
-
-  ppos := M_WriteSmallText(OptionsDisplay32bitDef.x, OptionsDisplay32bitDef.y + OptionsDisplay32bitDef.itemheight * Ord(od_flatfiltering),
-    'Flat filtering: ', SCN_TMP);
-  M_WriteSmallWhiteText(ppos.x, ppos.y, flatfilteringstrings[extremeflatfiltering], SCN_TMP);
 end;
 
 {$IFDEF OPENGL}
@@ -2597,18 +2590,10 @@ begin
   R_SetViewSize;
 
   case detailLevel of
-    DL_LOWEST:
-      players[consoleplayer]._message := DETAILLOWEST;
-    DL_LOW:
-      players[consoleplayer]._message := DETAILLOW;
     DL_MEDIUM:
       players[consoleplayer]._message := DETAILMED;
     DL_NORMAL:
       players[consoleplayer]._message := DETAILNORM;
-    DL_HIRES:
-      players[consoleplayer]._message := DETAILHI;
-    DL_ULTRARES:
-      players[consoleplayer]._message := DETAILULTRA;
   end;
 
 end;
@@ -2636,11 +2621,6 @@ begin
   itemOn := 0;
 
   D_NotifyVideoModeChange(displaymodes[mdisplaymode_idx].width, displaymodes[mdisplaymode_idx].height);
-end;
-
-procedure M_ChangeFlatFiltering(choice: integer);
-begin
-  C_ExecuteCmd('extremeflatfiltering', yesnoStrings[not extremeflatfiltering]);
 end;
 
 procedure M_BoolCmd(choice: integer);
@@ -3959,22 +3939,6 @@ begin
   pmi.pBoolVal := nil;
   pmi.alphaKey := 'd';
 
-  inc(pmi);
-  pmi.status := 1;
-  pmi.name := '!Allow low details';
-  pmi.cmd := 'allowlowdetails';
-  pmi.routine := @M_BoolCmd;
-  pmi.pBoolVal := @allowlowdetails;
-  pmi.alphaKey := 'l';
-
-  inc(pmi);
-  pmi.status := 1;
-  pmi.name := '!Allow high details';
-  pmi.cmd := 'allowhidetails';
-  pmi.routine := @M_BoolCmd;
-  pmi.pBoolVal := @allowhidetails;
-  pmi.alphaKey := 'h';
-
 ////////////////////////////////////////////////////////////////////////////////
 //OptionsDisplayDetailDef
   OptionsDisplayDetailDef.numitems := Ord(optdispdetail_end); // # of menu items
@@ -4569,14 +4533,6 @@ begin
   pmi.routine := @M_BoolCmd;
   pmi.pBoolVal := @preferetexturesnamesingamedirectory;
   pmi.alphaKey := 'p';
-
-  inc(pmi);
-  pmi.status := 1;
-  pmi.name := '';
-  pmi.cmd := '';
-  pmi.routine := @M_ChangeFlatFiltering;
-  pmi.pBoolVal := nil;
-  pmi.alphaKey := 'f';
 
 ////////////////////////////////////////////////////////////////////////////////
 //OptionsDisplay32bitDef

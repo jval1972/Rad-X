@@ -107,12 +107,8 @@ var
     '(press y to quit)';
 
 var
-  DETAILULTRA: string = 'Ultra detail';
-  DETAILHI: string = 'High detail';
   DETAILNORM: string = 'Normal detail';
   DETAILMED: string = 'Medium detail';
-  DETAILLOW: string = 'Low detail';
-  DETAILLOWEST: string = 'Lowest detail';
   GAMMALVL0: string = 'Gamma correction OFF';
   GAMMALVL1: string = 'Gamma correction level 1';
   GAMMALVL2: string = 'Gamma correction level 2';

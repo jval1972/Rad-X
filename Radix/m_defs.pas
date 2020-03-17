@@ -160,7 +160,7 @@ type
   Pdefault_t = ^default_t;
 
 const
-  NUMDEFAULTS = {$IFDEF FPC}193{$ELSE}195{$ENDIF};
+  NUMDEFAULTS = {$IFDEF FPC}190{$ELSE}192{$ENDIF};
 
 // JVAL
 // Note: All setable defaults must be in lowercase, don't ask why. Just do it. :)
@@ -364,22 +364,6 @@ const
      defaultivalue: DL_NORMAL;
      defaultbvalue: false;
      _type: tInteger),
-
-    (name: 'allowlowdetails';
-     location: @allowlowdetails;
-     setable: DFS_ALWAYS;
-     defaultsvalue: '';
-     defaultivalue: 0;
-     defaultbvalue: false;
-     _type: tBoolean),
-
-    (name: 'allowhidetails';
-     location: @allowhidetails;
-     setable: DFS_ALWAYS;
-     defaultsvalue: '';
-     defaultivalue: 0;
-     defaultbvalue: false;
-     _type: tBoolean),
 
     (name: 'optimizedcolumnrendering';
      location: @optimizedcolumnrendering;
@@ -845,14 +829,6 @@ const
      defaultsvalue: '';
      defaultivalue: 0;
      defaultbvalue: true;
-     _type: tBoolean),
-
-    (name: 'extremeflatfiltering';
-     location: @extremeflatfiltering;
-     setable: DFS_NEVER;
-     defaultsvalue: '';
-     defaultivalue: 0;
-     defaultbvalue: false;
      _type: tBoolean),
 
 {$IFNDEF FPC}

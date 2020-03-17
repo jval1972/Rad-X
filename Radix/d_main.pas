@@ -1547,23 +1547,11 @@ begin
     usefake3d := false;
 {$ENDIF}
 
-  if M_Checkparm('-ultrares') <> 0 then
-    detailLevel := DL_ULTRARES;
-
-  if M_Checkparm('-hires') <> 0 then
-    detailLevel := DL_HIRES;
-
   if M_Checkparm('-normalres') <> 0 then
     detailLevel := DL_NORMAL;
 
   if M_Checkparm('-mediumres') <> 0 then
     detailLevel := DL_MEDIUM;
-
-  if M_Checkparm('-lowres') <> 0 then
-    detailLevel := DL_LOW;
-
-  if M_Checkparm('-lowestres') <> 0 then
-    detailLevel := DL_LOWEST;
 
   if M_Checkparm('-interpolate') <> 0 then
     interpolate := true;

@@ -66,8 +66,6 @@ procedure R_DrawMaskedColumnNormalMT(p: Pspriterenderinfo_t);
 
 ////////////////////////////////////////////////////////////////////////////////
 // Batch functions
-// Low res
-procedure R_DrawColumnLow_BatchMT(p: Pspriterenderinfo_t);
 
 // Medium res
 procedure R_DrawColumnMedium_BatchMT(p: Pspriterenderinfo_t);
@@ -172,80 +170,6 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Batch functions
-procedure R_DrawColumnLow_BatchMT(p: Pspriterenderinfo_t);
-var
-  count: integer;
-  i: integer;
-  dest: PByte;
-  bdest: byte;
-  frac: fixed_t;
-  fracstep: fixed_t;
-  swidth: integer;
-  cnt: integer;
-begin
-  count := (p.dc_yh - p.dc_yl) div 3;
-
-  if count < 0 then
-    exit;
-
-  dest := @((ylookup[p.dc_yl]^)[columnofs[p.dc_x]]);
-
-  frac := p.dc_texturemid + (p.dc_yl - centery) * p.dc_iscale;
-  fracstep := 3 * p.dc_iscale;
-  swidth := SCREENWIDTH - p.num_batch_columns;
-
-  for i := 0 to count - 1 do
-  begin
-    bdest := dc_colormap[p.dc_source[(LongWord(frac) shr FRACBITS) and 127]];
-
-    cnt := p.num_batch_columns;
-    while cnt > 0 do
-    begin
-      dest^ := bdest;
-      inc(dest);
-      dec(cnt);
-    end;
-    inc(dest, swidth);
-
-    cnt := p.num_batch_columns;
-    while cnt > 0 do
-    begin
-      dest^ := bdest;
-      inc(dest);
-      dec(cnt);
-    end;
-    inc(dest, swidth);
-
-    cnt := p.num_batch_columns;
-    while cnt > 0 do
-    begin
-      dest^ := bdest;
-      inc(dest);
-      dec(cnt);
-    end;
-    inc(dest, swidth);
-
-    inc(frac, fracstep);
-  end;
-
-  count := (p.dc_yh - p.dc_yl) mod 3;
-  for i := 0 to count do
-  begin
-    bdest := dc_colormap[p.dc_source[(LongWord(frac) shr FRACBITS) and 127]];
-
-    cnt := p.num_batch_columns;
-    while cnt > 0 do
-    begin
-      dest^ := bdest;
-      inc(dest);
-      dec(cnt);
-    end;
-    inc(dest, swidth);
-
-    inc(frac, p.dc_iscale);
-  end;
-end;
-
 procedure R_DrawColumnMedium_BatchMT(p: Pspriterenderinfo_t);
 var
   count: integer;

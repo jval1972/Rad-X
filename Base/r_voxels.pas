@@ -1655,22 +1655,12 @@ begin
 
     // scale: small at large distances
     vscale := FixedDiv(vprojection, tz);
-    if detailLevel <= DL_LOW then
-    begin
-      if vscale >= FRACUNIT then
-        mip := @clms.mips[1]
-      else
-        mip := @clms.mips[2];
-    end
+    if vscale >= FRACUNIT then
+      mip := @clms.mips[0]
+    else if vscale >= FRACUNIT div 2 then
+      mip := @clms.mips[1]
     else
-    begin
-      if vscale >= FRACUNIT then
-        mip := @clms.mips[0]
-      else if vscale >= FRACUNIT div 2 then
-        mip := @clms.mips[1]
-      else
-        mip := @clms.mips[2];
-    end;
+      mip := @clms.mips[2];
 
 
     {$IFDEF HERETIC}

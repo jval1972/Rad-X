@@ -2724,16 +2724,10 @@ begin
   DEH_AddString(@deh_strings, @GOTSHOTGUN2, 'GOTSHOTGUN2');
   DEH_AddString(@deh_strings, @MSGSECRETSECTOR, 'MSGSECRETSECTOR');
 
-  DEH_AddString(@deh_strings, @DETAILULTRA, 'DETAILULTRA');
-  DEH_AddString(@deh_strings, @DETAILHI, 'DETAILHI');
-  DEH_AddString(@deh_strings, @DETAILHI, 'DETAILHIGH');
   DEH_AddString(@deh_strings, @DETAILNORM, 'DETAILNORM');
   DEH_AddString(@deh_strings, @DETAILNORM, 'DETAILNORMAL');
   DEH_AddString(@deh_strings, @DETAILMED, 'DETAILMED');
   DEH_AddString(@deh_strings, @DETAILMED, 'DETAILMEDIUM');
-  DEH_AddString(@deh_strings, @DETAILLOW, 'DETAILLO');
-  DEH_AddString(@deh_strings, @DETAILLOW, 'DETAILLOW');
-  DEH_AddString(@deh_strings, @DETAILLOWEST, 'DETAILLOWEST');
 
   DEH_AddString(@deh_strings, @GAMMALVL0, 'GAMMALVL0');
   DEH_AddString(@deh_strings, @GAMMALVL1, 'GAMMALVL1');

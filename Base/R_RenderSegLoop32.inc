@@ -128,12 +128,7 @@ begin
       texturecolumn := rw_offset - FixedMul(finetangent[angle], rw_distance);
 
       dc_texturemod := (LongWord(texturecolumn) and (FRACUNIT - 1)) shr (FRACBITS - DC_HIRESBITS); // JVAL for hi resolution
-      if detailLevel = DL_ULTRARES then
-        dc_mod := dc_texturemod
-      else if detailLevel = DL_HIRES then
-        dc_mod := dc_texturemod and (not $1)
-      else
-        dc_mod := 0;
+      dc_mod := 0;
 
       texturecolumnhi := texturecolumn shr (FRACBITS - DC_HIRESBITS);
       texturecolumn := texturecolumn shr FRACBITS;
