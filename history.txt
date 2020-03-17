@@ -1,3 +1,7 @@
+20200317
+--------
+Radix HUD in good progress
+
 20200312
 --------
 A lot of RADIX actions are implemented

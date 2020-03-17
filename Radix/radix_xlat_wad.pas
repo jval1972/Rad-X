@@ -1675,11 +1675,11 @@ begin
 
   MakeOneSprite('BarrelRotate1', _MTRX_BARREL, nil, 41, 77, false, false, 'C');
   MakeOneSprite('BarrelRotate2', _MTRX_BARREL, nil, 41, 77, false, false, 'D');
-  MakeOneSprite('BarrelRotate3', _MTRX_BARREL, nil, 41, 77, false, false, 'E');
+  MakeOneSprite('BarrelRotate3(end)', _MTRX_BARREL, nil, 41, 77, false, false, 'E');
   MakeOneSprite('BarrelRotate4', _MTRX_BARREL, nil, 41, 77, false, false, 'F');
-  MakeOneSprite('BarrelRotate5', _MTRX_BARREL, nil, 41, 77, false, false, 'G');
+  MakeOneSprite('BarrelRotate5(end)', _MTRX_BARREL, nil, 41, 77, false, false, 'G');
   MakeOneSprite('BarrelRotate6', _MTRX_BARREL, nil, 41, 77, false, false, 'H');
-  MakeOneSprite('BarrelRotate7', _MTRX_BARREL, nil, 41, 77, false, false, 'I');
+  MakeOneSprite('BarrelRotate7(end)', _MTRX_BARREL, nil, 41, 77, false, false, 'I');
   MakeOneSprite('BarrelRotate8', _MTRX_BARREL, nil, 41, 77, false, false, 'J');
 
   // MT_DOZZER
