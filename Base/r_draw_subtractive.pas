@@ -32,8 +32,6 @@ unit r_draw_subtractive;
 interface
 
 // Alpha column drawers (transparency effects)
-procedure R_DrawColumnSubtractLowest;
-procedure R_DrawColumnSubtractLow;
 procedure R_DrawColumnSubtractMedium;
 procedure R_DrawColumnSubtractHi;
 
@@ -47,106 +45,6 @@ uses
   r_draw,
   r_trans8,
   r_main;
-
-procedure R_DrawColumnSubtractLowest;
-var
-  count: integer;
-  i: integer;
-  dest: PByte;
-  frac: fixed_t;
-  fracstep: fixed_t;
-  swidth: integer;
-  buf: twobytes_t;
-begin
-  if odd(dc_x) then
-    exit;
-
-  count := (dc_yh - dc_yl) div 3;
-
-  if count < 0 then
-    exit;
-
-  dest := @((ylookup[dc_yl]^)[columnofs[dc_x]]);
-
-  frac := dc_texturemid + (dc_yl - centery) * dc_iscale;
-  fracstep := 3 * dc_iscale;
-  swidth := SCREENWIDTH;
-
-  for i := 0 to count - 1 do
-  begin
-    buf.byte1 := cursubtract8table[dest^ + (dc_colormap[dc_source[(LongWord(frac) shr FRACBITS) and 127]] shl 8)];
-    buf.byte2 := buf.byte1;
-
-    PWord(dest)^ := Word(buf);
-    inc(dest, swidth);
-
-    PWord(dest)^ := Word(buf);
-    inc(dest, swidth);
-
-    PWord(dest)^ := Word(buf);
-    inc(dest, swidth);
-
-    inc(frac, fracstep);
-  end;
-
-  count := (dc_yh - dc_yl) mod 3;
-  for i := 0 to count do
-  begin
-    buf.byte1 := cursubtract8table[dest^ + (dc_colormap[dc_source[(LongWord(frac) shr FRACBITS) and 127]] shl 8)];
-    buf.byte2 := buf.byte1;
-    PWord(dest)^ := Word(buf);
-    inc(dest, swidth);
-
-    inc(frac, dc_iscale);
-  end;
-end;
-
-procedure R_DrawColumnSubtractLow;
-var
-  count: integer;
-  i: integer;
-  dest: PByte;
-  bdest: byte;
-  frac: fixed_t;
-  fracstep: fixed_t;
-  swidth: integer;
-begin
-  count := (dc_yh - dc_yl) div 3;
-
-  if count < 0 then
-    exit;
-
-  dest := @((ylookup[dc_yl]^)[columnofs[dc_x]]);
-
-  frac := dc_texturemid + (dc_yl - centery) * dc_iscale;
-  fracstep := 3 * dc_iscale;
-  swidth := SCREENWIDTH;
-
-  for i := 0 to count - 1 do
-  begin
-    bdest := cursubtract8table[dest^ + (dc_colormap[dc_source[(LongWord(frac) shr FRACBITS) and 127]] shl 8)];
-
-    dest^ := bdest;
-    inc(dest, swidth);
-
-    dest^ := bdest;
-    inc(dest, swidth);
-
-    dest^ := bdest;
-    inc(dest, swidth);
-
-    inc(frac, fracstep);
-  end;
-
-  count := (dc_yh - dc_yl) mod 3;
-  for i := 0 to count do
-  begin
-    dest^ := cursubtract8table[dest^ + (dc_colormap[dc_source[(LongWord(frac) shr FRACBITS) and 127]] shl 8)];
-    inc(dest, swidth);
-
-    inc(frac, dc_iscale);
-  end;
-end;
 
 procedure R_DrawColumnSubtractMedium;
 var

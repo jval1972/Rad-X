@@ -1,42 +1,5 @@
 {$IFNDEF NO_INLINE_LOOPS}
-  while count >= 32 do
-  begin
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    {$I R_DrawColumnHi_Loop.inc}
-    count := count - 32;
-  end;
-
-  if count >= 16 then
+  while count >= 16 do
   begin
     {$I R_DrawColumnHi_Loop.inc}
     {$I R_DrawColumnHi_Loop.inc}

@@ -100,7 +100,7 @@ Conditionals=DOOM
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
-RunParams=-nofullscreen -geom 640x400 doom_assets.wad -idat RADIX_20_REG.DAT 
+RunParams=-nofullscreen -geom 640x400 doom_assets.wad -idat RADIX_20_REG.DAT
 HostApplication=
 Launcher=
 UseLauncher=0
@@ -115,7 +115,7 @@ AutoIncBuild=1
 MajorVer=1
 MinorVer=0
 Release=1
-Build=730
+Build=731
 Debug=0
 PreRelease=0
 Special=0
@@ -126,7 +126,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Jim Valavanis
 FileDescription=RAD
-FileVersion=1.0.1.730
+FileVersion=1.0.1.731
 InternalName=RAD
 LegalCopyright=Copyright 2004 - 2020, Jim Valavanis
 LegalTrademarks=

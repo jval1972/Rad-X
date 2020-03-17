@@ -1,5 +1,5 @@
 {$IFNDEF NO_INLINE_LOOPS}
-  while count >= 32 do
+  while count >= 16 do
   begin
     {$I R_DrawColumnAverageHi_Loop2.inc}
     {$I R_DrawColumnAverageHi_Loop2.inc}
@@ -17,23 +17,7 @@
     {$I R_DrawColumnAverageHi_Loop2.inc}
     {$I R_DrawColumnAverageHi_Loop2.inc}
     {$I R_DrawColumnAverageHi_Loop2.inc}
-    {$I R_DrawColumnAverageHi_Loop2.inc}
-    {$I R_DrawColumnAverageHi_Loop2.inc}
-    {$I R_DrawColumnAverageHi_Loop2.inc}
-    {$I R_DrawColumnAverageHi_Loop2.inc}
-    {$I R_DrawColumnAverageHi_Loop2.inc}
-    {$I R_DrawColumnAverageHi_Loop2.inc}
-    {$I R_DrawColumnAverageHi_Loop2.inc}
-    {$I R_DrawColumnAverageHi_Loop2.inc}
-    {$I R_DrawColumnAverageHi_Loop2.inc}
-    {$I R_DrawColumnAverageHi_Loop2.inc}
-    {$I R_DrawColumnAverageHi_Loop2.inc}
-    {$I R_DrawColumnAverageHi_Loop2.inc}
-    {$I R_DrawColumnAverageHi_Loop2.inc}
-    {$I R_DrawColumnAverageHi_Loop2.inc}
-    {$I R_DrawColumnAverageHi_Loop2.inc}
-    {$I R_DrawColumnAverageHi_Loop2.inc}
-    count := count - 32;
+    count := count - 16;
   end;
 
   while count >= 4 do
