@@ -286,7 +286,7 @@ begin
 
   if player.viewz < player.mo.floorz + 4 * FRACUNIT then
     player.viewz := player.mo.floorz + 4 * FRACUNIT;
-    
+
   player.oldviewz := oldviewz;
 end;
 
@@ -426,10 +426,8 @@ begin
 
   movefactor := ORIG_FRICTION_FACTOR;
 
-  if player.cheats and CF_LOWGRAVITY = 0 then
-    if G_PlayingEngineVersion >= VERSION120 then
-      if Psubsector_t(player.mo.subsector).sector.special and FRICTION_MASK <> 0 then
-        movefactor := P_GetMoveFactor(player.mo); //movefactor * 2;
+  if Psubsector_t(player.mo.subsector).sector.special and FRICTION_MASK <> 0 then
+    movefactor := P_GetMoveFactor(player.mo);
 
   if cmd.forwardmove <> 0 then
     P_Thrust(player, player.mo.angle, cmd.forwardmove * movefactor);
@@ -437,34 +435,10 @@ begin
   if cmd.sidemove <> 0 then
     P_Thrust(player, player.mo.angle - ANG90, cmd.sidemove * movefactor);
 
-  if G_PlayingEngineVersion >= VERSION115 then
+  if (cmd.forwardmove = 0) and (cmd.sidemove = 0) then
   begin
-    // JVAL: Adjust speed while flying
-    if player.mo.z > player.mo.floorz then
-    begin
-      if player.mo.momx > MAXMOVETHRESHOLD then
-        player.mo.momx := MAXMOVETHRESHOLD
-      else if player.mo.momx < -MAXMOVETHRESHOLD then
-        player.mo.momx := -MAXMOVETHRESHOLD;
-      if player.mo.momy > MAXMOVETHRESHOLD then
-        player.mo.momy := MAXMOVETHRESHOLD
-      else if player.mo.momy < -MAXMOVETHRESHOLD then
-        player.mo.momy := -MAXMOVETHRESHOLD;
-
-      if (cmd.forwardmove = 0) and (cmd.sidemove = 0) then
-      begin
-        player.mo.momx := player.mo.momx * 15 div 16;
-        player.mo.momy := player.mo.momy * 15 div 16;
-      end;
-    end
-    else if (G_PlayingEngineVersion >= VERSION205) and (player.mo.flags2_ex and MF2_EX_ONMOBJ <> 0) then
-    begin
-      if (cmd.forwardmove = 0) and (cmd.sidemove = 0) then
-      begin
-        player.mo.momx := player.mo.momx * 15 div 16;
-        player.mo.momy := player.mo.momy * 15 div 16;
-      end;
-    end;
+    player.mo.momx := player.mo.momx * 15 div 16;
+    player.mo.momy := player.mo.momy * 15 div 16;
   end;
 
   if ((cmd.forwardmove <> 0) or (cmd.sidemove <> 0)) and
