@@ -116,6 +116,8 @@ type
     energy: integer;  // JVAL: 20200314 - Radix energy
     threat: boolean;  // JVAL: 20200314 - Any threat nearby?
 
+    thrustmomz: fixed_t;  // JVAL: 20200318 - z momentum by forward/backward move
+
     // Power ups. invinc and invis are tic counters.
     powers: array[0..Ord(NUMPOWERS) - 1] of integer;
     cards: array[0..Ord(NUMCARDS) - 1] of boolean;

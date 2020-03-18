@@ -404,6 +404,7 @@ var
   look2: integer;
   movefactor: fixed_t;
   xyspeed: fixed_t;
+  an: angle_t;
 begin
   cmd := @player.cmd;
 
@@ -536,13 +537,20 @@ begin
     end;
   end;
 
+  player.mo.momz :=  player.mo.momz - player.thrustmomz;
+  player.thrustmomz := 0;
+
   player.mo.momz := player.mo.momz * 15 div 16;
 
   if player.lookdir <> 0 then
   begin
-    xyspeed := FixedSqrt(FixedMul(player.mo.momx, player.mo.momx) + FixedMul(player.mo.momy, player.mo.momy));
-    if xyspeed > 0 then
-      player.mo.momz := player.mo.momz + xyspeed * player.lookdir div ORIG_FRICTION_FACTOR;
+    an := (R_PointToAngle2(0, 0, player.mo.momx, player.mo.momy) - player.mo.angle) shr FRACBITS;
+    xyspeed := FixedMul(FixedSqrt(FixedMul(player.mo.momx, player.mo.momx) + FixedMul(player.mo.momy, player.mo.momy)), fixedcosine[an]);
+    if xyspeed <> 0 then
+    begin
+      player.thrustmomz := xyspeed * player.lookdir div 256; //ORIG_FRICTION_FACTOR;
+      player.mo.momz :=  player.mo.momz + player.thrustmomz;
+    end;
   end;
 
   if not G_NeedsCompatibilityMode then
