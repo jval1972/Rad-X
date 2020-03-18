@@ -2093,7 +2093,7 @@ begin
 
   SUC_Progress(92);
 
-  printf('RX_InitRadixHud: Init RADIX status bar.'#13#10);
+  printf('RX_InitRadixHud: Init RADIX HUD.'#13#10);
   RX_InitRadixHud;
 
   SUC_Progress(93);
@@ -2212,6 +2212,8 @@ begin
   T_ShutDown;
   printf('M_ShutDownMenus: Shut down menus.'#13#10);
   M_ShutDownMenus;
+  printf('RX_ShutDownRadixHud: Shut down RADIX HUD.'#13#10);
+  RX_ShutDownRadixHud;
   printf('SC_ShutDown: Shut down script engine.'#13#10);
   SC_ShutDown;
   // JVAL: PascalScript

@@ -11547,7 +11547,7 @@ const // Doom Original mobjinfo
     mass: 100;                                                    // mass
     damage: 0;                                                    // damage
     activesound: Ord(sfx_None);                                   // activesound
-    flags: MF_SOLID or MF_SHOOTABLE or MF_DROPOFF or MF_PICKUP or MF_NOTDMATCH;// flags
+    flags: MF_SOLID or MF_SHOOTABLE or MF_DROPOFF or MF_PICKUP or MF_NOTDMATCH or MF_NOGRAVITY;// flags
     flags_ex: 0;                                                  // flags_ex
     raisestate: Ord(S_NULL);                                      // raisestate
     customsound1: 0;                                              // customsound1

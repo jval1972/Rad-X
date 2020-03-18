@@ -254,7 +254,7 @@ begin
     xpos := (px - mo.x div RADAR_SHIFT_UNIT);
     if xpos < 0 then
       xpos := xpos - RADAR_RANGE_FACTOR div 2
-     else
+    else
       xpos := xpos + RADAR_RANGE_FACTOR div 2;
     xpos := xpos div RADAR_RANGE_FACTOR;
     ypos := (py - mo.y div RADAR_SHIFT_UNIT);

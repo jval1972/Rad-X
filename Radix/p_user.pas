@@ -400,10 +400,10 @@ end;
 procedure P_MovePlayer(player: Pplayer_t);
 var
   cmd: Pticcmd_t;
-  look: integer;
   look16: integer; // JVAL Smooth Look Up/Down
   look2: integer;
   movefactor: fixed_t;
+  xyspeed: fixed_t;
 begin
   cmd := @player.cmd;
 
@@ -423,36 +423,23 @@ begin
     if G_PlayingEngineVersion > VERSION120 then
       onground := player.mo.flags2_ex and MF2_EX_ONMOBJ <> 0;
 
-  // villsa [STRIFE] allows player to climb over things by jumping
-  // haleyjd 20110205: air control thrust should be 256, not cmd.forwardmove
-  if (G_PlayingEngineVersion >= VERSION121) and not onground and (player.cheats and CF_LOWGRAVITY = 0) and (cmd.forwardmove <> 0) then
-  begin
-    P_Thrust(player, player.mo.angle, 256);
-  end
-  else
-  begin
-    movefactor := ORIG_FRICTION_FACTOR;
+  movefactor := ORIG_FRICTION_FACTOR;
 
-    if player.cheats and CF_LOWGRAVITY = 0 then
-      if G_PlayingEngineVersion >= VERSION120 then
-        if Psubsector_t(player.mo.subsector).sector.special and FRICTION_MASK <> 0 then
-          movefactor := P_GetMoveFactor(player.mo); //movefactor * 2;
+  if player.cheats and CF_LOWGRAVITY = 0 then
+    if G_PlayingEngineVersion >= VERSION120 then
+      if Psubsector_t(player.mo.subsector).sector.special and FRICTION_MASK <> 0 then
+        movefactor := P_GetMoveFactor(player.mo); //movefactor * 2;
 
-    if (player.cheats and CF_LOWGRAVITY <> 0) or
-      ((cmd.forwardmove <> 0) and
-       (onground or ((cmd.jump > 0) and (player.mo.momx = 0) and (player.mo.momy = 0)))) then
-      P_Thrust(player, player.mo.angle, cmd.forwardmove * movefactor);
+  if cmd.forwardmove <> 0 then
+    P_Thrust(player, player.mo.angle, cmd.forwardmove * movefactor);
 
-    if (player.cheats and CF_LOWGRAVITY <> 0) or
-      ((cmd.sidemove <> 0) and
-       (onground or ((cmd.jump > 0) and (player.mo.momx = 0) and (player.mo.momy = 0)))) then
-      P_Thrust(player, player.mo.angle - ANG90, cmd.sidemove * movefactor);
-  end;
+  if cmd.sidemove <> 0 then
+    P_Thrust(player, player.mo.angle - ANG90, cmd.sidemove * movefactor);
 
   if G_PlayingEngineVersion >= VERSION115 then
   begin
     // JVAL: Adjust speed while flying
-    if (player.cheats and CF_LOWGRAVITY <> 0) and (player.mo.z > player.mo.floorz) then
+    if player.mo.z > player.mo.floorz then
     begin
       if player.mo.momx > MAXMOVETHRESHOLD then
         player.mo.momx := MAXMOVETHRESHOLD
@@ -486,56 +473,31 @@ begin
 // JVAL Look UP and DOWN
   if zaxisshift then
   begin
-    if G_PlayingEngineVersion < VERSION203 then // JVAL Smooth Look Up/Down
+    // JVAL Smooth Look Up/Down
+    look16 := cmd.lookupdown16;
+    if look16 > 7 * 256 then
+      look16 := look16 - 16 * 256;
+
+    if player.angletargetticks > 0 then
+      player.centering := true
+    else if look16 <> 0 then
     begin
-      look := cmd.lookupdown;
-      if look > 7 then
-        look := look - 16;
-
-      if player.angletargetticks > 0 then
+      if look16 = TOCENTER * 256 then
         player.centering := true
-      else if look <> 0 then
+      else
       begin
-        if look = TOCENTER then
-          player.centering := true
-        else
-        begin
-          player.lookdir := player.lookdir + 5 * look;
-          if player.lookdir > MAXLOOKDIR then
-            player.lookdir := MAXLOOKDIR
-          else if player.lookdir < MINLOOKDIR then
-            player.lookdir := MINLOOKDIR;
-        end;
-      end;
-      player.lookdir16 := player.lookdir * 16;
-    end
-    else
-    begin // JVAL Smooth Look Up/Down
-      look16 := cmd.lookupdown16;
-      if look16 > 7 * 256 then
-        look16 := look16 - 16 * 256;
+        player.lookdir16 := player.lookdir16 + Round(5 * look16 / 16);
+        player.lookdir := player.lookdir16 div 16;
 
-      if player.angletargetticks > 0 then
-        player.centering := true
-      else if look16 <> 0 then
-      begin
-        if look16 = TOCENTER * 256 then
-          player.centering := true
-        else
-        begin
-          player.lookdir16 := player.lookdir16 + Round(5 * look16 / 16);
-          player.lookdir := player.lookdir16 div 16;
+        if player.lookdir16 > MAXLOOKDIR * 16 then
+          player.lookdir16 := MAXLOOKDIR * 16
+        else if player.lookdir16 < MINLOOKDIR * 16 then
+          player.lookdir16 := MINLOOKDIR * 16;
 
-          if player.lookdir16 > MAXLOOKDIR * 16 then
-            player.lookdir16 := MAXLOOKDIR * 16
-          else if player.lookdir16 < MINLOOKDIR * 16 then
-            player.lookdir16 := MINLOOKDIR * 16;
-
-          if player.lookdir > MAXLOOKDIR then
-            player.lookdir := MAXLOOKDIR
-          else if player.lookdir < MINLOOKDIR then
-            player.lookdir := MINLOOKDIR;
-        end;
+        if player.lookdir > MAXLOOKDIR then
+          player.lookdir := MAXLOOKDIR
+        else if player.lookdir < MINLOOKDIR then
+          player.lookdir := MINLOOKDIR;
       end;
     end;
 
@@ -572,6 +534,15 @@ begin
         player.lookdir := player.lookdir16 div 16;
       end;
     end;
+  end;
+
+  player.mo.momz := player.mo.momz * 15 div 16;
+
+  if player.lookdir <> 0 then
+  begin
+    xyspeed := FixedSqrt(FixedMul(player.mo.momx, player.mo.momx) + FixedMul(player.mo.momy, player.mo.momy));
+    if xyspeed > 0 then
+      player.mo.momz := player.mo.momz + xyspeed * player.lookdir div ORIG_FRICTION_FACTOR;
   end;
 
   if not G_NeedsCompatibilityMode then
@@ -617,7 +588,7 @@ begin
 
     player.oldlook2 := look2;
 
-    if (onground or (player.cheats and CF_LOWGRAVITY <> 0)) and (cmd.jump > 1) then
+    if cmd.jump > 1 then
       player.mo.momz := 8 * FRACUNIT;
   end
   else
