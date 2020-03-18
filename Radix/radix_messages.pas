@@ -70,5 +70,6 @@ initialization
   radixmessages[9] := S_RADIX_MESSAGE_9;
   radixmessages[10] := S_RADIX_MESSAGE_10;
   radixmessages[11] := S_RADIX_MESSAGE_11;
+  radixmessages[12] := S_RADIX_MESSAGE_12;
 
 end.
