@@ -181,7 +181,7 @@ type
 //  including a marker indicating
 //  user has not changed weapon.
   weapontype_t = (
-    wp_fist,
+    wp_neutroncannons,
     wp_pistol,
     wp_shotgun,
     wp_chaingun,

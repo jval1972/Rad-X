@@ -298,7 +298,7 @@ begin
       player.pendingweapon := wp_bfg
     else
       // If everything fails.
-      player.pendingweapon := wp_fist;
+      player.pendingweapon := wp_neutroncannons;
 
   until not (player.pendingweapon = wp_nochange);
 

@@ -256,7 +256,6 @@ var
   pars: array[1..3, 1..9] of integer;
 
 var
-  p_initialbullets: integer = 50;
   allowvanillademos: boolean = true;
   vanilla_demo_off: boolean = false;
 
@@ -1249,11 +1248,9 @@ begin
   p.health := mobjinfo[Ord(MT_PLAYER)].spawnhealth;
   p.shield := PLAYERSPAWNSHIELD;
   p.energy := PLAYERSPAWNENERGY;
-  p.readyweapon := wp_pistol;
-  p.pendingweapon := wp_pistol;
-  p.weaponowned[Ord(wp_fist)] := 1;
-  p.weaponowned[Ord(wp_pistol)] := 1;
-  p.ammo[Ord(am_clip)] := p_initialbullets;
+  p.readyweapon := wp_neutroncannons;
+  p.pendingweapon := wp_neutroncannons;
+  p.weaponowned[Ord(wp_neutroncannons)] := 1;
   p.last_grid_trigger := -1;
 
   for i := 0 to Ord(NUMAMMO) - 1 do

@@ -57,7 +57,7 @@ procedure P_DamageMobj(target, inflictor, source: Pmobj_t; damage: integer);
 const
 // a weapon is found with two clip loads,
 // a big item has five clip loads
-  maxammo: array[0..Ord(NUMAMMO) - 1] of integer = (200, 50, 300, 50);
+  maxammo: array[0..Ord(NUMAMMO) - 1] of integer = (5000, 400, 1500, 50);
   clipammo: array[0..Ord(NUMAMMO) - 1] of integer = (10, 4, 20, 1);
 
 procedure P_CmdSuicide;
@@ -157,7 +157,7 @@ begin
   case ammo of
     am_clip:
       begin
-        if player.readyweapon = wp_fist then
+        if player.readyweapon = wp_neutroncannons then
         begin
           if player.weaponowned[Ord(wp_chaingun)] <> 0 then
             player.pendingweapon := wp_chaingun
@@ -167,7 +167,7 @@ begin
       end;
     am_shell:
       begin
-        if (player.readyweapon = wp_fist) or
+        if (player.readyweapon = wp_neutroncannons) or
            (player.readyweapon = wp_pistol) then
         begin
           if player.weaponowned[Ord(wp_shotgun)] <> 0 then
@@ -176,7 +176,7 @@ begin
       end;
     am_cell:
       begin
-        if (player.readyweapon = wp_fist) or
+        if (player.readyweapon = wp_neutroncannons) or
            (player.readyweapon = wp_pistol) then
         begin
           if player.weaponowned[Ord(wp_plasma)] <> 0 then
@@ -185,7 +185,7 @@ begin
       end;
     am_misl:
       begin
-        if player.readyweapon = wp_fist then
+        if player.readyweapon = wp_neutroncannons then
         begin
           if player.weaponowned[Ord(wp_missile)] <> 0 then
             player.pendingweapon := wp_missile;
@@ -650,8 +650,8 @@ begin
           if not P_GivePower(player, Ord(pw_strength)) then
             exit;
           player._message := GOTBERSERK;
-          if player.readyweapon <> wp_fist then
-            player.pendingweapon := wp_fist;
+          if player.readyweapon <> wp_neutroncannons then
+            player.pendingweapon := wp_neutroncannons;
           sound := Ord(sfx_getpow);
         end;
 

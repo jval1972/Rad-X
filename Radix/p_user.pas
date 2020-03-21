@@ -770,7 +770,7 @@ begin
     //  (read: not in the middle of an attack).
     newweapon := weapontype_t(_SHR(cmd.buttons and BT_WEAPONMASK, BT_WEAPONSHIFT));
 
-    if (newweapon = wp_fist) and
+    if (newweapon = wp_neutroncannons) and
        (player.weaponowned[Ord(wp_chainsaw)] <> 0) and (not (
        (player.readyweapon = wp_chainsaw) and (player.powers[Ord(pw_strength)] <> 0))) then
     begin
@@ -779,7 +779,7 @@ begin
       // Only if we don't have old compatibility mode suspended
       if not G_NeedsCompatibilityMode then
         if player.readyweapon = wp_chainsaw then
-          newweapon := wp_fist;
+          newweapon := wp_neutroncannons;
     end;
 
     if (player.weaponowned[Ord(newweapon)] <> 0) and

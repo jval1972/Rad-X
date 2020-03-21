@@ -1117,8 +1117,7 @@ begin
           6: p_maxarmor := misc_val;
           7: p_greenarmorclass := misc_val;
           8: p_bluearmorclass := misc_val;
-          9: p_initialbullets := misc_val;
-         10: p_bfgcells := misc_val;
+          9: p_bfgcells := misc_val;
         end;
       end;
 
@@ -1688,8 +1687,7 @@ begin
   result.Add('%s = %d', [capitalizedstring(misc_tokens[6]), p_maxarmor]);
   result.Add('%s = %d', [capitalizedstring(misc_tokens[7]), p_greenarmorclass]);
   result.Add('%s = %d', [capitalizedstring(misc_tokens[8]), p_bluearmorclass]);
-  result.Add('%s = %d', [capitalizedstring(misc_tokens[9]), p_initialbullets]);
-  result.Add('%s = %d', [capitalizedstring(misc_tokens[10]), p_bfgcells]);
+  result.Add('%s = %d', [capitalizedstring(misc_tokens[9]), p_bfgcells]);
 
   result.Add('');
 
@@ -3020,7 +3018,6 @@ begin
   misc_tokens.Add('MAX ARMOR');           // p_maxarmor
   misc_tokens.Add('GREEN ARMOR CLASS');   // p_greenarmorclass
   misc_tokens.Add('BLUE ARMOR CLASS');    // p_bluearmorclass
-  misc_tokens.Add('INITIAL BULLETS');     // p_initialbullets
   misc_tokens.Add('BFG CELLS/SHOT');      // p_bfgcells
 
 
