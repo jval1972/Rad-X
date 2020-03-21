@@ -111,6 +111,13 @@ begin
     exit;
   end;
 
+  if (gameepisode = 1) then
+    if (ammo = am_radixtorp) or (ammo = am_radixnuke) then
+    begin
+      result := false;
+      exit;
+    end;
+
   if (Ord(ammo) < 0) or (Ord(ammo) > Ord(NUMAMMO)) then
     I_Error('P_GiveAmmo(): bad type %d', [Ord(ammo)]);
 
