@@ -397,6 +397,12 @@ begin
 
   // Draw radar
   RX_DrawRadar(269, 200 - STATUSBAR_HEIGHT + 19, 12);
+
+  // Draw ammo
+  M_WriteSmallText(96, 200 - STATUSBAR_HEIGHT + 8, itoa(hud_player.ammo[0]), SCN_HUD);
+  M_WriteSmallText(145, 200 - STATUSBAR_HEIGHT + 8, itoa(hud_player.ammo[1]), SCN_HUD);
+  M_WriteSmallText(96, 200 - STATUSBAR_HEIGHT + 19, itoa(hud_player.ammo[2]), SCN_HUD);
+  M_WriteSmallText(145, 200 - STATUSBAR_HEIGHT + 19, itoa(hud_player.ammo[3]), SCN_HUD);
 end;
 
 procedure RX_HudDrawerCockpit;
@@ -469,6 +475,12 @@ begin
 
   // Draw radar
   RX_DrawRadar(163, 171, 15);
+
+  // Draw ammo
+  M_WriteSmallText(31, 174, itoa(hud_player.ammo[0]), SCN_HUD);
+  M_WriteSmallText(74, 174, itoa(hud_player.ammo[1]), SCN_HUD);
+  M_WriteSmallText(31, 185, itoa(hud_player.ammo[2]), SCN_HUD);
+  M_WriteSmallText(74, 185, itoa(hud_player.ammo[3]), SCN_HUD);
 end;
 
 procedure RX_HudDrawer;
