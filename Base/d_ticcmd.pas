@@ -55,7 +55,6 @@ type
     lookfly: byte;   // look up/down/centering/fly
     arti: byte;
 {$ENDIF}
-    lookupdown: byte;      // JVAL look up/down/centering
     lookleftright: byte;   // JVAL look left/right/forward
     jump: byte;     // JVAL Jump!
     lookupdown16: word;    // JVAL Smooth Look Up/Down

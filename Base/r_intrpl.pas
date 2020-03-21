@@ -346,7 +346,6 @@ begin
   begin
     R_AddInterpolationItem(@player.lookdir16, iinteger); // JVAL Smooth Look Up/Down
     R_AddInterpolationItem(@player.lookdir2, ibyte);
-    R_AddInterpolationItem(@player.viewz, iinteger);
     R_AddInterpolationItem(@player.teleporttics, iinteger);
     R_AddInterpolationItem(@player.quaketics, iinteger);
   end;

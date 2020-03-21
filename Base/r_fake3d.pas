@@ -769,14 +769,7 @@ begin
   end;
 
   if zaxisshift and usefake3d and (p.lookdir16 <> 0) then
-  begin
     result := 2.0 - FAKE3D_ANGLE_COSINES[p.lookdir16]
-{    if f3dinfobuffer[p.lookdir16] = nil then
-       R_ComputeFake3DTables(p.lookdir16)
-    else if not f3dinfobuffer[p.lookdir16].computed then
-       R_ComputeFake3DTables(p.lookdir16);
-    result := f3dinfobuffer[p.lookdir16].aspect;}
-  end
   else
     result := 1.0;
 end;

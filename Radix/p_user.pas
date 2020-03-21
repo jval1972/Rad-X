@@ -497,7 +497,7 @@ begin
     xyspeed := FixedMul(FixedSqrt(FixedMul(player.mo.momx, player.mo.momx) + FixedMul(player.mo.momy, player.mo.momy)), fixedcosine[an]);
     if xyspeed <> 0 then
     begin
-      player.thrustmomz := xyspeed * player.lookdir16 div (16 * 256); //ORIG_FRICTION_FACTOR;
+      player.thrustmomz := ((xyspeed div 16) * player.lookdir16) div 256; //ORIG_FRICTION_FACTOR;
       player.mo.momz :=  player.mo.momz + player.thrustmomz;
     end;
   end;

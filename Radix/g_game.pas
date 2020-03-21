@@ -716,10 +716,6 @@ begin
   begin
     if zaxisshift then
     begin
-      if look < 0 then
-        look := look + 16;
-      cmd.lookupdown := look;
-
       // JVAL Smooth Look Up/Down
       if look16 < 0 then
         look16 := look16 + 16 * 256;
@@ -2157,24 +2153,15 @@ begin
 
   if olddemo then
   begin
-    cmd.lookupdown := 0;
     cmd.lookupdown16 := 0; // JVAL Smooth Look Up/Down
     cmd.lookleftright := 0;
     cmd.jump := 0;
   end
   else
   begin
-    cmd.lookupdown := demo_p[0];
-    demo_p := @demo_p[1];
-
     // JVAL Smooth Look Up/Down
-    if demoversion >= VERSION203 then
-    begin
-      cmd.lookupdown16 := PWord(demo_p)^;
-      demo_p := @demo_p[2];
-    end
-    else
-      cmd.lookupdown16 := 256 * cmd.lookupdown;
+    cmd.lookupdown16 := PWord(demo_p)^;
+    demo_p := @demo_p[2];
 
     cmd.lookleftright := demo_p[0];
     demo_p := @demo_p[1];
@@ -2242,9 +2229,6 @@ begin
   demo_p := @demo_p[2];
 
   demo_p[0] := cmd.buttons and (not BT_SPECIAL);
-  demo_p := @demo_p[1];
-
-  demo_p[0] := cmd.lookupdown;
   demo_p := @demo_p[1];
 
   // JVAL Smooth Look Up/Down
