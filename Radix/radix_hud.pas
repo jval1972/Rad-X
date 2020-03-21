@@ -173,7 +173,9 @@ begin
   speed := sqrt(sqr(hud_player.mo.momx / FRACUNIT) + sqr(hud_player.mo.momy / FRACUNIT) + sqr(hud_player.mo.momz / FRACUNIT));
 
   cnt := GetIntegerInRange(15 - round(speed * hud_speed_factor), 0, 15);
-  if cnt = 0 then
+  if not up and (cnt = 0) then
+    exit;
+  if up and (cnt = 15) then
     exit;
 
   xpos := x;
