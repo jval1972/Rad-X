@@ -1138,8 +1138,7 @@ begin
   ZeroMemory(@p.cards, SizeOf(p.cards));
   if p.mo <> nil then
     p.mo.flags := p.mo.flags and (not MF_SHADOW); // cancel invisibility
-  p.lookdir := 0;       // JVAL cancel lookdir Up/Down
-  p.lookdir16 := 0;     // JVAL Smooth Look Up/Down
+  p.lookdir16 := 0;     // JVAL cancel lookdir
   p.centering := false;
   p.lookdir2 := 0;      // JVAL cancel lookdir Left/Right
   p.forwarding := false;

@@ -462,51 +462,26 @@ begin
       else
       begin
         player.lookdir16 := player.lookdir16 + Round(5 * look16 / 16);
-        player.lookdir := player.lookdir16 div 16;
 
         if player.lookdir16 > MAXLOOKDIR * 16 then
           player.lookdir16 := MAXLOOKDIR * 16
         else if player.lookdir16 < MINLOOKDIR * 16 then
           player.lookdir16 := MINLOOKDIR * 16;
-
-        if player.lookdir > MAXLOOKDIR then
-          player.lookdir := MAXLOOKDIR
-        else if player.lookdir < MINLOOKDIR then
-          player.lookdir := MINLOOKDIR;
       end;
     end;
 
     if player.centering then
     begin
-      if G_PlayingEngineVersion < VERSION203 then // JVAL Smooth Look Up/Down
+      // JVAL Smooth Look Up/Down
+      if player.lookdir16 > 0 then
+        player.lookdir16 := player.lookdir16 - 8 * 16
+      else if player.lookdir16 < 0 then
+        player.lookdir16 := player.lookdir16 + 8 * 16;
+
+      if abs(player.lookdir16) < 8 * 16 then
       begin
-        if player.lookdir > 0 then
-          player.lookdir := player.lookdir - 8
-        else if player.lookdir < 0 then
-          player.lookdir := player.lookdir + 8;
-
-        if abs(player.lookdir) < 8 then
-        begin
-          player.lookdir := 0;
-          player.centering := false;
-        end;
-
-        player.lookdir16 := player.lookdir * 16;
-      end
-      else
-      begin // JVAL Smooth Look Up/Down
-        if player.lookdir16 > 0 then
-          player.lookdir16 := player.lookdir16 - 8 * 16
-        else if player.lookdir16 < 0 then
-          player.lookdir16 := player.lookdir16 + 8 * 16;
-
-        if abs(player.lookdir16) < 8 * 16 then
-        begin
-          player.lookdir16 := 0;
-          player.centering := false;
-        end;
-
-        player.lookdir := player.lookdir16 div 16;
+        player.lookdir16 := 0;
+        player.centering := false;
       end;
     end;
   end;
@@ -516,13 +491,13 @@ begin
 
   player.mo.momz := player.mo.momz * 15 div 16;
 
-  if player.lookdir <> 0 then
+  if player.lookdir16 <> 0 then
   begin
     an := (R_PointToAngle2(0, 0, player.mo.momx, player.mo.momy) - player.mo.angle) shr FRACBITS;
     xyspeed := FixedMul(FixedSqrt(FixedMul(player.mo.momx, player.mo.momx) + FixedMul(player.mo.momy, player.mo.momy)), fixedcosine[an]);
     if xyspeed <> 0 then
     begin
-      player.thrustmomz := xyspeed * player.lookdir div 256; //ORIG_FRICTION_FACTOR;
+      player.thrustmomz := xyspeed * player.lookdir16 div (16 * 256); //ORIG_FRICTION_FACTOR;
       player.mo.momz :=  player.mo.momz + player.thrustmomz;
     end;
   end;
@@ -601,11 +576,8 @@ begin
     player.viewheight := 6 * FRACUNIT;
 
   if player.viewheight > 6 * FRACUNIT then
-    if player.lookdir < 45 then
-    begin
-      player.lookdir := player.lookdir + 5;
-      player.lookdir16 := player.lookdir * 16; // JVAL Smooth Look Up/Down
-    end;
+    if player.lookdir16 < 45 * 16 then
+      player.lookdir16 := player.lookdir16 + 5 * 16; // JVAL Smooth Look Up/Down
 
   player.deltaviewheight := 0;
   onground := player.mo.z <= player.mo.floorz;

@@ -344,7 +344,6 @@ begin
   player := @players[displayplayer];
   if player <> nil then
   begin
-    R_AddInterpolationItem(@player.lookdir, iinteger);
     R_AddInterpolationItem(@player.lookdir16, iinteger); // JVAL Smooth Look Up/Down
     R_AddInterpolationItem(@player.lookdir2, ibyte);
     R_AddInterpolationItem(@player.viewz, iinteger);

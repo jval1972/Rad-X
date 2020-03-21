@@ -95,7 +95,7 @@ type
     bob: fixed_t;
 
     // Look UP/DOWN support
-    lookdir: integer;
+    lookdir16: integer; // JVAL Smooth Look Up/Down
     centering: boolean;
     // Look LEFT/RIGHT support
     lookdir2: byte;
@@ -209,7 +209,6 @@ type
     oldviewz: fixed_t; // JVAL: Slopes
     teleporttics: integer;
     quaketics: integer;
-    lookdir16: integer; // JVAL Smooth Look Up/Down
     cmd: ticcmd_t;      // JVAL Smooth Look Up/Down
   end;
   Pplayer_t = ^player_t;

@@ -168,7 +168,6 @@ begin
         if p <> nil then
         begin
           p.viewz := thing.z + p.viewheight;
-          p.lookdir := 0;
           p.lookdir16 := 0; // JVAL Smooth Look Up/Down
         end;
 

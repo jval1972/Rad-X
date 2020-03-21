@@ -625,7 +625,7 @@ begin
       an := an - $8000000;
       bulletslope := P_AimLineAttack(mo, an, 16 * 64 * FRACUNIT);
       if zaxisshift and (linetarget = nil) then
-        bulletslope := (Pplayer_t(mo.player).lookdir * FRACUNIT) div 173;
+        bulletslope := (Pplayer_t(mo.player).lookdir16 * (FRACUNIT div 16)) div 173;
     end;
   end;
 end;

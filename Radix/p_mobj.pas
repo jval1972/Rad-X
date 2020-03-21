@@ -1743,33 +1743,10 @@ begin
       an := an - $8000000;
       slope := P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
 
-      ver := G_PlayingEngineVersion;
-      if ver > VERSION110 then
+      if linetarget = nil then
       begin
-        if ver < VERSION204 then
-        begin
-          if zaxisshift and (linetarget = nil) then
-          begin
-            an := source.angle;
-            slope := (Pplayer_t(source.player).lookdir * FRACUNIT) div 173;
-          end;
-        end
-        else
-        begin
-          if linetarget = nil then
-          begin
-            an := source.angle;
-            slope := (Pplayer_t(source.player).lookdir * FRACUNIT) div 173;
-          end;
-        end;
-      end
-      else
-      begin
-        if linetarget = nil then
-        begin
-          an := source.angle;
-          slope := 0;
-        end;
+        an := source.angle;
+        slope := (Pplayer_t(source.player).lookdir16 * (FRACUNIT div 16)) div 173;
       end;
 
     end;
@@ -1779,7 +1756,7 @@ begin
   y := source.y;
   // Also z axis shift calculation
   if zaxisshift then
-    z := source.z + 4 * 8 * FRACUNIT + (Pplayer_t(source.player).lookdir * FRACUNIT) div 173
+    z := source.z + 4 * 8 * FRACUNIT + (Pplayer_t(source.player).lookdir16 * (FRACUNIT div 16)) div 173
   else
     z := source.z + 4 * 8 * FRACUNIT;
 
