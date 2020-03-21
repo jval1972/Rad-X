@@ -55,9 +55,10 @@ type
     lookfly: byte;   // look up/down/centering/fly
     arti: byte;
 {$ENDIF}
-    lookleftright: byte;   // JVAL look left/right/forward
-    jump: byte;     // JVAL Jump!
-    lookupdown16: word;    // JVAL Smooth Look Up/Down
+    lookleftright: byte;  // JVAL look left/right/forward
+    flyup: byte;          // JVAL Fly up
+    flydown: byte;        // JVAL Fly down
+    lookupdown16: word;   // JVAL Smooth Look Up/Down
   end;
   Pticcmd_t = ^ticcmd_t;
 

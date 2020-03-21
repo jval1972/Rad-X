@@ -129,8 +129,9 @@ var
   key_use: integer;
   key_strafe: integer;
   key_speed: integer;
-// JVAL Jump
-  key_jump: integer;
+// JVAL Fly up/down
+  key_flyup: integer;
+  key_flydown: integer;
 
 // JVAL 20191207 Key bindings for weapon change
   key_weapon0: integer = Ord('1');
@@ -156,7 +157,8 @@ var
   joybstrafe: integer;
   joybuse: integer;
   joybspeed: integer;
-  joybjump: integer;
+  joybflyup: integer;
+  joybflydown: integer;
   joyblleft: integer;
   joyblright: integer;
 
@@ -726,16 +728,15 @@ begin
     cmd.lookleftright:= look2;
     // JVAL
     // allowplayerjumps variable controls if we accept input for jumping
-    if allowplayerjumps and (gamekeydown[key_jump] or (usejoystick and joybuttons[joybjump])) then
-    begin
-      if players[consoleplayer].oldjump <> 0 then
-        cmd.jump := 1
-      else
-        cmd.jump := 2
-      end
+    if allowplayerjumps and (gamekeydown[key_flyup] or (usejoystick and joybuttons[joybflyup])) then
+      cmd.flyup := 1
     else
-      cmd.jump := 0;
-    players[consoleplayer].oldjump := cmd.jump;
+      cmd.flyup := 0;
+
+    if gamekeydown[key_flydown] or (usejoystick and joybuttons[joybflydown]) then
+      cmd.flydown := 1
+    else
+      cmd.flydown := 0;
   end;
 
   // special buttons
@@ -1154,7 +1155,8 @@ begin
     key_down := 175;
     key_strafeleft := 44;
     key_straferight := 46;
-    key_jump := 97;
+    key_flyup := 97;
+    key_flydown := 122;
     key_fire := 157;
     key_use := 32;
     key_strafe := 184;
@@ -1182,7 +1184,8 @@ begin
     key_down := 115;
     key_strafeleft := 97;
     key_straferight := 100;
-    key_jump := 106;
+    key_flyup := 106;
+    key_flydown := 122;
     key_fire := 157;
     key_use := 32;
     key_strafe := 184;
@@ -2151,23 +2154,16 @@ begin
   cmd.buttons := demo_p[0] and (not BT_SPECIAL);
   demo_p := @demo_p[1];
 
-  if olddemo then
-  begin
-    cmd.lookupdown16 := 0; // JVAL Smooth Look Up/Down
-    cmd.lookleftright := 0;
-    cmd.jump := 0;
-  end
-  else
-  begin
-    // JVAL Smooth Look Up/Down
-    cmd.lookupdown16 := PWord(demo_p)^;
-    demo_p := @demo_p[2];
+  // JVAL Smooth Look Up/Down
+  cmd.lookupdown16 := PWord(demo_p)^;
+  demo_p := @demo_p[2];
 
-    cmd.lookleftright := demo_p[0];
-    demo_p := @demo_p[1];
-    cmd.jump := demo_p[0];
-    demo_p := @demo_p[1];
-  end;
+  cmd.lookleftright := demo_p[0];
+  demo_p := @demo_p[1];
+  cmd.flyup := demo_p[0];
+  demo_p := @demo_p[1];
+  cmd.flydown := demo_p[0];
+  demo_p := @demo_p[1];
 end;
 
 //
@@ -2238,7 +2234,10 @@ begin
   demo_p[0] := cmd.lookleftright;
   demo_p := @demo_p[1];
 
-  demo_p[0] := cmd.jump;
+  demo_p[0] := cmd.flyup;
+  demo_p := @demo_p[1];
+
+  demo_p[0] := cmd.flydown;
 
   demo_p := demo_start;
 

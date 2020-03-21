@@ -405,6 +405,7 @@ var
   movefactor: fixed_t;
   xyspeed: fixed_t;
   an: angle_t;
+  flyupdown: integer;
 begin
   cmd := @player.cmd;
 
@@ -545,8 +546,12 @@ begin
 
     player.oldlook2 := look2;
 
-    if cmd.jump > 1 then
-      player.mo.momz := 8 * FRACUNIT;
+    flyupdown := cmd.flyup;
+    flyupdown := flyupdown - cmd.flydown;
+    if flyupdown > 0 then
+      player.mo.momz := 8 * FRACUNIT
+    else if flyupdown < 0 then
+      player.mo.momz := -8 * FRACUNIT
   end
   else
     player.lookdir2 := 0;

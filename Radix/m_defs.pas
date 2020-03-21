@@ -160,7 +160,7 @@ type
   Pdefault_t = ^default_t;
 
 const
-  NUMDEFAULTS = {$IFDEF FPC}190{$ELSE}192{$ENDIF};
+  NUMDEFAULTS = {$IFDEF FPC}192{$ELSE}194{$ENDIF};
 
 // JVAL
 // Note: All setable defaults must be in lowercase, don't ask why. Just do it. :)
@@ -1042,12 +1042,21 @@ const
      defaultbvalue: false;
      _type: tInteger),
 
-     // JVAL Jump
-    (name: 'key_jump';
-     location: @key_jump;
+     // JVAL Fly up
+    (name: 'key_flyup';
+     location: @key_flyup;
      setable: DFS_NEVER;
      defaultsvalue: '';
-     defaultivalue: Ord('a');
+     defaultivalue: Ord('e');
+     defaultbvalue: false;
+     _type: tInteger),
+
+     // JVAL Fly down
+    (name: 'key_flydown';
+     location: @key_flydown;
+     setable: DFS_NEVER;
+     defaultsvalue: '';
+     defaultivalue: Ord('q');
      defaultbvalue: false;
      _type: tInteger),
 
@@ -1327,11 +1336,19 @@ const
      defaultbvalue: false;
      _type: tInteger),
 
-    (name: 'joyb_jump';
-     location: @joybjump;
+    (name: 'joyb_flyup';
+     location: @joybflyup;
      setable: DFS_ALWAYS;
      defaultsvalue: '';
      defaultivalue: 4;
+     defaultbvalue: false;
+     _type: tInteger),
+
+    (name: 'joyb_flydown';
+     location: @joybflyup;
+     setable: DFS_ALWAYS;
+     defaultsvalue: '';
+     defaultivalue: 5;
      defaultbvalue: false;
      _type: tInteger),
 

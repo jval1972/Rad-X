@@ -102,9 +102,6 @@ type
     oldlook2: integer;
     forwarding: boolean;
 
-    // jump
-    oldjump: integer;
-
     // This is only used between levels,
     // mo->health is used during levels.
     health: integer;
