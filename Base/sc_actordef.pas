@@ -2207,7 +2207,7 @@ begin
           sc.GetString;
         end
 
-        else if sc.MatchString('weapon0') then
+        else if sc.MatchString('weapon0') or sc.MatchString('neutroncannons') then
         begin
           if not foundinventory then
             I_Warning('SC_ActordefToDEH(): "WEAPON0" keyword ouside "INVENTORY" block'#13#10);
@@ -2215,7 +2215,7 @@ begin
           sc.GetString;
         end
 
-        else if sc.MatchString('weapon1') then
+        else if sc.MatchString('weapon1') or sc.MatchString('standardepc') then
         begin
           if not foundinventory then
             I_Warning('SC_ActordefToDEH(): "WEAPON1" keyword ouside "INVENTORY" block'#13#10);
@@ -2223,7 +2223,7 @@ begin
           sc.GetString;
         end
 
-        else if sc.MatchString('weapon2') then
+        else if sc.MatchString('weapon2') or sc.MatchString('plasmaspreader') then
         begin
           if not foundinventory then
             I_Warning('SC_ActordefToDEH(): "WEAPON2" keyword ouside "INVENTORY" block'#13#10);
@@ -2231,7 +2231,7 @@ begin
           sc.GetString;
         end
 
-        else if sc.MatchString('weapon3') then
+        else if sc.MatchString('weapon3') or sc.MatchString('seekingmissiles') then
         begin
           if not foundinventory then
             I_Warning('SC_ActordefToDEH(): "WEAPON3" keyword ouside "INVENTORY" block'#13#10);
@@ -2239,7 +2239,7 @@ begin
           sc.GetString;
         end
 
-        else if sc.MatchString('weapon4') then
+        else if sc.MatchString('weapon4') or sc.MatchString('nuke') then
         begin
           if not foundinventory then
             I_Warning('SC_ActordefToDEH(): "WEAPON4" keyword ouside "INVENTORY" block'#13#10);
@@ -2247,7 +2247,7 @@ begin
           sc.GetString;
         end
 
-        else if sc.MatchString('weapon5') then
+        else if sc.MatchString('weapon5') or sc.MatchString('phasetorpedoes') then
         begin
           if not foundinventory then
             I_Warning('SC_ActordefToDEH(): "WEAPON5" keyword ouside "INVENTORY" block'#13#10);
@@ -2255,7 +2255,7 @@ begin
           sc.GetString;
         end
 
-        else if sc.MatchString('weapon6') then
+        else if sc.MatchString('weapon6') or sc.MatchString('gravitywave') then
         begin
           if not foundinventory then
             I_Warning('SC_ActordefToDEH(): "WEAPON6" keyword ouside "INVENTORY" block'#13#10);
@@ -2263,7 +2263,7 @@ begin
           sc.GetString;
         end
 
-        else if sc.MatchString('weapon7') then
+        else if sc.MatchString('weapon7') or sc.MatchString('enchancedepc') then
         begin
           if not foundinventory then
             I_Warning('SC_ActordefToDEH(): "WEAPON7" keyword ouside "INVENTORY" block'#13#10);
@@ -2271,7 +2271,7 @@ begin
           sc.GetString;
         end
 
-        else if sc.MatchString('weapon8') then
+        else if sc.MatchString('weapon8') or sc.MatchString('superepc') then
         begin
           if not foundinventory then
             I_Warning('SC_ActordefToDEH(): "WEAPON8" keyword ouside "INVENTORY" block'#13#10);
