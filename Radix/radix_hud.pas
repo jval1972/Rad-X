@@ -48,6 +48,7 @@ uses
   am_map,
   d_net,
   d_player,
+  d_items,
   g_game,
   mt_utils,
   mn_font,
@@ -90,6 +91,7 @@ var
   ShieldBar: Ppatch_t;
   EnergyBar: Ppatch_t;
   hud_player: Pplayer_t;
+  statammo: array[0..3] of Ppatch_t;
 
 procedure RX_InitRadixHud;
 var
@@ -140,6 +142,11 @@ begin
   ArmourBar := W_CacheLumpName('ArmourBar', PU_STATIC);
   ShieldBar := W_CacheLumpName('ShieldBar', PU_STATIC);
   EnergyBar := W_CacheLumpName('EnergyBar', PU_STATIC);
+
+  statammo[0] := W_CacheLumpName('StatAmmo1', PU_STATIC);
+  statammo[1] := W_CacheLumpName('StatAmmo4', PU_STATIC);
+  statammo[2] := W_CacheLumpName('StatAmmo2', PU_STATIC);
+  statammo[3] := W_CacheLumpName('StatAmmo3', PU_STATIC);
 end;
 
 procedure RX_ShutDownRadixHud;
@@ -403,6 +410,13 @@ begin
   M_WriteSmallText(145, 200 - STATUSBAR_HEIGHT + 8, itoa(hud_player.ammo[1]), SCN_HUD);
   M_WriteSmallText(96, 200 - STATUSBAR_HEIGHT + 19, itoa(hud_player.ammo[2]), SCN_HUD);
   M_WriteSmallText(145, 200 - STATUSBAR_HEIGHT + 19, itoa(hud_player.ammo[3]), SCN_HUD);
+
+  case Ord(weaponinfo[Ord(hud_player.readyweapon)].ammo) of
+    0: V_DrawPatch(75, 200 - STATUSBAR_HEIGHT + 8, SCN_HUD, statammo[0], false);
+    1: V_DrawPatch(124, 200 - STATUSBAR_HEIGHT + 8, SCN_HUD, statammo[1], false);
+    2: V_DrawPatch(75, 200 - STATUSBAR_HEIGHT + 19, SCN_HUD, statammo[2], false);
+    3: V_DrawPatch(124, 200 - STATUSBAR_HEIGHT + 19, SCN_HUD, statammo[3], false);
+  end;
 end;
 
 procedure RX_HudDrawerCockpit;
@@ -481,6 +495,13 @@ begin
   M_WriteSmallText(74, 174, itoa(hud_player.ammo[1]), SCN_HUD);
   M_WriteSmallText(31, 185, itoa(hud_player.ammo[2]), SCN_HUD);
   M_WriteSmallText(74, 185, itoa(hud_player.ammo[3]), SCN_HUD);
+
+  case Ord(weaponinfo[Ord(hud_player.readyweapon)].ammo) of
+    0: V_DrawPatchStencil(10, 174, SCN_HUD, statammo[0], false, 0);
+    1: V_DrawPatchStencil(53, 174, SCN_HUD, statammo[1], false, 0);
+    2: V_DrawPatchStencil(10, 185, SCN_HUD, statammo[2], false, 0);
+    3: V_DrawPatchStencil(53, 185, SCN_HUD, statammo[3], false, 0);
+  end;
 end;
 
 procedure RX_HudDrawer;
