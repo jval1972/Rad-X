@@ -81,10 +81,10 @@ var
   statusbarspeed: speedindicatorcolumn_t;
   cockpit: Ppatch_t;
   statusbarimage: Ppatch_t;
-  weaponimages: array[0..6] of Ppatch_t;
-  WeaponNumOn: array[0..6] of Ppatch_t;
-  WeaponNumOff: array[0..6] of Ppatch_t;
-  WeaponNumUse: array[0..6] of Ppatch_t;
+  weaponimages: array[0..8] of Ppatch_t;
+  WeaponNumOn: array[0..8] of Ppatch_t;
+  WeaponNumOff: array[0..8] of Ppatch_t;
+  WeaponNumUse: array[0..8] of Ppatch_t;
   treatimages: array[boolean] of Ppatch_t;
   ArmourBar: Ppatch_t;
   ShieldBar: Ppatch_t;
@@ -125,6 +125,16 @@ begin
     sprintf(stmp, 'WeaponNumUse%d', [i + 1]);
     WeaponNumUse[i] := W_CacheLumpName(stmp, PU_STATIC);
   end;
+  weaponimages[7] := W_CacheLumpName('EnhancedEPCWeaponPicture', PU_STATIC);
+  WeaponNumOn[7] := WeaponNumOn[1];
+  WeaponNumOff[7] := WeaponNumOff[1];
+  WeaponNumUse[7] := WeaponNumUse[1];
+
+  weaponimages[8] := W_CacheLumpName('SuperEPCWeaponPicture', PU_STATIC);
+  WeaponNumOn[8] := WeaponNumOn[1];
+  WeaponNumOff[8] := WeaponNumOff[1];
+  WeaponNumUse[8] := WeaponNumUse[1];
+
   treatimages[true] := W_CacheLumpName('ThreatOnMap', PU_STATIC);
   treatimages[false] := W_CacheLumpName('ThreatOffMap', PU_STATIC);
   ArmourBar := W_CacheLumpName('ArmourBar', PU_STATIC);
@@ -307,6 +317,10 @@ begin
   end;
 end;
 
+const
+  weaponxlatpos: array[0..8] of integer =
+    (0, 1, 2, 3, 4, 5, 6, 1, 1);
+
 procedure RX_HudDrawerStatusbar;
 var
   p: Ppatch_t;
@@ -324,21 +338,32 @@ begin
     3: p := weaponimages[3];
     4: p := weaponimages[4];
     5: p := weaponimages[5];
+    6: p := weaponimages[6];
+    7: p := weaponimages[7];
+    8: p := weaponimages[8];
   else
-    p := weaponimages[6];
+    p := weaponimages[0];
   end;
   V_DrawPatch(5, 200 - STATUSBAR_HEIGHT + 4, SCN_HUD, p, false);
 
   // Draw weapon indicators
-  for i := 0 to 6 do
+  for i := 0 to 8 do
   begin
     if Ord(hud_player.readyweapon) = i then
       p := WeaponNumUse[i]
     else if hud_player.weaponowned[i] <> 0 then
+    begin
+      if i > 6 then
+        continue;
       p := WeaponNumOn[i]
+    end
     else
+    begin
+      if i > 6 then
+        continue;
       p := WeaponNumOff[i];
-    V_DrawPatch(6 + i * 8, 200 - STATUSBAR_HEIGHT + 31, SCN_HUD, p, false);
+    end;
+    V_DrawPatch(6 + weaponxlatpos[i] * 8, 200 - STATUSBAR_HEIGHT + 31, SCN_HUD, p, false);
   end;
 
   // Draw kills
@@ -389,21 +414,28 @@ begin
     3: p := weaponimages[3];
     4: p := weaponimages[4];
     5: p := weaponimages[5];
+    6: p := weaponimages[6];
+    7: p := weaponimages[7];
+    8: p := weaponimages[8];
   else
-    p := weaponimages[6];
+    p := weaponimages[0];
   end;
   V_DrawPatch(23, 142, SCN_HUD, p, false);
 
   // Draw weapon indicators
-  for i := 0 to 6 do
+  for i := 0 to 8 do
   begin
     if Ord(hud_player.readyweapon) = i then
       p := WeaponNumUse[i]
     else if hud_player.weaponowned[i] <> 0 then
-      p := WeaponNumOn[i]
+    begin
+      if i > 6 then
+        continue;
+      p := WeaponNumOn[i];
+    end
     else
       continue; // Already in cockpit patch
-    V_DrawPatchStencil(26 + i * 8, 162, SCN_HUD, p, false, 0);
+    V_DrawPatchStencil(26 + weaponxlatpos[i] * 8, 162, SCN_HUD, p, false, 0);
   end;
 
   // Draw kills
