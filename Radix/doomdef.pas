@@ -182,14 +182,14 @@ type
 //  user has not changed weapon.
   weapontype_t = (
     wp_neutroncannons,
-    wp_pistol,
-    wp_shotgun,
-    wp_chaingun,
-    wp_missile,
-    wp_plasma,
-    wp_bfg,
-    wp_chainsaw,
-    wp_supershotgun,
+    wp_standardepc,
+    wp_plasmaspreader,
+    wp_seekingmissiles,
+    wp_nuke,
+    wp_phasetorpedoes,
+    wp_gravitywave,
+    wp_enchancedepc,
+    wp_superepc,
     NUMWEAPONS,
     // No pending weapon change.
     wp_nochange
@@ -197,10 +197,10 @@ type
 
 // Ammunition types defined.
   ammotype_t = (
-    am_clip,  // Pistol / chaingun ammo.
-    am_shell, // Shotgun / double barreled shotgun.
-    am_cell,  // Plasma rifle, BFG.
-    am_misl,  // Missile launcher.
+    am_radixshell,
+    am_radixmisl,
+    am_radixtorp,
+    am_radixnuke,
     NUMAMMO,
     am_noammo // Unlimited for chainsaw / fist.
   );

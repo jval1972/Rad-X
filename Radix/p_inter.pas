@@ -100,9 +100,6 @@ const
 
 //
 // P_GiveAmmo
-// Num is the number of clip loads,
-// not the individual count (0= 1/2 clip).
-// Returns false if the ammo can't be picked up at all
 //
 function P_GiveAmmo(player: Pplayer_t; ammo: ammotype_t; num: integer): boolean;
 var
@@ -123,15 +120,9 @@ begin
     exit;
   end;
 
-  if num <> 0 then
-    num := num * clipammo[Ord(ammo)]
-  else
-    num := clipammo[Ord(ammo)] div 2;
-
-  if (gameskill = sk_baby) or (gameskill = sk_nightmare) then
+  if gameskill = sk_nightmare then
   begin
-    // give double ammo in trainer mode,
-    // you'll need in nightmare
+    // give double ammo in nightmare
     num := num * 2
   end;
 
@@ -155,40 +146,40 @@ begin
   // so select a new weapon.
   // Preferences are not user selectable.
   case ammo of
-    am_clip:
+    am_radixshell:
       begin
         if player.readyweapon = wp_neutroncannons then
         begin
-          if player.weaponowned[Ord(wp_chaingun)] <> 0 then
-            player.pendingweapon := wp_chaingun
+          if player.weaponowned[Ord(wp_seekingmissiles)] <> 0 then
+            player.pendingweapon := wp_seekingmissiles
           else
-            player.pendingweapon := wp_pistol;
+            player.pendingweapon := wp_standardepc;
         end;
       end;
-    am_shell:
+    am_radixmisl:
       begin
         if (player.readyweapon = wp_neutroncannons) or
-           (player.readyweapon = wp_pistol) then
+           (player.readyweapon = wp_standardepc) then
         begin
-          if player.weaponowned[Ord(wp_shotgun)] <> 0 then
-            player.pendingweapon := wp_shotgun;
+          if player.weaponowned[Ord(wp_plasmaspreader)] <> 0 then
+            player.pendingweapon := wp_plasmaspreader;
         end;
       end;
-    am_cell:
+    am_radixtorp:
       begin
         if (player.readyweapon = wp_neutroncannons) or
-           (player.readyweapon = wp_pistol) then
+           (player.readyweapon = wp_standardepc) then
         begin
-          if player.weaponowned[Ord(wp_plasma)] <> 0 then
-            player.pendingweapon := wp_plasma;
+          if player.weaponowned[Ord(wp_phasetorpedoes)] <> 0 then
+            player.pendingweapon := wp_phasetorpedoes;
         end;
       end;
-    am_misl:
+    am_radixnuke:
       begin
         if player.readyweapon = wp_neutroncannons then
         begin
-          if player.weaponowned[Ord(wp_missile)] <> 0 then
-            player.pendingweapon := wp_missile;
+          if player.weaponowned[Ord(wp_nuke)] <> 0 then
+            player.pendingweapon := wp_nuke;
         end
       end;
   end;
@@ -692,12 +683,12 @@ begin
         begin
           if special.flags and MF_DROPPED <> 0 then
           begin
-            if not P_GiveAmmo(player, am_clip, 0) then
+            if not P_GiveAmmo(player, am_radixshell, 0) then
               exit;
           end
           else
           begin
-            if not P_GiveAmmo(player, am_clip, 1) then
+            if not P_GiveAmmo(player, am_radixshell, 1) then
               exit;
           end;
           player._message := GOTCLIP;
@@ -705,35 +696,35 @@ begin
 
       Ord(SPR_AMMO):
         begin
-          if not P_GiveAmmo(player, am_clip, 5) then
+          if not P_GiveAmmo(player, am_radixshell, 5) then
             exit;
           player._message := GOTCLIPBOX;
         end;
 
       Ord(SPR_ROCK):
         begin
-          if not P_GiveAmmo(player, am_misl, 1) then
+          if not P_GiveAmmo(player, am_radixnuke, 1) then
             exit;
           player._message := GOTROCKET;
         end;
 
       Ord(SPR_BROK):
         begin
-          if not P_GiveAmmo(player, am_misl, 5) then
+          if not P_GiveAmmo(player, am_radixnuke, 5) then
             exit;
           player._message := GOTROCKBOX;
         end;
 
       Ord(SPR_CELL):
         begin
-          if not P_GiveAmmo(player, am_cell, 1) then
+          if not P_GiveAmmo(player, am_radixtorp, 1) then
             exit;
           player._message := GOTCELL;
         end;
 
       Ord(SPR_CELP):
         begin
-          if not P_GiveAmmo(player, am_cell, 5) then
+          if not P_GiveAmmo(player, am_radixtorp, 5) then
             exit;
           player._message := GOTCELLBOX;
         end;
@@ -741,12 +732,12 @@ begin
       Ord(SPR_SHEL):
         begin
         // JVAL: 7/12/2007 display exact number of picked-up shells.
-          oldshells := player.ammo[Ord(am_shell)];
+          oldshells := player.ammo[Ord(am_radixmisl)];
 
-          if not P_GiveAmmo(player, am_shell, 1) then
+          if not P_GiveAmmo(player, am_radixmisl, 1) then
             exit;
 
-          pickedshells := player.ammo[Ord(am_shell)] - oldshells;
+          pickedshells := player.ammo[Ord(am_radixmisl)] - oldshells;
           if pickedshells > 0 then
           begin
             case pickedshells of
@@ -763,7 +754,7 @@ begin
 
       Ord(SPR_SBOX):
         begin
-          if not P_GiveAmmo(player, am_shell, 5) then
+          if not P_GiveAmmo(player, am_radixmisl, 5) then
             exit;
           player._message := GOTSHELLBOX;
         end;
@@ -784,7 +775,7 @@ begin
     // weapons
       Ord(SPR_BFUG):
         begin
-          if not P_GiveWeapon(player, wp_bfg, false) then
+          if not P_GiveWeapon(player, wp_gravitywave, false) then
             exit;
           player._message := GOTBFG9000;
           sound := Ord(sfx_wpnup);
@@ -792,7 +783,7 @@ begin
 
       Ord(SPR_MGUN):
         begin
-          if not P_GiveWeapon(player, wp_chaingun, special.flags and MF_DROPPED <> 0) then
+          if not P_GiveWeapon(player, wp_seekingmissiles, special.flags and MF_DROPPED <> 0) then
             exit;
           player._message := GOTCHAINGUN;
           sound := Ord(sfx_wpnup);
@@ -800,7 +791,7 @@ begin
 
       Ord(SPR_CSAW):
         begin
-          if not P_GiveWeapon(player, wp_chainsaw, false) then
+          if not P_GiveWeapon(player, wp_enchancedepc, false) then
             exit;
           player._message := GOTCHAINSAW;
           sound := Ord(sfx_wpnup);
@@ -808,7 +799,7 @@ begin
 
       Ord(SPR_LAUN):
         begin
-          if not P_GiveWeapon(player, wp_missile, false) then
+          if not P_GiveWeapon(player, wp_nuke, false) then
             exit;
           player._message := GOTLAUNCHER;
           sound := Ord(sfx_wpnup);
@@ -816,7 +807,7 @@ begin
 
       Ord(SPR_PLAS):
         begin
-          if not P_GiveWeapon(player, wp_plasma, false) then
+          if not P_GiveWeapon(player, wp_phasetorpedoes, false) then
             exit;
           player._message := GOTPLASMA;
           sound := Ord(sfx_wpnup);
@@ -824,7 +815,7 @@ begin
 
       Ord(SPR_SHOT):
         begin
-          if not P_GiveWeapon(player, wp_shotgun, special.flags and MF_DROPPED <> 0) then
+          if not P_GiveWeapon(player, wp_plasmaspreader, special.flags and MF_DROPPED <> 0) then
             exit;
           player._message := GOTSHOTGUN;
           sound := Ord(sfx_wpnup);
@@ -832,7 +823,7 @@ begin
 
       Ord(SPR_SGN2):
         begin
-          if not P_GiveWeapon(player, wp_supershotgun, special.flags and MF_DROPPED <> 0) then
+          if not P_GiveWeapon(player, wp_superepc, special.flags and MF_DROPPED <> 0) then
             exit;
           player._message := GOTSHOTGUN2;
           sound := Ord(sfx_wpnup);
@@ -1024,7 +1015,7 @@ begin
   // inflict thrust and push the victim out of reach,
   // thus kick away unless using the chainsaw.
   if (inflictor <> nil) and (target.flags and MF_NOCLIP = 0) and
-    ((source = nil) or (source.player = nil) or (Pplayer_t(source.player).readyweapon <> wp_chainsaw)) then
+    ((source = nil) or (source.player = nil) or (Pplayer_t(source.player).readyweapon <> wp_enchancedepc)) then
   begin
     ang := R_PointToAngle2(inflictor.x, inflictor.y, target.x, target.y);
 

@@ -664,11 +664,11 @@ begin
 
   if gamemode = shareware then
   begin
-    for i := 0 to Ord(wp_missile) do
+    for i := 0 to Ord(wp_nuke) do
       plyr.weaponowned[i] := 1;
 
     for i := 0 to Ord(NUMAMMO) - 1 do
-      if i <> Ord(am_cell) then
+      if i <> Ord(am_radixtorp) then
         plyr.ammo[i] := plyr.maxammo[i];
   end
   else
@@ -695,11 +695,11 @@ begin
 
   if gamemode = shareware then
   begin
-    for i := 0 to Ord(wp_missile) - 1 do
+    for i := 0 to Ord(wp_nuke) - 1 do
       plyr.weaponowned[i] := 1;
 
     for i := 0 to Ord(NUMAMMO) - 1 do
-      if i <> Ord(am_cell) then
+      if i <> Ord(am_radixtorp) then
         plyr.ammo[i] := plyr.maxammo[i];
   end
   else
@@ -928,7 +928,7 @@ begin
       // 'choppers' invulnerability & chainsaw
       else if check_cheat(@cheat_choppers, Chr(ev.data1)) then
       begin
-        plyr.weaponowned[Ord(wp_chainsaw)] := 1;
+        plyr.weaponowned[Ord(wp_enchancedepc)] := 1;
         plyr.powers[Ord(pw_invulnerability)] := INVULNTICS;
         plyr._message := STSTR_CHOPPERS;
       end

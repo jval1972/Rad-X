@@ -230,7 +230,7 @@ begin
   if player.pendingweapon = wp_nochange then
     player.pendingweapon := player.readyweapon;
 
-  if player.pendingweapon = wp_chainsaw then
+  if player.pendingweapon = wp_enchancedepc then
     S_StartSound(player.mo, Ord(sfx_sawup));
 
   newstate := statenum_t(weaponinfo[Ord(player.pendingweapon)].upstate);
@@ -254,9 +254,9 @@ begin
   ammo := weaponinfo[Ord(player.readyweapon)].ammo;
 
   // Minimal amount for one shot varies.
-  if player.readyweapon = wp_bfg then
+  if player.readyweapon = wp_gravitywave then
     count := p_bfgcells
-  else if player.readyweapon = wp_supershotgun then
+  else if player.readyweapon = wp_superepc then
     count := 2 // Double barrel.
   else
     count := 1; // Regular.
@@ -272,30 +272,30 @@ begin
   // Out of ammo, pick a weapon to change to.
   // Preferences are set here.
   repeat
-    if (player.weaponowned[Ord(wp_plasma)] <> 0) and
-       (player.ammo[Ord(am_cell)] <> 0) and
+    if (player.weaponowned[Ord(wp_phasetorpedoes)] <> 0) and
+       (player.ammo[Ord(am_radixtorp)] <> 0) and
       (gamemode <> shareware) then
-      player.pendingweapon := wp_plasma
-    else if (player.weaponowned[Ord(wp_supershotgun)] <> 0) and
-            (player.ammo[Ord(am_shell)] > 2) then
-      player.pendingweapon := wp_supershotgun
-    else if (player.weaponowned[Ord(wp_chaingun)] <> 0) and
-            (player.ammo[Ord(am_clip)] <> 0) then
-      player.pendingweapon := wp_chaingun
-    else if (player.weaponowned[Ord(wp_shotgun)] <> 0) and
-            (player.ammo[Ord(am_shell)] <> 0) then
-      player.pendingweapon := wp_shotgun
-    else if (player.ammo[Ord(am_clip)] <> 0) then
-      player.pendingweapon := wp_pistol
-    else if (player.weaponowned[Ord(wp_chainsaw)] <> 0) then
-      player.pendingweapon := wp_chainsaw
-    else if (player.weaponowned[Ord(wp_missile)] <> 0) and
-            (player.ammo[Ord(am_misl)] <> 0) then
-      player.pendingweapon := wp_missile
-    else if (player.weaponowned[Ord(wp_bfg)] <> 0) and
-            (player.ammo[Ord(am_cell)] > p_bfgcells) and
+      player.pendingweapon := wp_phasetorpedoes
+    else if (player.weaponowned[Ord(wp_superepc)] <> 0) and
+            (player.ammo[Ord(am_radixmisl)] > 2) then
+      player.pendingweapon := wp_superepc
+    else if (player.weaponowned[Ord(wp_seekingmissiles)] <> 0) and
+            (player.ammo[Ord(am_radixshell)] <> 0) then
+      player.pendingweapon := wp_seekingmissiles
+    else if (player.weaponowned[Ord(wp_plasmaspreader)] <> 0) and
+            (player.ammo[Ord(am_radixmisl)] <> 0) then
+      player.pendingweapon := wp_plasmaspreader
+    else if (player.ammo[Ord(am_radixshell)] <> 0) then
+      player.pendingweapon := wp_standardepc
+    else if (player.weaponowned[Ord(wp_enchancedepc)] <> 0) then
+      player.pendingweapon := wp_enchancedepc
+    else if (player.weaponowned[Ord(wp_nuke)] <> 0) and
+            (player.ammo[Ord(am_radixnuke)] <> 0) then
+      player.pendingweapon := wp_nuke
+    else if (player.weaponowned[Ord(wp_gravitywave)] <> 0) and
+            (player.ammo[Ord(am_radixtorp)] > p_bfgcells) and
             (gamemode <> shareware) then
-      player.pendingweapon := wp_bfg
+      player.pendingweapon := wp_gravitywave
     else
       // If everything fails.
       player.pendingweapon := wp_neutroncannons;
@@ -350,7 +350,7 @@ begin
      (player.mo.state = @states[Ord(S_PLAY_ATK2)]) then
     P_SetMobjState(player.mo, S_PLAY);
 
-  if (player.readyweapon = wp_chainsaw) and
+  if (player.readyweapon = wp_enchancedepc) and
      (psp.state = @states[Ord(S_SAW)]) then
     S_StartSound(player.mo, Ord(sfx_sawidl));
 
@@ -370,7 +370,7 @@ begin
   if player.cmd.buttons and BT_ATTACK <> 0 then
   begin
     if (not player.attackdown) or
-       ((player.readyweapon <> wp_missile) and (player.readyweapon <> wp_bfg)) then
+       ((player.readyweapon <> wp_nuke) and (player.readyweapon <> wp_gravitywave)) then
     begin
       player.attackdown := true;
       P_FireWeapon(player);
