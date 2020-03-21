@@ -342,13 +342,10 @@ begin
 
   // Interpolate player
   player := @players[displayplayer];
-  if player <> nil then
-  begin
-    R_AddInterpolationItem(@player.lookdir16, iinteger); // JVAL Smooth Look Up/Down
-    R_AddInterpolationItem(@player.lookdir2, ibyte);
-    R_AddInterpolationItem(@player.teleporttics, iinteger);
-    R_AddInterpolationItem(@player.quaketics, iinteger);
-  end;
+  R_AddInterpolationItem(@player.lookdir16, iinteger); // JVAL Smooth Look Up/Down
+  R_AddInterpolationItem(@player.lookdir2, ibyte);
+  R_AddInterpolationItem(@player.teleporttics, iinteger);
+  R_AddInterpolationItem(@player.quaketics, iinteger);
 
   // Interpolate Sectors
   sec := @sectors[0];
@@ -371,13 +368,10 @@ begin
     inc(sec);
   end;
 
-  if player <> nil then
+  for i := 0 to Ord(NUMPSPRITES) - 1 do
   begin
-    for i := 0 to Ord(NUMPSPRITES) - 1 do
-    begin
-      R_AddInterpolationItem(@player.psprites[i].sx, iinteger);
-      R_AddInterpolationItem(@player.psprites[i].sy, iinteger);
-    end;
+    R_AddInterpolationItem(@player.psprites[i].sx, iinteger);
+    R_AddInterpolationItem(@player.psprites[i].sy, iinteger);
   end;
 
   // Interpolate Lines
