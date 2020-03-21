@@ -298,6 +298,46 @@ begin
 end;
 
 //
+// JVAL 20200321 - New function
+// P_GiveEnergy
+//   Increases player energy
+//
+function P_GiveEnergy(player: Pplayer_t; ammount: integer): boolean;
+begin
+  if player.energy >= PLAYERMAXENERGY then
+  begin
+    result := false;
+    exit;
+  end;
+
+  player.energy := player.energy + ammount;
+  if player.energy > PLAYERMAXENERGY then
+    player.energy := PLAYERMAXENERGY;
+
+  result := true;
+end;
+
+//
+// JVAL 20200321 - New function
+// P_GiveShield
+//   Increases player shield
+//
+function P_GiveShield(player: Pplayer_t; ammount: integer): boolean;
+begin
+  if player.shield >= PLAYERMAXSHIELD then
+  begin
+    result := false;
+    exit;
+  end;
+
+  player.shield := player.shield + ammount;
+  if player.shield > PLAYERMAXSHIELD then
+    player.shield := PLAYERMAXSHIELD;
+
+  result := true;
+end;
+
+//
 // P_GiveCard
 //
 procedure P_GiveCard(player: Pplayer_t; card: card_t);
@@ -374,6 +414,7 @@ var
   pickedshells: integer;
   pmsg: string;
   oldhealth: integer;
+  didbonus: boolean;
 begin
   delta := special.z - toucher.z;
 
@@ -381,7 +422,6 @@ begin
   // out of reach
     exit;
 
-  sound := Ord(sfx_itemup);
   player := toucher.player;
 
   // Dead thing touching.
@@ -389,353 +429,418 @@ begin
   if toucher.health <= 0 then
     exit;
 
-  // Identify by sprite.
-  case special.sprite of
-  // armor
-    Ord(SPR_ARM1):
-      begin
-        if not P_GiveArmor(player, p_greenarmorclass) then
-          exit;
-        player._message := GOTARMOR;
-      end;
+  if special.flags3_ex and MF3_EX_CUSTOMPICKUP <> 0 then
+  begin
+    didbonus := false;
 
-    Ord(SPR_ARM2):
-      begin
-        if not P_GiveArmor(player, p_bluearmorclass) then
-          exit;
-        player._message := GOTMEGA;
-      end;
+    if special.armour_inc > 0 then
+    begin
+      if P_GiveArmor(player, special.armour_inc) then
+        didbonus := true;
+    end;
 
-  // bonus items
-    Ord(SPR_BON1):
-      begin
-        player.health := player.health + p_bonushealth; // can go over 100%
-        if player.health > p_maxhealth then
-          player.health := p_maxhealth;
-        player.mo.health := player.health;
-        player._message := GOTHTHBONUS;
-      end;
+    if special.energy_inc > 0 then
+    begin
+      if P_GiveEnergy(player, special.energy_inc) then
+        didbonus := true;
+    end;
 
-    Ord(SPR_BON2):
-      begin
-        player.armorpoints := player.armorpoints + 1; // can go over 100%
-        if player.armorpoints > p_maxarmor then
-          player.armorpoints := p_maxarmor;
-        if player.armortype = 0 then
-          player.armortype := 1;
-        player._message := GOTARMBONUS;
-      end;
+    if special.shield_inc > 0 then
+    begin
+      if P_GiveShield(player, special.shield_inc) then
+        didbonus := true;
+    end;
 
-    Ord(SPR_SOUL):
-      begin
-        player.health := player.health + p_soulspherehealth;
-        if player.health > p_maxhealth then
-          player.health := p_maxhealth;
-        player.mo.health := player.health;
-        player._message := GOTSUPER;
-        sound := Ord(sfx_getpow);
-      end;
+    if special.armour_set > player.armorpoints then
+    begin
+      if P_GiveArmor(player, player.armorpoints - special.armour_inc) then
+        didbonus := true;
+    end;
 
-    Ord(SPR_MEGA):
-      begin
-        player.health := 200;
-        player.mo.health := player.health;
-        P_GiveArmor(player, p_bluearmorclass);
-        player._message := GOTMSPHERE;
-        sound := Ord(sfx_getpow);
-      end;
+    if special.energy_set > player.energy then
+    begin
+      if P_GiveEnergy(player, player.energy - special.energy_inc) then
+        didbonus := true;
+    end;
 
-  // cards
-  // leave cards for everyone
-    Ord(SPR_BKEY):
-      begin
-        if not player.cards[Ord(it_bluecard)] then
-          player._message := GOTBLUECARD;
-        P_GiveCard(player, it_bluecard);
-      if netgame then
-        exit;
-      end;
+    if special.shield_set > player.shield then
+    begin
+      if P_GiveShield(player, player.shield - special.shield_inc) then
+        didbonus := true;
+    end;
 
-    Ord(SPR_YKEY):
-      begin
-        if not player.cards[Ord(it_yellowcard)] then
-          player._message := GOTYELWCARD;
-        P_GiveCard(player, it_yellowcard);
-        if netgame then
-          exit;
-      end;
+    for i := 0 to Ord(NUMAMMO) - 1 do
+    begin
+      if special.ammo_inc[i] > 0 then
+        if P_GiveAmmo(player, ammotype_t(i), special.ammo_inc[i]) then
+          didbonus := true;
+    end;
 
-    Ord(SPR_RKEY):
-      begin
-        if not player.cards[Ord(it_redcard)] then
-          player._message := GOTREDCARD;
-        P_GiveCard(player, it_redcard);
-        if netgame then
-          exit;
-      end;
+    for i := 0 to Ord(NUMWEAPONS) - 1 do
+    begin
+      if special.weapon_inc[i] then
+        if P_GiveWeapon(player, weapontype_t(i), special.flags and MF_DROPPED <> 0) then
+          didbonus := true;
+    end;
 
-    Ord(SPR_BSKU):
-      begin
-        if not player.cards[Ord(it_blueskull)] then
-          player._message := GOTBLUESKUL;
-        P_GiveCard(player, it_blueskull);
-        if netgame then
-          exit;
-      end;
+    if not didbonus then
+      exit;
+      
+    player._message := special.info.pickupmessage;
 
-    Ord(SPR_YSKU):
-      begin
-        if not player.cards[Ord(it_yellowskull)] then
-          player._message := GOTYELWSKUL;
-        P_GiveCard(player, it_yellowskull);
-        if netgame then
-          exit;
-      end;
-
-    Ord(SPR_RSKU):
-      begin
-        if not player.cards[Ord(it_redskull)] then
-          player._message := GOTREDSKULL;
-        P_GiveCard(player, it_redskull);
-        if netgame then
-          exit;
-      end;
-
-  // medikits, heals
-    Ord(SPR_STIM):
-      begin
-        if not P_GiveBody(player, p_stimpackhealth) then
-          exit;
-        player._message := GOTSTIM;
-      end;
-
-    Ord(SPR_MEDI):
-      begin
-        oldhealth := player.health;
-        if not P_GiveBody(player, p_medikithealth) then
-          exit;
-
-        // JVAL 20171210 Fix the https://doomwiki.org/wiki/Picked_up_a_medikit_that_you_REALLY_need! bug
-        if (G_PlayingEngineVersion >= VERSION204) and (player.mo <> nil) then
+    sound := Ord(special.info.pickupsound);
+  end
+  else
+  begin
+    sound := Ord(sfx_itemup);
+    // Identify by sprite.
+    case special.sprite of
+    // armor
+      Ord(SPR_ARM1):
         begin
-          if oldhealth < player.mo.info.spawnhealth div 4 then
-            player._message := GOTMEDINEED
-          else
-            player._message := GOTMEDIKIT;
-        end
-        else
-        begin
-          if player.health < p_medikithealth then
-            player._message := GOTMEDINEED
-          else
-            player._message := GOTMEDIKIT;
-        end;
-      end;
-
-  // power ups
-    Ord(SPR_PINV):
-      begin
-        if not P_GivePower(player, Ord(pw_invulnerability)) then
-          exit;
-        player._message := GOTINVUL;
-        sound := Ord(sfx_getpow);
-      end;
-
-    Ord(SPR_PSTR):
-      begin
-        if not P_GivePower(player, Ord(pw_strength)) then
-          exit;
-        player._message := GOTBERSERK;
-        if player.readyweapon <> wp_fist then
-          player.pendingweapon := wp_fist;
-        sound := Ord(sfx_getpow);
-      end;
-
-    Ord(SPR_PINS):
-      begin
-        if not P_GivePower(player, Ord(pw_invisibility)) then
-          exit;
-        player._message := GOTINVIS;
-        sound := Ord(sfx_getpow);
-      end;
-
-    Ord(SPR_SUIT):
-      begin
-        if not P_GivePower(player, Ord(pw_ironfeet)) then
-          exit;
-        player._message := GOTSUIT;
-        sound := Ord(sfx_getpow);
-      end;
-
-    Ord(SPR_PMAP):
-      begin
-        if not P_GivePower(player, Ord(pw_allmap)) then
-          exit;
-        player._message := GOTMAP;
-        sound := Ord(sfx_getpow);
-      end;
-
-    Ord(SPR_PVIS):
-      begin
-        if not P_GivePower(player, Ord(pw_infrared)) then
-          exit;
-        player._message := GOTVISOR;
-        sound := Ord(sfx_getpow);
-      end;
-
-  // ammo
-    Ord(SPR_CLIP):
-      begin
-        if special.flags and MF_DROPPED <> 0 then
-        begin
-          if not P_GiveAmmo(player, am_clip, 0) then
+          if not P_GiveArmor(player, p_greenarmorclass) then
             exit;
-        end
-        else
+          player._message := GOTARMOR;
+        end;
+
+      Ord(SPR_ARM2):
         begin
-          if not P_GiveAmmo(player, am_clip, 1) then
+          if not P_GiveArmor(player, p_bluearmorclass) then
+            exit;
+          player._message := GOTMEGA;
+        end;
+
+    // bonus items
+      Ord(SPR_BON1):
+        begin
+          player.health := player.health + p_bonushealth; // can go over 100%
+          if player.health > p_maxhealth then
+            player.health := p_maxhealth;
+          player.mo.health := player.health;
+          player._message := GOTHTHBONUS;
+        end;
+
+      Ord(SPR_BON2):
+        begin
+          player.armorpoints := player.armorpoints + 1; // can go over 100%
+          if player.armorpoints > p_maxarmor then
+            player.armorpoints := p_maxarmor;
+          if player.armortype = 0 then
+            player.armortype := 1;
+          player._message := GOTARMBONUS;
+        end;
+
+      Ord(SPR_SOUL):
+        begin
+          player.health := player.health + p_soulspherehealth;
+          if player.health > p_maxhealth then
+            player.health := p_maxhealth;
+          player.mo.health := player.health;
+          player._message := GOTSUPER;
+          sound := Ord(sfx_getpow);
+        end;
+
+      Ord(SPR_MEGA):
+        begin
+          player.health := 200;
+          player.mo.health := player.health;
+          P_GiveArmor(player, p_bluearmorclass);
+          player._message := GOTMSPHERE;
+          sound := Ord(sfx_getpow);
+        end;
+
+    // cards
+    // leave cards for everyone
+      Ord(SPR_BKEY):
+        begin
+          if not player.cards[Ord(it_bluecard)] then
+            player._message := GOTBLUECARD;
+          P_GiveCard(player, it_bluecard);
+        if netgame then
+          exit;
+        end;
+
+      Ord(SPR_YKEY):
+        begin
+          if not player.cards[Ord(it_yellowcard)] then
+            player._message := GOTYELWCARD;
+          P_GiveCard(player, it_yellowcard);
+          if netgame then
             exit;
         end;
-        player._message := GOTCLIP;
-      end;
 
-    Ord(SPR_AMMO):
-      begin
-        if not P_GiveAmmo(player, am_clip, 5) then
-          exit;
-        player._message := GOTCLIPBOX;
-      end;
-
-    Ord(SPR_ROCK):
-      begin
-        if not P_GiveAmmo(player, am_misl, 1) then
-          exit;
-        player._message := GOTROCKET;
-      end;
-
-    Ord(SPR_BROK):
-      begin
-        if not P_GiveAmmo(player, am_misl, 5) then
-          exit;
-        player._message := GOTROCKBOX;
-      end;
-
-    Ord(SPR_CELL):
-      begin
-        if not P_GiveAmmo(player, am_cell, 1) then
-          exit;
-        player._message := GOTCELL;
-      end;
-
-    Ord(SPR_CELP):
-      begin
-        if not P_GiveAmmo(player, am_cell, 5) then
-          exit;
-        player._message := GOTCELLBOX;
-      end;
-
-    Ord(SPR_SHEL):
-      begin
-      // JVAL: 7/12/2007 display exact number of picked-up shells.
-        oldshells := player.ammo[Ord(am_shell)];
-
-        if not P_GiveAmmo(player, am_shell, 1) then
-          exit;
-
-        pickedshells := player.ammo[Ord(am_shell)] - oldshells;
-        if pickedshells > 0 then
+      Ord(SPR_RKEY):
         begin
-          case pickedshells of
-            4: player._message := GOTSHELLS;
-            1: player._message := GOTONESHELL;
+          if not player.cards[Ord(it_redcard)] then
+            player._message := GOTREDCARD;
+          P_GiveCard(player, it_redcard);
+          if netgame then
+            exit;
+        end;
+
+      Ord(SPR_BSKU):
+        begin
+          if not player.cards[Ord(it_blueskull)] then
+            player._message := GOTBLUESKUL;
+          P_GiveCard(player, it_blueskull);
+          if netgame then
+            exit;
+        end;
+
+      Ord(SPR_YSKU):
+        begin
+          if not player.cards[Ord(it_yellowskull)] then
+            player._message := GOTYELWSKUL;
+          P_GiveCard(player, it_yellowskull);
+          if netgame then
+            exit;
+        end;
+
+      Ord(SPR_RSKU):
+        begin
+          if not player.cards[Ord(it_redskull)] then
+            player._message := GOTREDSKULL;
+          P_GiveCard(player, it_redskull);
+          if netgame then
+            exit;
+        end;
+
+    // medikits, heals
+      Ord(SPR_STIM):
+        begin
+          if not P_GiveBody(player, p_stimpackhealth) then
+            exit;
+          player._message := GOTSTIM;
+        end;
+
+      Ord(SPR_MEDI):
+        begin
+          oldhealth := player.health;
+          if not P_GiveBody(player, p_medikithealth) then
+            exit;
+
+          // JVAL 20171210 Fix the https://doomwiki.org/wiki/Picked_up_a_medikit_that_you_REALLY_need! bug
+          if (G_PlayingEngineVersion >= VERSION204) and (player.mo <> nil) then
+          begin
+            if oldhealth < player.mo.info.spawnhealth div 4 then
+              player._message := GOTMEDINEED
+            else
+              player._message := GOTMEDIKIT;
+          end
           else
-            begin
-              sprintf(pmsg, GOTMANYSHELLS, [pickedshells]);
-              player._message := pmsg;
+          begin
+            if player.health < p_medikithealth then
+              player._message := GOTMEDINEED
+            else
+              player._message := GOTMEDIKIT;
+          end;
+        end;
+
+    // power ups
+      Ord(SPR_PINV):
+        begin
+          if not P_GivePower(player, Ord(pw_invulnerability)) then
+            exit;
+          player._message := GOTINVUL;
+          sound := Ord(sfx_getpow);
+        end;
+
+      Ord(SPR_PSTR):
+        begin
+          if not P_GivePower(player, Ord(pw_strength)) then
+            exit;
+          player._message := GOTBERSERK;
+          if player.readyweapon <> wp_fist then
+            player.pendingweapon := wp_fist;
+          sound := Ord(sfx_getpow);
+        end;
+
+      Ord(SPR_PINS):
+        begin
+          if not P_GivePower(player, Ord(pw_invisibility)) then
+            exit;
+          player._message := GOTINVIS;
+          sound := Ord(sfx_getpow);
+        end;
+
+      Ord(SPR_SUIT):
+        begin
+          if not P_GivePower(player, Ord(pw_ironfeet)) then
+            exit;
+          player._message := GOTSUIT;
+          sound := Ord(sfx_getpow);
+        end;
+
+      Ord(SPR_PMAP):
+        begin
+          if not P_GivePower(player, Ord(pw_allmap)) then
+            exit;
+          player._message := GOTMAP;
+          sound := Ord(sfx_getpow);
+        end;
+
+      Ord(SPR_PVIS):
+        begin
+          if not P_GivePower(player, Ord(pw_infrared)) then
+            exit;
+          player._message := GOTVISOR;
+          sound := Ord(sfx_getpow);
+        end;
+
+    // ammo
+      Ord(SPR_CLIP):
+        begin
+          if special.flags and MF_DROPPED <> 0 then
+          begin
+            if not P_GiveAmmo(player, am_clip, 0) then
+              exit;
+          end
+          else
+          begin
+            if not P_GiveAmmo(player, am_clip, 1) then
+              exit;
+          end;
+          player._message := GOTCLIP;
+        end;
+
+      Ord(SPR_AMMO):
+        begin
+          if not P_GiveAmmo(player, am_clip, 5) then
+            exit;
+          player._message := GOTCLIPBOX;
+        end;
+
+      Ord(SPR_ROCK):
+        begin
+          if not P_GiveAmmo(player, am_misl, 1) then
+            exit;
+          player._message := GOTROCKET;
+        end;
+
+      Ord(SPR_BROK):
+        begin
+          if not P_GiveAmmo(player, am_misl, 5) then
+            exit;
+          player._message := GOTROCKBOX;
+        end;
+
+      Ord(SPR_CELL):
+        begin
+          if not P_GiveAmmo(player, am_cell, 1) then
+            exit;
+          player._message := GOTCELL;
+        end;
+
+      Ord(SPR_CELP):
+        begin
+          if not P_GiveAmmo(player, am_cell, 5) then
+            exit;
+          player._message := GOTCELLBOX;
+        end;
+
+      Ord(SPR_SHEL):
+        begin
+        // JVAL: 7/12/2007 display exact number of picked-up shells.
+          oldshells := player.ammo[Ord(am_shell)];
+
+          if not P_GiveAmmo(player, am_shell, 1) then
+            exit;
+
+          pickedshells := player.ammo[Ord(am_shell)] - oldshells;
+          if pickedshells > 0 then
+          begin
+            case pickedshells of
+              4: player._message := GOTSHELLS;
+              1: player._message := GOTONESHELL;
+            else
+              begin
+                sprintf(pmsg, GOTMANYSHELLS, [pickedshells]);
+                player._message := pmsg;
+              end;
             end;
           end;
         end;
-      end;
 
-    Ord(SPR_SBOX):
-      begin
-        if not P_GiveAmmo(player, am_shell, 5) then
-          exit;
-        player._message := GOTSHELLBOX;
-      end;
-
-    Ord(SPR_BPAK):
-      begin
-        if not player.backpack then
+      Ord(SPR_SBOX):
         begin
-          for i := 0 to Ord(NUMAMMO) - 1 do
-            player.maxammo[i] := player.maxammo[i] * 2;
-          player.backpack := true;
+          if not P_GiveAmmo(player, am_shell, 5) then
+            exit;
+          player._message := GOTSHELLBOX;
         end;
-        for i := 0 to Ord(NUMAMMO) - 1 do
-          P_GiveAmmo(player, ammotype_t(i), 1);
-        player._message := GOTBACKPACK;
-      end;
 
-  // weapons
-    Ord(SPR_BFUG):
-      begin
-        if not P_GiveWeapon(player, wp_bfg, false) then
-          exit;
-        player._message := GOTBFG9000;
-        sound := Ord(sfx_wpnup);
-      end;
+      Ord(SPR_BPAK):
+        begin
+          if not player.backpack then
+          begin
+            for i := 0 to Ord(NUMAMMO) - 1 do
+              player.maxammo[i] := player.maxammo[i] * 2;
+            player.backpack := true;
+          end;
+          for i := 0 to Ord(NUMAMMO) - 1 do
+            P_GiveAmmo(player, ammotype_t(i), 1);
+          player._message := GOTBACKPACK;
+        end;
 
-    Ord(SPR_MGUN):
-      begin
-        if not P_GiveWeapon(player, wp_chaingun, special.flags and MF_DROPPED <> 0) then
-          exit;
-        player._message := GOTCHAINGUN;
-        sound := Ord(sfx_wpnup);
-      end;
+    // weapons
+      Ord(SPR_BFUG):
+        begin
+          if not P_GiveWeapon(player, wp_bfg, false) then
+            exit;
+          player._message := GOTBFG9000;
+          sound := Ord(sfx_wpnup);
+        end;
 
-    Ord(SPR_CSAW):
-      begin
-        if not P_GiveWeapon(player, wp_chainsaw, false) then
-          exit;
-        player._message := GOTCHAINSAW;
-        sound := Ord(sfx_wpnup);
-      end;
+      Ord(SPR_MGUN):
+        begin
+          if not P_GiveWeapon(player, wp_chaingun, special.flags and MF_DROPPED <> 0) then
+            exit;
+          player._message := GOTCHAINGUN;
+          sound := Ord(sfx_wpnup);
+        end;
 
-    Ord(SPR_LAUN):
-      begin
-        if not P_GiveWeapon(player, wp_missile, false) then
-          exit;
-        player._message := GOTLAUNCHER;
-        sound := Ord(sfx_wpnup);
-      end;
+      Ord(SPR_CSAW):
+        begin
+          if not P_GiveWeapon(player, wp_chainsaw, false) then
+            exit;
+          player._message := GOTCHAINSAW;
+          sound := Ord(sfx_wpnup);
+        end;
 
-    Ord(SPR_PLAS):
-      begin
-        if not P_GiveWeapon(player, wp_plasma, false) then
-          exit;
-        player._message := GOTPLASMA;
-        sound := Ord(sfx_wpnup);
-      end;
+      Ord(SPR_LAUN):
+        begin
+          if not P_GiveWeapon(player, wp_missile, false) then
+            exit;
+          player._message := GOTLAUNCHER;
+          sound := Ord(sfx_wpnup);
+        end;
 
-    Ord(SPR_SHOT):
-      begin
-        if not P_GiveWeapon(player, wp_shotgun, special.flags and MF_DROPPED <> 0) then
-          exit;
-        player._message := GOTSHOTGUN;
-        sound := Ord(sfx_wpnup);
-      end;
+      Ord(SPR_PLAS):
+        begin
+          if not P_GiveWeapon(player, wp_plasma, false) then
+            exit;
+          player._message := GOTPLASMA;
+          sound := Ord(sfx_wpnup);
+        end;
 
-    Ord(SPR_SGN2):
-      begin
-        if not P_GiveWeapon(player, wp_supershotgun, special.flags and MF_DROPPED <> 0) then
-          exit;
-        player._message := GOTSHOTGUN2;
-        sound := Ord(sfx_wpnup);
-      end;
+      Ord(SPR_SHOT):
+        begin
+          if not P_GiveWeapon(player, wp_shotgun, special.flags and MF_DROPPED <> 0) then
+            exit;
+          player._message := GOTSHOTGUN;
+          sound := Ord(sfx_wpnup);
+        end;
 
-  else
-    I_Error('P_TouchSpecialThing(): Unknown gettable thing');
+      Ord(SPR_SGN2):
+        begin
+          if not P_GiveWeapon(player, wp_supershotgun, special.flags and MF_DROPPED <> 0) then
+            exit;
+          player._message := GOTSHOTGUN2;
+          sound := Ord(sfx_wpnup);
+        end;
+
+    else
+      I_Error('P_TouchSpecialThing(): Unknown gettable thing');
+    end;
   end;
 
   if special.flags and MF_COUNTITEM <> 0 then

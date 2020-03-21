@@ -32,7 +32,8 @@ unit rtl_types;
 interface
 
 uses
-  d_delphi;
+  d_delphi,
+  doomdef;
 
 const
   RTL_ST_SPAWN = 1;
@@ -129,6 +130,16 @@ type
     replacesid: integer;
     scale: float;
     gravity: float;
+    armour_inc: integer;  // JVAL 20200321 - Armour inc for pickable objects
+    energy_inc: integer;  // JVAL 20200321 - Energy inc for pickable objects
+    shield_inc: integer;  // JVAL 20200321 - Shield inc for pickable objects
+    armour_set: integer;  // JVAL 20200321 - Armour set for pickable objects
+    energy_set: integer;  // JVAL 20200321 - Energy set for pickable objects
+    shield_set: integer;  // JVAL 20200321 - Shield set for pickable objects
+    ammo_inc: array[0..Ord(NUMAMMO) - 1] of integer;  // JVAL 20200321 - Ammo inc for pickable objects
+    weapon_inc: array[0..Ord(NUMWEAPONS) - 1] of boolean; // JVAL 20200321 - Weapon pickable objects
+    pickupmessage: string[64];  // JVAL 20200321 - Custom pickup message
+    pickupsound: string;  // JVAL 20200321 - Custom pickup sound
   end;
   Prtl_mobjinfo_t = ^rtl_mobjinfo_t;
 

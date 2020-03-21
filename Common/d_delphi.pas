@@ -162,6 +162,10 @@ function atof(const s: string): single; overload;
 
 function atof(const s: string; const default: single): single; overload;
 
+function atob(const s: string): boolean;
+
+function btoa(const b: boolean): string;
+
 //
 // Memory functions
 //
@@ -978,6 +982,22 @@ begin
       exit;
     result := default;
   end;
+end;
+
+function atob(const s: string): boolean;
+var
+  check: string;
+begin
+  check := strupper(strtrim(s));
+  result := (check = 'TRUE') or (check = 'YES') or (check = '1')
+end;
+
+function btoa(const b: boolean): string;
+begin
+  if b then
+    result := 'TRUE'
+  else
+    result := 'FALSE';
 end;
 
 {$IFNDEF FPC}

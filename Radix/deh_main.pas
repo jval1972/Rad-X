@@ -156,7 +156,7 @@ var
 
 procedure DEH_Parse(const s: TDStringList);
 var
-  i, j: integer;
+  i, j, k: integer;
   str: string;
   stmp: string;
   token1: string;
@@ -174,6 +174,8 @@ var
 
   mobj_flag: integer;
   mobj_setflag: integer;
+
+  mobj_nums: TDStringList;
 
   state_no: integer;
   state_idx: integer;
@@ -532,6 +534,37 @@ begin
 
                 end;
               end;
+          49: mobjinfo[mobj_no].armour_inc := mobj_val;
+          50: mobjinfo[mobj_no].energy_inc := mobj_val;
+          51: mobjinfo[mobj_no].shield_inc := mobj_val;
+          52: begin
+                mobj_nums := wordstolist(token2, [' ', ',', '|']);
+                if mobj_nums.Count <> Ord(NUMAMMO) then
+                  I_Warning('DEH_Parse(): Wrong ammo values = %s (Count is = %d).'#13#10, [token2, mobj_nums.Count])
+                else
+                begin
+                  for k := 0 to mobj_nums.Count - 1 do
+                    mobjinfo[mobj_no].ammo_inc[k] := atoi(mobj_nums.Strings[k], 0);
+                end;
+                mobj_nums.Free;
+              end;
+          53: begin
+                mobj_nums := wordstolist(token2, [' ', ',', '|']);
+                if mobj_nums.Count <> Ord(NUMWEAPONS) then
+                  I_Warning('DEH_Parse(): Wrong weapon values = %s (Count is = %d).'#13#10, [token2, mobj_nums.Count])
+                else
+                begin
+                  for k := 0 to mobj_nums.Count - 1 do
+                    mobjinfo[mobj_no].weapon_inc[k] := atob(mobj_nums.Strings[k]);
+                end;
+                mobj_nums.Free;
+              end;
+          54: mobjinfo[mobj_no].pickupmessage := token2;
+          55: mobjinfo[mobj_no].armour_set := mobj_val;
+          56: mobjinfo[mobj_no].energy_set := mobj_val;
+          57: mobjinfo[mobj_no].shield_set := mobj_val;
+          58: mobjinfo[mobj_no].pickupsound := S_GetSoundNumForName(token2);
+
         end;
       end;
 
@@ -1254,6 +1287,10 @@ begin
           PLAYERSPAWNSHIELD := plyr_val
         else if token1 = 'PLAYERSPAWNENERGY' then
           PLAYERSPAWNENERGY := plyr_val
+        else if token1 = 'PLAYERMAXSHIELD' then
+          PLAYERMAXSHIELD := plyr_val
+        else if token1 = 'PLAYERMAXENERGY' then
+          PLAYERMAXENERGY := plyr_val
         else
         begin
           mustnextline := false; // Already got line
@@ -1527,6 +1564,33 @@ begin
     else
       result.Add('%s = %s', [capitalizedstring(mobj_tokens[48]), str]);
 
+    result.Add('%s = %d', [capitalizedstring(mobj_tokens[49]), mobjinfo[i].armour_inc]);
+    result.Add('%s = %d', [capitalizedstring(mobj_tokens[50]), mobjinfo[i].energy_inc]);
+    result.Add('%s = %d', [capitalizedstring(mobj_tokens[51]), mobjinfo[i].shield_inc]);
+
+    str := '';
+    for j := 0 to Ord(NUMAMMO) - 1 do
+    begin
+      if str <> '' then
+        str := str + ', ';
+      str := str + itoa(mobjinfo[i].ammo_inc[j]);
+    end;
+    result.Add('%s = %d', [capitalizedstring(mobj_tokens[52]), str]);
+
+    str := '';
+    for j := 0 to Ord(NUMWEAPONS) - 1 do
+    begin
+      if str <> '' then
+        str := str + ', ';
+      str := str + btoa(mobjinfo[i].weapon_inc[j]);
+    end;
+    result.Add('%s = %d', [capitalizedstring(mobj_tokens[53]), str]);
+
+    result.Add('%s = %d', [capitalizedstring(mobj_tokens[54]), mobjinfo[i].pickupmessage]);
+    result.Add('%s = %d', [capitalizedstring(mobj_tokens[55]), mobjinfo[i].armour_set]);
+    result.Add('%s = %d', [capitalizedstring(mobj_tokens[56]), mobjinfo[i].energy_set]);
+    result.Add('%s = %d', [capitalizedstring(mobj_tokens[57]), mobjinfo[i].shield_set]);
+    result.Add('%s = %d', [capitalizedstring(mobj_tokens[58]), mobjinfo[i].pickupsound]);
 
     result.Add('');
   end;
@@ -1764,6 +1828,16 @@ begin
   mobj_tokens.Add('GRAVITY');            // .gravity                  // 46
   mobj_tokens.Add('FLAGS3_EX');          // .flags3_ex (DelphiDoom)   // 47
   mobj_tokens.Add('FLAGS4_EX');          // .flags4_ex (DelphiDoom)   // 48
+  mobj_tokens.Add('ARMOR INC');          // .armour_inc (Radix)       // 49
+  mobj_tokens.Add('ENERGY INC');         // .energy_inc (Radix)       // 50
+  mobj_tokens.Add('SHIELD INC');         // .shield_inc (Radix)       // 51
+  mobj_tokens.Add('AMMO ADD');           // .ammo (Radix)             // 52
+  mobj_tokens.Add('WEAPON ADD');         // .weapon (Radix)           // 53
+  mobj_tokens.Add('PICKUP MESSAGE');     // .pickupmessage (Radix)    // 54
+  mobj_tokens.Add('ARMOR SET');          // .armour_set (Radix)       // 55
+  mobj_tokens.Add('ENERGY SET');         // .energy_set (Radix)       // 56
+  mobj_tokens.Add('SHIELD SET');         // .shield_set (Radix)       // 57
+  mobj_tokens.Add('PICKUP SOUND');       // .pickupsound (Radix)      // 58
 
 
   mobj_flags := TDTextList.Create;
@@ -1874,6 +1948,7 @@ begin
   mobj_flags3_ex.Add('MF3_EX_FLOORBOUNCE');
   mobj_flags3_ex.Add('MF3_EX_CEILINGBOUNCE');
   mobj_flags3_ex.Add('MF3_EX_WALLBOUNCE');
+  mobj_flags3_ex.Add('MF3_EX_CUSTOMPICKUP');
 
   mobj_flags4_ex := TDTextList.Create;
 

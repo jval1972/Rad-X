@@ -54,6 +54,7 @@ function SC_SoundAlias(const snd: string): string;
 implementation
 
 uses
+  doomdef,
   d_main,
   deh_base,
   deh_main,
@@ -224,6 +225,7 @@ var
   pinf: Pmobjinfo_t;
   sc: TActordefScriptEngine;
   foundstates: boolean;
+  foundinventory: boolean;
   numstates: integer;
   m_states: array[0..MAXSTATES - 1] of rtl_state_t;
   pm_state: Prtl_state_t;
@@ -1195,6 +1197,8 @@ var
   var
     cnt: integer;
     stateprefix: string;
+    k: integer;
+    str: string;
   begin
     if not actorpending then
       Exit;
@@ -1272,7 +1276,27 @@ var
     AddRes('missileheight = ' + itoa(mobj.missileheight));
     {$ENDIF}
     AddRes('Scale = ' + itoa(round(mobj.scale * FRACUNIT)));
-    AddRes('gravity = ' + itoa(round(mobj.gravity * FRACUNIT)));
+    AddRes('Gravity = ' + itoa(round(mobj.gravity * FRACUNIT)));
+    AddRes('Armor Inc = ' + itoa(mobj.armour_inc));
+    AddRes('Energy Inc = ' + itoa(mobj.energy_inc));
+    AddRes('Shield Inc = ' + itoa(mobj.shield_inc));
+    AddRes('Armor Set = ' + itoa(mobj.armour_set));
+    AddRes('Energy Set = ' + itoa(mobj.energy_set));
+    AddRes('Shield Set = ' + itoa(mobj.shield_set));
+
+    str := '';
+    for k := 0 to Ord(NUMAMMO) - 1 do
+      str := str + itoa(mobj.ammo_inc[k]) + ' ';
+    AddRes('Ammo Add = ' + strtrim(str));
+
+    str := '';
+    for k := 0 to Ord(NUMWEAPONS) - 1 do
+      str := str + btoa(mobj.weapon_inc[k]) + ' ';
+    AddRes('Weapon Add = ' + strtrim(str));
+
+    AddRes('Pickup Message = ' + mobj.pickupmessage);
+    AddRes('Pickup Sound = ' + SC_SoundAlias(mobj.pickupsound));
+
     AddRes('');
 
     if numstates > 0 then
@@ -1424,6 +1448,7 @@ var
   stmp: string;
   isreplace, isinherit: boolean;
   rstyle: mobjrenderstyle_t;
+  l: integer;
 begin
   state_tokens := TDStringList.Create;
   state_tokens.Add('spawn:');
@@ -1718,6 +1743,19 @@ begin
           mobj.pushfactor := pinf.pushfactor / FRACUNIT;
           mobj.scale := pinf.scale / FRACUNIT;
 
+          mobj.armour_inc := pinf.armour_inc;  // JVAL 20200321 - Armour inc for pickable objects
+          mobj.energy_inc := pinf.energy_inc;  // JVAL 20200321 - Energy inc for pickable objects
+          mobj.shield_inc := pinf.shield_inc;  // JVAL 20200321 - Shield inc for pickable objects
+          mobj.armour_set := pinf.armour_set;  // JVAL 20200321 - Armour set for pickable objects
+          mobj.energy_set := pinf.energy_set;  // JVAL 20200321 - Energy set for pickable objects
+          mobj.shield_set := pinf.shield_set;  // JVAL 20200321 - Shield set for pickable objects
+          for i := 0 to Ord(NUMAMMO) - 1 do // JVAL 20200321 - Ammo inc for pickable objects
+            mobj.ammo_inc[i] := pinf.ammo_inc[i];
+          for i := 0 to Ord(NUMWEAPONS) - 1 do  // JVAL 20200321 - Weapon pickable objects
+            mobj.weapon_inc[i] := pinf.weapon_inc[i];
+          mobj.pickupmessage := pinf.pickupmessage;
+          mobj.pickupsound := itoa(pinf.pickupsound);
+
           mobj.spawnstate := ORIGINALSTATEMARKER + pinf.spawnstate;
           mobj.seestate := ORIGINALSTATEMARKER + pinf.seestate;
           mobj.painstate := ORIGINALSTATEMARKER + pinf.painstate;
@@ -1777,6 +1815,7 @@ begin
       end;
 
       foundstates := false;
+      foundinventory := false;
       repeat
         {$IFDEF STRIFE}
         if sc.MatchString('name') or sc.MatchString('strifename') then
@@ -2067,6 +2106,125 @@ begin
           sc.GetString;
         end
         {$ENDIF}
+
+        // Custom pickup items
+        else if sc.MatchString('inventory') then
+        begin
+          foundinventory := true;
+          sc.GetString;
+        end
+
+        else if sc.MatchString('armor') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "ARMOR" keyword ouside "INVENTORY" block'#13#10);
+          sc.GetString;
+          if sc.MatchString('SET') then
+          begin
+            sc.GetInteger;
+            mobj.armour_set := sc._Integer;
+            sc.GetString;
+          end
+          else if sc.MatchString('INC') or sc.MatchString('ADD') then
+          begin
+            sc.GetInteger;
+            mobj.armour_inc := sc._Integer;
+            sc.GetString;
+          end
+          else
+          begin
+            I_Warning('SC_ActordefToDEH(): Unknown token "%s" found, "SET", "ADD" or "INC" expected'#13#10, [sc._String]);
+          end;
+        end
+
+        else if sc.MatchString('energy') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "ENERGY" keyword ouside "INVENTORY" block'#13#10);
+          sc.GetString;
+          if sc.MatchString('SET') then
+          begin
+            sc.GetInteger;
+            mobj.energy_set := sc._Integer;
+            sc.GetString;
+          end
+          else if sc.MatchString('INC') or sc.MatchString('ADD') then
+          begin
+            sc.GetInteger;
+            mobj.energy_inc := sc._Integer;
+            sc.GetString;
+          end
+          else
+          begin
+            I_Warning('SC_ActordefToDEH(): Unknown token "%s" found, "SET", "ADD" or "INC" expected'#13#10, [sc._String]);
+          end;
+        end
+
+        else if sc.MatchString('shield') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "SHIELD" keyword ouside "INVENTORY" block'#13#10);
+          sc.GetString;
+          if sc.MatchString('SET') then
+          begin
+            sc.GetInteger;
+            mobj.shield_set := sc._Integer;
+            sc.GetString;
+          end
+          else if sc.MatchString('INC') or sc.MatchString('ADD') then
+          begin
+            sc.GetInteger;
+            mobj.shield_inc := sc._Integer;
+            sc.GetString;
+          end
+          else
+          begin
+            I_Warning('SC_ActordefToDEH(): Unknown token "%s" found, "SET", "ADD" or "INC" expected'#13#10, [sc._String]);
+          end;
+        end
+
+        else if sc.MatchString('ammo') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "AMMO" keyword ouside "INVENTORY" block'#13#10);
+          for l := 0 to Ord(NUMAMMO) - 1 do
+          begin
+            sc.MustGetInteger;
+            mobj.ammo_inc[l] := sc._Integer;
+          end;
+          sc.GetString;
+        end
+
+        else if sc.MatchString('weapon') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "WEAPON" keyword ouside "INVENTORY" block'#13#10);
+          for l := 0 to Ord(NUMWEAPONS) - 1 do
+          begin
+            sc.MustGetString;
+            mobj.weapon_inc[l] := atob(sc._String);
+          end;
+          sc.GetString;
+        end
+
+        else if sc.MatchString('pickupmessage') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "PICKUPMESSAGE" keyword ouside "INVENTORY" block'#13#10);
+          sc.GetString;
+          mobj.pickupmessage := sc._String;
+          sc.GetString;
+        end
+
+        else if sc.MatchString('pickupsound') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "PICKUPSOUND" keyword ouside "INVENTORY" block'#13#10);
+          sc.GetString;
+          mobj.pickupsound := sc._String;
+          sc.GetString;
+        end
+
         else if sc.MatchString('states') then
         begin
           foundstates := true;

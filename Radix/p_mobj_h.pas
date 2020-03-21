@@ -35,6 +35,7 @@ unit p_mobj_h;
 interface
 
 uses
+  doomdef,
   m_fixed,
   info_h,
   doomdata,
@@ -336,6 +337,8 @@ const
   MF3_EX_WALLBOUNCE = 4;
   // All bounce flags
   MF3_EX_BOUNCE = MF3_EX_FLOORBOUNCE or MF3_EX_CEILINGBOUNCE or MF3_EX_WALLBOUNCE;
+  // Custom pickup
+  MF3_EX_CUSTOMPICKUP = 8;
 
 type
 // Map Object definition.
@@ -457,6 +460,15 @@ type
     intrplcnt: LongWord;
 
     dropitem: integer;
+
+    armour_inc: integer;  // JVAL 20200321 - Armour inc for pickable objects
+    energy_inc: integer;  // JVAL 20200321 - Energy inc for pickable objects
+    shield_inc: integer;  // JVAL 20200321 - Shield inc for pickable objects
+    armour_set: integer;  // JVAL 20200321 - Armour set for pickable objects
+    energy_set: integer;  // JVAL 20200321 - Energy set for pickable objects
+    shield_set: integer;  // JVAL 20200321 - Shield set for pickable objects
+    ammo_inc: array[0..Ord(NUMAMMO) - 1] of integer;  // JVAL 20200321 - Ammo inc for pickable objects
+    weapon_inc: array[0..Ord(NUMWEAPONS) - 1] of boolean; // JVAL 20200321 - Weapon pickable objects
 
     // version 205
     lightvalidcount: integer;

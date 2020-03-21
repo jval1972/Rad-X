@@ -380,8 +380,6 @@ begin
   else
     if mo.z > mo.floorz then
     begin
-      if G_PlayingEngineVersion <= VERSION203 then
-        exit; // no friction when airborne
       if wasonfloorz and wasonslope and (oldsector = Psubsector_t(mo.subsector).sector) then
       begin
         if oldsector.flags and SF_SLIPSLOPEDESCENT <> 0 then
@@ -823,6 +821,7 @@ var
   mobj: Pmobj_t;
   st: Pstate_t;
   info: Pmobjinfo_t;
+  i: integer;
   space: fixed_t;
   sec: Psector_t;
   msec: Psector_t;  // JVAL: 3d floors
@@ -857,6 +856,17 @@ begin
   if mobj.flags_ex and MF_EX_FLOATBOB <> 0 then
     mobj.bob := N_Random and FLOATBOBMASK;
   mobj.health := info.spawnhealth;
+
+  mobj.armour_inc := info.armour_inc;  // JVAL 20200321 - Armour inc for pickable objects
+  mobj.energy_inc := info.energy_inc;  // JVAL 20200321 - Energy inc for pickable objects
+  mobj.shield_inc := info.shield_inc;  // JVAL 20200321 - Shield inc for pickable objects
+  mobj.armour_set := info.armour_set;  // JVAL 20200321 - Armour set for pickable objects
+  mobj.energy_set := info.energy_set;  // JVAL 20200321 - Energy set for pickable objects
+  mobj.shield_set := info.shield_set;  // JVAL 20200321 - Shield set for pickable objects
+  for i := 0 to Ord(NUMAMMO) - 1 do
+    mobj.ammo_inc[i] := info.ammo_inc[i]; // JVAL 20200321 - Ammo inc for pickable objects
+  for i := 0 to Ord(NUMWEAPONS) - 1 do  // JVAL 20200321 - Weapon pickable objects
+    mobj.weapon_inc[i] := info.weapon_inc[i];
 
   if gameskill <> sk_nightmare then
     mobj.reactiontime := info.reactiontime;

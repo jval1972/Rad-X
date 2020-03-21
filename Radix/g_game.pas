@@ -269,6 +269,8 @@ const
 var
   PLAYERSPAWNSHIELD: integer = 100;
   PLAYERSPAWNENERGY: integer = 100;
+  PLAYERMAXSHIELD: integer = 200;
+  PLAYERMAXENERGY: integer = 200;
 
 implementation
 
