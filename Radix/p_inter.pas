@@ -58,7 +58,7 @@ const
 // a weapon is found with two clip loads,
 // a big item has five clip loads
   maxammo: array[0..Ord(NUMAMMO) - 1] of integer = (5000, 400, 1500, 50);
-  clipammo: array[0..Ord(NUMAMMO) - 1] of integer = (10, 4, 20, 1);
+  clipammo: array[0..Ord(NUMAMMO) - 1] of integer = (50, 4, 10, 1);
 
 procedure P_CmdSuicide;
 
@@ -218,9 +218,9 @@ begin
     player.weaponowned[Ord(weapon)] := 1;
 
     if deathmatch <> 0 then
-      P_GiveAmmo(player, ammo, 5)
+      P_GiveAmmo(player, ammo, clipammo[Ord(ammo)] * 5)
     else
-      P_GiveAmmo(player, ammo, 2);
+      P_GiveAmmo(player, ammo, clipammo[Ord(ammo)] * 2);
     player.pendingweapon := weapon;
 
     if (player = @players[consoleplayer]) then
@@ -234,9 +234,9 @@ begin
   // give one clip with a dropped weapon,
   // two clips with a found weapon
     if dropped then
-      gaveammo := P_GiveAmmo(player, ammo, 1)
+      gaveammo := P_GiveAmmo(player, ammo, clipammo[Ord(ammo)] * 1)
     else
-      gaveammo := P_GiveAmmo(player, ammo, 2);
+      gaveammo := P_GiveAmmo(player, ammo, clipammo[Ord(ammo)] * 2);
   end
   else
     gaveammo := false;
@@ -690,12 +690,12 @@ begin
         begin
           if special.flags and MF_DROPPED <> 0 then
           begin
-            if not P_GiveAmmo(player, am_radixshell, 0) then
+            if not P_GiveAmmo(player, am_radixshell, clipammo[Ord(am_radixshell)] div 2) then
               exit;
           end
           else
           begin
-            if not P_GiveAmmo(player, am_radixshell, 1) then
+            if not P_GiveAmmo(player, am_radixshell, clipammo[Ord(am_radixshell)]) then
               exit;
           end;
           player._message := GOTCLIP;
@@ -703,35 +703,35 @@ begin
 
       Ord(SPR_AMMO):
         begin
-          if not P_GiveAmmo(player, am_radixshell, 5) then
+          if not P_GiveAmmo(player, am_radixshell, clipammo[Ord(am_radixshell)] * 5) then
             exit;
           player._message := GOTCLIPBOX;
         end;
 
       Ord(SPR_ROCK):
         begin
-          if not P_GiveAmmo(player, am_radixnuke, 1) then
+          if not P_GiveAmmo(player, am_radixnuke, clipammo[Ord(am_radixnuke)] * 1) then
             exit;
           player._message := GOTROCKET;
         end;
 
       Ord(SPR_BROK):
         begin
-          if not P_GiveAmmo(player, am_radixnuke, 5) then
+          if not P_GiveAmmo(player, am_radixnuke, clipammo[Ord(am_radixnuke)] * 5) then
             exit;
           player._message := GOTROCKBOX;
         end;
 
       Ord(SPR_CELL):
         begin
-          if not P_GiveAmmo(player, am_radixtorp, 1) then
+          if not P_GiveAmmo(player, am_radixtorp, clipammo[Ord(am_radixtorp)] * 1) then
             exit;
           player._message := GOTCELL;
         end;
 
       Ord(SPR_CELP):
         begin
-          if not P_GiveAmmo(player, am_radixtorp, 5) then
+          if not P_GiveAmmo(player, am_radixtorp, clipammo[Ord(am_radixtorp)] * 5) then
             exit;
           player._message := GOTCELLBOX;
         end;
@@ -741,7 +741,7 @@ begin
         // JVAL: 7/12/2007 display exact number of picked-up shells.
           oldshells := player.ammo[Ord(am_radixmisl)];
 
-          if not P_GiveAmmo(player, am_radixmisl, 1) then
+          if not P_GiveAmmo(player, am_radixmisl, clipammo[Ord(am_radixmisl)] * 1) then
             exit;
 
           pickedshells := player.ammo[Ord(am_radixmisl)] - oldshells;
@@ -761,7 +761,7 @@ begin
 
       Ord(SPR_SBOX):
         begin
-          if not P_GiveAmmo(player, am_radixmisl, 5) then
+          if not P_GiveAmmo(player, am_radixmisl, clipammo[Ord(am_radixmisl)] * 5) then
             exit;
           player._message := GOTSHELLBOX;
         end;
@@ -775,7 +775,7 @@ begin
             player.backpack := true;
           end;
           for i := 0 to Ord(NUMAMMO) - 1 do
-            P_GiveAmmo(player, ammotype_t(i), 1);
+            P_GiveAmmo(player, ammotype_t(i), clipammo[i] * 1);
           player._message := GOTBACKPACK;
         end;
 
