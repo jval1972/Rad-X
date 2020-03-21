@@ -1471,6 +1471,9 @@ begin
 
   spr := @SPRITEINFO[0];
 
+  // MT_FULLARMOR
+  MakeNonRotatingSprite('FullArmour', _MTRX_FULLARMOR, 3);
+
   // MT_FULLSHIED
   MakeNonRotatingSprite('FullShield', _MTRX_FULLSHIED, 3);
 

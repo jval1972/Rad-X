@@ -451,19 +451,19 @@ begin
 
     if special.armour_set > player.armorpoints then
     begin
-      if P_GiveArmor(player, player.armorpoints - special.armour_inc) then
+      if P_GiveArmor(player, special.armour_set - player.armorpoints) then
         didbonus := true;
     end;
 
     if special.energy_set > player.energy then
     begin
-      if P_GiveEnergy(player, player.energy - special.energy_inc) then
+      if P_GiveEnergy(player, special.energy_set - player.energy) then
         didbonus := true;
     end;
 
     if special.shield_set > player.shield then
     begin
-      if P_GiveShield(player, player.shield - special.shield_inc) then
+      if P_GiveShield(player, special.shield_set - player.shield) then
         didbonus := true;
     end;
 
@@ -483,7 +483,7 @@ begin
 
     if not didbonus then
       exit;
-      
+
     player._message := special.info.pickupmessage;
 
     sound := Ord(special.info.pickupsound);
@@ -845,8 +845,9 @@ begin
     player.itemcount := player.itemcount + 1;
   P_RemoveMobj(special);
   player.bonuscount := player.bonuscount + BONUSADD;
-  if player = @players[consoleplayer] then
-    S_StartSound(nil, sound);
+  if sound > 0 then
+    if player = @players[consoleplayer] then
+      S_StartSound(nil, sound);
 end;
 
 //

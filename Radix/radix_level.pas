@@ -1164,7 +1164,7 @@ begin
 
   for i := 0 to header.numthings - 1 do
   begin
-    if rthings[i].radix_type > 0 then
+    if (rthings[i].thing_key >= 0) and (rthings[i].radix_type >= 0) then
       AddThingToWad(
         rthings[i].x, rthings[i].y, rthings[i].ground, rthings[i].speed, rthings[i].height_speed,
         rthings[i].angle, rthings[i].radix_type + _DOOM_THING_2_RADIX_, RadixSkillToDoomSkill(rthings[i].skill),

@@ -34,6 +34,7 @@ interface
 
 // Original Radix Thing IDs
 const
+  _MTRX_FULLARMOR = 0; // full armor (pickup)
   _MTRX_FULLSHIED = 1; // full shield (pickup)
   _MTRX_FULLENERGY = 2; // full energy (pickup)
   _MTRX_SUPERCHARGE = 3; // supercharge (pickup)
@@ -106,6 +107,7 @@ const
 
 // Doom Engine Radix Thing Editor Numbers
 const
+  MT_FULLARMOR = _DOOM_THING_2_RADIX_ + _MTRX_FULLARMOR;
   MT_FULLSHIED = _DOOM_THING_2_RADIX_ + _MTRX_FULLSHIED;
   MT_FULLENERGY = _DOOM_THING_2_RADIX_ + _MTRX_FULLENERGY;
   MT_SUPERCHARGE = _DOOM_THING_2_RADIX_ + _MTRX_SUPERCHARGE;
