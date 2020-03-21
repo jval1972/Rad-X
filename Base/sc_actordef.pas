@@ -2207,6 +2207,78 @@ begin
           sc.GetString;
         end
 
+        else if sc.MatchString('weapon0') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "WEAPON0" keyword ouside "INVENTORY" block'#13#10);
+          mobj.weapon_inc[0] := true;
+          sc.GetString;
+        end
+
+        else if sc.MatchString('weapon1') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "WEAPON1" keyword ouside "INVENTORY" block'#13#10);
+          mobj.weapon_inc[1] := true;
+          sc.GetString;
+        end
+
+        else if sc.MatchString('weapon2') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "WEAPON2" keyword ouside "INVENTORY" block'#13#10);
+          mobj.weapon_inc[2] := true;
+          sc.GetString;
+        end
+
+        else if sc.MatchString('weapon3') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "WEAPON3" keyword ouside "INVENTORY" block'#13#10);
+          mobj.weapon_inc[3] := true;
+          sc.GetString;
+        end
+
+        else if sc.MatchString('weapon4') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "WEAPON4" keyword ouside "INVENTORY" block'#13#10);
+          mobj.weapon_inc[4] := true;
+          sc.GetString;
+        end
+
+        else if sc.MatchString('weapon5') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "WEAPON5" keyword ouside "INVENTORY" block'#13#10);
+          mobj.weapon_inc[5] := true;
+          sc.GetString;
+        end
+
+        else if sc.MatchString('weapon6') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "WEAPON6" keyword ouside "INVENTORY" block'#13#10);
+          mobj.weapon_inc[6] := true;
+          sc.GetString;
+        end
+
+        else if sc.MatchString('weapon7') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "WEAPON7" keyword ouside "INVENTORY" block'#13#10);
+          mobj.weapon_inc[7] := true;
+          sc.GetString;
+        end
+
+        else if sc.MatchString('weapon8') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "WEAPON8" keyword ouside "INVENTORY" block'#13#10);
+          mobj.weapon_inc[8] := true;
+          sc.GetString;
+        end
+
         else if sc.MatchString('pickupmessage') then
         begin
           if not foundinventory then
