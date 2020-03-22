@@ -1578,7 +1578,7 @@ begin
         str := str + ', ';
       str := str + itoa(mobjinfo[i].ammo_inc[j]);
     end;
-    result.Add('%s = %d', [capitalizedstring(mobj_tokens[52]), str]);
+    result.Add('%s = %s', [capitalizedstring(mobj_tokens[52]), str]);
 
     str := '';
     for j := 0 to Ord(NUMWEAPONS) - 1 do
@@ -1587,9 +1587,9 @@ begin
         str := str + ', ';
       str := str + btoa(mobjinfo[i].weapon_inc[j]);
     end;
-    result.Add('%s = %d', [capitalizedstring(mobj_tokens[53]), str]);
+    result.Add('%s = %s', [capitalizedstring(mobj_tokens[53]), str]);
 
-    result.Add('%s = %d', [capitalizedstring(mobj_tokens[54]), mobjinfo[i].pickupmessage]);
+    result.Add('%s = %s', [capitalizedstring(mobj_tokens[54]), mobjinfo[i].pickupmessage]);
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[55]), mobjinfo[i].armour_set]);
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[56]), mobjinfo[i].energy_set]);
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[57]), mobjinfo[i].shield_set]);
