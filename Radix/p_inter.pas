@@ -457,7 +457,7 @@ function P_GivePlasmaBombs(const p: Pplayer_t; const bombs: integer): boolean;
 begin
   if p.plasmabombs < PLAYERMAXPLASMABOMBS then
   begin
-    p.plasmabombs := p.plasmabombs + PLAYERMAXPLASMABOMBS;
+    p.plasmabombs := p.plasmabombs + bombs;
     if p.plasmabombs > PLAYERMAXPLASMABOMBS then
       p.plasmabombs := PLAYERMAXPLASMABOMBS;
     result := true;
