@@ -565,6 +565,7 @@ type
     rapidenergy: integer; // JVAL 20200322 - Rapid energy regenerator tics
     maneuverjets: integer;  // JVAL 20200322 - Maneuver jets tics
     nightvision: integer; // JVAL 20200322 - Night vison tics
+    alds: integer;  // JVAL 20200322 - Automated Laser Defence System tics
     ammo_inc: array[0..Ord(NUMAMMO) - 1] of integer;  // JVAL 20200321 - Ammo inc for pickable objects
     weapon_inc: array[0..Ord(NUMWEAPONS) - 1] of boolean; // JVAL 20200321 - Weapon pickable objects
     pickupmessage: string[64];

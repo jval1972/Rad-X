@@ -223,6 +223,7 @@ type
     rpu_rapidenergy,
     rpu_maneuverjets,
     rpu_nightvision,
+    rpu_alds, // JVAL: 20200322 - Automated Laser Defence System 
     NUMRADIXPOWERUPS
   );
   Pradixpowerup_t = ^radixpowerup_t;

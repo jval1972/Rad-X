@@ -442,6 +442,17 @@ begin
     result := false;
 end;
 
+function P_GiveALDS(const p: Pplayer_t; const tics: integer): boolean;
+begin
+  if p.radixpowers[Ord(rpu_alds)] < tics then
+  begin
+    p.radixpowers[Ord(rpu_alds)] := tics;
+    result := true;
+  end
+  else
+    result := false;
+end;
+
 //
 // P_TouchSpecialThing
 //
@@ -539,6 +550,10 @@ begin
 
     if special.info.nightvision > 0 then
       if P_GiveNightVision(player, special.info.nightvision) then
+        didbonus := true;
+
+    if special.info.alds > 0 then
+      if P_GiveALDS(player, special.info.alds) then
         didbonus := true;
 
     if not didbonus then

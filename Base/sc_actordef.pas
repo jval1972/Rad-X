@@ -1288,6 +1288,7 @@ var
     AddRes('Rapid Energy = ' + itoa(mobj.rapidenergy));
     AddRes('Maneuver Jets = ' + itoa(mobj.maneuverjets));
     AddRes('Night Vision = ' + itoa(mobj.nightvision));
+    AddRes('A.L.D.S. = ' + itoa(mobj.alds));
 
     str := '';
     for k := 0 to Ord(NUMAMMO) - 1 do
@@ -1764,6 +1765,7 @@ begin
           mobj.rapidenergy := pinf.rapidenergy; // JVAL 20200322 - Rapid energy regenerator tics
           mobj.maneuverjets := pinf.maneuverjets; // JVAL 20200322 - Maneuver jets tics
           mobj.nightvision := pinf.nightvision; // JVAL 20200322 - Night vision tics
+          mobj.alds := pinf.alds; // JVAL 20200322 - Automated Laset Defence System tics
 
           mobj.spawnstate := ORIGINALSTATEMARKER + pinf.spawnstate;
           mobj.seestate := ORIGINALSTATEMARKER + pinf.seestate;
@@ -2321,6 +2323,15 @@ begin
             I_Warning('SC_ActordefToDEH(): "NIGHTVISION" keyword ouside "INVENTORY" block'#13#10);
           sc.MustGetInteger;
           mobj.nightvision := sc._Integer;
+          sc.GetString;
+        end
+
+        else if sc.MatchString('alds') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "ALDS" keyword ouside "INVENTORY" block'#13#10);
+          sc.MustGetInteger;
+          mobj.alds := sc._Integer;
           sc.GetString;
         end
 
