@@ -1423,7 +1423,7 @@ begin
   result.Add('# Created with %s, %s', [D_Version, D_VersionBuilt]);
   result.Add('');
 
-  result.Add('# Note: Use the ''#'' or ''//'' (DelphiDoom specific) sign to start comment lines.');
+  result.Add('# Note: Use the ''#'' or ''//'' sign to start comment lines.');
   result.Add('');
 
   result.Add('# General version information');
@@ -1484,7 +1484,7 @@ begin
     if i = 0 then
     begin
       result.Add('');
-      result.Add('# The following fields are DelphiDoom specific enhancements');
+      result.Add('# The following fields are custom specific enhancements');
     end;
 
     str := '';
@@ -1650,7 +1650,7 @@ begin
       result.Add('%s = %s', [capitalizedstring(state_tokens[7]), str]);
 
     if i = 1 then
-      result.Add('# Flags_ex is DelphiDoom specific and declares transparency and light effects');
+      result.Add('# Flags_ex declares transparency and light effects');
 
     result.Add('');
   end;
