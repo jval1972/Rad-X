@@ -57,6 +57,7 @@ implementation
 
 uses
   d_delphi,
+  d_englsh,
   m_rnd,
   tables,
   d_ticcmd,
@@ -875,13 +876,25 @@ begin
 
   // JVAL 20200322: Radix power ups dec in every tick
   if player.radixpowers[Ord(rpu_rapidshield)] > 0 then
+  begin
     dec(player.radixpowers[Ord(rpu_rapidshield)]);
+    if player.radixpowers[Ord(rpu_rapidshield)] = 0 then
+      player._message := S_RAPID_SHIELD_DEPLETED;
+  end;
 
   if player.radixpowers[Ord(rpu_rapidenergy)] > 0 then
+  begin
     dec(player.radixpowers[Ord(rpu_rapidenergy)]);
+    if player.radixpowers[Ord(rpu_rapidenergy)] = 0 then
+      player._message := S_RAPID_ENERGY_DEPLETED;
+  end;
 
   if player.radixpowers[Ord(rpu_maneuverjets)] > 0 then
+  begin
     dec(player.radixpowers[Ord(rpu_maneuverjets)]);
+    if player.radixpowers[Ord(rpu_maneuverjets)] = 0 then
+      player._message := S_MANEUVER_JETS_DEPLETED;
+  end;
 
   if player.radixpowers[Ord(rpu_nightvision)] > 0 then
   begin
@@ -894,10 +907,16 @@ begin
       else
         player.fixedcolormap := 0;
     end;
+    if player.radixpowers[Ord(rpu_nightvision)] = 0 then
+      player._message := S_NIGHTVISION_DEPLETED;
   end;
 
   if player.radixpowers[Ord(rpu_alds)] > 0 then
+  begin
     dec(player.radixpowers[Ord(rpu_alds)]);
+    if player.radixpowers[Ord(rpu_alds)] = 0 then
+      player._message := S_ALDS_DEPLETED;
+  end;
 
   if G_PlayingEngineVersion >= VERSION119 then
     A_PlayerBreath(player);

@@ -2991,6 +2991,13 @@ begin
   DEH_AddString(@deh_strings, @SAVEGAMENAME, 'SAVEGAMENAME');
 
 
+  DEH_AddString(@deh_strings, @S_NIGHTVISION_DEPLETED, 'S_NIGHTVISION_DEPLETED');
+  DEH_AddString(@deh_strings, @S_RAPID_ENERGY_DEPLETED, 'S_RAPID_ENERGY_DEPLETED');
+  DEH_AddString(@deh_strings, @S_RAPID_SHIELD_DEPLETED, 'S_RAPID_SHIELD_DEPLETED');
+  DEH_AddString(@deh_strings, @S_MANEUVER_JETS_DEPLETED, 'S_MANEUVER_JETS_DEPLETED');
+  DEH_AddString(@deh_strings, @S_ULTRA_SHIELDS_DEPLETED, 'S_ULTRA_SHIELDS_DEPLETED');
+  DEH_AddString(@deh_strings, @S_ALDS_DEPLETED, 'S_ALDS_DEPLETED');
+
   ammo_tokens := TDTextList.Create;
 
   ammo_tokens.Add('MAX AMMO');

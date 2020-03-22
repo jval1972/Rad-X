@@ -676,6 +676,14 @@ var
         '===========================================================================' + #13#10;
 
 
+var
+  S_NIGHTVISION_DEPLETED: string = 'Night Vision Depleted';
+  S_RAPID_ENERGY_DEPLETED: string = 'Rapid Energy Depleted';
+  S_RAPID_SHIELD_DEPLETED: string = 'Rapid Shield Depleted';
+  S_MANEUVER_JETS_DEPLETED: string = 'Maneuver Jets Depleted';
+  S_ULTRA_SHIELDS_DEPLETED: string = 'Ultra Shields Depleted';
+  S_ALDS_DEPLETED: string = 'A.L.D.S. Depleted';
+
 implementation
 
 
