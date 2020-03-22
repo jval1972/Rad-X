@@ -1731,6 +1731,20 @@ begin
     result.Add('%s = %s', [deh_strings._array[i].name, DEH_StringToCString(deh_strings._array[i].pstr^)]);
   result.Add('');
 
+  ////////////////////////////////////////////////////////////////////////////
+  // Add player extension
+  ////////////////////////////////////////////////////////////////////////////
+  result.Add('');
+  result.Add('# Player');
+  result.Add('');
+  result.Add('[PLAYER]');
+  result.Add('%s = %d', ['PLAYERSPAWNSHIELD', PLAYERSPAWNSHIELD]);
+  result.Add('%s = %d', ['PLAYERSPAWNENERGY', PLAYERSPAWNENERGY]);
+  result.Add('%s = %d', ['PLAYERMAXSHIELD', PLAYERMAXSHIELD]);
+  result.Add('%s = %d', ['PLAYERMAXENERGY', PLAYERMAXENERGY]);
+  result.Add('%s = %d', ['PLAYERMAXPLASMABOMBS', PLAYERMAXPLASMABOMBS]);
+  result.Add('');
+
   //////////////////////////////////////////////////////////////////////////////
   // Add music
   //////////////////////////////////////////////////////////////////////////////
