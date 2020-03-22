@@ -93,6 +93,7 @@ var
   hud_player: Pplayer_t;
   statammo: array[0..3] of Ppatch_t;
   PowerUpIcons: array[0..4] of Ppatch_t;
+  PlasmaIcon: Ppatch_t;
 
 procedure RX_InitRadixHud;
 var
@@ -154,6 +155,8 @@ begin
     sprintf(stmp, 'PowerUpIcon[%d]', [i + 1]);
     PowerUpIcons[i] := W_CacheLumpName(stmp, PU_STATIC);
   end;
+
+  PlasmaIcon := W_CacheLumpName('PlasmaIcon', PU_STATIC);
 end;
 
 procedure RX_ShutDownRadixHud;
@@ -363,6 +366,12 @@ begin
     V_DrawPatch(300, 102, SCN_HUD, PowerUpIcons[4], false);
 end;
 
+procedure RX_HudDrawPlasmaBall;
+begin
+  V_DrawPatch(282, 0, SCN_HUD, PlasmaIcon, false);
+  M_WriteSmallText(305, 4, IntToStrzFill(2, hud_player.plasmabombs), SCN_HUD);
+end;
+
 ////////////////////////////////////////////////////////////////////////////////
 // Draw Status Bar
 ////////////////////////////////////////////////////////////////////////////////
@@ -460,6 +469,9 @@ begin
 
   // Draw power up icons
   RX_HudDrawPowerUpIcons;
+
+  // Draw plasma balls
+  RX_HudDrawPlasmaBall;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -551,6 +563,9 @@ begin
 
   // Draw power up icons
   RX_HudDrawPowerUpIcons;
+  
+  // Draw plasma balls
+  RX_HudDrawPlasmaBall;
 end;
 
 //
