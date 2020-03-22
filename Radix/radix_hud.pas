@@ -92,6 +92,7 @@ var
   EnergyBar: Ppatch_t;
   hud_player: Pplayer_t;
   statammo: array[0..3] of Ppatch_t;
+  PowerUpIcons: array[0..4] of Ppatch_t;
 
 procedure RX_InitRadixHud;
 var
@@ -147,6 +148,12 @@ begin
   statammo[1] := W_CacheLumpName('StatAmmo4', PU_STATIC);
   statammo[2] := W_CacheLumpName('StatAmmo2', PU_STATIC);
   statammo[3] := W_CacheLumpName('StatAmmo3', PU_STATIC);
+
+  for i := 0 to 4 do
+  begin
+    sprintf(stmp, 'PowerUpIcon[%d]', [i + 1]);
+    PowerUpIcons[i] := W_CacheLumpName(stmp, PU_STATIC);
+  end;
 end;
 
 procedure RX_ShutDownRadixHud;
@@ -326,6 +333,32 @@ begin
   end;
 end;
 
+procedure RX_HudDrawPowerUpIcons;
+begin
+  // Rapid shield icon
+  if hud_player.radixpowers[Ord(rpu_rapidshield)] > 0 then
+    V_DrawPatch(300, 22, SCN_HUD, PowerUpIcons[0], false);
+
+  // Rapid energy icon
+  if hud_player.radixpowers[Ord(rpu_rapidenergy)] > 0 then
+    V_DrawPatch(300, 42, SCN_HUD, PowerUpIcons[1], false);
+
+  // Maneuver jets icon
+  if hud_player.radixpowers[Ord(rpu_maneuverjets)] > 0 then
+    V_DrawPatch(300, 62, SCN_HUD, PowerUpIcons[2], false);
+
+  // Ultra shields icon
+  if hud_player.shield > PLAYERSPAWNSHIELD then
+    V_DrawPatch(300, 82, SCN_HUD, PowerUpIcons[3], false);
+
+  // ALDS icon
+  if hud_player.radixpowers[Ord(rpu_alds)] > 0 then
+    V_DrawPatch(300, 102, SCN_HUD, PowerUpIcons[4], false);
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+// Draw Status Bar
+////////////////////////////////////////////////////////////////////////////////
 const
   weaponxlatpos: array[0..8] of integer =
     (0, 1, 2, 3, 4, 5, 6, 1, 1);
@@ -417,8 +450,14 @@ begin
     2: V_DrawPatch(75, 200 - STATUSBAR_HEIGHT + 19, SCN_HUD, statammo[2], false);
     3: V_DrawPatch(124, 200 - STATUSBAR_HEIGHT + 19, SCN_HUD, statammo[3], false);
   end;
+
+  // Draw power up icons
+  RX_HudDrawPowerUpIcons;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+// Draw Cockpit
+////////////////////////////////////////////////////////////////////////////////
 procedure RX_HudDrawerCockpit;
 var
   p: Ppatch_t;
@@ -502,8 +541,14 @@ begin
     2: V_DrawPatchStencil(10, 185, SCN_HUD, statammo[2], false, 0);
     3: V_DrawPatchStencil(54, 185, SCN_HUD, statammo[3], false, 0);
   end;
+
+  // Draw power up icons
+  RX_HudDrawPowerUpIcons;
 end;
 
+//
+// RX_HudDrawer
+//
 procedure RX_HudDrawer;
 begin
   if (screenblocks > 11) and (amstate <> am_only) then
@@ -520,7 +565,7 @@ begin
     else
       RX_HudDrawerStatusbar;
   end;
-  
+
   V_CopyRectTransparent(0, 0, SCN_HUD, 320, 200, 0, 0, SCN_FG, true);
 end;
 
