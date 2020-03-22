@@ -873,6 +873,32 @@ begin
   else
     player.fixedcolormap := 0;
 
+  // JVAL 20200322: Radix power ups dec in every tick
+  if player.radixpowers[Ord(rpu_rapidshield)] > 0 then
+    dec(player.radixpowers[Ord(rpu_rapidshield)]);
+
+  if player.radixpowers[Ord(rpu_rapidenergy)] > 0 then
+    dec(player.radixpowers[Ord(rpu_rapidenergy)]);
+
+  if player.radixpowers[Ord(rpu_maneuverjets)] > 0 then
+    dec(player.radixpowers[Ord(rpu_maneuverjets)]);
+
+  if player.radixpowers[Ord(rpu_nightvision)] > 0 then
+  begin
+    dec(player.radixpowers[Ord(rpu_nightvision)]);
+    if player.fixedcolormap = 0 then
+    begin
+      if (player.radixpowers[Ord(rpu_nightvision)] > 4 * 32) or
+         (player.radixpowers[Ord(rpu_nightvision)] and 8 <> 0) then
+        player.fixedcolormap := 1
+      else
+        player.fixedcolormap := 0;
+    end;
+  end;
+
+  if player.radixpowers[Ord(rpu_alds)] > 0 then
+    dec(player.radixpowers[Ord(rpu_alds)]);
+
   if G_PlayingEngineVersion >= VERSION119 then
     A_PlayerBreath(player);
 end;
