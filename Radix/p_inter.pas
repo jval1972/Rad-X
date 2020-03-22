@@ -398,6 +398,17 @@ begin
   end;
 end;
 
+function P_GiveRapidShield(const p: Pplayer_t; const tics: integer): boolean;
+begin
+  if p.radixpowers[Ord(rpu_rapidshield)] < tics then
+  begin
+    p.radixpowers[Ord(rpu_rapidshield)] := tics;
+    result := true;
+  end
+  else
+    result := false;
+end;
+
 //
 // P_TouchSpecialThing
 //
@@ -481,6 +492,10 @@ begin
           didbonus := true;
     end;
 
+    if special.info.rapidshield > 0 then
+      if P_GiveRapidShield(player, special.info.rapidshield) then
+        didbonus := true;
+              
     if not didbonus then
       exit;
 

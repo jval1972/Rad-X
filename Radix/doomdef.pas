@@ -217,6 +217,13 @@ type
   );
   Ppowertype_t = ^powertype_t;
 
+// Radix power Ups
+  radixpowerup_t = (
+    rpu_rapidshield,
+    NUMRADIXPOWERUPS
+  );
+  Pradixpowerup_t = ^radixpowerup_t;
+
 //
 // Power up durations,
 //  how many seconds till expiration,

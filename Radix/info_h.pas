@@ -561,6 +561,7 @@ type
     armour_set: integer;  // JVAL 20200321 - Armour set for pickable objects
     energy_set: integer;  // JVAL 20200321 - Energy set for pickable objects
     shield_set: integer;  // JVAL 20200321 - Shield set for pickable objects
+    rapidshield: integer; // JVAL 20200322 - Rapid shield regenerator tics
     ammo_inc: array[0..Ord(NUMAMMO) - 1] of integer;  // JVAL 20200321 - Ammo inc for pickable objects
     weapon_inc: array[0..Ord(NUMWEAPONS) - 1] of boolean; // JVAL 20200321 - Weapon pickable objects
     pickupmessage: string[64];

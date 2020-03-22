@@ -1284,6 +1284,8 @@ var
     AddRes('Energy Set = ' + itoa(mobj.energy_set));
     AddRes('Shield Set = ' + itoa(mobj.shield_set));
 
+    AddRes('Rapid Shield = ' + itoa(mobj.rapidshield));
+
     str := '';
     for k := 0 to Ord(NUMAMMO) - 1 do
       str := str + itoa(mobj.ammo_inc[k]) + ' ';
@@ -1755,6 +1757,7 @@ begin
             mobj.weapon_inc[i] := pinf.weapon_inc[i];
           mobj.pickupmessage := pinf.pickupmessage;
           mobj.pickupsound := itoa(pinf.pickupsound);
+          mobj.rapidshield := pinf.rapidshield; // JVAL 20200322 - Rapid shield regenerator tics
 
           mobj.spawnstate := ORIGINALSTATEMARKER + pinf.spawnstate;
           mobj.seestate := ORIGINALSTATEMARKER + pinf.seestate;
@@ -2276,6 +2279,15 @@ begin
           if not foundinventory then
             I_Warning('SC_ActordefToDEH(): "WEAPON8" keyword ouside "INVENTORY" block'#13#10);
           mobj.weapon_inc[8] := true;
+          sc.GetString;
+        end
+
+        else if sc.MatchString('rapidshield') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "RAPIDSHIELD" keyword ouside "INVENTORY" block'#13#10);
+          sc.MustGetInteger;
+          mobj.rapidshield := sc._Integer;
           sc.GetString;
         end
 
