@@ -537,7 +537,7 @@ var
   c: integer;
 begin
 {$IFDEF OPENGL}
-  x := 280;
+  x := 272;
   y := 1;
   for i := length(m_fps) downto 1 do
   begin
@@ -545,7 +545,7 @@ begin
     begin
       c := Ord(toupper(m_fps[i])) - Ord(HU_FONTSTART);
       V_DrawPatch(x, y, SCN_FG, hu_font[c], false);
-      x := x - 8;
+      x := x - 6;
     end
     else
       x := x - 4;
@@ -554,7 +554,7 @@ begin
 {$ELSE}
   if (amstate = am_only) or (viewwindowx = 0) then
   begin
-    x := 280;
+    x := 272;
     y := 1;
   end
   else
@@ -568,7 +568,7 @@ begin
     begin
       c := Ord(toupper(m_fps[i])) - Ord(HU_FONTSTART);
       V_DrawPatch(x, y, SCN_FG, hu_font[c], true);
-      x := x - 8;
+      x := x - 6;
     end
     else
       x := x - 4;
