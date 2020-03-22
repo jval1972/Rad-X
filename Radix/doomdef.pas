@@ -222,6 +222,7 @@ type
     rpu_rapidshield,
     rpu_rapidenergy,
     rpu_maneuverjets,
+    rpu_nightvision,
     NUMRADIXPOWERUPS
   );
   Pradixpowerup_t = ^radixpowerup_t;

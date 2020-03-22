@@ -431,6 +431,17 @@ begin
     result := false;
 end;
 
+function P_GiveNightVision(const p: Pplayer_t; const tics: integer): boolean;
+begin
+  if p.radixpowers[Ord(rpu_nightvision)] < tics then
+  begin
+    p.radixpowers[Ord(rpu_nightvision)] := tics;
+    result := true;
+  end
+  else
+    result := false;
+end;
+
 //
 // P_TouchSpecialThing
 //
@@ -524,6 +535,10 @@ begin
 
     if special.info.maneuverjets > 0 then
       if P_GiveManeuverJets(player, special.info.maneuverjets) then
+        didbonus := true;
+
+    if special.info.nightvision > 0 then
+      if P_GiveNightVision(player, special.info.nightvision) then
         didbonus := true;
 
     if not didbonus then
