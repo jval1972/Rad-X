@@ -500,7 +500,7 @@ begin
     0: V_DrawPatchStencil(10, 174, SCN_HUD, statammo[0], false, 0);
     1: V_DrawPatchStencil(53, 174, SCN_HUD, statammo[1], false, 0);
     2: V_DrawPatchStencil(10, 185, SCN_HUD, statammo[2], false, 0);
-    3: V_DrawPatchStencil(53, 185, SCN_HUD, statammo[3], false, 0);
+    3: V_DrawPatchStencil(54, 185, SCN_HUD, statammo[3], false, 0);
   end;
 end;
 
