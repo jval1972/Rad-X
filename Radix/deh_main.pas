@@ -565,6 +565,7 @@ begin
           57: mobjinfo[mobj_no].shield_set := mobj_val;
           58: mobjinfo[mobj_no].pickupsound := S_GetSoundNumForName(token2);
           59: mobjinfo[mobj_no].rapidshield := mobj_val;
+          60: mobjinfo[mobj_no].rapidenergy := mobj_val;
 
         end;
       end;
@@ -1592,6 +1593,7 @@ begin
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[57]), mobjinfo[i].shield_set]);
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[58]), mobjinfo[i].pickupsound]);
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[59]), mobjinfo[i].rapidshield]);
+    result.Add('%s = %d', [capitalizedstring(mobj_tokens[60]), mobjinfo[i].rapidenergy]);
 
     result.Add('');
   end;
@@ -1839,6 +1841,7 @@ begin
   mobj_tokens.Add('SHIELD SET');         // .shield_set (Radix)       // 57
   mobj_tokens.Add('PICKUP SOUND');       // .pickupsound (Radix)      // 58
   mobj_tokens.Add('RAPID SHIELD');       // .rapidshield (Radix)      // 59
+  mobj_tokens.Add('RAPID ENERGY');       // .rapidenergy (Radix)      // 60
 
 
   mobj_flags := TDTextList.Create;

@@ -220,6 +220,7 @@ type
 // Radix power Ups
   radixpowerup_t = (
     rpu_rapidshield,
+    rpu_rapidenergy,
     NUMRADIXPOWERUPS
   );
   Pradixpowerup_t = ^radixpowerup_t;
