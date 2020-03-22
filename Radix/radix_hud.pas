@@ -334,17 +334,24 @@ begin
 end;
 
 procedure RX_HudDrawPowerUpIcons;
+
+  // JVAL: 20200322 - Flash icons at the end
+  function DoDrawQuery(const x: integer): boolean;
+  begin
+    result := (x > 4 * 32) or (x and 8 <> 0);
+  end;
+
 begin
   // Rapid shield icon
-  if hud_player.radixpowers[Ord(rpu_rapidshield)] > 0 then
+  if DoDrawQuery(hud_player.radixpowers[Ord(rpu_rapidshield)]) then
     V_DrawPatch(300, 22, SCN_HUD, PowerUpIcons[0], false);
 
   // Rapid energy icon
-  if hud_player.radixpowers[Ord(rpu_rapidenergy)] > 0 then
+  if DoDrawQuery(hud_player.radixpowers[Ord(rpu_rapidenergy)]) then
     V_DrawPatch(300, 42, SCN_HUD, PowerUpIcons[1], false);
 
   // Maneuver jets icon
-  if hud_player.radixpowers[Ord(rpu_maneuverjets)] > 0 then
+  if DoDrawQuery(hud_player.radixpowers[Ord(rpu_maneuverjets)]) then
     V_DrawPatch(300, 62, SCN_HUD, PowerUpIcons[2], false);
 
   // Ultra shields icon
@@ -352,7 +359,7 @@ begin
     V_DrawPatch(300, 82, SCN_HUD, PowerUpIcons[3], false);
 
   // ALDS icon
-  if hud_player.radixpowers[Ord(rpu_alds)] > 0 then
+  if DoDrawQuery(hud_player.radixpowers[Ord(rpu_alds)]) then
     V_DrawPatch(300, 102, SCN_HUD, PowerUpIcons[4], false);
 end;
 
