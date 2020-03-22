@@ -552,9 +552,9 @@ begin
   end;
   hu_h := hu_h + 9;
 {$ELSE}
-  if amstate = am_only then
+  if (amstate = am_only) or (viewwindowx = 0) then
   begin
-    x := 311;
+    x := 280;
     y := 1;
   end
   else
