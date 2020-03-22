@@ -406,6 +406,7 @@ var
   xyspeed: fixed_t;
   an: angle_t;
   flyupdown: integer;
+  has_mj: boolean; // JVAL: 20200322 - Maneuvering jets physics
 begin
   cmd := @player.cmd;
 
@@ -416,6 +417,9 @@ begin
   end;
 
   player.mo.angle := player.mo.angle + _SHLW(cmd.angleturn, 16);
+
+  // JVAL: 20200322 - Maneuvering jets physics
+  has_mj := player.radixpowers[Ord(rpu_maneuverjets)] > 0;
 
   // Do not let the player control movement
   //  if not onground.
@@ -438,8 +442,17 @@ begin
 
   if (cmd.forwardmove = 0) and (cmd.sidemove = 0) then
   begin
-    player.mo.momx := player.mo.momx * 15 div 16;
-    player.mo.momy := player.mo.momy * 15 div 16;
+    // JVAL: 20200322 - Maneuvering jets physics - Faster slowdown
+    if has_mj then
+    begin
+      player.mo.momx := player.mo.momx * 7 div 8;
+      player.mo.momy := player.mo.momy * 7 div 8;
+    end
+    else
+    begin
+      player.mo.momx := player.mo.momx * 15 div 16;
+      player.mo.momy := player.mo.momy * 15 div 16;
+    end;
   end;
 
   if ((cmd.forwardmove <> 0) or (cmd.sidemove <> 0)) and
