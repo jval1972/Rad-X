@@ -158,7 +158,7 @@ procedure RX_HudDrawTime(const x, y: integer);
 var
   secs: integer;
 begin
-  if leveltime <= 99 * 60 + 59 then
+  if leveltime <= (99 * 60 + 59) * TICRATE then
   begin
     secs := leveltime div TICRATE;
     M_WriteSmallText(x, y, IntToStrzFill(2, secs div 60) + ':', SCN_HUD);
