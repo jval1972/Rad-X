@@ -453,6 +453,19 @@ begin
     result := false;
 end;
 
+function P_GivePlasmaBombs(const p: Pplayer_t; const bombs: integer): boolean;
+begin
+  if p.plasmabombs < PLAYERMAXPLASMABOMBS then
+  begin
+    p.plasmabombs := p.plasmabombs + PLAYERMAXPLASMABOMBS;
+    if p.plasmabombs > PLAYERMAXPLASMABOMBS then
+      p.plasmabombs := PLAYERMAXPLASMABOMBS;
+    result := true;
+  end
+  else
+    result := false;
+end;
+
 //
 // P_TouchSpecialThing
 //
@@ -556,6 +569,10 @@ begin
       if P_GiveALDS(player, special.info.alds) then
         didbonus := true;
 
+    if special.info.plasmabomb > 0 then
+      if P_GivePlasmaBombs(player, special.info.plasmabomb) then
+        didbonus := true;
+        
     if not didbonus then
       exit;
 

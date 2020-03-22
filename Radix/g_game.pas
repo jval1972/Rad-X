@@ -273,6 +273,9 @@ var
   PLAYERMAXSHIELD: integer = 200;
   PLAYERMAXENERGY: integer = 200;
 
+const
+  PLAYERMAXPLASMABOMBS: integer = 99;
+
 implementation
 
 uses

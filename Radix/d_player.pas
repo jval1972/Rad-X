@@ -120,6 +120,7 @@ type
     cards: array[0..Ord(NUMCARDS) - 1] of boolean;
     backpack: boolean;
     radixpowers: array[0..Ord(NUMRADIXPOWERUPS) - 1] of integer;  // JVAL: 20200322 - Radix power ups
+    plasmabombs: integer; // JVAL: 20200322 - Number of plasma bombs
 
     // Frags, kills of other players.
     frags: array[0..MAXPLAYERS - 1] of integer;

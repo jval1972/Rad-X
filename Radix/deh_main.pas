@@ -569,6 +569,7 @@ begin
           61: mobjinfo[mobj_no].maneuverjets := mobj_val;
           62: mobjinfo[mobj_no].nightvision := mobj_val;
           63: mobjinfo[mobj_no].alds := mobj_val;
+          64: mobjinfo[mobj_no].plasmabomb := mobj_val;
 
         end;
       end;
@@ -1295,6 +1296,8 @@ begin
           PLAYERMAXSHIELD := plyr_val
         else if token1 = 'PLAYERMAXENERGY' then
           PLAYERMAXENERGY := plyr_val
+        else if token1 = 'PLAYERMAXPLASMABOMBS' then
+          PLAYERMAXPLASMABOMBS := plyr_val
         else
         begin
           mustnextline := false; // Already got line
@@ -1600,6 +1603,7 @@ begin
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[61]), mobjinfo[i].maneuverjets]);
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[62]), mobjinfo[i].nightvision]);
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[63]), mobjinfo[i].alds]);
+    result.Add('%s = %d', [capitalizedstring(mobj_tokens[64]), mobjinfo[i].plasmabomb]);
 
     result.Add('');
   end;
@@ -1851,6 +1855,7 @@ begin
   mobj_tokens.Add('MANEUVER JETS');      // .maneuverjets (Radix)     // 61
   mobj_tokens.Add('NIGHT VISION');       // .nightvision (Radix)      // 62
   mobj_tokens.Add('A.L.D.S.');           // .alds (Radix)             // 63
+  mobj_tokens.Add('PLASMA BOMB');        // .plasmabomb (Radix)       // 64
 
 
   mobj_flags := TDTextList.Create;

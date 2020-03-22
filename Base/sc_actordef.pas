@@ -1289,6 +1289,7 @@ var
     AddRes('Maneuver Jets = ' + itoa(mobj.maneuverjets));
     AddRes('Night Vision = ' + itoa(mobj.nightvision));
     AddRes('A.L.D.S. = ' + itoa(mobj.alds));
+    AddRes('Plasma Bomb = ' + itoa(mobj.plasmabomb));
 
     str := '';
     for k := 0 to Ord(NUMAMMO) - 1 do
@@ -1766,6 +1767,7 @@ begin
           mobj.maneuverjets := pinf.maneuverjets; // JVAL 20200322 - Maneuver jets tics
           mobj.nightvision := pinf.nightvision; // JVAL 20200322 - Night vision tics
           mobj.alds := pinf.alds; // JVAL 20200322 - Automated Laset Defence System tics
+          mobj.plasmabomb := pinf.plasmabomb; // JVAL: 20200322 - Give player Plasma bomb
 
           mobj.spawnstate := ORIGINALSTATEMARKER + pinf.spawnstate;
           mobj.seestate := ORIGINALSTATEMARKER + pinf.seestate;
@@ -2332,6 +2334,15 @@ begin
             I_Warning('SC_ActordefToDEH(): "ALDS" keyword ouside "INVENTORY" block'#13#10);
           sc.MustGetInteger;
           mobj.alds := sc._Integer;
+          sc.GetString;
+        end
+
+        else if sc.MatchString('plasmabomb') then
+        begin
+          if not foundinventory then
+            I_Warning('SC_ActordefToDEH(): "PLASMABOMB" keyword ouside "INVENTORY" block'#13#10);
+          sc.MustGetInteger;
+          mobj.plasmabomb := sc._Integer;
           sc.GetString;
         end
 
