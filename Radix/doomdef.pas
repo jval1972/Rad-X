@@ -221,6 +221,7 @@ type
   radixpowerup_t = (
     rpu_rapidshield,
     rpu_rapidenergy,
+    rpu_maneuverjets,
     NUMRADIXPOWERUPS
   );
   Pradixpowerup_t = ^radixpowerup_t;

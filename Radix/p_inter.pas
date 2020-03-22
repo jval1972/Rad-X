@@ -420,6 +420,17 @@ begin
     result := false;
 end;
 
+function P_GiveManeuverJets(const p: Pplayer_t; const tics: integer): boolean;
+begin
+  if p.radixpowers[Ord(rpu_maneuverjets)] < tics then
+  begin
+    p.radixpowers[Ord(rpu_maneuverjets)] := tics;
+    result := true;
+  end
+  else
+    result := false;
+end;
+
 //
 // P_TouchSpecialThing
 //
@@ -509,6 +520,10 @@ begin
 
     if special.info.rapidenergy > 0 then
       if P_GiveRapidEnergy(player, special.info.rapidenergy) then
+        didbonus := true;
+
+    if special.info.maneuverjets > 0 then
+      if P_GiveManeuverJets(player, special.info.maneuverjets) then
         didbonus := true;
 
     if not didbonus then
