@@ -161,8 +161,8 @@ var
   ConsoleInitialized: boolean = false;
 
 const
-  C_FONTWIDTH = 14;
-  C_FONTHEIGHT = 14;
+  C_FONTWIDTH = 8;
+  C_FONTHEIGHT = 9;
 
 function isDivideLine(const s: string): boolean;
 var
@@ -756,7 +756,6 @@ begin
               C_DoPageDown;
           else
             begin
-              c := Ord(toupper(Chr(c)));
               if ((c >= Ord(DOS_FONTSTART)) and (c <= Ord(DOS_FONTEND))) or
                  (Chr(c) in [' ', '.', '!', '-', '+', '=', '*', '/', '\']) then
               begin
@@ -942,10 +941,10 @@ begin
       begin
         while i <= len do
         begin
-          c := toupper(ConsoleText[line].line[i]);
+          c := ConsoleText[line].line[i];
           if (c >= DOS_FONTSTART) and (c <= DOS_FONTEND) then
           begin
-            patch := dos_fontB[Ord(c) - Ord(DOS_FONTSTART)];
+            patch := small_fontB[Ord(c) - Ord(DOS_FONTSTART)];
             if c in FIXED_PITCH_CHARS then
             begin
               V_DrawPatch(x + C_FONTWIDTH - patch.width, y, SCN_CON, patch, false);
@@ -979,10 +978,10 @@ begin
     y := V_GetScreenHeight(SCN_CON) - C_FONTHEIGHT;
     for i := 1 to Length(ConsoleInputBuff) do
     begin
-      c := toupper(ConsoleInputBuff[i]);
+      c := ConsoleInputBuff[i];
       if (c >= DOS_FONTSTART) and (c <= DOS_FONTEND) and (x < xmax) then
       begin
-        patch := dos_fontB[Ord(c) - Ord(DOS_FONTSTART)];
+        patch := small_fontB[Ord(c) - Ord(DOS_FONTSTART)];
         if c in FIXED_PITCH_CHARS then
         begin
           V_DrawPatch(x + C_FONTWIDTH - patch.width, y, SCN_CON, patch, false);
@@ -1000,7 +999,7 @@ begin
 
     if cursonon and (x < xmax) then
     begin
-      patch := dos_fontB[Ord('_') - Ord(DOS_FONTSTART)];
+      patch := small_fontB[Ord('_') - Ord(DOS_FONTSTART)];
       V_DrawPatch(x, y, SCN_CON, patch, false);
     end;
     cursor_x := x;
@@ -1014,7 +1013,7 @@ begin
   begin
     if cursonon and (cursor_x < xmax) then
     begin
-      patch := dos_fontB[Ord('_') - Ord(DOS_FONTSTART)];
+      patch := small_fontB[Ord('_') - Ord(DOS_FONTSTART)];
       V_DrawPatch(cursor_x, cursor_y, SCN_CON, patch, false);
     end;
     cursor_needs_update := false;
