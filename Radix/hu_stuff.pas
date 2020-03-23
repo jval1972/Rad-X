@@ -100,6 +100,9 @@ var
   big_fontB: array[0..DOS_FONTSIZE - 1] of Ppatch_t;
   big_fontC: array[0..DOS_FONTSIZE - 1] of Ppatch_t;
 
+  small_fontA: array[0..DOS_FONTSIZE - 1] of Ppatch_t;
+  small_fontB: array[0..DOS_FONTSIZE - 1] of Ppatch_t;
+
   chat_on: boolean;
 
   message_on: boolean;
@@ -452,6 +455,30 @@ begin
     big_fontC[i] := W_CacheLumpNum(lump, PU_STATIC);
   end;
 
+  // Red small font
+  j := Ord(BIG_FONTSTART);
+  for i := 0 to BIG_FONTSIZE - 1 do
+  begin
+    buffer := 'DOSSA' + IntToStrZfill(3, j);
+    lump := W_CheckNumForName(buffer);
+    if lump < 0 then
+      lump := W_GetNumForName('TNT1A0');
+    inc(j);
+    small_fontA[i] := W_CacheLumpNum(lump, PU_STATIC);
+  end;
+
+  // White small font
+  j := Ord(BIG_FONTSTART);
+  for i := 0 to BIG_FONTSIZE - 1 do
+  begin
+    buffer := 'DOSSB' + IntToStrZfill(3, j);
+    lump := W_CheckNumForName(buffer);
+    if lump < 0 then
+      lump := W_GetNumForName('TNT1A0');
+    inc(j);
+    small_fontB[i] := W_CacheLumpNum(lump, PU_STATIC);
+  end;
+
   for i := 0 to FPSSIZE - 1 do
     FPSHISTORY[i] := 0;
 
@@ -537,43 +564,42 @@ var
   c: integer;
 begin
 {$IFDEF OPENGL}
-  x := 272;
+  x := viewwindowx + (viewwidth + 8 * Length(m_fps) - 4) div 2;
   y := 1;
   for i := length(m_fps) downto 1 do
   begin
     if m_fps[i] <> ' ' then
     begin
-      c := Ord(toupper(m_fps[i])) - Ord(HU_FONTSTART);
-      V_DrawPatch(x, y, SCN_FG, hu_font[c], false);
-      x := x - 6;
+      x := x - 8;
+      c := Ord(m_fps[i]) - Ord(DOS_FONTSTART);
+      V_DrawPatch(x, y, SCN_FG, small_fontB[c], false);
     end
     else
       x := x - 4;
   end;
   hu_h := hu_h + 9;
 {$ELSE}
+  x := viewwindowx + (viewwidth + 8 * Length(m_fps) - 4) div 2;
   if (amstate = am_only) or (viewwindowx = 0) then
   begin
-    x := 272;
     y := 1;
   end
   else
   begin
-    x := (viewwindowx + viewwidth) * 320 div SCREENWIDTH - 9;
-    y := viewwindowy * 200 div SCREENHEIGHT + 1;
+    y := viewwindowy + 1;
   end;
   for i := length(m_fps) downto 1 do
   begin
     if m_fps[i] <> ' ' then
     begin
-      c := Ord(toupper(m_fps[i])) - Ord(HU_FONTSTART);
-      V_DrawPatch(x, y, SCN_FG, hu_font[c], true);
-      x := x - 6;
+      x := x - 8;
+      c := Ord(m_fps[i]) - Ord(DOS_FONTSTART);
+      V_DrawPatch(x, y, SCN_FG, small_fontB[c], false);
     end
     else
       x := x - 4;
   end;
-{$ENDIF}  
+{$ENDIF}
 end;
 
 // 19/9/2009 JVAL: For drawing demo progress
