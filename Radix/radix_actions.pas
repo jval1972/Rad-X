@@ -1010,7 +1010,7 @@ end;
 // Sprite type 23
 type
   radixprintmessage_t = packed record
-    message_id: byte; // id's 0-11
+    message_id: byte; // id's 0-12
   end;
   radixprintmessage_p = ^radixprintmessage_t;
 
