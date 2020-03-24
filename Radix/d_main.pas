@@ -745,7 +745,7 @@ begin
       begin
         pagetic := (TICRATE * 200) div 35;
         gamestate := GS_DEMOSCREEN;
-        pagename := pg_CREDIT;
+        pagename := pg_TITLE;
       end;
     3:
       begin
@@ -753,9 +753,9 @@ begin
       end;
     4:
       begin
-        gamestate := GS_DEMOSCREEN;
         pagetic := (TICRATE * 200) div 35;
-        pagename := pg_HELP2;
+        gamestate := GS_DEMOSCREEN;
+        pagename := pg_TITLE;
       end;
     5:
       begin
