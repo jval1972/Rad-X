@@ -256,6 +256,9 @@ var
   an: angle_t;
   asin, acos: fixed_t;
 begin
+  if hud_player.scannerjam then
+    exit; // JVAL: 20200324 - When true can not see the radar in hud
+
   r := range * 64 * FRACUNIT;
   xl := MapBlockInt(hud_player.mo.x - r - bmaporgx);
   xh := MapBlockInt(hud_player.mo.x + r - bmaporgx);

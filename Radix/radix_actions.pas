@@ -1002,6 +1002,8 @@ var
   parms: radixscannerjam_p;
 begin
   parms := radixscannerjam_p(@action.params);
+
+  players[radixplayer].scannerjam := parms.on_off = 1;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
