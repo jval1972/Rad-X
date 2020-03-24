@@ -2059,9 +2059,6 @@ end;
 //
 // M_Options
 //
-var
-  msgNames: array[0..1] of string = ('M_MSGOFF', 'M_MSGON');
-
 procedure M_DrawOptions;
 var
   i, y: integer;

@@ -164,28 +164,6 @@ const
   ST_FX = 143;
   ST_FY = ST_Y + 1; // JVAL was 169;
 
-// Number of status faces.
-  ST_NUMPAINFACES = 5;
-  ST_NUMSTRAIGHTFACES = 3;
-  ST_NUMTURNFACES = 2;
-  ST_NUMSPECIALFACES = 3;
-
-  ST_FACESTRIDE = ST_NUMSTRAIGHTFACES + ST_NUMTURNFACES + ST_NUMSPECIALFACES;
-
-  ST_NUMEXTRAFACES = 2;
-
-  ST_NUMFACES = ST_FACESTRIDE * ST_NUMPAINFACES + ST_NUMEXTRAFACES;
-
-  ST_TURNOFFSET = ST_NUMSTRAIGHTFACES;
-  ST_OUCHOFFSET = ST_TURNOFFSET + ST_NUMTURNFACES;
-  ST_EVILGRINOFFSET = ST_OUCHOFFSET + 1;
-  ST_RAMPAGEOFFSET = ST_EVILGRINOFFSET + 1;
-  ST_GODFACE = ST_NUMPAINFACES * ST_FACESTRIDE;
-  ST_DEADFACE = ST_GODFACE + 1;
-
-  ST_FACESX = 143;
-  ST_FACESY = ST_Y; // JVAL was 168;
-
   ST_EVILGRINCOUNT = 2 * TICRATE;
   ST_STRAIGHTFACECOUNT = TICRATE div 2;
   ST_TURNCOUNT = 1 * TICRATE;
@@ -212,14 +190,6 @@ const
   ST_HEALTHWIDTH = 3;
   ST_HEALTHX = 90;
   ST_HEALTHY = ST_Y + 3; // JVAL was 171;
-
-// Weapon pos.
-  ST_ARMSX = 111;
-  ST_ARMSY = ST_Y + 4; // JVAL was 172;
-  ST_ARMSBGX = 104;
-  ST_ARMSBGY = ST_Y; // JVAL was 168;
-  ST_ARMSXSPACE = 12;
-  ST_ARMSYSPACE = 10;
 
 // Frags pos.
   ST_FRAGSX = 138;
@@ -377,16 +347,7 @@ var
   st_cursoron: boolean;
 
 // !deathmatch
-  st_notdeathmatch: boolean;
-
-// !deathmatch && st_statusbaron
-  st_armson: boolean;
-
-// !deathmatch
   st_fragson: boolean;
-
-// main bar left
-  sbar: Ppatch_t;
 
 // medikit
   smedikit: integer;
@@ -405,18 +366,6 @@ var
 // 3 key-cards, 3 skulls
   keys: array[0..Ord(NUMCARDS) - 1] of Ppatch_t;
 
-// face status patches
-  faces: array[0..ST_NUMFACES - 1] of Ppatch_t;
-
-// face background
-  faceback: Ppatch_t;
-
- // main bar right
-  armsbg: Ppatch_t;
-
-// weapon ownership patches
-  arms: array[0..5, 0..1] of Ppatch_t;
-
 // ready-weapon widget
   w_ready: st_number_t;
 
@@ -426,16 +375,6 @@ var
 // health widgets
   w_health: st_percent_t;
   w_health2: st_percent_t;
-
-// arms background
-  w_armsbg: st_binicon_t;
-
-
-// weapon ownership widgets
-  w_arms: array[0..5] of st_multicon_t;
-
-// face status widget
-  w_faces: st_multicon_t;
 
 // keycard widgets
   w_keyboxes: array[0..2] of st_multicon_t;
@@ -781,21 +720,6 @@ end;
 //
 // STATUS BAR CODE
 //
-procedure ST_RefreshBackground;
-begin
-  if st_statusbaron then
-  begin
-    V_DrawPatch(ST_X, 0, SCN_ST, sbar, false);
-    if netgame then
-      V_DrawPatch(ST_FX, 0, SCN_ST, faceback, false);
-  end;
-end;
-
-procedure ST_FinishRefresh;
-begin
-  V_CopyRect(ST_X, 0, SCN_ST, ST_WIDTH, ST_HEIGHT, ST_X, ST_Y, SCN_FG, true);
-end;
-
 // Respond to keyboard input events,
 //  intercept cheats.
 function ST_Responder(ev: Pevent_t): boolean;
@@ -974,265 +898,10 @@ begin
   result := result or ateit;
 end;
 
-var
-  lastcalc: integer;
-  oldhealth: integer;
-
-function ST_calcPainOffset: integer;
-var
-  health: integer;
-begin
-  if plyr.health > 100 then
-    health := 100
-  else
-    health := plyr.health;
-
-  if health <> oldhealth then
-  begin
-    lastcalc := ST_FACESTRIDE * (((100 - health) * ST_NUMPAINFACES) div 101);
-    oldhealth := health;
-  end;
-  result := lastcalc;
-end;
-
-//
-// This is a not-very-pretty routine which handles
-//  the face states and their timing.
-// the precedence of expressions is:
-//  dead > evil grin > turned head > straight ahead
-//
-var
-  lastattackdown: integer;
-  priority: integer;
-
-procedure ST_UpdateFaceWidget;
-var
-  i: integer;
-  to_right: boolean;
-  badguyangle: angle_t;
-  diffang: angle_t;
-  doevilgrin: boolean;
-begin
-  if priority < 10 then
-  begin
-    // dead
-    if plyr.health = 0 then
-    begin
-      priority := 9;
-      st_faceindex := ST_DEADFACE;
-      st_facecount := 1;
-    end;
-  end;
-
-  if priority < 9 then
-  begin
-    if plyr.bonuscount <> 0 then
-    begin
-      // picking up bonus
-      doevilgrin := false;
-
-      for i := 0 to Ord(NUMWEAPONS) - 1 do
-      begin
-        if oldweaponsowned[i] <> plyr.weaponowned[i] then
-        begin
-          doevilgrin := true;
-          oldweaponsowned[i] := plyr.weaponowned[i];
-        end;
-      end;
-      if doevilgrin then
-      begin
-        // evil grin if just picked up weapon
-        priority := 8;
-        st_facecount := ST_EVILGRINCOUNT;
-        st_faceindex := ST_calcPainOffset + ST_EVILGRINOFFSET;
-      end;
-    end;
-  end;
-
-  if priority < 8 then
-  begin
-    if (plyr.damagecount <> 0) and
-       (plyr.attacker <> nil) and
-       (plyr.attacker <> plyr.mo) then
-    begin
-      // being attacked
-      priority := 7;
-
-      if ((G_PlayingEngineVersion <= VERSION203) and (plyr.health - st_oldhealth > ST_MUCHPAIN)) or
-         ((G_PlayingEngineVersion > VERSION203) and (st_oldhealth - plyr.health > ST_MUCHPAIN)) then
-      begin
-        if G_PlayingEngineVersion > VERSION203 then // JVAL: actually, I must check > VERSION204 :)
-          priority := 8;
-        st_facecount := ST_TURNCOUNT;
-        st_faceindex := ST_calcPainOffset + ST_OUCHOFFSET;
-      end
-      else
-      begin
-        badguyangle :=
-          R_PointToAngle2(plyr.mo.x, plyr.mo.y, plyr.attacker.x, plyr.attacker.y);
-
-        if badguyangle > plyr.mo.angle then
-        begin
-          // whether right or left
-          diffang := badguyangle - plyr.mo.angle;
-          to_right := diffang > ANG180;
-        end
-        else
-        begin
-          // whether left or right
-          diffang := plyr.mo.angle - badguyangle;
-          to_right := diffang <= ANG180;
-        end; // confusing, aint it?
-
-
-        st_facecount := ST_TURNCOUNT;
-        st_faceindex := ST_calcPainOffset;
-
-        if diffang < ANG45 then
-        begin
-          // head-on
-          st_faceindex := st_faceindex + ST_RAMPAGEOFFSET;
-        end
-        else if to_right then
-        begin
-          // turn face right
-          st_faceindex := st_faceindex + ST_TURNOFFSET;
-        end
-        else
-        begin
-          // turn face left
-          st_faceindex := st_faceindex + ST_TURNOFFSET + 1;
-        end;
-      end;
-    end;
-  end;
-
-  if priority < 7 then
-  begin
-    // getting hurt because of your own damn stupidity
-    if plyr.damagecount <> 0 then
-    begin
-      if plyr.health - st_oldhealth > ST_MUCHPAIN then
-      begin
-        priority := 7;
-        st_facecount := ST_TURNCOUNT;
-        st_faceindex := ST_calcPainOffset + ST_OUCHOFFSET;
-      end
-      else
-      begin
-        priority := 6;
-        st_facecount := ST_TURNCOUNT;
-        st_faceindex := ST_calcPainOffset + ST_RAMPAGEOFFSET;
-      end;
-    end;
-  end;
-
-  if priority < 6 then
-  begin
-    // rapid firing
-    if plyr.attackdown then
-    begin
-      if lastattackdown = -1 then
-        lastattackdown := ST_RAMPAGEDELAY
-      else
-      begin
-        dec(lastattackdown);
-        if lastattackdown = 0 then
-        begin
-          priority := 5;
-          st_faceindex := ST_calcPainOffset + ST_RAMPAGEOFFSET;
-          st_facecount := 1;
-          lastattackdown := 1;
-        end;
-      end;
-    end
-    else
-      lastattackdown := -1;
-  end;
-
-  if priority < 5 then
-  begin
-    // invulnerability
-    if (plyr.cheats and CF_GODMODE <> 0) or
-       (plyr.powers[Ord(pw_invulnerability)] <> 0) then
-    begin
-      priority := 4;
-
-      st_faceindex := ST_GODFACE;
-      st_facecount := 1;
-    end;
-  end;
-
-  // look left or look right if the facecount has timed out
-  if st_facecount = 0 then
-  begin
-    st_faceindex := ST_calcPainOffset + (st_randomnumber mod 3);
-    st_facecount := ST_STRAIGHTFACECOUNT;
-    priority := 0;
-  end;
-
-  dec(st_facecount);
-end;
-
-procedure ST_UpdateWidgets;
-var
-  i: integer;
-begin
-  if plyr = nil then
-    exit;
-    
-  // must redirect the pointer if the ready weapon has changed.
-  if weaponinfo[Ord(plyr.readyweapon)].ammo = am_noammo then
-    w_ready.num := @largeammo
-  else
-    w_ready.num := @plyr.ammo[Ord(weaponinfo[Ord(plyr.readyweapon)].ammo)];
-
-  w_ready.data := Ord(plyr.readyweapon);
-
-  // update keycard multiple widgets
-  for i := 0 to 2 do
-  begin
-    if plyr.cards[i] then
-      keyboxes[i] := i
-    else
-      keyboxes[i] := -1;
-
-    if plyr.cards[i + 3] then
-      keyboxes[i] := i + 3;
-  end;
-
-  // refresh everything if this is him coming back to life
-  ST_UpdateFaceWidget;
-
-  // used by the w_armsbg widget
-  st_notdeathmatch := deathmatch = 0;
-
-  // used by w_arms[] widgets
-  st_armson := st_statusbaron and st_notdeathmatch;
-
-  // used by w_frags widget
-  st_fragson := (deathmatch <> 0) and st_statusbaron;
-  st_fragscount := 0;
-
-  for i := 0 to MAXPLAYERS - 1 do
-  begin
-    if i <> consoleplayer then
-      st_fragscount := st_fragscount + plyr.frags[i]
-    else
-      st_fragscount := st_fragscount - plyr.frags[i];
-  end;
-
-  // get rid of chat window if up because of message
-  dec(st_msgcounter);
-  if st_msgcounter = 0 then
-    st_chat := st_oldchat;
-end;
-
 procedure ST_Ticker;
 begin
   inc(st_clock);
   st_randomnumber := M_Random;
-  ST_UpdateWidgets;
   if plyr <> nil then
     st_oldhealth := plyr.health;
 end;
@@ -1303,105 +972,10 @@ begin
   end;
 end;
 
-procedure ST_DrawWidgets(refresh: boolean);
-var
-  i: integer;
-begin
-  // used by w_arms[] widgets
-  st_armson := st_statusbaron and (deathmatch = 0);
-
-  // used by w_frags widget
-  st_fragson := (deathmatch <> 0) and st_statusbaron;
-
-  STlib_updateNum(@w_ready, refresh);
-
-  for i := 0 to 3 do
-  begin
-    STlib_updateNum(@w_ammo[i], refresh);
-    STlib_updateNum(@w_maxammo[i], refresh);
-  end;
-
-  STlib_updatePercent(@w_health, refresh, false);
-  STlib_updatePercent(@w_armor, refresh, false);
-
-  STlib_updateBinIcon(@w_armsbg, refresh);
-
-  for i := 0 to 5 do
-    STlib_updateMultIcon(@w_arms[i], refresh);
-
-  STlib_updateMultIcon(@w_faces, refresh);
-
-  for i := 0 to 2 do
-    STlib_updateMultIcon(@w_keyboxes[i], refresh);
-
-  STlib_updateNum(@w_frags, refresh);
-end;
-
-procedure ST_Refresh(refresh: boolean);
-begin
-  // draw status bar background to off-screen buff
-  ST_RefreshBackground;
-  // and refresh all widgets
-  ST_DrawWidgets(refresh);
-  if refresh then
-    ST_FinishRefresh;
-end;
-
-procedure ST_RefreshBackgroundSmall;
-begin
-  R_VideoBlanc(SCN_ST, 0, ST_WIDTH * ST_HEIGHT);
-end;
-
-procedure ST_DrawWidgetsSmall;
-var
-  ammo: integer;
-begin
-  STlib_updatePercent(@w_health2, true, true);
-  ammo := Ord(weaponinfo[Ord(plyr.readyweapon)].ammo);
-  if ammo <> Ord(am_noammo) then
-  begin
-    STlib_updateNum(@w_ammo2[ammo], true);
-    if sammo[ammo] >= 0 then
-      V_DrawPatch(ST_MWX, ST_MWY, SCN_ST, sammo[ammo], false);
-  end;
-  V_DrawPatch(ST_MX, ST_MY, SCN_ST, smedikit, false);
-end;
-
-procedure ST_FinishRefreshSmall;
-begin
-  V_CopyRectTransparent(0, 0, SCN_ST, ST_WIDTH, ST_HEIGHT, 0, ST_Y, SCN_FG, true);
-end;
-
-procedure ST_RefreshSmall;
-begin
-  // draw status bar background to off-screen buff
-  ST_RefreshBackgroundSmall;
-  // and refresh all widgets
-  ST_DrawWidgetsSmall;
-  ST_FinishRefreshSmall;
-end;
-
-procedure ST_DoRefresh;
-begin
-  st_firsttime := false;
-  ST_Refresh(true);
-end;
-
-procedure ST_DiffDraw;
-begin
-  // update all widgets
-  ST_DrawWidgets(true);
-
-  ST_FinishRefresh;
-end;
-
 procedure ST_LoadGraphics;
 var
   i: integer;
-  j: integer;
-  facenum: integer;
   namebuf: string;
-  lump: integer;
 begin
   // Load the numbers, tall and short
   for i := 0 to 9 do
@@ -1423,29 +997,6 @@ begin
     keys[i] := Ppatch_t(W_CacheLumpName(namebuf, PU_STATIC));
   end;
 
-  // arms background
-  armsbg := Ppatch_t(W_CacheLumpName('STARMS', PU_STATIC));
-
-  // arms ownership widgets
-  for i := 0 to 5 do
-  begin
-    sprintf(namebuf, 'STGNUM%d', [i + 2]);
-
-    // gray #
-    arms[i][0] := Ppatch_t(W_CacheLumpName(namebuf, PU_STATIC));
-
-    // yellow #
-    arms[i][1] := shortnum[i + 2];
-  end;
-
-  // face backgrounds for different color players
-  sprintf(namebuf, 'STFB%d', [consoleplayer]);
-  faceback := Ppatch_t(W_CacheLumpName(namebuf, PU_STATIC));
-
-  // status bar background bits
-  lump :=  W_CheckNumForName('STBAR');
-  sbar := Ppatch_t(W_CacheLumpNum(lump, PU_STATIC));
-
 // JVAL
 // Statusbar medikit, use stimpack patch (STIMA0)
   smedikit := W_GetNumForName('STIMA0');
@@ -1458,36 +1009,6 @@ begin
 // Cells do not exist in shareware version, use W_CheckNumForName instead of W_GetNumForName
   sammo[2] := W_CheckNumForName('CELLA0');
   sammo[3] := W_GetNumForName('ROCKA0');
-
-  // face states
-  facenum := 0;
-  for i := 0 to ST_NUMPAINFACES - 1 do
-  begin
-    for j := 0 to ST_NUMSTRAIGHTFACES - 1 do
-    begin
-      sprintf(namebuf, 'STFST%d%d', [i, j]);
-      faces[facenum] := W_CacheLumpName(namebuf, PU_STATIC);
-      inc(facenum);
-    end;
-    sprintf(namebuf, 'STFTR%d0', [i]); // turn right
-    faces[facenum] := W_CacheLumpName(namebuf, PU_STATIC);
-    inc(facenum);
-    sprintf(namebuf, 'STFTL%d0', [i]); // turn left
-    faces[facenum] := W_CacheLumpName(namebuf, PU_STATIC);
-    inc(facenum);
-    sprintf(namebuf, 'STFOUCH%d', [i]); // ouch!
-    faces[facenum] := W_CacheLumpName(namebuf, PU_STATIC);
-    inc(facenum);
-    sprintf(namebuf, 'STFEVL%d', [i]); // evil grin ;)
-    faces[facenum] := W_CacheLumpName(namebuf, PU_STATIC);
-    inc(facenum);
-    sprintf(namebuf, 'STFKILL%d', [i]); // pissed off
-    faces[facenum] := W_CacheLumpName(namebuf, PU_STATIC);
-    inc(facenum);
-  end;
-  faces[facenum] := W_CacheLumpName('STFGOD0', PU_STATIC);
-  inc(facenum);
-  faces[facenum] := W_CacheLumpName('STFDEAD0', PU_STATIC);
 end;
 
 procedure ST_LoadData;
@@ -1509,25 +1030,9 @@ begin
   // unload tall percent
   Z_ChangeTag(tallpercent, PU_CACHE);
 
-  // unload arms background
-  Z_ChangeTag(armsbg, PU_CACHE);
-
-  // unload gray #'s
-  for i := 0 to 5 do
-    Z_ChangeTag(arms[i][0], PU_CACHE);
-
   // unload the key cards
   for i := 0 to Ord(NUMCARDS) - 1 do
     Z_ChangeTag(keys[i], PU_CACHE);
-
-  Z_ChangeTag(sbar, PU_CACHE);
-  Z_ChangeTag(faceback, PU_CACHE);
-
-  for i := 0 to ST_NUMFACES - 1 do
-    Z_ChangeTag(faces[i], PU_CACHE);
-
-  // Note: nobody ain't seen no unloading    // JVAL ???
-  //   of stminus yet. Dude.
 end;
 
 procedure ST_InitData;
@@ -1556,8 +1061,6 @@ begin
 
   for i := 0 to 2 do
     keyboxes[i] := -1;
-
-  STlib_init;
 end;
 
 procedure ST_CreateWidgets;
@@ -1595,27 +1098,6 @@ begin
     @st_statusbaron,
     tallpercent);
 
-  // arms background
-  STlib_initBinIcon(
-    @w_armsbg,
-    ST_ARMSBGX,
-    ST_ARMSBGY,
-    armsbg,
-    @st_notdeathmatch,
-    @st_statusbaron);
-
-  // weapons owned
-  for i := 0 to 5 do
-  begin
-    STlib_initMultIcon(
-      @w_arms[i],
-      ST_ARMSX + (i mod 3) * ST_ARMSXSPACE,
-      ST_ARMSY + (i div 3) * ST_ARMSYSPACE,
-      @arms[i],
-      @plyr.weaponowned[i + 1],
-      @st_armson);
-  end;
-
   // frags sum
   STlib_initNum(
     @w_frags,
@@ -1625,15 +1107,6 @@ begin
     @st_fragscount,
     @st_fragson,
     ST_FRAGSWIDTH);
-
-  // faces
-  STlib_initMultIcon(
-    @w_faces,
-    ST_FACESX,
-    ST_FACESY,
-    @faces,
-    @st_faceindex,
-    @st_statusbaron);
 
   // armor percentage - should be colored later
   STlib_initPercent(
@@ -1834,12 +1307,6 @@ begin
   cheat_clev.p := get_cheatseq_string(0);
   cheat_mypos.sequence := get_cheatseq_string(cheat_mypos_seq);
   cheat_mypos.p := get_cheatseq_string(0);
-
-  lastcalc := 0;
-  oldhealth := -1;
-
-  lastattackdown := -1;
-  priority := 0;
 
   st_palette := 0;
 

@@ -136,35 +136,17 @@ type
 // Widget creation, access, and update routines
 //
 
-// Initializes widget library.
-// More precisely, initialize STMINUS,
-//  everything else is done somewhere else.
-//
-procedure STlib_init;
-
 // Number widget routines
 procedure STlib_initNum(n: Pst_number_t; x, y: integer; pl: Ppatch_tPArray;
   num: PInteger; _on: PBoolean; width: integer);
-
-procedure STlib_updateNum(n: Pst_number_t; transparent: boolean);
 
 // Percent widget routines
 procedure STlib_initPercent(p: Pst_percent_t; x, y: integer; pl: Ppatch_tPArray;
   num: PInteger; _on: PBoolean; percent: Ppatch_t);
 
-procedure STlib_updatePercent(per: Pst_percent_t; refresh: boolean; transparent: boolean);
-
 // Multiple Icon widget routines
 procedure STlib_initMultIcon(i: Pst_multicon_t; x, y: integer; il: Ppatch_tPArray;
   inum: PInteger; _on: PBoolean);
-
-procedure STlib_updateMultIcon(mi: Pst_multicon_t; refresh: boolean);
-
-// Binary Icon widget routines
-procedure STlib_initBinIcon(b: Pst_binicon_t; x, y: integer; i: Ppatch_t;
-  val: PBoolean; _on: PBoolean);
-
-procedure STlib_updateBinIcon(bi: Pst_binicon_t; refresh: boolean);
 
 var
   largeammo: integer = 1994; // means "n/a"
@@ -180,24 +162,6 @@ uses
   w_wad,
   st_stuff;  // automapactive
 
-//
-// Hack display negative frags.
-//  Loads and store the stminus lump.
-//
-var
-  sttminus: Ppatch_t;
-
-procedure STlib_init;
-var
-  lump: integer;
-begin
-  lump := W_CheckNumForName('STTMINUS');
-  if lump = -1 then
-    sttminus := Ppatch_t(W_CacheLumpName('STCFN046', PU_STATIC))
-  else
-    sttminus := Ppatch_t(W_CacheLumpNum(lump, PU_STATIC));
-end;
-
 // ?
 procedure STlib_initNum(n: Pst_number_t; x, y: integer; pl: Ppatch_tPArray;
   num: PInteger; _on: PBoolean; width: integer);
@@ -212,95 +176,12 @@ begin
 end;
 
 //
-// A fairly efficient way to draw a number
-//  based on differences from the old number.
-// Note: worth the trouble?
-//
-procedure STlib_drawNum(n: Pst_number_t; transparent: boolean);
-var
-  numdigits: integer;
-  num: integer;
-  w: integer;
-  h: integer;
-  x: integer;
-  neg: boolean;
-begin
-  numdigits := n.width;
-  num := n.num^;
-
-  w := n.p[0].width;
-  h := n.p[0].height;
-
-  n.oldnum := num;
-
-  neg := num < 0;
-
-  if neg then
-  begin
-    if (numdigits = 2) and (num < -9) then
-      num := -9
-    else if (numdigits = 3) and (num < -99) then
-      num := -99;
-
-    num := -num;
-  end;
-
-  // clear the area
-  x := n.x - numdigits * w;
-
-  if n.y - ST_Y < 0 then
-    I_Error('STlib_drawNum() : n.y - ST_Y < 0');
-
-  if transparent then
-    V_CopyRectTransparent(x, n.y - ST_Y, SCN_ST, w * numdigits, h, x, n.y, SCN_FG, true)
-  else
-    V_CopyRect(x, n.y - ST_Y, SCN_ST, w * numdigits, h, x, n.y, SCN_FG, true);
-
-  // if non-number, do not draw it
-  if num = largeammo then
-    exit;
-
-  x := n.x;
-
-  // in the special case of 0, you draw 0
-  if num = 0 then
-    V_DrawPatch(x - w, n.y - ST_Y, SCN_ST, n.p[0], false);
-
-  // draw the new number
-  while (num <> 0) and (numdigits <> 0) do
-  begin
-    x := x - w;
-    V_DrawPatch(x, n.y - ST_Y, SCN_ST, n.p[num mod 10], false);
-    num := num div 10;
-    dec(numdigits);
-  end;
-
-  // draw a minus sign if necessary
-  if neg then
-    V_DrawPatch(x - 8, n.y - ST_Y, SCN_ST, sttminus, false);
-end;
-
-//
-procedure STlib_updateNum(n: Pst_number_t; transparent: boolean);
-begin
-  if n._on^ then
-    STlib_drawNum(n, transparent);
-end;
-
 //
 procedure STlib_initPercent(p: Pst_percent_t; x, y: integer; pl: Ppatch_tPArray;
   num: PInteger; _on: PBoolean; percent: Ppatch_t);
 begin
   STlib_initNum(@p.n, x, y, pl, num, _on, 3);
   p.p := percent;
-end;
-
-procedure STlib_updatePercent(per: Pst_percent_t; refresh: boolean;transparent: boolean);
-begin
-  if refresh and per.n._on^ then
-    V_DrawPatch(per.n.x, per.n.y - ST_Y, SCN_ST, per.p, false);
-
-  STlib_updateNum(@per.n, transparent);
 end;
 
 procedure STlib_initMultIcon(i: Pst_multicon_t; x, y: integer; il: Ppatch_tPArray;
@@ -312,54 +193,6 @@ begin
   i.inum := inum;
   i._on := _on;
   i.p := il;
-end;
-
-procedure STlib_updateMultIcon(mi: Pst_multicon_t; refresh: boolean);
-var
-  y: integer;
-begin
-  if mi._on^ and ((mi.oldinum <> mi.inum^) or refresh) and (mi.inum^ <> -1) then
-  begin
-    if mi.oldinum <> -1 then
-    begin
-      y := mi.y - mi.p[mi.oldinum].topoffset;
-
-      if y - ST_Y < 0 then
-        I_Error('STlib_updateMultIcon(): y - ST_Y < 0');
-
-    end;
-    V_DrawPatch(mi.x, mi.y - ST_Y, SCN_ST, mi.p[mi.inum^], false);
-    mi.oldinum := mi.inum^;
-  end;
-end;
-
-procedure STlib_initBinIcon(b: Pst_binicon_t; x, y: integer; i: Ppatch_t;
-  val: PBoolean; _on: PBoolean);
-begin
-  b.x  := x;
-  b.y  := y;
-  b.oldval := false;
-  b.val := val;
-  b._on := _on;
-  b.p := i;
-end;
-
-procedure STlib_updateBinIcon(bi: Pst_binicon_t; refresh: boolean);
-var
-  y: integer;
-begin
-  if bi._on^ and ((bi.oldval <> bi.val^) or refresh) then
-  begin
-    y := bi.y - bi.p.topoffset;
-
-    if y - ST_Y < 0 then
-      I_Error('STlib_updateBinIcon(): y - ST_Y < 0');
-
-    if bi.val^ then
-      V_DrawPatch(bi.x, bi.y - ST_Y, SCN_ST, bi.p, false);
-
-    bi.oldval := bi.val^;
-  end;
 end;
 
 end.
