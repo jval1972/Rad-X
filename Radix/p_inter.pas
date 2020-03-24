@@ -86,6 +86,7 @@ uses
   p_mobj,
   p_pspr,
   ps_main, // JVAL: Script Events
+  radix_things,
   r_defs,
   r_main,
   tables,
@@ -466,6 +467,21 @@ begin
     result := false;
 end;
 
+function P_UpgradeNeutronCannons(const p: Pplayer_t): boolean;
+var
+  stmp: string;
+begin
+  if p.neutroncannonlevel < 3 then
+  begin
+    inc(p.neutroncannonlevel);
+    sprintf(stmp, 'Level %d Neutron Cannons Acquired', [p.neutroncannonlevel + 1]);
+    p._message := stmp;
+    result := true;
+  end
+  else
+    result := false;
+end;
+
 //
 // P_TouchSpecialThing
 //
@@ -576,7 +592,13 @@ begin
     if not didbonus then
       exit;
 
-    player._message := special.info.pickupmessage;
+    if special.info.doomednum = MT_LEVEL2NEUTRONCANNONS then
+    begin
+      if P_UpgradeNeutronCannons(player) then
+        didbonus := true;
+    end
+    else
+      player._message := special.info.pickupmessage;
 
     sound := Ord(special.info.pickupsound);
   end

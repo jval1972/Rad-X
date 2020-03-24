@@ -121,6 +121,7 @@ type
     backpack: boolean;
     radixpowers: array[0..Ord(NUMRADIXPOWERUPS) - 1] of integer;  // JVAL: 20200322 - Radix power ups
     plasmabombs: integer; // JVAL: 20200322 - Number of plasma bombs
+    neutroncannonlevel: integer;  // JVAL: 20200324 - Neutro Cannons Level
     scannerjam: boolean;  // JVAL: 20200324 - When true can not see the radar in hud
 
     // Frags, kills of other players.
