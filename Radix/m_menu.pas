@@ -138,6 +138,7 @@ uses
   p_enemy,
   p_user,
   p_adjust,
+  radix_sounds,
   r_aspect,
   r_data,
   r_defs,
@@ -1329,23 +1330,23 @@ end;
 //
 //      M_QuickSave
 //
-procedure M_SwtchnSound;
-begin
-  S_StartSound(nil, Ord(sfx_swtchn));
-end;
+var
+  menusnd: integer = -1;
 
-procedure M_SwtchxSound;
+procedure M_MenuSound;
 begin
-  S_StartSound(nil, Ord(sfx_swtchx));
+  if menusnd = -1 then
+    menusnd := S_GetSoundNumForName(radixsounds[Ord(sfx_SndButtonClick)].name);
+  if menusnd > 0 then
+    S_StartSound(nil, menusnd);
 end;
-
 
 procedure M_QuickSaveResponse(ch: integer);
 begin
   if ch = Ord('y') then
   begin
     M_DoSave(quickSaveSlot);
-    M_SwtchxSound;
+    M_MenuSound;
   end;
 end;
 
@@ -1383,7 +1384,7 @@ begin
   if ch = Ord('y') then
   begin
     M_LoadSelect(quickSaveSlot);
-    M_SwtchxSound;
+    M_MenuSound;
   end;
 end;
 
@@ -2873,7 +2874,7 @@ begin
       exit;
 
     menuactive := false;
-    M_SwtchxSound;
+    M_MenuSound;
     exit;
   end;
 
@@ -2910,14 +2911,14 @@ begin
           currentMenu := @ReadDef1;
 
           itemOn := 0;
-          M_SwtchnSound;
+          M_MenuSound;
           result := true;
           exit;
         end;
       KEY_F2:  // Save
         begin
           M_StartControlPanel;
-          M_SwtchnSound;
+          M_MenuSound;
           M_SaveGame(0);
           result := true;
           exit;
@@ -2925,7 +2926,7 @@ begin
       KEY_F3:  // Load
         begin
           M_StartControlPanel;
-          M_SwtchnSound;
+          M_MenuSound;
           M_LoadGame(0);
           result := true;
           exit;
@@ -2935,27 +2936,27 @@ begin
           M_StartControlPanel;
           currentMenu := @SoundVolDef;
           itemOn := Ord(sfx_vol);
-          M_SwtchnSound;
+          M_MenuSound;
           result := true;
           exit;
         end;
       KEY_F5:   // Detail toggle
         begin
           M_ChangeDetail(0);
-          M_SwtchnSound;
+          M_MenuSound;
           result := true;
           exit;
         end;
       KEY_F6:   // Quicksave
         begin
-          M_SwtchnSound;
+          M_MenuSound;
           M_QuickSave;
           result := true;
           exit;
         end;
       KEY_F7:   // End game
         begin
-          M_SwtchnSound;
+          M_MenuSound;
           M_EndGame(0);
           result := true;
           exit;
@@ -2963,20 +2964,20 @@ begin
       KEY_F8:   // Toggle messages
         begin
           M_ChangeMessages(0);
-          M_SwtchnSound;
+          M_MenuSound;
           result := true;
           exit;
         end;
       KEY_F9:   // Quickload
         begin
-          M_SwtchnSound;
+          M_MenuSound;
           M_QuickLoad;
           result := true;
           exit;
         end;
       KEY_F10:  // Quit DOOM
         begin
-          M_SwtchnSound;
+          M_MenuSound;
           M_QuitRADIX(0);
           result := true;
           exit;
@@ -3019,7 +3020,7 @@ begin
     if ch = KEY_ESCAPE then
     begin
       M_StartControlPanel;
-      M_SwtchnSound;
+      M_MenuSound;
       result := true;
       exit;
     end;
@@ -3086,7 +3087,7 @@ begin
           currentMenu.lastOn := itemOn;
           currentMenu := currentMenu.leftMenu;
           itemOn := currentMenu.lastOn;
-          M_SwtchnSound;
+          M_MenuSound;
         end;
         result := true;
         exit;
@@ -3104,7 +3105,7 @@ begin
           currentMenu.lastOn := itemOn;
           currentMenu := currentMenu.rightMenu;
           itemOn := currentMenu.lastOn;
-          M_SwtchnSound;
+          M_MenuSound;
         end;
         result := true;
         exit;
@@ -3133,7 +3134,7 @@ begin
       begin
         currentMenu.lastOn := itemOn;
         M_ClearMenus;
-        M_SwtchxSound;
+        M_MenuSound;
         result := true;
         exit;
       end;
@@ -3144,13 +3145,13 @@ begin
         if (currentMenu = @ReadDefExt) and (extrahelpscreens_idx > 0) then
         begin
           dec(extrahelpscreens_idx);
-          M_SwtchnSound;
+          M_MenuSound;
         end
         else if currentMenu.prevMenu <> nil then
         begin
           currentMenu := currentMenu.prevMenu;
           itemOn := currentMenu.lastOn;
-          M_SwtchnSound;
+          M_MenuSound;
         end;
         result := true;
         exit;
