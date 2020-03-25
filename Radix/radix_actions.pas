@@ -884,6 +884,9 @@ type
     // return_value = 0 -> End level, go to next level
     // return_value <> 0 -> End secret level, go to next level normal (non secret) level
     return_value: smallint;
+    // RTL
+    initialized: boolean;
+    tics: integer;
   end;
   radixendoflevel_p = ^radixendoflevel_t;
 
@@ -893,6 +896,20 @@ var
 begin
   parms := radixendoflevel_p(@action.params);
 
+  if not parms.initialized then
+  begin
+    parms.tics := S_RadixSoundDuration(Ord(sfx_SndEndOfLevel)) + 1;
+    S_StartSound(nil, radixsounds[Ord(sfx_SndEndOfLevel)].name);
+    parms.initialized := true;
+    exit;
+  end;
+
+  if parms.tics > 0 then
+  begin
+    dec(parms.tics);
+    exit;
+  end;
+  
   G_ExitRadixLevel(parms.return_value);
 end;
 
