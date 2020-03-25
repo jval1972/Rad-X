@@ -1034,11 +1034,17 @@ type
 procedure RA_PrintMessage(const action: Pradixaction_t);
 var
   parms: radixprintmessage_p;
+  snd: integer;
 begin
   parms := radixprintmessage_p(@action.params);
 
   if IsIntegerInRange(parms.message_id, 0, NUMRADIXMESSAGES - 1) then
-    players[radixplayer]._message := radixmessages[parms.message_id];
+  begin
+    players[radixplayer]._message := radixmessages[parms.message_id].radix_msg;
+    snd := radixmessages[parms.message_id].radix_snd;
+    if snd >= 0 then
+      S_StartSound(nil, radixsounds[snd].name);
+  end;
     
   action.suspend := 1;  // JVAL: 20200306 - Disable action
 end;
@@ -1188,14 +1194,19 @@ type
   radixsecondaryobjective_p = ^radixsecondaryobjective_t;
 
 procedure RA_SecondaryObjective(const action: Pradixaction_t);
+const
+  MSG_SECONDARY = 12;
 var
   parms: radixsecondaryobjective_p;
+  snd: integer;
 begin
   parms := radixsecondaryobjective_p(@action.params);
 
   players[radixplayer].secondaryobjective := true;
-  players[radixplayer]._message := radixmessages[12];
-  S_StartSound(nil, 'SndSecComplete');
+  players[radixplayer]._message := radixmessages[MSG_SECONDARY].radix_msg;
+  snd := radixmessages[MSG_SECONDARY].radix_snd;
+  if snd >= 0 then
+    S_StartSound(nil, radixsounds[snd].name);
 
   action.suspend := 1; // Disable action;
 end;

@@ -2784,7 +2784,7 @@ begin
     end;
 
   for i := 0 to NUMRADIXMESSAGES - 1 do
-    DEH_AddString(@deh_strings, @radixmessages[i], 'S_RADIX_MESSAGE_' + itoa(i));
+    DEH_AddString(@deh_strings, @radixmessages[i].radix_msg, 'S_RADIX_MESSAGE_' + itoa(i));
 
   DEH_AddString(@deh_strings, @castorder[0].name, 'CC_ZOMBIE');
   DEH_AddString(@deh_strings, @castorder[1].name, 'CC_SHOTGUN');

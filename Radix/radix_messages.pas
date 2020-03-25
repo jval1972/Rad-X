@@ -52,24 +52,59 @@ const
 const
   NUMRADIXMESSAGES = 13;
 
+type
+  radixmessage_t = record
+    radix_msg: string;
+    radix_snd: integer;
+  end;
+  Pradixmessage_t = ^radixmessage_t;
+
 var
-  radixmessages: array[0..NUMRADIXMESSAGES - 1] of string;
+  radixmessages: array[0..NUMRADIXMESSAGES - 1] of radixmessage_t;
 
 implementation
 
+uses
+  radix_sounds;
+
 initialization
-  radixmessages[0] := S_RADIX_MESSAGE_0;
-  radixmessages[1] := S_RADIX_MESSAGE_1;
-  radixmessages[2] := S_RADIX_MESSAGE_2;
-  radixmessages[3] := S_RADIX_MESSAGE_3;
-  radixmessages[4] := S_RADIX_MESSAGE_4;
-  radixmessages[5] := S_RADIX_MESSAGE_5;
-  radixmessages[6] := S_RADIX_MESSAGE_6;
-  radixmessages[7] := S_RADIX_MESSAGE_7;
-  radixmessages[8] := S_RADIX_MESSAGE_8;
-  radixmessages[9] := S_RADIX_MESSAGE_9;
-  radixmessages[10] := S_RADIX_MESSAGE_10;
-  radixmessages[11] := S_RADIX_MESSAGE_11;
-  radixmessages[12] := S_RADIX_MESSAGE_12;
+  radixmessages[0].radix_msg := S_RADIX_MESSAGE_0;
+  radixmessages[0].radix_snd := Ord(sfx_SndPrimAhead);
+
+  radixmessages[1].radix_msg := S_RADIX_MESSAGE_1;
+  radixmessages[1].radix_snd := Ord(sfx_SndSecAhead);
+
+  radixmessages[2].radix_msg := S_RADIX_MESSAGE_2;
+  radixmessages[2].radix_snd := -1;
+
+  radixmessages[3].radix_msg := S_RADIX_MESSAGE_3;
+  radixmessages[3].radix_snd := -1;
+
+  radixmessages[4].radix_msg := S_RADIX_MESSAGE_4;
+  radixmessages[4].radix_snd := -1;
+
+  radixmessages[5].radix_msg := S_RADIX_MESSAGE_5;
+  radixmessages[5].radix_snd := -1;
+
+  radixmessages[6].radix_msg := S_RADIX_MESSAGE_6;
+  radixmessages[6].radix_snd := -1;
+
+  radixmessages[7].radix_msg := S_RADIX_MESSAGE_7;
+  radixmessages[7].radix_snd := -1;
+
+  radixmessages[8].radix_msg := S_RADIX_MESSAGE_8;
+  radixmessages[8].radix_snd := -1;
+
+  radixmessages[9].radix_msg := S_RADIX_MESSAGE_9;
+  radixmessages[9].radix_snd := Ord(sfx_SndPrimComplete);
+
+  radixmessages[10].radix_msg := S_RADIX_MESSAGE_10;
+  radixmessages[10].radix_snd := Ord(sfx_SndPrimInComplete);
+
+  radixmessages[11].radix_msg := S_RADIX_MESSAGE_11;
+  radixmessages[11].radix_snd := -1;
+
+  radixmessages[12].radix_msg := S_RADIX_MESSAGE_12;
+  radixmessages[12].radix_snd := Ord(sfx_SndSecComplete);
 
 end.
