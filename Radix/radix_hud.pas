@@ -245,9 +245,10 @@ var
   yh: integer;
   bx: integer;
   by: integer;
-  i: integer;
+  i, j: integer;
   mo: Pmobj_t;
   px, py: integer;
+  pb: PByte;
   xpos, ypos: integer;
   pitch: integer;
   sqdist: integer;
@@ -257,7 +258,20 @@ var
   asin, acos: fixed_t;
 begin
   if hud_player.scannerjam then
+  begin
+    if leveltime and 16 <> 0 then
+    begin
+      pitch := V_GetScreenWidth(SCN_HUD);
+      for i := x - range - 1 to x + range + 1 do
+        for j := y - range to y + range do
+        begin
+          pb := @screens[SCN_HUD][pitch * j + i];
+          if pb^ = 124 then
+            pb^ := 63;
+        end;
+    end;
     exit; // JVAL: 20200324 - When true can not see the radar in hud
+  end;
 
   r := range * 64 * FRACUNIT;
   xl := MapBlockInt(hud_player.mo.x - r - bmaporgx);
