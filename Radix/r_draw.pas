@@ -238,6 +238,15 @@ begin
   end;
 end;
 
+var
+  brdr_t: integer = -1;
+  brdr_b: integer = -1;
+  brdr_l: integer = -1;
+  brdr_r: integer = -1;
+  brdr_tl: integer = -1;
+  brdr_tr: integer = -1;
+  brdr_bl: integer = -1;
+  brdr_br: integer = -1;
 
 //
 // R_FillBackScreen
@@ -275,7 +284,7 @@ begin
 
   dest := screens[SCN_TMP];
 
-  for y := 0 to 200 - ST_HEIGHT do
+  for y := 0 to 200 - ST_HEIGHT + 1 do
   begin
     for x := 0 to 320 div 64 - 1 do
     begin
@@ -296,54 +305,75 @@ begin
   tviewheight := viewheight * 200 div SCREENHEIGHT - 2;
   tscaledviewwidth := scaledviewwidth * 320 div SCREENWIDTH - 2;
 
-  patch := W_CacheLumpName('brdr_t', PU_STATIC);
+  if brdr_t < 0 then
+    brdr_t := W_GetNumForName('brdr_t');
+  if brdr_b < 0 then
+    brdr_b := W_GetNumForName('brdr_b');
+  if brdr_l < 0 then
+    brdr_l := W_GetNumForName('brdr_l');
+  if brdr_r < 0 then
+    brdr_r := W_GetNumForNAme('brdr_r');
+  if brdr_tl < 0 then
+    brdr_tl := W_GetNumForName('brdr_tl');
+  if brdr_tr < 0 then
+    brdr_tr := W_GetNumForName('brdr_tr');
+  if brdr_bl < 0 then
+    brdr_bl := W_GetNumForName('brdr_bl');
+  if brdr_br < 0 then
+    brdr_br := W_GetNumForName('brdr_br');
+
+  patch := W_CacheLumpNum(brdr_t, PU_STATIC);
   x := 0;
   while x < tscaledviewwidth do
   begin
-    V_DrawPatch(tviewwindowx + x, tviewwindowy - 8, SCN_TMP, patch, false);
+    V_DrawPatch(tviewwindowx + x - 4, tviewwindowy - 4, SCN_TMP, patch, false);
     x := x + 8;
   end;
+  V_DrawPatch(tviewwindowx + tscaledviewwidth - 8, tviewwindowy - 4, SCN_TMP, patch, false);
   Z_ChangeTag(patch, PU_CACHE);
 
-  patch := W_CacheLumpName('brdr_b', PU_STATIC);
+  patch := W_CacheLumpNum(brdr_b, PU_STATIC);
   x := 0;
   while x < tscaledviewwidth do
   begin
-    V_DrawPatch(tviewwindowx + x, tviewwindowy + tviewheight, SCN_TMP, patch, false);
+    V_DrawPatch(tviewwindowx + x - 4, tviewwindowy + tviewheight, SCN_TMP, patch, false);
     x := x + 8;
   end;
+  V_DrawPatch(tviewwindowx + tscaledviewwidth - 8, tviewwindowy + tviewheight, SCN_TMP, patch, false);
   Z_ChangeTag(patch, PU_CACHE);
 
-  patch := W_CacheLumpName('brdr_l', PU_STATIC);
+  patch := W_CacheLumpNum(brdr_l, PU_STATIC);
   y := 0;
   while y < tviewheight do
   begin
-    V_DrawPatch(tviewwindowx - 8, tviewwindowy + y, SCN_TMP, patch, false);
+    V_DrawPatch(tviewwindowx - 4, tviewwindowy + y - 4, SCN_TMP, patch, false);
     y := y + 8;
   end;
+  V_DrawPatch(tviewwindowx - 4, tviewwindowy + tviewheight - 8, SCN_TMP, patch, false);
   Z_ChangeTag(patch, PU_CACHE);
 
-  patch := W_CacheLumpName('brdr_r', PU_STATIC);
+  patch := W_CacheLumpNum(brdr_r, PU_STATIC);
   y := 0;
   while y < tviewheight do
   begin
-    V_DrawPatch(tviewwindowx + tscaledviewwidth, tviewwindowy + y, SCN_TMP, patch, false);
+    V_DrawPatch(tviewwindowx + tscaledviewwidth, tviewwindowy + y - 4, SCN_TMP, patch, false);
     y := y + 8;
   end;
+  V_DrawPatch(tviewwindowx + tscaledviewwidth, tviewwindowy + tviewheight - 8, SCN_TMP, patch, false);
   Z_ChangeTag(patch, PU_CACHE);
 
   // Draw beveled edge.
-  V_DrawPatch(tviewwindowx - 8, tviewwindowy - 8, SCN_TMP,
-    'brdr_tl', false);
+  V_DrawPatch(tviewwindowx - 4, tviewwindowy - 4, SCN_TMP,
+    brdr_tl, false);
 
-  V_DrawPatch(tviewwindowx + tscaledviewwidth, tviewwindowy - 8, SCN_TMP,
-    'brdr_tr', false);
+  V_DrawPatch(tviewwindowx + tscaledviewwidth, tviewwindowy - 4, SCN_TMP,
+    brdr_tr, false);
 
-  V_DrawPatch(tviewwindowx - 8, tviewwindowy + tviewheight, SCN_TMP,
-    'brdr_bl', false);
+  V_DrawPatch(tviewwindowx - 4, tviewwindowy + tviewheight, SCN_TMP,
+    brdr_bl, false);
 
   V_DrawPatch(tviewwindowx + tscaledviewwidth, tviewwindowy + tviewheight, SCN_TMP,
-    'brdr_br', false);
+    brdr_br, false);
 
   V_RemoveTransparency(SCN_TMP, 0, -1);
   V_CopyRect(0, 0, SCN_TMP, V_GetScreenWidth(SCN_TMP), V_GetScreenHeight(SCN_TMP), 0, 0, SCN_BG, true);
