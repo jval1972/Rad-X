@@ -1,6 +1,6 @@
-program XRide;
+program RAD_IDE;
 
-{$D XRadix Script IDE}
+{$D RAD Script IDE}
 
 uses
   FastMM4 in 'FASTMM4\FastMM4.pas',

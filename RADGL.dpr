@@ -351,7 +351,9 @@ uses
   radix_actions in 'Radix\radix_actions.pas',
   radix_alias in 'Radix\radix_alias.pas',
   radix_grid in 'Radix\radix_grid.pas',
-  radix_messages in 'Radix\radix_messages.pas';
+  radix_messages in 'Radix\radix_messages.pas',
+  sound_data in 'Radix\sound_data.pas',
+  radix_sounds in 'Radix\radix_sounds.pas';
 
 var
   Saved8087CW: Word;

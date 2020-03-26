@@ -137,7 +137,7 @@ begin
   pendingrename := '';
   projectquerymodifieditem := nil;
   projectonchangegame := nil;
-  Game := 'doom';
+  Game := 'radix';
   Inherited Create(afilename);
 end;
 
@@ -538,7 +538,7 @@ var
   gU: string;
 begin
   gU := LowerCase(Trim(g));
-  if (gU = 'doom') or (gU = 'heretic') or (gU = 'hexen') or (gU = 'strife') then
+  if gU = 'radix' then
     fGame := gU
   else
     LogOutput(LOG_WARNING, 'Unknown game type "%s"'#13#10, [g]);

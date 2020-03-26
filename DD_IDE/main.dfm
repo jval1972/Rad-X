@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 88
   Width = 1088
   Height = 650
-  Caption = 'DelphiDOOM Script IDE'
+  Caption = 'RAD Script IDE'
   Color = clBtnFace
   Constraints.MinHeight = 480
   Constraints.MinWidth = 640
@@ -4829,7 +4829,10 @@ object Form1: TForm1
               NumGlyphs = 1
             end
             inherited GameTypeComboBox: TComboBox
+              Text = 'Radix'
               OnChange = Frame_ProjectManager1GameTypeComboBoxChange
+              Items.Strings = (
+                'Radix')
             end
           end
           inherited TreeView1: TTreeView

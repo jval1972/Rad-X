@@ -303,7 +303,6 @@ procedure R_Ticker;
 
 {$IFDEF OPENGL}
 var
-  viewpitch: integer;
   absviewpitch: integer;
 {$ENDIF}
 
@@ -1591,7 +1590,6 @@ begin
 {$ENDIF}
 
   {$IFDEF OPENGL}
-  viewpitch := 0;
   absviewpitch := 0;
   {$ENDIF}
 //******************************
@@ -1618,8 +1616,7 @@ begin
     end;
 
 {$IFDEF OPENGL}
-    viewpitch := player.lookdir;
-    absviewpitch := abs(viewpitch);
+    absviewpitch := abs(player.lookdir16 div 16);
 {$ELSE}
     if usefake3d then
       R_Set3DLookup(player);

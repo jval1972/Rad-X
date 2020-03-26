@@ -48,7 +48,7 @@
 {$I RAD.inc}
 {$D Doom to Delphi Total Conversion}
 
-library XRlib;
+library RAD_LIB;
 
 {$R *.RES}
 
@@ -256,7 +256,6 @@ uses
   w_pak in 'Base\w_pak.pas',
   w_utils in 'Base\w_utils.pas',
   w_wad in 'Base\w_wad.pas',
-  wi_stuff in 'Radix\wi_stuff.pas',
   z_zone in 'Base\z_zone.pas',
   r_trans8 in 'Base\r_trans8.pas',
   i_exec in 'Base\i_exec.pas',
@@ -268,7 +267,6 @@ uses
   sc_tokens in 'Base\sc_tokens.pas',
   sc_states in 'Base\sc_states.pas',
   p_common in 'Base\p_common.pas',
-  d_check in 'Radix\d_check.pas',
   r_precalc in 'Base\r_precalc.pas',
   r_wall32 in 'Base\r_wall32.pas',
   r_wall8 in 'Base\r_wall8.pas',
@@ -368,22 +366,45 @@ uses
   p_levelinfo in 'Base\p_levelinfo.pas',
   deh_base in 'Base\deh_base.pas',
   r_sprite in 'Base\r_sprite.pas',
-  r_tallcolumn in 'Base\r_tallcolumn.pas';
+  r_tallcolumn in 'Base\r_tallcolumn.pas',
+  radix_alias in 'Radix\radix_alias.pas',
+  radix_defs in 'Radix\radix_defs.pas',
+  radix_xlat_wad in 'Radix\radix_xlat_wad.pas',
+  radix_palette in 'Radix\radix_palette.pas',
+  sound_data in 'Radix\sound_data.pas',
+  radix_map_extra in 'Radix\radix_map_extra.pas',
+  radix_things in 'Radix\radix_things.pas',
+  radix_level in 'Radix\radix_level.pas',
+  radix_grid in 'Radix\radix_grid.pas',
+  radix_logic in 'Radix\radix_logic.pas',
+  radix_actions in 'Radix\radix_actions.pas',
+  radix_messages in 'Radix\radix_messages.pas',
+  radix_sounds in 'Radix\radix_sounds.pas',
+  i_modmusic in 'Base\i_modmusic.pas',
+  radix_end_screen in 'Radix\radix_end_screen.pas',
+  radix_version in 'Radix\radix_version.pas',
+  mn_font in 'Radix\mn_font.pas',
+  mn_screenshot in 'Radix\mn_screenshot.pas',
+  radix_intermission in 'Radix\radix_intermission.pas',
+  radix_patch in 'Radix\radix_patch.pas',
+  radix_bitmap in 'Radix\radix_bitmap.pas',
+  radix_font in 'Radix\radix_font.pas',
+  radix_hud in 'Radix\radix_hud.pas';
 
 exports
-  dd_compile_doom,
-  dd_getavailableunits_doom,
-  dd_getunitfunctions_doom,
-  dd_getconstants_doom,
-  dd_getvariables_doom,
-  dd_getclasses_doom,
-  dd_getdisassembly_doom,
-  dd_gettypes_doom,
-  dd_getevents_doom,
-  dd_getactordeffunctions_doom,
-  dd_getmobjinfocsv_doom,
-  dd_getstatescsv_doom,
-  dd_getspritescsv_doom;
+  dd_compile_radix,
+  dd_getavailableunits_radix,
+  dd_getunitfunctions_radix,
+  dd_getconstants_radix,
+  dd_getvariables_radix,
+  dd_getclasses_radix,
+  dd_getdisassembly_radix,
+  dd_gettypes_radix,
+  dd_getevents_radix,
+  dd_getactordeffunctions_radix,
+  dd_getmobjinfocsv_radix,
+  dd_getstatescsv_radix,
+  dd_getspritescsv_radix;
 
 begin
 

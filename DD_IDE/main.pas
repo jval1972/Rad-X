@@ -281,7 +281,7 @@ begin
   project := TIDEProject.Create(fname);
   project.projectquerymodifieditem := CheckCanCloseProjectItem;
   project.projectonchangegame := ChangeGame;
-  project.Game := 'doom';
+  project.Game := 'radix';
   project.Editor := ProjectEditorFrame;
 end;
 
@@ -394,7 +394,7 @@ procedure TForm1.About;
 begin
   IDEMessage(
     Format(
-      '%s'#13#10'Version ' + I_VersionBuilt +
+      '%s'#13#10'Version ' + I_VersionBuilt, 
       [rsTitle]));
 end;
 

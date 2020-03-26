@@ -37,6 +37,9 @@ uses
 const
   DDCVERSION = 101;
 
+const
+  RAD_LIBNAME = 'RAD_LIB.dll';
+
 function dll_compile(const game: string; const code: string; var pcode: string; var msgs: string): Boolean;
 
 function dll_getuntisfuncdeclarations(const game: string): TStringList;
@@ -93,7 +96,7 @@ var
   i: integer;
   _inp, _out, _msgs: PChar;
 begin
-  libname := 'ddc_' + game + '.dll';
+  libname := RAD_LIBNAME;
   inst := LoadLibrary(PChar(libname));
   if inst = 0 then
   begin
@@ -183,7 +186,7 @@ var
   tmpstr: string;
   funclist: TStringList;
 begin
-  libname := 'ddc_' + game + '.dll';
+  libname := RAD_LIBNAME;
   inst := LoadLibrary(PChar(libname));
   if inst = 0 then
   begin
@@ -263,7 +266,7 @@ var
   tmpstr: string;
   i: integer;
 begin
-  libname := 'ddc_' + game + '.dll';
+  libname := RAD_LIBNAME;
   inst := LoadLibrary(PChar(libname));
   if inst = 0 then
   begin
@@ -378,7 +381,7 @@ var
 begin
   Result := '';
 
-  libname := 'ddc_' + game + '.dll';
+  libname := RAD_LIBNAME;
   inst := LoadLibrary(PChar(libname));
   if inst = 0 then
   begin
