@@ -100,16 +100,14 @@ var
 // P_Thrust
 // Moves the given origin along a given angle.
 //
-procedure P_Thrust(player: Pplayer_t; angle: angle_t; const move: fixed_t);
+procedure P_Thrust(player: Pplayer_t; angle: angle_t; const mv: fixed_t);
 begin
-  {$IFDEF FPC}
-  angle := _SHRW(angle, ANGLETOFINESHIFT);
-  {$ELSE}
-  angle := angle shr ANGLETOFINESHIFT;
-  {$ENDIF}
+  if mv = 0 then
+    exit;
+  angle := angle div FRACUNIT;
 
-  player.mo.momx := player.mo.momx + FixedMul(move, finecosine[angle]);
-  player.mo.momy := player.mo.momy + FixedMul(move, finesine[angle]);
+  player.mo.momx := player.mo.momx + FixedMul(mv, fixedcosine[angle]);
+  player.mo.momy := player.mo.momy + FixedMul(mv, fixedsine[angle]);
 end;
 
 //
@@ -435,13 +433,16 @@ begin
   if Psubsector_t(player.mo.subsector).sector.special and FRICTION_MASK <> 0 then
     movefactor := P_GetMoveFactor(player.mo);
 
+  if has_mj then
+    movefactor := movefactor * 2;
+
   if cmd.forwardmove <> 0 then
     P_Thrust(player, player.mo.angle, cmd.forwardmove * movefactor);
 
   if cmd.sidemove <> 0 then
     P_Thrust(player, player.mo.angle - ANG90, cmd.sidemove * movefactor);
 
-  if (cmd.forwardmove = 0) and (cmd.sidemove = 0) then
+//  if (cmd.forwardmove = 0) and (cmd.sidemove = 0) then
   begin
     // JVAL: 20200322 - Maneuvering jets physics - Faster slowdown
     if has_mj then
