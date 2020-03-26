@@ -69,6 +69,7 @@ implementation
 uses
   doomdef,
   radix_end_screen,
+  radix_font,
   i_system,
 {$IFDEF OPENGL}
   gl_main,
@@ -133,21 +134,12 @@ var
 
 procedure E_Init;
 var
-  dosfontlump: integer;
   i: integer;
   pal: PByteArray;
 begin
   e_ticks := 1;
   e_screen := malloc(640 * 200 * SizeOf(byte));
-  dosfontlump := W_CheckNumForName('DOSFONT');
-  if dosfontlump >= 0 then
-    dosfont := W_CacheLumpNum(dosfontlump, PU_STATIC)
-  else
-  begin
-    I_Warning('E_Init(): Can not find DOSFONT lump'#13#10);
-    dosfont := Z_Malloc(128 * 128, PU_STATIC, nil);
-    ZeroMemory(dosfont, 128 * 128);
-  end;
+  dosfont := @SMALL_DOS_FONT_BUFFER;
 
   pal := V_ReadPalette(PU_STATIC);
   V_SetPalette(pal);
