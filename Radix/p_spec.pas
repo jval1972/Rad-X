@@ -497,6 +497,7 @@ const
   MORE_FRICTION_MOMENTUM = 15000; // mud factor based on momentum
   ORIG_FRICTION = $E800;          // original value
   ORIG_FRICTION_FACTOR = 2048;    // original value
+  MJ_FACTOR = 160000; // JVAL: 20200326 - Faster when we have maneouvering jets
 
 procedure P_SpawnFriction;
 

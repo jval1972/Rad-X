@@ -434,7 +434,7 @@ begin
     movefactor := P_GetMoveFactor(player.mo);
 
   if has_mj then
-    movefactor := movefactor * 2;
+    movefactor := FixedMul(movefactor, MJ_FACTOR);
 
   if cmd.forwardmove <> 0 then
     P_Thrust(player, player.mo.angle, cmd.forwardmove * movefactor);
@@ -442,19 +442,16 @@ begin
   if cmd.sidemove <> 0 then
     P_Thrust(player, player.mo.angle - ANG90, cmd.sidemove * movefactor);
 
-//  if (cmd.forwardmove = 0) and (cmd.sidemove = 0) then
+  // JVAL: 20200322 - Maneuvering jets physics - Faster slowdown
+  if has_mj then
   begin
-    // JVAL: 20200322 - Maneuvering jets physics - Faster slowdown
-    if has_mj then
-    begin
-      player.mo.momx := player.mo.momx * 7 div 8;
-      player.mo.momy := player.mo.momy * 7 div 8;
-    end
-    else
-    begin
-      player.mo.momx := player.mo.momx * 15 div 16;
-      player.mo.momy := player.mo.momy * 15 div 16;
-    end;
+    player.mo.momx := player.mo.momx * 7 div 8;
+    player.mo.momy := player.mo.momy * 7 div 8;
+  end
+  else
+  begin
+    player.mo.momx := player.mo.momx * 15 div 16;
+    player.mo.momy := player.mo.momy * 15 div 16;
   end;
 
   if ((cmd.forwardmove <> 0) or (cmd.sidemove <> 0)) and
