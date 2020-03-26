@@ -1,4 +1,4 @@
-program XRps;
+program RAD_PS;
 
 {$APPTYPE CONSOLE}
 
