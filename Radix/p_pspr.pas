@@ -106,7 +106,6 @@ var
 // plasma cells for a bfg attack
   p_bfgcells: integer = 40;
 
-
 implementation
 
 uses
@@ -146,8 +145,8 @@ const
   WEAPONBOTTOM = WEAPONTOP + 96 * FRACUNIT;
 
 const
-  LOWERSPEED = 6 * FRACUNIT;
-  RAISESPEED = 6 * FRACUNIT;
+  LOWERSPEED = 12 * FRACUNIT;
+  RAISESPEED = 12 * FRACUNIT;
 
 //
 // P_SetPsprite
