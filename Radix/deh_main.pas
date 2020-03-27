@@ -3063,6 +3063,8 @@ begin
   C_AddCmd('DEH_ParseLump, BEX_ParseLump', @DEH_ParseLumpName);
   C_AddCmd('DEH_PrintCurrentSettings, DEH_PrintSettings, BEX_PrintCurrentSettings, BEX_PrintSettings', @DEH_PrintCurrentSettings);
   C_AddCmd('DEH_SaveCurrentSettings, DEH_SaveToFile, BEX_SaveCurrentSettings, BEX_SaveToFile', @DEH_SaveCurrentSettings);
+  C_AddCmd('DEH_PrintActordef', @DEH_PrintActordef);
+  C_AddCmd('DEH_SaveActordef', @DEH_SaveActordef);
   C_AddCmd('DEH_SaveMobjInfoCSV, BEX_SaveMobjInfoCSV', @DEH_SaveMobjInfoCSV);
   C_AddCmd('DEH_SaveStatesCSV, BEX_SaveStatesCSV', @DEH_SaveStatesCSV);
   C_AddCmd('DEH_SaveSpritesCSV, BEX_SaveSpritesCSV', @DEH_SaveSpritesCSV);

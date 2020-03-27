@@ -150,6 +150,8 @@ function uitoa(l: longword): string;
 
 function ftoa(f: single): string;
 
+function ftoafmt(const fmt: string; f: single): string;
+
 function atoi(const s: string): integer; overload;
 
 function atoi(const s: string; const default: integer): integer; overload;
@@ -828,6 +830,11 @@ end;
 function ftoa(f: single): string;
 begin
   result := FloatToStr(f);
+end;
+
+function ftoafmt(const fmt: string; f: single): string;
+begin
+  sprintf(result, '%' + fmt + 'f', [f]);
 end;
 
 function atoi(const s: string): integer;
