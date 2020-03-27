@@ -51,6 +51,8 @@ function P_GetStateFromName(const actor: Pmobj_t; const s: string): integer;
 
 function P_GetStateFromNameWithOffsetCheck(const actor: Pmobj_t; const s: string): integer;
 
+function SC_StateName(const st: integer): string;
+
 implementation
 
 uses
@@ -243,6 +245,14 @@ begin
     Result := ((integer(actor.state) - integer(states)) div SizeOf(state_t)) + atoi(s)
   else
     Result := P_GetStateFromName(actor, s);
+end;
+
+function SC_StateName(const st: integer): string;
+begin
+  result := statenames[st];
+  if result = '' then
+    if IsIntegerInRange(st, 0, Ord(NUMSTATES) - 1) then
+      result := strupper(GetENumName(TypeInfo(statenum_t), Ord(st)));
 end;
 
 end.

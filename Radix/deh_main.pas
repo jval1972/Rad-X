@@ -1618,7 +1618,7 @@ begin
   //////////////////////////////////////////////////////////////////////////////
   for i := 1 to numstates - 1 do // JVAL skip state 0 -> S_NULL
   begin
-    result.Add('// ' + statenames[i]);
+    result.Add('// ' + SC_StateName(i));
     result.Add('Frame %d', [i]);
     result.Add('%s = %d', [capitalizedstring(state_tokens[0]), Ord(states[i].sprite)]);
     result.Add('%s = %d', [capitalizedstring(state_tokens[1]), states[i].frame]);
