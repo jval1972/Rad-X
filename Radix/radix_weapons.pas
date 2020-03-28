@@ -110,6 +110,7 @@ var
   slower: integer;
   sready: integer;
   sflash: integer;
+  st: integer;
 
   procedure get_def_weapon_states;
   begin
@@ -126,7 +127,10 @@ begin
   weaponinfo[Ord(wp_neutroncannons)].downstate := slower;
   weaponinfo[Ord(wp_neutroncannons)].readystate := sready;
   weaponinfo[Ord(wp_neutroncannons)].flashstate := sflash;
-  weaponinfo[Ord(wp_neutroncannons)].atkstate := RX_NewWeaponState(5, @A_FireRadixPlasma);
+  st := RX_NewWeaponState(5, @A_FireRadixPlasma);
+  weaponinfo[Ord(wp_neutroncannons)].atkstate := st;
+  states[st].nextstate := statenum_t(RX_NewWeaponState(5, @A_Refire));
+  states[Ord(states[st].nextstate)].nextstate := statenum_t(sready);
 
   get_def_weapon_states;
   weaponinfo[Ord(wp_standardepc)].upstate := sraise;
