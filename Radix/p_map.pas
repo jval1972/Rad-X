@@ -111,6 +111,7 @@ var
 // JVAL: 3d Floors move from implementation section to interface
 var
   tmthing: Pmobj_t;
+  tmline: Pline_t;
   tmx: fixed_t; // JVAL: Slopes - move from implementation section to interface
   tmy: fixed_t; // JVAL: Slopes - move from implementation section to interface
 
@@ -397,6 +398,9 @@ begin
   if ld.backsector = nil then
   begin
     result := false;  // one sided line
+    // JVAL: 20200328 - Missile damage line
+    if tmthing.flags and MF_MISSILE <> 0 then
+      tmline := ld;
     exit;
   end;
 
@@ -451,6 +455,7 @@ begin
 
   end;
 
+  tmline := ld;
   result := true;
 end;
 
@@ -699,6 +704,7 @@ var
 begin
   tmthing := thing;
   tmflags := thing.flags;
+  tmline := nil;
 
   tmx := x;
   tmy := y;
@@ -1684,7 +1690,7 @@ begin
     if li.special <> 0 then
       P_ShootSpecialLine(shootthing, li);
 
-    // JVAL: 20200307 - Damage Wall
+   // JVAL: 20200307 - Damage Wall
    if la_damage > 0 then
      RX_DamageLine(li, la_damage);
 

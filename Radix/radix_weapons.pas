@@ -265,20 +265,20 @@ begin
       end;
     1:
       begin
-        spawn_neutron(-32 * FRACUNIT, -8 * FRACUNIT);
-        spawn_neutron(32 * FRACUNIT, -8 * FRACUNIT);
+        spawn_neutron(-32 * FRACUNIT, -32 * FRACUNIT);
+        spawn_neutron(32 * FRACUNIT, -32 * FRACUNIT);
       end;
     2:
       begin
-        spawn_neutron(-32 * FRACUNIT, -8 * FRACUNIT);
-        spawn_neutron(0, -32 * FRACUNIT);
-        spawn_neutron(32 * FRACUNIT, -8 * FRACUNIT);
+        spawn_neutron(-32 * FRACUNIT, -32 * FRACUNIT);
+        spawn_neutron(0, 32 * FRACUNIT);
+        spawn_neutron(32 * FRACUNIT, -32 * FRACUNIT);
       end;
   else
-    spawn_neutron(-32 * FRACUNIT, -8 * FRACUNIT);
     spawn_neutron(-32 * FRACUNIT, -32 * FRACUNIT);
-    spawn_neutron(32 * FRACUNIT, -8 * FRACUNIT);
+    spawn_neutron(-32 * FRACUNIT, 32 * FRACUNIT);
     spawn_neutron(32 * FRACUNIT, -32 * FRACUNIT);
+    spawn_neutron(32 * FRACUNIT, 32 * FRACUNIT);
   end;
 end;
 

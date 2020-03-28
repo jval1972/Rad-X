@@ -134,6 +134,7 @@ uses
   p_params,
   p_ladder,
   p_musinfo,
+  radix_map_extra,
   r_defs,
   r_sky,
   r_main,
@@ -217,7 +218,7 @@ begin
   mo.momy := 0;
   mo.momz := 0;
 
-  P_SetMobjState(mo, statenum_t(mobjinfo[Ord(mo._type)].deathstate));
+  P_SetMobjState(mo, statenum_t(mo.info.deathstate));
 
   mo.tics := mo.tics - (P_Random and 3);
 
@@ -225,6 +226,13 @@ begin
     mo.tics := 1;
 
   mo.flags := mo.flags and (not MF_MISSILE);
+
+  // JVAL: 20200328 - Missile Damage Wall
+  if tmline <> nil then
+  begin
+    RX_DamageLine(tmline, mo.info.damage * ((P_Random mod 3) + 1));
+    tmline := nil;
+  end;
 
   A_DeathSound(mo, mo);
 end;
@@ -311,13 +319,11 @@ begin
       ymove := 0;
     end;
 
-    // JVAL: Slopes
-    // JVAL 20191209 - Fix 3d floor problem
-  //  if mo.player <> nil then
-  //  begin
-      tmfloorz := P_3dFloorHeight(ptryx, ptryy, mo.z);
-      tmceilingz := P_3dCeilingHeight(ptryx, ptryy, mo.z);
-  //  end;
+    tmfloorz := P_3dFloorHeight(ptryx, ptryy, mo.z);
+    tmceilingz := P_3dCeilingHeight(ptryx, ptryy, mo.z);
+
+    // JVAL: 20200328 - Missile Damage Wall
+    tmline := nil;
 
     if not P_TryMove(mo, ptryx, ptryy) then
     begin
