@@ -106,6 +106,8 @@ var
 // plasma cells for a bfg attack
   p_bfgcells: integer = 40;
 
+procedure P_SetPsprite(player: Pplayer_t; position: integer; stnum: statenum_t);
+  
 implementation
 
 uses

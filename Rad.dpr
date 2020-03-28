@@ -380,7 +380,8 @@ uses
   radix_sounds in 'Radix\radix_sounds.pas',
   sound_data in 'Radix\sound_data.pas',
   radix_intermission in 'Radix\radix_intermission.pas',
-  radix_hud in 'Radix\radix_hud.pas';
+  radix_hud in 'Radix\radix_hud.pas',
+  radix_weapons in 'Radix\radix_weapons.pas';
 
 var
   Saved8087CW: Word;
