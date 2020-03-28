@@ -1377,6 +1377,16 @@ var
       I_Error('TRadixToWADConverter.GenerateSprites(): Sprite table overflow, numsprinfo=%d', [numsprinfo]);
   end;
 
+  function get_sprite_name(const ids: integer): string;
+  begin
+    if ids < 67 then
+      result := 'XR' + IntToStrzFill(2, ids)
+    else if ids < 1000 then
+      result := 'X' + IntToStrzFill(3, ids)
+    else
+      result := IntToStrzFill(4, ids)
+  end;
+
   procedure MakeNonRotatingSprite(const rprefix: string; const r_id: integer;
     const numframes: integer; const trans: PByteArray = nil;
     const xofs: integer = -255; const yofs: integer = -255;
@@ -1390,7 +1400,7 @@ var
       check_sprite_overflow;
 
       spr.rname := rprefix + '_' + itoa(ii);
-      spr.dname := 'XR' + IntToStrzFill(2, r_id) + Chr(Ord(startframe) + ii - 1) + '0';
+      spr.dname := get_sprite_name(r_id) + Chr(Ord(startframe) + ii - 1) + '0';
       spr.translation := trans;
       spr.xoffs := xofs;
       spr.yoffs := yofs;
@@ -1413,9 +1423,9 @@ var
       for jj := 1 to 8 do
       begin
         check_sprite_overflow;
-        
+
         spr.rname := rprefix + '_' + itoa(jj + (ii - 1) * 8);
-        spr.dname := 'XR' + IntToStrzFill(2, r_id) + Chr(Ord('A') + ii - 1) + itoa(jj);
+        spr.dname := get_sprite_name(r_id) + Chr(Ord('A') + ii - 1) + itoa(jj);
         spr.translation := trans;
         spr.xoffs := xofs;
         spr.yoffs := yofs;
@@ -1435,7 +1445,7 @@ var
     check_sprite_overflow;
 
     spr.rname := rname;
-    spr.dname := 'XR' + IntToStrzFill(2, r_id) + frm + '0';
+    spr.dname := get_sprite_name(r_id) + frm + '0';
     spr.translation := trans;
     spr.xoffs := xofs;
     spr.yoffs := yofs;
@@ -1697,6 +1707,10 @@ begin
   // MT_SECONDCOOLAND3
   MakeNonRotatingSprite('SecondCoolant', _MTRX_SECONDCOOLAND3, 1, nil, 64, 183, false, false);
 
+  // Radix things without doom editor number (runtime)
+  // MT_RADIXPLASMA
+  MakeNonRotatingSprite('Plasma', _MTTX_RADIXPLASMA, 3, nil, 21, 24, false, false);
+
   bmp := TRadixBitmap.Create;
 
   for j := 0 to numsprinfo - 1 do
@@ -1704,7 +1718,7 @@ begin
     spr := @SPRITEINFO[j];
     if spr.dname = 'XR63A7' then
       continue;
-      
+
     bl := nil;
     for i := 0 to bnumlumps - 1 do
       if radixlumpname(blumps[i]) = spr.rname then
