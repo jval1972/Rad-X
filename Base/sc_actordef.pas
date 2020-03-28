@@ -57,6 +57,7 @@ function SC_GetActordefDeclaration(const m: Pmobjinfo_t): string;
 implementation
 
 uses
+  TypInfo,
   doomdef,
   d_main,
   deh_base,
@@ -2675,6 +2676,7 @@ var
   ret: string;
   plevel: integer;
   i: integer;
+  id: integer;
 
   procedure AddLn(const s: string);
   var
@@ -2840,6 +2842,10 @@ var
 begin
   ret := '';
   plevel := 0;
+
+  id := pDiff(m, mobjinfo, SizeOf(mobjinfo_t));
+  if IsIntegerInRange(id, 0, Ord(DO_NUMMOBJTYPES) - 1) then
+    Addln('// ' + strupper(GetENumName(TypeInfo(mobjtype_t), Ord(id))));
 
   AddLn('ACTOR "' + Info_GetMobjName(m) + '"' + decide(m.doomednum > 0, ' ' + itoa(m.doomednum), ''));
   AddLn('{');

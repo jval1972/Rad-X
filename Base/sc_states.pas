@@ -251,7 +251,7 @@ function SC_StateName(const st: integer): string;
 begin
   result := statenames[st];
   if result = '' then
-    if IsIntegerInRange(st, 0, Ord(NUMSTATES) - 1) then
+    if IsIntegerInRange(st, 0, Ord(DO_NUMSTATES) - 1) then
       result := strupper(GetENumName(TypeInfo(statenum_t), Ord(st)));
 end;
 
