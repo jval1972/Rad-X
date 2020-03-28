@@ -268,15 +268,18 @@ begin
 
   player := mo.player;
 
-  if mo.momx > MAXMOVE then
-    mo.momx := MAXMOVE
-  else if mo.momx < -MAXMOVE then
-    mo.momx := -MAXMOVE;
+  if mo.flags3_ex and MF3_EX_NOMAXMOVE = 0 then
+  begin
+    if mo.momx > MAXMOVE then
+      mo.momx := MAXMOVE
+    else if mo.momx < -MAXMOVE then
+      mo.momx := -MAXMOVE;
 
-  if mo.momy > MAXMOVE then
-    mo.momy := MAXMOVE
-  else if mo.momy < -MAXMOVE then
-    mo.momy := -MAXMOVE;
+    if mo.momy > MAXMOVE then
+      mo.momy := MAXMOVE
+    else if mo.momy < -MAXMOVE then
+      mo.momy := -MAXMOVE;
+  end;
 
   xmove := mo.momx;
   ymove := mo.momy;
@@ -1727,6 +1730,7 @@ var
   y: fixed_t;
   z: fixed_t;
   slope: fixed_t;
+  speed: fixed_t;
 begin
   // see which target is to be aimed at
   an := source.angle;
@@ -1765,9 +1769,11 @@ begin
 
   th.target := source;
   th.angle := an;
-  th.momx := FixedMul(th.info.speed, finecosine[{$IFDEF FPC}_SHRW(an, ANGLETOFINESHIFT){$ELSE}an shr ANGLETOFINESHIFT{$ENDIF}]);
-  th.momy := FixedMul(th.info.speed, finesine[{$IFDEF FPC}_SHRW(an, ANGLETOFINESHIFT){$ELSE}an shr ANGLETOFINESHIFT{$ENDIF}]);
-  th.momz := FixedMul(th.info.speed, slope);
+  an := an shr ANGLETOFINESHIFT;
+  speed := th.info.speed;
+  th.momx := FixedMul(speed, finecosine[an]);
+  th.momy := FixedMul(speed, finesine[an]);
+  th.momz := FixedMul(speed, slope);
 
   P_CheckMissileSpawn(th);
 end;

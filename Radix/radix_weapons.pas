@@ -185,33 +185,23 @@ begin
   weaponinfo[Ord(wp_superepc)].flashstate := sflash;
 end;
 
-procedure P_SpawnPlayerMissileDXDYDZ(source: Pmobj_t; _type: integer; const dx, dy, dz: fixed_t);
+procedure P_SpawnPlayerMissileOffsZ(source: Pmobj_t; _type: integer; const doffs, dz: fixed_t);
 var
   oldx, oldy, oldz: fixed_t;
-  tmpx, dx1, dy1: fixed_t;
+  dx, dy: fixed_t;
   ang: angle_t;
 begin
   oldx := source.x;
   oldy := source.y;
   oldz := source.z;
 
-  dx1 := dx;
-  dy1 := dy;
+  ang := (source.angle - ANG90) shr ANGLETOFINESHIFT;
 
-  ang := source.angle shr ANGLETOFINESHIFT;
+  dx := FixedMul(doffs, finecosine[ang]);
+  dy := FixedMul(doffs, finesine[ang]);
 
-  tmpx :=
-    FixedMul(dx1, finecosine[ang]) -
-    FixedMul(dy1, finesine[ang]);
-
-  dy1 :=
-    FixedMul(dx1, finesine[ang]) +
-    FixedMul(dy1, finecosine[ang]);
-
-  dx1 := tmpx;
-
-  source.x := source.x + dx1;
-  source.y := source.y + dy1;
+  source.x := source.x + dx;
+  source.y := source.y + dy;
   source.z := source.z + dz;
 
   P_SpawnPlayerMissile(source, _type);
@@ -230,11 +220,11 @@ var
 
 procedure A_FireRadixPlasma(player: Pplayer_t; psp: Ppspdef_t);
 
-  procedure spawn_neutron(x, y, z: fixed_t);
+  procedure spawn_neutron(offs, z: fixed_t);
   begin
-    P_SpawnPlayerMissileDXDYDZ(
+    P_SpawnPlayerMissileOffsZ(
       player.mo, radixplasma_id,
-      x, y, z
+      offs, z
     );
   end;
 
@@ -264,31 +254,31 @@ begin
       begin
         if player.weaponflags and PWF_NEURONCANNON <> 0 then
         begin
-          spawn_neutron(0, -32 * FRACUNIT, -8 * FRACUNIT);
+          spawn_neutron(-32 * FRACUNIT, -8 * FRACUNIT);
           player.weaponflags := player.weaponflags and not PWF_NEURONCANNON;
         end
         else
         begin
-          spawn_neutron(0, 32 * FRACUNIT, -8 * FRACUNIT);
+          spawn_neutron(32 * FRACUNIT, -8 * FRACUNIT);
           player.weaponflags := player.weaponflags or PWF_NEURONCANNON;
         end;
       end;
     1:
       begin
-        spawn_neutron(0, -32 * FRACUNIT, -8 * FRACUNIT);
-        spawn_neutron(0, 32 * FRACUNIT, -8 * FRACUNIT);
+        spawn_neutron(-32 * FRACUNIT, -8 * FRACUNIT);
+        spawn_neutron(32 * FRACUNIT, -8 * FRACUNIT);
       end;
     2:
       begin
-        spawn_neutron(0, -32 * FRACUNIT, -8 * FRACUNIT);
-        spawn_neutron(0, 0, -32 * FRACUNIT);
-        spawn_neutron(0, 32 * FRACUNIT, -8 * FRACUNIT);
+        spawn_neutron(-32 * FRACUNIT, -8 * FRACUNIT);
+        spawn_neutron(0, -32 * FRACUNIT);
+        spawn_neutron(32 * FRACUNIT, -8 * FRACUNIT);
       end;
   else
-    spawn_neutron(0, -32 * FRACUNIT, -8 * FRACUNIT);
-    spawn_neutron(0, -32 * FRACUNIT, -32 * FRACUNIT);
-    spawn_neutron(0, 32 * FRACUNIT, -8 * FRACUNIT);
-    spawn_neutron(0, 32 * FRACUNIT, -32 * FRACUNIT);
+    spawn_neutron(-32 * FRACUNIT, -8 * FRACUNIT);
+    spawn_neutron(-32 * FRACUNIT, -32 * FRACUNIT);
+    spawn_neutron(32 * FRACUNIT, -8 * FRACUNIT);
+    spawn_neutron(32 * FRACUNIT, -32 * FRACUNIT);
   end;
 end;
 

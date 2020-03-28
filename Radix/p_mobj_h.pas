@@ -339,6 +339,8 @@ const
   MF3_EX_BOUNCE = MF3_EX_FLOORBOUNCE or MF3_EX_CEILINGBOUNCE or MF3_EX_WALLBOUNCE;
   // Custom pickup
   MF3_EX_CUSTOMPICKUP = 8;
+  // No max move
+  MF3_EX_NOMAXMOVE = 16;
 
 type
 // Map Object definition.
