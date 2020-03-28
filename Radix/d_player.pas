@@ -75,6 +75,13 @@ const
   // Low gravity cheat
   CF_LOWGRAVITY = 8;
 
+// Radix Weapons Flags and consts
+const
+  MAXNEUTRONCANNONLEVEL = 3;
+
+const
+  PWF_NEURONCANNON = 1;
+
 type
 //
 // Extended player object info: player_t
@@ -122,6 +129,7 @@ type
     radixpowers: array[0..Ord(NUMRADIXPOWERUPS) - 1] of integer;  // JVAL: 20200322 - Radix power ups
     plasmabombs: integer; // JVAL: 20200322 - Number of plasma bombs
     neutroncannonlevel: integer;  // JVAL: 20200324 - Neutro Cannons Level
+    weaponflags: LongWord;  // JVAL: 20200328 - Weapon firing sequence information
     scannerjam: boolean;  // JVAL: 20200324 - When true can not see the radar in hud
 
     // Frags, kills of other players.

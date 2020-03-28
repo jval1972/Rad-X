@@ -52,11 +52,15 @@ uses
   doomdef,
   d_think,
   d_items,
+  g_game,
   info,
   info_h,
   info_common,
   m_rnd,
+  m_fixed,
+  tables,
   p_pspr,
+  p_mobj_h,
   p_mobj;
 
 function RX_NewWeaponState(const tics: integer; const proc: actionf_p2): integer;
@@ -129,7 +133,7 @@ begin
   weaponinfo[Ord(wp_neutroncannons)].flashstate := sflash;
   st := RX_NewWeaponState(5, @A_FireRadixPlasma);
   weaponinfo[Ord(wp_neutroncannons)].atkstate := st;
-  states[st].nextstate := statenum_t(RX_NewWeaponState(5, @A_Refire));
+  states[st].nextstate := statenum_t(RX_NewWeaponState(7, @A_Refire));
   states[Ord(states[st].nextstate)].nextstate := statenum_t(sready);
 
   get_def_weapon_states;
@@ -181,6 +185,43 @@ begin
   weaponinfo[Ord(wp_superepc)].flashstate := sflash;
 end;
 
+procedure P_SpawnPlayerMissileDXDYDZ(source: Pmobj_t; _type: integer; const dx, dy, dz: fixed_t);
+var
+  oldx, oldy, oldz: fixed_t;
+  tmpx, dx1, dy1: fixed_t;
+  ang: angle_t;
+begin
+  oldx := source.x;
+  oldy := source.y;
+  oldz := source.z;
+
+  dx1 := dx;
+  dy1 := dy;
+
+  ang := source.angle shr ANGLETOFINESHIFT;
+
+  tmpx :=
+    FixedMul(dx1, finecosine[ang]) -
+    FixedMul(dy1, finesine[ang]);
+
+  dy1 :=
+    FixedMul(dx1, finesine[ang]) +
+    FixedMul(dy1, finecosine[ang]);
+
+  dx1 := tmpx;
+
+  source.x := source.x + dx1;
+  source.y := source.y + dy1;
+  source.z := source.z + dz;
+
+  P_SpawnPlayerMissile(source, _type);
+
+  source.x := oldx;
+  source.y := oldy;
+  source.z := oldz;
+end;
+
+
 //
 // A_FireRadixPlasma
 //
@@ -188,6 +229,17 @@ var
   radixplasma_id: integer = -1;
 
 procedure A_FireRadixPlasma(player: Pplayer_t; psp: Ppspdef_t);
+
+  procedure spawn_neutron(x, y, z: fixed_t);
+  begin
+    P_SpawnPlayerMissileDXDYDZ(
+      player.mo, radixplasma_id,
+      x, y, z
+    );
+  end;
+
+var
+  nlevel: integer;
 begin
 //  player.ammo[Ord(weaponinfo[Ord(player.readyweapon)].ammo)] :=
 //    player.ammo[Ord(weaponinfo[Ord(player.readyweapon)].ammo)] - 1;
@@ -198,7 +250,46 @@ begin
   if radixplasma_id < 0 then
     radixplasma_id := Info_GetMobjNumForName('MT_RADIXPLASMA');
 
-  P_SpawnPlayerMissile(player.mo, radixplasma_id);
+  // JVAL: Decide the neutron cannon level
+  nlevel := player.neutroncannonlevel;
+  if nlevel > 0 then
+    if player.energy < PLAYERSPAWNENERGY div 2 then
+      dec(nlevel);
+  if nlevel > 0 then
+    if player.energy < PLAYERSPAWNENERGY div 4 then
+      dec(nlevel);
+
+  case nlevel of
+    0:
+      begin
+        if player.weaponflags and PWF_NEURONCANNON <> 0 then
+        begin
+          spawn_neutron(0, -32 * FRACUNIT, -8 * FRACUNIT);
+          player.weaponflags := player.weaponflags and not PWF_NEURONCANNON;
+        end
+        else
+        begin
+          spawn_neutron(0, 32 * FRACUNIT, -8 * FRACUNIT);
+          player.weaponflags := player.weaponflags or PWF_NEURONCANNON;
+        end;
+      end;
+    1:
+      begin
+        spawn_neutron(0, -32 * FRACUNIT, -8 * FRACUNIT);
+        spawn_neutron(0, 32 * FRACUNIT, -8 * FRACUNIT);
+      end;
+    2:
+      begin
+        spawn_neutron(0, -32 * FRACUNIT, -8 * FRACUNIT);
+        spawn_neutron(0, 0, -32 * FRACUNIT);
+        spawn_neutron(0, 32 * FRACUNIT, -8 * FRACUNIT);
+      end;
+  else
+    spawn_neutron(0, -32 * FRACUNIT, -8 * FRACUNIT);
+    spawn_neutron(0, -32 * FRACUNIT, -32 * FRACUNIT);
+    spawn_neutron(0, 32 * FRACUNIT, -8 * FRACUNIT);
+    spawn_neutron(0, 32 * FRACUNIT, -32 * FRACUNIT);
+  end;
 end;
 
 end.

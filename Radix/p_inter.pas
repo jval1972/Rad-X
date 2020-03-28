@@ -471,7 +471,7 @@ function P_UpgradeNeutronCannons(const p: Pplayer_t): boolean;
 var
   stmp: string;
 begin
-  if p.neutroncannonlevel < 3 then
+  if p.neutroncannonlevel < MAXNEUTRONCANNONLEVEL then
   begin
     inc(p.neutroncannonlevel);
     sprintf(stmp, 'Level %d Neutron Cannons Acquired', [p.neutroncannonlevel + 1]);

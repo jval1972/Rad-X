@@ -1727,7 +1727,6 @@ var
   y: fixed_t;
   z: fixed_t;
   slope: fixed_t;
-  ver: integer;
 begin
   // see which target is to be aimed at
   an := source.angle;
