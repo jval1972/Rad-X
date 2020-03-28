@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 261;
+  DEHNUMACTIONS = 262;
 
 type
   deh_action_t = record
@@ -2784,6 +2784,9 @@ begin
   deh_actions[260].action.acp1 := @A_FireRadixPlasma;
   deh_actions[260].name := strupper('A_FireRadixPlasma');
   {$IFDEF DLL}deh_actions[260].decl := 'A_FireRadixPlasma()';{$ENDIF}
+  deh_actions[261].action.acp1 := @A_GlowLight;
+  deh_actions[261].name := strupper('A_GlowLight');
+  {$IFDEF DLL}deh_actions[261].decl := 'A_GlowLight(color: string)';{$ENDIF}
 
 
   deh_strings.numstrings := 0;
