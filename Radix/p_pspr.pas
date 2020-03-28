@@ -107,6 +107,8 @@ var
   p_bfgcells: integer = 40;
 
 procedure P_SetPsprite(player: Pplayer_t; position: integer; stnum: statenum_t);
+
+procedure P_BringUpWeapon(player: Pplayer_t);
   
 implementation
 

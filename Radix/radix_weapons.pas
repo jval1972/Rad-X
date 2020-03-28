@@ -38,17 +38,144 @@ uses
   d_player,
   p_pspr_h;
 
+procedure RX_InitWeaponStates;
+
+procedure A_RaiseRadixWeapon(player: Pplayer_t; psp: Ppspdef_t);
+
+procedure A_LowerRadixWeapon(player: Pplayer_t; psp: Ppspdef_t);
+
 procedure A_FireRadixPlasma(player: Pplayer_t; psp: Ppspdef_t);
 
 implementation
 
 uses
+  doomdef,
+  d_think,
   d_items,
+  info,
   info_h,
   info_common,
   m_rnd,
   p_pspr,
   p_mobj;
+
+function RX_NewWeaponState(const tics: integer; const proc: actionf_p2): integer;
+var
+  st: Pstate_t;
+begin
+  result := Info_GetNewState;
+  st := @states[result];
+  st.sprite := Ord(SPR_TNT1);
+  st.frame := 0;
+  st.tics := tics;
+  st.nextstate := statenum_t(result);
+  st.action.acp2 := proc;
+end;
+
+procedure A_RaiseRadixWeapon(player: Pplayer_t; psp: Ppspdef_t);
+var
+  newstate: statenum_t;
+begin
+  // The weapon has been raised all the way,
+  //  so change to the ready state.
+  newstate := statenum_t(weaponinfo[Ord(player.readyweapon)].readystate);
+
+  P_SetPsprite(player, Ord(ps_weapon), newstate);
+end;
+
+procedure A_LowerRadixWeapon(player: Pplayer_t; psp: Ppspdef_t);
+begin
+  // Player is dead.
+  if player.playerstate = PST_DEAD then
+    // don't bring weapon back up
+    exit;
+
+  // The old weapon has been lowered off the screen,
+  // so change the weapon and start raising it
+  if player.health = 0 then
+  begin
+    // Player is dead, so keep the weapon off screen.
+    P_SetPsprite(player, Ord(ps_weapon), S_NULL);
+    exit;
+  end;
+
+  player.readyweapon := player.pendingweapon;
+
+  P_BringUpWeapon(player);
+end;
+
+procedure RX_InitWeaponStates;
+var
+  sraise: integer;
+  slower: integer;
+  sready: integer;
+  sflash: integer;
+
+  procedure get_def_weapon_states;
+  begin
+    sraise := RX_NewWeaponState(1, @A_RaiseRadixWeapon);
+    slower := RX_NewWeaponState(1, @A_LowerRadixWeapon);
+    sready := RX_NewWeaponState(1, @A_WeaponReady);
+    sflash := RX_NewWeaponState(5, @A_Light1);
+    states[sflash].nextstate := S_LIGHTDONE;
+  end;
+
+begin
+  get_def_weapon_states;
+  weaponinfo[Ord(wp_neutroncannons)].upstate := sraise;
+  weaponinfo[Ord(wp_neutroncannons)].downstate := slower;
+  weaponinfo[Ord(wp_neutroncannons)].readystate := sready;
+  weaponinfo[Ord(wp_neutroncannons)].flashstate := sflash;
+  weaponinfo[Ord(wp_neutroncannons)].atkstate := RX_NewWeaponState(5, @A_FireRadixPlasma);
+
+  get_def_weapon_states;
+  weaponinfo[Ord(wp_standardepc)].upstate := sraise;
+  weaponinfo[Ord(wp_standardepc)].downstate := slower;
+  weaponinfo[Ord(wp_standardepc)].readystate := sready;
+  weaponinfo[Ord(wp_standardepc)].flashstate := sflash;
+
+  get_def_weapon_states;
+  weaponinfo[Ord(wp_plasmaspreader)].upstate := sraise;
+  weaponinfo[Ord(wp_plasmaspreader)].downstate := slower;
+  weaponinfo[Ord(wp_plasmaspreader)].readystate := sready;
+  weaponinfo[Ord(wp_plasmaspreader)].flashstate := sflash;
+
+  get_def_weapon_states;
+  weaponinfo[Ord(wp_seekingmissiles)].upstate := sraise;
+  weaponinfo[Ord(wp_seekingmissiles)].downstate := slower;
+  weaponinfo[Ord(wp_seekingmissiles)].readystate := sready;
+  weaponinfo[Ord(wp_seekingmissiles)].flashstate := sflash;
+
+  get_def_weapon_states;
+  weaponinfo[Ord(wp_nuke)].upstate := sraise;
+  weaponinfo[Ord(wp_nuke)].downstate := slower;
+  weaponinfo[Ord(wp_nuke)].readystate := sready;
+  weaponinfo[Ord(wp_nuke)].flashstate := sflash;
+
+  get_def_weapon_states;
+  weaponinfo[Ord(wp_phasetorpedoes)].upstate := sraise;
+  weaponinfo[Ord(wp_phasetorpedoes)].downstate := slower;
+  weaponinfo[Ord(wp_phasetorpedoes)].readystate := sready;
+  weaponinfo[Ord(wp_phasetorpedoes)].flashstate := sflash;
+
+  get_def_weapon_states;
+  weaponinfo[Ord(wp_gravitywave)].upstate := sraise;
+  weaponinfo[Ord(wp_gravitywave)].downstate := slower;
+  weaponinfo[Ord(wp_gravitywave)].readystate := sready;
+  weaponinfo[Ord(wp_gravitywave)].flashstate := sflash;
+
+  get_def_weapon_states;
+  weaponinfo[Ord(wp_enchancedepc)].upstate := sraise;
+  weaponinfo[Ord(wp_enchancedepc)].downstate := slower;
+  weaponinfo[Ord(wp_enchancedepc)].readystate := sready;
+  weaponinfo[Ord(wp_enchancedepc)].flashstate := sflash;
+
+  get_def_weapon_states;
+  weaponinfo[Ord(wp_superepc)].upstate := sraise;
+  weaponinfo[Ord(wp_superepc)].downstate := slower;
+  weaponinfo[Ord(wp_superepc)].readystate := sready;
+  weaponinfo[Ord(wp_superepc)].flashstate := sflash;
+end;
 
 //
 // A_FireRadixPlasma

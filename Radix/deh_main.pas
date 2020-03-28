@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 258;
+  DEHNUMACTIONS = 261;
 
 type
   deh_action_t = record
@@ -125,6 +125,7 @@ uses
   p_inter,
   p_musinfo,
   radix_messages,
+  radix_weapons,
   r_renderstyle,
   sounds,
   sound_data,
@@ -2772,6 +2773,18 @@ begin
   deh_actions[257].action.acp1 := @A_UnSetWallBounce;
   deh_actions[257].name := strupper('A_UnSetWallBounce');
   {$IFDEF DLL}deh_actions[257].decl := 'A_UnSetWallBounce()';{$ENDIF}
+
+
+  deh_actions[258].action.acp1 := @A_RaiseRadixWeapon;
+  deh_actions[258].name := strupper('A_RaiseRadixWeapon');
+  {$IFDEF DLL}deh_actions[258].decl := 'A_RaiseRadixWeapon()';{$ENDIF}
+  deh_actions[259].action.acp1 := @A_LowerRadixWeapon;
+  deh_actions[259].name := strupper('A_LowerRadixWeapon');
+  {$IFDEF DLL}deh_actions[259].decl := 'A_LowerRadixWeapon()';{$ENDIF}
+  deh_actions[260].action.acp1 := @A_FireRadixPlasma;
+  deh_actions[260].name := strupper('A_FireRadixPlasma');
+  {$IFDEF DLL}deh_actions[260].decl := 'A_FireRadixPlasma()';{$ENDIF}
+
 
   deh_strings.numstrings := 0;
   deh_strings.realnumstrings := 0;

@@ -176,6 +176,7 @@ uses
   ps_main,
   psi_overlay,
   radix_alias,
+  radix_weapons,
   radix_version,
   radix_intermission,
   radix_hud,
@@ -1862,6 +1863,11 @@ begin
 
   printf('W_AutoLoadPakFiles: Autoload required pak files.'#13#10);
   W_AutoLoadPakFiles;
+
+  SUC_Progress(39);
+
+  printf('RX_InitWeaponStates: Initializing radix weapons.'#13#10);
+  RX_InitWeaponStates;
 
   SUC_Progress(40);
 
