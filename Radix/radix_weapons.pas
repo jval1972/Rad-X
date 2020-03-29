@@ -46,6 +46,8 @@ procedure A_LowerRadixWeapon(player: Pplayer_t; psp: Ppspdef_t);
 
 procedure A_FireRadixPlasma(player: Pplayer_t; psp: Ppspdef_t);
 
+procedure A_FireRadixStandardEPC(player: Pplayer_t; psp: Ppspdef_t);
+
 implementation
 
 uses
@@ -114,7 +116,7 @@ var
   slower: integer;
   sready: integer;
   sflash: integer;
-  st: integer;
+  st, st2: integer;
 
   procedure get_def_weapon_states;
   begin
@@ -141,6 +143,12 @@ begin
   weaponinfo[Ord(wp_standardepc)].downstate := slower;
   weaponinfo[Ord(wp_standardepc)].readystate := sready;
   weaponinfo[Ord(wp_standardepc)].flashstate := sflash;
+  st := RX_NewWeaponState(2, @A_FireRadixStandardEPC);
+  weaponinfo[Ord(wp_standardepc)].atkstate := st;
+  st2 := RX_NewWeaponState(2, @A_FireRadixStandardEPC);
+  states[st].nextstate := statenum_t(st2);
+  states[st2].nextstate := statenum_t(RX_NewWeaponState(8, @A_Refire));
+  states[Ord(states[st2].nextstate)].nextstate := statenum_t(sready);
 
   get_def_weapon_states;
   weaponinfo[Ord(wp_plasmaspreader)].upstate := sraise;
@@ -280,6 +288,80 @@ begin
     spawn_neutron(32 * FRACUNIT, -32 * FRACUNIT);
     spawn_neutron(32 * FRACUNIT, 32 * FRACUNIT);
   end;
+end;
+
+//
+// P_EPCFire
+//
+var
+  radixepcshell_id: integer = -1;
+
+type
+  epccoord_t = record
+    offs, z: fixed_t;
+  end;
+  Pepccoord_t = ^epccoord_t;
+  epccoord_tArray = array[0..$FF] of epccoord_t;
+  Pepccoord_tArray = ^epccoord_tArray;
+
+procedure P_EPCFire(const player: Pplayer_t; const tbl: Pepccoord_tArray; const sz: integer; const accuracy: integer);
+var
+  ammoid: integer;
+  i, actualammo: integer;
+  doffs, dz: fixed_t;
+begin
+  ammoid := Ord(weaponinfo[Ord(player.readyweapon)].ammo);
+
+  // Find the actual ammo
+  if player.ammo[ammoid] >= sz then
+  begin
+    player.ammo[ammoid] := player.ammo[ammoid] - sz;
+    actualammo := sz;
+  end
+  else
+  begin
+    actualammo := player.ammo[ammoid];
+    player.ammo[ammoid] := 0;
+  end;
+
+  P_SetPsprite(player,
+    Ord(ps_flash), statenum_t(weaponinfo[Ord(player.readyweapon)].flashstate + (P_Random and 1)));
+
+  if radixepcshell_id < 0 then
+    radixepcshell_id := Info_GetMobjNumForName('MT_RADIXEPCSHELL');
+
+  for i := 0 to actualammo - 1 do
+  begin
+    // accuracy -> lower values, better accuracy
+    if accuracy = 0 then
+    begin
+      doffs := 0;
+      dz := 0;
+    end
+    else
+    begin
+      doffs := (P_Random mod accuracy) * FRACUNIT - (P_Random mod accuracy) * FRACUNIT;
+      dz := (P_Random mod accuracy) * FRACUNIT - (P_Random mod accuracy) * FRACUNIT;
+    end;
+
+    P_SpawnPlayerMissileOffsZ(
+      player.mo, radixepcshell_id,
+        tbl[i].offs + doffs, tbl[i].z + dz);
+  end;
+end;
+
+//
+// A_FireRadixStandardEPC
+//
+const
+  standardEPCtbl: array[0..1] of epccoord_t = (
+    (offs: -32 * FRACUNIT; z: -32 * FRACUNIT),
+    (offs:  32 * FRACUNIT; z: -32 * FRACUNIT)
+  );
+
+procedure A_FireRadixStandardEPC(player: Pplayer_t; psp: Ppspdef_t);
+begin
+  P_EPCFire(player, @standardEPCtbl, 2, 1);
 end;
 
 end.
