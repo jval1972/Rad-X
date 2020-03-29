@@ -54,6 +54,8 @@ procedure A_FireRadixSuperEPC1(player: Pplayer_t; psp: Ppspdef_t);
 
 procedure A_FireRadixSuperEPC2(player: Pplayer_t; psp: Ppspdef_t);
 
+procedure A_FireRadixPlasmaSpread(player: Pplayer_t; psp: Ppspdef_t);
+
 implementation
 
 uses
@@ -161,6 +163,10 @@ begin
   weaponinfo[Ord(wp_plasmaspreader)].downstate := slower;
   weaponinfo[Ord(wp_plasmaspreader)].readystate := sready;
   weaponinfo[Ord(wp_plasmaspreader)].flashstate := sflash;
+  st := RX_NewWeaponState(5, @A_FireRadixPlasmaSpread);
+  weaponinfo[Ord(wp_plasmaspreader)].atkstate := st;
+  states[st].nextstate := statenum_t(RX_NewWeaponState(5, @A_Refire));
+  states[Ord(states[st].nextstate)].nextstate := statenum_t(sready);
 
   get_def_weapon_states;
   weaponinfo[Ord(wp_seekingmissiles)].upstate := sraise;
@@ -428,5 +434,36 @@ procedure A_FireRadixSuperEPC2(player: Pplayer_t; psp: Ppspdef_t);
 begin
   P_EPCFire(player, @superEPCtbl2, 6, 3);
 end;
+
+//
+// A_FireRadixPlasmaSpread
+//
+var
+  radixplasmaspreadleft_id: integer = -1;
+  radixplasmaspreadright_id: integer = -1;
+
+procedure A_FireRadixPlasmaSpread(player: Pplayer_t; psp: Ppspdef_t);
+begin
+  P_SetPsprite(player,
+    Ord(ps_flash), statenum_t(weaponinfo[Ord(player.readyweapon)].flashstate + (P_Random and 1)));
+
+  if radixplasmaspreadleft_id < 0 then
+    radixplasmaspreadleft_id := Info_GetMobjNumForName('MT_RADIXPLASMASPREADLEFT');
+
+  if radixplasmaspreadright_id < 0 then
+    radixplasmaspreadright_id := Info_GetMobjNumForName('MT_RADIXPLASMASPREADRIGHT');
+
+  P_SpawnPlayerMissileOffsZ(
+    player.mo, radixplasmaspreadleft_id,
+      -32 * FRACUNIT, -8 * FRACUNIT
+  );
+
+  P_SpawnPlayerMissileOffsZ(
+    player.mo, radixplasmaspreadright_id,
+      32 * FRACUNIT, -8 * FRACUNIT
+  );
+
+end;
+
 
 end.
