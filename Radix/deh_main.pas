@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 264;
+  DEHNUMACTIONS = 266;
 
 type
   deh_action_t = record
@@ -2795,6 +2795,12 @@ begin
   deh_actions[263].action.acp1 := @A_FireRadixEnhancedEPC;
   deh_actions[263].name := strupper('A_FireRadixEnhancedEPC');
   {$IFDEF DLL}deh_actions[263].decl := 'A_FireRadixEnhancedEPC()';{$ENDIF}
+  deh_actions[264].action.acp1 := @A_FireRadixSuperEPC1;
+  deh_actions[264].name := strupper('A_FireRadixSuperEPC1');
+  {$IFDEF DLL}deh_actions[264].decl := 'A_FireRadixSuperEPC1()';{$ENDIF}
+  deh_actions[265].action.acp1 := @A_FireRadixSuperEPC2;
+  deh_actions[265].name := strupper('A_FireRadixSuperEPC2');
+  {$IFDEF DLL}deh_actions[265].decl := 'A_FireRadixSuperEPC2()';{$ENDIF}
 
 
   deh_strings.numstrings := 0;

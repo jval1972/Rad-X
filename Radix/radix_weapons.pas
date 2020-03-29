@@ -50,6 +50,10 @@ procedure A_FireRadixStandardEPC(player: Pplayer_t; psp: Ppspdef_t);
 
 procedure A_FireRadixEnhancedEPC(player: Pplayer_t; psp: Ppspdef_t);
 
+procedure A_FireRadixSuperEPC1(player: Pplayer_t; psp: Ppspdef_t);
+
+procedure A_FireRadixSuperEPC2(player: Pplayer_t; psp: Ppspdef_t);
+
 implementation
 
 uses
@@ -199,6 +203,12 @@ begin
   weaponinfo[Ord(wp_superepc)].downstate := slower;
   weaponinfo[Ord(wp_superepc)].readystate := sready;
   weaponinfo[Ord(wp_superepc)].flashstate := sflash;
+  st := RX_NewWeaponState(4, @A_FireRadixSuperEPC1);
+  weaponinfo[Ord(wp_superepc)].atkstate := st;
+  st2 := RX_NewWeaponState(4, @A_FireRadixSuperEPC2);
+  states[st].nextstate := statenum_t(st2);
+  states[st2].nextstate := statenum_t(RX_NewWeaponState(4, @A_Refire));
+  states[Ord(states[st2].nextstate)].nextstate := statenum_t(sready);
 end;
 
 procedure P_SpawnPlayerMissileOffsZ(source: Pmobj_t; _type: integer; const doffs, dz: fixed_t);
@@ -386,6 +396,37 @@ const
 procedure A_FireRadixEnhancedEPC(player: Pplayer_t; psp: Ppspdef_t);
 begin
   P_EPCFire(player, @enchancedEPCtbl, 4, 2);
+end;
+
+//
+// A_FireRadixSuperEPC
+//
+const
+  superEPCtbl1: array[0..5] of epccoord_t = (
+    (offs: 0 * FRACUNIT; z:  32 * FRACUNIT),
+    (offs: 28 * FRACUNIT; z:  16 * FRACUNIT),
+    (offs: 28 * FRACUNIT; z:  -16 * FRACUNIT),
+    (offs: 0 * FRACUNIT; z:  -32 * FRACUNIT),
+    (offs: -28 * FRACUNIT; z:  -16 * FRACUNIT),
+    (offs: -28 * FRACUNIT; z:  16 * FRACUNIT)
+  );
+  superEPCtbl2: array[0..5] of epccoord_t = (
+    (offs: 16 * FRACUNIT; z:  28 * FRACUNIT),
+    (offs: 32 * FRACUNIT; z:  0 * FRACUNIT),
+    (offs: 16 * FRACUNIT; z:  -28 * FRACUNIT),
+    (offs: -16 * FRACUNIT; z:  -28 * FRACUNIT),
+    (offs: -32 * FRACUNIT; z:  0 * FRACUNIT),
+    (offs: -16 * FRACUNIT; z:  28 * FRACUNIT)
+  );
+
+procedure A_FireRadixSuperEPC1(player: Pplayer_t; psp: Ppspdef_t);
+begin
+  P_EPCFire(player, @superEPCtbl1, 6, 3);
+end;
+
+procedure A_FireRadixSuperEPC2(player: Pplayer_t; psp: Ppspdef_t);
+begin
+  P_EPCFire(player, @superEPCtbl2, 6, 3);
 end;
 
 end.
