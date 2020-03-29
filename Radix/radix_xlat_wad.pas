@@ -1411,7 +1411,7 @@ var
     end;
   end;
 
-  procedure MakeRotatingSprite(const rprefix: string; const r_id: integer;
+  procedure MakeRotatingSprite8(const rprefix: string; const r_id: integer;
     const numframes: integer; const trans: PByteArray = nil;
     const xofs: integer = -255; const yofs: integer = -255;
     const cofs: boolean = true; const defofs: boolean = true);
@@ -1426,6 +1426,33 @@ var
 
         spr.rname := rprefix + '_' + itoa(jj + (ii - 1) * 8);
         spr.dname := get_sprite_name(r_id) + Chr(Ord('A') + ii - 1) + itoa(jj);
+        spr.translation := trans;
+        spr.xoffs := xofs;
+        spr.yoffs := yofs;
+        spr.centeroffs := cofs;
+        spr.defaultoffs := defofs;
+        inc(spr);
+        inc(numsprinfo);
+      end;
+  end;
+
+  procedure MakeRotatingSprite16(const rprefix: string; const r_id: integer;
+    const numframes: integer; const trans: PByteArray = nil;
+    const xofs: integer = -255; const yofs: integer = -255;
+    const cofs: boolean = true; const defofs: boolean = true);
+  const
+    SPR16 = '192A3B4C5D6E7F8G';
+  var
+    ii: integer;
+    jj: integer;
+  begin
+    for ii := 1 to numframes do
+      for jj := 1 to 16 do
+      begin
+        check_sprite_overflow;
+
+        spr.rname := rprefix + '_' + itoa(jj + (ii - 1) * 16);
+        spr.dname := get_sprite_name(r_id) + Chr(Ord('A') + ii - 1) + SPR16[jj];
         spr.translation := trans;
         spr.xoffs := xofs;
         spr.yoffs := yofs;
@@ -1572,31 +1599,31 @@ begin
   MakeNonRotatingSprite('PowerBiomine', _MTRX_BIOMINE2, 3);
 
   // MT_ALIENFODDER
-  MakeRotatingSprite('AlienFodder', _MTRX_ALIENFODDER, 3, nil, 68, 101, false, false);
+  MakeRotatingSprite8('AlienFodder', _MTRX_ALIENFODDER, 3, nil, 68, 101, false, false);
 
   // MT_DEFENCEDRONE_STUB1
-  MakeRotatingSprite('DroneB', _MTRX_DEFENCEDRONE_STUB1, 1, nil, 63, 67, false, false);
+  MakeRotatingSprite8('DroneB', _MTRX_DEFENCEDRONE_STUB1, 1, nil, 63, 67, false, false);
 
   // MT_DEFENCEDRONE_STUB2
-  MakeRotatingSprite('DroneB', _MTRX_DEFENCEDRONE_STUB2, 1, nil, 63, 67, false, false);
+  MakeRotatingSprite8('DroneB', _MTRX_DEFENCEDRONE_STUB2, 1, nil, 63, 67, false, false);
 
   // MT_BATTLEDRONE1
-  MakeRotatingSprite('DroneA', _MTRX_BATTLEDRONE1, 1, nil, 91, 50, false, false);
+  MakeRotatingSprite8('DroneA', _MTRX_BATTLEDRONE1, 1, nil, 91, 50, false, false);
 
   // MT_MISSILEBOAT
-  MakeRotatingSprite('DroneC', _MTRX_MISSILEBOAT, 1, nil, 83, 68, false, false);
+  MakeRotatingSprite8('DroneC', _MTRX_MISSILEBOAT, 1, nil, 83, 68, false, false);
 
   // MT_STORMBIRDHEAVYBOMBER
-  MakeRotatingSprite('HeavyFighter', _MTRX_STORMBIRDHEAVYBOMBER, 1, nil, 86, 54, false, false);
+  MakeRotatingSprite8('HeavyFighter', _MTRX_STORMBIRDHEAVYBOMBER, 1, nil, 86, 54, false, false);
 
   // MT_SKYFIREASSULTFIGHTER
-  MakeRotatingSprite('LightAssault', _MTRX_SKYFIREASSULTFIGHTER, 1, nil, 62, 51, false, false);
+  MakeRotatingSprite8('LightAssault', _MTRX_SKYFIREASSULTFIGHTER, 1, nil, 62, 51, false, false);
 
   // MT_SPAWNER
-  MakeRotatingSprite('Spawner', _MTRX_SPAWNER, 1, nil, 146, 154, false, false);
+  MakeRotatingSprite8('Spawner', _MTRX_SPAWNER, 1, nil, 146, 154, false, false);
 
   // MT_EXODROID
-  MakeRotatingSprite('ExoDroid', _MTRX_EXODROID, 3, nil, 113, 188, false, false);
+  MakeRotatingSprite8('ExoDroid', _MTRX_EXODROID, 3, nil, 113, 188, false, false);
 
   // MT_SNAKEDEAMON
   MakeNonRotatingSprite('SnakeDemonBadassHead', _MTRX_SNAKEDEAMON, 3, nil, 57, 109, false, false);
@@ -1605,7 +1632,7 @@ begin
   MakeNonRotatingSprite('Airmine', _MTRX_MINE, 3, nil, 51, 93, false, false);
 
   // MT_ROTATINGRADAR1
-  MakeRotatingSprite('RadarDish', _MTRX_ROTATINGRADAR1, 1, nil, 53, 91, false, false);
+  MakeRotatingSprite8('RadarDish', _MTRX_ROTATINGRADAR1, 1, nil, 53, 91, false, false);
 
   // MT_SHIELDGENERATOR1
   MakeNonRotatingSprite('ShieldGen', _MTRX_SHIELDGENERATOR1, 3, nil, 34, 135, false, false);
@@ -1620,25 +1647,25 @@ begin
   MakeNonRotatingSprite('EngineCore', _MTRX_ENGINECORE, 1, nil, 59, 178, false, false);
 
   // MT_DEFENCEDRONE1
-  MakeRotatingSprite('DroneB', _MTRX_DEFENCEDRONE1, 1, nil, 63, 67, false, false);
+  MakeRotatingSprite8('DroneB', _MTRX_DEFENCEDRONE1, 1, nil, 63, 67, false, false);
 
   // MT_BATTLEDRONE2
-  MakeRotatingSprite('DroneA', _MTRX_BATTLEDRONE2, 1, nil, 91, 50, false, false);
+  MakeRotatingSprite8('DroneA', _MTRX_BATTLEDRONE2, 1, nil, 91, 50, false, false);
 
   // MT_SKYFIREASSULTFIGHTER2
-  MakeRotatingSprite('LightAssault', _MTRX_SKYFIREASSULTFIGHTER2, 1, nil, 62, 51, false, false);
+  MakeRotatingSprite8('LightAssault', _MTRX_SKYFIREASSULTFIGHTER2, 1, nil, 62, 51, false, false);
 
   // MT_SKYFIREASSULTFIGHTER3
-  MakeRotatingSprite('LightAssault', _MTRX_SKYFIREASSULTFIGHTER3, 1, nil, 62, 51, false, false);
+  MakeRotatingSprite8('LightAssault', _MTRX_SKYFIREASSULTFIGHTER3, 1, nil, 62, 51, false, false);
 
   // MT_SKYFIREASSULTFIGHTER4
-  MakeRotatingSprite('LightAssault', _MTRX_SKYFIREASSULTFIGHTER4, 1, nil, 62, 51, false, false);
+  MakeRotatingSprite8('LightAssault', _MTRX_SKYFIREASSULTFIGHTER4, 1, nil, 62, 51, false, false);
 
   // MT_BIOMECH
-  MakeRotatingSprite('BioMech', _MTRX_BIOMECH, 1, nil, 73, 60, false, false);
+  MakeRotatingSprite8('BioMech', _MTRX_BIOMECH, 1, nil, 73, 60, false, false);
 
   // MT_DEFENCEDRONE2
-  MakeRotatingSprite('DroneB', _MTRX_DEFENCEDRONE2, 1, nil, 63, 67, false, false);
+  MakeRotatingSprite8('DroneB', _MTRX_DEFENCEDRONE2, 1, nil, 63, 67, false, false);
 
   // MT_RUI
   MakeOneSprite('Rui_1', _MTRX_RUI, nil, 16, 58, false, false, 'A');
@@ -1659,13 +1686,13 @@ begin
   MakeNonRotatingSprite('CoolantGener', _MTRX_COOLANDGENERATOR, 1, nil, 55, 190, false, false);
 
   // MT_ROTATINGRADAR2
-  MakeRotatingSprite('RadarDish', _MTRX_ROTATINGRADAR2, 1, nil, 53, 91, false, false);
+  MakeRotatingSprite8('RadarDish', _MTRX_ROTATINGRADAR2, 1, nil, 53, 91, false, false);
 
   // MT_MISSILEBOAT2
-  MakeRotatingSprite('DroneC', _MTRX_MISSILEBOAT2, 1, nil, 83, 68, false, false);
+  MakeRotatingSprite8('DroneC', _MTRX_MISSILEBOAT2, 1, nil, 83, 68, false, false);
 
   // MT_BATTLEDRONE3
-  MakeRotatingSprite('DroneA', _MTRX_BATTLEDRONE3, 1, nil, 91, 50, false, false);
+  MakeRotatingSprite8('DroneA', _MTRX_BATTLEDRONE3, 1, nil, 91, 50, false, false);
 
   // MT_ROTATINGLIGHT
   MakeOneSprite('RotatingLight2', _MTRX_ROTATINGLIGHT, nil, 10, 61, true, true, 'A');
@@ -1696,10 +1723,10 @@ begin
   MakeOneSprite('BarrelRotate8', _MTRX_BARREL, nil, 41, 77, false, false, 'J');
 
   // MT_DOZZER
-  MakeRotatingSprite('Dozer', _MTRX_DOZZER, 1, nil, 100, 80, false, false);
+  MakeRotatingSprite8('Dozer', _MTRX_DOZZER, 1, nil, 100, 80, false, false);
 
   // MT_LIFT
-  MakeRotatingSprite('Lift', _MTRX_LIFT, 1, nil, 110, 88, false, false);
+  MakeRotatingSprite8('Lift', _MTRX_LIFT, 1, nil, 110, 88, false, false);
 
   // MT_SECONDCOOLAND2
   MakeNonRotatingSprite('SecondCoolant', _MTRX_SECONDCOOLAND2, 1, nil, 64, 183, false, false);
@@ -1719,6 +1746,9 @@ begin
   MakeOneSprite('FireSmoke1', _MTTX_RADIXEPCSHELL, nil, 8, 7, false, false, 'A');
   MakeOneSprite('FireSmoke2', _MTTX_RADIXEPCSHELL, nil, 8, 7, false, false, 'B');
   MakeOneSprite('FireSmoke3', _MTTX_RADIXEPCSHELL, nil, 7, 7, false, false, 'C');
+                                                   
+  // MT_RADIXTORPEDO
+  MakeRotatingSprite16('Seeker', _MTTX_RADIXTORPEDO, 1, nil, 49, 17, false, false);
 
   bmp := TRadixBitmap.Create;
 
