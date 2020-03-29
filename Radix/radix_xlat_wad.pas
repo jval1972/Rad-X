@@ -1710,10 +1710,10 @@ begin
   // Radix things without doom editor number (runtime)
   // MT_RADIXPLASMA
   MakeNonRotatingSprite('Plasma', _MTTX_RADIXPLASMA, 3, nil, 21, 24, false, false);
-  MakeOneSprite('PlasmaPuf1', _MTTX_RADIXPLASMA, nil, 16, 16, false, false, 'D');
-  MakeOneSprite('PlasmaPuf2', _MTTX_RADIXPLASMA, nil, 12, 12, false, false, 'E');
-  MakeOneSprite('PlasmaPuf3', _MTTX_RADIXPLASMA, nil, 9, 11, false, false, 'F');
-  MakeOneSprite('NeutronCannonPuff1', _MTTX_RADIXPLASMA, nil, 13, 12, false, false, 'G');
+  MakeOneSprite('NeutronCannonPuff1', _MTTX_RADIXPLASMA, nil, 13, 12, false, false, 'D');
+  MakeOneSprite('PlasmaPuf1', _MTTX_RADIXPLASMA, nil, 16, 16, false, false, 'E');
+  MakeOneSprite('PlasmaPuf2', _MTTX_RADIXPLASMA, nil, 12, 12, false, false, 'F');
+  MakeOneSprite('PlasmaPuf3', _MTTX_RADIXPLASMA, nil, 9, 11, false, false, 'G');
 
   bmp := TRadixBitmap.Create;
 
