@@ -341,6 +341,8 @@ const
   MF3_EX_CUSTOMPICKUP = 8;
   // No max move
   MF3_EX_NOMAXMOVE = 16;
+  // No Crush
+  MF3_EX_NOCRASH = 32;
 
 type
 // Map Object definition.
