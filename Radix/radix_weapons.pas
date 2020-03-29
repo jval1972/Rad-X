@@ -48,6 +48,8 @@ procedure A_FireRadixPlasma(player: Pplayer_t; psp: Ppspdef_t);
 
 procedure A_FireRadixStandardEPC(player: Pplayer_t; psp: Ppspdef_t);
 
+procedure A_FireRadixEnhancedEPC(player: Pplayer_t; psp: Ppspdef_t);
+
 implementation
 
 uses
@@ -185,6 +187,12 @@ begin
   weaponinfo[Ord(wp_enchancedepc)].downstate := slower;
   weaponinfo[Ord(wp_enchancedepc)].readystate := sready;
   weaponinfo[Ord(wp_enchancedepc)].flashstate := sflash;
+  st := RX_NewWeaponState(2, @A_FireRadixEnhancedEPC);
+  weaponinfo[Ord(wp_enchancedepc)].atkstate := st;
+  st2 := RX_NewWeaponState(2, @A_FireRadixEnhancedEPC);
+  states[st].nextstate := statenum_t(st2);
+  states[st2].nextstate := statenum_t(RX_NewWeaponState(8, @A_Refire));
+  states[Ord(states[st2].nextstate)].nextstate := statenum_t(sready);
 
   get_def_weapon_states;
   weaponinfo[Ord(wp_superepc)].upstate := sraise;
@@ -362,6 +370,22 @@ const
 procedure A_FireRadixStandardEPC(player: Pplayer_t; psp: Ppspdef_t);
 begin
   P_EPCFire(player, @standardEPCtbl, 2, 1);
+end;
+
+//
+// A_FireRadixEnhancedEPC
+//
+const
+  enchancedEPCtbl: array[0..3] of epccoord_t = (
+    (offs: -32 * FRACUNIT; z:  32 * FRACUNIT),
+    (offs:  32 * FRACUNIT; z:  32 * FRACUNIT),
+    (offs: -32 * FRACUNIT; z: -32 * FRACUNIT),
+    (offs:  32 * FRACUNIT; z: -32 * FRACUNIT)
+  );
+
+procedure A_FireRadixEnhancedEPC(player: Pplayer_t; psp: Ppspdef_t);
+begin
+  P_EPCFire(player, @enchancedEPCtbl, 4, 2);
 end;
 
 end.
