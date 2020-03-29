@@ -1715,6 +1715,11 @@ begin
   MakeOneSprite('PlasmaPuf2', _MTTX_RADIXPLASMA, nil, 12, 12, false, false, 'F');
   MakeOneSprite('PlasmaPuf3', _MTTX_RADIXPLASMA, nil, 9, 11, false, false, 'G');
 
+  // MT_RADIXEPCSHELL
+  MakeOneSprite('FireSmoke1', _MTTX_RADIXEPCSHELL, nil, 8, 7, false, false, 'A');
+  MakeOneSprite('FireSmoke2', _MTTX_RADIXEPCSHELL, nil, 8, 7, false, false, 'B');
+  MakeOneSprite('FireSmoke3', _MTTX_RADIXEPCSHELL, nil, 7, 7, false, false, 'C');
+
   bmp := TRadixBitmap.Create;
 
   for j := 0 to numsprinfo - 1 do

@@ -103,6 +103,7 @@ const
   _MTRX_SECONDCOOLAND3 = 66; // second cooland - not animated - spawned on top (obstacle) - SecondCoolant1.bmp
   // Runtime thing ids (without doom editor number)
   _MTTX_RADIXPLASMA = 67;
+  _MTTX_RADIXEPCSHELL = 68;
 
 const
   _DOOM_THING_2_RADIX_ = 1000;
@@ -177,6 +178,7 @@ const
   MT_SECONDCOOLAND2 = _DOOM_THING_2_RADIX_ + _MTRX_SECONDCOOLAND2;
   MT_SECONDCOOLAND3 = _DOOM_THING_2_RADIX_ + _MTRX_SECONDCOOLAND3;
   MT_RADIXPLASMA = _DOOM_THING_2_RADIX_ + _MTTX_RADIXPLASMA;
+  MT_RADIXEPCSHELL = _DOOM_THING_2_RADIX_ + _MTTX_RADIXEPCSHELL;
 
 implementation
 
