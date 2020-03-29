@@ -1747,8 +1747,8 @@ begin
   MakeOneSprite('FireSmoke2', _MTTX_RADIXEPCSHELL, nil, 8, 7, false, false, 'B');
   MakeOneSprite('FireSmoke3', _MTTX_RADIXEPCSHELL, nil, 7, 7, false, false, 'C');
                                                    
-  // MT_RADIXTORPEDO
-  MakeRotatingSprite16('Seeker', _MTTX_RADIXTORPEDO, 1, nil, 49, 17, false, false);
+  // MT_RADIXSEEKINGMISSILE
+  MakeRotatingSprite16('Seeker', _MTTX_RADIXSEEKINGMISSILE, 1, nil, 49, 17, false, false);
 
   bmp := TRadixBitmap.Create;
 

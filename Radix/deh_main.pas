@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 267;
+  DEHNUMACTIONS = 268;
 
 type
   deh_action_t = record
@@ -2804,6 +2804,9 @@ begin
   deh_actions[266].action.acp1 := @A_FireRadixPlasmaSpread;
   deh_actions[266].name := strupper('A_FireRadixPlasmaSpread');
   {$IFDEF DLL}deh_actions[266].decl := 'A_FireRadixPlasmaSpread()';{$ENDIF}
+  deh_actions[267].action.acp1 := @A_FireRadixSeekingMissiles;
+  deh_actions[267].name := strupper('A_FireRadixSeekingMissiles');
+  {$IFDEF DLL}deh_actions[267].decl := 'A_FireRadixSeekingMissiles()';{$ENDIF}
 
 
   deh_strings.numstrings := 0;
