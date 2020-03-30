@@ -319,6 +319,10 @@ procedure A_UnSetWallBounce(actor: Pmobj_t);
 
 procedure A_GlowLight(actor: Pmobj_t);
 
+procedure A_FlipSprite(actor: Pmobj_t);
+
+procedure A_NoFlipSprite(actor: Pmobj_t);
+
 const
   FLOATBOBSIZE = 64;
   FLOATBOBMASK = FLOATBOBSIZE - 1;
@@ -3251,6 +3255,16 @@ begin
     ACL_BLUE: actor.flags_ex := actor.flags_ex or MF_EX_BLUELIGHT;
     ACL_YELLOW: actor.flags_ex := actor.flags_ex or MF_EX_YELLOWLIGHT;
   end;
+end;
+
+procedure A_FlipSprite(actor: Pmobj_t);
+begin
+  actor.flags3_ex := actor.flags3_ex or MF3_EX_FLIPSPRITE;
+end;
+
+procedure A_NoFlipSprite(actor: Pmobj_t);
+begin
+  actor.flags3_ex := actor.flags3_ex and not MF3_EX_FLIPSPRITE;
 end;
 
 end.
