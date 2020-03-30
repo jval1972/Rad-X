@@ -2861,7 +2861,7 @@ var
         act := ''
       else
       begin
-        act := deh_actionname(sst.action);
+        act := DEH_ActionName(sst.action);
         if act = 'NULL' then
           act := ''
         else

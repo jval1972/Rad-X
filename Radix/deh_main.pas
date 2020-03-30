@@ -93,7 +93,7 @@ var
   deh_actions: array[0..DEHNUMACTIONS - 1] of deh_action_t;
   deh_strings: deh_strings_t;
 
-function deh_actionname(action: actionf_t): string;
+function Deh_ActionName(action: actionf_t): string;
 
 implementation
 
@@ -3145,7 +3145,7 @@ begin
   realloc(pointer(deh_strings._array), deh_strings.realnumstrings * SizeOf(deh_string_t), 0);
 end;
 
-function deh_actionname(action: actionf_t): string;
+function Deh_ActionName(action: actionf_t): string;
 var
   i: integer;
 begin
