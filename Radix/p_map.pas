@@ -97,7 +97,7 @@ var
 
   attackrange: fixed_t;
 
-function P_SectorJumpOverhead(const s: Psector_t): integer;
+function P_SectorJumpOverhead(const s: Psector_t; const mo: Pmobj_t): integer;
 
 // Boom compatibility
 procedure P_CreateSecNodeList(thing: Pmobj_t; x, y: fixed_t);
@@ -224,12 +224,10 @@ begin
   // that contains the point.
   // Any contacted lines the step closer together
   // will adjust them.
-  //**tmdropoffz := newsubsec.sector.floorheight;
   tmdropoffz := P_FloorHeight(newsubsec.sector, x, y); // JVAL: Slopes
   tmfloorz := tmdropoffz;
 
-  //**tmceilingz := newsubsec.sector.ceilingheight + P_SectorJumpOverhead(newsubsec.sector);
-  tmceilingz := P_CeilingHeight(newsubsec.sector, x, y) + P_SectorJumpOverhead(newsubsec.sector);  // JVAL: Slopes
+  tmceilingz := P_CeilingHeight(newsubsec.sector, x, y) + P_SectorJumpOverhead(newsubsec.sector, tmthing);  // JVAL: Slopes
   tmfloorpic := newsubsec.sector.floorpic;
 
   inc(validcount);
@@ -734,7 +732,7 @@ begin
   // JVAL 20191209 - Fix 3d floor problems with A_SpawnItem & A_SpawnItemEx
   tmdropoffz := P_3dFloorHeight(newsubsec.sector, x, y, thing.z); // JVAL: Slopes
   tmfloorz := tmdropoffz;
-  tmceilingz := P_3dCeilingHeight(newsubsec.sector, x, y, thing.z) + P_SectorJumpOverhead(newsubsec.sector);
+  tmceilingz := P_3dCeilingHeight(newsubsec.sector, x, y, thing.z) + P_SectorJumpOverhead(newsubsec.sector, tmthing);
 
   inc(validcount);
   numspechit := 0;
@@ -2349,26 +2347,23 @@ end;
 
 
 // JVAL Allow jumps in sectors with sky ceiling.... (7/8/2007)
-function P_SectorJumpOverhead(const s: Psector_t): integer;
+function P_SectorJumpOverhead(const s: Psector_t; const mo: Pmobj_t): integer;
 begin
+  result := 0;
+
   // JVAL: 3d floors
   if s.midsec >= 0 then
   begin
-    result := 0;
-    Exit;
+    if mo = nil then
+      exit
+    else if mo.z < sectors[s.midsec].floorheight then
+      exit;
   end;
 
   if s.ceilingpic = skyflatnum then
-    if not G_NeedsCompatibilityMode then
-    begin
-      // JVAL: 20200107 - No just overhead for version > 205
-      if G_PlayingEngineVersion <= VERSION204 then
-        result := 128 * FRACUNIT
-      else
-        result := 0;
-      exit;
-    end;
-  result := 0;
+    if mo <> nil then
+      if mo.flags and MF_MISSILE <> 0 then
+        result := 128 * FRACUNIT;
 end;
 
 // phares 3/16/98

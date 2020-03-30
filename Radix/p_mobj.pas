@@ -636,7 +636,7 @@ begin
 
   end;
 
-  ceilz := mo.ceilingz + P_SectorJumpOverhead(Psubsector_t(mo.subsector).sector);
+  ceilz := mo.ceilingz + P_SectorJumpOverhead(Psubsector_t(mo.subsector).sector, mo);
 
   if mo.z + mo.height > ceilz then
   begin

@@ -332,9 +332,9 @@ begin
   back := linedef.backsector;
 
   if front.ceilingheight < back.ceilingheight then
-    opentop := front.ceilingheight + P_SectorJumpOverhead(front)
+    opentop := front.ceilingheight + P_SectorJumpOverhead(front, nil)
   else
-    opentop := back.ceilingheight + P_SectorJumpOverhead(back);
+    opentop := back.ceilingheight + P_SectorJumpOverhead(back, nil);
 
   if front.floorheight > back.floorheight then
   begin
@@ -446,9 +446,9 @@ begin
 
 
   if frontceilingheight < backceilingheight then
-    opentop := frontceilingheight + P_SectorJumpOverhead(front)
+    opentop := frontceilingheight + P_SectorJumpOverhead(front, nil)
   else
-    opentop := backceilingheight + P_SectorJumpOverhead(back);
+    opentop := backceilingheight + P_SectorJumpOverhead(back, nil);
 
   if frontfloorheight > backfloorheight then
   begin

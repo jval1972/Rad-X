@@ -101,7 +101,7 @@ begin
       sec := R_PointInSubSector(cx, cy).sector;
       cz := viewz + chasecamera_viewz * FRACUNIT; // JVAL: Slopes
       ceilz := P_3dCeilingHeight(sec, cx, cy, cz) +
-               P_SectorJumpOverhead(sec{$IFDEF HERETIC_OR_HEXEN}, viewplayer{$ENDIF}) - 1 - CAMERARADIOUS; // JVAL: 3d floors
+               P_SectorJumpOverhead(sec, viewplayer.mo) - 1 - CAMERARADIOUS; // JVAL: 3d floors
       if cz > ceilz then
         cz := ceilz
       else
@@ -131,7 +131,7 @@ begin
     if cz < floorz then
       cz := floorz + CAMERARADIOUS; // JVAL: Slopes
     ceilz := P_3dCeilingHeight(sec2, viewx, viewy, cz) +
-             P_SectorJumpOverhead(sec2{$IFDEF HERETIC_OR_HEXEN}, viewplayer{$ENDIF});  // JVAL: Slopes
+             P_SectorJumpOverhead(sec2, viewplayer.mo);  // JVAL: Slopes
     if cz > ceilz then
       cz := ceilz - CAMERARADIOUS;  // JVAL: Slopes
 
