@@ -420,6 +420,7 @@ type
     sprite: integer;
     frame: integer;
     tics: integer;
+    tics2: integer;
     action: actionf_t;
     nextstate: statenum_t;
     misc1: integer;

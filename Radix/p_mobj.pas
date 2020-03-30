@@ -47,6 +47,8 @@ uses
   info_h,
   m_fixed;
 
+function P_TicsFromState(const st: Pstate_t): integer;
+
 function P_SetMobjState(mobj: Pmobj_t; state: statenum_t): boolean;
 
 procedure P_ExplodeMissile(mo: Pmobj_t);
@@ -148,6 +150,28 @@ uses
   info_rnd,
   info_common;
 
+function P_TicsFromState(const st: Pstate_t): integer;
+begin
+  if st.flags_ex and MF_EX_STATE_RANDOM_SELECT <> 0 then
+  begin
+    if P_Random < 128 then
+      result := st.tics
+    else
+      result := st.tics2;
+  end
+  else if st.flags_ex and MF_EX_STATE_RANDOM_RANGE <> 0 then
+  begin
+    if st.tics2 > st.tics then
+      result := st.tics + P_Random mod (st.tics2 - st.tics + 1)
+    else if st.tics2 < st.tics then
+      result := st.tics + P_Random mod (st.tics - st.tics2 + 1)
+    else
+      result := st.tics;
+  end
+  else
+    result := st.tics;
+end;
+
 // From Chocolate-Doom
 // Use a heuristic approach to detect infinite state cycles: Count the number
 // of times the loop in P_SetMobjState() executes and exit with an error once
@@ -186,7 +210,7 @@ begin
     st := @states[Ord(state)];
 
     mobj.state := st;
-    mobj.tics := st.tics;
+    mobj.tics := P_TicsFromState(st);
     mobj.sprite := st.sprite;
     mobj.frame := st.frame;
 
@@ -892,7 +916,7 @@ begin
   mobj.state := st;
   mobj.prevstate := st;
   mobj.validcount := validcount;
-  mobj.tics := st.tics;
+  mobj.tics := P_TicsFromState(st);
   mobj.sprite := st.sprite;
   mobj.frame := st.frame;
   mobj.touching_sectorlist := nil; // NULL head of sector list // phares 3/13/98

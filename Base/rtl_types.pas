@@ -56,6 +56,7 @@ type
     sprite: string;
     frame: integer;
     tics: integer;
+    tics2: integer;
     action: string;
     nextstate: integer;
     misc1: integer;
