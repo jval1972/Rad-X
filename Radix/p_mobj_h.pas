@@ -346,6 +346,8 @@ const
   MF3_EX_NOMAXMOVE = 16;
   // No Crush
   MF3_EX_NOCRASH = 32;
+  // Flip sprite
+  MF3_EX_FLIPSPRITE = 64;
 
 type
 // Map Object definition.

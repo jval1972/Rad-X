@@ -1612,7 +1612,7 @@ begin
     end;
   end;
 
-  if flip then
+  if flip xor (thing.flags3_ex and MF3_EX_FLIPSPRITE <> 0) then
   begin
     vis.startfrac := spritewidth[lump] - 1;
     vis.xiscale := -iscale;
