@@ -1342,6 +1342,11 @@ type
 function TRadixToWADConverter.GenerateSprites: boolean;
 const
   MAX_SPR_INFO = 1024;
+  NUMEXTRASPRITENAMES = 4;
+const
+  SPREXTRANAMES: array[0..NUMEXTRASPRITENAMES - 1] of string[4] = (
+    'EXPB', 'EXPS', 'SMOB', 'SMOS'
+  );
 var
   position: integer;
   bstart: integer;
@@ -1379,10 +1384,12 @@ var
 
   function get_sprite_name(const ids: integer): string;
   begin
-    if ids < 67 then
+    if ids <= _MTRX_RADIXMAXEDITORTHING then
       result := 'XR' + IntToStrzFill(2, ids)
-    else if ids < 1000 then
+    else if ids < _DOOM_THING_2_RADIX_ then
       result := 'X' + IntToStrzFill(3, ids)
+    else if ids < _DOOM_THING_2_RADIX_ + NUMEXTRASPRITENAMES then
+      result := SPREXTRANAMES[ids - _DOOM_THING_2_RADIX_]
     else
       result := IntToStrzFill(4, ids)
   end;
@@ -1746,9 +1753,18 @@ begin
   MakeOneSprite('FireSmoke1', _MTTX_RADIXEPCSHELL, nil, 8, 7, false, false, 'A');
   MakeOneSprite('FireSmoke2', _MTTX_RADIXEPCSHELL, nil, 8, 7, false, false, 'B');
   MakeOneSprite('FireSmoke3', _MTTX_RADIXEPCSHELL, nil, 7, 7, false, false, 'C');
-                                                   
+
   // MT_RADIXSEEKINGMISSILE
   MakeRotatingSprite16('Seeker', _MTTX_RADIXSEEKINGMISSILE, 1, nil, 49, 17, false, false);
+
+  // Radix sprites shared between objects
+  MakeNonRotatingSprite('10FrameExplosion', _DOOM_THING_2_RADIX_ + 0, 10, nil, 49, 46, false, false);
+  MakeNonRotatingSprite('SmallXplode', _DOOM_THING_2_RADIX_ + 1, 5, nil, 26, 21, false, false);
+  MakeNonRotatingSprite('RisingSmoke', _DOOM_THING_2_RADIX_ + 2, 10, nil, 75, 62, false, false);
+  MakeOneSprite('BurnerSmoke1', _DOOM_THING_2_RADIX_ + 3, nil, 8, 7, false, false, 'A');
+  MakeOneSprite('BurnerSmoke2', _DOOM_THING_2_RADIX_ + 3, nil, 8, 7, false, false, 'B');
+  MakeOneSprite('BurnerSmoke3', _DOOM_THING_2_RADIX_ + 3, nil, 7, 7, false, false, 'C');
+
 
   bmp := TRadixBitmap.Create;
 

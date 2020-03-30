@@ -101,6 +101,7 @@ const
   _MTRX_LIFT = 64; // lift - shootable (vehicle) - Lift1.bmp
   _MTRX_SECONDCOOLAND2 = 65; // second cooland - not animated (obstacle) - SecondCoolant1.bmp
   _MTRX_SECONDCOOLAND3 = 66; // second cooland - not animated - spawned on top (obstacle) - SecondCoolant1.bmp
+  _MTRX_RADIXMAXEDITORTHING = _MTRX_SECONDCOOLAND3; // Maximum thing id in radix maps
   // Runtime thing ids (without doom editor number)
   _MTTX_RADIXPLASMA = 67;
   _MTTX_RADIXEPCSHELL = 68;
