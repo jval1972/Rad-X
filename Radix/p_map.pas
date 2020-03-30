@@ -368,6 +368,8 @@ end;
 
 // JVAL: Slopes
 function PIT_CheckLineTM(ld: Pline_t): boolean;
+var
+  docheckbox: boolean;
 begin
   if (tmbbox[BOXRIGHT] <= ld.bbox[BOXLEFT]) or
      (tmbbox[BOXLEFT] >= ld.bbox[BOXRIGHT]) or
@@ -378,11 +380,18 @@ begin
     exit;
   end;
 
-  if P_BoxOnLineSide(@tmbbox, ld) <> -1 then
-  begin
-    result := true;
-    exit;
-  end;
+  // JVAL: 20200330 - Do not check P_BoxOnLineSide() for fast missiles
+  if tmthing.flags and MF_MISSILE <> 0 then
+    docheckbox := (tmthing.momx <= MAXMOVE) and (tmthing.momy <= MAXMOVE)
+  else
+    docheckbox := true;
+
+  if docheckbox then
+    if P_BoxOnLineSide(@tmbbox, ld) <> -1 then
+    begin
+      result := true;
+      exit;
+    end;
 
   // A line has been hit
 
@@ -755,10 +764,10 @@ begin
       end;
 
   // check lines
-  xl := MapBlockInt(tmbbox[BOXLEFT] - bmaporgx);
-  xh := MapBlockInt(tmbbox[BOXRIGHT] - bmaporgx);
-  yl := MapBlockInt(tmbbox[BOXBOTTOM] - bmaporgy);
-  yh := MapBlockInt(tmbbox[BOXTOP] - bmaporgy);
+  xl := MapBlockInt(tmbbox[BOXLEFT] - bmaporgx - MAXRADIUS);
+  xh := MapBlockInt(tmbbox[BOXRIGHT] - bmaporgx + MAXRADIUS);
+  yl := MapBlockInt(tmbbox[BOXBOTTOM] - bmaporgy - MAXRADIUS);
+  yh := MapBlockInt(tmbbox[BOXTOP] - bmaporgy + MAXRADIUS);
 
   // JVAL: Slopes
   if G_PlayingEngineVersion >= VERSION122 then
