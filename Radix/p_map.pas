@@ -99,6 +99,8 @@ var
 
 function P_SectorJumpOverhead(const s: Psector_t; const mo: Pmobj_t): integer;
 
+function P_SectorJumpUnderhead(const s: Psector_t; const mo: Pmobj_t): integer;
+
 // Boom compatibility
 procedure P_CreateSecNodeList(thing: Pmobj_t; x, y: fixed_t);
 
@@ -225,7 +227,7 @@ begin
   // Any contacted lines the step closer together
   // will adjust them.
   tmdropoffz := P_FloorHeight(newsubsec.sector, x, y); // JVAL: Slopes
-  tmfloorz := tmdropoffz;
+  tmfloorz := tmdropoffz - P_SectorJumpUnderhead(newsubsec.sector, tmthing);
 
   tmceilingz := P_CeilingHeight(newsubsec.sector, x, y) + P_SectorJumpOverhead(newsubsec.sector, tmthing);  // JVAL: Slopes
   tmfloorpic := newsubsec.sector.floorpic;
@@ -730,7 +732,7 @@ begin
   // Any contacted lines the step closer together
   // will adjust them.
   // JVAL 20191209 - Fix 3d floor problems with A_SpawnItem & A_SpawnItemEx
-  tmdropoffz := P_3dFloorHeight(newsubsec.sector, x, y, thing.z); // JVAL: Slopes
+  tmdropoffz := P_3dFloorHeight(newsubsec.sector, x, y, thing.z) - P_SectorJumpUnderhead(newsubsec.sector, tmthing); // JVAL: Slopes
   tmfloorz := tmdropoffz;
   tmceilingz := P_3dCeilingHeight(newsubsec.sector, x, y, thing.z) + P_SectorJumpOverhead(newsubsec.sector, tmthing);
 
@@ -2361,6 +2363,25 @@ begin
   end;
 
   if s.ceilingpic = skyflatnum then
+    if mo <> nil then
+      if mo.flags and MF_MISSILE <> 0 then
+        result := 128 * FRACUNIT;
+end;
+
+function P_SectorJumpUnderhead(const s: Psector_t; const mo: Pmobj_t): integer;
+begin
+  result := 0;
+
+  // JVAL: 3d floors
+  if s.midsec >= 0 then
+  begin
+    if mo = nil then
+      exit
+    else if mo.z >= sectors[s.midsec].ceilingheight then
+      exit;
+  end;
+
+  if s.floorpic = skyflatnum then
     if mo <> nil then
       if mo.flags and MF_MISSILE <> 0 then
         result := 128 * FRACUNIT;

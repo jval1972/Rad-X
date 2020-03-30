@@ -106,7 +106,7 @@ begin
         cz := ceilz
       else
       begin
-        floorz := P_3dFloorHeight(sec, cx, cy, cz) + CAMERARADIOUS; // JVAL: Slopes
+        floorz := P_3dFloorHeight(sec, cx, cy, cz) + CAMERARADIOUS - P_SectorJumpUnderhead(sec, viewplayer.mo); // JVAL: Slopes
         if cz < floorz then
           cz := floorz
       end;
@@ -127,7 +127,7 @@ begin
     viewy := cy;
 
     sec2 := R_PointInSubsector(viewx, viewy).sector;
-    floorz := P_3dFloorHeight(sec2, viewx, viewy, cz);  // JVAL: Slopes
+    floorz := P_3dFloorHeight(sec2, viewx, viewy, cz) - P_SectorJumpUnderhead(sec2, viewplayer.mo);  // JVAL: Slopes
     if cz < floorz then
       cz := floorz + CAMERARADIOUS; // JVAL: Slopes
     ceilz := P_3dCeilingHeight(sec2, viewx, viewy, cz) +

@@ -473,6 +473,7 @@ var
   correct_lost_soul_bounce: Boolean; // JVAL: From Chocolate DOOM
   ladderticks: integer;
   player: Pplayer_t;
+  sec: Psector_t;
 begin
   ladderticks := 0;
   player := Pplayer_t(mo.player);
@@ -523,12 +524,13 @@ begin
     end;
   end;
 
+  sec := Psubsector_t(mo.subsector).sector;
   // clip movement
-  if mo.z <= mo.floorz then
+  if mo.z <= mo.floorz - P_SectorJumpUnderhead(sec, mo) then
   begin
     // hit the floor
 
-    if mo.flags3_ex and MF3_EX_FLOORBOUNCE <> 0 then
+    if (mo.flags3_ex and MF3_EX_FLOORBOUNCE <> 0) and (sec.floorpic <> skyflatnum) then
     begin
       // villsa [STRIFE] affect reactiontime
       // momz is also shifted by 1
@@ -636,14 +638,14 @@ begin
 
   end;
 
-  ceilz := mo.ceilingz + P_SectorJumpOverhead(Psubsector_t(mo.subsector).sector, mo);
+  ceilz := mo.ceilingz + P_SectorJumpOverhead(sec, mo);
 
   if mo.z + mo.height > ceilz then
   begin
     // hit the ceiling
     if mo.momz > 0 then
     begin
-      if mo.flags3_ex and MF3_EX_CEILINGBOUNCE <> 0 then
+      if (mo.flags3_ex and MF3_EX_CEILINGBOUNCE <> 0) and (sec.ceilingpic <> skyflatnum) then
         mo.momz := -mo.momz div 2
       else
         mo.momz := 0;

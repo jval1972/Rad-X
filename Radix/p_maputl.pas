@@ -338,13 +338,13 @@ begin
 
   if front.floorheight > back.floorheight then
   begin
-    openbottom := front.floorheight;
+    openbottom := front.floorheight - P_SectorJumpUnderhead(front, nil);
     lowfloor := back.floorheight;
     tmfloorpic := front.floorpic;
   end
   else
   begin
-    openbottom := back.floorheight;
+    openbottom := back.floorheight - P_SectorJumpUnderhead(back, nil);;
     lowfloor := front.floorheight;
     tmfloorpic := back.floorpic;
   end;
@@ -452,13 +452,13 @@ begin
 
   if frontfloorheight > backfloorheight then
   begin
-    openbottom := frontfloorheight;
+    openbottom := frontfloorheight - P_SectorJumpUnderhead(front, nil);;
     lowfloor := backfloorheight;
     tmfloorpic := front.floorpic;
   end
   else
   begin
-    openbottom := backfloorheight;
+    openbottom := backfloorheight - P_SectorJumpUnderhead(back, nil);;
     lowfloor := frontfloorheight;
     tmfloorpic := back.floorpic;
   end;

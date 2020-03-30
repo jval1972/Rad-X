@@ -312,9 +312,9 @@ begin
 
     // because of ceiling height differences
     if front_floorheight > back_floorheight then
-      openbottom := front_floorheight
+      openbottom := front_floorheight - P_SectorJumpUnderhead(front, nil)
     else
-      openbottom := back_floorheight;
+      openbottom := back_floorheight - P_SectorJumpUnderhead(back, nil);
 
     // quick test for totally closed doors
     if openbottom >= opentop then
