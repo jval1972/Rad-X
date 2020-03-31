@@ -1342,10 +1342,10 @@ type
 function TRadixToWADConverter.GenerateSprites: boolean;
 const
   MAX_SPR_INFO = 1024;
-  NUMEXTRASPRITENAMES = 4;
+  NUMEXTRASPRITENAMES = 5;
 const
   SPREXTRANAMES: array[0..NUMEXTRASPRITENAMES - 1] of string[4] = (
-    'EXPB', 'EXPS', 'SMOB', 'SMOS'
+    'EXPB', 'EXPS', 'SMOB', 'SMOS', 'PUFF'
   );
 var
   position: integer;
@@ -1764,6 +1764,9 @@ begin
   MakeOneSprite('BurnerSmoke1', _DOOM_THING_2_RADIX_ + 3, nil, 8, 7, false, false, 'A');
   MakeOneSprite('BurnerSmoke2', _DOOM_THING_2_RADIX_ + 3, nil, 8, 7, false, false, 'B');
   MakeOneSprite('BurnerSmoke3', _DOOM_THING_2_RADIX_ + 3, nil, 7, 7, false, false, 'C');
+  MakeOneSprite('FireballPuff1', _DOOM_THING_2_RADIX_ + 4, nil, 12, 11, false, false, 'A');
+  MakeOneSprite('FireballPuff2', _DOOM_THING_2_RADIX_ + 4, nil, 12, 11, false, false, 'B');
+  MakeOneSprite('FireballPuff3', _DOOM_THING_2_RADIX_ + 4, nil, 12, 11, false, false, 'C');
 
 
   bmp := TRadixBitmap.Create;
