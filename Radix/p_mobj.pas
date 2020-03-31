@@ -1460,22 +1460,20 @@ end;
 //
 // P_SpawnPuff
 //
+var
+  radixfireballpuff_id: integer = -1;
+
 procedure P_SpawnPuff(x, y, z: fixed_t);
 var
   th: Pmobj_t;
 begin
+  if radixfireballpuff_id < 0 then
+    radixfireballpuff_id := Info_GetMobjNumForName('MT_RADIXFIREBALLPUFF');
+
   z := z + _SHL(P_Random - P_Random, 10);
 
-  th := P_SpawnMobj(x, y, z, Ord(MT_PUFF));
+  th := P_SpawnMobj(x, y, z, radixfireballpuff_id);
   th.momz := FRACUNIT;
-  th.tics := th.tics - (P_Random and 3);
-
-  if th.tics < 1 then
-    th.tics := 1;
-
-  // don't make punches spark on the wall
-  if attackrange = MELEERANGE then
-    P_SetMobjState(th, S_PUFF3);
 end;
 
 //
