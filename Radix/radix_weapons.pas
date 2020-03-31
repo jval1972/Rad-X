@@ -175,7 +175,7 @@ begin
   weaponinfo[Ord(wp_seekingmissiles)].downstate := slower;
   weaponinfo[Ord(wp_seekingmissiles)].readystate := sready;
   weaponinfo[Ord(wp_seekingmissiles)].flashstate := sflash;
-  st := RX_NewWeaponState(25, @A_FireRadixSeekingMissiles);
+  st := RX_NewWeaponState(20, @A_FireRadixSeekingMissiles);
   weaponinfo[Ord(wp_seekingmissiles)].atkstate := st;
   states[st].nextstate := statenum_t(RX_NewWeaponState(25, @A_Refire));
   states[Ord(states[st].nextstate)].nextstate := statenum_t(sready);
