@@ -1882,6 +1882,9 @@ begin
 
   printf('SC_Init: Initializing script engine.'#13#10);
   SC_Init;
+
+  SUC_Progress(42);
+
   // JVAL: PascalScript
   printf('PS_Init: Initializing pascal script compiler.'#13#10);
   PS_Init;
@@ -1900,7 +1903,7 @@ begin
     SC_ParseActordefLumps;
   end;
 
-  SUC_Progress(45);
+  SUC_Progress(46);
 
   if M_CheckParm('-nowaddehacked') = 0 then
     if not DEH_ParseLumpName('DEHACKED') then
