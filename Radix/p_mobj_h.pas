@@ -348,6 +348,8 @@ const
   MF3_EX_NOCRASH = 32;
   // Flip sprite
   MF3_EX_FLIPSPRITE = 64;
+  // Not blocked by sky floor or ceiling
+  MF3_EX_THRUSKY = 128;
 
 type
 // Map Object definition.
