@@ -1768,6 +1768,8 @@ begin
   MakeOneSprite('FireballPuff2', _DOOM_THING_2_RADIX_ + 4, nil, 12, 11, false, false, 'B');
   MakeOneSprite('FireballPuff3', _DOOM_THING_2_RADIX_ + 4, nil, 12, 11, false, false, 'C');
 
+  // MT_RADIXNUKE
+  MakeRotatingSprite16('Nuke', _MTTX_RADIXNUKE, 1, nil, 42, 16, false, false);
 
   bmp := TRadixBitmap.Create;
 
