@@ -81,6 +81,7 @@ const
 
 const
   PWF_NEURONCANNON = 1;
+  PWF_NUKE = 1;
 
 type
 //

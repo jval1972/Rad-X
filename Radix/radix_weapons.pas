@@ -58,6 +58,8 @@ procedure A_FireRadixPlasmaSpread(player: Pplayer_t; psp: Ppspdef_t);
 
 procedure A_FireRadixSeekingMissiles(player: Pplayer_t; psp: Ppspdef_t);
 
+procedure A_FireRadixNuke(player: Pplayer_t; psp: Ppspdef_t);
+
 implementation
 
 uses
@@ -185,6 +187,10 @@ begin
   weaponinfo[Ord(wp_nuke)].downstate := slower;
   weaponinfo[Ord(wp_nuke)].readystate := sready;
   weaponinfo[Ord(wp_nuke)].flashstate := sflash;
+  st := RX_NewWeaponState(20, @A_FireRadixNuke);
+  weaponinfo[Ord(wp_nuke)].atkstate := st;
+  states[st].nextstate := statenum_t(RX_NewWeaponState(25, @A_Refire));
+  states[Ord(states[st].nextstate)].nextstate := statenum_t(sready);
 
   get_def_weapon_states;
   weaponinfo[Ord(wp_phasetorpedoes)].upstate := sraise;
@@ -507,6 +513,46 @@ begin
     player.mo, radixseekingmissile_id,
       32 * FRACUNIT, -8 * FRACUNIT
   );
+end;
+
+//
+// A_FireRadixNuke
+//
+var
+  radixnuke_id: integer = -1;
+
+procedure A_FireRadixNuke(player: Pplayer_t; psp: Ppspdef_t);
+var
+  ammoid: integer;
+begin
+  P_SetPsprite(player,
+    Ord(ps_flash), statenum_t(weaponinfo[Ord(player.readyweapon)].flashstate + (P_Random and 1)));
+
+  if radixnuke_id < 0 then
+    radixnuke_id := Info_GetMobjNumForName('MT_RADIXNUKE');
+
+  ammoid := Ord(weaponinfo[Ord(player.readyweapon)].ammo);
+
+  if player.ammo[ammoid] <= 0 then
+    exit;
+  dec(player.ammo[ammoid]);
+
+  if player.weaponflags and PWF_NUKE <> 0 then
+  begin
+    P_SpawnPlayerMissileOffsZ(
+      player.mo, radixnuke_id,
+        -32 * FRACUNIT, -8 * FRACUNIT
+    );
+    player.weaponflags := player.weaponflags and not PWF_NUKE;
+  end
+  else
+  begin
+    P_SpawnPlayerMissileOffsZ(
+      player.mo, radixnuke_id,
+        32 * FRACUNIT, -8 * FRACUNIT
+    );
+    player.weaponflags := player.weaponflags or PWF_NUKE;
+  end;
 end;
 
 end.

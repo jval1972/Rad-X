@@ -1364,14 +1364,14 @@ begin
   // spawn a puff of smoke behind the rocket
   P_SpawnPuff(actor.x, actor.y, actor.z);
 
-  th := P_SpawnMobj(actor.x - actor.momx,
+ { th := P_SpawnMobj(actor.x - actor.momx,
                     actor.y - actor.momy,
                     actor.z, Ord(MT_SMOKE));
 
   th.momz := FRACUNIT;
   th.tics := th.tics - P_Random and 3;
   if th.tics < 1 then
-    th.tics := 1;
+    th.tics := 1;      }
 
   // adjust direction
   dest := actor.tracer;

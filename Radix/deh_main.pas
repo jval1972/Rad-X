@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 270;
+  DEHNUMACTIONS = 271;
 
 type
   deh_action_t = record
@@ -2829,7 +2829,9 @@ begin
   deh_actions[269].action.acp1 := @A_NoFlipSprite;
   deh_actions[269].name := strupper('A_NoFlipSprite');
   {$IFDEF DLL}deh_actions[269].decl := 'A_NoFlipSprite()';{$ENDIF}
-
+  deh_actions[270].action.acp1 := @A_FireRadixNuke;
+  deh_actions[270].name := strupper('A_FireRadixNuke');
+  {$IFDEF DLL}deh_actions[270].decl := 'A_FireRadixNuke()';{$ENDIF}
 
   deh_strings.numstrings := 0;
   deh_strings.realnumstrings := 0;
