@@ -1368,14 +1368,52 @@ type
     on_min_delay: smallint;
     on_max_delay: integer;
     info: packed array[0..4] of radixmultrandlightsinfo_t;
+    // RTL
+    on_off: byte;
+    off_countdown: integer;
+    on_countdown: integer;
   end;
   radixmultrandlightsflicker_p = ^radixmultrandlightsflicker_t;
 
 procedure RA_MultRandLightsFlicker(const action: Pradixaction_t);
 var
   parms: radixmultrandlightsflicker_p;
+  i: integer;
 begin
   parms := radixmultrandlightsflicker_p(@action.params);
+
+  if parms.on_off = 0 then
+  begin
+    if parms.off_countdown <= 0 then
+    begin
+      for i := 0 to 4 do
+      begin
+        if parms.info[i].sector < 0 then
+          Continue;
+        sectors[parms.info[i].sector].lightlevel := RX_LightLevel(parms.info[i].on_light_level);
+      end;
+      parms.on_countdown := P_RandomInRange(parms.on_min_delay, parms.on_max_delay);
+      parms.on_off := 1;
+    end
+    else
+      dec(parms.off_countdown);
+  end
+  else
+  begin
+    if parms.on_countdown <= 0 then
+    begin
+      for i := 0 to 4 do
+      begin
+        if parms.info[i].sector < 0 then
+          Continue;
+        sectors[parms.info[i].sector].lightlevel := RX_LightLevel(parms.info[i].off_light_level);
+      end;
+      parms.off_countdown := P_RandomInRange(parms.off_min_delay, parms.off_max_delay);
+      parms.on_off := 0;
+    end
+    else
+      dec(parms.on_countdown);
+  end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
