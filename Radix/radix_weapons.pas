@@ -73,9 +73,26 @@ uses
   m_rnd,
   m_fixed,
   tables,
+  p_tick,
   p_pspr,
   p_mobj_h,
   p_mobj;
+
+//
+// RX_CheckNextRefire
+// JVAL: 20200401 - Check if weapon can refire
+//
+function RX_CheckNextRefire(const p: Pplayer_t): boolean;
+begin
+  if leveltime - p.lastfire[Ord(p.readyweapon)] < weaponinfo[Ord(p.readyweapon)].refiretics then
+  begin
+    result := false;
+    exit;
+  end;
+
+  p.lastfire[Ord(p.readyweapon)] := leveltime;
+  result := true;
+end;
 
 function RX_NewWeaponState(const tics: integer; const proc: actionf_p2): integer;
 var
@@ -145,9 +162,9 @@ begin
   weaponinfo[Ord(wp_neutroncannons)].downstate := slower;
   weaponinfo[Ord(wp_neutroncannons)].readystate := sready;
   weaponinfo[Ord(wp_neutroncannons)].flashstate := sflash;
-  st := RX_NewWeaponState(5, @A_FireRadixPlasma);
+  st := RX_NewWeaponState(1, @A_FireRadixPlasma);
   weaponinfo[Ord(wp_neutroncannons)].atkstate := st;
-  states[st].nextstate := statenum_t(RX_NewWeaponState(7, @A_Refire));
+  states[st].nextstate := statenum_t(RX_NewWeaponState(weaponinfo[Ord(wp_neutroncannons)].refiretics, @A_Refire));
   states[Ord(states[st].nextstate)].nextstate := statenum_t(sready);
 
   get_def_weapon_states;
@@ -155,11 +172,11 @@ begin
   weaponinfo[Ord(wp_standardepc)].downstate := slower;
   weaponinfo[Ord(wp_standardepc)].readystate := sready;
   weaponinfo[Ord(wp_standardepc)].flashstate := sflash;
-  st := RX_NewWeaponState(2, @A_FireRadixStandardEPC);
+  st := RX_NewWeaponState(1, @A_FireRadixStandardEPC);
   weaponinfo[Ord(wp_standardepc)].atkstate := st;
-  st2 := RX_NewWeaponState(2, @A_FireRadixStandardEPC);
+  st2 := RX_NewWeaponState(1, @A_FireRadixStandardEPC);
   states[st].nextstate := statenum_t(st2);
-  states[st2].nextstate := statenum_t(RX_NewWeaponState(8, @A_Refire));
+  states[st2].nextstate := statenum_t(RX_NewWeaponState(weaponinfo[Ord(wp_standardepc)].refiretics, @A_Refire));
   states[Ord(states[st2].nextstate)].nextstate := statenum_t(sready);
 
   get_def_weapon_states;
@@ -167,9 +184,9 @@ begin
   weaponinfo[Ord(wp_plasmaspreader)].downstate := slower;
   weaponinfo[Ord(wp_plasmaspreader)].readystate := sready;
   weaponinfo[Ord(wp_plasmaspreader)].flashstate := sflash;
-  st := RX_NewWeaponState(5, @A_FireRadixPlasmaSpread);
+  st := RX_NewWeaponState(1, @A_FireRadixPlasmaSpread);
   weaponinfo[Ord(wp_plasmaspreader)].atkstate := st;
-  states[st].nextstate := statenum_t(RX_NewWeaponState(5, @A_Refire));
+  states[st].nextstate := statenum_t(RX_NewWeaponState(weaponinfo[Ord(wp_plasmaspreader)].refiretics, @A_Refire));
   states[Ord(states[st].nextstate)].nextstate := statenum_t(sready);
 
   get_def_weapon_states;
@@ -177,9 +194,9 @@ begin
   weaponinfo[Ord(wp_seekingmissiles)].downstate := slower;
   weaponinfo[Ord(wp_seekingmissiles)].readystate := sready;
   weaponinfo[Ord(wp_seekingmissiles)].flashstate := sflash;
-  st := RX_NewWeaponState(20, @A_FireRadixSeekingMissiles);
+  st := RX_NewWeaponState(1, @A_FireRadixSeekingMissiles);
   weaponinfo[Ord(wp_seekingmissiles)].atkstate := st;
-  states[st].nextstate := statenum_t(RX_NewWeaponState(25, @A_Refire));
+  states[st].nextstate := statenum_t(RX_NewWeaponState(weaponinfo[Ord(wp_seekingmissiles)].refiretics, @A_Refire));
   states[Ord(states[st].nextstate)].nextstate := statenum_t(sready);
 
   get_def_weapon_states;
@@ -187,9 +204,9 @@ begin
   weaponinfo[Ord(wp_nuke)].downstate := slower;
   weaponinfo[Ord(wp_nuke)].readystate := sready;
   weaponinfo[Ord(wp_nuke)].flashstate := sflash;
-  st := RX_NewWeaponState(20, @A_FireRadixNuke);
+  st := RX_NewWeaponState(1, @A_FireRadixNuke);
   weaponinfo[Ord(wp_nuke)].atkstate := st;
-  states[st].nextstate := statenum_t(RX_NewWeaponState(25, @A_Refire));
+  states[st].nextstate := statenum_t(RX_NewWeaponState(weaponinfo[Ord(wp_nuke)].refiretics, @A_Refire));
   states[Ord(states[st].nextstate)].nextstate := statenum_t(sready);
 
   get_def_weapon_states;
@@ -209,11 +226,11 @@ begin
   weaponinfo[Ord(wp_enchancedepc)].downstate := slower;
   weaponinfo[Ord(wp_enchancedepc)].readystate := sready;
   weaponinfo[Ord(wp_enchancedepc)].flashstate := sflash;
-  st := RX_NewWeaponState(2, @A_FireRadixEnhancedEPC);
+  st := RX_NewWeaponState(1, @A_FireRadixEnhancedEPC);
   weaponinfo[Ord(wp_enchancedepc)].atkstate := st;
-  st2 := RX_NewWeaponState(2, @A_FireRadixEnhancedEPC);
+  st2 := RX_NewWeaponState(1, @A_FireRadixEnhancedEPC);
   states[st].nextstate := statenum_t(st2);
-  states[st2].nextstate := statenum_t(RX_NewWeaponState(8, @A_Refire));
+  states[st2].nextstate := statenum_t(RX_NewWeaponState(weaponinfo[Ord(wp_enchancedepc)].refiretics, @A_Refire));
   states[Ord(states[st2].nextstate)].nextstate := statenum_t(sready);
 
   get_def_weapon_states;
@@ -221,11 +238,11 @@ begin
   weaponinfo[Ord(wp_superepc)].downstate := slower;
   weaponinfo[Ord(wp_superepc)].readystate := sready;
   weaponinfo[Ord(wp_superepc)].flashstate := sflash;
-  st := RX_NewWeaponState(4, @A_FireRadixSuperEPC1);
+  st := RX_NewWeaponState(1, @A_FireRadixSuperEPC1);
   weaponinfo[Ord(wp_superepc)].atkstate := st;
-  st2 := RX_NewWeaponState(4, @A_FireRadixSuperEPC2);
+  st2 := RX_NewWeaponState(1, @A_FireRadixSuperEPC2);
   states[st].nextstate := statenum_t(st2);
-  states[st2].nextstate := statenum_t(RX_NewWeaponState(4, @A_Refire));
+  states[st2].nextstate := statenum_t(RX_NewWeaponState(weaponinfo[Ord(wp_superepc)].refiretics, @A_Refire));
   states[Ord(states[st2].nextstate)].nextstate := statenum_t(sready);
 end;
 
@@ -277,6 +294,9 @@ var
 begin
 //  player.ammo[Ord(weaponinfo[Ord(player.readyweapon)].ammo)] :=
 //    player.ammo[Ord(weaponinfo[Ord(player.readyweapon)].ammo)] - 1;
+
+  if not RX_CheckNextRefire(player) then
+    exit;
 
   P_SetPsprite(player,
     Ord(ps_flash), statenum_t(weaponinfo[Ord(player.readyweapon)].flashstate + (P_Random and 1)));
@@ -397,6 +417,9 @@ const
 
 procedure A_FireRadixStandardEPC(player: Pplayer_t; psp: Ppspdef_t);
 begin
+  if not RX_CheckNextRefire(player) then
+    exit;
+
   P_EPCFire(player, @standardEPCtbl, 2, 1);
 end;
 
@@ -413,6 +436,9 @@ const
 
 procedure A_FireRadixEnhancedEPC(player: Pplayer_t; psp: Ppspdef_t);
 begin
+  if not RX_CheckNextRefire(player) then
+    exit;
+
   P_EPCFire(player, @enchancedEPCtbl, 4, 2);
 end;
 
@@ -439,11 +465,17 @@ const
 
 procedure A_FireRadixSuperEPC1(player: Pplayer_t; psp: Ppspdef_t);
 begin
+  if not RX_CheckNextRefire(player) then
+    exit;
+
   P_EPCFire(player, @superEPCtbl1, 6, 3);
 end;
 
 procedure A_FireRadixSuperEPC2(player: Pplayer_t; psp: Ppspdef_t);
 begin
+  if not RX_CheckNextRefire(player) then
+    exit;
+
   P_EPCFire(player, @superEPCtbl2, 6, 3);
 end;
 
@@ -456,6 +488,9 @@ var
 
 procedure A_FireRadixPlasmaSpread(player: Pplayer_t; psp: Ppspdef_t);
 begin
+  if not RX_CheckNextRefire(player) then
+    exit;
+
   P_SetPsprite(player,
     Ord(ps_flash), statenum_t(weaponinfo[Ord(player.readyweapon)].flashstate + (P_Random and 1)));
 
@@ -488,6 +523,9 @@ procedure A_FireRadixSeekingMissiles(player: Pplayer_t; psp: Ppspdef_t);
 var
   ammoid: integer;
 begin
+  if not RX_CheckNextRefire(player) then
+    exit;
+
   P_SetPsprite(player,
     Ord(ps_flash), statenum_t(weaponinfo[Ord(player.readyweapon)].flashstate + (P_Random and 1)));
 
@@ -525,6 +563,9 @@ procedure A_FireRadixNuke(player: Pplayer_t; psp: Ppspdef_t);
 var
   ammoid: integer;
 begin
+  if not RX_CheckNextRefire(player) then
+    exit;
+
   P_SetPsprite(player,
     Ord(ps_flash), statenum_t(weaponinfo[Ord(player.readyweapon)].flashstate + (P_Random and 1)));
 

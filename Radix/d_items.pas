@@ -48,6 +48,7 @@ type
     readystate: integer;
     atkstate: integer;
     flashstate: integer;
+    refiretics: integer;
   end;
   Pweaponinfo_t = ^weaponinfo_t;
 
@@ -68,31 +69,40 @@ var
   weaponinfo: array[0..Ord(NUMWEAPONS) - 1] of weaponinfo_t = (
     // Neutron Cannon
     (ammo: am_noammo;            upstate: Ord(S_PUNCHUP);   downstate: Ord(S_PUNCHDOWN);
-     readystate: Ord(S_PUNCH);   atkstate: Ord(S_PUNCH1);   flashstate: Ord(S_NULL)),
+     readystate: Ord(S_PUNCH);   atkstate: Ord(S_PUNCH1);   flashstate: Ord(S_NULL);
+     refiretics: 5),
     // Standard EPC
     (ammo: am_radixshell;        upstate: Ord(S_PISTOLUP);  downstate: Ord(S_PISTOLDOWN);
-     readystate: Ord(S_PISTOL);  atkstate: Ord(S_PISTOL1);  flashstate: Ord(S_PISTOLFLASH)),
+     readystate: Ord(S_PISTOL);  atkstate: Ord(S_PISTOL1);  flashstate: Ord(S_PISTOLFLASH);
+     refiretics: 2),
     // Plasma Spreader
     (ammo: am_noammo;            upstate: Ord(S_SGUNUP);    downstate: Ord(S_SGUNDOWN);
-     readystate: Ord(S_SGUN);    atkstate: Ord(S_SGUN1);    flashstate: Ord(S_SGUNFLASH1)),
+     readystate: Ord(S_SGUN);    atkstate: Ord(S_SGUN1);    flashstate: Ord(S_SGUNFLASH1);
+     refiretics: 5),
     // Seeking Missiles
     (ammo: am_radixmisl;         upstate: Ord(S_CHAINUP);   downstate: Ord(S_CHAINDOWN);
-     readystate: Ord(S_CHAIN);   atkstate: Ord(S_CHAIN1);   flashstate: Ord(S_CHAINFLASH1)),
+     readystate: Ord(S_CHAIN);   atkstate: Ord(S_CHAIN1);   flashstate: Ord(S_CHAINFLASH1);
+     refiretics: 20),
     // Nuke
     (ammo: am_radixnuke;         upstate: Ord(S_MISSILEUP); downstate: Ord(S_MISSILEDOWN);
-     readystate: Ord(S_MISSILE); atkstate: Ord(S_MISSILE1); flashstate: Ord(S_MISSILEFLASH1)),
+     readystate: Ord(S_MISSILE); atkstate: Ord(S_MISSILE1); flashstate: Ord(S_MISSILEFLASH1);
+     refiretics: 18),
     // Phase Torpedoes
-     (ammo: am_radixtorp;        upstate: Ord(S_PLASMAUP);  downstate: Ord(S_PLASMADOWN);
-      readystate: Ord(S_PLASMA); atkstate: Ord(S_PLASMA1);  flashstate: Ord(S_PLASMAFLASH1)),
+    (ammo: am_radixtorp;        upstate: Ord(S_PLASMAUP);  downstate: Ord(S_PLASMADOWN);
+     readystate: Ord(S_PLASMA); atkstate: Ord(S_PLASMA1);  flashstate: Ord(S_PLASMAFLASH1);
+     refiretics: 7),
     // Gravity Device
-     (ammo: am_noammo;           upstate: Ord(S_BFGUP);     downstate: Ord(S_BFGDOWN);
-      readystate: Ord(S_BFG);    atkstate: Ord(S_BFG1);     flashstate: Ord(S_BFGFLASH1)),
+    (ammo: am_noammo;           upstate: Ord(S_BFGUP);     downstate: Ord(S_BFGDOWN);
+     readystate: Ord(S_BFG);    atkstate: Ord(S_BFG1);     flashstate: Ord(S_BFGFLASH1);
+     refiretics: 7),
     // Enhanced EPC
-     (ammo: am_radixshell;       upstate: Ord(S_SAWUP);     downstate: Ord(S_SAWDOWN);
-      readystate: Ord(S_SAW);    atkstate: Ord(S_SAW1);     flashstate: Ord(S_NULL)),
+    (ammo: am_radixshell;       upstate: Ord(S_SAWUP);     downstate: Ord(S_SAWDOWN);
+     readystate: Ord(S_SAW);    atkstate: Ord(S_SAW1);     flashstate: Ord(S_NULL);
+     refiretics: 2),
     // Super EPC
-     (ammo: am_radixshell;       upstate: Ord(S_DSGUNUP);   downstate: Ord(S_DSGUNDOWN);
-      readystate: Ord(S_DSGUN);  atkstate: Ord(S_DSGUN1);   flashstate: Ord(S_DSGUNFLASH1))
+    (ammo: am_radixshell;       upstate: Ord(S_DSGUNUP);   downstate: Ord(S_DSGUNDOWN);
+     readystate: Ord(S_DSGUN);  atkstate: Ord(S_DSGUN1);   flashstate: Ord(S_DSGUNFLASH1);
+     refiretics: 3)
   );
 
 implementation
