@@ -1507,8 +1507,26 @@ type
 procedure RA_SurfacePowerUp(const action: Pradixaction_t);
 var
   parms: radixsurfacepowerup_p;
+  i: integer;
+  sec: integer;
 begin
   parms := radixsurfacepowerup_p(@action.params);
+
+  if leveltime and 7 = 0 then
+    for i := 0 to MAXPLAYERS - 1 do
+      if playeringame[i] then
+      begin
+        sec := Psubsector_t(players[i].mo.subsector).sector.iSectorID;
+        if sec = parms.sector_id then
+        begin
+          players[i].armorpoints := players[i].armorpoints + parms.armour_inc;
+          players[i].armorpoints := GetIntegerInRange(players[i].armorpoints, 0, PLAYERMAXARMOR);
+          players[i].shield := players[i].shield + parms.shield_inc;
+          players[i].shield := GetIntegerInRange(players[i].shield, 0, PLAYERMAXSHIELD);
+          players[i].energy := players[i].energy + parms.energy_inc;
+          players[i].energy := GetIntegerInRange(players[i].energy, 0, PLAYERMAXENERGY);
+        end;
+      end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

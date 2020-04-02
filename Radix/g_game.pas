@@ -268,8 +268,10 @@ const
   SAVEVERSIONSIZE = 16;
 
 var
+  PLAYERSPAWNARMOR: integer = 100;
   PLAYERSPAWNSHIELD: integer = 100;
   PLAYERSPAWNENERGY: integer = 100;
+  PLAYERMAXARMOR: integer = 200;
   PLAYERMAXSHIELD: integer = 200;
   PLAYERMAXENERGY: integer = 200;
 
@@ -1250,6 +1252,8 @@ begin
   p.playerstate := PST_LIVE;
   p.health := mobjinfo[Ord(MT_PLAYER)].spawnhealth;
   p.shield := PLAYERSPAWNSHIELD;
+  p.armorpoints := PLAYERSPAWNARMOR;
+  p.armortype := p.armorpoints div 100;
   p.energy := PLAYERSPAWNENERGY;
   p.readyweapon := wp_neutroncannons;
   p.pendingweapon := wp_neutroncannons;

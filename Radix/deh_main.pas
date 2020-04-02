@@ -1292,7 +1292,11 @@ begin
         end;
 
         token1 := strupper(token1);
-        if token1 = 'PLAYERSPAWNSHIELD' then
+        if token1 = 'PLAYERSPAWNARMOR' then
+          PLAYERSPAWNARMOR := plyr_val
+        else if token1 = 'PLAYERMAXARMOR' then
+          PLAYERMAXARMOR := plyr_val
+        else if token1 = 'PLAYERSPAWNSHIELD' then
           PLAYERSPAWNSHIELD := plyr_val
         else if token1 = 'PLAYERSPAWNENERGY' then
           PLAYERSPAWNENERGY := plyr_val
@@ -1744,6 +1748,9 @@ begin
   result.Add('# Player');
   result.Add('');
   result.Add('[PLAYER]');
+
+  result.Add('%s = %d', ['PLAYERSPAWNARMOR', PLAYERSPAWNARMOR]);
+  result.Add('%s = %d', ['PLAYERMAXARMOR', PLAYERMAXARMOR]);
   result.Add('%s = %d', ['PLAYERSPAWNSHIELD', PLAYERSPAWNSHIELD]);
   result.Add('%s = %d', ['PLAYERSPAWNENERGY', PLAYERSPAWNENERGY]);
   result.Add('%s = %d', ['PLAYERMAXSHIELD', PLAYERMAXSHIELD]);
