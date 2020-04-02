@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 271;
+  DEHNUMACTIONS = 272;
 
 type
   deh_action_t = record
@@ -1997,6 +1997,7 @@ begin
   mobj_flags3_ex.Add('MF3_EX_NOCRASH');
   mobj_flags3_ex.Add('MF3_EX_FLIPSPRITE');
   mobj_flags3_ex.Add('MF3_EX_THRUSKY');
+  mobj_flags3_ex.Add('MF3_EX_LIMITBOUNCECONTROL');
 
   mobj_flags4_ex := TDTextList.Create;
 
@@ -2839,6 +2840,9 @@ begin
   deh_actions[270].action.acp1 := @A_FireRadixNuke;
   deh_actions[270].name := strupper('A_FireRadixNuke');
   {$IFDEF DLL}deh_actions[270].decl := 'A_FireRadixNuke()';{$ENDIF}
+  deh_actions[271].action.acp1 := @A_LimitBounceControl;
+  deh_actions[271].name := strupper('A_LimitBounceControl');
+  {$IFDEF DLL}deh_actions[271].decl := 'A_LimitBounceControl()';{$ENDIF}
 
   deh_strings.numstrings := 0;
   deh_strings.realnumstrings := 0;

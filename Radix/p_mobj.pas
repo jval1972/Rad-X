@@ -261,6 +261,17 @@ begin
   A_DeathSound(mo, mo);
 end;
 
+procedure P_ResolveBounceBehaviour(const mo: Pmobj_t);
+begin
+  if mo.flags3_ex and MF3_EX_LIMITBOUNCECONTROL <> 0 then
+  begin
+    if mo.bouncecnt > 0 then
+      dec(mo.bouncecnt);
+    if mo.bouncecnt = 0 then
+      mo.flags3_ex := mo.flags3_ex and not MF3_EX_BOUNCE;
+  end;
+end;
+
 //
 // P_XYMovement
 //
@@ -370,6 +381,8 @@ begin
 
         xmove := 0;
         ymove := 0;
+
+        P_ResolveBounceBehaviour(mo);
       end
       else if mo.flags and MF_MISSILE <> 0 then
       begin
@@ -474,6 +487,7 @@ var
   ladderticks: integer;
   player: Pplayer_t;
   sec: Psector_t;
+  bouncing: boolean;
 begin
   ladderticks := 0;
   player := Pplayer_t(mo.player);
@@ -507,6 +521,8 @@ begin
   else
     mo.z := mo.z + mo.momz;
 
+  bouncing := false;
+
   if (mo.flags and MF_FLOAT <> 0) and (mo.target <> nil) then
   begin
     // float down towards target if too close
@@ -539,7 +555,14 @@ begin
 
       // villsa [STRIFE] get terrain type
       if P_GetThingFloorType(mo) <> FLOOR_SOLID then
+      begin
         mo.flags3_ex := mo.flags3_ex and not MF3_EX_FLOORBOUNCE;
+        mo.bouncecnt := 0;
+      end
+      else
+        P_ResolveBounceBehaviour(mo);
+
+      bouncing := true;
     end;
 
     // Note (id):
@@ -601,7 +624,7 @@ begin
       if (not correct_lost_soul_bounce) and (mo.flags and MF_SKULLFLY <> 0) then
         mo.momz := -mo.momz;
 
-    if (mo.flags and MF_MISSILE <> 0) and (mo.flags and MF_NOCLIP = 0) then
+    if (mo.flags and MF_MISSILE <> 0) and (mo.flags and MF_NOCLIP = 0) and not bouncing then
     begin
       P_ExplodeMissile(mo);
       exit;
@@ -646,9 +669,14 @@ begin
     if mo.momz > 0 then
     begin
       if (mo.flags3_ex and MF3_EX_CEILINGBOUNCE <> 0) and (sec.ceilingpic <> skyflatnum) then
-        mo.momz := -mo.momz div 2
+      begin
+        mo.momz := -mo.momz div 2;
+        P_ResolveBounceBehaviour(mo);
+      end
       else
         mo.momz := 0;
+
+      bouncing := true;
     end;
 
     mo.z := ceilz - mo.height;
@@ -656,7 +684,7 @@ begin
     if mo.flags and MF_SKULLFLY <> 0 then
       mo.momz := -mo.momz; // the skull slammed into something
 
-    if (mo.flags and MF_MISSILE <> 0) and (mo.flags and MF_NOCLIP = 0) then
+    if (mo.flags and MF_MISSILE <> 0) and (mo.flags and MF_NOCLIP = 0) and not bouncing then
     begin
       P_ExplodeMissile(mo);
       exit;

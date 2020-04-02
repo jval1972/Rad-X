@@ -350,6 +350,8 @@ const
   MF3_EX_FLIPSPRITE = 64;
   // Not blocked by sky floor or ceiling
   MF3_EX_THRUSKY = 128;
+  // Limit bounce control
+  MF3_EX_LIMITBOUNCECONTROL = 256;
 
 type
 // Map Object definition.
@@ -480,6 +482,7 @@ type
     shield_set: integer;  // JVAL 20200321 - Shield set for pickable objects
     ammo_inc: array[0..Ord(NUMAMMO) - 1] of integer;  // JVAL 20200321 - Ammo inc for pickable objects
     weapon_inc: array[0..Ord(NUMWEAPONS) - 1] of boolean; // JVAL 20200321 - Weapon pickable objects
+    bouncecnt: integer; // JVAL: 20200402 - Bounce countdown
 
     // version 205
     lightvalidcount: integer;
