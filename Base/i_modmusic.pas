@@ -1126,6 +1126,7 @@ var
   i: integer;
   si: ShortInt;
 begin
+  ismultithread := true;
   while mod_datapointer = nil do
     I_Sleep(10);
 
@@ -1157,6 +1158,7 @@ begin
   if ReturnCode <> 0 then
     I_Error('TModMusicPlayer.LoadModule(): Unable to initialize replay! Error Code = %d', [ReturnCode]);
   SetLength(ModuleData, 0);
+  ismultithread := false;
 end;
 
 var
@@ -1198,6 +1200,7 @@ var
   PWaveHeader: PWaveHdr;
   Idx, Err, CurrentBuffer, SamplesRemaining, InitialSamples, Count: longint;
 begin
+  ismultithread := true;
   { Initialise Wave Format Structure. }
   WaveFormat.wFormatTag := WAVE_FORMAT_PCM;
   WaveFormat.nChannels := NUM_CHANNELS;
@@ -1231,6 +1234,7 @@ begin
   { Initialise Mix Buffer. }
   SetLength(MixBuffer, SAMPLING_FREQ * 2 div 5);
 
+  ismultithread := false;
   { Play Through Once. }
   CurrentBuffer := 0;
   while true do
