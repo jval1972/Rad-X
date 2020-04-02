@@ -708,8 +708,9 @@ begin
 
   if not parms.initialized then
   begin
-    S_StartSound(
-      Pmobj_t(@sec.soundorg),
+    S_AmbientSound(
+      sec.soundorg.x,
+      sec.soundorg.y,
       radixsounds[parms.start_sound].name);
     parms.initialized := true;
   end;
@@ -763,8 +764,9 @@ begin
 
 finish_move:
   P_ChangeSector(sec, true);  // JVAL: 20200313
-  S_StartSound(
-    Pmobj_t(@sec.soundorg),
+  S_AmbientSound(
+    sec.soundorg.x,
+    sec.soundorg.y,
     radixsounds[parms.stop_sound].name);
   parms.initialized := false;
   action.suspend := 1;  // JVAL: 202003 - Disable action
