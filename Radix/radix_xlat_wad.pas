@@ -1771,6 +1771,11 @@ begin
   // MT_RADIXNUKE
   MakeRotatingSprite16('Nuke', _MTTX_RADIXNUKE, 1, nil, 42, 16, false, false);
 
+  // MT_RADIXPHASETORPEDO
+  MakeOneSprite('PhaseTorpedo1', _MTTX_RADIXPHASETORPEDO, nil, 16, 17, false, false, 'A');
+  MakeOneSprite('PhaseTorpedo2', _MTTX_RADIXPHASETORPEDO, nil, 15, 17, false, false, 'B');
+  MakeOneSprite('PhaseTorpedo3', _MTTX_RADIXPHASETORPEDO, nil, 18, 17, false, false, 'C');
+
   bmp := TRadixBitmap.Create;
 
   for j := 0 to numsprinfo - 1 do
