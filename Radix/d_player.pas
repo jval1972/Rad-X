@@ -81,7 +81,8 @@ const
 
 const
   PWF_NEURONCANNON = 1;
-  PWF_NUKE = 1;
+  PWF_NUKE = 2;
+  PWF_PHASETORPEDO = 4;
 
 type
 //

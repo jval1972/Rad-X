@@ -36,6 +36,7 @@ interface
 
 uses
   d_player,
+  p_mobj_h,
   p_pspr_h;
 
 procedure RX_InitWeaponStates;
@@ -60,6 +61,10 @@ procedure A_FireRadixSeekingMissiles(player: Pplayer_t; psp: Ppspdef_t);
 
 procedure A_FireRadixNuke(player: Pplayer_t; psp: Ppspdef_t);
 
+procedure A_FireRadixPhaseTorpedo(player: Pplayer_t; psp: Ppspdef_t);
+
+procedure A_PhaseTorpedoSplit(actor: Pmobj_t);
+
 implementation
 
 uses
@@ -75,7 +80,6 @@ uses
   tables,
   p_tick,
   p_pspr,
-  p_mobj_h,
   p_mobj;
 
 //
@@ -214,6 +218,10 @@ begin
   weaponinfo[Ord(wp_phasetorpedoes)].downstate := slower;
   weaponinfo[Ord(wp_phasetorpedoes)].readystate := sready;
   weaponinfo[Ord(wp_phasetorpedoes)].flashstate := sflash;
+  st := RX_NewWeaponState(1, @A_FireRadixPhaseTorpedo);
+  weaponinfo[Ord(wp_phasetorpedoes)].atkstate := st;
+  states[st].nextstate := statenum_t(RX_NewWeaponState(weaponinfo[Ord(wp_phasetorpedoes)].refiretics, @A_Refire));
+  states[Ord(states[st].nextstate)].nextstate := statenum_t(sready);
 
   get_def_weapon_states;
   weaponinfo[Ord(wp_gravitywave)].upstate := sraise;
@@ -594,6 +602,94 @@ begin
     );
     player.weaponflags := player.weaponflags or PWF_NUKE;
   end;
+end;
+
+//
+// A_FireRadixPhaseTorpedo
+//
+var
+  radixphasetorpedo_id: integer = -1;
+
+procedure A_FireRadixPhaseTorpedo(player: Pplayer_t; psp: Ppspdef_t);
+var
+  ammoid: integer;
+begin
+  if not RX_CheckNextRefire(player) then
+    exit;
+
+  P_SetPsprite(player,
+    Ord(ps_flash), statenum_t(weaponinfo[Ord(player.readyweapon)].flashstate + (P_Random and 1)));
+
+  if radixphasetorpedo_id < 0 then
+    radixphasetorpedo_id := Info_GetMobjNumForName('MT_RADIXPHASETORPEDO');
+
+  ammoid := Ord(weaponinfo[Ord(player.readyweapon)].ammo);
+
+  if player.ammo[ammoid] <= 0 then
+    exit;
+  dec(player.ammo[ammoid]);
+
+  if player.weaponflags and PWF_PHASETORPEDO <> 0 then
+  begin
+    P_SpawnPlayerMissileOffsZ(
+      player.mo, radixphasetorpedo_id,
+        -32 * FRACUNIT, 8 * FRACUNIT
+    );
+    player.weaponflags := player.weaponflags and not PWF_PHASETORPEDO;
+  end
+  else
+  begin
+    P_SpawnPlayerMissileOffsZ(
+      player.mo, radixphasetorpedo_id,
+        32 * FRACUNIT, 8 * FRACUNIT
+    );
+    player.weaponflags := player.weaponflags or PWF_PHASETORPEDO;
+  end;
+end;
+
+procedure A_PhaseTorpedoSplit(actor: Pmobj_t);
+var
+  mo: Pmobj_t;
+  mv: fixed_t;
+  ang: angle_t;
+begin
+  if actor.flags3_ex and MF3_EX_NOPHASETORPEDOSPLIT <> 0 then
+    exit;
+
+  actor.flags3_ex := actor.flags3_ex or MF3_EX_NOPHASETORPEDOSPLIT;
+
+  if radixphasetorpedo_id < 0 then
+    radixphasetorpedo_id := Info_GetMobjNumForName('MT_RADIXPHASETORPEDO');
+
+  mo := P_SpawnMobj(actor.x + actor.momx, actor.y + actor.momy, actor.z + actor.momz, radixphasetorpedo_id);
+  mo.flags3_ex := actor.flags3_ex or MF3_EX_NOPHASETORPEDOSPLIT;
+  mo.target := actor.target;
+  mo.tracer := actor.tracer;
+  mo.momx := actor.momx;
+  mo.momy := actor.momy;
+  mo.momz := actor.momz;
+
+  mv := (4 + P_Random and 1) * FRACUNIT div 4;
+  ang := (actor.angle - ANG90 - ANG5) shr ANGLETOFINESHIFT;
+  mo.momx := mo.momx + FixedMul(mv, finecosine[ang]);
+  mo.momy := mo.momy + FixedMul(mv, finesine[ang]);
+  mo.momz := mo.momz - (4 + P_Random and 1) * FRACUNIT div 16;
+
+  mo := P_SpawnMobj(actor.x + actor.momx, actor.y + actor.momy, actor.z + actor.momz, radixphasetorpedo_id);
+  mo.flags3_ex := actor.flags3_ex or MF3_EX_NOPHASETORPEDOSPLIT;
+  mo.target := actor.target;
+  mo.tracer := actor.tracer;
+  mo.momx := actor.momx;
+  mo.momy := actor.momy;
+  mo.momz := actor.momz;
+
+  mv := (4 + P_Random and 1) * FRACUNIT div 4;
+  ang := (actor.angle + ANG90 + ANG5) shr ANGLETOFINESHIFT;
+  mo.momx := mo.momx + FixedMul(mv, finecosine[ang]);
+  mo.momy := mo.momy + FixedMul(mv, finesine[ang]);
+  mo.momz := mo.momz - (4 + P_Random and 1) * FRACUNIT div 16;
+
+  actor.momz := actor.momz + (4 + P_Random and 1) * FRACUNIT div 16;
 end;
 
 end.

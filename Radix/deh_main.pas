@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 274;
+  DEHNUMACTIONS = 276;
 
 type
   deh_action_t = record
@@ -1999,6 +1999,7 @@ begin
   mobj_flags3_ex.Add('MF3_EX_THRUSKY');
   mobj_flags3_ex.Add('MF3_EX_LIMITBOUNCECONTROL');
   mobj_flags3_ex.Add('MF3_EX_WALLBOUNCEFACTOR');
+  mobj_flags3_ex.Add('MF3_EX_NOPHASETORPEDOSPLIT');
 
   mobj_flags4_ex := TDTextList.Create;
 
@@ -2849,7 +2850,13 @@ begin
   {$IFDEF DLL}deh_actions[272].decl := 'A_WallBounceFactor(factor: float)';{$ENDIF}
   deh_actions[273].action.acp1 := @A_DefWallBounceFactor;
   deh_actions[273].name := strupper('A_DefWallBounceFactor');
-  {$IFDEF DLL}deh_actions[273].decl := 'A_DefWallBounceFactor';{$ENDIF}
+  {$IFDEF DLL}deh_actions[273].decl := 'A_DefWallBounceFactor()';{$ENDIF}
+  deh_actions[274].action.acp1 := @A_FireRadixPhaseTorpedo;
+  deh_actions[274].name := strupper('A_FireRadixPhaseTorpedo');
+  {$IFDEF DLL}deh_actions[274].decl := 'A_FireRadixPhaseTorpedo()';{$ENDIF}
+  deh_actions[275].action.acp1 := @A_PhaseTorpedoSplit;
+  deh_actions[275].name := strupper('A_PhaseTorpedoSplit');
+  {$IFDEF DLL}deh_actions[275].decl := 'A_PhaseTorpedoSplit()';{$ENDIF}
 
   deh_strings.numstrings := 0;
   deh_strings.realnumstrings := 0;

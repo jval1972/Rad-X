@@ -354,6 +354,8 @@ const
   MF3_EX_LIMITBOUNCECONTROL = 256;
   // Wall bounce factor
   MF3_EX_WALLBOUNCEFACTOR = 512;
+  // Wall bounce factor
+  MF3_EX_NOPHASETORPEDOSPLIT = 1024;
 
 type
 // Map Object definition.

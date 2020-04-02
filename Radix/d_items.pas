@@ -90,7 +90,7 @@ var
     // Phase Torpedoes
     (ammo: am_radixtorp;        upstate: Ord(S_PLASMAUP);  downstate: Ord(S_PLASMADOWN);
      readystate: Ord(S_PLASMA); atkstate: Ord(S_PLASMA1);  flashstate: Ord(S_PLASMAFLASH1);
-     refiretics: 7),
+     refiretics: 20),
     // Gravity Device
     (ammo: am_noammo;           upstate: Ord(S_BFGUP);     downstate: Ord(S_BFGDOWN);
      readystate: Ord(S_BFG);    atkstate: Ord(S_BFG1);     flashstate: Ord(S_BFGFLASH1);
