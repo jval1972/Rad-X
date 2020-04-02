@@ -173,7 +173,7 @@ var
   f_mx: integer;
 
 {$IFNDEF OPENGL}
-procedure AM_DecodeUV(var xx, yy: integer);
+procedure AM_DecodeUV(var xx, yy: integer; const sz: integer);
 var
   tmpx: fixed_t;
 begin
@@ -189,8 +189,8 @@ begin
 
     xx := tmpx;
   end;
-  yy := 63 - (yy div MAPUNIT) and 63;
-  xx := (xx div MAPUNIT) and 63;
+  yy := sz - (yy div MAPUNIT) and sz;
+  xx := (xx div MAPUNIT) and sz;
 end;
 {$ENDIF}
 
@@ -198,6 +198,8 @@ procedure AM_DrawTexturedTriangle(const lst: seg_ap3; const lump: integer; const
 {$IFNDEF OPENGL}
 var
   data: PByteArray;
+  flat_width: integer;
+  lumpsize: integer;
 
   procedure fillLeftFlatTriangle(v1, v2, v3: drawpoint_t);
   var
@@ -252,8 +254,8 @@ var
         begin
           du := xx;
           dv := yy;
-          AM_DecodeUV(du, dv);
-          drawsegfunc(i, j, data[du + dv * 64], amcolormap);
+          AM_DecodeUV(du, dv, flat_width - 1);
+          drawsegfunc(i, j, data[du + dv * flat_width], amcolormap);
           yy := yy - scale_ftom;
         end;
       end;
@@ -320,8 +322,8 @@ var
         begin
           du := xx;
           dv := yy;
-          AM_DecodeUV(du, dv);
-          drawsegfunc(i, j, data[du + dv * 64], amcolormap);
+          AM_DecodeUV(du, dv, flat_width - 1);
+          drawsegfunc(i, j, data[du + dv * flat_width], amcolormap);
           yy := yy - scale_ftom;
         end;
       end;
@@ -339,6 +341,14 @@ var
   v: Pvertex_t;
   i: integer;
 begin
+  lumpsize := W_LumpLength(lump);
+  if lumpsize = 4096 then
+    flat_width := 64
+  else if lumpsize = 16384 then
+    flat_width := 128
+  else
+    flat_width := 256;
+    
   v := lst[0].v1;
   t[0].x := v.x div FRACTOMAPUNIT;
   t[0].y := v.y div FRACTOMAPUNIT;
