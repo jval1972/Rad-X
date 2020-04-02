@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 272;
+  DEHNUMACTIONS = 274;
 
 type
   deh_action_t = record
@@ -1998,6 +1998,7 @@ begin
   mobj_flags3_ex.Add('MF3_EX_FLIPSPRITE');
   mobj_flags3_ex.Add('MF3_EX_THRUSKY');
   mobj_flags3_ex.Add('MF3_EX_LIMITBOUNCECONTROL');
+  mobj_flags3_ex.Add('MF3_EX_WALLBOUNCEFACTOR');
 
   mobj_flags4_ex := TDTextList.Create;
 
@@ -2842,7 +2843,13 @@ begin
   {$IFDEF DLL}deh_actions[270].decl := 'A_FireRadixNuke()';{$ENDIF}
   deh_actions[271].action.acp1 := @A_LimitBounceControl;
   deh_actions[271].name := strupper('A_LimitBounceControl');
-  {$IFDEF DLL}deh_actions[271].decl := 'A_LimitBounceControl()';{$ENDIF}
+  {$IFDEF DLL}deh_actions[271].decl := 'A_LimitBounceControl(numbounces: integer)';{$ENDIF}
+  deh_actions[272].action.acp1 := @A_WallBounceFactor;
+  deh_actions[272].name := strupper('A_WallBounceFactor');
+  {$IFDEF DLL}deh_actions[272].decl := 'A_WallBounceFactor(factor: float)';{$ENDIF}
+  deh_actions[273].action.acp1 := @A_DefWallBounceFactor;
+  deh_actions[273].name := strupper('A_DefWallBounceFactor');
+  {$IFDEF DLL}deh_actions[273].decl := 'A_DefWallBounceFactor';{$ENDIF}
 
   deh_strings.numstrings := 0;
   deh_strings.realnumstrings := 0;

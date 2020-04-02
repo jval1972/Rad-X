@@ -325,6 +325,10 @@ procedure A_NoFlipSprite(actor: Pmobj_t);
 
 procedure A_LimitBounceControl(actor: Pmobj_t);
 
+procedure A_WallBounceFactor(actor: Pmobj_t);
+
+procedure A_DefWallBounceFactor(actor: Pmobj_t);
+
 const
   FLOATBOBSIZE = 64;
   FLOATBOBMASK = FLOATBOBSIZE - 1;
@@ -3276,6 +3280,20 @@ begin
 
   actor.flags3_ex := actor.flags3_ex or MF3_EX_LIMITBOUNCECONTROL;
   actor.bouncecnt := actor.state.params.IntVal[0];
+end;
+
+procedure A_WallBounceFactor(actor: Pmobj_t);
+begin
+  if not P_CheckStateParams(actor, 1) then
+    exit;
+
+  actor.flags3_ex := actor.flags3_ex or MF3_EX_WALLBOUNCEFACTOR;
+  actor.wallbouncefactor := actor.state.params.FixedVal[0];
+end;
+
+procedure A_DefWallBounceFactor(actor: Pmobj_t);
+begin
+  actor.flags3_ex := actor.flags3_ex and not MF3_EX_WALLBOUNCEFACTOR;
 end;
 
 end.

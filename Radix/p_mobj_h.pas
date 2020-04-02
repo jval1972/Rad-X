@@ -352,6 +352,8 @@ const
   MF3_EX_THRUSKY = 128;
   // Limit bounce control
   MF3_EX_LIMITBOUNCECONTROL = 256;
+  // Wall bounce factor
+  MF3_EX_WALLBOUNCEFACTOR = 512;
 
 type
 // Map Object definition.
@@ -483,6 +485,7 @@ type
     ammo_inc: array[0..Ord(NUMAMMO) - 1] of integer;  // JVAL 20200321 - Ammo inc for pickable objects
     weapon_inc: array[0..Ord(NUMWEAPONS) - 1] of boolean; // JVAL 20200321 - Weapon pickable objects
     bouncecnt: integer; // JVAL: 20200402 - Bounce countdown
+    wallbouncefactor: fixed_t; // JVAL: 20200402 - Speed modifier after wall bounce
 
     // version 205
     lightvalidcount: integer;

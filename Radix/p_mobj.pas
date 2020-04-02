@@ -371,8 +371,16 @@ begin
       // JVAL: 20200308 - Bounce on walls
       else if mo.flags3_ex and MF3_EX_WALLBOUNCE <> 0 then
       begin
-        mo.momx := mo.momx div 8;
-        mo.momy := mo.momy div 8;
+        if mo.flags3_ex and MF3_EX_WALLBOUNCEFACTOR <> 0 then
+        begin
+          mo.momx := FixedMul(mo.momx, mo.wallbouncefactor);
+          mo.momy := FixedMul(mo.momy, mo.wallbouncefactor);
+        end
+        else
+        begin
+          mo.momx := mo.momx div 2;
+          mo.momy := mo.momy div 2;
+        end;
 
         if P_TryMove(mo, mo.x - xmove, ymove + mo.y) then
           mo.momy := -mo.momy
@@ -383,6 +391,8 @@ begin
         ymove := 0;
 
         P_ResolveBounceBehaviour(mo);
+
+        mo.angle := R_PointToAngle2(0, 0, -mo.momx, -mo.momy);
       end
       else if mo.flags and MF_MISSILE <> 0 then
       begin
