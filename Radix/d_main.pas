@@ -318,8 +318,6 @@ begin
 
   if player <> nil then
     R_RenderPlayerView(player);
-    
-  RX_HudDrawer;
 end;
 
 var
@@ -424,6 +422,7 @@ begin
     if (amstate <> am_only) and (gametic <> 0) then
     begin
       D_RenderPlayerView(@players[displayplayer]);
+      RX_HudDrawer;
       if amstate = am_overlay then
         AM_Drawer;
     end;
@@ -590,6 +589,7 @@ begin
     begin
       R_FillBackScreen; // draw the pattern into the back screen
       D_RenderPlayerView(@players[displayplayer]);
+      RX_HudDrawer;
     end;
   end;
   if gamestate = GS_LEVEL then
