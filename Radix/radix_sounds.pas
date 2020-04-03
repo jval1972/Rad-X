@@ -147,12 +147,16 @@ function S_AmbientSound(const x, y: integer; const sndname: string): Pmobj_t;
 // Returns duration of sound in tics
 function S_RadixSoundDuration(const radix_snd: integer): integer;
 
+procedure A_AmbientSound(actor: Pmobj_t);
+
 implementation
 
 uses
   d_delphi,
   doomdef,
+  m_fixed,
   info_common,
+  p_common,
   p_local,
   p_mobj,
   s_sound,
@@ -282,6 +286,24 @@ begin
     result := S_GetWaveLength(radixsounds[radix_snd].name);
     radixsounds[radix_snd].duration := result;
   end;
+end;
+
+procedure A_AmbientSound(actor: Pmobj_t);
+var
+  dx, dy: fixed_t;
+  snd: string;
+begin
+  if not P_CheckStateParams(actor, 3) then
+    exit;
+
+  dx := actor.state.params.FixedVal[0];
+  dy := actor.state.params.FixedVal[1];
+
+  // JVAL: 20200304 -
+  //  Hack! Allow zero string length sound inside RANDOMPICK to avoid playing the sound :)
+  snd := actor.state.params.StrVal[2];
+  if snd <> '' then
+    S_AmbientSound(actor.x + dx, actor.y + dy, snd);
 end;
 
 end.

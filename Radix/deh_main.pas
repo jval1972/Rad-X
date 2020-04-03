@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 279;
+  DEHNUMACTIONS = 280;
 
 type
   deh_action_t = record
@@ -127,6 +127,7 @@ uses
   p_musinfo,
   radix_messages,
   radix_weapons,
+  radix_sounds,
   r_renderstyle,
   sounds,
   sound_data,
@@ -2872,6 +2873,9 @@ begin
   deh_actions[278].action.acp1 := @A_RandomNoFlipSprite;
   deh_actions[278].name := strupper('A_RandomNoFlipSprite');
   {$IFDEF DLL}deh_actions[278].decl := 'A_RandomNoFlipSprite(chance: integer)';{$ENDIF}
+  deh_actions[279].action.acp1 := @A_AmbientSound;
+  deh_actions[279].name := strupper('A_AmbientSound');
+  {$IFDEF DLL}deh_actions[279].decl := 'A_AmbientSound(x: integer, y: integer, sound: string)';{$ENDIF}
 
   deh_strings.numstrings := 0;
   deh_strings.realnumstrings := 0;
