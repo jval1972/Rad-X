@@ -222,10 +222,14 @@ begin
       P_GiveAmmo(player, ammo, clipammo[Ord(ammo)] * 5)
     else
       P_GiveAmmo(player, ammo, clipammo[Ord(ammo)] * 2);
+    if weapon = wp_gravitywave then
+      player.gravitywave := MAXGRAVITYWAVE;
+
     player.pendingweapon := weapon;
 
     if (player = @players[consoleplayer]) then
       S_StartSound(nil, Ord(sfx_wpnup));
+
     result := false;
     exit;
   end;
