@@ -381,7 +381,8 @@ uses
   sound_data in 'Radix\sound_data.pas',
   radix_intermission in 'Radix\radix_intermission.pas',
   radix_hud in 'Radix\radix_hud.pas',
-  radix_weapons in 'Radix\radix_weapons.pas';
+  radix_weapons in 'Radix\radix_weapons.pas',
+  radix_objects in 'Radix\radix_objects.pas';
 
 var
   Saved8087CW: Word;

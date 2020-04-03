@@ -142,6 +142,7 @@ uses
   radix_map_extra,
   radix_messages,
   radix_logic,
+  radix_objects,
   radix_sounds,
   r_data,
   r_defs,
@@ -1175,8 +1176,17 @@ type
 procedure RA_MassiveExplosion(const action: Pradixaction_t);
 var
   parms: radixmassiveexplosion_p;
+  i: integer;
 begin
   parms := radixmassiveexplosion_p(@action.params);
+
+  if parms.number_of_explosions <= 0 then
+  begin
+    action.suspend := 1;
+    exit;
+  end;
+
+  dec(parms.number_of_explosions)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

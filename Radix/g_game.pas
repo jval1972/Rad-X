@@ -431,6 +431,11 @@ begin
     result := result + PIntegerArray(cmd)[i];
 end;
 
+const
+  PAUSEWAITTIME = 10;
+
+var
+  pausewait: integer;
 //
 // G_BuildTiccmd
 // Builds a ticcmd from all of the available inputs
@@ -746,10 +751,11 @@ begin
   end;
 
   // special buttons
-  if sendpause then
+  if sendpause and (pausewait < I_GetTime) then
   begin
     sendpause := false;
     cmd.buttons := BT_SPECIAL or BTS_PAUSE;
+    pausewait := I_GetTime + PAUSEWAITTIME;
   end;
 
   if sendsave then
