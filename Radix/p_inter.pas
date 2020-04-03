@@ -240,7 +240,15 @@ begin
       gaveammo := P_GiveAmmo(player, ammo, clipammo[Ord(ammo)] * 2);
   end
   else
-    gaveammo := false;
+  begin
+    if weapon = wp_gravitywave then
+    begin
+      player.gravitywave := MAXGRAVITYWAVE;
+      gaveammo := true;
+    end
+    else
+      gaveammo := false;
+  end;
 
   if player.weaponowned[Ord(weapon)] <> 0 then
     gaveweapon := false

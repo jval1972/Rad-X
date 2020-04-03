@@ -274,6 +274,8 @@ var
   PLAYERMAXARMOR: integer = 200;
   PLAYERMAXSHIELD: integer = 200;
   PLAYERMAXENERGY: integer = 200;
+  MAXGRAVITYWAVE: integer = 15;
+  GRAVITYWAVEENERGY: integer = 30;
 
 const
   PLAYERMAXPLASMABOMBS: integer = 99;

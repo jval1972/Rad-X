@@ -65,6 +65,8 @@ procedure A_FireRadixPhaseTorpedo(player: Pplayer_t; psp: Ppspdef_t);
 
 procedure A_PhaseTorpedoSplit(actor: Pmobj_t);
 
+procedure A_FireRadixGravityWave(player: Pplayer_t; psp: Ppspdef_t);
+
 implementation
 
 uses
@@ -228,6 +230,10 @@ begin
   weaponinfo[Ord(wp_gravitywave)].downstate := slower;
   weaponinfo[Ord(wp_gravitywave)].readystate := sready;
   weaponinfo[Ord(wp_gravitywave)].flashstate := sflash;
+  st := RX_NewWeaponState(1, @A_FireRadixGravityWave);
+  weaponinfo[Ord(wp_gravitywave)].atkstate := st;
+  states[st].nextstate := statenum_t(RX_NewWeaponState(weaponinfo[Ord(wp_gravitywave)].refiretics, @A_Refire));
+  states[Ord(states[st].nextstate)].nextstate := statenum_t(sready);
 
   get_def_weapon_states;
   weaponinfo[Ord(wp_enchancedepc)].upstate := sraise;
@@ -690,6 +696,39 @@ begin
   mo.momz := mo.momz - (4 + P_Random and 1) * FRACUNIT div 16;
 
   actor.momz := actor.momz + (4 + P_Random and 1) * FRACUNIT div 16;
+end;
+
+//
+// A_FireRadixGravityWave
+//
+var
+  radixgravitywave_id: integer = -1;
+
+procedure A_FireRadixGravityWave(player: Pplayer_t; psp: Ppspdef_t);
+var
+  i: integer;
+begin
+  if RX_CheckNextRefire(player) then
+  begin
+
+//  P_SetPsprite(player,
+//    Ord(ps_flash), statenum_t(weaponinfo[Ord(player.readyweapon)].flashstate + (P_Random and 1)));
+
+    if (player.gravitywave > 0) and (player.energy >= GRAVITYWAVEENERGY) then
+    begin
+      if radixgravitywave_id < 0 then
+        radixgravitywave_id := Info_GetMobjNumForName('MT_RADIXGRAVITYWAVE');
+
+      dec(player.gravitywave);
+//      player.energy := player.energy - GRAVITYWAVEENERGY;
+      P_SpawnPlayerMissileOffsZ(player.mo, radixgravitywave_id, 0, 0);
+    end;
+  end;
+  
+  if player.gravitywave = 0 then
+    for i := Ord(wp_gravitywave) - 1 downto 0 do
+      if player.weaponowned[i] <> 0 then
+        player.pendingweapon := weapontype_t(i);
 end;
 
 end.

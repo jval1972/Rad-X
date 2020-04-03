@@ -1776,6 +1776,18 @@ begin
   MakeOneSprite('PhaseTorpedo2', _MTTX_RADIXPHASETORPEDO, nil, 15, 17, false, false, 'B');
   MakeOneSprite('PhaseTorpedo3', _MTTX_RADIXPHASETORPEDO, nil, 18, 17, false, false, 'C');
 
+  // MT_RADIXGRAVITYWAVE
+  MakeOneSprite('GravityWave1', _MTTX_RADIXGRAVITYWAVE, nil, 99, 28, false, false, 'A');
+  MakeOneSprite('GravityWave2', _MTTX_RADIXGRAVITYWAVE, nil, 99, 28, false, false, 'B');
+  MakeOneSprite('GravityWave3', _MTTX_RADIXGRAVITYWAVE, nil, 99, 28, false, false, 'C');
+
+  // MT_RADIXGRAVITYWAVEEXPOLOSION
+  MakeOneSprite('GravityWavePuf1', _MTTX_RADIXGRAVITYWAVEEXPOLOSION, nil, 19, 20, false, false, 'A');
+  MakeOneSprite('GravityWavePuf2', _MTTX_RADIXGRAVITYWAVEEXPOLOSION, nil, 19, 20, false, false, 'B');
+  MakeOneSprite('GravityWavePuf3', _MTTX_RADIXGRAVITYWAVEEXPOLOSION, nil, 19, 18, false, false, 'C');
+  MakeOneSprite('GravityWavePuf4', _MTTX_RADIXGRAVITYWAVEEXPOLOSION, nil, 19, 18, false, false, 'D');
+  MakeOneSprite('GravityWavePuf5', _MTTX_RADIXGRAVITYWAVEEXPOLOSION, nil, 11, 15, false, false, 'E');
+
   bmp := TRadixBitmap.Create;
 
   for j := 0 to numsprinfo - 1 do

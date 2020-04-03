@@ -618,6 +618,7 @@ begin
     for i := 0 to Ord(NUMAMMO) - 1 do
       plyr.ammo[i] := plyr.maxammo[i];
   end;
+  plyr.gravitywave := MAXGRAVITYWAVE;
 
   plyr._message := STSTR_FAADDED;
 end;
@@ -649,6 +650,7 @@ begin
     for i := 0 to Ord(NUMAMMO) - 1 do
       plyr.ammo[i] := plyr.maxammo[i];
   end;
+  plyr.gravitywave := MAXGRAVITYWAVE;
 
   for i := 0 to Ord(NUMCARDS) - 1 do
     plyr.cards[i] := true;

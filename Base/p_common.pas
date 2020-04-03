@@ -321,7 +321,11 @@ procedure A_GlowLight(actor: Pmobj_t);
 
 procedure A_FlipSprite(actor: Pmobj_t);
 
+procedure A_RandomFlipSprite(actor: Pmobj_t);
+
 procedure A_NoFlipSprite(actor: Pmobj_t);
+
+procedure A_RandomNoFlipSprite(actor: Pmobj_t);
 
 procedure A_LimitBounceControl(actor: Pmobj_t);
 
@@ -3268,9 +3272,33 @@ begin
   actor.flags3_ex := actor.flags3_ex or MF3_EX_FLIPSPRITE;
 end;
 
+procedure A_RandomFlipSprite(actor: Pmobj_t);
+var
+  chance: integer;
+begin
+  if not P_CheckStateParams(actor, 1, CSP_AT_LEAST) then
+    exit;
+
+  chance := actor.state.params.IntVal[0];
+  if chance < P_Random then
+    actor.flags3_ex := actor.flags3_ex or MF3_EX_FLIPSPRITE;
+end;
+
 procedure A_NoFlipSprite(actor: Pmobj_t);
 begin
   actor.flags3_ex := actor.flags3_ex and not MF3_EX_FLIPSPRITE;
+end;
+
+procedure A_RandomNoFlipSprite(actor: Pmobj_t);
+var
+  chance: integer;
+begin
+  if not P_CheckStateParams(actor, 1, CSP_AT_LEAST) then
+    exit;
+
+  chance := actor.state.params.IntVal[0];
+  if chance < P_Random then
+    actor.flags3_ex := actor.flags3_ex and not MF3_EX_FLIPSPRITE;
 end;
 
 procedure A_LimitBounceControl(actor: Pmobj_t);

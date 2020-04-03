@@ -493,6 +493,10 @@ begin
 
   // Draw plasma balls
   RX_HudDrawPlasmaBall;
+
+  // Gravity wave shots left
+  if hud_player.readyweapon = wp_gravitywave then
+    M_WriteSmallText(55, 200 - STATUSBAR_HEIGHT + 16, IntToStrzFill(2, hud_player.gravitywave), SCN_HUD);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -588,9 +592,13 @@ begin
 
   // Draw power up icons
   RX_HudDrawPowerUpIcons;
-  
+
   // Draw plasma balls
   RX_HudDrawPlasmaBall;
+
+  // Gravity wave shots left
+  if hud_player.readyweapon = wp_gravitywave then
+    M_WriteSmallText(73, 154, IntToStrzFill(2, hud_player.gravitywave), SCN_HUD);
 end;
 
 //

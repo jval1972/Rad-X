@@ -94,7 +94,7 @@ var
     // Gravity Device
     (ammo: am_noammo;           upstate: Ord(S_BFGUP);     downstate: Ord(S_BFGDOWN);
      readystate: Ord(S_BFG);    atkstate: Ord(S_BFG1);     flashstate: Ord(S_BFGFLASH1);
-     refiretics: 7),
+     refiretics: 35),
     // Enhanced EPC
     (ammo: am_radixshell;       upstate: Ord(S_SAWUP);     downstate: Ord(S_SAWDOWN);
      readystate: Ord(S_SAW);    atkstate: Ord(S_SAW1);     flashstate: Ord(S_NULL);

@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 276;
+  DEHNUMACTIONS = 279;
 
 type
   deh_action_t = record
@@ -1306,6 +1306,10 @@ begin
           PLAYERMAXENERGY := plyr_val
         else if token1 = 'PLAYERMAXPLASMABOMBS' then
           PLAYERMAXPLASMABOMBS := plyr_val
+        else if token1 = 'MAXGRAVITYWAVE' then
+          MAXGRAVITYWAVE := plyr_val
+        else if token1 = 'GRAVITYWAVEENERGY' then
+          GRAVITYWAVEENERGY := plyr_val
         else
         begin
           mustnextline := false; // Already got line
@@ -1756,6 +1760,8 @@ begin
   result.Add('%s = %d', ['PLAYERMAXSHIELD', PLAYERMAXSHIELD]);
   result.Add('%s = %d', ['PLAYERMAXENERGY', PLAYERMAXENERGY]);
   result.Add('%s = %d', ['PLAYERMAXPLASMABOMBS', PLAYERMAXPLASMABOMBS]);
+  result.Add('%s = %d', ['MAXGRAVITYWAVE', MAXGRAVITYWAVE]);
+  result.Add('%s = %d', ['GRAVITYWAVEENERGY', GRAVITYWAVEENERGY]);
   result.Add('');
 
   //////////////////////////////////////////////////////////////////////////////
@@ -2857,6 +2863,15 @@ begin
   deh_actions[275].action.acp1 := @A_PhaseTorpedoSplit;
   deh_actions[275].name := strupper('A_PhaseTorpedoSplit');
   {$IFDEF DLL}deh_actions[275].decl := 'A_PhaseTorpedoSplit()';{$ENDIF}
+  deh_actions[276].action.acp1 := @A_FireRadixGravityWave;
+  deh_actions[276].name := strupper('A_FireRadixGravityWave');
+  {$IFDEF DLL}deh_actions[276].decl := 'A_FireRadixGravityWave()';{$ENDIF}
+  deh_actions[277].action.acp1 := @A_RandomFlipSprite;
+  deh_actions[277].name := strupper('A_RandomFlipSprite');
+  {$IFDEF DLL}deh_actions[277].decl := 'A_RandomFlipSprite(chance: integer)';{$ENDIF}
+  deh_actions[278].action.acp1 := @A_RandomNoFlipSprite;
+  deh_actions[278].name := strupper('A_RandomNoFlipSprite');
+  {$IFDEF DLL}deh_actions[278].decl := 'A_RandomNoFlipSprite(chance: integer)';{$ENDIF}
 
   deh_strings.numstrings := 0;
   deh_strings.realnumstrings := 0;
