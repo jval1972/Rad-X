@@ -156,6 +156,8 @@ begin
             else
               AddParam(GLBF_EVALUATE, lst[i]);
           end
+          else
+            AddParam(GLBF_EVALUATE, lst[i]);
         end
         else if (utoken = 'FRANDOM') or (utoken = 'FLOATRANDOM') then
         begin
@@ -169,6 +171,8 @@ begin
             else
               AddParam(GLBF_EVALUATE, lst[i]);
           end
+          else
+            AddParam(GLBF_EVALUATE, lst[i]);
         end
         else if (utoken = 'MAPSTR') or
                 (utoken = 'WORLDSTR') or
