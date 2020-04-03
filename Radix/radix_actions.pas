@@ -220,6 +220,9 @@ begin
   end;
 end;
 
+const
+  MOVINGSURFACETHRESHHOLD = 10;
+
 ////////////////////////////////////////////////////////////////////////////////
 // Sprite type = 1
 type
@@ -258,15 +261,25 @@ begin
   if parms.direction = 1 then // Up
   begin
     dest_height := parms.max_height * FRACUNIT;
-    step := (1 shl parms.speed) * FRACUNIT;
+    if parms.speed > MOVINGSURFACETHRESHHOLD then
+      step := (1 shl MOVINGSURFACETHRESHHOLD) * FRACUNIT
+    else
+      step := (1 shl parms.speed) * FRACUNIT;
   end
   else if parms.direction = $FF then // Down
   begin
     dest_height := parms.min_height * FRACUNIT;
-    step := -(1 shl parms.speed) * FRACUNIT;
+    if parms.speed > MOVINGSURFACETHRESHHOLD then
+      step := -(1 shl MOVINGSURFACETHRESHHOLD) * FRACUNIT
+    else
+      step := -(1 shl parms.speed) * FRACUNIT;
   end
   else
     exit; // ouch
+
+  // JVAL: 20200403 - Avoid interpolation for fast moving sectors
+  if parms.speed > MOVINGSURFACETHRESHHOLD div 2 then
+    sec.renderflags := sec.renderflags or SRF_NO_INTERPOLATE;
 
   case parms.surface_type of
     1: // floor
@@ -718,15 +731,25 @@ begin
   if parms.direction = 1 then // Up
   begin
     dest_height := parms.max_height * FRACUNIT;
-    step := (1 shl parms.speed) * FRACUNIT;
+    if parms.speed > MOVINGSURFACETHRESHHOLD then
+      step := (1 shl MOVINGSURFACETHRESHHOLD) * FRACUNIT
+    else
+      step := (1 shl parms.speed) * FRACUNIT;
   end
   else if parms.direction = $FF then // Down
   begin
     dest_height := parms.min_height * FRACUNIT;
-    step := -(1 shl parms.speed) * FRACUNIT;
+    if parms.speed > MOVINGSURFACETHRESHHOLD then
+      step := -(1 shl MOVINGSURFACETHRESHHOLD) * FRACUNIT
+    else
+      step := -(1 shl parms.speed) * FRACUNIT;
   end
   else
     exit; // ouch
+
+  // JVAL: 20200403 - Avoid interpolation for fast moving sectors
+  if parms.speed > MOVINGSURFACETHRESHHOLD div 2 then
+    sec.renderflags := sec.renderflags or SRF_NO_INTERPOLATE;
 
   case parms.surface_type of
     1: // floor
