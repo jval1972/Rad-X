@@ -11542,8 +11542,8 @@ const // Doom Original mobjinfo
     xdeathstate: Ord(S_PLAY_XDIE1);                               // xdeathstate
     deathsound: Ord(sfx_pldeth);                                  // deathsound
     speed: 0;                                                     // speed
-    radius: 16 * FRACUNIT;                                        // radius
-    height: 56 * FRACUNIT;                                        // height
+    radius: 48 * FRACUNIT;                                        // radius
+    height: 48 * FRACUNIT;                                        // height
     mass: 100;                                                    // mass
     damage: 0;                                                    // damage
     activesound: Ord(sfx_None);                                   // activesound
