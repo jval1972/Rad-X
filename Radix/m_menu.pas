@@ -916,14 +916,14 @@ const
     (text: 'Look center'; pkey: @key_lookcenter),
     (text: 'Look left'; pkey: @key_lookleft),
     (text: 'Look right'; pkey: @key_lookright),
-    (text: 'Fists/Chainsaw'; pkey: @key_weapon0),
-    (text: 'Pistol'; pkey: @key_weapon1),
-    (text: 'Shotgun'; pkey: @key_weapon2),
-    (text: 'Chaingun'; pkey: @key_weapon3),
-    (text: 'Rocket launcher'; pkey: @key_weapon4),
-    (text: 'Plasma gun'; pkey: @key_weapon5),
-    (text: 'BFG 9000'; pkey: @key_weapon6),
-    (text: 'Chainsaw'; pkey: @key_weapon7)
+    (text: 'Neutron Cannon'; pkey: @key_weapon0),
+    (text: 'Standard EPC'; pkey: @key_weapon1),
+    (text: 'Plasma Spreader'; pkey: @key_weapon2),
+    (text: 'Seeking Missiles'; pkey: @key_weapon3),
+    (text: 'Nuke'; pkey: @key_weapon4),
+    (text: 'Phase Torpedoes'; pkey: @key_weapon5),
+    (text: 'Gravity Device'; pkey: @key_weapon6),
+    (text: 'Enhanced EPC'; pkey: @key_weapon7)
   );
 
 var
@@ -1060,14 +1060,14 @@ end;
 
 procedure M_DrawBindings2;
 begin
-  KeyBindingsInfo[Ord(kb_weapon0)].text := 'Fists/Chainsaw';
-  KeyBindingsInfo[Ord(kb_weapon1)].text := 'Pistol';
-  KeyBindingsInfo[Ord(kb_weapon2)].text := 'Shotgun';
-  KeyBindingsInfo[Ord(kb_weapon3)].text := 'Chaingun';
-  KeyBindingsInfo[Ord(kb_weapon4)].text := 'Rocket launcher';
-  KeyBindingsInfo[Ord(kb_weapon5)].text := 'Plasma gun';
-  KeyBindingsInfo[Ord(kb_weapon6)].text := 'BFG 9000';
-  KeyBindingsInfo[Ord(kb_weapon7)].text := 'Chainsaw';
+  KeyBindingsInfo[Ord(kb_weapon0)].text := 'Neutron Cannon';
+  KeyBindingsInfo[Ord(kb_weapon1)].text := 'Standard EPC';
+  KeyBindingsInfo[Ord(kb_weapon2)].text := 'Plasma Spreader';
+  KeyBindingsInfo[Ord(kb_weapon3)].text := 'Seeking Missiles';
+  KeyBindingsInfo[Ord(kb_weapon4)].text := 'Nuke';
+  KeyBindingsInfo[Ord(kb_weapon5)].text := 'Phase Torpedoes';
+  KeyBindingsInfo[Ord(kb_weapon6)].text := 'Gravity Device';
+  KeyBindingsInfo[Ord(kb_weapon7)].text := 'Enhanced EPC';
 
   M_DrawBindings(KeyBindingsDef2, Ord(kb_lookup), Ord(kb_end));
 end;
