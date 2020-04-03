@@ -145,7 +145,7 @@ type
     ammo: array[0..Ord(NUMAMMO) - 1] of integer;
     maxammo: array[0..Ord(NUMAMMO) - 1] of integer;
     lastfire: array[0..Ord(NUMWEAPONS) - 1] of integer; // JVAL: 20200401 - Refire control
-    gravitywave: integer;
+    gravitywave: integer; // JVAL: 20200403 - Number of gravity wave shots
 
     // True if button down last tic.
     attackdown: boolean;

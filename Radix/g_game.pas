@@ -796,6 +796,10 @@ begin
     if playeringame[i] and (players[i].playerstate = PST_DEAD) then
       players[i].playerstate := PST_REBORN;
     ZeroMemory(@players[i].frags, SizeOf(players[i].frags));
+    // JVAL: 20200403 - Clear special radix fields on new level
+    ZeroMemory(@players[i].lastfire, SizeOf(players[i].lastfire));
+    players[i].weaponflags := 0;
+    players[i].scannerjam := false;
   end;
 
   PS_NewMap;
