@@ -136,6 +136,7 @@ uses
   m_rnd,
   m_fixed,
   tables,
+  p_inter,
   p_map,
   p_mobj_h,
   p_mobj,
@@ -1509,14 +1510,72 @@ type
     delta_y: integer;
     delay_length: integer;
     radious_one_third: integer;
+    // RTL
+    delay_cnt: integer;
   end;
   radixhurtplayerexplosion_p = ^radixhurtplayerexplosion_t;
 
 procedure RA_HurtPlayerExplosion(const action: Pradixaction_t);
 var
   parms: radixhurtplayerexplosion_p;
+  x, y, z: fixed_t;
+  x1, y1, z1: fixed_t;
+  mo: Pmobj_t;
+  i: integer;
+  dist, maxdist: fixed_t;
+  damage: integer;
+  maxradius: integer;
 begin
   parms := radixhurtplayerexplosion_p(@action.params);
+
+  if parms.number_of_explosions <= 0 then
+  begin
+    action.suspend := 1;
+    exit;
+  end;
+
+  if parms.delay_cnt <= 0 then
+  begin
+    x1 := RX_RadixX2Doom(parms.x_coord, parms.y_coord) * FRACUNIT;
+    y1 := RX_RadixY2Doom(parms.x_coord, parms.y_coord) * FRACUNIT;
+    z1 := parms.height * FRACUNIT;
+    x := x1 + (2 * (P_Random - P_Random) * parms.radious_one_third) * (FRACUNIT div 256);
+    y := y1 + (2 * (P_Random - P_Random) * parms.radious_one_third) * (FRACUNIT div 256);
+    z := z1 + (2 * (P_Random - P_Random) * parms.radious_one_third) * (FRACUNIT div 256);
+    mo := RX_SpawnRadixBigExplosion(x, y, z);
+    parms.x_coord := parms.x_coord + parms.delta_x;
+    parms.y_coord := parms.y_coord + parms.delta_y;
+    parms.delay_cnt := parms.delay_length;
+    dec(parms.number_of_explosions);
+
+    maxradius := parms.radious_one_third * 3;
+    for i := 0 to MAXPLAYERS - 1 do
+      if playeringame[i] then
+      begin
+        mo := players[i].mo;
+        if mo <> nil then
+        begin
+          maxdist := 0;
+          dist := abs(x - mo.x);
+          if dist > maxdist then
+            maxdist := dist;
+          dist := abs(y - mo.y);
+          if dist > maxdist then
+            maxdist := dist;
+          dist := abs(z - mo.z);
+          if dist > maxdist then
+            maxdist := dist;
+          maxdist := maxdist div FRACUNIT;
+          if maxdist < maxradius then
+          begin
+            damage := parms.hit_points_at_center * (maxradius - maxdist) div maxradius;
+            P_DamageMobj(mo, nil, nil, damage);
+          end;
+        end;
+      end;
+  end
+  else
+    dec(parms.delay_cnt);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
