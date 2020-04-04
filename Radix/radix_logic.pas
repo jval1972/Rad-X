@@ -161,6 +161,7 @@ begin
     39: RA_SecretSprite(action);
     40: RA_BossEyeHandler(action);
     41: RA_VertExplosion(action);
+    42: RA_ChangeFloorOffsets(action);
     43: RA_MassiveLightMovement(action);
   end;
 end;

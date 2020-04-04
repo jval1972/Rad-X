@@ -122,6 +122,8 @@ procedure RA_BossEyeHandler(const action: Pradixaction_t);
 
 procedure RA_VertExplosion(const action: Pradixaction_t);
 
+procedure RA_ChangeFloorOffsets(const action: Pradixaction_t);
+
 procedure RA_MassiveLightMovement(const action: Pradixaction_t);
 
 implementation
@@ -1693,6 +1695,31 @@ begin
   end
   else
     dec(parms.delay_cnt);
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+// Sprite type = 42
+type
+  radixchangeflooroffsets_t = packed record
+    sector: smallint;
+    x_offs: smallint;
+    y_offs: smallint;
+  end;
+  radixchangeflooroffsets_p = ^radixchangeflooroffsets_t;
+
+procedure RA_ChangeFloorOffsets(const action: Pradixaction_t);
+var
+  parms: radixchangeflooroffsets_p;
+  sec: Psector_t;
+begin
+  parms := radixchangeflooroffsets_p(@action.params);
+
+  if parms.sector < 0 then
+    exit;
+
+  sec := @sectors[parms.sector];
+  sec.floor_xoffs := sec.floor_xoffs + parms.x_offs * FRACUNIT;
+  sec.floor_yoffs := sec.floor_yoffs + parms.y_offs * FRACUNIT;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
