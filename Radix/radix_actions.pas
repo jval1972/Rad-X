@@ -122,6 +122,8 @@ procedure RA_BossEyeHandler(const action: Pradixaction_t);
 
 procedure RA_VertExplosion(const action: Pradixaction_t);
 
+procedure RA_MassiveLightMovement(const action: Pradixaction_t);
+
 implementation
 
 uses
@@ -1691,6 +1693,51 @@ begin
   end
   else
     dec(parms.delay_cnt);
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+// Sprite type = 43
+type
+  radixmassivelightmovement_t = packed record
+    on_light_level: smallint;
+    off_light_level: smallint;
+    speed: smallint;
+    the_sectors: packed array[0..40] of smallint;  // Sector can be -1
+    //RTL
+    currsectoridx: integer;
+    countdown: integer;
+  end;
+  radixmassivelightmovement_p = ^radixmassivelightmovement_t;
+
+procedure RA_MassiveLightMovement(const action: Pradixaction_t);
+var
+  parms: radixmassivelightmovement_p;
+  i: integer;
+  secid: integer;
+begin
+  parms := radixmassivelightmovement_p(@action.params);
+
+  if parms.countdown <= 0 then
+    parms.countdown := parms.speed;
+
+  dec(parms.countdown);
+  if parms.countdown <= 0 then
+  begin
+    for i := 0 to 40 do
+    begin
+      secid := parms.the_sectors[i];
+      if secid >= 0 then
+      begin
+        if i = parms.currsectoridx then
+          sectors[secid].lightlevel := RX_LightLevel(parms.on_light_level)
+        else
+          sectors[secid].lightlevel := RX_LightLevel(parms.off_light_level);
+      end;
+    end;
+    inc(parms.currsectoridx);
+    if parms.the_sectors[parms.currsectoridx] < 0 then
+      parms.currsectoridx := 0;
+  end;
 end;
 
 end.
