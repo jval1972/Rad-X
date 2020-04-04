@@ -46,6 +46,7 @@ var
   skyflatnum: integer;
   skytexture: integer;
   skytexturemid: integer;
+  billboardsky: boolean = true;
 
 procedure R_InitSkyMap;
   

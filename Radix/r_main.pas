@@ -270,6 +270,9 @@ var
 // from clipangle to -clipangle.
   xtoviewangle: array[0..MAXWIDTH] of angle_t;
 
+// JVAL: 20200404 - Radix sky does not stretch
+  xtoskyangle: array[0..MAXWIDTH] of angle_t;
+
 //
 // precalculated math tables
 //
@@ -744,6 +747,8 @@ begin              {
   fixedcosine := Pfixed_tArray(@fixedsine[FIXEDANGLES div 4]);
 end;
 
+var
+  oldfocallength: fixed_t = -1;
 //
 // R_InitTextureMapping
 //
@@ -767,6 +772,9 @@ begin
   else
     fov := round(arctan(monitor_relative_aspect) * FINEANGLES / D_PI);
   focallength := FixedDiv(centerxfrac, finetangent[FINEANGLES div 4 + fov div 2]);
+  
+  if focallength = oldfocallength then
+    exit;
 
   for i := 0 to FINEANGLES div 2 - 1 do
   begin
@@ -795,7 +803,9 @@ begin
     an := 0;
     while viewangletox[an] > x do
       inc(an);
-    xtoviewangle[x] := an * ANGLETOFINEUNIT - ANG90;
+    an := an * ANGLETOFINEUNIT;
+    xtoskyangle[x] := an + ANG180;
+    xtoviewangle[x] := an - ANG90;
   end;
 
   // Take out the fencepost cases from viewangletox.

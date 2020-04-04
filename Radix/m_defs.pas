@@ -81,6 +81,7 @@ uses
 {$ENDIF}
   r_camera,
   r_draw,
+  r_sky,
 {$IFNDEF OPENGL}
   r_segs,
 {$ENDIF}  
@@ -437,8 +438,8 @@ const
      defaultbvalue: false;
      _type: tBoolean),
 
-    (name: 'hidedoublicatedbarrels';
-     location: @hidedoublicatedbarrels;
+    (name: 'billboardsky';
+     location: @billboardsky;
      setable: DFS_ALWAYS;
      defaultsvalue: '';
      defaultivalue: 0;

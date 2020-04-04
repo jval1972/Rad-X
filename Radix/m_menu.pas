@@ -152,6 +152,7 @@ uses
 {$ENDIF}
   r_camera,
   r_draw,
+  r_sky,
   t_main,
   vx_voxelsprite,
   v_data,
@@ -561,7 +562,7 @@ type
     od_usefake3d,
 {$ENDIF}
     od_fixstallhack,
-    od_hidedoublicatedbarrels,
+    od_skydrawmode,
     od_autoadjustmissingtextures,
 {$IFNDEF OPENGL}
     od_optimizedcolumnrendering,
@@ -4208,10 +4209,10 @@ begin
 
   inc(pmi);
   pmi.status := 1;
-  pmi.name := '!Hide duplicated barrels';
-  pmi.cmd := 'hidedoublicatedbarrels';
+  pmi.name := '!Billboard sky drawing';
+  pmi.cmd := 'billboardsky';
   pmi.routine := @M_BoolCmd;
-  pmi.pBoolVal := @hidedoublicatedbarrels;
+  pmi.pBoolVal := @billboardsky;
   pmi.alphaKey := 'b';
 
   inc(pmi);

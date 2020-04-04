@@ -879,6 +879,8 @@ begin
       flip := false;
     end;
 
+    flip := not flip; // JVAL: 20200404
+
     if optimizedcolumnrendering then
     begin
       if videomode = vm32bit then
@@ -892,10 +894,16 @@ begin
 
             if dc_yl <= dc_yh then
             begin
-              if flip then
-                angle := (ANGLE_MAX - deltaangle - viewangle - xtoviewangle[x]) div ANGLETOSKYUNIT
+              if billboardsky then
+              begin
+                angle := round(viewangle / $FFFFFFFF * 512 - x * 256 / viewwidth) and 511;
+                if flip then
+                  angle := 512 - angle;
+              end
+              else if flip then
+                angle := (ANGLE_MAX - deltaangle - viewangle - xtoskyangle[x]) div ANGLETOSKYUNIT
               else
-                angle := (deltaangle + viewangle + xtoviewangle[x]) div ANGLETOSKYUNIT;
+                angle := (deltaangle + viewangle + xtoskyangle[x]) div ANGLETOSKYUNIT;
               if detaillevel = DL_NORMAL then
               begin
                 dc_texturemod := 0;
@@ -903,10 +911,14 @@ begin
               end
               else
               begin
-                if flip then
-                  dc_texturemod := (((ANGLE_MAX - deltaangle - viewangle - xtoviewangle[x]) mod ANGLETOSKYUNIT) * DC_HIRESFACTOR) div ANGLETOSKYUNIT
+                if billboardsky then
+                begin
+                  dc_texturemod := 0;
+                end
+                else if flip then
+                  dc_texturemod := (((ANGLE_MAX - deltaangle - viewangle - xtoskyangle[x]) mod ANGLETOSKYUNIT) * DC_HIRESFACTOR) div ANGLETOSKYUNIT
                 else
-                  dc_texturemod := (((deltaangle + viewangle + xtoviewangle[x]) mod ANGLETOSKYUNIT) * DC_HIRESFACTOR) div ANGLETOSKYUNIT;
+                  dc_texturemod := (((deltaangle + viewangle + xtoskyangle[x]) mod ANGLETOSKYUNIT) * DC_HIRESFACTOR) div ANGLETOSKYUNIT;
                 dc_mod := dc_texturemod;
               end;
               dc_x := x;
@@ -930,10 +942,16 @@ begin
 
             if dc_yl <= dc_yh then
             begin
-              if flip then
-                angle := (ANGLE_MAX - deltaangle - viewangle - xtoviewangle[x]) div ANGLETOSKYUNIT
+              if billboardsky then
+              begin
+                angle := round(viewangle / $FFFFFFFF * 512 - x * 256 / viewwidth) and 511;
+                if flip then
+                  angle := 512 - angle;
+              end
+              else if flip then
+                angle := (ANGLE_MAX - deltaangle - viewangle - xtoskyangle[x]) div ANGLETOSKYUNIT
               else
-                angle := (deltaangle + viewangle + xtoviewangle[x]) div ANGLETOSKYUNIT;
+                angle := (deltaangle + viewangle + xtoskyangle[x]) div ANGLETOSKYUNIT;
               dc_x := x;
               dc_source := R_GetColumn(skytexture1, angle);
               // JVAL
@@ -956,10 +974,16 @@ begin
 
           if dc_yl <= dc_yh then
           begin
-            if flip then
-              angle := (ANGLE_MAX - deltaangle - viewangle - xtoviewangle[x]) div ANGLETOSKYUNIT
+            if billboardsky then
+            begin
+              angle := round(viewangle / $FFFFFFFF * 512 - x * 256 / viewwidth) and 511;
+              if flip then
+                angle := 512 - angle;
+            end
+            else if flip then
+              angle := (ANGLE_MAX - deltaangle - viewangle - xtoskyangle[x]) div ANGLETOSKYUNIT
             else
-              angle := (deltaangle + viewangle + xtoviewangle[x]) div ANGLETOSKYUNIT;
+              angle := (deltaangle + viewangle + xtoskyangle[x]) div ANGLETOSKYUNIT;
             if detaillevel <= DL_NORMAL then
             begin
               dc_texturemod := 0;
@@ -967,10 +991,14 @@ begin
             end
             else
             begin
-              if flip then
-                dc_texturemod := (((ANGLE_MAX - deltaangle - deltaangle - viewangle - xtoviewangle[x]) mod ANGLETOSKYUNIT) * DC_HIRESFACTOR) div ANGLETOSKYUNIT
+              if billboardsky then
+              begin
+                dc_texturemod := 0;
+              end
+              else if flip then
+                dc_texturemod := (((ANGLE_MAX - deltaangle - deltaangle - viewangle - xtoskyangle[x]) mod ANGLETOSKYUNIT) * DC_HIRESFACTOR) div ANGLETOSKYUNIT
               else
-                dc_texturemod := (((deltaangle + deltaangle + viewangle + xtoviewangle[x]) mod ANGLETOSKYUNIT) * DC_HIRESFACTOR) div ANGLETOSKYUNIT;
+                dc_texturemod := (((deltaangle + deltaangle + viewangle + xtoskyangle[x]) mod ANGLETOSKYUNIT) * DC_HIRESFACTOR) div ANGLETOSKYUNIT;
               dc_mod := dc_texturemod;
             end;
             dc_x := x;

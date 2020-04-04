@@ -139,9 +139,6 @@ function P_GameValidThing(const doomdnum: integer): boolean;
 var
   useglnodesifavailable: boolean;
 
-var
-  hidedoublicatedbarrels: boolean = true;
-
 implementation
 
 uses
@@ -812,12 +809,6 @@ begin
 end;
 
 
-procedure P_CheckThings;
-begin
-  if hidedoublicatedbarrels then
-    P_DontDrawDuplicateThings(Ord(MT_BARREL));
-end;
-
 //
 // P_LoadThings
 //
@@ -877,8 +868,6 @@ begin
   Z_Free(data);
   if extradata <> nil then
     Z_Free(extradata);
-
-  P_CheckThings;
 end;
 
 //
