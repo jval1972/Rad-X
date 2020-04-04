@@ -1648,14 +1648,49 @@ type
     delay_length: integer; // Value 2-3 inside dat files
     radious_one_third: integer;
     number_of_bitmaps_per: smallint;
+    // RTL
+    delay_cnt: integer;
   end;
   radixvertexplosion_p = ^radixvertexplosion_t;
 
 procedure RA_VertExplosion(const action: Pradixaction_t);
 var
   parms: radixvertexplosion_p;
+  i: integer;
+  x, y, z: fixed_t;
+  x1, y1, z1: fixed_t;
+  mo: Pmobj_t;
 begin
   parms := radixvertexplosion_p(@action.params);
+
+  if parms.number_of_explosions <= 0 then
+  begin
+    action.suspend := 1;
+    exit;
+  end;
+
+  if parms.delay_cnt <= 0 then
+  begin
+    x1 := RX_RadixX2Doom(parms.x_coord, parms.y_coord) * FRACUNIT;
+    y1 := RX_RadixY2Doom(parms.x_coord, parms.y_coord) * FRACUNIT;
+    z1 := parms.height * FRACUNIT;
+    for i := 0 to parms.number_of_bitmaps_per - 1 do
+    begin
+      x := x1 + (2 * (P_Random - P_Random) * parms.radious_one_third) * (FRACUNIT div 256);
+      y := y1 + (2 * (P_Random - P_Random) * parms.radious_one_third) * (FRACUNIT div 256);
+      z := z1 + (2 * (P_Random - P_Random) * parms.radious_one_third) * (FRACUNIT div 256);
+      mo := RX_SpawnRadixBigExplosion(x, y, z);
+      mo.flags3_ex := mo.flags3_ex or MF3_EX_NOSOUND;
+    end;
+    S_AmbientSound(x, y, 'radix/SndExplode');
+    parms.x_coord := parms.x_coord + parms.delta_x;
+    parms.y_coord := parms.y_coord + parms.delta_y;
+    parms.height := parms.height + parms.delta_height;
+    parms.delay_cnt := parms.delay_length;
+    dec(parms.number_of_explosions);
+  end
+  else
+    dec(parms.delay_cnt);
 end;
 
 end.
