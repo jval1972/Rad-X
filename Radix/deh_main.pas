@@ -2007,6 +2007,7 @@ begin
   mobj_flags3_ex.Add('MF3_EX_LIMITBOUNCECONTROL');
   mobj_flags3_ex.Add('MF3_EX_WALLBOUNCEFACTOR');
   mobj_flags3_ex.Add('MF3_EX_NOPHASETORPEDOSPLIT');
+  mobj_flags3_ex.Add('MF3_EX_NOSOUND');
 
   mobj_flags4_ex := TDTextList.Create;
 

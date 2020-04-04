@@ -618,7 +618,8 @@ begin
         // after hitting the ground (hard),
         // and utter appropriate sound.
         player.deltaviewheight := _SHR(mo.momz, 3);
-        S_StartSound(mo, Ord(sfx_oof));
+        if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+          S_StartSound(mo, Ord(sfx_oof));
       end;
       mo.momz := 0;
     end;
@@ -730,7 +731,8 @@ begin
     mo := P_SpawnMobj(mobj.x, mobj.y, Psubsector_t(mobj.subsector).sector.floorheight, Ord(MT_TFOG));
 
   // initiate teleport sound
-  S_StartSound(mo, Ord(sfx_telept));
+  if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(mo, Ord(sfx_telept));
 
   // spawn a teleport fog at the new spot
   ss := R_PointInSubsector(x, y);
@@ -743,7 +745,8 @@ begin
 
   mo := P_SpawnMobj(x, y, h, Ord(MT_TFOG));
 
-  S_StartSound(mo, Ord(sfx_telept));
+  if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(mo, Ord(sfx_telept));
 
   // spawn the new monster
   mthing := @(mobj.spawnpoint);
@@ -1150,7 +1153,8 @@ begin
   // spawn a teleport fog at the new spot
   ss := R_PointInSubsector(x, y);
   mo := P_SpawnMobj(x, y, ss.sector.floorheight, Ord(MT_IFOG), mthing);  // JVAL: Slopes
-  S_StartSound(mo, Ord(sfx_itmbk));                     
+  if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(mo, Ord(sfx_itmbk));
 
   // find which type to spawn
   i := 0;
@@ -2028,7 +2032,8 @@ begin
           mo.momx := (P_Random - P_Random) * 256;
           mo.momy := (P_Random - P_Random) * 256;
           mo.momz := 2 * FRACUNIT + (P_Random * 256);
-          S_StartSound(mo, Ord(sfx_gloop));
+          if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+            S_StartSound(mo, Ord(sfx_gloop));
         end;
         result := FLOOR_WATER;
         exit;
@@ -2040,7 +2045,8 @@ begin
           P_SpawnMobj(thing.x, thing.y, z, Ord(MT_LAVASPLASH));
           mo := P_SpawnMobj(thing.x, thing.y, z, Ord(MT_LAVASMOKE));
           mo.momz := FRACUNIT + (P_Random * 128);
-          S_StartSound(mo, Ord(sfx_burn));
+          if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+            S_StartSound(mo, Ord(sfx_burn));
         end;
         result := FLOOR_LAVA;
         exit;
@@ -2055,7 +2061,8 @@ begin
           mo.momx := (P_Random - P_Random) * 256;
           mo.momy := (P_Random - P_Random) * 256;
           mo.momz := FRACUNIT + (P_Random * 256);
-          S_StartSound(mo, Ord(sfx_sgloop));
+          if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+            S_StartSound(mo, Ord(sfx_sgloop));
         end;
         result := FLOOR_SLUDGE;
         exit;
@@ -2070,7 +2077,8 @@ begin
           mo.momx := (P_Random - P_Random) * 256;
           mo.momy := (P_Random - P_Random) * 256;
           mo.momz := FRACUNIT + (P_Random * 256);
-          S_StartSound(mo, Ord(sfx_sgloop));
+          if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+            S_StartSound(mo, Ord(sfx_sgloop));
         end;
         result := FLOOR_NUKAGE;
         exit;

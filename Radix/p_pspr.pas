@@ -233,9 +233,6 @@ begin
   if player.pendingweapon = wp_nochange then
     player.pendingweapon := player.readyweapon;
 
-  if player.pendingweapon = wp_enchancedepc then
-    S_StartSound(player.mo, Ord(sfx_sawup));
-
   newstate := statenum_t(weaponinfo[Ord(player.pendingweapon)].upstate);
 
   player.pendingweapon := wp_nochange;
@@ -352,10 +349,6 @@ begin
   if (player.mo.state = @states[Ord(S_PLAY_ATK1)]) or
      (player.mo.state = @states[Ord(S_PLAY_ATK2)]) then
     P_SetMobjState(player.mo, S_PLAY);
-
-  if (player.readyweapon = wp_enchancedepc) and
-     (psp.state = @states[Ord(S_SAW)]) then
-    S_StartSound(player.mo, Ord(sfx_sawidl));
 
   // check for change
   //  if player is dead, put the weapon away
@@ -516,7 +509,8 @@ begin
   // turn to face target
   if linetarget <> nil then
   begin
-    S_StartSound(player.mo, Ord(sfx_punch));
+    if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+      S_StartSound(player.mo, Ord(sfx_punch));
     player.mo.angle :=
       R_PointToAngle2(player.mo.x, player.mo.y, linetarget.x, linetarget.y);
   end;
@@ -541,11 +535,13 @@ begin
 
   if linetarget = nil then
   begin
-    S_StartSound(player.mo, Ord(sfx_sawful));
+    if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+      S_StartSound(player.mo, Ord(sfx_sawful));
     exit;
   end;
 
-  S_StartSound(player.mo, Ord(sfx_sawhit));
+  if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(player.mo, Ord(sfx_sawhit));
 
   // turn to face target
   angle :=
@@ -657,7 +653,8 @@ procedure A_FirePistol(player: Pplayer_t; psp: Ppspdef_t);
 var
   am: integer;
 begin
-  S_StartSound(player.mo, Ord(sfx_pistol));
+  if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(player.mo, Ord(sfx_pistol));
 
   P_SetMobjState(player.mo, S_PLAY_ATK2);
 
@@ -678,7 +675,8 @@ var
   i: integer;
   am: integer;
 begin
-  S_StartSound(player.mo, Ord(sfx_shotgn));
+  if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(player.mo, Ord(sfx_shotgn));
   P_SetMobjState(player.mo, S_PLAY_ATK2);
 
   am := Ord(weaponinfo[Ord(player.readyweapon)].ammo);
@@ -702,7 +700,8 @@ var
   damage: integer;
   am: integer;
 begin
-  S_StartSound(player.mo, Ord(sfx_dshtgn));
+  if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(player.mo, Ord(sfx_dshtgn));
   P_SetMobjState(player.mo, S_PLAY_ATK2);
 
   am := Ord(weaponinfo[Ord(player.readyweapon)].ammo);
@@ -729,7 +728,8 @@ procedure A_FireCGun(player: Pplayer_t; psp: Ppspdef_t);
 var
   am : integer;
 begin
-  S_StartSound(player.mo, Ord(sfx_pistol));
+  if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(player.mo, Ord(sfx_pistol));
 
   if player.ammo[Ord(weaponinfo[Ord(player.readyweapon)].ammo)] = 0 then
     exit;
@@ -815,7 +815,8 @@ end;
 //
 procedure A_BFGsound(player: Pplayer_t; psp: Ppspdef_t);
 begin
-  S_StartSound(player.mo, Ord(sfx_bfg));
+  if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(player.mo, Ord(sfx_bfg));
 end;
 
 //

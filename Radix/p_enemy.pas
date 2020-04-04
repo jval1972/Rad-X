@@ -948,36 +948,39 @@ begin
   end;
 
   // go into chase state
-  if actor.info.seesound <> 0 then
+  if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
   begin
-    case sfxenum_t(actor.info.seesound) of
-      sfx_posit1,
-      sfx_posit2,
-      sfx_posit3:
-        sound := Ord(sfx_posit1) + P_Random mod 3;
-
-      sfx_bgsit1,
-      sfx_bgsit2:
-        sound := Ord(sfx_bgsit1) + P_Random mod 2;
-    else
-      sound := actor.info.seesound;
-    end;
-
-    if actor.info.flags_ex and MF_EX_RANDOMSEESOUND <> 0 then
+    if actor.info.seesound <> 0 then
     begin
-      if (actor._type = Ord(MT_SPIDER)) or (actor._type = Ord(MT_CYBORG)) or (actor.info.flags_ex and MF_EX_BOSS <> 0) then
-        // full volume
-        P_RandomSound(nil, sound)
+      case sfxenum_t(actor.info.seesound) of
+        sfx_posit1,
+        sfx_posit2,
+        sfx_posit3:
+          sound := Ord(sfx_posit1) + P_Random mod 3;
+
+        sfx_bgsit1,
+        sfx_bgsit2:
+          sound := Ord(sfx_bgsit1) + P_Random mod 2;
       else
-        P_RandomSound(actor, sound)
-    end
-    else
-    begin
-      if (actor._type = Ord(MT_SPIDER)) or (actor._type = Ord(MT_CYBORG)) or (actor.info.flags_ex and MF_EX_BOSS <> 0) then
-        // full volume
-        S_StartSound(nil, sound)
+        sound := actor.info.seesound;
+      end;
+
+      if actor.info.flags_ex and MF_EX_RANDOMSEESOUND <> 0 then
+      begin
+        if (actor._type = Ord(MT_SPIDER)) or (actor._type = Ord(MT_CYBORG)) or (actor.info.flags_ex and MF_EX_BOSS <> 0) then
+          // full volume
+          P_RandomSound(nil, sound)
+        else
+          P_RandomSound(actor, sound)
+      end
       else
-        S_StartSound(actor, sound);
+      begin
+        if (actor._type = Ord(MT_SPIDER)) or (actor._type = Ord(MT_CYBORG)) or (actor.info.flags_ex and MF_EX_BOSS <> 0) then
+          // full volume
+          S_StartSound(nil, sound)
+        else
+          S_StartSound(actor, sound);
+      end;
     end;
   end;
 
@@ -1149,7 +1152,8 @@ begin
   angle := actor.angle;
   slope := P_AimLineAttack(actor, angle, MISSILERANGE);
 
-  S_StartSound(actor, Ord(sfx_pistol));
+  if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(actor, Ord(sfx_pistol));
   angle := angle + _SHLW(P_Random - P_Random, 20);
   damage := ((P_Random mod 5) + 1) * 3;
   P_LineAttack(actor, angle, MISSILERANGE, slope, damage);
@@ -1166,7 +1170,8 @@ begin
   if actor.target = nil then
     exit;
 
-  S_StartSound(actor, Ord(sfx_shotgn));
+  if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(actor, Ord(sfx_shotgn));
   A_FaceTarget(actor);
   bangle := actor.angle;
   slope := P_AimLineAttack(actor, bangle, MISSILERANGE);
@@ -1189,7 +1194,8 @@ begin
   if actor.target = nil then
     exit;
 
-  S_StartSound(actor, Ord(sfx_shotgn));
+  if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(actor, Ord(sfx_shotgn));
   A_FaceTarget(actor);
   bangle := actor.angle;
 
@@ -1250,7 +1256,8 @@ begin
   A_FaceTarget(actor);
   if P_CheckMeleeRange(actor) then
   begin
-    S_StartSound(actor, Ord(sfx_claw));
+    if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
+      S_StartSound(actor, Ord(sfx_claw));
     damage := (P_Random mod 8 + 1) * 3;
     P_DamageMobj(actor.target, actor, actor, damage);
     exit;
@@ -1312,7 +1319,8 @@ begin
 
   if P_CheckMeleeRange(actor) then
   begin
-    S_StartSound(actor, Ord(sfx_claw));
+    if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
+      S_StartSound(actor, Ord(sfx_claw));
     damage := (P_Random mod 8 + 1) * 10;
     P_DamageMobj(actor.target, actor, actor, damage);
     exit;
@@ -1427,7 +1435,8 @@ begin
     exit;
 
   A_FaceTarget(actor);
-  S_StartSound(actor, Ord(sfx_skeswg));
+  if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(actor, Ord(sfx_skeswg));
 end;
 
 procedure A_SkelFist(actor: Pmobj_t);
@@ -1442,7 +1451,8 @@ begin
   if P_CheckMeleeRange(actor) then
   begin
     damage := ((P_Random mod 10) + 1) * 6;
-    S_StartSound(actor, Ord(sfx_skepch));
+    if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
+      S_StartSound(actor, Ord(sfx_skepch));
     P_DamageMobj(actor.target, actor, actor, damage);
   end;
 end;
@@ -1549,7 +1559,8 @@ begin
           else
             P_SetMobjState(actor, S_VILE_HEAL1);
 
-          S_StartSound(corpsehit, Ord(sfx_slop));
+          if corpsehit.flags3_ex and MF3_EX_NOSOUND = 0 then
+            S_StartSound(corpsehit, Ord(sfx_slop));
           info := corpsehit.info;
 
           P_SetMobjState(corpsehit, statenum_t(info.raisestate));
@@ -1588,7 +1599,8 @@ end;
 //
 procedure A_VileStart(actor: Pmobj_t);
 begin
-  S_StartSound(actor, Ord(sfx_vilatk));
+  if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(actor, Ord(sfx_vilatk));
 end;
 
 //
@@ -1623,13 +1635,15 @@ end;
 
 procedure A_StartFire(actor: Pmobj_t);
 begin
-  S_StartSound(actor, Ord(sfx_flamst));
+  if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(actor, Ord(sfx_flamst));
   A_Fire(actor);
 end;
 
 procedure A_FireCrackle(actor: Pmobj_t);
 begin
-  S_StartSound(actor, Ord(sfx_flame));
+  if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(actor, Ord(sfx_flame));
   A_Fire(actor);
 end;
 
@@ -1675,7 +1689,8 @@ begin
   if not P_CheckSight(actor, actor.target) then
     exit;
 
-  S_StartSound(actor, Ord(sfx_barexp));
+  if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(actor, Ord(sfx_barexp));
   P_DamageMobj(actor.target, actor, actor, 20);
   actor.target.momz := 1000 * FRACUNIT div actor.target.info.mass;
 
@@ -1708,7 +1723,8 @@ const
 procedure A_FatRaise(actor: Pmobj_t);
 begin
   A_FaceTarget(actor);
-  S_StartSound(actor, Ord(sfx_manatk));
+  if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(actor, Ord(sfx_manatk));
 end;
 
 procedure A_FatAttack1(actor: Pmobj_t);
@@ -1922,39 +1938,44 @@ procedure A_Scream(actor: Pmobj_t);
 var
   sound: integer;
 begin
-  case actor.info.deathsound of
-    0: exit;
-    Ord(sfx_podth1),
-    Ord(sfx_podth2),
-    Ord(sfx_podth3):
-      sound := Ord(sfx_podth1) + P_Random mod 3;
+  if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
+  begin
+    case actor.info.deathsound of
+      0: exit;
+      Ord(sfx_podth1),
+      Ord(sfx_podth2),
+      Ord(sfx_podth3):
+        sound := Ord(sfx_podth1) + P_Random mod 3;
 
-    Ord(sfx_bgdth1),
-    Ord(sfx_bgdth2):
-      sound := Ord(sfx_bgdth1) + P_Random mod 2;
-  else
-    sound := actor.info.deathsound;
+      Ord(sfx_bgdth1),
+      Ord(sfx_bgdth2):
+        sound := Ord(sfx_bgdth1) + P_Random mod 2;
+    else
+      sound := actor.info.deathsound;
+    end;
+
+    // Check for bosses.
+    if (actor._type = Ord(MT_SPIDER)) or
+       (actor._type = Ord(MT_CYBORG)) or
+       (actor.flags_ex and MF_EX_BOSS <> 0) or
+       (actor.info.flags2_ex and MF2_EX_FULLVOLDEATH <> 0) then
+      // full volume
+      S_StartSound(nil, sound)
+    else
+      S_StartSound(actor, sound);
   end;
-
-  // Check for bosses.
-  if (actor._type = Ord(MT_SPIDER)) or
-     (actor._type = Ord(MT_CYBORG)) or
-     (actor.flags_ex and MF_EX_BOSS <> 0) or
-     (actor.info.flags2_ex and MF2_EX_FULLVOLDEATH <> 0) then
-    // full volume
-    S_StartSound(nil, sound)
-  else
-    S_StartSound(actor, sound);
 end;
 
 procedure A_XScream(actor: Pmobj_t);
 begin
-  S_StartSound(actor, Ord(sfx_slop));
+  if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(actor, Ord(sfx_slop));
 end;
 
 procedure A_Pain(actor: Pmobj_t);
 begin
-  A_PainSound(actor);
+  if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
+    A_PainSound(actor);
 end;
 
 //
@@ -2036,35 +2057,41 @@ end;
 
 procedure A_Hoof(mo: Pmobj_t);
 begin
-  S_StartSound(mo, Ord(sfx_hoof));
+  if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(mo, Ord(sfx_hoof));
   A_Chase(mo);
 end;
 
 procedure A_Metal(mo: Pmobj_t);
 begin
-  S_StartSound(mo, Ord(sfx_metal));
+  if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(mo, Ord(sfx_metal));
   A_Chase(mo);
 end;
 
 procedure A_BabyMetal(mo: Pmobj_t);
 begin
-  S_StartSound(mo, Ord(sfx_bspwlk));
+  if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(mo, Ord(sfx_bspwlk));
   A_Chase(mo);
 end;
 
 procedure A_OpenShotgun2(player: Pplayer_t; psp: Pplayer_t);
 begin
-  S_StartSound(player.mo, Ord(sfx_dbopn));
+  if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(player.mo, Ord(sfx_dbopn));
 end;
 
 procedure A_LoadShotgun2(player: Pplayer_t; psp: Ppspdef_t);
 begin
-  S_StartSound(player.mo, Ord(sfx_dbload));
+  if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(player.mo, Ord(sfx_dbload));
 end;
 
 procedure A_CloseShotgun2(player: Pplayer_t; psp: Ppspdef_t);
 begin
-  S_StartSound(player.mo, Ord(sfx_dbcls));
+  if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(player.mo, Ord(sfx_dbcls));
   A_ReFire(player, psp);
 end;
 
@@ -2102,12 +2129,14 @@ begin
     thinker := thinker.next;
   end;
 
-  S_StartSound(nil, Ord(sfx_bossit));
+  if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(nil, Ord(sfx_bossit));
 end;
 
 procedure A_BrainPain(mo: Pmobj_t);
 begin
-  S_StartSound(nil, Ord(sfx_bospn));
+  if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(nil, Ord(sfx_bospn));
 end;
 
 procedure A_BrainScream(mo: Pmobj_t);
@@ -2133,7 +2162,8 @@ begin
     x := x + FRACUNIT * 8;
   end;
 
-  S_StartSound(nil, Ord(sfx_bosdth));
+  if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(nil, Ord(sfx_bosdth));
 end;
 
 procedure A_BrainExplode(mo: Pmobj_t);
@@ -2197,7 +2227,8 @@ begin
   newmobj.target := targ;
   newmobj.reactiontime := ((targ.y - mo.y) div newmobj.momy) div newmobj.state.tics;
 
-  S_StartSound(nil, Ord(sfx_bospit));
+  if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(nil, Ord(sfx_bospit));
 end;
 
 procedure A_SpawnFly(mo: Pmobj_t);
@@ -2222,7 +2253,8 @@ begin
 
   // First spawn teleport fog.
   fog := P_SpawnMobj(targ.x, targ.y, targ.z, Ord(MT_SPAWNFIRE));
-  S_StartSound(fog, Ord(sfx_telept));
+  if fog.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(fog, Ord(sfx_telept));
 
   // Randomly select monster to spawn.
   r := P_Random;
@@ -2275,7 +2307,8 @@ end;
 // travelling cube sound
 procedure A_SpawnSound(mo: Pmobj_t);
 begin
-  S_StartSound(mo, Ord(sfx_boscub));
+  if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(mo, Ord(sfx_boscub));
   A_SpawnFly(mo);
 end;
 
@@ -2284,8 +2317,11 @@ var
   sound: integer;
 begin
   // Default death sound.
-  sound := Ord(sfx_pldeth);
-  S_StartSound(mo, sound);
+  if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+  begin
+    sound := Ord(sfx_pldeth);
+    S_StartSound(mo, sound);
+  end;
 end;
 
 //----------------------------------------------------------------------------

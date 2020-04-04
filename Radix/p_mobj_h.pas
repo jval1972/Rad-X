@@ -356,6 +356,8 @@ const
   MF3_EX_WALLBOUNCEFACTOR = 512;
   // Wall bounce factor
   MF3_EX_NOPHASETORPEDOSPLIT = 1024;
+  // No sound flag
+  MF3_EX_NOSOUND = $800;
 
 type
 // Map Object definition.

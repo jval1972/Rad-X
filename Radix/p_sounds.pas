@@ -61,6 +61,9 @@ uses
 
 procedure A_SeeSound(actor: Pmobj_t; origin: Pmobj_t);
 begin
+  if actor.flags3_ex and MF3_EX_NOSOUND <> 0 then
+    exit;
+
   if actor.info.seesound = 0 then
     exit;
 
@@ -80,6 +83,9 @@ end;
 
 procedure A_PainSound(actor: Pmobj_t; origin: Pmobj_t);
 begin
+  if actor.flags3_ex and MF3_EX_NOSOUND <> 0 then
+    exit;
+
   if actor.info.painsound = 0 then
     exit;
 
@@ -91,6 +97,9 @@ end;
 
 procedure A_PainSound(actor: Pmobj_t);
 begin
+  if actor.flags3_ex and MF3_EX_NOSOUND <> 0 then
+    exit;
+
   if (actor._type = Ord(MT_SPIDER)) or
      (actor._type = Ord(MT_CYBORG)) or
      (actor.info.flags_ex and MF_EX_BOSS <> 0) or
@@ -102,6 +111,9 @@ end;
 
 procedure A_AttackSound(actor: Pmobj_t; origin: Pmobj_t);
 begin
+  if actor.flags3_ex and MF3_EX_NOSOUND <> 0 then
+    exit;
+
   if actor.info.attacksound = 0 then
     exit;
 
@@ -113,6 +125,9 @@ end;
 
 procedure A_AttackSound(actor: Pmobj_t);
 begin
+  if actor.flags3_ex and MF3_EX_NOSOUND <> 0 then
+    exit;
+
   if (actor._type = Ord(MT_SPIDER)) or
      (actor._type = Ord(MT_CYBORG)) or
      (actor.info.flags_ex and MF_EX_BOSS <> 0) or
@@ -124,6 +139,9 @@ end;
 
 procedure A_MeleeSound(actor: Pmobj_t; origin: Pmobj_t);
 begin
+  if actor.flags3_ex and MF3_EX_NOSOUND <> 0 then
+    exit;
+
   if actor.info.meleesound = 0 then
     exit;
 
@@ -135,6 +153,9 @@ end;
 
 procedure A_MeleeSound(actor: Pmobj_t);
 begin
+  if actor.flags3_ex and MF3_EX_NOSOUND <> 0 then
+    exit;
+
   if (actor._type = Ord(MT_SPIDER)) or
      (actor._type = Ord(MT_CYBORG)) or
      (actor.info.flags_ex and MF_EX_BOSS <> 0) or
@@ -146,6 +167,9 @@ end;
 
 procedure A_DeathSound(actor: Pmobj_t; origin: Pmobj_t);
 begin
+  if actor.flags3_ex and MF3_EX_NOSOUND <> 0 then
+    exit;
+
   if actor.info.deathsound = 0 then
     exit;
 
@@ -157,6 +181,9 @@ end;
 
 procedure A_DeathSound(actor: Pmobj_t);
 begin
+  if actor.flags3_ex and MF3_EX_NOSOUND <> 0 then
+    exit;
+
   if (actor._type = Ord(MT_SPIDER)) or
      (actor._type = Ord(MT_CYBORG)) or
      (actor.info.flags_ex and MF_EX_BOSS <> 0) or
@@ -168,6 +195,9 @@ end;
 
 procedure A_ActiveSound(actor: Pmobj_t; origin: Pmobj_t);
 begin
+  if actor.flags3_ex and MF3_EX_NOSOUND <> 0 then
+    exit;
+
   if actor.info.activesound = 0 then
     exit;
 
@@ -179,6 +209,9 @@ end;
 
 procedure A_ActiveSound(actor: Pmobj_t);
 begin
+  if actor.flags3_ex and MF3_EX_NOSOUND <> 0 then
+    exit;
+
   if (actor._type = Ord(MT_SPIDER)) or
      (actor._type = Ord(MT_CYBORG)) or
      (actor.info.flags_ex and MF_EX_BOSS <> 0) or

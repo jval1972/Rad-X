@@ -1414,7 +1414,8 @@ begin
            not player.cards[Ord(it_yellowskull)] then
         begin
           player._message := PD_ANY; // Ty 03/27/98 - externalized
-          S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
+          if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+            S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
           result := false;
           exit;
         end;
@@ -1429,7 +1430,8 @@ begin
             player._message := PD_REDK
           else
             player._message := PD_REDC; // Ty 03/27/98 - externalized
-          S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
+          if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+            S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
           result := false;
           exit;
         end;
@@ -1444,7 +1446,8 @@ begin
             player._message := PD_BLUEK
           else
             player._message := PD_BLUEC; // Ty 03/27/98 - externalized
-          S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
+          if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+            S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
           result := false;
           exit;
         end;
@@ -1459,7 +1462,8 @@ begin
             player._message := PD_YELLOWK
           else
             player._message := PD_YELLOWC; // Ty 03/27/98 - externalized
-          S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
+          if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+            S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
           result := false;
           exit;
         end;
@@ -1474,7 +1478,8 @@ begin
             player._message := PD_REDK
           else
             player._message := PD_REDS; // Ty 03/27/98 - externalized
-          S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
+          if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+            S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
           result := false;
           exit;
         end;
@@ -1489,7 +1494,8 @@ begin
             player._message := PD_BLUEK
           else
             player._message := PD_BLUES; // Ty 03/27/98 - externalized
-          S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
+          if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+            S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
           result := false;
           exit;
         end;
@@ -1504,7 +1510,8 @@ begin
             player._message := PD_YELLOWK
           else
             player._message := PD_YELLOWS; // Ty 03/27/98 - externalized
-          S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
+          if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+            S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
           result := false;
           exit;
         end;
@@ -1521,7 +1528,8 @@ begin
            not player.cards[Ord(it_yellowskull)]) then
         begin
           player._message := PD_ALL6; // Ty 03/27/98 - externalized
-          S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
+          if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+            S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
           result := false;
           exit;
         end;
@@ -1534,7 +1542,8 @@ begin
            not player.cards[Ord(it_yellowskull)])) then
         begin
           player._message := PD_ALL3; // Ty 03/27/98 - externalized
-          S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
+          if player.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+            S_StartSound(player.mo, Ord(sfx_oof));             // killough 3/20/98
           result := false;
           exit;
         end;
