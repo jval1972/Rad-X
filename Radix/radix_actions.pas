@@ -1109,7 +1109,6 @@ procedure RA_SpriteTriggerActivate(const action: Pradixaction_t);
 var
   parms: radixspritetriggeractivate_p;
   i: integer;
-  act: integer;
 begin
   parms := radixspritetriggeractivate_p(@action.params);
 
@@ -1148,8 +1147,6 @@ type
 procedure RA_DeactivateTrigger(const action: Pradixaction_t);
 var
   parms: radixdeactivatetrigger_p;
-  i: integer;
-  act: integer;
 begin
   parms := radixdeactivatetrigger_p(@action.params);
   radixtriggers[parms.trigger].suspended := 1;
@@ -1361,7 +1358,7 @@ begin
       mo := RX_SpawnRadixBigExplosion(x, y, z);
       mo.flags3_ex := mo.flags3_ex or MF3_EX_NOSOUND;
     end;
-    S_AmbientSound(x, y, 'radix/SndExplode');
+    S_AmbientSound(x1, y1, 'radix/SndExplode');
     parms.x_coord := parms.x_coord + parms.delta_x;
     parms.y_coord := parms.y_coord + parms.delta_y;
     parms.delay_cnt := parms.delay_length;
@@ -1694,7 +1691,7 @@ begin
     x := x1 + (2 * (P_Random - P_Random) * parms.radious_one_third) * (FRACUNIT div 256);
     y := y1 + (2 * (P_Random - P_Random) * parms.radious_one_third) * (FRACUNIT div 256);
     z := z1 + (2 * (P_Random - P_Random) * parms.radious_one_third) * (FRACUNIT div 256);
-    mo := RX_SpawnRadixBigExplosion(x, y, z);
+    RX_SpawnRadixBigExplosion(x, y, z);
     parms.x_coord := parms.x_coord + parms.delta_x;
     parms.y_coord := parms.y_coord + parms.delta_y;
     parms.delay_cnt := parms.delay_length;
@@ -1897,7 +1894,7 @@ begin
       mo := RX_SpawnRadixBigExplosion(x, y, z);
       mo.flags3_ex := mo.flags3_ex or MF3_EX_NOSOUND;
     end;
-    S_AmbientSound(x, y, 'radix/SndExplode');
+    S_AmbientSound(x1, y1, 'radix/SndExplode');
     parms.x_coord := parms.x_coord + parms.delta_x;
     parms.y_coord := parms.y_coord + parms.delta_y;
     parms.height := parms.height + parms.delta_height;
