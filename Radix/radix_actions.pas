@@ -140,9 +140,11 @@ uses
   p_map,
   p_mobj_h,
   p_mobj,
+  p_telept,
   p_tick,
   p_setup,
   p_genlin,
+  p_user,
   radix_defs,
   radix_map_extra,
   radix_messages,
@@ -787,8 +789,66 @@ type
 procedure RA_PlaneTeleport(const action: Pradixaction_t);
 var
   parms: radixplaneteleport_p;
+  p: Pplayer_t;
+  x, y: fixed_t;
+  s, c: fixed_t;
+  momx, momy: fixed_t;
+  angle: angle_t;
+  deltaviewheight: integer;
 begin
   parms := radixplaneteleport_p(@action.params);
+                 
+  if parms.delay > 0 then
+  begin
+    dec(parms.delay);
+    exit;
+  end;
+
+  p := @players[radixplayer];
+
+  x := RX_RadixX2Doom(parms.new_x, parms.new_y) * FRACUNIT;
+  y := RX_RadixY2Doom(parms.new_x, parms.new_y) * FRACUNIT;
+
+  angle := parms.new_angle * (ANGLE_MAX div 256);
+  // Sine, cosine of angle adjustment
+  s := finesine[angle shr ANGLETOFINESHIFT];
+  c := finecosine[angle shr ANGLETOFINESHIFT];
+
+  // Momentum of thing crossing teleporter linedef
+  momx := p.mo.momx;
+  momy := p.mo.momy;
+
+  if not P_TeleportMove(p.mo, x, y) then
+    exit;
+
+  if parms.change_height <> 0 then
+    p.mo.z := parms.new_height * FRACUNIT;
+  if p.mo.z < p.mo.floorz then
+    p.mo.z := p.mo.floorz
+  else if p.mo.z > p.mo.ceilingz - p.mo.height then
+    p.mo.z := p.mo.ceilingz - p.mo.height;
+
+  p.mo.angle := angle;
+
+  // Rotate thing's momentum to come out of exit just like it entered
+  p.mo.momx := FixedMul(momx, c) - FixedMul(momy, s);
+  p.mo.momy := FixedMul(momy, c) + FixedMul(momx, s);
+
+  // Save the current deltaviewheight, used in stepping
+  deltaviewheight := p.deltaviewheight;
+
+  // Clear deltaviewheight, since we don't want any changes
+  p.deltaviewheight := 0;
+
+  // Set player's view according to the newly set parameters
+  P_CalcHeight(p);
+
+  // Reset the delta to have the same dynamics as before
+  p.deltaviewheight := deltaviewheight;
+
+  p.teleporttics := TELEPORTZOOM;
+  
+  action.suspend := 1;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
