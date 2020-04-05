@@ -151,7 +151,8 @@ uses
   radix_sounds,
   r_data,
   r_defs,
-  s_sound;
+  s_sound,
+  w_wad;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Sprite type = 0
@@ -420,10 +421,127 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Sprite type = 4 - Not presend in radix.dat
+type
+  radixtogglewallbitmap_t = packed record
+    element_number: smallint;
+    switch_bitmap: smallint;
+    do_floor: smallint;
+    // RTL
+    initialize_flag: integer;
+    new_switch_bitmap_top1: char8_t;
+    new_switch_bitmap_mid1: char8_t;
+    new_switch_bitmap_bot1: char8_t;
+    new_switch_bitmap_top2: char8_t;
+    new_switch_bitmap_mid2: char8_t;
+    new_switch_bitmap_bot2: char8_t;
+  end;
+  radixtogglewallbitmap_p = ^radixtogglewallbitmap_t;
+
 procedure RA_ToggleWallBitmap(const action: Pradixaction_t);
 var
-  element_number, switch_bitmap, do_floor: integer;
+  parms: radixtogglewallbitmap_p;
+  li: Pline_t;
+  s1, s2: Pside_t;
+  texid_top1: integer;
+  texid_mid1: integer;
+  texid_bot1: integer;
+  texid_top2: integer;
+  texid_mid2: integer;
+  texid_bot2: integer;
 begin
+  parms := radixtogglewallbitmap_p(@action.params);
+
+  li := @lines[parms.element_number];
+
+  if li.sidenum[0] > 0 then
+    s1 := @sides[li.sidenum[0]]
+  else
+    s1 := nil;
+  if li.sidenum[1] > 0 then
+    s2 := @sides[li.sidenum[1]]
+  else
+    s2 := nil;
+
+  if parms.initialize_flag <> $FFFFDDDD then
+  begin
+    parms.new_switch_bitmap_top1 := stringtochar8(RX_WALL_PREFIX + IntToStrzFill(4, parms.switch_bitmap + 1));
+    parms.new_switch_bitmap_bot1 := stringtochar8(RX_WALL_PREFIX + IntToStrzFill(4, parms.switch_bitmap + 1));
+    parms.new_switch_bitmap_mid1 := stringtochar8(RX_WALL_PREFIX + IntToStrzFill(4, parms.switch_bitmap + 1));
+    parms.new_switch_bitmap_top2 := parms.new_switch_bitmap_top1;
+    parms.new_switch_bitmap_bot2 := parms.new_switch_bitmap_bot1;
+    parms.new_switch_bitmap_mid2 := parms.new_switch_bitmap_mid1;
+    parms.initialize_flag := $FFFFDDDD;
+  end;
+
+  texid_top1 := R_SafeTextureNumForName(parms.new_switch_bitmap_top1);
+  texid_mid1 := R_SafeTextureNumForName(parms.new_switch_bitmap_mid1);
+  texid_bot1 := R_SafeTextureNumForName(parms.new_switch_bitmap_bot1);
+  texid_top2 := R_SafeTextureNumForName(parms.new_switch_bitmap_top2);
+  texid_mid2 := R_SafeTextureNumForName(parms.new_switch_bitmap_mid2);
+  texid_bot2 := R_SafeTextureNumForName(parms.new_switch_bitmap_bot2);
+
+  if s1 <> nil then
+  begin
+    parms.new_switch_bitmap_top1 := R_NameForSideTexture(s1.toptexture);
+    parms.new_switch_bitmap_bot1 := R_NameForSideTexture(s1.bottomtexture);
+    parms.new_switch_bitmap_mid1 := R_NameForSideTexture(s1.midtexture);
+  end
+  else
+  begin
+    parms.new_switch_bitmap_top1 := stringtochar8('-');
+    parms.new_switch_bitmap_bot1 := stringtochar8('-');
+    parms.new_switch_bitmap_mid1 := stringtochar8('-');
+  end;
+
+  if s2 <> nil then
+  begin
+    parms.new_switch_bitmap_top2 := R_NameForSideTexture(s2.toptexture);
+    parms.new_switch_bitmap_bot2 := R_NameForSideTexture(s2.bottomtexture);
+    parms.new_switch_bitmap_mid2 := R_NameForSideTexture(s2.midtexture);
+  end
+  else
+  begin
+    parms.new_switch_bitmap_top2 := stringtochar8('-');
+    parms.new_switch_bitmap_bot2 := stringtochar8('-');
+    parms.new_switch_bitmap_mid2 := stringtochar8('-');
+  end;
+
+  if parms.do_floor = 0 then  // Ceiling or mid
+  begin
+    if s1 <> nil then
+    begin
+      if s1.toptexture <> 0 then
+        s1.toptexture := texid_top1;
+      if s1.midtexture <> 0 then
+        s1.midtexture := texid_mid1;
+    end;
+    if s2 <> nil then
+    begin
+      if s2.toptexture <> 0 then
+        s2.toptexture := texid_top2;
+      if s2.midtexture <> 0 then
+        s2.midtexture := texid_mid2;
+    end;
+  end
+  else if parms.do_floor = 256 then  // Floor or mid
+  begin
+    if s1 <> nil then
+    begin
+      if s1.bottomtexture <> 0 then
+        s1.bottomtexture := texid_bot1;
+      if s1.midtexture <> 0 then
+        s1.midtexture := texid_mid1;
+    end;
+    if s2 <> nil then
+    begin
+      if s2.bottomtexture <> 0 then
+        s2.bottomtexture := texid_bot2;
+      if s2.midtexture <> 0 then
+        s2.midtexture := texid_mid2;
+    end;
+  end;
+
+  action.suspend := 1;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
