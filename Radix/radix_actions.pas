@@ -904,7 +904,7 @@ type
     max_delay: integer;
     speed: byte;
     surface_type: byte; // 1-> floor, 0-> ceiling
-    direction: byte;  // 1-> up, 0-> delayed, -1 -> down
+    direction: byte;  // 1-> up, 0-> delayed, -1($FF) -> down
     stop_position: byte; // 0-> no stop, 1-> maxstop, 2-> minstop, 3-> allstop
     approx_x: LongWord;
     approx_y: LongWord;
@@ -914,6 +914,8 @@ type
     trigger_number: smallint;
     // RTL
     initialized: boolean;
+    delay_saved: boolean;
+    save_delay: integer;
   end;
   radixnewmovingsurface_p = ^radixnewmovingsurface_t;
 
@@ -924,10 +926,39 @@ var
   dest_height: fixed_t;
   step: fixed_t;
   finished: boolean;
+  changed_direction: boolean;
 label
   finish_move;
+
+  // After finishing checks if need to change direction
+  procedure finishcheck;
+  begin
+    // JVAL: 20200405
+    //  If "direction" is Up (1) and "stop position" is Min (2)
+    //  We continue changing movement down
+    if (parms.direction = 1) and (parms.stop_position = 2) then
+    begin
+      changed_direction := true;
+      parms.direction := $FF;
+    end
+    // JVAL: 20200405
+    //  If "direction" is Down ($FF) and "stop position" is Max (1)
+    //  We continue changing movement up
+    else if (parms.direction = $FF) and (parms.stop_position = 1) then
+    begin
+      changed_direction := true;
+      parms.direction := 1;
+    end;
+  end;
+
 begin
   parms := radixnewmovingsurface_p(@action.params);
+
+  if not parms.delay_saved then
+  begin
+    parms.save_delay := parms.max_delay;
+    parms.delay_saved := true;
+  end;
 
   if parms.max_delay > 0 then
   begin
@@ -965,6 +996,7 @@ begin
   else
     exit; // ouch
 
+  changed_direction := false;
   // JVAL: 20200403 - Avoid interpolation for fast moving sectors
   if parms.speed > MOVINGSURFACETHRESHHOLD div 2 then
     sec.renderflags := sec.renderflags or SRF_NO_INTERPOLATE;
@@ -981,6 +1013,7 @@ begin
         if finished then
         begin
           sec.floorheight := dest_height;
+          finishcheck;
           goto finish_move;
         end;
       end;
@@ -995,6 +1028,7 @@ begin
         if finished then
         begin
           sec.ceilingheight := dest_height;
+          finishcheck;
           goto finish_move;
         end;
       end;
@@ -1010,7 +1044,9 @@ finish_move:
     sec.soundorg.y,
     radixsounds[parms.stop_sound].name);
   parms.initialized := false;
-  action.suspend := 1;  // JVAL: 202003 - Disable action
+  if not changed_direction then
+    action.suspend := 1;  // JVAL: 202003 - Disable action
+  parms.max_delay := parms.save_delay;  // JVAL: 20200405 - Restore old delay
   if parms.activate_trig <> 0 then
   begin
     radixtriggers[parms.trigger_number].suspended := 0;
