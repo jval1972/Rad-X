@@ -427,7 +427,7 @@ type
     switch_bitmap: smallint;
     do_floor: smallint;
     // RTL
-    initialize_flag: integer;
+    initialize_flag: LongWord;
     new_switch_bitmap_top1: char8_t;
     new_switch_bitmap_mid1: char8_t;
     new_switch_bitmap_bot1: char8_t;
@@ -546,10 +546,44 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Sprite type = 5 - Not presend in radix.dat
+type
+  radixtongglesecbitmap_t = packed record
+    element_number: smallint; // sector id
+    switch_bitmap: smallint;
+    do_floor: smallint;
+    // RTL
+    initialize_flag: LongWord;
+    new_switch_bitmap: smallint;
+  end;
+  radixtongglesecbitmap_p = ^radixtongglesecbitmap_t;
+
 procedure RA_ToggleSecBitmap(const action: Pradixaction_t);
 var
-  element_number, switch_bitmap, do_floor: integer;
+  parms: radixtongglesecbitmap_p;
+  texid: integer;
 begin
+  parms := radixtongglesecbitmap_p(@action.params);
+
+  if parms.initialize_flag <> $FFFFDDDD then
+  begin
+    parms.new_switch_bitmap := R_FlatNumForName(RX_FLAT_PREFIX + IntToStrzFill(4, parms.switch_bitmap + 1));
+    parms.initialize_flag := $FFFFDDDD;
+  end;
+
+  texid := parms.new_switch_bitmap;
+
+  if parms.do_floor = 257 then  // floor texture
+  begin
+    parms.new_switch_bitmap := sectors[parms.element_number].floorpic;
+    sectors[parms.element_number].floorpic := texid;
+  end
+  else
+  begin
+    parms.new_switch_bitmap := sectors[parms.element_number].ceilingpic;
+    sectors[parms.element_number].ceilingpic := texid;
+  end;
+
+  action.suspend := 1; // Disable action
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
