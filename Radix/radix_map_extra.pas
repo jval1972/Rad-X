@@ -393,7 +393,7 @@ begin
      18:  // wallflags
         begin
           sc.MustGetInteger;
-          lines[curline].radixflags := sc._Integer;
+          lines[curline].radixflags := sc._Integer
         end;
      19:  // wallhitpoints
         begin
@@ -419,7 +419,7 @@ begin
   line := seg.linedef;
   if line.radixflags and RWF_PEGTOP_FLOOR <> 0 then
     result := worldtop
-  else if line.radixflags and RWF_PEGBOTTOM_FLOOR <> 0 then
+  else if line.radixflags and RWF_PEGTOP_CEILING <> 0 then
     result := worldlow
   else
     result := -viewz;
@@ -430,7 +430,7 @@ var
   line: Pline_t;
 begin
   line := seg.linedef;
-  if line.radixflags and RWF_PEGTOP_CEILING <> 0 then
+  if line.radixflags and RWF_PEGBOTTOM_FLOOR <> 0 then
     result := worldtop
   else if line.radixflags and RWF_PEGBOTTOM_CEILING <> 0 then
     result := line.backsector.ceilingheight - viewz
@@ -445,7 +445,7 @@ begin
   line := seg.linedef;
   if line.radixflags and RWF_PEGTOP_FLOOR <> 0 then
     result := line.backsector.floorheight - viewz
-  else if line.radixflags and RWF_PEGBOTTOM_FLOOR <> 0 then
+  else if line.radixflags and RWF_PEGTOP_CEILING <> 0 then
     result := worldtop //
   else
     result := -viewz;
@@ -461,7 +461,7 @@ var
   line: Pline_t;
 begin
   line := seg.linedef;
-  if line.radixflags and (RWF_PEGBOTTOM_CEILING or RWF_PEGTOP_CEILING) = 0 then
+  if line.radixflags and (RWF_PEGBOTTOM_CEILING or RWF_PEGBOTTOM_FLOOR) = 0 then
     result := - viewz
   else if line.radixflags and RWF_PEGBOTTOM_CEILING <> 0 then
     result := line.backsector.ceilingheight - viewz
@@ -474,9 +474,9 @@ var
   line: Pline_t;
 begin
   line := seg.linedef;
-  if line.radixflags and (RWF_PEGBOTTOM_FLOOR or RWF_PEGTOP_FLOOR) = 0 then
+  if line.radixflags and (RWF_PEGTOP_CEILING or RWF_PEGTOP_FLOOR) = 0 then
     result := -viewz
-  else if line.radixflags and RWF_PEGBOTTOM_FLOOR <> 0 then
+  else if line.radixflags and RWF_PEGTOP_CEILING <> 0 then
     result := line.frontsector.floorheight - viewz
   else
     result := line.backsector.floorheight - viewz;
