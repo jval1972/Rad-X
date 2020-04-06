@@ -809,17 +809,17 @@ begin
   x := RX_RadixX2Doom(parms.new_x, parms.new_y) * FRACUNIT;
   y := RX_RadixY2Doom(parms.new_x, parms.new_y) * FRACUNIT;
 
-  angle := parms.new_angle * (ANGLE_MAX div 256);
-  // Sine, cosine of angle adjustment
-  s := finesine[angle shr ANGLETOFINESHIFT];
-  c := finecosine[angle shr ANGLETOFINESHIFT];
-
   // Momentum of thing crossing teleporter linedef
   momx := p.mo.momx;
   momy := p.mo.momy;
 
   if not P_TeleportMove(p.mo, x, y) then
     exit;
+
+  angle := parms.new_angle * (ANGLE_MAX div 256);
+  // Sine, cosine of angle adjustment
+  s := finesine[angle shr ANGLETOFINESHIFT];
+  c := finecosine[angle shr ANGLETOFINESHIFT];
 
   if parms.change_height <> 0 then
     p.mo.z := parms.new_height * FRACUNIT;
