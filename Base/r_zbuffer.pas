@@ -85,9 +85,9 @@ implementation
 
 uses
   d_delphi,
-  {.$IFDEF DEBUG}
+  {$IFDEF DEBUG}
   i_system,
-  {.$ENDIF}
+  {$ENDIF}
   m_fixed,
   r_bsp,
   r_draw,
