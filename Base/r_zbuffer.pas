@@ -111,7 +111,7 @@ procedure R_DrawSpanToZBuffer;
 var
   item: Pzbufferitem_t;
 begin
-{.$IFDEF DEBUG}
+{$IFDEF DEBUG}
   if not IsIntegerInRange(ds_y, 0, viewheight - 1) then
     I_Warning('R_DrawSpanToZBuffer(): ds_y=%d not in range [0..viewheight(=%d) - 1]'#13#10, [ds_y, viewheight]);
   if not IsIntegerInRange(ds_x1, 0, viewwidth - 1) then
@@ -120,7 +120,7 @@ begin
     I_Warning('R_DrawSpanToZBuffer(): ds_x2=%d not in range [0..viewwidth(=%d) - 1]'#13#10, [ds_x2, viewwidth]);
   if ds_x2 < ds_x1 then
     I_Warning('R_DrawSpanToZBuffer(): ds_x2=%d < ds_x1=%d'#13#10, [ds_x2, ds_x1]);
-{.$ENDIF}
+{$ENDIF}
 
   item := R_NewZBufferItem(@Zspans[ds_y]);
 
