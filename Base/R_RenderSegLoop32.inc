@@ -280,8 +280,8 @@ begin
 {$ENDIF}
       pceilingclip^ := viewheight;
       pfloorclip^ := -1;
-    end
-    else
+    end;
+//    else
     begin
       // two sided line
       if toptexture <> 0 then

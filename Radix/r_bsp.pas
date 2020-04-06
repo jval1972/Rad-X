@@ -77,6 +77,7 @@ uses
   m_bbox,
   p_setup,
   p_slopes, // JVAL: Slopes
+  radix_level,
   {$IFNDEF OPENGL}
   r_segs,
   r_3dfloors, // JVAL: 3d Floors
@@ -670,7 +671,7 @@ begin
   backsector := line.backsector;
 
   // Single sided line?
-  if backsector = nil then
+  if (backsector = nil) or R_CompleteWall(line.linedef) then
   begin
     R_ClipSolidWallSegment(x1, x2 - 1);
     exit;

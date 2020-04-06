@@ -133,6 +133,8 @@ procedure R_WiggleFix(sec: Psector_t);
 var
   r_fakecontrast: boolean;
 
+function R_CompleteWall(const l: Pline_t): boolean;
+
 implementation
 
 uses
@@ -160,6 +162,7 @@ uses
   r_scale,
   r_segs2,
   radix_map_extra,
+  radix_level,
 {$IFDEF STRIFE}
   r_col_fz,
 {$ENDIF}
@@ -255,7 +258,7 @@ begin
     begin
       frontsector.cachedheight := height;
       frontsector.scaleindex := 0;
-      height := height shr  7;
+      height := height shr 7;
       // calculate adjustment
       while true do
       begin
@@ -617,7 +620,7 @@ begin
   pds.thicksidecol := nil;  // JVAL: 3d Floors
   pds.midsec := nil;        // JVAL: 3d Floors
 
-  if backsector = nil then
+  if (backsector = nil) or R_CompleteWall(curline.linedef) then
   begin
     // single sided line
     midtexture := texturetranslation[sidedef.midtexture];
@@ -656,8 +659,8 @@ begin
     pds.sprbottomclip := @negonearray;
     pds.bsilheight := MAXINT;
     pds.tsilheight := MININT;
-  end
-  else
+  end;
+  if backsector <> nil then
   begin
     // two sided line
     pds.sprtopclip := nil;
@@ -718,55 +721,58 @@ begin
       worldtop := worldhigh;
     end;
 
-    // JVAL: 20200118
-    if curline.frontsector = curline.backsector then
+    if not R_CompleteWall(curline.linedef) then
     begin
-      markfloor := false;
-      markceiling := false;
-    end
-    else if (backsector.ceilingheight <= frontsector.floorheight) or
-       (backsector.floorheight >= frontsector.ceilingheight) then
-    begin
-      // closed door
-      markceiling := true;
-      markfloor := true;
-    end
-    else
-    begin
-      markfloor := (worldlow <> worldbottom) or
-                   (backsector.floorpic <> frontsector.floorpic) or
-                   (backsector.lightlevel <> frontsector.lightlevel) or
-                   {$IFDEF DOOM_OR_STRIFE}
-                   // killough 3/7/98: Add checks for (x,y) offsets
-                   (backsector.floor_xoffs <> frontsector.floor_xoffs) or
-                   (backsector.floor_yoffs <> frontsector.floor_yoffs) or
-                   // killough 4/15/98: prevent 2s normals
-                   // from bleeding through deep water
-                   (frontsector.heightsec <> -1) or
-                   // killough 4/17/98: draw floors if different light levels
-                   (backsector.floorlightsec <> frontsector.floorlightsec) or
-                   {$ENDIF}
-                   {$IFDEF HEXEN}
-                   (backsector.special <> frontsector.special) or
-                   {$ENDIF}
-                   ((frontsector.midsec <> backsector.midsec) and (frontsector.tag <> backsector.tag)) or // JVAL: 3d floors
-                   (backsector.renderflags <> frontsector.renderflags);
-
-      markceiling := (worldhigh <> worldtop) or
-                     (backsector.ceilingpic <> frontsector.ceilingpic) or
+      // JVAL: 20200118
+      if curline.frontsector = curline.backsector then
+      begin
+        markfloor := false;
+        markceiling := false;
+      end
+      else if (backsector.ceilingheight <= frontsector.floorheight) or
+         (backsector.floorheight >= frontsector.ceilingheight) then
+      begin
+        // closed door
+        markceiling := true;
+        markfloor := true;
+      end
+      else
+      begin
+        markfloor := (worldlow <> worldbottom) or
+                     (backsector.floorpic <> frontsector.floorpic) or
                      (backsector.lightlevel <> frontsector.lightlevel) or
                      {$IFDEF DOOM_OR_STRIFE}
                      // killough 3/7/98: Add checks for (x,y) offsets
-                     (backsector.ceiling_xoffs <> frontsector.ceiling_xoffs) or
-                     (backsector.ceiling_yoffs <> frontsector.ceiling_yoffs) or
+                     (backsector.floor_xoffs <> frontsector.floor_xoffs) or
+                     (backsector.floor_yoffs <> frontsector.floor_yoffs) or
                      // killough 4/15/98: prevent 2s normals
-                     // from bleeding through fake ceilings
-                     ((frontsector.heightsec <> -1) and (frontsector.ceilingpic <> skyflatnum)) or
-                     // killough 4/17/98: draw ceilings if different light levels
-                     (backsector.ceilinglightsec <> frontsector.ceilinglightsec) or
+                     // from bleeding through deep water
+                     (frontsector.heightsec <> -1) or
+                     // killough 4/17/98: draw floors if different light levels
+                     (backsector.floorlightsec <> frontsector.floorlightsec) or
+                     {$ENDIF}
+                     {$IFDEF HEXEN}
+                     (backsector.special <> frontsector.special) or
                      {$ENDIF}
                      ((frontsector.midsec <> backsector.midsec) and (frontsector.tag <> backsector.tag)) or // JVAL: 3d floors
                      (backsector.renderflags <> frontsector.renderflags);
+
+        markceiling := (worldhigh <> worldtop) or
+                       (backsector.ceilingpic <> frontsector.ceilingpic) or
+                       (backsector.lightlevel <> frontsector.lightlevel) or
+                       {$IFDEF DOOM_OR_STRIFE}
+                       // killough 3/7/98: Add checks for (x,y) offsets
+                       (backsector.ceiling_xoffs <> frontsector.ceiling_xoffs) or
+                       (backsector.ceiling_yoffs <> frontsector.ceiling_yoffs) or
+                       // killough 4/15/98: prevent 2s normals
+                       // from bleeding through fake ceilings
+                       ((frontsector.heightsec <> -1) and (frontsector.ceilingpic <> skyflatnum)) or
+                       // killough 4/17/98: draw ceilings if different light levels
+                       (backsector.ceilinglightsec <> frontsector.ceilinglightsec) or
+                       {$ENDIF}
+                       ((frontsector.midsec <> backsector.midsec) and (frontsector.tag <> backsector.tag)) or // JVAL: 3d floors
+                       (backsector.renderflags <> frontsector.renderflags);
+      end;
     end;
 
     if worldhigh < worldtop then
@@ -835,7 +841,7 @@ begin
     R_StoreThickSideRange(pds, frontsector, backsector);
 
     // allocate space for masked texture tables
-    if sidedef.midtexture <> 0 then
+    if (sidedef.midtexture <> 0) and not R_CompleteWall(curline.linedef) then
     begin
       // masked midtexture
       maskedtexture := true;
@@ -1205,7 +1211,7 @@ begin
   pds.thicksidecol := nil;  // JVAL: 3d Floors
   pds.midsec := nil;        // JVAL: 3d Floors
 
-  if backsector = nil then
+  if (backsector = nil) or R_CompleteWall(curline.linedef) then
   begin
     // single sided line
     midtexture := texturetranslation[sidedef.midtexture];
@@ -1244,8 +1250,8 @@ begin
     pds.sprbottomclip := @negonearray;
     pds.bsilheight := MAXINT;
     pds.tsilheight := MININT;
-  end
-  else
+  end;
+  if backsector <> nil then
   begin
     // two sided line
     pds.sprtopclip := nil;
@@ -1306,55 +1312,58 @@ begin
       worldtop := worldhigh;
     end;
 
-    // JVAL: 20200118
-    if curline.frontsector = curline.backsector then
+    if not R_CompleteWall(curline.linedef) then
     begin
-      markfloor := false;
-      markceiling := false;
-    end
-    else if (backsector.ceilingheight <= frontsector.floorheight) or
-       (backsector.floorheight >= frontsector.ceilingheight) then
-    begin
-      // closed door
-      markceiling := true;
-      markfloor := true;
-    end
-    else
-    begin
-      markfloor := (worldlow <> worldbottom) or
-                   (backsector.floorpic <> frontsector.floorpic) or
-                   (backsector.lightlevel <> frontsector.lightlevel) or
-                   {$IFDEF DOOM_OR_STRIFE}
-                   // killough 3/7/98: Add checks for (x,y) offsets
-                   (backsector.floor_xoffs <> frontsector.floor_xoffs) or
-                   (backsector.floor_yoffs <> frontsector.floor_yoffs) or
-                   // killough 4/15/98: prevent 2s normals
-                   // from bleeding through deep water
-                   (frontsector.heightsec <> -1) or
-                   // killough 4/17/98: draw floors if different light levels
-                   (backsector.floorlightsec <> frontsector.floorlightsec) or
-                   {$ENDIF}
-                   {$IFDEF HEXEN}
-                   (backsector.special <> frontsector.special) or
-                   {$ENDIF}
-                   ((frontsector.midsec <> backsector.midsec) and (frontsector.tag <> backsector.tag)) or // JVAL: 3d floors
-                   (backsector.renderflags <> frontsector.renderflags);
-
-      markceiling := (worldhigh <> worldtop) or
-                     (backsector.ceilingpic <> frontsector.ceilingpic) or
+      // JVAL: 20200118
+      if curline.frontsector = curline.backsector then
+      begin
+        markfloor := false;
+        markceiling := false;
+      end
+      else if (backsector.ceilingheight <= frontsector.floorheight) or
+         (backsector.floorheight >= frontsector.ceilingheight) then
+      begin
+        // closed door
+        markceiling := true;
+        markfloor := true;
+      end
+      else
+      begin
+        markfloor := (worldlow <> worldbottom) or
+                     (backsector.floorpic <> frontsector.floorpic) or
                      (backsector.lightlevel <> frontsector.lightlevel) or
                      {$IFDEF DOOM_OR_STRIFE}
                      // killough 3/7/98: Add checks for (x,y) offsets
-                     (backsector.ceiling_xoffs <> frontsector.ceiling_xoffs) or
-                     (backsector.ceiling_yoffs <> frontsector.ceiling_yoffs) or
+                     (backsector.floor_xoffs <> frontsector.floor_xoffs) or
+                     (backsector.floor_yoffs <> frontsector.floor_yoffs) or
                      // killough 4/15/98: prevent 2s normals
-                     // from bleeding through fake ceilings
-                     ((frontsector.heightsec <> -1) and (frontsector.ceilingpic <> skyflatnum)) or
-                     // killough 4/17/98: draw ceilings if different light levels
-                     (backsector.ceilinglightsec <> frontsector.ceilinglightsec) or
+                     // from bleeding through deep water
+                     (frontsector.heightsec <> -1) or
+                     // killough 4/17/98: draw floors if different light levels
+                     (backsector.floorlightsec <> frontsector.floorlightsec) or
+                     {$ENDIF}
+                     {$IFDEF HEXEN}
+                     (backsector.special <> frontsector.special) or
                      {$ENDIF}
                      ((frontsector.midsec <> backsector.midsec) and (frontsector.tag <> backsector.tag)) or // JVAL: 3d floors
                      (backsector.renderflags <> frontsector.renderflags);
+
+        markceiling := (worldhigh <> worldtop) or
+                       (backsector.ceilingpic <> frontsector.ceilingpic) or
+                       (backsector.lightlevel <> frontsector.lightlevel) or
+                       {$IFDEF DOOM_OR_STRIFE}
+                       // killough 3/7/98: Add checks for (x,y) offsets
+                       (backsector.ceiling_xoffs <> frontsector.ceiling_xoffs) or
+                       (backsector.ceiling_yoffs <> frontsector.ceiling_yoffs) or
+                       // killough 4/15/98: prevent 2s normals
+                       // from bleeding through fake ceilings
+                       ((frontsector.heightsec <> -1) and (frontsector.ceilingpic <> skyflatnum)) or
+                       // killough 4/17/98: draw ceilings if different light levels
+                       (backsector.ceilinglightsec <> frontsector.ceilinglightsec) or
+                       {$ENDIF}
+                       ((frontsector.midsec <> backsector.midsec) and (frontsector.tag <> backsector.tag)) or // JVAL: 3d floors
+                       (backsector.renderflags <> frontsector.renderflags);
+      end;
     end;
 
     if worldhigh < worldtop then
@@ -1423,7 +1432,7 @@ begin
     R_StoreThickSideRange(pds, frontsector, backsector);
 
     // allocate space for masked texture tables
-    if sidedef.midtexture <> 0 then
+    if (sidedef.midtexture <> 0) and not R_CompleteWall(curline.linedef) then
     begin
       // masked midtexture
       maskedtexture := true;
@@ -1573,7 +1582,7 @@ begin
 
   bottomfrac := (int64(centeryfrac) div WORLDUNIT) - int64(worldbottom) * int64(rw_scale) shr FRACBITS;
 
-  if backsector <> nil then
+  if (backsector <> nil) and not R_CompleteWall(curline.linedef) then
   begin
     worldhigh := worldhigh div WORLDUNIT;
     worldlow := worldlow div WORLDUNIT;
@@ -1643,41 +1652,52 @@ begin
   end;
 
   // save sprite clipping info
-  if ((pds.silhouette and SIL_TOP <> 0) or maskedtexture) and
-     (pds.sprtopclip = nil) then
+  if not R_CompleteWall(curline.linedef) then
   begin
-    memcpy(@openings[lastopening], @ceilingclip[start], SizeOf(ceilingclip[0]) * (rw_stopx - start));
-    {$IFDEF DEBUG}
-    R_CheckClipTable(@ceilingclip, start, rw_stopx - 1);
-    {$ENDIF}
-    pds.sprtopclip := PSmallIntArray(@openings[lastopening - start]);
-    lastopening := lastopening + rw_stopx - start;
+    if ((pds.silhouette and SIL_TOP <> 0) or maskedtexture) and
+       (pds.sprtopclip = nil) then
+    begin
+      memcpy(@openings[lastopening], @ceilingclip[start], SizeOf(ceilingclip[0]) * (rw_stopx - start));
+      {$IFDEF DEBUG}
+      R_CheckClipTable(@ceilingclip, start, rw_stopx - 1);
+      {$ENDIF}
+      pds.sprtopclip := PSmallIntArray(@openings[lastopening - start]);
+      lastopening := lastopening + rw_stopx - start;
+    end;
+
+    if ((pds.silhouette and SIL_BOTTOM <> 0) or maskedtexture) and
+       (pds.sprbottomclip = nil) then
+    begin
+      memcpy(@openings[lastopening], @floorclip[start], SizeOf(floorclip[0]) * (rw_stopx - start));
+      {$IFDEF DEBUG}
+      R_CheckClipTable(@floorclip, start, rw_stopx - 1);
+      {$ENDIF}
+      pds.sprbottomclip := PSmallIntArray(@openings[lastopening - start]);
+      lastopening := lastopening + rw_stopx - start;
+    end;
+
+    if maskedtexture and (pds.silhouette and SIL_TOP = 0) then
+    begin
+      pds.silhouette := pds.silhouette or SIL_TOP;
+      pds.tsilheight := MININT;
+    end;
+    if maskedtexture and (pds.silhouette and SIL_BOTTOM = 0) then
+    begin
+      pds.silhouette := pds.silhouette or SIL_BOTTOM;
+      pds.bsilheight := MAXINT;
+    end;
   end;
 
-  if ((pds.silhouette and SIL_BOTTOM <> 0) or maskedtexture) and
-     (pds.sprbottomclip = nil) then
-  begin
-    memcpy(@openings[lastopening], @floorclip[start], SizeOf(floorclip[0]) * (rw_stopx - start));
-    {$IFDEF DEBUG}
-    R_CheckClipTable(@floorclip, start, rw_stopx - 1);
-    {$ENDIF}
-    pds.sprbottomclip := PSmallIntArray(@openings[lastopening - start]);
-    lastopening := lastopening + rw_stopx - start;
-  end;
-
-  if maskedtexture and (pds.silhouette and SIL_TOP = 0) then
-  begin
-    pds.silhouette := pds.silhouette or SIL_TOP;
-    pds.tsilheight := MININT;
-  end;
-  if maskedtexture and (pds.silhouette and SIL_BOTTOM = 0) then
-  begin
-    pds.silhouette := pds.silhouette or SIL_BOTTOM;
-    pds.bsilheight := MAXINT;
-  end;
   inc(ds_p);
 end;
 {$ENDIF}
+
+function R_CompleteWall(const l: Pline_t): boolean;
+begin
+  result := (l.radixflags and RWF_TWOSIDEDCOMPLETE <> 0);
+  if result then
+    result := not R_PointOnLineSide(viewx, viewy, l);
+end;
 
 end.
 
