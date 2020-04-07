@@ -57,6 +57,7 @@ const
   RSF_FLOORSLOPE = 4;
   RSF_CEILINGSLOPE = 8;
   RSF_CEILINGSKY = 16;
+  RSF_HIDDEN = 32;
   RSF_FLOORSKY = 64;
 
 // Wall Flags
@@ -561,6 +562,7 @@ var
     doommapscript.Add('xadd ' + itoa(doomsectorsextra[numdoomsectors].xadd));
     doommapscript.Add('ymul ' + itoa(doomsectorsextra[numdoomsectors].ymul));
     doommapscript.Add('yadd ' + itoa(doomsectorsextra[numdoomsectors].yadd));
+    doommapscript.Add('sectorflags ' + itoa(ss.flags));
 
     if ss.flags and RSF_FLOORSLOPE <> 0 then
       doommapscript.Add('floorslope ' + itoa(ss.fa) + ' ' + itoa(ss.fb) + ' ' + itoa(ss.fc) + ' ' + itoa(ss.fd));

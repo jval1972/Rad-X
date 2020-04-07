@@ -224,6 +224,7 @@ begin
   tokens.Add('WALLFLAGS'); // 18
   tokens.Add('WALLHITPOINTS'); // 19
   tokens.Add('WALLTRIGGER'); // 20
+  tokens.Add('SECTORFLAGS'); // 21
 
   cursector := 0;
   curline := 0;
@@ -404,6 +405,11 @@ begin
         begin
           sc.MustGetInteger;
           lines[curline].radixtrigger := sc._Integer;
+        end;
+     21: // sectorflags
+        begin
+          sc.MustGetInteger;
+          sectors[cursector].radixflags := sc._Integer;
         end;
     end;  // case
   end;

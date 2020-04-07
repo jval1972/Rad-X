@@ -212,6 +212,7 @@ type
     radixmapYadd: integer;
     floorangle: angle_t; // JVAL: 20200221 - Texture angle
     ceilingangle: angle_t; // JVAL: 20200221 - Texture angle
+    radixflags: integer; // JVAL: 20200407 - Pass sector flags from RADIX.DAT
 {$IFDEF OPENGL}
     floorlightlevel: smallint;
     ceilinglightlevel: smallint;
