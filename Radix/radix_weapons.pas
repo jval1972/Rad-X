@@ -319,7 +319,7 @@ begin
     radixplasma_id := Info_GetMobjNumForName('MT_RADIXPLASMA');
 
   // JVAL: Decide the neutron cannon level
-  nlevel := player.neutroncannonlevel;
+  nlevel := neutroncannoninfo[player.neutroncannonlevel].firelevel;
   if nlevel > 0 then
     if player.energy < PLAYERSPAWNENERGY div 2 then
       dec(nlevel);

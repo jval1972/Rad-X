@@ -77,7 +77,25 @@ const
 
 // Radix Weapons Flags and consts
 const
-  MAXNEUTRONCANNONLEVEL = 3;
+  MAXNEUTRONCANNONLEVEL = 7;
+
+type
+  neutroncannoninfo_t = record
+    level: integer;
+    firelevel: integer;
+    msg: string[34];
+  end;
+
+const
+  neutroncannoninfo: array[0..MAXNEUTRONCANNONLEVEL - 1] of neutroncannoninfo_t = (
+    (level: 0; firelevel: 0; msg: ''),
+    (level: 1; firelevel: 1; msg: 'Level 2 Neutron Cannons Acquired'),
+    (level: 2; firelevel: 1; msg: '1 Powerup required for next level'),
+    (level: 3; firelevel: 2; msg: 'Level 3 Neutron Cannons Acquired'),
+    (level: 4; firelevel: 2; msg: '2 Powerups required for next level'),
+    (level: 5; firelevel: 2; msg: '1 Powerup required for next level'),
+    (level: 6; firelevel: 3; msg: 'Level 4 Neutron Cannons Acquired')
+  );
 
 const
   PWF_NEURONCANNON = 1;
@@ -133,6 +151,7 @@ type
     neutroncannonlevel: integer;  // JVAL: 20200324 - Neutro Cannons Level
     weaponflags: LongWord;  // JVAL: 20200328 - Weapon firing sequence information
     scannerjam: boolean;  // JVAL: 20200324 - When true can not see the radar in hud
+    lastbonustime: integer; // JVAL: 20200407 - Last level time the player did bonus
 
     // Frags, kills of other players.
     frags: array[0..MAXPLAYERS - 1] of integer;

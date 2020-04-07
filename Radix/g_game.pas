@@ -806,6 +806,7 @@ begin
     ZeroMemory(@players[i].lastfire, SizeOf(players[i].lastfire));
     players[i].weaponflags := 0;
     players[i].scannerjam := false;
+    players[i].lastbonustime := -1;
   end;
 
   PS_NewMap;

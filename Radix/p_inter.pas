@@ -83,6 +83,7 @@ uses
   m_fixed,
   d_items,
   g_game,
+  p_tick,
   p_mobj,
   p_pspr,
   ps_main, // JVAL: Script Events
@@ -480,14 +481,10 @@ begin
 end;
 
 function P_UpgradeNeutronCannons(const p: Pplayer_t): boolean;
-var
-  stmp: string;
 begin
-  if p.neutroncannonlevel < MAXNEUTRONCANNONLEVEL then
+  if p.neutroncannonlevel < MAXNEUTRONCANNONLEVEL - 1 then
   begin
     inc(p.neutroncannonlevel);
-    sprintf(stmp, 'Level %d Neutron Cannons Acquired', [p.neutroncannonlevel + 1]);
-    p._message := stmp;
     result := true;
   end
   else
@@ -509,6 +506,7 @@ var
   pmsg: string;
   oldhealth: integer;
   didbonus: boolean;
+  didneutronbonus: boolean;
 begin
   delta := special.z - toucher.z;
 
@@ -517,6 +515,8 @@ begin
     exit;
 
   player := toucher.player;
+  if player.lastbonustime = leveltime then
+    exit;
 
   // Dead thing touching.
   // Can happen with a sliding player corpse.
@@ -600,15 +600,19 @@ begin
     if special.info.plasmabomb > 0 then
       if P_GivePlasmaBombs(player, special.info.plasmabomb) then
         didbonus := true;
-        
-    if not didbonus then
-      exit;
 
+    didneutronbonus := false;
     if special.info.doomednum = MT_LEVEL2NEUTRONCANNONS then
-    begin
-      if P_UpgradeNeutronCannons(player) then
-        didbonus := true;
-    end
+      didneutronbonus := P_UpgradeNeutronCannons(player);
+
+    if not didbonus then
+      if not didneutronbonus then
+        exit;
+
+    player.lastbonustime := leveltime;
+
+    if didneutronbonus then
+      player._message := neutroncannoninfo[player.neutroncannonlevel].msg
     else
       player._message := special.info.pickupmessage;
 
@@ -616,6 +620,8 @@ begin
   end
   else
   begin
+    player.lastbonustime := leveltime;
+
     sound := Ord(sfx_itemup);
     // Identify by sprite.
     case special.sprite of
