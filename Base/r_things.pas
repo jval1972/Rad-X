@@ -520,6 +520,10 @@ var
   tallpatch: boolean;
   dodepthbuffer: boolean;
 begin
+  if completewallactive then
+    if depthscale < completewallmarks[dc_x] then
+      exit;
+
   basetexturemid := dc_texturemid;
 
   fc_x := mfloorclip[dc_x];
@@ -594,6 +598,10 @@ var
   basetexturemid: fixed_t;
   fc_x, cc_x: integer;
 begin
+  if completewallactive then
+    if trunc((FRACUNIT / dc_iscale) * FRACUNIT) >= completewallmarks[dc_x] then
+      exit;
+
   basetexturemid := dc_texturemid;
 
   fc_x := mfloorclip[dc_x];
@@ -1030,12 +1038,12 @@ begin
 
   do_mt := (vis.x2 - vis.x1 > MIN_SPRITE_SIZE_MT) and usemultithread;
 
-  if do_mt and Assigned(spritefunc_mt) then
+  if do_mt and Assigned(spritefunc_mt) and not completewallactive then
     dmcproc := @R_DrawMaskedColumnMT
   else
     dmcproc := @R_DrawMaskedColumn;
 
-  if ({(vis.renderflags and VSF_DONTCLIP3DFLOOR = 0) and }depthbufferactive) or (xiscale > FRACUNIT div 2) or (xiscale < -FRACUNIT div 2) or (not optimizedthingsrendering) or (not Assigned(batchcolfunc)) then
+  if depthbufferactive or completewallactive or (xiscale > FRACUNIT div 2) or (xiscale < -FRACUNIT div 2) or (not optimizedthingsrendering) or (not Assigned(batchcolfunc)) then
   begin
     while dc_x <= vis.x2 do
     begin
@@ -1170,7 +1178,7 @@ begin
   end;
 
   dc_x := x1;
-  if depthbufferactive or (fracstep > FRACUNIT div 2) or (not optimizedthingsrendering) or (not Assigned(batchlightcolfunc)) then
+  if depthbufferactive or completewallactive or (fracstep > FRACUNIT div 2) or (not optimizedthingsrendering) or (not Assigned(batchlightcolfunc)) then
   begin
     while dc_x <= x2 do
     begin
@@ -1195,10 +1203,17 @@ begin
 
       if frac < 256 * FRACUNIT then
         if dc_yl <= dc_yh then
+        begin
           if depthbufferactive then                             // JVAL: 3d Floors
             R_DrawColumnWithDepthBufferCheckOnly(lightcolfunc)  // JVAL: 3d Floors
+          else if completewallactive then
+          begin
+            if spryscale >= completewallmarks[dc_x] then
+              lightcolfunc;
+          end
           else
             lightcolfunc;
+        end;
 
       dc_texturemid := basetexturemid;
 

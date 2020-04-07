@@ -153,8 +153,10 @@ begin
       dc_x := rwx;
       {$IFDEF USEDOUBLE}
       dc_iscale := round($100000000 / rw_scale_dbl);
+      completewallmarks[rwx] := round(rw_scale_dbl);
       {$ELSE}
       dc_iscale := LongWord($ffffffff) div LongWord(rw_scale);
+      completewallmarks[rwx] := rw_scale;
       {$ENDIF}
     end;
 

@@ -37,6 +37,9 @@ interface
 
 uses
   d_delphi,
+{$IFNDEF OPENGL}
+  doomdef,
+{$ENDIF}  
   m_fixed,
   tables,
   r_defs;
@@ -133,7 +136,18 @@ procedure R_WiggleFix(sec: Psector_t);
 var
   r_fakecontrast: boolean;
 
+{$IFNDEF OPENGL}
 function R_CompleteWall(const l: Pline_t): boolean;
+
+var
+  completewall: boolean;
+  completewallactive: boolean;
+
+procedure R_ClearCompleteWallMarks;
+
+var
+  completewallmarks: array[0..MAXWIDTH - 1] of fixed_t;
+{$ENDIF}
 
 implementation
 
@@ -142,7 +156,6 @@ uses
   g_game,
   r_bsp,
 {$IFNDEF OPENGL}
-  doomdef,
   doomdata,
   doomtype,
   p_setup, // JVAL: 3d floors
@@ -620,7 +633,9 @@ begin
   pds.thicksidecol := nil;  // JVAL: 3d Floors
   pds.midsec := nil;        // JVAL: 3d Floors
 
-  if (backsector = nil) or R_CompleteWall(curline.linedef) then
+  completewall := R_CompleteWall(curline.linedef);
+  completewallactive := completewallactive or completewall;
+  if (backsector = nil) or completewall then
   begin
     // single sided line
     midtexture := texturetranslation[sidedef.midtexture];
@@ -721,7 +736,7 @@ begin
       worldtop := worldhigh;
     end;
 
-    if not R_CompleteWall(curline.linedef) then
+    if not completewall then
     begin
       // JVAL: 20200118
       if curline.frontsector = curline.backsector then
@@ -841,7 +856,7 @@ begin
     R_StoreThickSideRange(pds, frontsector, backsector);
 
     // allocate space for masked texture tables
-    if (sidedef.midtexture <> 0) and not R_CompleteWall(curline.linedef) then
+    if (sidedef.midtexture <> 0) and not completewall then
     begin
       // masked midtexture
       maskedtexture := true;
@@ -1211,7 +1226,9 @@ begin
   pds.thicksidecol := nil;  // JVAL: 3d Floors
   pds.midsec := nil;        // JVAL: 3d Floors
 
-  if (backsector = nil) or R_CompleteWall(curline.linedef) then
+  completewall := R_CompleteWall(curline.linedef);
+  completewallactive := completewallactive or completewall;
+  if (backsector = nil) or completewall then
   begin
     // single sided line
     midtexture := texturetranslation[sidedef.midtexture];
@@ -1312,7 +1329,7 @@ begin
       worldtop := worldhigh;
     end;
 
-    if not R_CompleteWall(curline.linedef) then
+    if not completewall then
     begin
       // JVAL: 20200118
       if curline.frontsector = curline.backsector then
@@ -1432,7 +1449,7 @@ begin
     R_StoreThickSideRange(pds, frontsector, backsector);
 
     // allocate space for masked texture tables
-    if (sidedef.midtexture <> 0) and not R_CompleteWall(curline.linedef) then
+    if (sidedef.midtexture <> 0) and not completewall then
     begin
       // masked midtexture
       maskedtexture := true;
@@ -1582,7 +1599,7 @@ begin
 
   bottomfrac := (int64(centeryfrac) div WORLDUNIT) - int64(worldbottom) * int64(rw_scale) shr FRACBITS;
 
-  if (backsector <> nil) and not R_CompleteWall(curline.linedef) then
+  if (backsector <> nil) and not completewall then
   begin
     worldhigh := worldhigh div WORLDUNIT;
     worldlow := worldlow div WORLDUNIT;
@@ -1652,7 +1669,7 @@ begin
   end;
 
   // save sprite clipping info
-  if not R_CompleteWall(curline.linedef) then
+  if not completewall then
   begin
     if ((pds.silhouette and SIL_TOP <> 0) or maskedtexture) and
        (pds.sprtopclip = nil) then
@@ -1692,12 +1709,20 @@ begin
 end;
 {$ENDIF}
 
+{$IFNDEF OPENGL}
 function R_CompleteWall(const l: Pline_t): boolean;
 begin
   result := (l.radixflags and RWF_TWOSIDEDCOMPLETE <> 0);
   if result then
     result := not R_PointOnLineSide(viewx, viewy, l);
 end;
+
+procedure R_ClearCompleteWallMarks;
+begin
+  memset(@completewallmarks, 0, SCREENWIDTH * SizeOf(fixed_t));
+  completewallactive := false;
+end;
+{$ENDIF}
 
 end.
 
