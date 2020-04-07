@@ -47,7 +47,7 @@ const
   FLOATSPEED = FRACUNIT * 4;
 
 // Player VIEWHEIGHT
-  PVIEWHEIGHT = 41 * FRACUNIT;
+  PVIEWHEIGHT = 36 * FRACUNIT;
 
 // mapblocks are used to check movement
 // against lines and things

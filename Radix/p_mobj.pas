@@ -328,16 +328,8 @@ begin
   ymove := mo.momy;
 
   repeat
-    if (xmove > MAXMOVE div 2) or (ymove > MAXMOVE div 2) then
-    begin
-    // JVAL 20180107
-    // Please do not change, the div and the _SHR1, problem with demo compatibility..
-      ptryx := mo.x + xmove div 2;
-      ptryy := mo.y + ymove div 2;
-      xmove := _SHR1(xmove);
-      ymove := _SHR1(ymove);
-    end
-    else if (G_PlayingEngineVersion >= VERSION205) and ((xmove < -MAXMOVE div 2) or (ymove < -MAXMOVE div 2)) then
+    if (xmove > MAXMOVE div 2) or (ymove > MAXMOVE div 2) or
+       (xmove < -MAXMOVE div 2) or (ymove < -MAXMOVE div 2) then
     begin
     // JVAL 20180107
     // Please do not change, the div and the _SHR1, problem with demo compatibility..

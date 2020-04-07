@@ -110,77 +110,8 @@ begin
   player.mo.momy := player.mo.momy + FixedMul(mv, fixedsine[angle]);
 end;
 
-//
-// P_CalcHeight
-// Calculate the walking / running height adjustment
-//
-procedure P_CalcHeight(player: Pplayer_t);
-var
-  angle: integer;
-begin
-  // Regular movement bobbing
-  // (needs to be calculated for gun swing
-  // even if not on ground)
-  // OPTIMIZE: tablify angle
-  // Note: a LUT allows for effects
-  //  like a ramp with low health.
-
-  player.bob := FixedMul(player.mo.momx, player.mo.momx) +
-                FixedMul(player.mo.momy, player.mo.momy);
-  player.bob := player.bob div 4;
-
-  if player.bob > MAXBOB then
-    player.bob := MAXBOB;
-
-  player.oldviewz := player.viewz;  // JVAL: Slopes
-
-  if (player.cheats and CF_NOMOMENTUM <> 0) or (not onground) then
-  begin
-    player.viewz := player.mo.z + PVIEWHEIGHT;
-
-    if player.viewz > player.mo.ceilingz - 4 * FRACUNIT then
-      player.viewz := player.mo.ceilingz - 4 * FRACUNIT;
-
-//    player.viewz := player.mo.z + player.viewheight;  JVAL removed!
-    exit;
-  end;
-
-  angle := (FINEANGLES div 20 * leveltime) and FINEMASK;
-  player.viewbob := FixedMul(player.bob div 2, finesine[angle]);
-
-  // move viewheight
-  if player.playerstate = PST_LIVE then
-  begin
-    player.viewheight := player.viewheight + player.deltaviewheight;
-
-    if player.viewheight > PVIEWHEIGHT then
-    begin
-      player.viewheight := PVIEWHEIGHT;
-      player.deltaviewheight := 0;
-    end;
-
-    if player.viewheight < PVIEWHEIGHT div 2 then
-    begin
-      player.viewheight := PVIEWHEIGHT div 2;
-      if player.deltaviewheight <= 0 then
-        player.deltaviewheight := 1;
-    end;
-
-    if player.deltaviewheight <> 0 then
-    begin
-      player.deltaviewheight := player.deltaviewheight + FRACUNIT div 4;
-      if player.deltaviewheight = 0 then
-        player.deltaviewheight := 1;
-    end;
-  end;
-  player.viewz := player.mo.z + player.viewheight + player.viewbob;
-
-  if player.viewz > player.mo.ceilingz - 4 * FRACUNIT then
-    player.viewz := player.mo.ceilingz - 4 * FRACUNIT;
-end;
-
 // JVAL: Slopes
-procedure P_SlopesCalcHeight(player: Pplayer_t);
+procedure P_CalcHeight(player: Pplayer_t);
 var
   angle: integer;
   oldviewz: fixed_t;
@@ -192,13 +123,6 @@ begin
   // OPTIMIZE: tablify angle
   // Note: a LUT allows for effects
   //  like a ramp with low health.
-
-  if G_PlayingEngineVersion < VERSION122 then
-  begin
-    P_CalcHeight(player);
-    exit;
-  end;
-
   player.bob := FixedMul(player.mo.momx, player.mo.momx) +
                 FixedMul(player.mo.momy, player.mo.momy);
   player.bob := player.bob div 4;
@@ -598,7 +522,7 @@ begin
 
   player.deltaviewheight := 0;
   onground := player.mo.z <= player.mo.floorz;
-  P_SlopesCalcHeight(player); // JVAL: Slopes
+  P_CalcHeight(player); // JVAL: Slopes
 
   if (player.attacker <> nil) and (player.attacker <> player.mo) then
   begin
@@ -759,7 +683,7 @@ begin
   else
     P_MovePlayer(player);
 
-  P_SlopesCalcHeight(player); // JVAL: Slopes
+  P_CalcHeight(player); // JVAL: Slopes
 
   // JVAL: 3d Floors
   sec := Psubsector_t(player.mo.subsector).sector;

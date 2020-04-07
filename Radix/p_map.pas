@@ -1033,8 +1033,11 @@ begin
     if (thing.flags and MF_TELEPORT = 0) and
        (tmceilingz - thing.z < thing.height) then
     begin
-      result := false;  // mobj must lower itself to fit
-      exit;
+      if Psubsector_t(thing.subsector).sector.renderflags and SRF_SLOPECEILING = 0 then
+      begin
+        result := false;  // mobj must lower itself to fit
+        exit;
+      end;
     end;
 
     // JVAL: Do not step up in ladder movement
@@ -1049,9 +1052,8 @@ begin
 
     jumpupmargin := 24 * FRACUNIT;
     // JVAL: Version 205
-    if G_PlayingEngineVersion >= VERSION205 then
-      if (thing.flags2_ex and MF2_EX_JUMPUP <> 0) and (N_Random > 20) then
-        jumpupmargin := 56 * FRACUNIT;
+    if (thing.flags2_ex and MF2_EX_JUMPUP <> 0) and (N_Random > 20) then
+      jumpupmargin := 56 * FRACUNIT;
 
     if (thing.flags and MF_TELEPORT = 0) and
        (tmfloorz - thing.z > jumpupmargin) then
@@ -1061,11 +1063,9 @@ begin
     end;
 
     dropoffmargin := 24 * FRACUNIT;
-
     // JVAL: Version 204
-    if G_PlayingEngineVersion >= VERSION204 then
-      if (thing.flags2_ex and MF2_EX_JUMPDOWN <> 0) and (N_Random > 20) then
-        dropoffmargin := 144 * FRACUNIT;
+    if (thing.flags2_ex and MF2_EX_JUMPDOWN <> 0) and (N_Random > 20) then
+      dropoffmargin := 144 * FRACUNIT;
 
     if ((thing.flags and (MF_DROPOFF or MF_FLOAT)) = 0) and
        (tmfloorz - tmdropoffz > dropoffmargin) then
@@ -1075,14 +1075,13 @@ begin
     end;
 
     // JVAL: Version 204
-    if G_PlayingEngineVersion >= VERSION204 then
-      if (thing.flags2_ex and MF2_EX_CANTLEAVEFLOORPIC <> 0) and
-         ((tmfloorpic <> Psubsector_t(thing.subsector).sector.floorpic) or
-           (tmfloorz - thing.z <> 0)) then
-      begin // must stay within a sector of a certain floor type
-        result := false;
-        exit;
-      end;
+    if (thing.flags2_ex and MF2_EX_CANTLEAVEFLOORPIC <> 0) and
+       ((tmfloorpic <> Psubsector_t(thing.subsector).sector.floorpic) or
+         (tmfloorz - thing.z <> 0)) then
+    begin // must stay within a sector of a certain floor type
+      result := false;
+      exit;
+    end;
 
   end;
 
