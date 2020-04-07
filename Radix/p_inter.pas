@@ -512,7 +512,7 @@ var
 begin
   delta := special.z - toucher.z;
 
-  if (delta > toucher.height) or (delta < - 8 * FRACUNIT) then
+  if (delta > toucher.height) or (delta < - special.height) then
   // out of reach
     exit;
 
