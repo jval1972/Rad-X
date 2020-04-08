@@ -731,6 +731,10 @@ function MinI(const a, b: integer): integer;
 
 function MaxI(const a, b: integer): integer;
 
+function Min3I(const a, b, c: integer): integer;
+
+function Max3I(const a, b, c: integer): integer;
+
 function NowTime: TDateTime;
 
 function formatDateTimeAsString(const Format: string; DateTime: TDateTime): string;
@@ -4049,6 +4053,27 @@ begin
   else
     result := b;
 end;
+
+function Min3I(const a, b, c: integer): integer;
+begin
+  if a > b then
+    result := b
+  else
+    result := a;
+  if c < result then
+    result := c;
+end;
+
+function Max3I(const a, b, c: integer): integer;
+begin
+  if a > b then
+    result := a
+  else
+    result := b;
+  if c > result then
+    result := c;
+end;
+
 
 function NowTime: TDateTime;
 begin

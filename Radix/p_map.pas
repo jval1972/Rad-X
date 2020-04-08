@@ -278,94 +278,6 @@ end;
 // PIT_CheckLine
 // Adjusts tmfloorz and tmceilingz as lines are contacted
 //
-function PIT_CheckLine(ld: Pline_t): boolean;
-begin
-  if (tmbbox[BOXRIGHT] <= ld.bbox[BOXLEFT]) or
-     (tmbbox[BOXLEFT] >= ld.bbox[BOXRIGHT]) or
-     (tmbbox[BOXTOP] <= ld.bbox[BOXBOTTOM]) or
-     (tmbbox[BOXBOTTOM] >= ld.bbox[BOXTOP]) then
-  begin
-    result := true;
-    exit;
-  end;
-
-  if P_BoxOnLineSide(@tmbbox, ld) <> -1 then
-  begin
-    result := true;
-    exit;
-  end;
-
-  // A line has been hit
-
-  // The moving thing's destination position will cross
-  // the given line.
-  // If this should not be allowed, return false.
-  // If the line is special, keep track of it
-  // to process later if the move is proven ok.
-  // NOTE: specials are NOT sorted by order,
-  // so two special lines that are only 8 pixels apart
-  // could be crossed in either order.
-
-  if ld.backsector = nil then
-  begin
-    result := false;  // one sided line
-    exit;
-  end;
-
-  if tmthing.flags and MF_MISSILE = 0 then
-  begin
-    if ld.flags and ML_BLOCKING <> 0 then
-    begin
-      result := false;  // explicitly blocking everything
-      exit;
-    end;
-
-    // killough 8/9/98: monster-blockers don't affect friends
-    if ((tmthing.player = nil) or (tmthing.flags2_ex and MF2_EX_FRIEND <> 0)) and ((ld.flags and ML_BLOCKMONSTERS) <> 0) then
-    begin
-      result := false;  // block monsters only
-      exit;
-    end;
-  end;
-
-  // set openrange, opentop, openbottom
-  P_LineOpening(ld, true);
-
-  // adjust floor / ceiling heights
-  if opentop < tmceilingz then
-  begin
-    tmceilingz := opentop;
-    ceilingline := ld;
-  end;
-
-  if openbottom > tmfloorz then
-    tmfloorz := openbottom;
-
-  if lowfloor < tmdropoffz then
-    tmdropoffz := lowfloor;
-
-  // if contacted a special line, add it to the list
-  if (ld.special <> 0) or (ld.flags and ML_TRIGGERSCRIPTS <> 0) then
-  begin
-    if maxspechit = 0 then
-    begin
-      maxspechit := 64;
-      spechit := Z_Malloc(64 * SizeOf(Pline_t), PU_STATIC, nil);
-    end
-    else if numspechit = maxspechit then
-    begin
-      maxspechit := maxspechit + 8;
-      spechit := Z_ReAlloc(spechit, maxspechit * SizeOf(Pline_t), PU_STATIC, nil)
-    end;
-
-    spechit[numspechit] := ld;
-    inc(numspechit);
-
-  end;
-
-  result := true;
-end;
-
 // JVAL: Slopes
 function PIT_CheckLineTM(ld: Pline_t): boolean;
 var
@@ -770,26 +682,13 @@ begin
   yh := MapBlockInt(tmbbox[BOXTOP] - bmaporgy + MAXRADIUS);
 
   // JVAL: Slopes
-  if G_PlayingEngineVersion >= VERSION122 then
-  begin
-    for bx := xl to xh do
-      for by := yl to yh do
-        if not P_BlockLinesIterator(bx, by, PIT_CheckLineTM) then // JVAL: Slopes
-        begin
-          result := false;
-          exit;
-        end;
-  end
-  else
-  begin
-    for bx := xl to xh do
-      for by := yl to yh do
-        if not P_BlockLinesIterator(bx, by, PIT_CheckLine) then
-        begin
-          result := false;
-          exit;
-        end;
-  end;
+  for bx := xl to xh do
+    for by := yl to yh do
+      if not P_BlockLinesIterator(bx, by, PIT_CheckLineTM) then // JVAL: Slopes
+      begin
+        result := false;
+        exit;
+      end;
 
   result := true;
 end;
@@ -934,6 +833,7 @@ var
   x: fixed_t;
   y: fixed_t;
   oldmo: mobj_t;
+  r: fixed_t;
 begin
   x := thing.x;
   y := thing.y;
@@ -945,10 +845,11 @@ begin
   tmx := x;
   tmy := y;
 
-  tmbbox[BOXTOP] := y + tmthing.radius;
-  tmbbox[BOXBOTTOM] := y - tmthing.radius;
-  tmbbox[BOXRIGHT] := x + tmthing.radius;
-  tmbbox[BOXLEFT] := x - tmthing.radius;
+  r := tmthing.radius;
+  tmbbox[BOXTOP] := y + r;
+  tmbbox[BOXBOTTOM] := y - r;
+  tmbbox[BOXRIGHT] := x + r;
+  tmbbox[BOXLEFT] := x - r;
 
   newsubsec := R_PointInSubsector(x, y);
   ceilingline := nil;
@@ -1004,6 +905,8 @@ function P_TryMove(thing: Pmobj_t; x, y: fixed_t): boolean;
 var
   oldx: fixed_t;
   oldy: fixed_t;
+  x1, y1: fixed_t;
+  i: integer;
   side: integer;
   oldside: integer;
   ld: Pline_t;
@@ -1014,10 +917,26 @@ var
   jumpupmargin: fixed_t;
 begin
   floatok := false;
-  if not P_CheckPosition(thing, x, y) then
+  if (thing.flags and MF_MISSILE = 0) or (thing.flags3_ex and MF3_EX_NOMAXMOVE <> 0) then
   begin
-    result := false;  // solid wall or thing
-    exit;
+    if not P_CheckPosition(thing, x, y) then
+    begin
+      result := false;  // solid wall or thing
+      exit;
+    end;
+  end
+  else
+  begin
+    for i := 1 to 4 do
+    begin
+      x1 := (thing.x div 4) * (4 - i) + (x div 4) * i;
+      y1 := (thing.y div 4) * (4 - i) + (y div 4) * i;
+      if not P_CheckPosition(thing, x1, y1) then
+      begin
+        result := false;  // solid wall or thing
+        exit;
+      end;
+    end;
   end;
 
   if thing.flags and MF_NOCLIP = 0 then
@@ -2544,6 +2463,7 @@ var
   bx: integer;
   by: integer;
   node: Pmsecnode_t;
+  r: fixed_t;
 begin
   // First, clear out the existing m_thing fields. As each node is
   // added or verified as needed, m_thing will be set properly. When
@@ -2563,10 +2483,11 @@ begin
   tmx := x;
   tmy := y;
 
-  tmbbox[BOXTOP] := y + tmthing.radius;
-  tmbbox[BOXBOTTOM] := y - tmthing.radius;
-  tmbbox[BOXRIGHT] := x + tmthing.radius;
-  tmbbox[BOXLEFT] := x - tmthing.radius;
+  r := tmthing.radius;
+  tmbbox[BOXTOP] := y + r;
+  tmbbox[BOXBOTTOM] := y - r;
+  tmbbox[BOXRIGHT] := x + r;
+  tmbbox[BOXLEFT] := x - r;
 
   inc(validcount); // used to make sure we only process a line once
 

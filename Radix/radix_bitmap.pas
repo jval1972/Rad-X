@@ -197,8 +197,8 @@ begin
   tmp.AttachImage(fimg, fwidth, fheight);
   SetWidth(nw);
   SetHeight(nh);
-  w := mini(fwidth, nw);
-  h := mini(fheight, nh);
+  w := MinI(fwidth, nw);
+  h := MinI(fheight, nh);
   for i := 0 to w - 1 do
     for j := 0 to h - 1 do
       fimg[pos2idx(i, j)] := tmp.Pixels[i, j];
