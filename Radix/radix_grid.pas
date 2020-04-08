@@ -51,14 +51,25 @@ function RX_RadixGridX: integer;
 
 function RX_RadixGridY: integer;
 
-function RX_PosInGrid(const mo: Pmobj_t): integer;
+const
+  MAXMOVEMENTGRIDPOSITIONS = 3;
+
+type
+  gridmovementpositions_t = record
+    numpositions: integer;
+    positions: array[0..MAXMOVEMENTGRIDPOSITIONS - 1] of integer;
+  end;
+  Pgridmovementpositions_t = ^gridmovementpositions_t;
+
+function RX_PosInGrid(const mo: Pmobj_t): gridmovementpositions_t;
 
 implementation
 
 uses
   d_delphi,
   m_fixed,
-  i_system;
+  i_system,
+  r_main;
 
 var
   grid_X_size: integer;
@@ -92,24 +103,69 @@ begin
   result := grid_Y_size;
 end;
 
-function RX_PosInGrid(const mo: Pmobj_t): integer;
+function RX_PosInGrid(const mo: Pmobj_t): gridmovementpositions_t;
 var
   sec: Psector_t;
   rx, ry: integer;
+  mx, my: integer;
+  num: integer;
+  N: TDNumberList;
+  i: integer;
 begin
   if (grid_X_size = 0) or (grid_Y_size = 0) or (mo = nil) then
   begin
-    result := -1;
+    result.numpositions := 0;
     exit;
   end;
 
+  N := TDNumberList.Create;
+
+  // 3 steps between the mo movement
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Step 1
+  mx := ((mo.prevx div FRACUNIT) * 2 + (mo.x div FRACUNIT)) div 3;
+  my := ((mo.prevy div FRACUNIT) * 2 + (mo.y div FRACUNIT)) div 3;
+  sec := R_PointInSubSector(mx * FRACUNIT, my * FRACUNIT).sector;
+
+  // JVAL: 20200305 - Works only when ::radixmapXmult & ::radixmapYmult are -1 or 1
+  rx := (sec.radixmapXmult * mx - sec.radixmapXadd) div 64;
+  ry := (sec.radixmapYmult * my - sec.radixmapYadd) div 64;
+
+  num := ry * grid_X_size + rx;
+  N.Add(num);
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Step 2
+  mx := ((mo.prevx div FRACUNIT) + (mo.x div FRACUNIT) * 2) div 3;
+  my := ((mo.prevy div FRACUNIT) + (mo.y div FRACUNIT) * 2) div 3;
+  sec := R_PointInSubSector(mx * FRACUNIT, my * FRACUNIT).sector;
+
+  // JVAL: 20200305 - Works only when ::radixmapXmult & ::radixmapYmult are -1 or 1
+  rx := (sec.radixmapXmult * mx - sec.radixmapXadd) div 64;
+  ry := (sec.radixmapYmult * my - sec.radixmapYadd) div 64;
+
+  num := ry * grid_X_size + rx;
+  if N.IndexOf(num) < 0 then
+    N.Add(num);
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Step 3 - Current mo Position
   sec := Psubsector_t(mo.subsector).sector;
 
   // JVAL: 20200305 - Works only when ::radixmapXmult & ::radixmapYmult are -1 or 1
   rx := (sec.radixmapXmult * (mo.x div FRACUNIT) - sec.radixmapXadd) div 64;
   ry := (sec.radixmapYmult * (mo.y div FRACUNIT) - sec.radixmapYadd) div 64;
 
-  result := ry * grid_X_size + rx;
+  num := ry * grid_X_size + rx;
+  if N.IndexOf(num) < 0 then
+    N.Add(num);
+
+  result.numpositions := N.Count;
+  for i := 0 to N.Count - 1 do
+    result.positions[i] := N.Numbers[i];
+
+  N.Free;
 end;
 
 end.

@@ -55,6 +55,7 @@ var
 implementation
 
 uses
+  d_delphi,
   doomdef,
   d_player,
   g_game,
@@ -94,26 +95,39 @@ end;
 //
 procedure RX_RunTriggers;
 var
-  i: integer;
+  i, p: integer;
+  gridpositions: gridmovementpositions_t;
   grid_id: integer;
   trig_id: integer;
+  T: TDNumberList;
 begin
+  T := TDNumberList.Create;
   for i := 0 to MAXPLAYERS - 1 do
     if playeringame[i] then
     begin
       radixplayer := i;
-      grid_id := RX_PosInGrid(players[i].mo);
-      if (grid_id >= 0) and (grid_id < RADIXGRIDSIZE) then
+      gridpositions := RX_PosInGrid(players[i].mo);
+      for p := 0 to gridpositions.numpositions - 1 do
       begin
-        trig_id := radixgrid[grid_id];
-        if players[i].last_grid_trigger <> trig_id then // JVAL: 20200313 - Don't trigger twice the trigger
+        grid_id := gridpositions.positions[p];
+        if (grid_id >= 0) and (grid_id < RADIXGRIDSIZE) then
         begin
-          players[i].last_grid_trigger := trig_id;
-          if trig_id >= 0 then
-            RX_RunTrigger(trig_id);
+          trig_id := radixgrid[grid_id];
+          if players[i].last_grid_trigger <> trig_id then // JVAL: 20200313 - Don't trigger twice the trigger
+          begin
+            players[i].last_grid_trigger := trig_id;
+            if trig_id >= 0 then
+              if T.IndexOf(trig_id) < 0 then  // JVAL: 20200408 - Do not run trigger twice
+              begin
+                RX_RunTrigger(trig_id);
+                T.Add(trig_id);
+              end;
+          end;
         end;
       end;
+      T.FastClear;
     end;
+  T.Free;
 end;
 
 procedure RX_RunAction(const action: Pradixaction_t);
