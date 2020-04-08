@@ -1851,14 +1851,50 @@ type
     off_level: smallint;  // 0-63
     delay: smallint; // 1-20 in radix.dat v2
     the_sectors: packed array[0..11] of  smallint; // -1 -> no sector
+    // RTL
+    currid: integer;
+    countdown: integer;
+    initialized: boolean;
   end;
   radix6lightmovement_p = ^radix6lightmovement_t;
 
 procedure RA_SixLightMovement(const action: Pradixaction_t);
 var
   parms: radix6lightmovement_p;
+  i: integer;
+  secid: integer;
 begin
   parms := radix6lightmovement_p(@action.params);
+
+  if not parms.initialized then
+  begin
+    parms.currid := -1;
+    parms.initialized := true;
+  end;
+
+  if parms.countdown > 0 then
+  begin
+    dec(parms.countdown);
+    exit;
+  end;
+
+  inc(parms.currid);
+  if parms.currid = 12 then
+    parms.currid := 0
+  else if parms.the_sectors[parms.currid] = -1 then
+    parms.currid := 0;
+
+  for i := 0 to 11 do
+  begin
+    secid := parms.the_sectors[i];
+    if secid >= 0 then
+    begin
+      if i = parms.currid then
+        sectors[secid].lightlevel := RX_LightLevel(parms.on_level)
+      else
+        sectors[secid].lightlevel := RX_LightLevel(parms.off_level)
+    end;
+  end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
