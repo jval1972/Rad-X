@@ -518,6 +518,7 @@ uses
   m_rnd,
   m_bbox,
   w_wad,
+  radix_sounds,
   r_data,
   r_main,
   r_plane,
@@ -2891,8 +2892,9 @@ begin
      9:
       begin
         // SECRET SECTOR
-        player.secretcount := player.secretcount + 1;
+        inc(player.secretcount);
         player._message := MSGSECRETSECTOR;
+        S_AmbientSoundFV(player.mo.x, player.mo.y, 'radix/SndPowerUp');
         sector.special := 0;
       end;
 
@@ -2949,6 +2951,8 @@ begin
     if sector.special and SECRET_MASK <> 0 then
     begin
       inc(player.secretcount);
+      player._message := MSGSECRETSECTOR;
+      S_AmbientSoundFV(player.mo.x, player.mo.y, 'radix/SndPowerUp');
       sector.special := sector.special and not SECRET_MASK;
       if sector.special < 32 then // if all extended bits clear,
         sector.special := 0;    // sector is not special anymore
