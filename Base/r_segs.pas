@@ -313,12 +313,16 @@ var
   tempsec: sector_t;
 {$ENDIF}
 begin
+  // JVAL: 20200409 - Radix walls with RWF_TWOSIDEDCOMPLETE flag are already rendered in RenderSegLoop
+  curline := ds.curline;
+  if curline.linedef.radixflags and RWF_TWOSIDEDCOMPLETE <> 0 then
+    exit;
+
   R_DisableFixedColumn;
   // Calculate light table.
   // Use different light tables
   //   for horizontal / vertical / diagonal. Diagonal?
   // OPTIMIZE: get rid of LIGHTSEGSHIFT globally
-  curline := ds.curline;
   frontsector := curline.frontsector;
   backsector := curline.backsector;
   texnum := texturetranslation[curline.sidedef.midtexture];
