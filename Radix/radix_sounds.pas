@@ -144,10 +144,14 @@ const
 
 function S_AmbientSound(const x, y: integer; const sndname: string): Pmobj_t;
 
+function S_AmbientSoundFV(const x, y: integer; const sndname: string): Pmobj_t;
+
 // Returns duration of sound in tics
 function S_RadixSoundDuration(const radix_snd: integer): integer;
 
 procedure A_AmbientSound(actor: Pmobj_t);
+
+procedure A_AmbientSoundFV(actor: Pmobj_t);
 
 implementation
 
@@ -182,6 +186,21 @@ begin
 
   result := P_SpawnMobj(x, y, ONFLOATZ, m_ambient);
   S_StartSound(result, sndname);
+end;
+
+function S_AmbientSoundFV(const x, y: integer; const sndname: string): Pmobj_t;
+begin
+  if m_ambient = -1 then
+    m_ambient := Info_GetMobjNumForName(STR_AMBIENTSOUND);
+
+  if m_ambient = -1 then
+  begin
+    result := nil;
+    exit;
+  end;
+
+  result := P_SpawnMobj(x, y, ONFLOATZ, m_ambient);
+  S_StartSound(result, sndname, true);
 end;
 
 type
@@ -304,6 +323,24 @@ begin
   snd := actor.state.params.StrVal[2];
   if snd <> '' then
     S_AmbientSound(actor.x + dx, actor.y + dy, snd);
+end;
+
+procedure A_AmbientSoundFV(actor: Pmobj_t);
+var
+  dx, dy: fixed_t;
+  snd: string;
+begin
+  if not P_CheckStateParams(actor, 3) then
+    exit;
+
+  dx := actor.state.params.FixedVal[0];
+  dy := actor.state.params.FixedVal[1];
+
+  // JVAL: 20200304 -
+  //  Hack! Allow zero string length sound inside RANDOMPICK to avoid playing the sound :)
+  snd := actor.state.params.StrVal[2];
+  if snd <> '' then
+    S_AmbientSoundFV(actor.x + dx, actor.y + dy, snd);
 end;
 
 end.

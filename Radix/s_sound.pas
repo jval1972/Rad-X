@@ -55,14 +55,9 @@ procedure S_Start;
 // Start sound for thing at <origin>
 //  using <sound_id> from sounds.h
 //
-procedure S_StartSound(origin: pointer; sfx_id: integer); overload;
+procedure S_StartSound(origin: pointer; sfx_id: integer; const fullvolume: boolean = false); overload;
 
-procedure S_StartSound(origin: pointer; const sndname: string); overload;
-
-
-// Will start a sound at a given volume.
-procedure S_StartSoundAtVolume(origin_p: pointer; sfx_id: integer; volume: integer);
-
+procedure S_StartSound(origin: pointer; const sndname: string; const fullvolume: boolean = false); overload;
 
 // Stop sound for thing at <origin>
 procedure S_StopSound(origin: pointer);
@@ -178,6 +173,9 @@ type
 
     // handle of the sound being played
     handle: integer;
+
+    // Do not adjust
+    fullvolume: boolean;
   end;
   Pchannel_t = ^channel_t;
   channel_tArray = packed array[0..$FFFF] of channel_t;
@@ -297,7 +295,10 @@ begin
 
   // Free all channels for use
   for i := 0 to numChannels - 1 do
+  begin
     channels[i].sfxinfo := nil;
+    channels[i].fullvolume := false;
+  end;
 
   // no sounds are playing, and they are not mus_paused
   mus_paused := false;
@@ -366,7 +367,8 @@ begin
   S_ChangeMusic(mnum, true);
 end;
 
-procedure S_StartSoundAtVolume(origin_p: pointer; sfx_id: integer; volume: integer);
+// Will start a sound at a given volume.
+procedure S_StartSoundAtVolume(origin_p: pointer; sfx_id: integer; volume: integer; const fullvolume: boolean);
 var
   rc: boolean;
   sep: integer;
@@ -410,17 +412,22 @@ begin
   //  and if not, modify the params
   if (origin <> nil) and (origin <> players[consoleplayer].mo) then
   begin
-    rc := S_AdjustSoundParams(players[consoleplayer].mo, origin,
+    if not fullvolume then
+    begin
+      rc := S_AdjustSoundParams(players[consoleplayer].mo, origin,
            @volume,
            @sep,
            @pitch);
 
-    if (origin.x = players[consoleplayer].mo.x) and
-       (origin.y = players[consoleplayer].mo.y) then
-      sep := NORM_SEP;
+      if (origin.x = players[consoleplayer].mo.x) and
+         (origin.y = players[consoleplayer].mo.y) then
+        sep := NORM_SEP;
 
-    if not rc then
-      exit;
+      if not rc then
+        exit;
+    end
+    else
+      sep := NORM_SEP;
   end
   else
     sep := NORM_SEP;
@@ -484,16 +491,17 @@ begin
   // Assigns the handle to one of the channels in the
   //  mix/output buffer.
   channels[cnum].handle := I_StartSound(sfx_id, volume, sep, pitch, priority);
+  channels[cnum].fullvolume := fullvolume;
 end;
 
-procedure S_StartSound(origin: pointer; sfx_id: integer);
+procedure S_StartSound(origin: pointer; sfx_id: integer; const fullvolume: boolean = false);
 begin
-  S_StartSoundAtVolume(origin, sfx_id, snd_SfxVolume);
+  S_StartSoundAtVolume(origin, sfx_id, snd_SfxVolume, fullvolume);
 end;
 
-procedure S_StartSound(origin: pointer; const sndname: string);
+procedure S_StartSound(origin: pointer; const sndname: string; const fullvolume: boolean = false);
 begin
-  S_StartSoundAtVolume(origin, S_GetSoundNumForName(sndname), snd_SfxVolume);
+  S_StartSoundAtVolume(origin, S_GetSoundNumForName(sndname), snd_SfxVolume, fullvolume);
 end;
 
 procedure S_StopSound(origin: pointer);
@@ -580,14 +588,17 @@ begin
         //  or modify their params
         if (c.origin <> nil) and (integer(listener_p) <> integer(c.origin)) then
         begin
-          audible := S_AdjustSoundParams(listener, c.origin, @volume, @sep, @pitch);
-
-          if not audible then
+          if not c.fullvolume then
           begin
-            S_StopChannel(cnum);
-          end
-          else
-            I_UpdateSoundParams(c.handle, volume, sep, pitch);
+            audible := S_AdjustSoundParams(listener, c.origin, @volume, @sep, @pitch);
+
+            if not audible then
+            begin
+              S_StopChannel(cnum);
+            end
+            else
+              I_UpdateSoundParams(c.handle, volume, sep, pitch);
+          end;
         end
       end
       else

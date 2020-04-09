@@ -488,9 +488,12 @@ begin
     result := line.backsector.floorheight - viewz;
 end;
 
+const
+  MAXRADIXLIGHTLEVEL = 64;
+
 function RX_LightLevel(const l: integer): byte;
 begin
-  if l > 63 then
+  if l >= MAXRADIXLIGHTLEVEL then
     result := 255
   else
     result := l * 4 + 2;

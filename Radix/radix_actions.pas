@@ -1178,7 +1178,13 @@ begin
   if not parms.initialized then
   begin
     parms.tics := S_RadixSoundDuration(Ord(sfx_SndEndOfLevel)) + 1;
-    S_StartSound(nil, radixsounds[Ord(sfx_SndEndOfLevel)].name);
+
+    S_AmbientSoundFV(
+      players[radixplayer].mo.x,
+      players[radixplayer].mo.y,
+      radixsounds[Ord(sfx_SndEndOfLevel)].name
+    );
+
     parms.initialized := true;
     exit;
   end;
@@ -1188,7 +1194,7 @@ begin
     dec(parms.tics);
     exit;
   end;
-  
+
   G_ExitRadixLevel(parms.return_value);
 end;
 
@@ -1304,6 +1310,9 @@ end;
 type
   radixprintmessage_t = packed record
     message_id: byte; // id's 0-12
+    // RTL
+    nextsoundtime: integer;
+    initialized: boolean;
   end;
   radixprintmessage_p = ^radixprintmessage_t;
 
@@ -1314,14 +1323,28 @@ var
 begin
   parms := radixprintmessage_p(@action.params);
 
+  if not parms.initialized then
+  begin
+    parms.nextsoundtime := -1;
+    parms.initialized := true;
+  end;
+
   if IsIntegerInRange(parms.message_id, 0, NUMRADIXMESSAGES - 1) then
   begin
     players[radixplayer]._message := radixmessages[parms.message_id].radix_msg;
-    snd := radixmessages[parms.message_id].radix_snd;
-    if snd >= 0 then
-      S_StartSound(nil, radixsounds[snd].name);
+    if leveltime >= parms.nextsoundtime then
+    begin
+      snd := radixmessages[parms.message_id].radix_snd;
+      if snd >= 0 then
+        S_AmbientSoundFV(
+          players[radixplayer].mo.x,
+          players[radixplayer].mo.y,
+          radixsounds[snd].name
+        );
+      parms.nextsoundtime := leveltime + S_RadixSoundDuration(snd) + 1;
+    end;
   end;
-    
+
   action.suspend := 1;  // JVAL: 20200306 - Disable action
 end;
 
@@ -1500,6 +1523,9 @@ end;
 type
   radixsecondaryobjective_t = packed record
     return_value: byte;
+    // RTL
+    nextsoundtime: integer;
+    initialized: boolean;
   end;
   radixsecondaryobjective_p = ^radixsecondaryobjective_t;
 
@@ -1512,11 +1538,26 @@ var
 begin
   parms := radixsecondaryobjective_p(@action.params);
 
+  if not parms.initialized then
+  begin
+    parms.nextsoundtime := -1;
+    parms.initialized := true;
+  end;
+
   players[radixplayer].secondaryobjective := true;
   players[radixplayer]._message := radixmessages[MSG_SECONDARY].radix_msg;
-  snd := radixmessages[MSG_SECONDARY].radix_snd;
-  if snd >= 0 then
-    S_StartSound(nil, radixsounds[snd].name);
+
+  if leveltime >= parms.nextsoundtime then
+  begin
+    snd := radixmessages[MSG_SECONDARY].radix_snd;
+    if snd >= 0 then
+      S_AmbientSoundFV(
+        players[radixplayer].mo.x,
+        players[radixplayer].mo.y,
+        radixsounds[snd].name
+      );
+    parms.nextsoundtime := leveltime + S_RadixSoundDuration(snd) + 1;
+  end;
 
   action.suspend := 1; // Disable action;
 end;

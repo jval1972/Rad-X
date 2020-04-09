@@ -652,6 +652,7 @@ begin
     ss.radixmapXadd := 0;
     ss.radixmapYmult := 1;
     ss.radixmapYadd := 0;
+    ss.radixflags := 0;
     // JVAL: 20200221 - Texture angle
     ss.floorangle := 0;
     ss.ceilingangle := 0;
