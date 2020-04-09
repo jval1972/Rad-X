@@ -2857,10 +2857,22 @@ end;
 //  that the player origin is in a special sector
 //
 procedure P_PlayerInSpecialSector(player: Pplayer_t; const sector: Psector_t; const height: fixed_t);  // JVAL: 3d Floors
+var
+  ignoreheight: boolean;
 begin
   // Falling, not all the way down yet?
   if player.mo.z <> height then
-    exit;
+  begin
+    // JVAL: 20200409 - Secret sector handling does not require to be on ground
+    ignoreheight := false;
+    if sector.special >= 32 then  // BOOM sector specials
+      if sector.special and SECRET_MASK <> 0 then
+        ignoreheight := true;
+    if sector.special = 9 then
+      ignoreheight := true;
+    if not ignoreheight then
+      exit;
+  end;
 
   // Has hitten ground.
   case sector.special of
