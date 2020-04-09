@@ -1446,7 +1446,8 @@ var
   procedure MakeRotatingSprite16(const rprefix: string; const r_id: integer;
     const numframes: integer; const trans: PByteArray = nil;
     const xofs: integer = -255; const yofs: integer = -255;
-    const cofs: boolean = true; const defofs: boolean = true);
+    const cofs: boolean = true; const defofs: boolean = true;
+    const mask: integer = -1);
   const
     SPR16 = '192A3B4C5D6E7F8G';
   var
@@ -1455,19 +1456,20 @@ var
   begin
     for ii := 1 to numframes do
       for jj := 1 to 16 do
-      begin
-        check_sprite_overflow;
+        if (mask = -1) or (jj = mask) then
+        begin
+          check_sprite_overflow;
 
-        spr.rname := rprefix + '_' + itoa(jj + (ii - 1) * 16);
-        spr.dname := get_sprite_name(r_id) + Chr(Ord('A') + ii - 1) + SPR16[jj];
-        spr.translation := trans;
-        spr.xoffs := xofs;
-        spr.yoffs := yofs;
-        spr.centeroffs := cofs;
-        spr.defaultoffs := defofs;
-        inc(spr);
-        inc(numsprinfo);
-      end;
+          spr.rname := rprefix + '_' + itoa(jj + (ii - 1) * 16);
+          spr.dname := get_sprite_name(r_id) + Chr(Ord('A') + ii - 1) + SPR16[jj];
+          spr.translation := trans;
+          spr.xoffs := xofs;
+          spr.yoffs := yofs;
+          spr.centeroffs := cofs;
+          spr.defaultoffs := defofs;
+          inc(spr);
+          inc(numsprinfo);
+        end;
   end;
 
   procedure MakeOneSprite(const rname: string; const r_id: integer;
@@ -1787,6 +1789,24 @@ begin
   MakeOneSprite('GravityWavePuf3', _MTTX_RADIXGRAVITYWAVEEXPOLOSION, nil, 19, 18, false, false, 'C');
   MakeOneSprite('GravityWavePuf4', _MTTX_RADIXGRAVITYWAVEEXPOLOSION, nil, 19, 18, false, false, 'D');
   MakeOneSprite('GravityWavePuf5', _MTTX_RADIXGRAVITYWAVEEXPOLOSION, nil, 11, 15, false, false, 'E');
+
+  // MT_ENEMYMISSILE
+  MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 14, 12, false, false, 1);
+  MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 22, 12, false, false, 2);
+  MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 32, 12, false, false, 3);
+  MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 37, 12, false, false, 4);
+  MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 37, 12, false, false, 5);
+  MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 36, 13, false, false, 6);
+  MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 31, 14, false, false, 7);
+  MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 23, 14, false, false, 8);
+  MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 14, 13, false, false, 9);
+  MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 23, 14, false, false, 10);
+  MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 31, 14, false, false, 11);
+  MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 36, 13, false, false, 12);
+  MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 38, 13, false, false, 13);
+  MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 37, 12, false, false, 14);
+  MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 32, 12, false, false, 15);
+  MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 22, 12, false, false, 16);
 
   bmp := TRadixBitmap.Create;
 

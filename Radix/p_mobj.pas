@@ -85,6 +85,8 @@ procedure P_SpawnGreenBlood(x, y, z: fixed_t; damage: integer);
 
 procedure P_SpawnBlueBlood(x, y, z: fixed_t; damage: integer);
 
+function P_CheckMissileSpawn(th: Pmobj_t): boolean;
+
 function P_SeekerMissile(actor: Pmobj_t; thresh, turnMax: angle_t): boolean;
 
 function P_HitFloor(thing: Pmobj_t): integer;
@@ -249,7 +251,7 @@ begin
   if mo.tics < 1 then
     mo.tics := 1;
 
-  mo.flags := mo.flags and (not MF_MISSILE);
+  mo.flags := mo.flags and not MF_MISSILE;
 
   // JVAL: 20200328 - Missile Damage Wall
   if tmline <> nil then

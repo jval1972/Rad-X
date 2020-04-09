@@ -152,6 +152,7 @@ uses
   radix_objects,
   radix_sounds,
   r_data,
+  r_main,
   r_defs,
   s_sound,
   w_wad;
@@ -1273,6 +1274,9 @@ begin
   action.suspend := 1;  // JVAL: 202003 - Disable action
 end;
 
+const
+  WALLMISSILEOFFSET = 16 * FRACUNIT;
+
 ////////////////////////////////////////////////////////////////////////////////
 // Sprite type = 21
 type
@@ -1284,8 +1288,41 @@ type
 procedure RA_CompleteMissileWall(const action: Pradixaction_t);
 var
   parms: radixcompletemissilewall_p;
+  li: Pline_t;
+  x, y, z: integer;
+  an: angle_t;
+  c, s: fixed_t;
+  mo: Pmobj_t;
 begin
   parms := radixcompletemissilewall_p(@action.params);
+
+  if parms.wall_number < 0 then
+    exit;
+
+  li := @lines[parms.wall_number];
+
+  if li.backsector <> nil then
+    exit;
+
+  x := li.v1.x div 2 + li.v2.x div 2;
+  y := li.v1.y div 2 + li.v2.y div 2;
+  z := li.frontsector.ceilingheight div 2 + li.frontsector.floorheight div 2;
+
+  an := R_PointToAngle2(li.v1.x, li.v1.y, li.v2.x, li.v2.y) + ANG90 + _SHLW(P_Random - P_Random, 21);
+  c := finecosine[an shr ANGLETOFINESHIFT];
+  s := finesine[an shr ANGLETOFINESHIFT];
+  x := x + WALLMISSILEOFFSET * c;
+  y := y + WALLMISSILEOFFSET * s;
+
+  mo := RX_SpawnRadixEnemyMissile(x, y, z);
+  if mo = nil then
+    exit;
+
+  mo.angle := an;
+  mo.target := players[radixplayer].mo;
+  mo.momx := FixedMul(mo.info.speed, c);
+  mo.momy := FixedMul(mo.info.speed, s);
+  P_CheckMissileSpawn(mo);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

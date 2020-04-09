@@ -42,6 +42,8 @@ function RX_SpawnRadixBigExplosion(const x, y, z: fixed_t): Pmobj_t;
 
 function RX_SpawnRadixSmallExplosion(const x, y, z: fixed_t): Pmobj_t;
 
+function RX_SpawnRadixEnemyMissile(const x, y, z: fixed_t): Pmobj_t;
+
 implementation
 
 uses
@@ -68,6 +70,17 @@ begin
     radixsmallexplosion_id := Info_GetMobjNumForName('MT_RADIXSMALLEXPLOSION');
 
   result := P_SpawnMobj(x, y, z, radixsmallexplosion_id);
+end;
+
+var
+  radixenemymissile_id: integer = -1;
+
+function RX_SpawnRadixEnemyMissile(const x, y, z: fixed_t): Pmobj_t;
+begin
+  if radixenemymissile_id < 0 then
+    radixenemymissile_id := Info_GetMobjNumForName('MT_ENEMYMISSILE');
+
+  result := P_SpawnMobj(x, y, z, radixenemymissile_id);
 end;
 
 end.
