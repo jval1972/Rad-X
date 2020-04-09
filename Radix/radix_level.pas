@@ -635,7 +635,10 @@ var
 
     realloc(pointer(doomsidedefs), numdoomsidedefs * SizeOf(mapsidedef_t), (numdoomsidedefs  + 1) * SizeOf(mapsidedef_t));
     pside := @doomsidedefs[numdoomsidedefs];
-    pside.textureoffset := toff;
+    if toff < 0 then
+      pside.textureoffset := toff
+    else
+      pside.textureoffset := toff mod 128;
     pside.rowoffset := roff;
     pside.toptexture := toptex;
     pside.bottomtexture := bottomtex;
@@ -875,6 +878,11 @@ var
           doomsidedefs[j].sector := 0
         else if doomsidedefs[j].sector = 211 then
           doomsidedefs[j].sector := 212;
+    end
+    else if levelname = 'E1M6' then
+    begin
+      result := true;
+      doomsidedefs[1365].textureoffset := 0;
     end
     else if levelname = 'E2M1' then
     begin
