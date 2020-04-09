@@ -1275,7 +1275,7 @@ begin
 end;
 
 const
-  WALLMISSILEOFFSET = 16 * FRACUNIT;
+  WALLMISSILEOFFSET = 16;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Sprite type = 21
@@ -1308,7 +1308,7 @@ begin
   y := li.v1.y div 2 + li.v2.y div 2;
   z := li.frontsector.ceilingheight div 2 + li.frontsector.floorheight div 2;
 
-  an := R_PointToAngle2(li.v1.x, li.v1.y, li.v2.x, li.v2.y) + ANG90 + _SHLW(P_Random - P_Random, 21);
+  an := R_PointToAngle2(li.v1.x, li.v1.y, li.v2.x, li.v2.y) - ANG90 + _SHLW(P_Random - P_Random, 21);
   c := finecosine[an shr ANGLETOFINESHIFT];
   s := finesine[an shr ANGLETOFINESHIFT];
   x := x + WALLMISSILEOFFSET * c;
@@ -1604,14 +1604,60 @@ end;
 type
   radixseekcompletemissilewall_t = packed record
     wall_number: smallint;
+    //RTL
+    initialized: boolean;
+    mobjid: LongWord;
   end;
   radixseekcompletemissilewall_p = ^radixseekcompletemissilewall_t;
 
 procedure RA_SeekCompleteMissileWall(const action: Pradixaction_t);
 var
   parms: radixseekcompletemissilewall_p;
+  li: Pline_t;
+  x, y, z: integer;
+  an: angle_t;
+  c, s: fixed_t;
+  mo: Pmobj_t;
+  target: Pmobj_t;
 begin
   parms := radixseekcompletemissilewall_p(@action.params);
+
+  if parms.wall_number < 0 then
+    exit;
+
+  li := @lines[parms.wall_number];
+
+  if li.backsector <> nil then
+    exit;
+
+  x := li.v1.x div 2 + li.v2.x div 2;
+  y := li.v1.y div 2 + li.v2.y div 2;
+  z := li.frontsector.ceilingheight div 2 + li.frontsector.floorheight div 2;
+
+  if not parms.initialized then
+  begin
+    target := PX_SpawnWallMissileObject(x, y, z);
+    parms.mobjid := target.key;
+    parms.initialized := true;
+  end
+  else
+    target := P_FindMobjFromKey(parms.mobjid);
+
+  an := R_PointToAngle2(li.v1.x, li.v1.y, li.v2.x, li.v2.y) - ANG90 + _SHLW(P_Random - P_Random, 21);
+  c := finecosine[an shr ANGLETOFINESHIFT];
+  s := finesine[an shr ANGLETOFINESHIFT];
+  x := x + WALLMISSILEOFFSET * c;
+  y := y + WALLMISSILEOFFSET * s;
+
+  mo := RX_SpawnRadixEnemyMissile(x, y, z);
+  if mo = nil then
+    exit;
+
+  mo.angle := an;
+  mo.target := target; //players[radixplayer].mo;
+  mo.momx := FixedMul(mo.info.speed, c);
+  mo.momy := FixedMul(mo.info.speed, s);
+  P_CheckMissileSpawn(mo);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

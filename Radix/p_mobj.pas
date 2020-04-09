@@ -899,6 +899,12 @@ var
   onmidfloor: Boolean;
   spawnfloorheight, spawnceilingheight: fixed_t;  // JVAL: Slopes
 begin
+  if _type < 0 then
+  begin
+    result := nil;
+    exit;
+  end;
+  
   mobj := Z_Malloc(SizeOf(mobj_t), PU_LEVEL, nil);
 
   ZeroMemory(mobj, SizeOf(mobj_t));
