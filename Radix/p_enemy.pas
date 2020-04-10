@@ -1568,13 +1568,8 @@ begin
 
           P_SetMobjState(corpsehit, statenum_t(info.raisestate));
 
-          if G_PlayingEngineVersion >= VERSION205 then
-          begin
-            corpsehit.height := info.height; // fix Ghost bug
-            corpsehit.radius := info.radius; // fix Ghost bug
-          end
-          else
-            corpsehit.height := _SHL(corpsehit.height, 2);
+          corpsehit.height := info.height; // fix Ghost bug
+          corpsehit.radius := info.radius; // fix Ghost bug
           corpsehit.flags := info.flags;
           corpsehit.flags_ex := info.flags_ex;
           corpsehit.flags2_ex := info.flags2_ex;
@@ -1665,10 +1660,7 @@ begin
 
   // JVAL: Correct the Arch-Vile fire spawned at the wrong location bug
   //       https://doomwiki.org/wiki/Arch-Vile_fire_spawned_at_the_wrong_location
-  if G_PlayingEngineVersion <= VERSION203 then
-    fog := P_SpawnMobj(actor.target.x, actor.target.x, actor.target.z, Ord(MT_FIRE))
-  else
-    fog := P_SpawnMobj(actor.target.x, actor.target.y, actor.target.z, Ord(MT_FIRE));
+  fog := P_SpawnMobj(actor.target.x, actor.target.y, actor.target.z, Ord(MT_FIRE));
 
   actor.tracer := fog;
   fog.target := actor;
@@ -1986,29 +1978,14 @@ end;
 //
 procedure A_Explode(thingy: Pmobj_t);
 begin
-  if G_PlayingEngineVersion >= VERSION205 then
-  begin
-    if thingy.info.flags_ex and MF_EX_CUSTOMEXPLODE <> 0 then
-      P_RadiusAttackEx(thingy, thingy.target, thingy.info.explosiondamage, thingy.info.explosionradius)
-    else if thingy.state.params <> nil then
-      P_RadiusAttackEx(thingy, thingy.target, thingy.state.params.IntVal[0], thingy.state.params.IntVal[1])
-    else
-      P_RadiusAttack(thingy, thingy.target, 128);
-    if thingy.z <= thingy.floorz then
-      P_HitFloor(thingy);
-  end
+  if thingy.info.flags_ex and MF_EX_CUSTOMEXPLODE <> 0 then
+    P_RadiusAttackEx(thingy, thingy.target, thingy.info.explosiondamage, thingy.info.explosionradius)
+  else if thingy.state.params <> nil then
+    P_RadiusAttackEx(thingy, thingy.target, thingy.state.params.IntVal[0], thingy.state.params.IntVal[1])
   else
-  begin
-    if thingy.info.flags_ex and MF_EX_CUSTOMEXPLODE <> 0 then
-      P_RadiusAttackEx(thingy, thingy.target, thingy.info.explosiondamage, thingy.info.explosionradius)
-    else if thingy.state.params <> nil then
-      P_RadiusAttackEx(thingy, thingy.target, thingy.state.params.IntVal[0], thingy.state.params.IntVal[1])
-    else
-    begin
-      P_RadiusAttack(thingy, thingy.target, 128);
-      P_HitFloor(thingy);
-    end;
-  end;
+    P_RadiusAttack(thingy, thingy.target, 128);
+  if thingy.z <= thingy.floorz then
+    P_HitFloor(thingy);
 end;
 
 //
