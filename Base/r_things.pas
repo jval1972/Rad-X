@@ -1182,7 +1182,7 @@ begin
   begin
     while dc_x <= x2 do
     begin
-      texturecolumn := LongWord(frac) shr FRACBITS;
+      texturecolumn := GetIntegerInRange(LongWord(frac) shr FRACBITS, 0, LIGHTBOOSTSIZE - 1);
       ltopdelta := lighboostlookup[texturecolumn].topdelta;
       llength := lighboostlookup[texturecolumn].length;
       dc_source32 := @lightboost[texturecolumn * LIGHTBOOSTSIZE + ltopdelta];
@@ -1224,12 +1224,12 @@ begin
   else
   begin
     last_dc_x := dc_x;
-    last_texturecolumn := LongWord(frac) shr FRACBITS;
+    last_texturecolumn := GetIntegerInRange(LongWord(frac) shr FRACBITS, 0, LIGHTBOOSTSIZE - 1);
     last_floorclip := mfloorclip[dc_x];
     last_ceilingclip := mceilingclip[dc_x];
     while dc_x <= x2 do
     begin
-      checkcolumn := LongWord(frac) shr FRACBITS;
+      checkcolumn := GetIntegerInRange(LongWord(frac) shr FRACBITS, 0, LIGHTBOOSTSIZE - 1);
       if (last_floorclip <> mfloorclip[dc_x]) or
          (last_ceilingclip <> mceilingclip[dc_x]) or
          (last_texturecolumn <> checkcolumn) or
