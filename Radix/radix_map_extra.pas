@@ -81,14 +81,20 @@ const
 implementation
 
 uses
+  m_rnd,
   p_setup,
+  p_mobj_h,
+  p_maputl,
   r_data,
   r_main,
   r_segs,
   radix_level,
   radix_logic,
+  radix_objects,
+  radix_sounds,
   sc_engine,
   sc_tokens,
+  tables,
   w_wad;
 
 // radixmapXmult & radixmapYmult must be -1 or 1, no other values allowed :)
@@ -501,17 +507,123 @@ begin
     result := l * 4 + 2;
 end;
 
+const
+  WALLEXPLOSIONOFFSET = 24;
+
+procedure RX_ExplosionParade(const x1, x2, y1, y2, z1, z2: integer; const side: integer; const fracdensity: integer);
+var
+  i: integer;
+  area, cnt: integer;
+  mo: Pmobj_t;
+  x, y, z: integer;
+  dx, dy, dz: integer;
+  angle: angle_t;
+  c, s: fixed_t;
+begin
+  dx := x2 div FRACUNIT - x1 div FRACUNIT;
+  dy := y2 div FRACUNIT - y1 div FRACUNIT;
+  dz := z2 div FRACUNIT - z1 div FRACUNIT;
+
+  // Every 64x64 px area 1 explosion when fracdensity = FRACUNIT
+  area := (P_AproxDistance(x2 - x1, y2 - y1) div FRACUNIT * dz) div (64 * 64);
+  cnt := (area * fracdensity) div FRACUNIT;
+
+  if cnt <= 0 then cnt := 1;  // At least one explosion
+
+  for i := 0 to cnt - 1 do
+  begin
+    x := x1 + dx * Sys_Random * 256;
+    y := y1 + dy * Sys_Random * 256;
+    z := z1 + dz * Sys_Random * 256;
+
+    if side = 0 then
+      angle := R_PointToAngle2(x1, y1, x2, y2) - ANG90
+    else
+      angle := R_PointToAngle2(x1, y1, x2, y2) + ANG90;
+
+    angle := angle shr ANGLETOFINESHIFT;
+    c := finecosine[angle shr ANGLETOFINESHIFT];
+    s := finesine[angle shr ANGLETOFINESHIFT];
+    x := x + WALLEXPLOSIONOFFSET * c;
+    y := y + WALLEXPLOSIONOFFSET * s;
+
+    mo := RX_SpawnRadixBigExplosion(x, y, z);
+    mo.flags3_ex := mo.flags3_ex or MF3_EX_NOSOUND;
+    mo.tics := mo.tics + (P_Random and 15); // Some delay
+  end;
+  S_AmbientSound(x1 div 2 + x2 div 2, y1 div 2 + y2 div 2, 'radix/SndExplode');
+end;
+
+procedure RX_LineExplosion(const l: Pline_t);
+var
+  x1, x2, y1, y2: integer;
+  z1, z2: integer;
+begin
+  x1 := l.v1.x;
+  y1 := l.v1.y;
+  x2 := l.v2.x;
+  y2 := l.v2.y;
+  if l.backsector = nil then
+  begin
+    z1 := l.frontsector.floorheight;
+    z2 := l.frontsector.ceilingheight;
+    RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 0, FRACUNIT);
+  end
+  else
+  begin
+    if (l.frontsector.ceilingheight < l.backsector.ceilingheight) and
+       (l.backsector.renderflags or SRF_SLOPECEILING <> 0) then
+    begin
+      z1 := l.frontsector.ceilingheight;
+      z2 := l.backsector.ceilingheight;
+      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 1, FRACUNIT);
+    end;
+    if (l.frontsector.ceilingheight > l.backsector.ceilingheight) and
+       (l.frontsector.renderflags or SRF_SLOPECEILING <> 0) then
+    begin
+      z1 := l.backsector.ceilingheight;
+      z2 := l.frontsector.ceilingheight;
+      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 0, FRACUNIT);
+    end;
+    if (l.frontsector.floorheight < l.backsector.floorheight) and
+       (l.frontsector.renderflags or SRF_SLOPEFLOOR <> 0) then
+    begin
+      z1 := l.frontsector.floorheight;
+      z2 := l.backsector.floorheight;
+      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 0, FRACUNIT);
+    end;
+    if (l.frontsector.floorheight > l.backsector.floorheight) and
+       (l.backsector.renderflags or SRF_SLOPEFLOOR <> 0) then
+    begin
+      z1 := l.backsector.floorheight;
+      z2 := l.frontsector.floorheight;
+      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 1, FRACUNIT);
+    end;
+  end;
+end;
+
 procedure RX_DamageLine(const l: Pline_t; const damage: integer);
 begin
-  if l.radixflags and RWF_ACTIVATETRIGGER = 0 then
+  if l.radixflags and (RWF_ACTIVATETRIGGER or RWF_MISSILEWALL) = 0 then
     exit;
+
+  // Already dead
+ // if l.radixhitpoints <= 0 then
+ //   exit;
 
   l.radixhitpoints := l.radixhitpoints - damage;
   if l.radixhitpoints <= 0 then
   begin
-    l.radixflags := l.radixflags and not RWF_ACTIVATETRIGGER;
-    radixtriggers[l.radixtrigger].suspended := 0;
-    RX_RunTrigger(l.radixtrigger);
+    if l.radixflags and RWF_ACTIVATETRIGGER <> 0 then
+    begin
+      l.radixflags := l.radixflags and not RWF_ACTIVATETRIGGER;
+      radixtriggers[l.radixtrigger].suspended := 0;
+      RX_RunTrigger(l.radixtrigger);
+    end
+    else
+    begin
+      RX_LineExplosion(l);
+    end;
   end;
 end;
 

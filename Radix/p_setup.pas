@@ -1697,6 +1697,7 @@ end;
 procedure P_LoadRadixSprites(lump: integer);
 var
   i: integer;
+  ll: integer;
 begin
   if lump = -1 then
   begin
@@ -1709,11 +1710,20 @@ begin
   numradixactions := W_LumpLength(lump) div SizeOf(radixaction_t);
 
   for i := 0 to numradixactions - 1 do
+  begin
     if radixactions[i].action_type = 29 then
+      levelhassecondaryobjective := true
+    else if radixactions[i].action_type in [21, 24, 25, 30] then
     begin
-      levelhassecondaryobjective := true;
-      exit;
-    end;
+      ll := radixactions[i].params[0];
+      if IsIntegerInRange(ll, 0, numlines -1) then
+      begin
+        lines[ll].radixflags := lines[ll].radixflags or RWF_MISSILEWALL;
+        if lines[ll].radixhitpoints <= 0 then
+          lines[ll].radixhitpoints := 100;
+      end;
+    end
+  end;
 end;
 
 //

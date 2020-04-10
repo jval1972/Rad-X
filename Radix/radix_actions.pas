@@ -1635,6 +1635,14 @@ begin
   if li.backsector <> nil then
     exit;
 
+  if li.radixhitpoints <= 0 then  // Died
+  begin
+    if sides[li.sidenum[0]].midtexture = R_TextureNumForName(RX_WALL_PREFIX + '0064') then
+      sides[li.sidenum[0]].midtexture := R_TextureNumForName(RX_WALL_PREFIX + '0083');
+    action.suspend := 1;
+    exit;
+  end;
+
   if not parms.initialized then
   begin
     target :=
