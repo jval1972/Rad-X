@@ -335,6 +335,8 @@ procedure A_DefWallBounceFactor(actor: Pmobj_t);
 
 procedure A_TraceNearestPlayer(actor: Pmobj_t);
 
+procedure A_PlayerHurtExplode(actor: Pmobj_t);
+
 const
   FLOATBOBSIZE = 64;
   FLOATBOBMASK = FLOATBOBSIZE - 1;
@@ -3358,7 +3360,7 @@ begin
   for i := 0 to MAXPLAYERS - 1 do
     if playeringame[i] then
       if players[i].mo <> nil then
-        if players[i].mo.height >= 0 then
+        if players[i].mo.health >= 0 then
         begin
           mindist := P_AproxDistance(players[i].mo.x - actor.x, players[i].mo.y - actor.y);
           if mindist < nearest then
@@ -3416,6 +3418,22 @@ begin
     actor.momz := actor.momz - FRACUNIT div 8
   else
     actor.momz := actor.momz + FRACUNIT div 8;
+end;
+
+procedure A_PlayerHurtExplode(actor: Pmobj_t);
+var
+  damage: integer;
+  radius: fixed_t;
+begin
+  if not P_CheckStateParams(actor, 2, CSP_AT_LEAST) then
+    exit;
+
+  damage := actor.state.params.IntVal[0];
+  radius := actor.state.params.FixedVal[1];
+  P_RadiusAttackPlayer(actor, actor.target, damage, radius);
+
+  if actor.z <= actor.floorz then
+    P_HitFloor(actor);
 end;
 
 end.

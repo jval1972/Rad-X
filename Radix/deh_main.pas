@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 282;
+  DEHNUMACTIONS = 283;
 
 type
   deh_action_t = record
@@ -2883,6 +2883,9 @@ begin
   deh_actions[281].action.acp1 := @A_TraceNearestPlayer;
   deh_actions[281].name := strupper('A_TraceNearestPlayer');
   {$IFDEF DLL}deh_actions[281].decl := 'A_TraceNearestPlayer(pct: integer, [maxturn: angle_t])';{$ENDIF}
+  deh_actions[282].action.acp1 := @A_PlayerHurtExplode;
+  deh_actions[282].name := strupper('A_PlayerHurtExplode');
+  {$IFDEF DLL}deh_actions[282].decl := 'A_PlayerHurtExplode(damage: integer, radius: integer)';{$ENDIF}
 
   deh_strings.numstrings := 0;
   deh_strings.realnumstrings := 0;

@@ -68,6 +68,8 @@ procedure P_RadiusAttack(spot: Pmobj_t; source: Pmobj_t; const damage: integer);
 
 procedure P_RadiusAttackEx(spot: Pmobj_t; source: Pmobj_t; const damage, distance: integer);
 
+procedure P_RadiusAttackPlayer(spot: Pmobj_t; source: Pmobj_t; const damage, distance: integer);
+
 function P_ChangeSector(sector: Psector_t; crunch: boolean): boolean;
 
 procedure P_SlideMove(mo: Pmobj_t);
@@ -2078,6 +2080,68 @@ begin
       P_BlockThingsIterator(x, y, PIT_RadiusAttack);
 end;
 
+function PIT_RadiusAttackPlayer(thing: Pmobj_t): boolean;
+var
+  dx: fixed_t;
+  dy: fixed_t;
+  dist: fixed_t;
+begin
+  if thing.player = nil then
+  begin
+    result := true;
+    exit;
+  end;
+
+  dx := abs(thing.x - bombspot.x);
+  dy := abs(thing.y - bombspot.y);
+
+  if dx > dy then
+    dist := dx
+  else
+    dist := dy;
+  dist := FixedInt(dist - thing.radius);
+
+  if dist < 0 then
+    dist := 0;
+
+  if dist >= bombdamage then
+  begin
+    result := true; // out of range
+    exit;
+  end;
+
+  if P_CheckSight(thing, bombspot) then
+  begin
+    // must be in direct path
+    P_DamageMobj(thing, bombspot, bombsource, bombdamage - dist);
+  end;
+
+  result := true;
+end;
+
+procedure P_RadiusAttackPlayer(spot: Pmobj_t; source: Pmobj_t; const damage, distance: integer);
+var
+  x: integer;
+  y: integer;
+  xl: integer;
+  xh: integer;
+  yl: integer;
+  yh: integer;
+  dist: fixed_t;
+begin
+  dist := distance * FRACUNIT;
+  yh := MapBlockInt(spot.y + dist - bmaporgy);
+  yl := MapBlockInt(spot.y - dist - bmaporgy);
+  xh := MapBlockInt(spot.x + dist - bmaporgx);
+  xl := MapBlockInt(spot.x - dist - bmaporgx);
+  bombspot := spot;
+  bombsource := source;
+  bombdamage := damage;
+
+  for y := yl to yh do
+    for x := xl to xh do
+      P_BlockThingsIterator(x, y, PIT_RadiusAttackPlayer);
+end;
 
 //
 // SECTOR HEIGHT CHANGING
