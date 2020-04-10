@@ -779,6 +779,20 @@ begin
   P_RemoveMobj(mobj);
 end;
 
+procedure P_FixPlayerViewz(const p: Pplayer_t);
+var
+  floorz, ceilingz: fixed_t;
+begin
+  floorz := P_3DFloorHeight(p.mo);
+  ceilingz := P_3DCeilingHeight(p.mo);
+
+  if p.viewz > ceilingz - 4 * FRACUNIT then
+    p.viewz := ceilingz - 4 * FRACUNIT;
+
+  if p.viewz < floorz + 4 * FRACUNIT then
+    p.viewz := floorz + 4 * FRACUNIT;
+end;
+
 //
 // P_MobjThinker
 //
@@ -795,6 +809,9 @@ begin
      (mobj.flags and MF_SKULLFLY <> 0) then
   begin
     P_XYMovement(mobj);
+
+    if mobj.player <> nil then
+      P_FixPlayerViewz(mobj.player);
 
     if not Assigned(mobj.thinker._function.acv) then
     begin
@@ -840,6 +857,9 @@ begin
     end
     else
       P_ZMovement(mobj);
+
+    if mobj.player <> nil then
+      P_FixPlayerViewz(mobj.player);
 
     if not Assigned(mobj.thinker._function.acv) then
       exit; // mobj was removed
