@@ -35,6 +35,7 @@ unit radix_map_extra;
 interface
 
 uses
+  d_delphi,
   m_fixed,
   r_defs;
 
@@ -69,6 +70,8 @@ function RX_LightLevel(const l: integer): byte;
 
 procedure RX_DamageLine(const l: Pline_t; const damage: integer);
 
+function RX_LineLengthf(li: Pline_t): float;
+
 var
   level_position_hack: boolean;
 
@@ -78,7 +81,6 @@ const
 implementation
 
 uses
-  d_delphi,
   p_setup,
   r_data,
   r_main,
@@ -511,6 +513,15 @@ begin
     radixtriggers[l.radixtrigger].suspended := 0;
     RX_RunTrigger(l.radixtrigger);
   end;
+end;
+
+function RX_LineLengthf(li: Pline_t): float;
+var
+  fx, fy: float;
+begin
+  fx := (li.v2.x - li.v1.x) / FRACUNIT;
+  fy := (li.v2.y - li.v1.y) / FRACUNIT;
+  result := sqrt(fx * fx + fy * fy);
 end;
 
 end.
