@@ -46,6 +46,8 @@ function PX_SpawnWallMissileObject(const x, y, z: fixed_t): Pmobj_t;
 
 function RX_SpawnRadixEnemyMissile(const x, y, z: fixed_t): Pmobj_t;
 
+function RX_SpawnRadixEnemySeekerMissile(const x, y, z: fixed_t): Pmobj_t;
+
 implementation
 
 uses
@@ -94,6 +96,17 @@ begin
     radixenemymissile_id := Info_GetMobjNumForName('MT_ENEMYMISSILE');
 
   result := P_SpawnMobj(x, y, z, radixenemymissile_id);
+end;
+
+var
+  radixenemyseekermissile_id: integer = -1;
+
+function RX_SpawnRadixEnemySeekerMissile(const x, y, z: fixed_t): Pmobj_t;
+begin
+  if radixenemyseekermissile_id < 0 then
+    radixenemyseekermissile_id := Info_GetMobjNumForName('MT_ENEMYSEEKERMISSILE');
+
+  result := P_SpawnMobj(x, y, z, radixenemyseekermissile_id);
 end;
 
 end.

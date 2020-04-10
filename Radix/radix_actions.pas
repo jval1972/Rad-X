@@ -1609,6 +1609,7 @@ type
     mobjid: LongWord;
     linelength: integer;
     baseangle: angle_t;
+    nextticfire: integer;
   end;
   radixseekcompletemissilewall_p = ^radixseekcompletemissilewall_t;
 
@@ -1619,7 +1620,6 @@ var
   x, y, z: integer;
   xlen, zlen: integer;
   xpos, zpos: integer;
-  height: integer;
   an: angle_t;
   c, s: fixed_t;
   mo: Pmobj_t;
@@ -1637,14 +1637,25 @@ begin
 
   if not parms.initialized then
   begin
-    target := PX_SpawnWallMissileObject(x, y, z);
+    target :=
+      PX_SpawnWallMissileObject(
+        li.v1.x div 2 + li.v2.x div 2,
+        li.v1.y div 2 + li.v2.y div 2,
+        li.frontsector.ceilingheight div 2 + li.frontsector.floorheight div 2
+      );
     parms.mobjid := target.key;
     parms.linelength := round(RX_LineLengthf(li));
     parms.baseangle := R_PointToAngle2(li.v1.x, li.v1.y, li.v2.x, li.v2.y) - ANG90;
+    parms.nextticfire := -1;
     parms.initialized := true;
   end
   else
     target := P_FindMobjFromKey(parms.mobjid);
+
+  if leveltime < parms.nextticfire then
+    exit;
+
+  parms.nextticfire := leveltime + TICRATE;
 
   xlen := (parms.linelength + 64) div 128;
   zlen := (li.frontsector.ceilingheight div FRACUNIT - li.frontsector.floorheight div FRACUNIT + 32) div 64;
@@ -1675,7 +1686,7 @@ begin
   x := x + WALLMISSILEOFFSET * c;
   y := y + WALLMISSILEOFFSET * s;
 
-  mo := RX_SpawnRadixEnemyMissile(x, y, z);
+  mo := RX_SpawnRadixEnemySeekerMissile(x, y, z);
   if mo = nil then
     exit;
 
