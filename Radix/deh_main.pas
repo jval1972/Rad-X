@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 281;
+  DEHNUMACTIONS = 282;
 
 type
   deh_action_t = record
@@ -2880,6 +2880,9 @@ begin
   deh_actions[280].action.acp1 := @A_AmbientSoundFV;
   deh_actions[280].name := strupper('A_AmbientSoundFV');
   {$IFDEF DLL}deh_actions[280].decl := 'A_AmbientSoundFV(x: integer, y: integer, sound: string)';{$ENDIF}
+  deh_actions[281].action.acp1 := @A_TraceNearestPlayer;
+  deh_actions[281].name := strupper('A_TraceNearestPlayer');
+  {$IFDEF DLL}deh_actions[281].decl := 'A_TraceNearestPlayer(pct: integer, [maxturn: angle_t])';{$ENDIF}
 
   deh_strings.numstrings := 0;
   deh_strings.realnumstrings := 0;
