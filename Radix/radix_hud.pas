@@ -238,7 +238,7 @@ const
   RADAR_SHIFT_UNIT = 1 shl RADAR_SHIFT_BITS;
   RADAR_RANGE_FACTOR = 64 * (1 shl (FRACBITS - RADAR_SHIFT_BITS));
 var
-  r: fixed_t;
+  r: int64;
   xl: integer;
   xh: integer;
   yl: integer;
@@ -274,10 +274,10 @@ begin
   end;
 
   r := range * 64 * FRACUNIT;
-  xl := MapBlockInt(hud_player.mo.x - r - bmaporgx);
-  xh := MapBlockInt(hud_player.mo.x + r - bmaporgx);
-  yl := MapBlockInt(hud_player.mo.y - r - bmaporgy);
-  yh := MapBlockInt(hud_player.mo.y + r - bmaporgy);
+  xl := MapBlockIntX(int64(hud_player.mo.x) - r - int64(bmaporgx));
+  xh := MapBlockIntX(int64(hud_player.mo.x) + r - int64(bmaporgx));
+  yl := MapBlockIntY(int64(hud_player.mo.y) - r - int64(bmaporgy));
+  yh := MapBlockIntY(int64(hud_player.mo.y) + r - int64(bmaporgy));
 
   radar_list.FastClear;
   for bx := xl to xh do

@@ -642,8 +642,8 @@ begin
   if thing.flags and MF_NOBLOCKMAP = 0 then
   begin
     // inert things don't need to be in blockmap
-    blockx := MapBlockInt(thing.x - bmaporgx);
-    blocky := MapBlockInt(thing.y - bmaporgy);
+    blockx := MapBlockIntX(int64(thing.x) - int64(bmaporgx));
+    blocky := MapBlockIntY(int64(thing.y) - int64(bmaporgy));
     if (blockx >= 0) and (blockx < bmapwidth) and
        (blocky >= 0) and (blocky < bmapheight) then
     begin
@@ -956,6 +956,7 @@ end;
 function P_PathTraverse(x1, y1, x2, y2: fixed_t; flags: integer;
   trav: traverser_t): boolean;
 var
+  _x1, _x2, _y1, _y2: int64;
   xt1: fixed_t;
   yt1: fixed_t;
   xt2: fixed_t;
@@ -966,7 +967,9 @@ var
   xintercept: fixed_t;
   yintercept: fixed_t;
   mapx: integer;
+  mapx1: integer;
   mapy: integer;
+  mapy1: integer;
   mapxstep: integer;
   mapystep: integer;
   count: integer;
@@ -987,26 +990,34 @@ begin
   trace.dx := x2 - x1;
   trace.dy := y2 - y1;
 
+  _x1 := int64(x1) - bmaporgx;
+  _y1 := int64(y1) - bmaporgy;
+  xt1 := _x1 shr MAPBLOCKSHIFT;
+  yt1 := _y1 shr MAPBLOCKSHIFT;
+
+  mapx1 := _x1 shr MAPBTOFRAC;
+  mapy1 := _y1 shr MAPBTOFRAC;
+
+  _x2 := int64(x2) - bmaporgx;
+  _y2 := int64(y2) - bmaporgy;
+  xt2 := _x2 shr MAPBLOCKSHIFT;
+  yt2 := _y2 shr MAPBLOCKSHIFT;
+
   x1 := x1 - bmaporgx;
   y1 := y1 - bmaporgy;
-  xt1 := MapBlockInt(x1);
-  yt1 := MapBlockInt(y1);
-
   x2 := x2 - bmaporgx;
   y2 := y2 - bmaporgy;
-  xt2 := MapBlockInt(x2);
-  yt2 := MapBlockInt(y2);
 
   if xt2 > xt1 then
   begin
     mapxstep := 1;
-    partial := FRACUNIT - (MapToFrac(x1) and (FRACUNIT - 1));
+    partial := FRACUNIT - (mapx1 and (FRACUNIT - 1));
     ystep := FixedDiv(y2 - y1, abs(x2 - x1));
   end
   else if xt2 < xt1 then
   begin
     mapxstep := -1;
-    partial := MapToFrac(x1) and (FRACUNIT - 1);
+    partial := mapx1 and (FRACUNIT - 1);
     ystep := FixedDiv(y2 - y1, abs(x2 - x1));
   end
   else
@@ -1021,13 +1032,13 @@ begin
   if yt2 > yt1 then
   begin
     mapystep := 1;
-    partial := FRACUNIT - (MapToFrac(y1) and (FRACUNIT - 1));
+    partial := FRACUNIT - (mapy1 and (FRACUNIT - 1));
     xstep := FixedDiv(x2 - x1, abs(y2 - y1));
   end
   else if yt2 < yt1 then
   begin
     mapystep := -1;
-    partial := MapToFrac(y1) and (FRACUNIT - 1);
+    partial := mapy1 and (FRACUNIT - 1);
     xstep := FixedDiv(x2 - x1, abs(y2 - y1));
   end
   else

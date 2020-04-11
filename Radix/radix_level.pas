@@ -255,7 +255,7 @@ type
 const
   E3M2_SPLIT_X = 48000;
   RADIX_MAP_X_MULT = 1;
-  RADIX_MAP_X_ADD = -32000; //-32767;
+  RADIX_MAP_X_ADD = -32767;
   RADIX_MAP_X_ADD2 = -65536;
   RADIX_MAP_Y_MULT = -1;
   RADIX_MAP_Y_ADD = 0;
@@ -827,6 +827,19 @@ var
       end;
   end;
 
+  procedure fix_movevertex(const x1, y1, x2, y2: integer);
+  var
+    j: integer;
+  begin
+    for j := 0 to numdoomvertexes - 1 do
+      if (doomvertexes[j].x = x1) and (doomvertexes[j].y = y1) then
+      begin
+        doomvertexes[j].x := x2;
+        doomvertexes[j].y := y2;
+        exit;
+      end;
+  end;
+
   procedure fix_cloneandmovewall(const wid: integer; const dx, dy: integer);
   var
     wall: radixwall_t;
@@ -884,6 +897,11 @@ var
     begin
       result := true;
       doomsidedefs[1365].textureoffset := 0;
+    end
+    else if levelname = 'E1M9' then
+    begin
+      result := true;
+//      fix_movevertex(dfssd
     end
     else if levelname = 'E2M1' then
     begin
