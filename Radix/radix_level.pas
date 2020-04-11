@@ -255,7 +255,7 @@ type
 const
   E3M2_SPLIT_X = 48000;
   RADIX_MAP_X_MULT = 1;
-  RADIX_MAP_X_ADD = -32767;
+  RADIX_MAP_X_ADD = -32000; //-32767;
   RADIX_MAP_X_ADD2 = -65536;
   RADIX_MAP_Y_MULT = -1;
   RADIX_MAP_Y_ADD = 0;
@@ -1251,7 +1251,7 @@ begin
       begin
         doomlinedefs[i].v1 := AddVertexToWAD(stubx, stuby);
         doomlinedefs[i].v2 := AddVertexToWAD(stubx + 32, stuby);
-        stubx := stubx + 64;
+        stubx := stubx + 32;
       end;
 
   wadwriter.AddSeparator(levelname);

@@ -434,7 +434,12 @@ begin
   if line.radixflags and RWF_PEGTOP_FLOOR <> 0 then
     result := worldtop
   else if line.radixflags and RWF_PEGTOP_CEILING <> 0 then
-    result := worldlow
+{//vtop :=  + textureheight[sidedef.midtexture];
+//        // bottom of texture at bottom
+//        rw_midtexturemid := vtop - viewz;
+        result := worldlow}
+
+        result := line.frontsector.floorheight + textureheight[sides[line.sidenum[0]].midtexture] - viewz
   else
     result := -viewz;
 end;
