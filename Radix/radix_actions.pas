@@ -986,7 +986,7 @@ begin
     else
       step := (1 shl parms.speed) * FRACUNIT;
   end
-  else if parms.direction = $FF then // Down
+  else if (parms.direction = $FF) or ((parms.direction = 0) and (parms.stop_position = 2)) then // Down
   begin
     dest_height := parms.min_height * FRACUNIT;
     if parms.speed > MOVINGSURFACETHRESHHOLD then
