@@ -1203,8 +1203,8 @@ end;
 // Sprite type = 17
 type
   radixspritetriggeractivate_t = packed record
-    trigger: integer;
-    actions: packed array[0..4] of integer; // JVAL: 20200310 - sprite in editor
+    trigger_number: integer;
+    the_sprites: packed array[0..4] of integer; // JVAL: 20200310 - sprite in editor
   end;
   radixspritetriggeractivate_p = ^radixspritetriggeractivate_t;
 
@@ -1212,12 +1212,43 @@ procedure RA_SpriteTriggerActivate(const action: Pradixaction_t);
 var
   parms: radixspritetriggeractivate_p;
   i: integer;
+  radix_id: integer;
+  think: Pthinker_t;
+  mo: Pmobj_t;
 begin
   parms := radixspritetriggeractivate_p(@action.params);
 
   for i := 0 to 4 do
-    if parms.actions[i] >= 0 then
-      radixactions[parms.actions[i]].suspend := 0;
+  begin
+    radix_id := parms.the_sprites[i];
+    if radix_id >= 0 then
+    begin
+      think := thinkercap.next;
+      while think <> @thinkercap do
+      begin
+        if @think._function.acp1 <> @P_MobjThinker then
+        begin
+          think := think.next;
+          continue;
+        end;
+
+        mo := Pmobj_t(think);
+        if mo.player = nil then
+          if mo.spawnpoint.options or MTF_RADIXTHING <> 0 then
+            if mo.spawnpoint.radix_id = radix_id then
+              if mo.flags and MF_SHOOTABLE <> 0 then
+                if mo.health > 0 then
+                  exit;
+
+        think := think.next;
+      end;
+    end;
+  end;
+
+  radixtriggers[parms.trigger_number].suspended := 0;
+  RX_RunTrigger(parms.trigger_number);
+
+  action.suspend := 1;  // JVAL: 20200411 - Disable action
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1252,6 +1283,7 @@ var
   parms: radixdeactivatetrigger_p;
 begin
   parms := radixdeactivatetrigger_p(@action.params);
+
   radixtriggers[parms.trigger].suspended := 1;
   action.suspend := 1;  // JVAL: 202003 - Disable action
 end;
@@ -1269,6 +1301,7 @@ var
   parms: radixactivatetrigger_p;
 begin
   parms := radixactivatetrigger_p(@action.params);
+
   radixtriggers[parms.trigger].suspended := 0;
 //  RX_RunTrigger(parms.trigger);
   action.suspend := 1;  // JVAL: 202003 - Disable action
