@@ -2029,7 +2029,7 @@ var
   i: integer;
   dist, maxdist: fixed_t;
   damage: integer;
-  maxradius: integer;
+  max_radius: integer;
 begin
   parms := radixhurtplayerexplosion_p(@action.params);
 
@@ -2053,7 +2053,7 @@ begin
     parms.delay_cnt := parms.delay_length;
     dec(parms.number_of_explosions);
 
-    maxradius := parms.radious_one_third * 3;
+    max_radius := parms.radious_one_third * 3;
     for i := 0 to MAXPLAYERS - 1 do
       if playeringame[i] then
       begin
@@ -2071,9 +2071,9 @@ begin
           if dist > maxdist then
             maxdist := dist;
           maxdist := maxdist div FRACUNIT;
-          if maxdist < maxradius then
+          if maxdist < max_radius then
           begin
-            damage := parms.hit_points_at_center * (maxradius - maxdist) div maxradius;
+            damage := parms.hit_points_at_center * (max_radius - maxdist) div max_radius;
             P_DamageMobj(mo, nil, nil, damage);
           end;
         end;
