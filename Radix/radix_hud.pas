@@ -316,7 +316,7 @@ begin
       ypos := FixedMul(xpos, asin) + FixedMul(ypos, acos);
       xpos := x + tmp;
       ypos := y + ypos;
-      screens[SCN_HUD][pitch * ypos + xpos] := aprox_green;
+      screens[SCN_HUD][pitch * ypos + xpos] := aprox_yellow;
     end;
   end;
 end;
