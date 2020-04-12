@@ -382,7 +382,8 @@ uses
   radix_intermission in 'Radix\radix_intermission.pas',
   radix_hud in 'Radix\radix_hud.pas',
   radix_weapons in 'Radix\radix_weapons.pas',
-  radix_objects in 'Radix\radix_objects.pas';
+  radix_objects in 'Radix\radix_objects.pas',
+  radix_player in 'Radix\radix_player.pas';
 
 var
   Saved8087CW: Word;

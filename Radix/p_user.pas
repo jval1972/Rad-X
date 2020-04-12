@@ -79,6 +79,7 @@ uses
   p_spec,
   p_map,
   p_maputl,
+  radix_player,
   r_main,
   r_defs,
   sounds,
@@ -666,6 +667,8 @@ begin
     if player.teleporttics < 0 then
       player.teleporttics := 0;
   end;
+
+  RX_PlayerThink(player); // JVAL: 20200412 - Special RADIX logic for players
 
   if player.playerstate = PST_DEAD then
   begin
