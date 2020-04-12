@@ -3429,7 +3429,7 @@ begin
     exit;
 
   damage := actor.state.params.IntVal[0];
-  radius := actor.state.params.FixedVal[1];
+  radius := actor.state.params.IntVal[1];
   P_RadiusAttackPlayer(actor, actor.target, damage, radius);
 
   if actor.z <= actor.floorz then
