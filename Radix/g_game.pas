@@ -1263,8 +1263,7 @@ begin
   p.usedown := true;
   p.attackdown := true;  // don't do anything immediately
   p.playerstate := PST_LIVE;
-  p.health := mobjinfo[Ord(MT_PLAYER)].spawnhealth;
-  p.shield := PLAYERSPAWNSHIELD;
+  p.health := (mobjinfo[Ord(MT_PLAYER)].spawnhealth + PLAYERSPAWNSHIELD) div 2;
   p.armorpoints := PLAYERSPAWNARMOR;
   p.armortype := p.armorpoints div 100;
   p.energy := PLAYERSPAWNENERGY;

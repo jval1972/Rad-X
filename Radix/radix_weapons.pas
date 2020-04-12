@@ -306,9 +306,6 @@ procedure A_FireRadixPlasma(player: Pplayer_t; psp: Ppspdef_t);
 var
   nlevel: integer;
 begin
-//  player.ammo[Ord(weaponinfo[Ord(player.readyweapon)].ammo)] :=
-//    player.ammo[Ord(weaponinfo[Ord(player.readyweapon)].ammo)] - 1;
-
   if not RX_CheckNextRefire(player) then
     exit;
 
@@ -720,11 +717,11 @@ begin
         radixgravitywave_id := Info_GetMobjNumForName('MT_RADIXGRAVITYWAVE');
 
       dec(player.gravitywave);
-//      player.energy := player.energy - GRAVITYWAVEENERGY;
+      player.energy := player.energy - GRAVITYWAVEENERGY;
       P_SpawnPlayerMissileOffsZ(player.mo, radixgravitywave_id, 0, 0);
     end;
   end;
-  
+
   if player.gravitywave = 0 then
     for i := Ord(wp_gravitywave) - 1 downto 0 do
       if player.weaponowned[i] <> 0 then

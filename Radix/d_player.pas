@@ -136,7 +136,6 @@ type
     // Armor type is 0-2.
     armortype: integer;
 
-    shield: integer;  // JVAL: 20200314 - Radix shield
     energy: integer;  // JVAL: 20200314 - Radix energy
     threat: boolean;  // JVAL: 20200314 - Any threat nearby?
 

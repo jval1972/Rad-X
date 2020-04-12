@@ -375,7 +375,7 @@ begin
     V_DrawPatch(300, 62, SCN_HUD, PowerUpIcons[2], false);
 
   // Ultra shields icon
-  if hud_player.shield > PLAYERSPAWNSHIELD then
+  if hud_player.health > PLAYERSPAWNSHIELD then
     V_DrawPatch(300, 82, SCN_HUD, PowerUpIcons[3], false);
 
   // ALDS icon
@@ -463,7 +463,7 @@ begin
 
   // Draw armor, shield and energy bars
   RX_HudDrawBar(189, 200 - STATUSBAR_HEIGHT + 7, ArmourBar, hud_player.armorpoints);
-  RX_HudDrawBar(189, 200 - STATUSBAR_HEIGHT + 14, ShieldBar, hud_player.shield);
+  RX_HudDrawBar(189, 200 - STATUSBAR_HEIGHT + 14, ShieldBar, hud_player.health);
   RX_HudDrawBar(189, 200 - STATUSBAR_HEIGHT + 21, EnergyBar, hud_player.energy);
 
   // Draw time
@@ -565,7 +565,7 @@ begin
 
   // Draw armor, shield and energy bars
   RX_HudDrawBar(202, 156, ArmourBar, hud_player.armorpoints);
-  RX_HudDrawBar(202, 171, ShieldBar, hud_player.shield);
+  RX_HudDrawBar(202, 171, ShieldBar, hud_player.health);
   RX_HudDrawBar(233, 186, EnergyBar, hud_player.energy);
 
   // Draw time

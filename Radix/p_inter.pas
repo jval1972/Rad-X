@@ -330,26 +330,6 @@ begin
 end;
 
 //
-// JVAL 20200321 - New function
-// P_GiveShield
-//   Increases player shield
-//
-function P_GiveShield(player: Pplayer_t; ammount: integer): boolean;
-begin
-  if player.shield >= PLAYERMAXSHIELD then
-  begin
-    result := false;
-    exit;
-  end;
-
-  player.shield := player.shield + ammount;
-  if player.shield > PLAYERMAXSHIELD then
-    player.shield := PLAYERMAXSHIELD;
-
-  result := true;
-end;
-
-//
 // P_GiveCard
 //
 procedure P_GiveCard(player: Pplayer_t; card: card_t);
@@ -541,7 +521,7 @@ begin
 
     if special.shield_inc > 0 then
     begin
-      if P_GiveShield(player, special.shield_inc) then
+      if P_GiveBody(player, special.shield_inc) then
         didbonus := true;
     end;
 
@@ -557,9 +537,9 @@ begin
         didbonus := true;
     end;
 
-    if special.shield_set > player.shield then
+    if special.shield_set > player.health then
     begin
-      if P_GiveShield(player, special.shield_set - player.shield) then
+      if P_GiveBody(player, special.shield_set - player.health) then
         didbonus := true;
     end;
 

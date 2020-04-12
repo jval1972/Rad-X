@@ -2185,8 +2185,8 @@ begin
         begin
           players[i].armorpoints := players[i].armorpoints + parms.armour_inc;
           players[i].armorpoints := GetIntegerInRange(players[i].armorpoints, 0, PLAYERMAXARMOR);
-          players[i].shield := players[i].shield + parms.shield_inc;
-          players[i].shield := GetIntegerInRange(players[i].shield, 0, PLAYERMAXSHIELD);
+          players[i].health := players[i].health + parms.shield_inc;
+          players[i].health := GetIntegerInRange(players[i].health, 0, PLAYERMAXSHIELD);
           players[i].energy := players[i].energy + parms.energy_inc;
           players[i].energy := GetIntegerInRange(players[i].energy, 0, PLAYERMAXENERGY);
         end;
