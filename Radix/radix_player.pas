@@ -56,6 +56,9 @@ begin
   if p.playerstate = PST_DEAD then
     exit;
 
+  if p.energyweaponfiretics > 0 then
+    dec(p.energyweaponfiretics);  // JVAL: 20201204
+
   if leveltime and 31 = 0 then
     if p.damagecount = 0 then
     begin
@@ -71,10 +74,20 @@ begin
       end;
 
       // Regenerate energy
-      if p.radixpowers[Ord(rpu_rapidenergy)] > 0 then
-        new_energy := p.energy + 2
+      new_energy := p.energy;
+      if p.energyweaponfiretics = 0 then
+      begin // JVAL: 20200412 - If we do not refire energy weapon faster regeneration
+        if p.radixpowers[Ord(rpu_rapidenergy)] > 0 then
+          new_energy := p.energy + 2
+        else
+          new_energy := p.energy + 1;
+      end
       else
-        new_energy := p.energy + 1;
+      begin  // JVAL: 20200412 - If we refire energy weapon regenerate only if rapid energy 
+        if p.radixpowers[Ord(rpu_rapidenergy)] > 0 then
+          new_energy := p.energy + 1;
+      end;
+
       if new_energy <= PLAYERSPAWNENERGY then
       begin
         p.energy := new_energy;

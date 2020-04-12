@@ -273,7 +273,7 @@ var
   PLAYERSPAWNENERGY: integer = 100;
   PLAYERMAXARMOR: integer = 200;
   PLAYERMAXSHIELD: integer = 200;
-  PLAYERMAXENERGY: integer = 200;
+  PLAYERMAXENERGY: integer = 100;
   MAXGRAVITYWAVE: integer = 15;
   GRAVITYWAVEENERGY: integer = 30;
 

@@ -139,6 +139,9 @@ type
     energy: integer;  // JVAL: 20200314 - Radix energy
     threat: boolean;  // JVAL: 20200314 - Any threat nearby?
 
+    plasmaenergycountdown: integer; // JVAL: 20200412 - How many plasma balls to drain energy
+    energyweaponfiretics: integer;  // JVAL: 20200412 - Energy weapon has been fired - wait to zero to regenerate
+
     thrustmomz: fixed_t;  // JVAL: 20200318 - z momentum by forward/backward move
 
     // Power ups. invinc and invis are tic counters.

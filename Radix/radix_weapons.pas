@@ -70,6 +70,7 @@ procedure A_FireRadixGravityWave(player: Pplayer_t; psp: Ppspdef_t);
 implementation
 
 uses
+  d_delphi,
   doomdef,
   d_think,
   d_items,
@@ -286,6 +287,25 @@ begin
   source.z := oldz;
 end;
 
+const
+  PLASMAENERGYDRAINTICS = 5;
+  PLASMAENERGYFIRETICS = TICRATE;
+
+procedure RX_DrainPlasmaEnergy(const p: Pplayer_t; const amount: integer);
+begin
+  p.energyweaponfiretics := PLASMAENERGYFIRETICS;
+  if p.plasmaenergycountdown <= 0 then
+  begin
+    if p.energy > 0 then
+      dec(p.energy);
+    p.plasmaenergycountdown := PLASMAENERGYDRAINTICS;
+    exit;
+  end;
+  dec(p.plasmaenergycountdown, amount);
+end;
+
+const
+  PLASMAENERGYMIN = 2;  // At least 2 points energy to fire energy weapons
 
 //
 // A_FireRadixPlasma
@@ -309,6 +329,10 @@ begin
   if not RX_CheckNextRefire(player) then
     exit;
 
+  // JVAL: 20200412 -> Do not fire if low on energy
+  if player.energy < PLASMAENERGYMIN then
+    exit;
+
   P_SetPsprite(player,
     Ord(ps_flash), statenum_t(weaponinfo[Ord(player.readyweapon)].flashstate + (P_Random and 1)));
 
@@ -318,11 +342,10 @@ begin
   // JVAL: Decide the neutron cannon level
   nlevel := neutroncannoninfo[player.neutroncannonlevel].firelevel;
   if nlevel > 0 then
-    if player.energy < PLAYERSPAWNENERGY div 2 then
-      dec(nlevel);
-  if nlevel > 0 then
-    if player.energy < PLAYERSPAWNENERGY div 4 then
-      dec(nlevel);
+    if player.energy < 2 * PLASMAENERGYMIN then
+      nlevel := 0;  // JVAL: 20200412 -> When low energy only fire the base level
+
+  RX_DrainPlasmaEnergy(player, decide(nlevel = 0, 2, 3));
 
   case nlevel of
     0:
@@ -502,6 +525,10 @@ begin
   if not RX_CheckNextRefire(player) then
     exit;
 
+  // JVAL: 20200412 -> Do not fire if low on energy
+  if player.energy < PLASMAENERGYMIN then
+    exit;
+
   P_SetPsprite(player,
     Ord(ps_flash), statenum_t(weaponinfo[Ord(player.readyweapon)].flashstate + (P_Random and 1)));
 
@@ -510,6 +537,8 @@ begin
 
   if radixplasmaspreadright_id < 0 then
     radixplasmaspreadright_id := Info_GetMobjNumForName('MT_RADIXPLASMASPREADRIGHT');
+
+  RX_DrainPlasmaEnergy(player, 2);
 
   P_SpawnPlayerMissileOffsZ(
     player.mo, radixplasmaspreadleft_id,
