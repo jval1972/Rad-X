@@ -1,0 +1,2668 @@
+ACTORALIAS "PLAYER" "DoomPlayer"
+ACTORALIAS "TROOPER" "ZombieMan"
+ACTORALIAS "SARGEANT" "ShotgunGuy"
+ACTORALIAS "ARCHVILE" "Archvile"
+ACTORALIAS "ARCHVILE ATTACK" "ArchvileFire"
+ACTORALIAS "REVENANT FIREBALL" "RevenantTracer"
+ACTORALIAS "MANCUBUS FIREBALL" "FatShot"
+ACTORALIAS "CHAINGUN SARGEANT" "ChaingunGuy"
+ACTORALIAS "IMP" "DoomImp"
+ACTORALIAS "BARON OF HELL" "BaronOfHell"
+ACTORALIAS "BARON FIREBALL" "BaronBall"
+ACTORALIAS "HELL KNIGHT" "HellKnight"
+ACTORALIAS "LOST SOUL" "LostSoul"
+ACTORALIAS "SPIDERDEMON" "SpiderMastermind"
+ACTORALIAS "PAIN ELEMENTAL" "PainElemental"
+ACTORALIAS "SS NAZI" "WolfensteinSS"
+ACTORALIAS "COMMANDER KEEN" "CommanderKeen"
+ACTORALIAS "BIG BRAIN" "BossBrain"
+ACTORALIAS "DEMON SPAWNER" "BossEye"
+ACTORALIAS "DEMON SPAWN CUBE" "SpawnShot"
+ACTORALIAS "DEMON SPAWN FIRE" "SpawnFire"
+ACTORALIAS "BARREL" "ExplosiveBarrel"
+ACTORALIAS "IMP FIREBALL" "DoomImpBall"
+ACTORALIAS "CACO FIREBALL" "CacodemonBall"
+ACTORALIAS "PLASMA BULLET" "PlasmaBall"
+ACTORALIAS "BFG SHOT" "BFGBall"
+ACTORALIAS "ARACH. FIREBALL" "ArachnotronPlasma"
+ACTORALIAS "BULLET PUFF" "BulletPuff"
+ACTORALIAS "BLOOD SPLAT" "BloodSplatter"
+ACTORALIAS "TELEPORT FLASH" "TeleportFog"
+ACTORALIAS "ITEM RESPAWN FOG" "ItemFog"
+ACTORALIAS "BFG HIT" "BFGExtra"
+ACTORALIAS "GREEN ARMOR" "GreenArmor"
+ACTORALIAS "BLUE ARMOR" "BlueArmor"
+ACTORALIAS "HEALTH POTION" "HealthBonus"
+ACTORALIAS "ARMOR HELMET" "ArmorBonus"
+ACTORALIAS "BLUE KEYCARD" "BlueCard"
+ACTORALIAS "RED KEYCARD" "RedCard"
+ACTORALIAS "YELLOW KEYCARD" "YellowCard"
+ACTORALIAS "YELLOW SKULL KEY" "YellowSkull"
+ACTORALIAS "RED SKULL KEY" "RedSkull"
+ACTORALIAS "BLUE SKULL KEY" "BlueSkull"
+ACTORALIAS "STIM PACK" "Stimpack"
+ACTORALIAS "MEDICAL KIT" "Medikit"
+ACTORALIAS "SOUL SPHERE" "SoulSphere"
+ACTORALIAS "INVULNERABILITY" "InvulnerabilitySphere"
+ACTORALIAS "BERSERK SPHERE" "Berserk"
+ACTORALIAS "BLUR SPHERE" "BlurSphere"
+ACTORALIAS "RADIATION SUIT" "RadSuit"
+ACTORALIAS "COMPUTER MAP" "Allmap"
+ACTORALIAS "LITE AMP. VISOR" "Infrared"
+ACTORALIAS "MEGA SPHERE" "MegaSphere"
+ACTORALIAS "AMMO CLIP" "Clip"
+ACTORALIAS "BOX OF AMMO" "ClipBox"
+ACTORALIAS "ROCKET AMMO" "RocketAmmo"
+ACTORALIAS "BOX OF ROCKETS" "RocketBox"
+ACTORALIAS "ENERGY CELL" "Cell"
+ACTORALIAS "ENERGY PACK" "CellPack"
+ACTORALIAS "SHELLS" "Shell"
+ACTORALIAS "BOX OF SHELLS" "ShellBox"
+ACTORALIAS "BFG 9000" "BFG9000"
+ACTORALIAS "ROCKET LAUNCHER" "RocketLauncher"
+ACTORALIAS "PLASMA GUN" "PlasmaRifle"
+ACTORALIAS "SUPER SHOTGUN" "SuperShotgun"
+ACTORALIAS "TALL LAMP" "TechLamp"
+ACTORALIAS "TALL LAMP 2" "TechLamp2"
+ACTORALIAS "SHORT LAMP" "Column"
+ACTORALIAS "TALL GR. PILLAR" "TallGreenColumn"
+ACTORALIAS "SHORT GR. PILLAR" "ShortGreenColumn"
+ACTORALIAS "TALL RED PILLAR" "TallRedColumn"
+ACTORALIAS "SHORT RED PILLAR" "ShortRedColumn"
+ACTORALIAS "PILLAR W/SKULL" "SkullColumn"
+ACTORALIAS "PILLAR W/HEART" "HeartColumn"
+ACTORALIAS "EYE IN SYMBOL" "EvilEye"
+ACTORALIAS "FLAMING SKULLS" "FloatingSkull"
+ACTORALIAS "GREY TREE" "TorchTree"
+ACTORALIAS "TALL BLUE TORCH" "BlueTorch"
+ACTORALIAS "TALL GREEN TORCH" "GreenTorch"
+ACTORALIAS "TALL RED TORCH" "RedTorch"
+ACTORALIAS "SMALL BLUE TORCH" "ShortBlueTorch"
+ACTORALIAS "SMALL GR. TORCH" "ShortGreenTorch"
+ACTORALIAS "SMALL RED TORCH" "ShortRedTorch"
+ACTORALIAS "BROWN STUB" "Stalagtite"
+ACTORALIAS "TECHNICAL COLUMN" "TechPillar"
+ACTORALIAS "CANDLE" "Candlestick"
+ACTORALIAS "SWAYING BODY" "BloodyTwitch"
+ACTORALIAS "HANGING ARMS OUT" "Meat2"
+ACTORALIAS "ONE-LEGGED BODY" "Meat3"
+ACTORALIAS "HANGING TORSO" "Meat4"
+ACTORALIAS "HANGING LEG" "Meat5"
+ACTORALIAS "HANGING ARMS OUT 2" "NonsolidMeat2"
+ACTORALIAS "HANGING TORSO 2" "NonsolidMeat4"
+ACTORALIAS "ONE-LEGGED BODY 2" "NonsolidMeat3"
+ACTORALIAS "HANGING LEG 2" "NonsolidMeat5"
+ACTORALIAS "SWAYING BODY 2" "NonsolidTwitch"
+ACTORALIAS "DEAD CACODEMON" "DeadCacodemon"
+ACTORALIAS "DEAD IMP" "DeadDoomImp"
+ACTORALIAS "SKEWERED HEADS" "HeadsOnAStick"
+ACTORALIAS "POLE WITH SKULL" "HeadOnAStick"
+ACTORALIAS "PILE OF SKULLS" "HeadCandles"
+ACTORALIAS "IMPALED BODY" "DeadStick"
+ACTORALIAS "TWITCHING BODY" "LiveStick"
+ACTORALIAS "LARGE TREE" "BigTree"
+ACTORALIAS "FLAMING BARREL" "BurningBarrel"
+ACTORALIAS "HANGING BODY 1" "HangNoGuts"
+ACTORALIAS "HANGING BODY 2" "HangBNoBrain"
+ACTORALIAS "HANGING BODY 3" "HangTLookingDown"
+ACTORALIAS "HANGING BODY 4" "HangTSkull"
+ACTORALIAS "HANGING BODY 5" "HangTLookingUp"
+ACTORALIAS "HANGING BODY 6" "HangTNoBrain"
+ACTORALIAS "POOL OF BLOOD 1" "ColonGibs"
+ACTORALIAS "POOL OF BLOOD 2" "SmallBloodPool"
+ACTORALIAS "BRAIN" "BrainStem"
+
+////////////////////////////////////////////////////////////////////////////////
+// MUSINFO SUPPORT
+ACTOR MusicChanger 14165
+{
+    HEALTH 1000
+    REACTIONTIME 8
+	RADIUS 16
+	HEIGHT 16
+	MASS 100
+    SPEED 0
+	+NOBLOCKMAP +DONTDRAW
+    States
+    {
+    Spawn:
+        TNT1 A 1 A_MusicChanger
+        Loop
+    }
+}
+   
+////////////////////////////////////////////////////////////////////////////////
+// AMBIENT SOUND
+ACTOR AMBIENTSOUND 1200
+{
+    HEALTH 1000
+    REACTIONTIME 8
+	RADIUS 16
+	HEIGHT 16
+	MASS 100
+    SPEED 0
+	+NOBLOCKMAP +DONTDRAW +NOGRAVITY +SPAWNFLOAT
+    States
+    {
+    Spawn:
+        TNT1 AAAAAAAAAA 35 // Nothing to do, the engine takes care of playing the sound
+		Stop
+    }
+}
+   
+////////////////////////////////////////////////////////////////////////////////
+// UNKNOWN EDITOR THING
+ACTOR Unknown
+{
+  Radius 32
+  Height 56
+  +NOGRAVITY
+  +NOBLOCKMAP
+  +NOHITFLOOR
+  DEFAULTTRANSPARENT
+  States
+  {
+  Spawn:
+    UNKN A -1
+    Stop
+  }
+}
+
+///////////////////////////////
+// MT_FULLARMOR
+///////////////////////////////
+ACTOR MT_FULLARMOR 1000
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +WHITELIGHT 
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    ARMOR SET 100
+	PICKUPMESSAGE "Full Armor"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR00 A 10
+    XR00 B 10
+    XR00 C 10
+    XR00 B 10
+    Loop
+  }
+}
+
+///////////////////////////////
+// MT_FULLSHIED
+///////////////////////////////
+ACTOR MT_FULLSHIED 1001
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +BLUELIGHT 
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    SHIELD SET 100
+	PICKUPMESSAGE "Full Shield"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR01 A 10
+    XR01 B 10
+    XR01 C 10
+    XR01 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_FULLENERGY
+///////////////////////////////
+ACTOR MT_FULLENERGY 1002
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +GREENLIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    ENERGY SET 100
+	PICKUPMESSAGE "Full Energy"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR02 A 10
+    XR02 B 10
+    XR02 C 10
+    XR02 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_SUPERCHARGE
+///////////////////////////////
+ACTOR MT_SUPERCHARGE 1003
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +BLUELIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    ARMOR SET 100
+    SHIELD SET 100
+    ENERGY SET 100
+	PICKUPMESSAGE "SUPERCHARGE!"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR03 A 10
+    XR03 B 10
+    XR03 C 10
+    XR03 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_RAPIDSHIELD
+///////////////////////////////
+ACTOR MT_RAPIDSHIELD 1004
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +BLUELIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    RAPIDSHIELD 3500
+	PICKUPMESSAGE "Rapid Shield Regeneration"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR04 A 10
+    XR04 B 10
+    XR04 C 10
+    XR04 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_RAPIDENERGY
+///////////////////////////////
+ACTOR MT_RAPIDENERGY 1005
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +GREENLIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    RAPIDENERGY 3500
+	PICKUPMESSAGE "Rapid Energy Regeneration"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR05 A 10
+    XR05 B 10
+    XR05 C 10
+    XR05 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_MANEUVERJETS
+///////////////////////////////
+ACTOR MT_MANEUVERJETS 1006
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +WHITELIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    MANEUVERJETS 3500
+	PICKUPMESSAGE "Maneuver Jets acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR06 A 10
+    XR06 B 10
+    XR06 C 10
+    XR06 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_NIGHTVISION
+///////////////////////////////
+ACTOR MT_NIGHTVISION 1007
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +GREENLIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    NIGHTVISION 3500
+	PICKUPMESSAGE "Night Vision acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR07 A 10 BRIGHT
+    XR07 B 10 BRIGHT
+    XR07 C 10 BRIGHT
+    XR07 B 10 BRIGHT
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_PLASMABOMB
+///////////////////////////////
+ACTOR MT_PLASMABOMB 1008
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +REDLIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    PLASMABOMB 1
+	PICKUPMESSAGE "Plasma bomb acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR08 A 10
+    XR08 B 10
+    XR08 C 10
+    XR08 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_ALDS
+///////////////////////////////
+ACTOR MT_ALDS 1009
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +REDLIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    ALDS 3500
+	PICKUPMESSAGE "A.L.D.S. Acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR09 A 10
+    XR09 B 10
+    XR09 C 10
+    XR09 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_ULTRASHIELDS
+///////////////////////////////
+ACTOR MT_ULTRASHIELDS 1010
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +REDLIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    SHIELD SET 200
+	PICKUPMESSAGE "Ultra Shields acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR10 A 10
+    XR10 B 10
+    XR10 C 10
+    XR10 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_LEVEL2NEUTRONCANNONS
+///////////////////////////////
+ACTOR MT_LEVEL2NEUTRONCANNONS 1011
+{
+  Radius 128
+  Height 96
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    ENERGY INC 20
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR11 A 10
+    XR11 B 10
+    XR11 C 10
+    XR11 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_STANDARDEPC
+///////////////////////////////
+ACTOR MT_STANDARDEPC 1012
+{
+  Radius 128
+  Height 96
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    STANDARDEPC
+    AMMO 200 0 0 0
+	PICKUPMESSAGE "Standard EPC Acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR12 A 10
+    XR12 B 10
+    XR12 C 10
+    XR12 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_LEVEL1PLASMASPREADER
+///////////////////////////////
+ACTOR MT_LEVEL1PLASMASPREADER 1013
+{
+  Radius 128
+  Height 96
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    PLASMASPREADER
+	PICKUPMESSAGE "Plasma Spreader Acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR13 A 10
+    XR13 B 10
+    XR13 C 10
+    XR13 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_NUCLEARCAPABILITY
+///////////////////////////////
+ACTOR MT_NUCLEARCAPABILITY 1014
+{
+  Radius 128
+  Height 96
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    NUKE
+	AMMO 0 0 0 2
+	PICKUPMESSAGE "Nuclear Capability Acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR14 A 10
+    XR14 B 10
+    XR14 C 10
+    XR14 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_MISSILECAPABILITY
+///////////////////////////////
+ACTOR MT_MISSILECAPABILITY 1015
+{
+  Radius 128
+  Height 96
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    SEEKINGMISSILES
+	AMMO 0 16 0 0
+	PICKUPMESSAGE "Missile Capability Acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR15 A 10
+    XR15 B 10
+    XR15 C 10
+    XR15 B 10
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_TORPEDOCAPABILITY
+///////////////////////////////
+ACTOR MT_TORPEDOCAPABILITY 1016
+{
+  Radius 128
+  Height 96
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    PHASETORPEDOES
+	AMMO 0 0 15 0
+	PICKUPMESSAGE "Torpedo Capability Acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR16 A 10
+    XR16 B 10
+    XR16 C 10
+    XR16 D 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_GRAVITYDEVICE
+///////////////////////////////
+ACTOR MT_GRAVITYDEVICE 1017
+{
+  Radius 128
+  Height 96
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    GRAVITYWAVE
+    ENERGY SET 100
+	PICKUPMESSAGE "Gravity Device Acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR17 A 10
+    XR17 B 10
+    XR17 C 10
+    XR17 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_250SHELLS
+///////////////////////////////
+ACTOR MT_250SHELLS 1018
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 250 0 0 0
+	PICKUPMESSAGE "250 Shells Acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR18 A 10
+    XR18 B 10
+    XR18 C 10
+    XR18 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_500SHELLS
+///////////////////////////////
+ACTOR MT_500SHELLS 1019
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 500 0 0 0
+	PICKUPMESSAGE "500 Shells Acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR19 A 10
+    XR19 B 10
+    XR19 C 10
+    XR19 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_1000SHELLS
+///////////////////////////////
+ACTOR MT_1000SHELLS 1020
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 1000 0 0 0
+	PICKUPMESSAGE "1000 Shells Acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR20 A 10
+    XR20 B 10
+    XR20 C 10
+    XR20 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_4NUKES
+///////////////////////////////
+ACTOR MT_4NUKES 1021
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 0 0 0 4
+	PICKUPMESSAGE "4 Nukes Acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR21 A 10
+    XR21 B 10
+    XR21 C 10
+    XR21 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_10NUKES
+///////////////////////////////
+ACTOR MT_10NUKES 1022
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 0 0 0 10
+	PICKUPMESSAGE "10 Nukes Acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR22 A 10
+    XR22 B 10
+    XR22 C 10
+    XR22 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_15TORPEDOES
+///////////////////////////////
+ACTOR MT_15TORPEDOES 1023
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 0 0 15 0
+	PICKUPMESSAGE "15 Torpedoes Acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR23 A 10
+    XR23 B 10
+    XR23 C 10
+    XR23 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_75TORPEDOES
+///////////////////////////////
+ACTOR MT_75TORPEDOES 1024
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 0 0 75 0
+	PICKUPMESSAGE "75 Torpedoes Acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR24 A 10
+    XR24 B 10
+    XR24 C 10
+    XR24 B 10
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_20MISSILES
+///////////////////////////////
+ACTOR MT_20MISSILES 1025
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 0 20 0 0
+	PICKUPMESSAGE "20 Missiles Acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR25 A 10
+    XR25 B 10
+    XR25 C 10
+    XR25 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_50MISSILES
+///////////////////////////////
+ACTOR MT_50MISSILES 1026
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 0 50 0 0
+	PICKUPMESSAGE "50 Missiles Acquired"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR26 A 10
+    XR26 B 10
+    XR26 C 10
+    XR26 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_BOOMPACK
+///////////////////////////////
+ACTOR MT_BOOMPACK 1027
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 5000 100 210 25
+	PICKUPMESSAGE "BOOM Pack :)"
+	PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR27 A 10
+    XR27 B 10
+    XR27 C 10
+    XR27 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_BIOMINE1
+///////////////////////////////
+ACTOR MT_BIOMINE1 1028
+{
+  Radius 32
+  Height 56
+  Health 20
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT
+  States
+  {
+  Spawn:
+    XR28 A 5
+    XR28 B 5
+    XR28 C 5
+    XR28 B 5
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_BIOMINE2
+///////////////////////////////
+ACTOR MT_BIOMINE2 1029
+{
+  Radius 32
+  Height 56
+  Health 40
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT
+  States
+  {
+  Spawn:
+    XR29 A 5
+    XR29 B 5
+    XR29 C 5
+    XR29 B 5
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_ALIENFODDER
+///////////////////////////////
+ACTOR MT_ALIENFODDER 1030
+{
+  Radius 32
+  Height 64
+  Health 150
+  SOLID SHOOTABLE COUNTKILL
+  States
+  {
+  Spawn:
+    XR30 A 5
+    XR30 B 5
+    XR30 C 5
+    XR30 B 5
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_DEFENCEDRONE_STUB1
+///////////////////////////////
+ACTOR MT_DEFENCEDRONE_STUB1 1031
+{
+  Radius 32
+  Height 56
+  Health 50
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  States
+  {
+  Spawn:
+    XR31 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_DEFENCEDRONE_STUB2
+///////////////////////////////
+ACTOR MT_DEFENCEDRONE_STUB2 1032
+{
+  Radius 32
+  Height 56
+  Health 50
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  States
+  {
+  Spawn:
+    XR32 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_BATTLEDRONE1
+///////////////////////////////
+ACTOR MT_BATTLEDRONE1 1033
+{
+  Radius 32
+  Height 56
+  Health 50
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  States
+  {
+  Spawn:
+    XR32 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_MISSILEBOAT
+///////////////////////////////
+ACTOR MT_MISSILEBOAT 1034
+{
+  Radius 32
+  Height 56
+  Health 150
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  States
+  {
+  Spawn:
+    XR34 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_STORMBIRDHEAVYBOMBER
+///////////////////////////////
+ACTOR MT_STORMBIRDHEAVYBOMBER 1035
+{
+  Radius 32
+  Height 56
+  Health 150
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  States
+  {
+  Spawn:
+    XR35 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_SKYFIREASSULTFIGHTER
+///////////////////////////////
+ACTOR MT_SKYFIREASSULTFIGHTER 1036
+{
+  Radius 32
+  Height 56
+  Health 100
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  States
+  {
+  Spawn:
+    XR36 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_SPAWNER
+///////////////////////////////
+ACTOR MT_SPAWNER 1037
+{
+  Radius 32
+  Height 56
+  Health 200
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  States
+  {
+  Spawn:
+    XR37 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_EXODROID
+///////////////////////////////
+ACTOR MT_EXODROID 1038
+{
+  Radius 32
+  Height 56
+  Health 150
+  SOLID SHOOTABLE COUNTKILL NOBLOOD
+  States
+  {
+  Spawn:
+    XR38 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_SNAKEDEAMON
+///////////////////////////////
+ACTOR MT_SNAKEDEAMON 1039
+{
+  Radius 32
+  Height 56
+  Health 200
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT
+  States
+  {
+  Spawn:
+    XR39 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_MINE
+///////////////////////////////
+ACTOR MT_MINE 1040
+{
+  Radius 32
+  Height 56
+  Health 20
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  States
+  {
+  Spawn:
+    XR40 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_ROTATINGRADAR1
+///////////////////////////////
+ACTOR MT_ROTATINGRADAR1 1041
+{
+  Radius 32
+  Height 56
+  Health 100
+  SOLID SHOOTABLE NOBLOOD
+  States
+  {
+  Spawn:
+    XR41 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_DEFENCEDRONE_STUB3
+///////////////////////////////
+ACTOR MT_DEFENCEDRONE_STUB3 1042
+{
+  Radius 32
+  Height 56
+  Health 50
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  States
+  {
+  Spawn:
+    XR42 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_SHIELDGENERATOR1
+///////////////////////////////
+ACTOR MT_SHIELDGENERATOR1 1043
+{
+  Radius 32
+  Height 56
+  Health 100
+  SOLID SHOOTABLE NOBLOOD
+  States
+  {
+  Spawn:
+    XR43 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_SECONDCOOLAND1
+///////////////////////////////
+ACTOR MT_SECONDCOOLAND1 1044
+{
+  Radius 32
+  Height 56
+  Health 100
+  SOLID SHOOTABLE NOBLOOD
+  States
+  {
+  Spawn:
+    XR44 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_BIOMECHUP
+///////////////////////////////
+ACTOR MT_BIOMECHUP 1045
+{
+  Radius 32
+  Height 56
+  Health 50
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  States
+  {
+  Spawn:
+    XR45 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_ENGINECORE
+///////////////////////////////
+ACTOR MT_ENGINECORE 1046
+{
+  Radius 32
+  Height 56
+  Health 100
+  SOLID SHOOTABLE NOBLOOD
+  States
+  {
+  Spawn:
+    XR46 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_DEFENCEDRONE1
+///////////////////////////////
+ACTOR MT_DEFENCEDRONE1 1047
+{
+  Radius 32
+  Height 56
+  Health 50
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  States
+  {
+  Spawn:
+    XR47 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_BATTLEDRONE2
+///////////////////////////////
+ACTOR MT_BATTLEDRONE2 1048
+{
+  Radius 32
+  Height 56
+  Health 50
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  States
+  {
+  Spawn:
+    XR48 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_SKYFIREASSULTFIGHTER2
+///////////////////////////////
+ACTOR MT_SKYFIREASSULTFIGHTER2 1049
+{
+  Radius 32
+  Height 56
+  Health 100
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  States
+  {
+  Spawn:
+    XR49 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_SKYFIREASSULTFIGHTER3
+///////////////////////////////
+ACTOR MT_SKYFIREASSULTFIGHTER3 1050
+{
+  Radius 32
+  Height 56
+  Health 100
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  States
+  {
+  Spawn:
+    XR50 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_SKYFIREASSULTFIGHTER4
+///////////////////////////////
+ACTOR MT_SKYFIREASSULTFIGHTER4 1051
+{
+  Radius 32
+  Height 56
+  Health 100
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  States
+  {
+  Spawn:
+    XR51 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_BIOMECH
+///////////////////////////////
+ACTOR MT_BIOMECH 1052
+{
+  Radius 32
+  Height 56
+  Health 50
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  States
+  {
+  Spawn:
+    XR52 A 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_DEFENCEDRONE2
+///////////////////////////////
+ACTOR MT_DEFENCEDRONE2 1053
+{
+  Radius 32
+  Height 56
+  Health 50
+  Gravity 0
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  States
+  {
+  Spawn:
+    XR53 A 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_RUI
+///////////////////////////////
+ACTOR MT_RUI 1054
+{
+  Radius 32
+  Height 56
+  Health 20
+  +NOGRAVITY
+  +FLOAT
+  +SOLID
+  +SHOOTABLE
+  States
+  {
+  Spawn:
+    XR54 A 10
+    XR54 B 10
+    XR54 C 10
+    XR54 B 10
+    Loop
+   Death:
+    XR54 D 5 A_NoBlocking
+    XR54 E 5
+    XR54 F 5
+    XR54 G 5
+    XR54 H -1
+	Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_SHIELDGENERATOR2
+///////////////////////////////
+ACTOR MT_SHIELDGENERATOR2 1055
+{
+  Radius 32
+  Height 56
+  +NOGRAVITY
+  +FLOAT
+  +PUSHABLE
+  States
+  {
+  Spawn:
+    XR55 A 5
+    XR55 B 5
+    XR55 C 5
+    XR55 B 5
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_COOLANDGENERATOR
+///////////////////////////////
+ACTOR MT_COOLANDGENERATOR 1056
+{
+  Radius 32
+  Height 56
+  Health 100
+  SOLID SHOOTABLE NOBLOOD
+  States
+  {
+  Spawn:
+    XR56 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_ROTATINGRADAR2
+///////////////////////////////
+ACTOR MT_ROTATINGRADAR2 1057
+{
+  Radius 32
+  Height 56
+  +NOGRAVITY
+  +FLOAT
+  +PUSHABLE
+  States
+  {
+  Spawn:
+    XR57 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_MISSILEBOAT2
+///////////////////////////////
+ACTOR MT_MISSILEBOAT2 1058
+{
+  Radius 32
+  Height 56
+  +NOGRAVITY
+  +FLOAT
+  +PUSHABLE
+  States
+  {
+  Spawn:
+    XR58 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_BATTLEDRONE3
+///////////////////////////////
+ACTOR MT_BATTLEDRONE3 1059
+{
+  Radius 32
+  Height 56
+  +NOGRAVITY
+  +FLOAT
+  +PUSHABLE
+  States
+  {
+  Spawn:
+    XR59 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_ROTATINGLIGHT
+///////////////////////////////
+ACTOR MT_ROTATINGLIGHT 1060
+{
+  Radius 32
+  Height 56
+  +NOGRAVITY
+  +FLOAT
+  +PUSHABLE
+  States
+  {
+  Spawn:
+    XR60 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_EGG
+///////////////////////////////
+ACTOR MT_EGG 1061
+{
+  Radius 32
+  Height 56
+  +NOGRAVITY
+  +FLOAT
+  +PUSHABLE
+  States
+  {
+  Spawn:
+    XR61 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_BARREL
+///////////////////////////////
+ACTOR MT_BARREL 1062
+{
+  Radius 32
+  Height 56
+  +NOGRAVITY
+  +FLOAT
+  +PUSHABLE
+  States
+  {
+  Spawn:
+    XR62 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_DOZZER
+///////////////////////////////
+ACTOR MT_DOZZER 1063
+{
+  Radius 32
+  Height 56
+  +NOGRAVITY
+  +FLOAT
+  +PUSHABLE
+  States
+  {
+  Spawn:
+    XR63 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_LIFT
+///////////////////////////////
+ACTOR MT_LIFT 1064
+{
+  Radius 32
+  Height 56
+  +NOGRAVITY
+  +FLOAT
+  +PUSHABLE
+  States
+  {
+  Spawn:
+    XR64 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_SECONDCOOLAND2
+///////////////////////////////
+ACTOR MT_SECONDCOOLAND2 1065
+{
+  Radius 32
+  Height 56
+  +NOGRAVITY
+  +FLOAT
+  +PUSHABLE
+  States
+  {
+  Spawn:
+    XR65 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_SECONDCOOLAND3
+///////////////////////////////
+ACTOR MT_SECONDCOOLAND3 1066
+{
+  Radius 32
+  Height 56
+  +NOGRAVITY
+  +FLOAT
+  +PUSHABLE
+  States
+  {
+  Spawn:
+    XR66 A -1
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_RADIXPLASMA
+///////////////////////////////
+ACTOR "MT_RADIXPLASMA"
+{
+  Health 1000
+  Width 13
+  Height 8
+  Speed 3670016
+  Damage 1
+  Mass 100
+  Reactiontime 8
+  Seesound "radix/SndShot"
+  Deathsound "radix/SndExplodeShort"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF_EX_TRANSPARENT
+  +MF_EX_BLUELIGHT
+  +MF3_EX_NOMAXMOVE
+  States
+  {
+    Spawn:
+    {
+      X067 A 6 BRIGHT
+      X067 B 6 BRIGHT A_GlowLight "NONE"
+      X067 C 6 BRIGHT
+      X067 B 6 BRIGHT
+      Loop
+    }
+    Death:
+    {
+      X067 D 4 BRIGHT A_GlowLight "BLUE"
+      X067 E 4 BRIGHT
+      X067 F 4 BRIGHT
+      X067 G 4 BRIGHT
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_RADIXEPCSHELL
+///////////////////////////////
+ACTOR "MT_RADIXEPCSHELL"
+{
+  Health 1000
+  Width 17
+  Height 15
+  Speed 16777216
+  Damage 1
+  Mass 100
+  Reactiontime 8
+  Seesound "radix/SndCannon"
+  Deathsound "radix/SndExplodeShort"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF_EX_TRANSPARENT
+  +MF3_EX_NOMAXMOVE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 6
+      Loop
+    }
+    Death:
+    {
+      X068 A 5 BRIGHT A_GlowLight "YELLOW"
+      X068 B 5 BRIGHT
+      X068 C 5 BRIGHT
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_RADIXPLASMASPREADLEFT
+///////////////////////////////
+ACTOR "MT_RADIXPLASMASPREADLEFT"
+{
+  Health 1000
+  Width 13
+  Height 8
+  Speed 3670016
+  Damage 1
+  Mass 100
+  Reactiontime 8
+  Seesound "radix/SndShot"
+  Deathsound "radix/SndExplodeShort"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF_EX_TRANSPARENT
+  +MF_EX_BLUELIGHT
+  +MF3_EX_NOMAXMOVE
+  +MF3_EX_FLOORBOUNCE
+  +MF3_EX_CEILINGBOUNCE
+  +MF3_EX_WALLBOUNCE
+  States
+  {
+    Spawn:
+    {
+      X067 AAAAAA 1 BRIGHT A_ThrustXY(6, 90)
+      TNT1 A 0 A_GlowLight "NONE"
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4))
+      TNT1 A 0 A_WallBounceFactor(1.0)
+      X067 BBBBBB 1 BRIGHT A_ThrustXY(5, -90)
+      X067 CCCCCC 1 BRIGHT A_ThrustXY(5, -90)
+      X067 BBBBBB 1 BRIGHT A_ThrustXY(5, 90)
+    Spread:
+      X067 AAAAAA 1 BRIGHT A_ThrustXY(5, 90)
+      X067 BBBBBB 1 BRIGHT A_ThrustXY(5, -90)
+      X067 CCCCCC 1 BRIGHT A_ThrustXY(5, -90)
+      X067 BBBBBB 1 BRIGHT A_ThrustXY(5, 90)
+      GoTo Spread
+    }
+    Death:
+    {
+      X067 D 4 BRIGHT A_GlowLight "BLUE"
+      X067 E 4 BRIGHT
+      X067 F 4 BRIGHT
+      X067 G 4 BRIGHT
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_RADIXPLASMASPREADRIGHT
+///////////////////////////////
+ACTOR "MT_RADIXPLASMASPREADRIGHT"
+{
+  Health 1000
+  Width 13
+  Height 8
+  Speed 3670016
+  Damage 1
+  Mass 100
+  Reactiontime 8
+  Seesound "radix/SndShot"
+  Deathsound "radix/SndExplodeShort"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF_EX_TRANSPARENT
+  +MF_EX_BLUELIGHT
+  +MF3_EX_NOMAXMOVE
+  +MF3_EX_FLOORBOUNCE
+  +MF3_EX_CEILINGBOUNCE
+  +MF3_EX_WALLBOUNCE
+  States
+  {
+    Spawn:
+    {
+      X067 AAAAAA 1 BRIGHT A_ThrustXY(6, -90)
+      TNT1 A 0 A_GlowLight "NONE"
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4))
+      TNT1 A 0 A_WallBounceFactor(1.0)
+      X067 BBBBBB 1 BRIGHT A_ThrustXY(5, 90)
+      X067 CCCCCC 1 BRIGHT A_ThrustXY(5, 90)
+      X067 BBBBBB 1 BRIGHT A_ThrustXY(5, -90)
+    Spread:
+      X067 AAAAAA 1 BRIGHT A_ThrustXY(5, -90)
+      X067 BBBBBB 1 BRIGHT A_ThrustXY(5, 90)
+      X067 CCCCCC 1 BRIGHT A_ThrustXY(5, 90)
+      X067 BBBBBB 1 BRIGHT A_ThrustXY(5, -90)
+      GoTo Spread
+    }
+    Death:
+    {
+      X067 D 4 BRIGHT A_GlowLight "BLUE"
+      X067 E 4 BRIGHT
+      X067 F 4 BRIGHT
+      X067 G 4 BRIGHT
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_RADIXSEEKINGMISSILE
+///////////////////////////////
+ACTOR "MT_RADIXSEEKINGMISSILE"
+{
+  Health 1000
+  Width 18
+  Height 14
+  Speed 2621440
+  Damage 20
+  Mass 100
+  Reactiontime 8
+  Seesound "radix/SndMissileOther"
+  Deathsound "radix/SndExplodeOther"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF_EX_WHITELIGHT
+  +MF3_EX_NOMAXMOVE
+  States
+  {
+    Spawn:
+    {
+      X069 A 1 BRIGHT
+	  X069 A 1 A_SpawnItemEx("MT_RADIXBURNERSMOKE", -10, 0, 0)
+      X069 A 1 BRIGHT
+	  TNT1 A 0 A_GlowLight "NONE"
+	  X069 A 1 A_SpawnItemEx("MT_RADIXBURNERSMOKE", -10, 0, 0)
+	SpawnLoop:
+      X069 A 1 BRIGHT A_Tracer
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXBURNERSMOKE", -10, 0, 0)
+      GoTo SpawnLoop
+    }
+    Death:
+    {
+	  TNT1 A 0 A_SetScale(RANDOMPICK(9,10,11)/10)
+	  TNT1 A 0 A_Jump(128, 2)
+	  TNT1 A 0 A_FlipSprite
+      EXPB A RANDOMRANGE(1,3) BRIGHT A_GlowLight "YELLOW"
+      EXPB B RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(64)*RANDOMPICK(-1,1),RANDOM(64)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+	  TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
+      EXPB C RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB D RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(64)*RANDOMPICK(-1,1),RANDOM(64)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+      EXPB E RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB F RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(64)*RANDOMPICK(-1,1),RANDOM(64)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+      EXPB G RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB H RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(64)*RANDOMPICK(-1,1),RANDOM(64)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+      EXPB I RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB J RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_RADIXBIGEXPLOSION
+///////////////////////////////
+ACTOR "MT_RADIXBIGEXPLOSION"
+{
+  Health 1000
+  Width 50
+  Height 50
+  Mass 100
+  Reactiontime 8
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_EX_YELLOWLIGHT
+  +MF2_EX_NOHITFLOOR
+  +MF2_EX_DONOTRENDERSHADOW
+  +THRUSKY
+  States
+  {
+    Spawn:
+    {
+	  TNT1 A 1 A_Jump(128, 2)
+	  TNT1 A 0 A_FlipSprite
+	  TNT1 A 0 A_PlaySound("radix/SndExplode")
+      EXPB A RANDOMRANGE(1,3) BRIGHT 
+      EXPB B RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB C RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB D RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB E RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB F RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB G RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB H RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB I RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB J RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_RADIXSMALLEXPLOSION
+///////////////////////////////
+ACTOR "MT_RADIXSMALLEXPLOSION"
+{
+  Health 1000
+  Width 25
+  Height 25
+  Mass 50
+  Reactiontime 8
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_EX_YELLOWLIGHT
+  +MF2_EX_NOHITFLOOR
+  +MF2_EX_DONOTRENDERSHADOW
+  +THRUSKY
+  States
+  {
+    Spawn:
+    {
+	  TNT1 A 1 A_Jump(128, 2)
+	  TNT1 A 0 A_FlipSprite
+      EXPS A RANDOMRANGE(2,4) BRIGHT 
+      EXPS B RANDOMRANGE(2,4) BRIGHT A_FadeOut20
+      EXPS C RANDOMRANGE(2,4) BRIGHT A_FadeOut20
+      EXPS D RANDOMRANGE(2,4) BRIGHT A_FadeOut20
+      EXPS E RANDOMRANGE(2,4) BRIGHT A_FadeOut20
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_RADIXBIGSMOKE
+///////////////////////////////
+ACTOR "MT_RADIXBIGSMOKE"
+{
+  Health 1000
+  Width 50
+  Height 50
+  Mass 100
+  Reactiontime 8
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_EX_YELLOWLIGHT
+  +MF2_EX_NOHITFLOOR
+  +MF2_EX_DONOTRENDERSHADOW
+  +THRUSKY
+  States
+  {
+    Spawn:
+    {
+	  TNT1 A 1 A_Jump(128, 2)
+	  TNT1 A 0 A_FlipSprite
+      SMOB A RANDOMRANGE(1,3) BRIGHT A_ThrustZ(8)
+      SMOB B RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      SMOB C RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      SMOB D RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      SMOB E RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      SMOB F RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      SMOB G RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      SMOB H RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      SMOB I RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      SMOB J RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_RADIXBURNERSMOKE
+///////////////////////////////
+ACTOR "MT_RADIXBURNERSMOKE"
+{
+  Health 1000
+  Width 10
+  Height 10
+  Mass 50
+  Reactiontime 8
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF2_EX_NOHITFLOOR
+  +MF2_EX_DONOTRENDERSHADOW
+  +THRUSKY
+  States
+  {
+    Spawn:
+    {
+	  TNT1 A 1 A_Jump(128, 2)
+	  TNT1 A 0 A_FlipSprite
+	  TNT1 A 0 A_ThrustXY(RANDOM(2,8), 0)
+      SMOS A RANDOMRANGE(4,8) BRIGHT A_FadeOut20
+      SMOS B RANDOMRANGE(4,8) BRIGHT A_FadeOut20
+      SMOS C RANDOMRANGE(4,8) BRIGHT A_FadeOut20
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_RADIXFIREBALLPUFF
+///////////////////////////////
+ACTOR "MT_RADIXFIREBALLPUFF"
+{
+  Health 1000
+  Width 10
+  Height 10
+  Mass 50
+  Reactiontime 8
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF2_EX_NOHITFLOOR
+  +MF2_EX_DONOTRENDERSHADOW
+  +THRUSKY
+  States
+  {
+    Spawn:
+    {
+	  TNT1 A 1 A_Jump(128, 2)
+	  TNT1 A 0 A_FlipSprite
+      PUFF A RANDOMRANGE(2,4) BRIGHT A_FadeOut20
+      PUFF B RANDOMRANGE(2,4) BRIGHT A_FadeOut20
+      PUFF C RANDOMRANGE(2,4) BRIGHT A_FadeOut20
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_RADIXNUKESMOKE
+///////////////////////////////
+ACTOR "MT_RADIXNUKESMOKE"
+{
+  Health 1000
+  Width 10
+  Height 10
+  Mass 50
+  Reactiontime 8
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF2_EX_NOHITFLOOR
+  +MF2_EX_DONOTRENDERSHADOW
+  +THRUSKY
+  States
+  {
+    Spawn:
+    {
+	  TNT1 A 1 A_Jump(128, 2)
+	  TNT1 A 0 A_FlipSprite
+	  TNT1 A 0 A_ThrustXY(RANDOM(2,8), 0)
+      PUFF A RANDOMRANGE(4,8) BRIGHT A_FadeOut20
+      PUFF B RANDOMRANGE(4,8) BRIGHT A_FadeOut20
+      SMOS C RANDOMRANGE(4,8) BRIGHT A_FadeOut20
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_RADIXNUKE
+///////////////////////////////
+ACTOR "MT_RADIXNUKE"
+{
+  Health 1000
+  Width 18
+  Height 14
+  Speed 1966080
+  Damage 100
+  Mass 100
+  Reactiontime 8
+  Seesound "radix/SndMissile"
+  Deathsound "radix/SndExplode"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF_EX_WHITELIGHT
+  +MF3_EX_NOMAXMOVE
+  States
+  {
+    Spawn:
+    {
+      X075 A 1 BRIGHT
+	  X075 A 1 A_SpawnItemEx("MT_RADIXNUKESMOKE", -10, 0, 0)
+      X075 A 1 BRIGHT
+	  TNT1 A 0 A_GlowLight "NONE"
+	  X075 A 1 A_SpawnItemEx("MT_RADIXNUKESMOKE", -10, 0, 0)
+	SpawnLoop:
+      X075 A 1 BRIGHT
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXNUKESMOKE", -10, 0, 0)
+      GoTo SpawnLoop
+    }
+    Death:
+    {
+	  TNT1 A 0 A_SetScale(RANDOMPICK(9,10,11)/10)
+	  TNT1 A 0 A_Jump(128, 2)
+	  TNT1 A 0 A_FlipSprite
+      EXPB A RANDOMRANGE(1,3) BRIGHT A_GlowLight "YELLOW"
+	  TNT1 AAAA 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+      EXPB B RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+	  TNT1 AAAAA 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+      EXPB C RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+	  TNT1 AAAAA 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+      EXPB D RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+	  TNT1 AAAAA 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+      EXPB E RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+	  TNT1 AAAAA 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+      EXPB F RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+	  TNT1 AAAAA 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+      EXPB G RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+	  TNT1 AAAAA 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,256)
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,256)
+      EXPB H RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+	  TNT1 AAAAA 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,256)
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,256)
+      EXPB I RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+	  TNT1 AAAAA 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,256)
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,256)
+      EXPB J RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_RADIXPHASETORPEDO
+///////////////////////////////
+ACTOR "MT_RADIXPHASETORPEDO"
+{
+  Health 1000
+  Width 20
+  Height 20
+  Speed 1638400
+  Damage 30
+  Mass 100
+  Reactiontime 8
+  Seesound "radix/SndPlasma"
+  Deathsound "radix/SndExplode"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF_EX_WHITELIGHT
+  +MF3_EX_NOMAXMOVE
+  States
+  {
+    Spawn:
+    {
+      X077 A 3 BRIGHT
+	  TNT1 A 0 A_GlowLight "NONE"
+      X077 B 3 BRIGHT
+      X077 C 3 BRIGHT
+	SpawnLoop:
+      X077 A 3 BRIGHT
+      X077 B 3 BRIGHT
+      X077 C 3 BRIGHT
+      X077 A 3 BRIGHT
+      X077 B 3 BRIGHT
+      X077 C 3 BRIGHT
+	  TNT1 A 0 A_PhaseTorpedoSplit
+      GoTo SpawnLoop
+    }
+    Death:
+    {
+	  TNT1 A 0 A_SetScale(RANDOMPICK(9,10,11)/10)
+	  TNT1 A 0 A_Jump(128, 2)
+	  TNT1 A 0 A_FlipSprite
+      EXPB A RANDOMRANGE(1,3) BRIGHT A_GlowLight "YELLOW"
+      EXPB B RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,100)
+	  TNT1 AA 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,100)
+      EXPB C RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB D RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,100)
+	  TNT1 AA 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,100)
+      EXPB E RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB F RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,100)
+	  TNT1 AA 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,100)
+      EXPB G RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB H RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,100)
+	  TNT1 AA 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,RANDOM(192)*RANDOMPICK(-1,1),RANDOM(192)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,100)
+      EXPB I RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB J RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_RADIXGRAVITYWAVEEXPOLOSION
+///////////////////////////////
+ACTOR "MT_RADIXGRAVITYWAVEEXPOLOSION"
+{
+  Health 1000
+  Width 10
+  Height 10
+  Mass 50
+  Reactiontime 8
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_EX_GREENLIGHT
+  +MF_EX_CUSTOMEXPLODE
+  +MF2_EX_NOHITFLOOR
+  +MF2_EX_DONOTRENDERSHADOW
+  +THRUSKY
+  States
+  {
+    Spawn:
+    {
+	  TNT1 A 1 A_Jump(128, 2)
+	  TNT1 A 0 A_RandomFlipSprite(128)
+	  TNT1 A 0 A_ThrustXY(RANDOM(2,8), 0)
+      X079 A RANDOMRANGE(4,8) BRIGHT A_FadeOut10
+      X079 B RANDOMRANGE(4,8) BRIGHT A_FadeOut10
+      X079 C RANDOMRANGE(4,8) BRIGHT A_FadeOut10
+      X079 D RANDOMRANGE(4,8) BRIGHT A_FadeOut10
+      X079 E RANDOMRANGE(4,8) BRIGHT A_Explode(RANDOM(20,30), 30)
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_RADIXGRAVITYWAVEEXPOLOSION2
+///////////////////////////////
+ACTOR "MT_RADIXGRAVITYWAVEEXPOLOSION2"
+{
+  Health 1000
+  Width 10
+  Height 10
+  Mass 50
+  Reactiontime 8
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_EX_GREENLIGHT
+  +MF_EX_CUSTOMEXPLODE
+  +MF2_EX_NOHITFLOOR
+  +MF2_EX_DONOTRENDERSHADOW
+  +THRUSKY
+  States
+  {
+    Spawn:
+    {
+	  TNT1 A 1 A_Jump(128, 2)
+	  TNT1 A 0 A_RandomFlipSprite(128)
+      X079 A RANDOMRANGE(4,8) BRIGHT A_FadeOut10
+      X079 B RANDOMRANGE(4,8) BRIGHT A_FadeOut10
+      X079 C RANDOMRANGE(4,8) BRIGHT A_FadeOut10
+      X079 D RANDOMRANGE(4,8) BRIGHT A_FadeOut10
+      X079 E RANDOMRANGE(4,8) BRIGHT A_Explode(RANDOM(20,30), 30)
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_RADIXGRAVITYWAVE
+///////////////////////////////
+ACTOR "MT_RADIXGRAVITYWAVE"
+{
+  Health 1000
+  Width 30
+  Height 20
+  Speed 1638400
+  Damage 100
+  Mass 100
+  Reactiontime 8
+  DEFAULTTRANSPARENT
+  Seesound "radix/SndGravityWave"
+  Deathsound "radix/SndExplode"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF_EX_GREENLIGHT
+  +MF3_EX_NOMAXMOVE
+  States
+  {
+    Spawn:
+    {
+	  TNT1 A 1 A_RandomFlipSprite(128)
+      X078 A 3 BRIGHT
+	  TNT1 A 0 A_GlowLight "NONE"
+      X078 B 3 BRIGHT
+      X078 C 3 BRIGHT
+	SpawnLoop:
+      X078 A 3 BRIGHT
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXGRAVITYWAVEEXPOLOSION",RANDOM(5),RANDOMPICK(-100,-110,-120),RANDOMPICK(-20,20),5,0,0,-90,0,200)
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXGRAVITYWAVEEXPOLOSION",RANDOM(5),RANDOMPICK(-50,0,50),RANDOMPICK(-20,20),5,0,0,RANDOMPICK(90,-90),0,200)
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXGRAVITYWAVEEXPOLOSION",RANDOM(5),RANDOMPICK(100,110,120),RANDOMPICK(-20,20),5,0,0,90,0,200)
+      X078 B 3 BRIGHT
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXGRAVITYWAVEEXPOLOSION",RANDOM(5),RANDOMPICK(-100,-110,-120),RANDOMPICK(-20,20),5,0,0,-90,0,200)
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXGRAVITYWAVEEXPOLOSION",RANDOM(5),RANDOMPICK(-50,0,50),RANDOMPICK(-20,20),5,0,0,RANDOMPICK(90,-90),0,200)
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXGRAVITYWAVEEXPOLOSION",RANDOM(5),RANDOMPICK(100,110,120),RANDOMPICK(-20,20),5,0,0,90,0,200)
+      X078 C 3 BRIGHT
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXGRAVITYWAVEEXPOLOSION",RANDOM(5),RANDOMPICK(-100,-110,-120),RANDOMPICK(-20,20),5,0,0,-90,0,200)
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXGRAVITYWAVEEXPOLOSION",RANDOM(5),RANDOMPICK(-50,0,50),RANDOMPICK(-20,20),5,0,0,RANDOMPICK(90,-90),0,200)
+	  TNT1 A 0 A_SpawnItemEx("MT_RADIXGRAVITYWAVEEXPOLOSION",RANDOM(5),RANDOMPICK(100,110,120),RANDOMPICK(-20,20),5,0,0,90,0,200)
+      GoTo SpawnLoop
+    }
+    Death:
+    {
+	  TNT1 A 0 A_SetScale(RANDOMPICK(9,10,11)/10)
+	  TNT1 A 0 A_Jump(128, 2)
+	  TNT1 A 0 A_FlipSprite
+	  TNT1 AAAA 0 A_SpawnItemEx("MT_RADIXGRAVITYWAVEEXPOLOSION2",0,(32+RANDOM(128))*RANDOMPICK(-1,1),(32+RANDOM(128))*RANDOMPICK(-1,1),0,0,RANDOMPICK(-1,1),RANDOMPICK(90,-90),0,256)
+	  TNT1 AAAA 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,(8+RANDOM(128))*RANDOMPICK(-1,1),(8+RANDOM(128))*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,256)
+	  TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
+      EXPS A RANDOMRANGE(2,4) BRIGHT A_GlowLight "YELLOW"
+	  TNT1 AAAA 0 A_SpawnItemEx("MT_RADIXGRAVITYWAVEEXPOLOSION2",0,(32+RANDOM(128))*RANDOMPICK(-1,1),(32+RANDOM(128))*RANDOMPICK(-1,1),0,0,RANDOMPICK(-1,1),RANDOMPICK(90,-90),0,256)
+	  TNT1 AAAA 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,(8+RANDOM(128))*RANDOMPICK(-1,1),(8+RANDOM(128))*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,256)
+      EXPS B RANDOMRANGE(2,4) BRIGHT A_FadeOut20
+	  TNT1 AAAA 0 A_SpawnItemEx("MT_RADIXGRAVITYWAVEEXPOLOSION2",0,(32+RANDOM(128))*RANDOMPICK(-1,1),(32+RANDOM(128))*RANDOMPICK(-1,1),0,0,RANDOMPICK(-1,1),RANDOMPICK(90,-90),0,256)
+	  TNT1 AAAA 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,(8+RANDOM(128))*RANDOMPICK(-1,1),(8+RANDOM(128))*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,256)
+      EXPS C RANDOMRANGE(2,4) BRIGHT A_FadeOut20
+	  TNT1 AAAA 0 A_SpawnItemEx("MT_RADIXGRAVITYWAVEEXPOLOSION2",0,(32+RANDOM(128))*RANDOMPICK(-1,1),(32+RANDOM(128))*RANDOMPICK(-1,1),0,0,RANDOMPICK(-1,1),RANDOMPICK(90,-90),0,256)
+	  TNT1 AAAA 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,(8+RANDOM(128))*RANDOMPICK(-1,1),(8+RANDOM(128))*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,256)
+      EXPS D RANDOMRANGE(2,4) BRIGHT A_FadeOut20
+	  TNT1 AAAA 0 A_SpawnItemEx("MT_RADIXGRAVITYWAVEEXPOLOSION2",0,(32+RANDOM(128))*RANDOMPICK(-1,1),(32+RANDOM(128))*RANDOMPICK(-1,1),0,0,RANDOMPICK(-1,1),RANDOMPICK(90,-90),0,256)
+	  TNT1 AAAA 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,(8+RANDOM(128))*RANDOMPICK(-1,1),(8+RANDOM(128))*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,256)
+      EXPS E RANDOMRANGE(2,4) BRIGHT A_FadeOut20
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_MISSILEWALL
+///////////////////////////////
+ACTOR "MT_MISSILEWALL" 
+{
+  Health 1000
+  Width 16
+  Height 16
+  Mass 100
+  Reactiontime 8
+  States
+  {
+    Spawn:
+    {
+      TNT1 A -1
+    }
+  }
+}
+
+///////////////////////////////
+// MT_ENEMYMISSILESMOKE
+///////////////////////////////
+ACTOR "MT_ENEMYMISSILESMOKE"
+{
+  Health 1000
+  Width 10
+  Height 10
+  Mass 50
+  Reactiontime 8
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF2_EX_NOHITFLOOR
+  +MF2_EX_DONOTRENDERSHADOW
+  +THRUSKY
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_ThrustXY(RANDOM(2,8), 0)
+      PUFF A RANDOMRANGE(4,8) BRIGHT A_FadeOut20
+      PUFF B RANDOMRANGE(4,8) BRIGHT A_FadeOut20
+      SMOS C RANDOMRANGE(4,8) BRIGHT A_FadeOut20
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_ENEMYMISSILE
+///////////////////////////////
+ACTOR "MT_ENEMYMISSILE"
+{
+  Health 1000
+  Width 18
+  Height 14
+  Speed 1310720
+  Damage 60
+  Mass 100
+  Reactiontime 8
+  Seesound "radix/SndMissile"
+  Deathsound "radix/SndExplode"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF_EX_WHITELIGHT
+  States
+  {
+    Spawn:
+    {
+      X081 A 1 BRIGHT
+      X081 A 1 A_SpawnItemEx("MT_ENEMYMISSILESMOKE", -10, 0, 0)
+      X081 A 1 BRIGHT
+      TNT1 A 0 A_GlowLight "NONE"
+      X081 A 1 A_SpawnItemEx("MT_ENEMYMISSILESMOKE", -10, 0, 0)
+    SpawnLoop:
+      X081 A 1 BRIGHT
+      TNT1 A 0 A_SpawnItemEx("MT_ENEMYMISSILESMOKE", -10, 0, 0)
+      GoTo SpawnLoop
+    }
+    Death:
+    {
+      TNT1 A 0 A_SetScale(RANDOMPICK(9,10,11)/10)
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_PlayerHurtExplode(RANDOMPICK(20,25,30), 30)
+      EXPB A RANDOMRANGE(1,3) BRIGHT A_GlowLight "YELLOW"
+      EXPB B RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(64)*RANDOMPICK(-1,1),RANDOM(64)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+      TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
+      EXPB C RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB D RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(64)*RANDOMPICK(-1,1),RANDOM(64)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+      EXPB E RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB F RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(64)*RANDOMPICK(-1,1),RANDOM(64)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+      EXPB G RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB H RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(64)*RANDOMPICK(-1,1),RANDOM(64)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+      EXPB I RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB J RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_ENEMYSEEKERMISSILE
+///////////////////////////////
+ACTOR "MT_ENEMYSEEKERMISSILE"
+{
+  Health 1000
+  Width 18
+  Height 14
+  Speed 1310720
+  Damage 60
+  Mass 100
+  Reactiontime 8
+  Seesound "radix/SndMissile"
+  Deathsound "radix/SndExplode"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF_EX_WHITELIGHT
+  States
+  {
+    Spawn:
+    {
+      X081 A 1 BRIGHT
+      X081 A 1 A_SpawnItemEx("MT_ENEMYMISSILESMOKE", -10, 0, 0)
+      X081 A 1 BRIGHT
+      TNT1 A 0 A_GlowLight "NONE"
+      X081 A 1 A_SpawnItemEx("MT_ENEMYMISSILESMOKE", -10, 0, 0)
+    SpawnLoop:
+      X081 A 1 BRIGHT A_TraceNearestPlayer(50, 15)
+      TNT1 A 0 A_SpawnItemEx("MT_ENEMYMISSILESMOKE", -10, 0, 0)
+      GoTo SpawnLoop
+    }
+    Death:
+    {
+      TNT1 A 0 A_SetScale(RANDOMPICK(9,10,11)/10)
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_PlayerHurtExplode(RANDOMPICK(20,25,30), 30)
+      EXPB A RANDOMRANGE(1,3) BRIGHT A_GlowLight "YELLOW"
+      EXPB B RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(64)*RANDOMPICK(-1,1),RANDOM(64)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+      TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
+      EXPB C RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB D RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(64)*RANDOMPICK(-1,1),RANDOM(64)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+      EXPB E RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB F RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(64)*RANDOMPICK(-1,1),RANDOM(64)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+      EXPB G RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB H RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,RANDOM(64)*RANDOMPICK(-1,1),RANDOM(64)*RANDOMPICK(-1,1),0,0,0,RANDOMPICK(90,-90),0,200)
+      EXPB I RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      EXPB J RANDOMRANGE(1,3) BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
