@@ -350,8 +350,7 @@ begin
   onground := player.mo.z <= player.mo.floorz;
 
   if not onground then
-    if G_PlayingEngineVersion > VERSION120 then
-      onground := player.mo.flags2_ex and MF2_EX_ONMOBJ <> 0;
+    onground := player.mo.flags2_ex and MF2_EX_ONMOBJ <> 0;
 
   movefactor := ORIG_FRICTION_FACTOR;
 
@@ -843,8 +842,7 @@ begin
       player._message := S_ALDS_DEPLETED;
   end;
 
-  if G_PlayingEngineVersion >= VERSION119 then
-    A_PlayerBreath(player);
+  A_PlayerBreath(player);
 end;
 
 end.

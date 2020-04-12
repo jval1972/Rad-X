@@ -759,9 +759,6 @@ begin
         mo.z := mo.z + FLOATSPEED;
     end;
   end;
-  if G_PlayingEngineVersion <= VERSION204 then
-    if (mo.player <> nil) and (mo.z > mo.floorz) and (leveltime and 2 <> 0) then
-      mo.z := mo.z + finesine[(FINEANGLES div 20 * leveltime div 4) and FINEMASK];
 
 //
 // clip movement
@@ -955,7 +952,6 @@ var
   jumpupmargin: fixed_t;
 begin
   floatok := false;
-//  if (thing.flags and MF_MISSILE = 0) or (thing.flags3_ex and MF3_EX_NOMAXMOVE <> 0) then
   if (thing.flags and MF_MISSILE = 0) and (thing.flags3_ex and MF3_EX_NOMAXMOVE = 0) then
   begin
     if not P_CheckPosition(thing, x, y) then
@@ -2256,25 +2252,20 @@ begin
   begin
     P_DamageMobj(thing, nil, nil, 10);
 
-    if G_PlayingEngineVersion >= VERSION115 then
+    if (thing.flags and MF_NOBLOOD <> 0) or
+       (thing.flags_ex and MF_EX_INVULNERABLE <> 0) then
     begin
-
-      if (thing.flags and MF_NOBLOOD <> 0) or
-         (thing.flags_ex and MF_EX_INVULNERABLE <> 0) then
-        begin
-          result := true;
-          exit;
-        end;
-
-      plr := thing.player;
-      if plr <> nil then
-        if (plr.cheats and CF_GODMODE <> 0) or (plr.powers[Ord(pw_invulnerability)] <> 0) then
-        begin
-          result := true;
-          exit;
-        end;
-
+      result := true;
+      exit;
     end;
+
+    plr := thing.player;
+    if plr <> nil then
+      if (plr.cheats and CF_GODMODE <> 0) or (plr.powers[Ord(pw_invulnerability)] <> 0) then
+      begin
+        result := true;
+        exit;
+      end;
 
     // spray blood in a random direction
     // JVAL: player with custom blood color :)
@@ -2355,7 +2346,7 @@ begin
   nofit := false;
   crushchange := crunch;
 
-  if (G_PlayingEngineVersion >= VERSION122) and (sector.num_saffectees > 0) then
+  if sector.num_saffectees > 0 then
   begin
     for i := 0 to sector.num_saffectees - 1 do
       P_DoChangeSector(@sectors[sector.saffectees[i]], crunch);

@@ -785,10 +785,7 @@ end;
 //
 function twoSided(sector: integer; line: integer): boolean;
 begin
-  if G_PlayingEngineVersion > VERSION115 then
-    result := sectors[sector].lines[line].sidenum[1] <> -1
-  else
-    result := sectors[sector].lines[line].flags and ML_TWOSIDED <> 0;
+  result := sectors[sector].lines[line].sidenum[1] <> -1;
 end;
 
 function twoSidedS(sector: Psector_t; line: integer): boolean;
@@ -802,23 +799,10 @@ end;
 // NULL if not two-sided line
 //
 function getNextSector(line: Pline_t; sec: Psector_t): Psector_t;
-var
-  oldcompatibility: boolean;
 begin
-  oldcompatibility := false;
-  if G_PlayingEngineVersion <= VERSION115 then
-  begin
-    oldcompatibility := true;
-    if (line.flags and ML_TWOSIDED) = 0 then
-    begin
-      result := nil;
-      exit;
-    end;
-  end;
-
   if line.frontsector = sec then
   begin
-    if oldcompatibility or (line.backsector <> sec) then
+    if line.backsector <> sec then
       result := line.backsector
     else
       result := nil;
@@ -861,10 +845,7 @@ var
   check: Pline_t;
   other: Psector_t;
 begin
-  if G_PlayingEngineVersion > VERSION115 then
-    result := -32000 * FRACUNIT
-  else
-    result := -500 * FRACUNIT;
+  result := -32000 * FRACUNIT;
 
   for i := 0 to sec.linecount - 1 do
   begin
@@ -1069,10 +1050,7 @@ var
   check: Pline_t;
   other: Psector_t;
 begin
-  if G_PlayingEngineVersion > VERSION115 then
-    result := 32000 * FRACUNIT
-  else
-    result := MAXINT;
+  result := 32000 * FRACUNIT;
 
   for i := 0 to sec.linecount - 1 do
   begin
@@ -1094,10 +1072,7 @@ var
   check: Pline_t;
   other: Psector_t;
 begin
-  if G_PlayingEngineVersion > VERSION115 then
-    result := -32000 * FRACUNIT
-  else
-    result := 0;
+  result := -32000 * FRACUNIT;
 
   for i := 0 to sec.linecount - 1 do
   begin
@@ -1570,12 +1545,6 @@ end;
 function P_CheckTag(line: Pline_t): boolean;
 begin
   // allow zero tags in compatibility mode
-  if G_PlayingEngineVersion <= VERSION115 then
-  begin
-    result := true;
-    exit;
-  end;
-
   if line.tag <> 0 then // tag not zero, allowed
   begin
     result := true;
@@ -1689,7 +1658,6 @@ procedure P_CrossSpecialLine(linenum: integer; side: integer; thing: Pmobj_t);
 var
   line: Pline_t;
   linefunc: linefunc_t;
-  oldcompatibility: boolean;
 begin
   line := @lines[linenum];
 
@@ -1709,94 +1677,88 @@ begin
 
   end;
 
-  oldcompatibility := true;
-  // generalized types not recognized if demo older than VERSION116
-  if G_PlayingEngineVersion > VERSION115 then
+  // pointer to line function is nil by default, set non-null if
+  // line special is walkover generalized linedef type
+  linefunc := nil;
+
+  // check each range of generalized linedefs
+  if word(line.special) >= CGENFLOORBASE then
   begin
-    oldcompatibility := false;
-    // pointer to line function is nil by default, set non-null if
-    // line special is walkover generalized linedef type
-    linefunc := nil;
-
-    // check each range of generalized linedefs
-    if word(line.special) >= CGENFLOORBASE then
-    begin
-      if thing.player = nil then
-        if (line.special and gen_FloorChange <> 0) or (line.special and gen_FloorModel = 0) then
-          exit;     // FloorModel is 'Allow Monsters' if FloorChange is 0
-      if line.tag = 0 then //jff 2/27/98 all walk generalized types require tag
-        exit;
-      linefunc := @EV_DoGenFloor;
-    end
-    else if word(line.special) >= CGENCEILINGBASE then
-    begin
-      if thing.player = nil then
-        if (line.special and CeilingChange <> 0) or (line.special and CeilingModel = 0) then
-          exit;     // CeilingModel is 'Allow Monsters' if CeilingChange is 0
-      if line.tag = 0 then //jff 2/27/98 all walk generalized types require tag
-        exit;
-      linefunc := @EV_DoGenCeiling;
-    end
-    else if word(line.special) >= CGENDOORBASE then
-    begin
-      if thing.player = nil then
-      begin
-        if line.special and DoorMonster = 0 then
-          exit;                    // monsters disallowed from this door
-        if line.flags and ML_SECRET <> 0 then // they can't open secret doors either
-          exit;
-      end;
-      if line.tag = 0 then //3/2/98 move outside the monster check
-        exit;
-      linefunc := @EV_DoGenDoor;
-    end
-    else if word(line.special) >= CGENLOCKEDBASE then
-    begin
-      if thing.player = nil then
-        exit;                     // monsters disallowed from unlocking doors
-      if (line.special and TriggerType = Ord(WalkOnce)) or (line.special and TriggerType = Ord(WalkMany)) then
-      begin //jff 4/1/98 check for being a walk type before reporting door type
-        if not P_CanUnlockGenDoor(line, thing.player) then
-          exit;
-      end
-      else
-        exit;
-      linefunc := @EV_DoGenLockedDoor;
-    end
-    else if word(line.special) >= CGENLIFTBASE then
-    begin
-      if thing.player = nil then
-        if line.special and LiftMonster = 0 then
-          exit; // monsters disallowed
-      if line.tag = 0 then //jff 2/27/98 all walk generalized types require tag
-        exit;
-      linefunc := @EV_DoGenLift;
-    end
-    else if word(line.special) >= CGENSTAIRSBASE then
-    begin
-      if thing.player = nil then
-        if line.special and StairMonster = 0 then
-          exit; // monsters disallowed
-      if line.tag = 0 then //jff 2/27/98 all walk generalized types require tag
-        exit;
-      linefunc := @EV_DoGenStairs;
-    end;
-
-    if Assigned(linefunc) then // if it was a valid generalized type
-    begin
-      case (line.special and TriggerType) shr TriggerTypeShift of
-        Ord(WalkOnce):
-          begin
-            if linefunc(line) <> 0 then
-              line.special := 0;    // clear special if a walk once type
-          end;
-        Ord(WalkMany):
-          begin
-            linefunc(line);
-          end;
-      end;
+    if thing.player = nil then
+      if (line.special and gen_FloorChange <> 0) or (line.special and gen_FloorModel = 0) then
+        exit;     // FloorModel is 'Allow Monsters' if FloorChange is 0
+    if line.tag = 0 then //jff 2/27/98 all walk generalized types require tag
       exit;
+    linefunc := @EV_DoGenFloor;
+  end
+  else if word(line.special) >= CGENCEILINGBASE then
+  begin
+    if thing.player = nil then
+      if (line.special and CeilingChange <> 0) or (line.special and CeilingModel = 0) then
+        exit;     // CeilingModel is 'Allow Monsters' if CeilingChange is 0
+    if line.tag = 0 then //jff 2/27/98 all walk generalized types require tag
+      exit;
+    linefunc := @EV_DoGenCeiling;
+  end
+  else if word(line.special) >= CGENDOORBASE then
+  begin
+    if thing.player = nil then
+    begin
+      if line.special and DoorMonster = 0 then
+        exit;                    // monsters disallowed from this door
+      if line.flags and ML_SECRET <> 0 then // they can't open secret doors either
+        exit;
     end;
+    if line.tag = 0 then //3/2/98 move outside the monster check
+      exit;
+    linefunc := @EV_DoGenDoor;
+  end
+  else if word(line.special) >= CGENLOCKEDBASE then
+  begin
+    if thing.player = nil then
+      exit;                     // monsters disallowed from unlocking doors
+    if (line.special and TriggerType = Ord(WalkOnce)) or (line.special and TriggerType = Ord(WalkMany)) then
+    begin //jff 4/1/98 check for being a walk type before reporting door type
+      if not P_CanUnlockGenDoor(line, thing.player) then
+        exit;
+    end
+    else
+      exit;
+    linefunc := @EV_DoGenLockedDoor;
+  end
+  else if word(line.special) >= CGENLIFTBASE then
+  begin
+    if thing.player = nil then
+      if line.special and LiftMonster = 0 then
+        exit; // monsters disallowed
+    if line.tag = 0 then //jff 2/27/98 all walk generalized types require tag
+      exit;
+    linefunc := @EV_DoGenLift;
+  end
+  else if word(line.special) >= CGENSTAIRSBASE then
+  begin
+    if thing.player = nil then
+      if line.special and StairMonster = 0 then
+        exit; // monsters disallowed
+    if line.tag = 0 then //jff 2/27/98 all walk generalized types require tag
+      exit;
+    linefunc := @EV_DoGenStairs;
+  end;
+
+  if Assigned(linefunc) then // if it was a valid generalized type
+  begin
+    case (line.special and TriggerType) shr TriggerTypeShift of
+      Ord(WalkOnce):
+        begin
+          if linefunc(line) <> 0 then
+            line.special := 0;    // clear special if a walk once type
+        end;
+      Ord(WalkMany):
+        begin
+          linefunc(line);
+        end;
+    end;
+    exit;
   end;
 
   if thing.player = nil then
@@ -1838,98 +1800,98 @@ begin
      2:
       begin
         // Open Door
-        if (EV_DoDoor(line, open) <> 0) or oldcompatibility then
+        if EV_DoDoor(line, open) <> 0 then
           line.special := 0;
       end;
 
      3:
       begin
         // Close Door
-        if (EV_DoDoor(line, close) <> 0) or oldcompatibility then
+        if EV_DoDoor(line, close) <> 0 then
           line.special := 0;
       end;
 
      4:
       begin
         // Raise Door
-        if (EV_DoDoor(line, normal) <> 0) or oldcompatibility then
+        if EV_DoDoor(line, normal) <> 0 then
           line.special := 0;
       end;
 
      5:
       begin
         // Raise Floor
-        if (EV_DoFloor(line, raiseFloor) <> 0) or oldcompatibility then
+        if EV_DoFloor(line, raiseFloor) <> 0 then
           line.special := 0;
       end;
 
      6:
       begin
         // Fast Ceiling Crush & Raise
-        if (EV_DoCeiling(line, fastCrushAndRaise) <> 0) or oldcompatibility then
+        if EV_DoCeiling(line, fastCrushAndRaise) <> 0 then
           line.special := 0;
       end;
 
      8:
       begin
         // Build Stairs
-        if (EV_BuildStairs(line, build8) <> 0) or oldcompatibility then
+        if EV_BuildStairs(line, build8) <> 0 then
           line.special := 0;
       end;
 
     10:
       begin
         // PlatDownWaitUp
-        if (EV_DoPlat(line, downWaitUpStay, 0) <> 0) or oldcompatibility then
+        if EV_DoPlat(line, downWaitUpStay, 0) <> 0 then
           line.special := 0;
       end;
 
     12:
       begin
         // Light Turn On - brightest near
-        if (EV_LightTurnOn(line, 0) <> 0) or oldcompatibility then
+        if EV_LightTurnOn(line, 0) <> 0 then
           line.special := 0;
       end;
 
     13:
       begin
         // Light Turn On 255
-        if (EV_LightTurnOn(line, 255) <> 0) or oldcompatibility then
+        if EV_LightTurnOn(line, 255) <> 0 then
           line.special := 0;
       end;
 
     16:
       begin
         // Close Door 30
-        if (EV_DoDoor(line, close30ThenOpen) <> 0) or oldcompatibility then
+        if EV_DoDoor(line, close30ThenOpen) <> 0 then
           line.special := 0;
       end;
 
     17:
       begin
         // Start Light Strobing
-        if (EV_StartLightStrobing(line) <> 0) or oldcompatibility then
+        if EV_StartLightStrobing(line) <> 0 then
           line.special := 0;
       end;
 
     19:
       begin
         // Lower Floor
-        if (EV_DoFloor(line, lowerFloor) <> 0) or oldcompatibility then
+        if EV_DoFloor(line, lowerFloor) <> 0 then
           line.special := 0;
       end;
 
     22:
       begin
         // Raise floor to nearest height and change texture
-        if (EV_DoPlat(line, raiseToNearestAndChange, 0) <> 0) or oldcompatibility then
+        if EV_DoPlat(line, raiseToNearestAndChange, 0) <> 0 then
           line.special := 0;
       end;
 
     25:
       begin
         // Ceiling Crush and Raise
-        if (EV_DoCeiling(line, crushAndRaise) <> 0) or oldcompatibility then
+        if EV_DoCeiling(line, crushAndRaise) <> 0 then
           line.special := 0;
       end;
 
@@ -1937,62 +1899,56 @@ begin
       begin
         // Raise floor to shortest texture height
         //  on either side of lines.
-        if (EV_DoFloor(line, raiseToTexture) <> 0) or oldcompatibility then
+        if EV_DoFloor(line, raiseToTexture) <> 0 then
           line.special := 0;
       end;
 
     35:
       begin
         // Lights Very Dark
-        if (EV_LightTurnOn(line, 35) <> 0) or oldcompatibility then
+        if EV_LightTurnOn(line, 35) <> 0 then
           line.special := 0;
       end;
 
     36:
       begin
         // Lower Floor (TURBO)
-        if (EV_DoFloor(line, turboLower) <> 0) or oldcompatibility then
+        if EV_DoFloor(line, turboLower) <> 0 then
           line.special := 0;
       end;
 
     37:
       begin
         // LowerAndChange
-        if (EV_DoFloor(line, lowerAndChange) <> 0) or oldcompatibility then
+        if EV_DoFloor(line, lowerAndChange) <> 0 then
           line.special := 0;
       end;
 
     38:
       begin
         // Lower Floor To Lowest
-        if (EV_DoFloor(line, lowerFloorToLowest) <> 0) or oldcompatibility then
+        if EV_DoFloor(line, lowerFloorToLowest) <> 0 then
           line.special := 0;
       end;
 
     39:
       begin
         // TELEPORT!
-        if (EV_Teleport(line, side, thing ) <> 0) or oldcompatibility then
+        if EV_Teleport(line, side, thing ) <> 0 then
           line.special := 0;
       end;
 
     40:
       begin
         // RaiseCeilingLowerFloor
-        if oldcompatibility then
-        begin
-          EV_DoCeiling(line, raiseToHighest);
-          EV_DoFloor(line, lowerFloorToLowest);
-          line.special := 0;
-        end
-        else if EV_DoCeiling(line, raiseToHighest) <> 0 then
+        if EV_DoCeiling(line, raiseToHighest) <> 0 then
           line.special := 0;
       end;
 
     44:
       begin
         // Ceiling Crush
-        if (EV_DoCeiling(line, lowerAndCrush) <> 0) or oldcompatibility then
+        if EV_DoCeiling(line, lowerAndCrush) <> 0 then
           line.special := 0;
       end;
 
@@ -2005,91 +1961,91 @@ begin
     53:
       begin
         // Perpetual Platform Raise
-        if (EV_DoPlat(line, perpetualRaise, 0) <> 0) or oldcompatibility then
+        if EV_DoPlat(line, perpetualRaise, 0) <> 0 then
           line.special := 0;
       end;
 
     54:
       begin
         // Platform Stop
-        if (EV_StopPlat(line) <> 0) or oldcompatibility then
+        if EV_StopPlat(line) <> 0 then
           line.special := 0;
       end;
 
     56:
       begin
         // Raise Floor Crush
-        if (EV_DoFloor(line, raiseFloorCrush) <> 0) or oldcompatibility then
+        if EV_DoFloor(line, raiseFloorCrush) <> 0 then
           line.special := 0;
       end;
 
     57:
       begin
         // Ceiling Crush Stop
-        if (EV_CeilingCrushStop(line) <> 0) or oldcompatibility then
+        if EV_CeilingCrushStop(line) <> 0 then
           line.special := 0;
       end;
 
     58:
       begin
         // Raise Floor 24
-        if (EV_DoFloor(line, raiseFloor24) <> 0) or oldcompatibility then
+        if EV_DoFloor(line, raiseFloor24) <> 0 then
           line.special := 0;
       end;
 
     59:
       begin
         // Raise Floor 24 And Change
-        if (EV_DoFloor(line, raiseFloor24AndChange) <> 0) or oldcompatibility then
+        if EV_DoFloor(line, raiseFloor24AndChange) <> 0 then
           line.special := 0;
       end;
 
    104:
       begin
         // Turn lights off in sector(tag)
-        if (EV_TurnTagLightsOff(line) <> 0) or oldcompatibility then
+        if EV_TurnTagLightsOff(line) <> 0 then
           line.special := 0;
       end;
 
    108:
       begin
         // Blazing Door Raise (faster than TURBO!)
-        if (EV_DoDoor(line, blazeRaise) <> 0) or oldcompatibility then
+        if EV_DoDoor(line, blazeRaise) <> 0 then
           line.special := 0;
       end;
 
    109:
       begin
         // Blazing Door Open (faster than TURBO!)
-        if (EV_DoDoor(line, blazeOpen) <> 0) or oldcompatibility then
+        if EV_DoDoor(line, blazeOpen) <> 0 then
           line.special := 0;
       end;
 
    100:
       begin
         // Build Stairs Turbo 16
-        if (EV_BuildStairs(line, turbo16) <> 0) or oldcompatibility then
+        if EV_BuildStairs(line, turbo16) <> 0 then
           line.special := 0;
       end;
 
    110:
       begin
         // Blazing Door Close (faster than TURBO!)
-        if (EV_DoDoor(line, blazeClose) <> 0) or oldcompatibility then
+        if EV_DoDoor(line, blazeClose) <> 0 then
           line.special := 0;
       end;
 
    119:
       begin
         // Raise floor to nearest surr. floor
-        if (EV_DoFloor(line, raiseFloorToNearest) <> 0) or oldcompatibility then
+        if EV_DoFloor(line, raiseFloorToNearest) <> 0 then
           line.special := 0;
       end;
 
    121:
       begin
         // Blazing PlatDownWaitUpStay
-        if (EV_DoPlat(line, blazeDWUS, 0) <> 0) or oldcompatibility then
+        if EV_DoPlat(line, blazeDWUS, 0) <> 0 then
           line.special := 0;
       end;
 
@@ -2104,7 +2060,7 @@ begin
         // TELEPORT MonsterONLY
         if thing.player = nil then
         begin
-          if (EV_Teleport(line, side, thing) <> 0) or oldcompatibility then
+          if EV_Teleport(line, side, thing) <> 0 then
             line.special := 0;
         end;
       end;
@@ -2112,14 +2068,14 @@ begin
    130:
       begin
         // Raise Floor Turbo
-        if (EV_DoFloor(line, raiseFloorTurbo) <> 0) or oldcompatibility then
+        if EV_DoFloor(line, raiseFloorTurbo) <> 0 then
           line.special := 0;
       end;
 
    141:
       begin
         // Silent Ceiling Crush & Raise
-        if (EV_DoCeiling(line, silentCrushAndRaise) <> 0) or oldcompatibility then
+        if EV_DoCeiling(line, silentCrushAndRaise) <> 0 then
           line.special := 0;
       end;
 
@@ -2318,363 +2274,357 @@ begin
         // Raise Floor Turbo
         EV_DoFloor(line, raiseFloorTurbo);
       end;
-  else
-    begin
-      if not oldcompatibility then
-        case line.special of
-          // Extended walk once triggers
 
-          142:
-            begin
-              // Raise Floor 512
-              // 142 W1  EV_DoFloor(raiseFloor512)
-              if EV_DoFloor(line,raiseFloor512) <> 0 then
-                line.special := 0;
-            end;
-
-          143:
-            begin
-              // Raise Floor 24 and change
-              // 143 W1  EV_DoPlat(raiseAndChange,24)
-              if EV_DoPlat(line,raiseAndChange, 24) <> 0 then
-                line.special := 0;
-            end;
-
-          144:
-            begin
-              // Raise Floor 32 and change
-              // 144 W1  EV_DoPlat(raiseAndChange,32)
-              if EV_DoPlat(line,raiseAndChange, 32) <> 0 then
-                line.special := 0;
-            end;
-
-          145:
-            begin
-              // Lower Ceiling to Floor
-              // 145 W1  EV_DoCeiling(lowerToFloor)
-              if EV_DoCeiling( line, lowerToFloor ) <> 0 then
-                line.special := 0;
-            end;
-
-          146:
-            begin
-              // Lower Pillar, Raise Donut
-              // 146 W1  EV_DoDonut
-              if EV_DoDonut(line) <> 0 then
-                line.special := 0;
-            end;
-
-          199:
-            begin
-              // Lower ceiling to lowest surrounding ceiling
-              // 199 W1 EV_DoCeiling(lowerToLowest)
-              if EV_DoCeiling(line, lowerToLowest) <> 0 then
-                line.special := 0;
-            end;
-
-          200:
-            begin
-              // Lower ceiling to highest surrounding floor
-              // 200 W1 EV_DoCeiling(lowerToMaxFloor)
-              if EV_DoCeiling(line, lowerToMaxFloor) <> 0 then
-                line.special := 0;
-            end;
-
-          207:
-            begin
-              // killough 2/16/98: W1 silent teleporter (normal kind)
-              if EV_SilentTeleport(line, side, thing) <> 0 then
-                line.special := 0;
-            end;
-
-            //jff 3/16/98 renumber 215.153
-          153:
-            begin
-              //jff 3/15/98 create texture change no motion type
-              // Texture/Type Change Only (Trig)
-              // 153 W1 Change Texture/Type Only
-              if EV_DoChange(line, trigChangeOnly) <> 0 then
-                line.special := 0;
-            end;
-
-          239:
-            begin
-              //jff 3/15/98 create texture change no motion type
-              // Texture/Type Change Only (Numeric)
-              // 239 W1 Change Texture/Type Only
-              if EV_DoChange(line, numChangeOnly) <> 0 then
-                line.special := 0;
-            end;
-
-          219:
-            begin
-              // Lower floor to next lower neighbor
-              // 219 W1 Lower Floor Next Lower Neighbor
-              if EV_DoFloor(line, lowerFloorToNearest) <> 0 then
-                line.special := 0;
-            end;
-
-          227:
-            begin
-              // Raise elevator next floor
-              // 227 W1 Raise Elevator next floor
-              if EV_DoElevator(line, elevateUp) <> 0 then
-                line.special := 0;
-            end;
-
-          231:
-            begin
-              // Lower elevator next floor
-              // 231 W1 Lower Elevator next floor
-              if EV_DoElevator(line, elevateDown) <> 0 then
-                line.special := 0;
-            end;
-
-          235:
-            begin
-              // Elevator to current floor
-              // 235 W1 Elevator to current floor
-              if EV_DoElevator(line, elevateCurrent) <> 0 then
-                line.special := 0;
-            end;
-
-          243:
-            begin
-              //jff 3/6/98 make fit within DCK's 256 linedef types
-              // killough 2/16/98: W1 silent teleporter (linedef-linedef kind)
-              if EV_SilentLineTeleport(line, side, thing, false) <> 0 then
-                line.special := 0;
-            end;
-
-          262:
-            begin
-              //jff 4/14/98 add silent line-line reversed
-              if EV_SilentLineTeleport(line, side, thing, true) <> 0 then
-                line.special := 0;
-            end;
-
-          264:
-            begin
-            //jff 4/14/98 add monster-only silent line-line reversed
-              if thing.player = nil then
-                if EV_SilentLineTeleport(line, side, thing, true) <> 0 then
-                  line.special := 0;
-            end;
-
-          266:
-            begin
-              //jff 4/14/98 add monster-only silent line-line
-              if thing.player = nil then
-                if EV_SilentLineTeleport(line, side, thing, false) <> 0 then
-                  line.special := 0;
-            end;
-
-          268: //jff 4/14/98 add monster-only silent
-            begin
-              if thing.player = nil then
-                if EV_SilentTeleport(line, side, thing) <> 0 then
-                  line.special := 0;
-            end;
-
-          //jff 1/29/98 end of added W1 linedef types
-
-          // Extended walk many retriggerable
-
-          //jff 1/29/98 added new linedef types to fill all functions
-          //out so that all have varieties SR, S1, WR, W1
-
-          147:
-            begin
-              // Raise Floor 512
-              // 147 WR  EV_DoFloor(raiseFloor512)
-              EV_DoFloor(line, raiseFloor512);
-            end;
-
-          148:
-            begin
-              // Raise Floor 24 and Change
-              // 148 WR  EV_DoPlat(raiseAndChange,24)
-              EV_DoPlat(line, raiseAndChange, 24);
-            end;
-
-          149:
-            begin
-              // Raise Floor 32 and Change
-              // 149 WR  EV_DoPlat(raiseAndChange,32)
-              EV_DoPlat(line, raiseAndChange, 32);
-            end;
-
-          150:
-            begin
-              // Start slow silent crusher
-              // 150 WR  EV_DoCeiling(silentCrushAndRaise)
-              EV_DoCeiling(line, silentCrushAndRaise);
-            end;
-
-          151:
-            begin
-              // RaiseCeilingLowerFloor
-              // 151 WR  EV_DoCeiling(raiseToHighest),
-              //         EV_DoFloor(lowerFloortoLowest)
-              EV_DoCeiling(line, raiseToHighest);
-              EV_DoFloor(line, lowerFloorToLowest);
-            end;
-
-          152:
-            begin
-              // Lower Ceiling to Floor
-              // 152 WR  EV_DoCeiling(lowerToFloor)
-              EV_DoCeiling(line, lowerToFloor);
-            end;
-
-            //jff 3/16/98 renumber 153.256
-          256:
-            begin
-              // Build stairs, step 8
-              // 256 WR EV_BuildStairs(build8)
-              EV_BuildStairs(line, build8);
-            end;
-
-            //jff 3/16/98 renumber 154.257
-          257:
-            begin
-              // Build stairs, step 16
-              // 257 WR EV_BuildStairs(turbo16)
-              EV_BuildStairs(line, turbo16);
-            end;
-
-          155:
-            begin
-              // Lower Pillar, Raise Donut
-              // 155 WR  EV_DoDonut
-              EV_DoDonut(line);
-            end;
-
-          156:
-            begin
-              // Start lights strobing
-              // 156 WR Lights EV_StartLightStrobing
-              EV_StartLightStrobing(line);
-            end;
-
-          157:
-            begin
-              // Lights to dimmest near
-              // 157 WR Lights EV_TurnTagLightsOff
-              EV_TurnTagLightsOff(line);
-            end;
-
-          201:
-            begin
-              // Lower ceiling to lowest surrounding ceiling
-              // 201 WR EV_DoCeiling(lowerToLowest)
-              EV_DoCeiling(line,lowerToLowest);
-            end;
-
-          202:
-            begin
-              // Lower ceiling to highest surrounding floor
-              // 202 WR EV_DoCeiling(lowerToMaxFloor)
-              EV_DoCeiling(line,lowerToMaxFloor);
-            end;
-
-          208:
-            begin
-              // killough 2/16/98: WR silent teleporter (normal kind)
-              EV_SilentTeleport(line, side, thing);
-            end;
-
-          212:
-            begin
-              //jff 3/14/98 create instant toggle floor type
-              // Toggle floor between C and F instantly
-              // 212 WR Instant Toggle Floor
-              EV_DoPlat(line, toggleUpDn, 0);
-            end;
-
-          //jff 3/16/98 renumber 216.154
-          154:
-            begin
-              //jff 3/15/98 create texture change no motion type
-              // Texture/Type Change Only (Trigger)
-              // 154 WR Change Texture/Type Only
-              EV_DoChange(line, trigChangeOnly);
-            end;
-
-          240:
-            begin
-              //jff 3/15/98 create texture change no motion type
-              // Texture/Type Change Only (Numeric)
-              // 240 WR Change Texture/Type Only
-              EV_DoChange(line, numChangeOnly);
-            end;
-
-          220:
-            begin
-              // Lower floor to next lower neighbor
-              // 220 WR Lower Floor Next Lower Neighbor
-              EV_DoFloor(line, lowerFloorToNearest);
-            end;
-
-          228:
-            begin
-              // Raise elevator next floor
-              // 228 WR Raise Elevator next floor
-              EV_DoElevator(line, elevateUp);
-            end;
-
-          232:
-            begin
-              // Lower elevator next floor
-              // 232 WR Lower Elevator next floor
-              EV_DoElevator(line, elevateDown);
-            end;
-
-          236:
-            begin
-              // Elevator to current floor
-              // 236 WR Elevator to current floor
-              EV_DoElevator(line,elevateCurrent);
-            end;
-
-          244:
-            begin
-              //jff 3/6/98 make fit within DCK's 256 linedef types
-              // killough 2/16/98: WR silent teleporter (linedef-linedef kind)
-              EV_SilentLineTeleport(line, side, thing, false);
-            end;
-
-          263:
-            begin
-              //jff 4/14/98 add silent line-line reversed
-              EV_SilentLineTeleport(line, side, thing, true);
-            end;
-
-          265:
-            begin
-              //jff 4/14/98 add monster-only silent line-line reversed
-              if thing.player = nil then
-                EV_SilentLineTeleport(line, side, thing, true);
-            end;
-
-          267:
-            begin
-              //jff 4/14/98 add monster-only silent line-line
-              if thing.player = nil then
-                EV_SilentLineTeleport(line, side, thing, false);
-            end;
-
-          269:
-            begin
-              //jff 4/14/98 add monster-only silent
-              if thing.player = nil then
-                EV_SilentTeleport(line, side, thing);
-            end;
-
-            //jff 1/29/98 end of added WR linedef types
-
+   // Extended walk once triggers
+   142:
+      begin
+        // Raise Floor 512
+        // 142 W1  EV_DoFloor(raiseFloor512)
+        if EV_DoFloor(line,raiseFloor512) <> 0 then
+          line.special := 0;
       end;
-    end;
+
+   143:
+      begin
+        // Raise Floor 24 and change
+        // 143 W1  EV_DoPlat(raiseAndChange,24)
+        if EV_DoPlat(line,raiseAndChange, 24) <> 0 then
+          line.special := 0;
+      end;
+
+   144:
+      begin
+        // Raise Floor 32 and change
+        // 144 W1  EV_DoPlat(raiseAndChange,32)
+        if EV_DoPlat(line,raiseAndChange, 32) <> 0 then
+          line.special := 0;
+      end;
+
+   145:
+      begin
+        // Lower Ceiling to Floor
+        // 145 W1  EV_DoCeiling(lowerToFloor)
+        if EV_DoCeiling( line, lowerToFloor ) <> 0 then
+          line.special := 0;
+      end;
+
+   146:
+      begin
+        // Lower Pillar, Raise Donut
+        // 146 W1  EV_DoDonut
+        if EV_DoDonut(line) <> 0 then
+          line.special := 0;
+      end;
+
+   199:
+      begin
+        // Lower ceiling to lowest surrounding ceiling
+        // 199 W1 EV_DoCeiling(lowerToLowest)
+        if EV_DoCeiling(line, lowerToLowest) <> 0 then
+          line.special := 0;
+      end;
+
+   200:
+      begin
+        // Lower ceiling to highest surrounding floor
+        // 200 W1 EV_DoCeiling(lowerToMaxFloor)
+        if EV_DoCeiling(line, lowerToMaxFloor) <> 0 then
+          line.special := 0;
+      end;
+
+   207:
+      begin
+        // killough 2/16/98: W1 silent teleporter (normal kind)
+        if EV_SilentTeleport(line, side, thing) <> 0 then
+          line.special := 0;
+      end;
+
+    //jff 3/16/98 renumber 215.153
+   153:
+      begin
+        //jff 3/15/98 create texture change no motion type
+        // Texture/Type Change Only (Trig)
+        // 153 W1 Change Texture/Type Only
+        if EV_DoChange(line, trigChangeOnly) <> 0 then
+          line.special := 0;
+      end;
+
+   239:
+      begin
+        //jff 3/15/98 create texture change no motion type
+        // Texture/Type Change Only (Numeric)
+        // 239 W1 Change Texture/Type Only
+        if EV_DoChange(line, numChangeOnly) <> 0 then
+          line.special := 0;
+      end;
+
+   219:
+      begin
+        // Lower floor to next lower neighbor
+        // 219 W1 Lower Floor Next Lower Neighbor
+        if EV_DoFloor(line, lowerFloorToNearest) <> 0 then
+          line.special := 0;
+      end;
+
+   227:
+      begin
+        // Raise elevator next floor
+        // 227 W1 Raise Elevator next floor
+        if EV_DoElevator(line, elevateUp) <> 0 then
+          line.special := 0;
+      end;
+
+   231:
+      begin
+        // Lower elevator next floor
+        // 231 W1 Lower Elevator next floor
+        if EV_DoElevator(line, elevateDown) <> 0 then
+          line.special := 0;
+      end;
+
+   235:
+      begin
+        // Elevator to current floor
+        // 235 W1 Elevator to current floor
+        if EV_DoElevator(line, elevateCurrent) <> 0 then
+          line.special := 0;
+      end;
+
+   243:
+      begin
+        //jff 3/6/98 make fit within DCK's 256 linedef types
+        // killough 2/16/98: W1 silent teleporter (linedef-linedef kind)
+        if EV_SilentLineTeleport(line, side, thing, false) <> 0 then
+          line.special := 0;
+      end;
+
+   262:
+      begin
+        //jff 4/14/98 add silent line-line reversed
+        if EV_SilentLineTeleport(line, side, thing, true) <> 0 then
+          line.special := 0;
+      end;
+
+   264:
+      begin
+      //jff 4/14/98 add monster-only silent line-line reversed
+        if thing.player = nil then
+          if EV_SilentLineTeleport(line, side, thing, true) <> 0 then
+            line.special := 0;
+      end;
+
+   266:
+      begin
+        //jff 4/14/98 add monster-only silent line-line
+        if thing.player = nil then
+          if EV_SilentLineTeleport(line, side, thing, false) <> 0 then
+            line.special := 0;
+      end;
+
+   268: //jff 4/14/98 add monster-only silent
+      begin
+        if thing.player = nil then
+          if EV_SilentTeleport(line, side, thing) <> 0 then
+            line.special := 0;
+      end;
+
+    //jff 1/29/98 end of added W1 linedef types
+
+    // Extended walk many retriggerable
+
+    //jff 1/29/98 added new linedef types to fill all functions
+    //out so that all have varieties SR, S1, WR, W1
+
+   147:
+      begin
+        // Raise Floor 512
+        // 147 WR  EV_DoFloor(raiseFloor512)
+        EV_DoFloor(line, raiseFloor512);
+      end;
+
+   148:
+      begin
+        // Raise Floor 24 and Change
+        // 148 WR  EV_DoPlat(raiseAndChange,24)
+        EV_DoPlat(line, raiseAndChange, 24);
+      end;
+
+   149:
+      begin
+        // Raise Floor 32 and Change
+        // 149 WR  EV_DoPlat(raiseAndChange,32)
+        EV_DoPlat(line, raiseAndChange, 32);
+      end;
+
+   150:
+      begin
+        // Start slow silent crusher
+        // 150 WR  EV_DoCeiling(silentCrushAndRaise)
+        EV_DoCeiling(line, silentCrushAndRaise);
+      end;
+
+   151:
+      begin
+        // RaiseCeilingLowerFloor
+        // 151 WR  EV_DoCeiling(raiseToHighest),
+        //         EV_DoFloor(lowerFloortoLowest)
+        EV_DoCeiling(line, raiseToHighest);
+        EV_DoFloor(line, lowerFloorToLowest);
+      end;
+
+   152:
+      begin
+        // Lower Ceiling to Floor
+        // 152 WR  EV_DoCeiling(lowerToFloor)
+        EV_DoCeiling(line, lowerToFloor);
+      end;
+
+    //jff 3/16/98 renumber 153.256
+   256:
+      begin
+        // Build stairs, step 8
+        // 256 WR EV_BuildStairs(build8)
+        EV_BuildStairs(line, build8);
+      end;
+
+    //jff 3/16/98 renumber 154.257
+   257:
+      begin
+        // Build stairs, step 16
+        // 257 WR EV_BuildStairs(turbo16)
+        EV_BuildStairs(line, turbo16);
+      end;
+
+   155:
+      begin
+        // Lower Pillar, Raise Donut
+        // 155 WR  EV_DoDonut
+        EV_DoDonut(line);
+      end;
+
+   156:
+      begin
+        // Start lights strobing
+        // 156 WR Lights EV_StartLightStrobing
+        EV_StartLightStrobing(line);
+      end;
+
+   157:
+      begin
+        // Lights to dimmest near
+        // 157 WR Lights EV_TurnTagLightsOff
+        EV_TurnTagLightsOff(line);
+      end;
+
+   201:
+      begin
+        // Lower ceiling to lowest surrounding ceiling
+        // 201 WR EV_DoCeiling(lowerToLowest)
+        EV_DoCeiling(line,lowerToLowest);
+      end;
+
+   202:
+      begin
+        // Lower ceiling to highest surrounding floor
+        // 202 WR EV_DoCeiling(lowerToMaxFloor)
+        EV_DoCeiling(line,lowerToMaxFloor);
+      end;
+
+   208:
+      begin
+        // killough 2/16/98: WR silent teleporter (normal kind)
+        EV_SilentTeleport(line, side, thing);
+      end;
+
+   212:
+      begin
+        //jff 3/14/98 create instant toggle floor type
+        // Toggle floor between C and F instantly
+        // 212 WR Instant Toggle Floor
+        EV_DoPlat(line, toggleUpDn, 0);
+      end;
+
+    //jff 3/16/98 renumber 216.154
+   154:
+      begin
+        //jff 3/15/98 create texture change no motion type
+        // Texture/Type Change Only (Trigger)
+        // 154 WR Change Texture/Type Only
+        EV_DoChange(line, trigChangeOnly);
+      end;
+
+   240:
+      begin
+        //jff 3/15/98 create texture change no motion type
+        // Texture/Type Change Only (Numeric)
+        // 240 WR Change Texture/Type Only
+        EV_DoChange(line, numChangeOnly);
+      end;
+
+   220:
+      begin
+        // Lower floor to next lower neighbor
+        // 220 WR Lower Floor Next Lower Neighbor
+        EV_DoFloor(line, lowerFloorToNearest);
+      end;
+
+   228:
+      begin
+        // Raise elevator next floor
+        // 228 WR Raise Elevator next floor
+        EV_DoElevator(line, elevateUp);
+      end;
+
+   232:
+      begin
+        // Lower elevator next floor
+        // 232 WR Lower Elevator next floor
+        EV_DoElevator(line, elevateDown);
+      end;
+
+   236:
+      begin
+        // Elevator to current floor
+        // 236 WR Elevator to current floor
+        EV_DoElevator(line,elevateCurrent);
+      end;
+
+   244:
+      begin
+        //jff 3/6/98 make fit within DCK's 256 linedef types
+        // killough 2/16/98: WR silent teleporter (linedef-linedef kind)
+        EV_SilentLineTeleport(line, side, thing, false);
+      end;
+
+   263:
+      begin
+        //jff 4/14/98 add silent line-line reversed
+        EV_SilentLineTeleport(line, side, thing, true);
+      end;
+
+   265:
+      begin
+        //jff 4/14/98 add monster-only silent line-line reversed
+        if thing.player = nil then
+          EV_SilentLineTeleport(line, side, thing, true);
+      end;
+
+   267:
+      begin
+        //jff 4/14/98 add monster-only silent line-line
+        if thing.player = nil then
+          EV_SilentLineTeleport(line, side, thing, false);
+      end;
+
+   269:
+      begin
+        //jff 4/14/98 add monster-only silent
+        if thing.player = nil then
+          EV_SilentTeleport(line, side, thing);
+      end;
+
+      //jff 1/29/98 end of added WR linedef types
+
   end;
 end;
 
@@ -2692,109 +2642,101 @@ end;
 procedure P_ShootSpecialLine(thing: Pmobj_t; line: Pline_t);
 var
   linefunc: linefunc_t;
-  oldcompatibility: boolean;
 begin
-  oldcompatibility := true;
-  // generalized types not recognized if demo older than VERSION116
-  if G_PlayingEngineVersion > VERSION115 then
+  // pointer to line function is nil by default, set non-null if
+  // line special is walkover generalized linedef type
+  linefunc := nil;
+
+  // check each range of generalized linedefs
+  if word(line.special) >= CGENFLOORBASE then
   begin
-    oldcompatibility := false;
-    // pointer to line function is nil by default, set non-null if
-    // line special is walkover generalized linedef type
-    linefunc := nil;
+    if thing.player = nil then
+      if (line.special and gen_FloorChange <> 0) or (line.special and gen_FloorModel = 0) then
+        exit;   // FloorModel is 'Allow Monsters' if FloorChange is 0
+    if line.tag = 0 then //jff 2/27/98 all gun generalized types require tag
+      exit;
 
-    // check each range of generalized linedefs
-    if word(line.special) >= CGENFLOORBASE then
+    linefunc := @EV_DoGenFloor;
+  end
+  else if word(line.special) >= CGENCEILINGBASE then
+  begin
+    if thing.player = nil then
+      if (line.special and CeilingChange <> 0) or (line.special and CeilingModel = 0) then
+        exit;   // CeilingModel is 'Allow Monsters' if CeilingChange is 0
+    if line.tag = 0 then //jff 2/27/98 all gun generalized types require tag
+      exit;
+    linefunc := @EV_DoGenCeiling;
+  end
+  else if word(line.special) >= CGENDOORBASE then
+  begin
+    if thing.player = nil then
     begin
-      if thing.player = nil then
-        if (line.special and gen_FloorChange <> 0) or (line.special and gen_FloorModel = 0) then
-          exit;   // FloorModel is 'Allow Monsters' if FloorChange is 0
-      if line.tag = 0 then //jff 2/27/98 all gun generalized types require tag
+      if line.special and DoorMonster = 0 then
+        exit;   // monsters disallowed from this door
+      if line.flags and ML_SECRET = 0 then // they can't open secret doors either
         exit;
-
-      linefunc := @EV_DoGenFloor;
-    end
-    else if word(line.special) >= CGENCEILINGBASE then
-    begin
-      if thing.player = nil then
-        if (line.special and CeilingChange <> 0) or (line.special and CeilingModel = 0) then
-          exit;   // CeilingModel is 'Allow Monsters' if CeilingChange is 0
-      if line.tag = 0 then //jff 2/27/98 all gun generalized types require tag
-        exit;
-      linefunc := @EV_DoGenCeiling;
-    end
-    else if word(line.special) >= CGENDOORBASE then
-    begin
-      if thing.player = nil then
-      begin
-        if line.special and DoorMonster = 0 then
-          exit;   // monsters disallowed from this door
-        if line.flags and ML_SECRET = 0 then // they can't open secret doors either
-          exit;
-      end;
-      if line.tag = 0 then //jff 3/2/98 all gun generalized types require tag
-        exit;
-      linefunc := @EV_DoGenDoor;
-    end
-    else if word(line.special) >= CGENLOCKEDBASE then
-    begin
-      if thing.player = nil then
-        exit;   // monsters disallowed from unlocking doors
-      if (line.special and TriggerType = Ord(GunOnce)) or (line.special and TriggerType = Ord(GunMany)) then
-      begin //jff 4/1/98 check for being a gun type before reporting door type
-        if not P_CanUnlockGenDoor(line, thing.player) then
-          exit;
-      end
-      else
-        exit;
-      if line.tag = 0 then //jff 2/27/98 all gun generalized types require tag
-        exit;
-
-      linefunc := @EV_DoGenLockedDoor;
-    end
-    else if word(line.special) >= CGENLIFTBASE then
-    begin
-      if thing.player = nil then
-        if line.special and LiftMonster = 0 then
-          exit; // monsters disallowed
-      linefunc := @EV_DoGenLift;
-    end
-    else if word(line.special) >= CGENSTAIRSBASE then
-    begin
-      if thing.player = nil then
-        if line.special and StairMonster = 0 then
-          exit; // monsters disallowed
-      if line.tag = 0 then //jff 2/27/98 all gun generalized types require tag
-        exit;
-      linefunc := @EV_DoGenStairs;
-    end
-    else if word(line.special) >= CGENCRUSHERBASE then
-    begin
-      if thing.player = nil then
-        if line.special and StairMonster = 0 then
-          exit; // monsters disallowed
-      if line.tag = 0 then //jff 2/27/98 all gun generalized types require tag
-        exit;
-      linefunc := @EV_DoGenCrusher;
     end;
+    if line.tag = 0 then //jff 3/2/98 all gun generalized types require tag
+      exit;
+    linefunc := @EV_DoGenDoor;
+  end
+  else if word(line.special) >= CGENLOCKEDBASE then
+  begin
+    if thing.player = nil then
+      exit;   // monsters disallowed from unlocking doors
+    if (line.special and TriggerType = Ord(GunOnce)) or (line.special and TriggerType = Ord(GunMany)) then
+    begin //jff 4/1/98 check for being a gun type before reporting door type
+      if not P_CanUnlockGenDoor(line, thing.player) then
+        exit;
+    end
+    else
+      exit;
+    if line.tag = 0 then //jff 2/27/98 all gun generalized types require tag
+      exit;
 
-    if Assigned(linefunc) then
-    begin
-      case (line.special and TriggerType) shr TriggerTypeShift of
-        Ord(GunOnce):
-          begin
-            if linefunc(line) <> 0 then
-              P_ChangeSwitchTexture(line, false);
-          end;
-        Ord(GunMany):
-          begin
-            if linefunc(line) <> 0 then
-              P_ChangeSwitchTexture(line, true);
-          end;
-      end;
-      exit; // if not a gun type, do nothing here
+    linefunc := @EV_DoGenLockedDoor;
+  end
+  else if word(line.special) >= CGENLIFTBASE then
+  begin
+    if thing.player = nil then
+      if line.special and LiftMonster = 0 then
+        exit; // monsters disallowed
+    linefunc := @EV_DoGenLift;
+  end
+  else if word(line.special) >= CGENSTAIRSBASE then
+  begin
+    if thing.player = nil then
+      if line.special and StairMonster = 0 then
+        exit; // monsters disallowed
+    if line.tag = 0 then //jff 2/27/98 all gun generalized types require tag
+      exit;
+    linefunc := @EV_DoGenStairs;
+  end
+  else if word(line.special) >= CGENCRUSHERBASE then
+  begin
+    if thing.player = nil then
+      if line.special and StairMonster = 0 then
+        exit; // monsters disallowed
+    if line.tag = 0 then //jff 2/27/98 all gun generalized types require tag
+      exit;
+    linefunc := @EV_DoGenCrusher;
+  end;
+
+  if Assigned(linefunc) then
+  begin
+    case (line.special and TriggerType) shr TriggerTypeShift of
+      Ord(GunOnce):
+        begin
+          if linefunc(line) <> 0 then
+            P_ChangeSwitchTexture(line, false);
+        end;
+      Ord(GunMany):
+        begin
+          if linefunc(line) <> 0 then
+            P_ChangeSwitchTexture(line, true);
+        end;
     end;
-    
+    exit; // if not a gun type, do nothing here
   end;
 
   //  Impacts that other things can activate.
@@ -2812,7 +2754,7 @@ begin
     24:
       begin
         // RAISE FLOOR
-        if (EV_DoFloor(line, raiseFloor) <> 0) or oldcompatibility then
+        if EV_DoFloor(line, raiseFloor) <> 0 then
           P_ChangeSwitchTexture(line, false);
       end;
 
@@ -2826,27 +2768,22 @@ begin
     47:
       begin
         // RAISE FLOOR NEAR AND CHANGE
-        if (EV_DoPlat(line, raiseToNearestAndChange, 0) <> 0) or oldcompatibility then
+        if EV_DoPlat(line, raiseToNearestAndChange, 0) <> 0 then
           P_ChangeSwitchTexture(line, false);
       end;
-  else
-    begin
-      if not oldcompatibility then
-        case line.special of
-         197:
-          begin
-            // Exit to next level
-            P_ChangeSwitchTexture(line, false);
-            G_ExitLevel;
-          end;
 
-         198:
-          begin
-            // Exit to secret level
-            P_ChangeSwitchTexture(line, false);
-            G_SecretExitLevel;
-          end;
-        end;
+   197:
+      begin
+        // Exit to next level
+        P_ChangeSwitchTexture(line, false);
+        G_ExitLevel;
+      end;
+
+   198:
+    begin
+      // Exit to secret level
+      P_ChangeSwitchTexture(line, false);
+      G_SecretExitLevel;
     end;
   end;
 end;
@@ -3308,17 +3245,12 @@ end;
 // JVAL: BOOM compatibility
 function P_SectorActive(const s: special_e; const sec: Psector_t): boolean;
 begin
-  if G_PlayingEngineVersion <= VERSION115 then
-    result := (sec.floordata <> nil) or (sec.ceilingdata <> nil) or (sec.lightingdata <> nil)
+  case s of
+    floor_special: result := sec.floordata <> nil;
+    ceiling_special: result := sec.ceilingdata <> nil;
+    lighting_special:  result := sec.lightingdata <> nil;
   else
-  begin
-    case s of
-      floor_special: result := sec.floordata <> nil;
-      ceiling_special: result := sec.ceilingdata <> nil;
-      lighting_special:  result := sec.lightingdata <> nil;
-    else
-      result := false;
-    end;
+    result := false;
   end;
 end;
 

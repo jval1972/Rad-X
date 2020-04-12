@@ -730,7 +730,7 @@ begin
             exit;
 
           // JVAL 20171210 Fix the https://doomwiki.org/wiki/Picked_up_a_medikit_that_you_REALLY_need! bug
-          if (G_PlayingEngineVersion >= VERSION204) and (player.mo <> nil) then
+          if player.mo <> nil then
           begin
             if oldhealth < player.mo.info.spawnhealth div 4 then
               player._message := GOTMEDINEED
@@ -974,11 +974,8 @@ begin
   begin
     result.z := result.z + 32 * FRACUNIT;
     result.momz := 4 * FRACUNIT;
-    if G_PlayingEngineVersion >= VERSION117 then
-    begin
-      result.momx := 64 * N_Random;
-      result.momy := 64 * N_Random;
-    end;
+    result.momx := 64 * N_Random;
+    result.momy := 64 * N_Random;
   end;
 end;
 

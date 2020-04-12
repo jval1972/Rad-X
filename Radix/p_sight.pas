@@ -224,12 +224,11 @@ begin
     line.validcount := validcount;
 
     // JVAL: 3d Floors
-    if G_PlayingEngineVersion >= VERSION122 then
-      if (line.bbox[BOXLEFT] > los.bbox[BOXRIGHT]) or
-         (line.bbox[BOXRIGHT] < los.bbox[BOXLEFT]) or
-         (line.bbox[BOXBOTTOM] > los.bbox[BOXTOP]) or
-         (line.bbox[BOXTOP] < los.bbox[BOXBOTTOM]) then
-        continue;
+    if (line.bbox[BOXLEFT] > los.bbox[BOXRIGHT]) or
+       (line.bbox[BOXRIGHT] < los.bbox[BOXLEFT]) or
+       (line.bbox[BOXBOTTOM] > los.bbox[BOXTOP]) or
+       (line.bbox[BOXTOP] < los.bbox[BOXBOTTOM]) then
+      continue;
 
     v1 := line.v1;
     v2 := line.v2;
@@ -281,22 +280,12 @@ begin
 
     front := seg.frontsector;
 
-    if G_PlayingEngineVersion >= VERSION122 then
-    begin
-      vmidx := (v1.x + v2.x) div 2;
-      vmidy := (v1.y + v2.y) div 2;
-      front_floorheight := P_FloorHeight(front, vmidx, vmidy);
-      back_floorheight := P_FloorHeight(back, vmidx, vmidy);
-      front_ceilingheight := P_CeilingHeight(front, vmidx, vmidy);
-      back_ceilingheight := P_CeilingHeight(back, vmidx, vmidy);
-    end
-    else
-    begin
-      front_floorheight := front.floorheight;
-      back_floorheight := back.floorheight;
-      front_ceilingheight := front.ceilingheight;
-      back_ceilingheight := back.ceilingheight;
-    end;
+    vmidx := (v1.x div 2) + (v2.x div 2);
+    vmidy := (v1.y div 2) + (v2.y div 2);
+    front_floorheight := P_FloorHeight(front, vmidx, vmidy);
+    back_floorheight := P_FloorHeight(back, vmidx, vmidy);
+    front_ceilingheight := P_CeilingHeight(front, vmidx, vmidy);
+    back_ceilingheight := P_CeilingHeight(back, vmidx, vmidy);
 
     // no wall to block sight with?
     if (front_floorheight = back_floorheight) and
@@ -474,28 +463,14 @@ begin
   end;
 
   // JVAL: 3D floors
-  if G_PlayingEngineVersion >= VERSION122 then
-  begin
-    if (G_PlayingEngineVersion < VERSION204) or ((G_PlayingEngineVersion = VERSION204) and (demoplayback or demorecording)) then
+  // JVAL 20191206 - Fix problem reported by slayermbm
+  // https://www.doomworld.com/forum/topic/92113-delphidoom-204720-updated-oct-12-2019/?do=findComment&comment=2051252
+  if midn > -1 then
+    if Psubsector_t(t1.subsector).sector = Psubsector_t(t2.subsector).sector then
     begin
-      if Psubsector_t(t1.subsector).sector = Psubsector_t(t2.subsector).sector then
-      begin
-        result := t1.floorz = t2.floorz;
-        exit;
-      end;
-    end
-    // JVAL 20191206 - Fix problem reported by slayermbm
-    // https://www.doomworld.com/forum/topic/92113-delphidoom-204720-updated-oct-12-2019/?do=findComment&comment=2051252
-    else
-    begin
-      if midn > -1 then
-        if Psubsector_t(t1.subsector).sector = Psubsector_t(t2.subsector).sector then
-        begin
-          result := t1.floorz = t2.floorz;
-          exit;
-        end;
+      result := t1.floorz = t2.floorz;
+      exit;
     end;
-  end;
 
   // An unobstructed LOS is possible.
   // Now look from eyes of t1 to any part of t2.

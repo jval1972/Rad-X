@@ -224,10 +224,7 @@ procedure A_Die(actor: Pmobj_t);
 begin
   actor.flags_ex := actor.flags_ex and not MF_EX_INVULNERABLE;  // Clear invulnerability flag
   actor.flags2_ex := actor.flags2_ex and not MF2_EX_NODAMAGE;   // Clear no damage flag
-  if G_PlayingEngineVersion > VERSION121 then
-    P_DamageMobj(actor, nil, nil, 10000)
-  else
-    P_DamageMobj(actor, nil, nil, actor.health);
+  P_DamageMobj(actor, nil, nil, 10000);
 end;
 
 //

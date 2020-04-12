@@ -690,21 +690,16 @@ begin
     end;
 
     // JVAL Smooth Look Up/Down
-    if G_PlayingEngineVersion < VERSION203 then
-      look16 := 256 * look
-    else
+    look16 := look16 + imousey * 16;
+    if imousey < 0 then
     begin
-      look16 := look16 + imousey * 16;
-      if imousey < 0 then
-      begin
-        if look16 < -4 * 256 then
-          look16 := -4 * 256;
-      end
-      else if imousey > 0 then
-      begin
-        if look16 > 4 * 256 then
-          look16 := 4 * 256;
-      end;
+      if look16 < -4 * 256 then
+        look16 := -4 * 256;
+    end
+    else if imousey > 0 then
+    begin
+      if look16 > 4 * 256 then
+        look16 := 4 * 256;
     end;
   end;
 
@@ -1320,14 +1315,12 @@ begin
 
   if not P_CheckPosition(players[playernum].mo, x, y) then
   begin
-    if G_PlayingEngineVersion > VERSION120 then
-      players[playernum].mo.flags2_ex := players[playernum].mo.flags2_ex or MF2_EX_PASSMOBJ;
+    players[playernum].mo.flags2_ex := players[playernum].mo.flags2_ex or MF2_EX_PASSMOBJ;
     result := false;
     exit;
   end;
 
-  if G_PlayingEngineVersion > VERSION120 then
-    players[playernum].mo.flags2_ex := players[playernum].mo.flags2_ex or MF2_EX_PASSMOBJ;
+  players[playernum].mo.flags2_ex := players[playernum].mo.flags2_ex or MF2_EX_PASSMOBJ;
 
   // flush an old corpse if needed
   if bodyqueslot >= BODYQUESIZE then

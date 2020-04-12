@@ -121,7 +121,7 @@ begin
         else if direction = 1 then
         begin
         // UP
-          if (G_PlayingEngineVersion > VERSION115) and (dest > sector.ceilingheight) then
+          if dest > sector.ceilingheight then
             dest := sector.ceilingheight;
 
           if sector.floorheight + speed > dest then
@@ -144,12 +144,6 @@ begin
             flag := P_ChangeSector(sector, crush);
             if flag then
             begin
-              if G_PlayingEngineVersion <= VERSION115 then
-                if crush then
-                begin
-                  result := crushed;
-                  exit;
-                end;
               sector.floorheight := lastpos;
               P_ChangeSector(sector, crush);
               result := crushed;
@@ -164,7 +158,7 @@ begin
         if direction = -1 then
         begin
         // DOWN
-          if (G_PlayingEngineVersion > VERSION115) and (dest < sector.floorheight) then
+          if dest < sector.floorheight then
             dest := sector.floorheight;
 
           if sector.ceilingheight - speed < dest then
@@ -546,10 +540,7 @@ begin
         end;
       raiseToTexture:
         begin
-          if G_PlayingEngineVersion > VERSION115 then
-            minsize := 32000 * FRACUNIT // Don't overflow
-          else
-            minsize := MAXINT;
+          minsize := 32000 * FRACUNIT; // Don't overflow
           floor.direction := 1;
           floor.sector := sec;
           floor.speed := FLOORSPEED;
@@ -567,16 +558,11 @@ begin
                   minsize := textureheight[side.bottomtexture];
             end;
           end;
-          if G_PlayingEngineVersion <= VERSION115 then
-            floor.floordestheight := floor.sector.floorheight + minsize
+          floor.floordestheight := FixedInt(floor.sector.floorheight) + FixedInt(minsize);
+          if floor.floordestheight > 32000 then
+            floor.floordestheight := 32000 * FRACUNIT
           else
-          begin
-            floor.floordestheight := FixedInt(floor.sector.floorheight) + FixedInt(minsize);
-            if floor.floordestheight > 32000 then
-              floor.floordestheight := 32000 * FRACUNIT
-            else
-              floor.floordestheight := floor.floordestheight * FRACUNIT;
-          end;
+            floor.floordestheight := floor.floordestheight * FRACUNIT;
         end;
       lowerAndChange:
         begin
@@ -700,15 +686,13 @@ begin
         begin
           speed := FLOORSPEED div 4;
           stairsize := 8 * FRACUNIT;
-          if G_PlayingEngineVersion > VERSION115 then
-            floor.crush := false;
+          floor.crush := false;
         end;
       turbo16:
         begin
           speed := FLOORSPEED * 4;
           stairsize := 16 * FRACUNIT;
-          if G_PlayingEngineVersion > VERSION115 then
-            floor.crush := true;
+          floor.crush := true;
         end;
       else
       begin
@@ -765,8 +749,7 @@ begin
         floor.speed := speed;
         floor.floordestheight := height;
         floor._type := buildStair;
-        if G_PlayingEngineVersion > VERSION115 then
-          floor.crush := _type <> build8;
+        floor.crush := _type <> build8;
         ok := true;
         break;
       end;
@@ -783,7 +766,7 @@ end;
 // Passed the linedef that triggered the donut
 // Returns whether a thinker was created
 //
-function EV_DoDonut2(line: Pline_t): integer;
+function EV_DoDonut(line: Pline_t): integer;
 var
   s1: Psector_t;
   s2: Psector_t;
@@ -840,74 +823,6 @@ begin
       floor := Z_Malloc(SizeOf(floormove_t), PU_LEVSPEC, nil);
       P_AddThinker (@floor.thinker);
       s1.floordata := floor; //jff 2/22/98
-      floor.thinker._function.acp1 := @T_MoveFloor;
-      floor._type := lowerFloor;
-      floor.crush := false;
-      floor.direction := -1;
-      floor.sector := s1;
-      floor.speed := FLOORSPEED div 2;
-      floor.floordestheight := s3.floorheight;
-      break;
-    end;
-  end;
-end;
-
-function EV_DoDonut(line: Pline_t): integer;
-var
-  s1: Psector_t;
-  s2: Psector_t;
-  s3: Psector_t;
-  secnum: integer;
-  i: integer;
-  floor: Pfloormove_t;
-begin
-  if G_PlayingEngineVersion > VERSION115 then
-  begin
-    result := EV_DoDonut2(line);
-    exit;
-  end;
-
-  result := 0;
-  secnum := P_FindSectorFromLineTag(line, -1);
-  while secnum >= 0 do
-  begin
-    s1 := @sectors[secnum];
-    secnum := P_FindSectorFromLineTag(line, secnum);
-
-    // ALREADY MOVING?  IF SO, KEEP GOING...
-    if P_SectorActive(floor_special, s1) then
-      continue;
-
-    s2 := getNextSector(s1.lines[0], s1); // s2 is pool's sector
-    if s2 = nil then
-     continue;
-
-    result := 1;
-    for i := 0 to s2.linecount - 1 do
-    begin
-      if (s2.lines[i].flags and ML_TWOSIDED = 0) or
-         (s2.lines[i].backsector = s1) then
-        continue;
-      s3 := s2.lines[i].backsector;
-
-      //  Spawn rising slime
-      floor := Z_Malloc(SizeOf(floormove_t), PU_LEVSPEC, nil);
-      P_AddThinker(@floor.thinker);
-      s2.floordata := floor;
-      floor.thinker._function.acp1 := @T_MoveFloor;
-      floor._type := donutRaise;
-      floor.crush := false;
-      floor.direction := 1;
-      floor.sector := s2;
-      floor.speed := FLOORSPEED div 2;
-      floor.texture := s3.floorpic;
-      floor.newspecial := 0;
-      floor.floordestheight := s3.floorheight;
-
-      //  Spawn lowering donut-hole
-      floor := Z_Malloc(SizeOf(floormove_t), PU_LEVSPEC, nil);
-      P_AddThinker(@floor.thinker);
-      s1.floordata := floor;
       floor.thinker._function.acp1 := @T_MoveFloor;
       floor._type := lowerFloor;
       floor.crush := false;

@@ -145,9 +145,8 @@ begin
           //killough 1/31/98: relax compatibility to demo_compatibility
 
           // remove the plat if its a pure raise type
-          if G_PlayingEngineVersion > VERSION115 then
-            if plat._type in [raiseAndChange, raiseToNearestAndChange] then
-              P_RemoveActivePlat(plat);
+          if plat._type in [raiseAndChange, raiseToNearestAndChange] then
+            P_RemoveActivePlat(plat);
 
         end;
       end;
