@@ -383,6 +383,45 @@ begin
 end;
 
 //
+// JVAL: 20200308 - New function
+// P_ThingsInSameZ
+//
+function P_ThingsInSameZ(const A, B: Pmobj_t): boolean;
+var
+  Az1, Az2, Bz1, Bz2: fixed_t;
+begin
+  Az1 := A.z - A.height div 2;
+  if Az1 < A.floorz then
+    Az1 := A.floorz;
+  Az2 := Az1 + A.height;
+  if Az2 > A.ceilingz then
+  begin
+    Az2 := A.ceilingz;
+    Az1 := Az2 - A.height;
+    if Az1 < A.floorz then
+      Az1 := A.floorz;
+  end;
+
+  Bz1 := B.z - B.height div 2;
+  if Bz1 < B.floorz then
+    Bz1 := B.floorz;
+  Bz2 := Bz1 + B.height;
+  if Bz2 > B.ceilingz then
+  begin
+    Bz2 := B.ceilingz;
+    Bz1 := Bz2 - B.height;
+    if Bz1 < B.floorz then
+      Bz1 := B.floorz;
+  end;
+
+  result :=
+    IsIntegerInRange(Az1, Bz1, Bz2) or
+    IsIntegerInRange(Az2, Bz1, Bz2) or
+    IsIntegerInRange(Bz1, Az1, Az2) or
+    IsIntegerInRange(Bz2, Az1, Az2);
+end;
+
+//
 // PIT_CheckThing
 //
 function PIT_CheckThing(thing: Pmobj_t): boolean;
@@ -393,6 +432,12 @@ var
   pushfactor: fixed_t;
 begin
   if (thing.flags and (MF_SOLID or MF_SPECIAL or MF_SHOOTABLE)) = 0 then
+  begin
+    result := true;
+    exit;
+  end;
+
+  if not P_ThingsInSameZ(thing, tmthing) then // JVAL: 20200412 -> Check z axis
   begin
     result := true;
     exit;
@@ -428,57 +473,46 @@ begin
   end;
 
   // JVAL: 3d Floors
-  if G_PlayingEngineVersion >= VERSION122 then
-  begin
-{    if Psubsector_t(tmthing.subsector).sector = Psubsector_t(thing.subsector).sector then
-      if tmthing.floorz <> thing.floorz then
-      begin
-        result := true;
-        exit;
-      end;
-                                                             }
-    if (tmthing.player <> nil) or (thing.player <> nil) then
-      if tmfloorz <> thing.floorz then
-      begin
-        if tmthing.z > thing.z + thing.height then
-        begin
-          result := true;
-          exit;
-        end;
-
-        if tmthing.z + tmthing.height < thing.z then
-        begin // under thing
-          result := true;
-          exit;
-        end;
-      end;
-  end;
-
-  if G_PlayingEngineVersion > VERSION120 then
-    if tmthing.flags2_ex and MF2_EX_PASSMOBJ <> 0 then
-    begin // check if a mobj passed over/under another object
-
-      if ((tmthing._type = Ord(MT_HEAD)) or (tmthing._type = Ord(MT_SKULL)) or (tmthing._type = Ord(MT_PAIN))) and
-         ((thing._type = Ord(MT_HEAD)) or (thing._type = Ord(MT_SKULL)) or (thing._type = Ord(MT_PAIN))) then
-      begin // don't let cacodemons / skull / pain elementals fly over other imps/wizards
-        result := false;
-        exit;
-      end;
-
-      if (tmthing.z > thing.z + thing.height) and
-         (thing.flags and MF_SPECIAL = 0) then
+  if (tmthing.player <> nil) or (thing.player <> nil) then
+    if tmfloorz <> thing.floorz then
+    begin
+      if tmthing.z > thing.z + thing.height then
       begin
         result := true;
         exit;
       end;
 
-      if (tmthing.z + tmthing.height < thing.z) and
-         (thing.flags and MF_SPECIAL = 0) then
+      if tmthing.z + tmthing.height < thing.z then
       begin // under thing
         result := true;
         exit;
       end;
     end;
+
+  if tmthing.flags2_ex and MF2_EX_PASSMOBJ <> 0 then
+  begin // check if a mobj passed over/under another object
+
+    if ((tmthing._type = Ord(MT_HEAD)) or (tmthing._type = Ord(MT_SKULL)) or (tmthing._type = Ord(MT_PAIN))) and
+       ((thing._type = Ord(MT_HEAD)) or (thing._type = Ord(MT_SKULL)) or (thing._type = Ord(MT_PAIN))) then
+    begin // don't let cacodemons / skull / pain elementals fly over other imps/wizards
+      result := false;
+      exit;
+    end;
+
+    if (tmthing.z > thing.z + thing.height) and
+       (thing.flags and MF_SPECIAL = 0) then
+    begin
+      result := true;
+      exit;
+    end;
+
+    if (tmthing.z + tmthing.height < thing.z) and
+       (thing.flags and MF_SPECIAL = 0) then
+    begin // under thing
+      result := true;
+      exit;
+    end;
+  end;
 
   // check for skulls slamming into things
   if tmthing.flags and MF_SKULLFLY <> 0 then
