@@ -2073,7 +2073,7 @@ begin
           maxdist := maxdist div FRACUNIT;
           if maxdist < max_radius then
           begin
-            damage := parms.hit_points_at_center * (max_radius - maxdist) div max_radius;
+            damage := (parms.hit_points_at_center * PLAYERSPAWNSHIELD div 300) * (max_radius - maxdist) div max_radius;
             P_DamageMobj(mo, nil, nil, damage);
           end;
         end;
