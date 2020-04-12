@@ -81,8 +81,6 @@ const
   FDWALLRANGE = BROWNRANGE;
   CDWALLCOLORS = YELLOWS;
   CDWALLRANGE = YELLOWRANGE;
-  THINGCOLORS = GREENS;
-  THINGRANGE = GREENRANGE;
   SECRETWALLCOLORS = WALLCOLORS;
   SECRETWALLRANGE = WALLRANGE;
   GRIDCOLORS = GRAYS + (GRAYSRANGE div 2);
@@ -1549,7 +1547,7 @@ begin
       continue;
 
     if p.powers[Ord(pw_invisibility)] <> 0 then
-      color := 246 // *close* to black
+      color := 26 // *close* to black
     else
       color := their_colors[their_color];
 
@@ -1565,13 +1563,14 @@ begin
   end;
 end;
 
-procedure AM_drawThings(colors: integer; colorrange: integer);
+procedure AM_drawThings;
 var
   i: integer;
   t: Pmobj_t;
   x, y: fixed_t;
   plrx, plry: fixed_t;
   plra: angle_t;
+  color: byte;
 begin
   plrx := plr.mo.x div FRACTOMAPUNIT;
   plry := plr.mo.y div FRACTOMAPUNIT;
@@ -1587,9 +1586,16 @@ begin
       if allowautomaprotate then
         AM_rotate(@x, @y, plra, plrx, plry);
 
+      if t.flags and MF_COUNTKILL <> 0 then
+        color := aprox_yellow
+      else if (t.flags and MF_SPECIAL <> 0) or (t.flags3_ex and MF3_EX_CUSTOMPICKUP <> 0) then
+        color := approx_white
+      else                      
+        color := aprox_green;
+
       AM_drawLineCharacter
         (@thintriangle_guy, NUMTHINTRIANGLEGUYLINES,
-        16 * FRACUNIT, t.angle, colors + lightlev, x, y);
+        16 * FRACUNIT, t.angle, color, x, y);
       t := t.snext;
     end;
   end;
@@ -1671,7 +1677,7 @@ begin
 
   AM_drawPlayers;
   if am_cheating = 2 then
-    AM_drawThings(THINGCOLORS, THINGRANGE);
+    AM_drawThings;
   AM_drawCrosshair(XHAIRCOLORS);
 
   {$IFDEF OPENGL}

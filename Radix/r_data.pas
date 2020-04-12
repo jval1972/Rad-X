@@ -123,6 +123,7 @@ var
   aprox_blue: byte = 156;
   aprox_yellow: byte = 134;
   aprox_lightblue: byte = 150;
+  approx_white: byte = 128;
 
 implementation
 
@@ -1070,6 +1071,7 @@ begin
   aprox_blue := V_FindAproxColorIndex(@cpal, $80, 1, 255);
   aprox_yellow := V_FindAproxColorIndex(@cpal, $FFFF00, 1, 255);
   aprox_lightblue := V_FindAproxColorIndex(@cpal, $FF, 1, 255);
+  approx_white := V_FindAproxColorIndex(@cpal, $FFFFFF, 1, 255);
 
   Z_ChangeTag(palette, PU_CACHE);
 
