@@ -72,6 +72,8 @@ procedure RX_DamageLine(const l: Pline_t; const damage: integer);
 
 function RX_LineLengthf(li: Pline_t): float;
 
+procedure RX_LineTrace(const fromx, fromy, fromz: fixed_t; const tox, toy, toz: fixed_t; var newx, newy, newz: fixed_t);
+
 var
   level_position_hack: boolean;
 
@@ -82,7 +84,10 @@ implementation
 
 uses
   m_rnd,
+  m_bbox,
   p_setup,
+  p_3dfloors,
+  p_local,
   p_mobj_h,
   p_maputl,
   r_data,
@@ -635,6 +640,116 @@ begin
   fx := (li.v2.x - li.v1.x) / FRACUNIT;
   fy := (li.v2.y - li.v1.y) / FRACUNIT;
   result := sqrt(fx * fx + fy * fy);
+end;
+
+var
+  LTfromx, LTfromy, LTfromz: fixed_t;
+  LTtox, LTtoy, LTtoz: fixed_t;
+  LTbbox: array[0..3] of fixed_t;
+  LTline: Pline_t;
+
+function PIT_LineTrace(ld: Pline_t): boolean;
+var
+  A1, B1, C1: int64;
+  A2, B2, C2: int64;
+  det: int64;
+  x, y: int64;
+  dist1, dist2: int64;
+begin
+  if ld.backsector <> nil then
+  begin
+    result := true;
+    exit;
+  end;
+
+  if (LTbbox[BOXRIGHT] <= ld.bbox[BOXLEFT]) or
+     (LTbbox[BOXLEFT] >= ld.bbox[BOXRIGHT]) or
+     (LTbbox[BOXTOP] <= ld.bbox[BOXBOTTOM]) or
+     (LTbbox[BOXBOTTOM] >= ld.bbox[BOXTOP]) then
+  begin
+    result := true;
+    exit;
+  end;
+
+  if P_BoxOnLineSide(@LTbbox, ld) <> -1 then
+  begin
+    result := true;
+    exit;
+  end;
+
+  A1 := LTtoy - LTfromy;
+  B1 := LTfromx - LTtox;
+  C1 := (A1 * LTfromx) div FRACUNIT + (B1 * LTfromy) div FRACUNIT;
+
+  A2 := ld.v2.y - ld.v1.y;
+  B2 := ld.v1.x - ld.v2.x;
+  C2 := (A2 * ld.v1.x) div FRACUNIT + (B2 * ld.v1.y) div FRACUNIT;
+
+  det := (A1 * B2) div FRACUNIT - (A2 * B1) div FRACUNIT;
+  if det <> 0 then
+  begin
+    x := (B2 * C1 - B1 * C2) div det;
+    y := (A1 * C2 - A2 * C1) div det;
+    dist1 := ((LTfromx - x) div FRACUNIT) * (LTfromx - x) + ((LTfromy - y) div FRACUNIT) * (LTfromy - y);
+    dist2 := ((LTfromx - LTtox) div FRACUNIT) * (LTfromx - LTtox) + ((LTfromy - LTtoy) div FRACUNIT) * (LTfromy - LTtoy);
+    if dist1 < dist2 then
+    begin
+      LTtox := x;
+      LTtoy := y;
+      LTline := ld;
+    end;
+  end;
+
+  result := true;
+end;
+
+procedure RX_LineTrace(const fromx, fromy, fromz: fixed_t; const tox, toy, toz: fixed_t; var newx, newy, newz: fixed_t);
+var
+  xl: integer;
+  xh: integer;
+  yl: integer;
+  yh: integer;
+  bx: integer;
+  by: integer;
+  floor, ceiling: fixed_t;
+begin
+  LTbbox[BOXLEFT] := MinI(fromx, tox);
+  LTbbox[BOXRIGHT] := MaxI(fromx, tox);
+  LTbbox[BOXBOTTOM] := MinI(fromy, toy);
+  LTbbox[BOXTOP] := MaxI(fromy, toy);
+
+  xl := MapBlockIntX(int64(LTbbox[BOXLEFT]) - int64(bmaporgx) - MAXRADIUS);
+  xh := MapBlockIntX(int64(LTbbox[BOXRIGHT]) - int64(bmaporgx) + MAXRADIUS);
+  yl := MapBlockIntY(int64(LTbbox[BOXBOTTOM]) - int64(bmaporgy) - MAXRADIUS);
+  yh := MapBlockIntY(int64(LTbbox[BOXTOP]) - int64(bmaporgy) + MAXRADIUS);
+
+  LTfromx := fromx;
+  LTfromy := fromy;
+  LTfromz := fromz;
+
+  LTtox := tox;
+  LTtoy := toy;
+  LTtoz := toz;
+
+  LTline := nil;
+  for bx := xl to xh do
+    for by := yl to yh do
+      P_BlockLinesIterator(bx, by, PIT_LineTrace);
+
+  newx := LTtox;
+  newy := LTtoy;
+  if LTline = nil then
+  begin
+    floor := P_3dFloorHeight(newx, newy, LTfromz);
+    ceiling := P_3dCeilingHeight(newx, newy, LTfromz);
+    newz := GetIntegerInRange(LTfromz, floor, ceiling);
+  end
+  else
+  begin
+    floor := P_3dFloorHeight(LTline.frontsector, newx, newy, LTfromz);
+    ceiling := P_3dCeilingHeight(LTline.frontsector, newx, newy, LTfromz);
+    newz := GetIntegerInRange(LTfromz, floor, ceiling);
+  end;
 end;
 
 end.

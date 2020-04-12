@@ -83,7 +83,8 @@ uses
   tables,
   p_tick,
   p_pspr,
-  p_mobj;
+  p_mobj,
+  radix_map_extra;
 
 //
 // RX_CheckNextRefire
@@ -279,6 +280,8 @@ begin
   source.x := source.x + dx;
   source.y := source.y + dy;
   source.z := source.z + dz;
+
+  RX_LineTrace(oldx, oldy, oldz, source.x, source.y, source.z, source.x, source.y, source.z);
 
   P_SpawnPlayerMissile(source, _type);
 
