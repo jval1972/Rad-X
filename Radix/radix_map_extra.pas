@@ -624,6 +624,7 @@ begin
     begin
       RX_LineExplosion(l);
     end;
+    l.radixflags := l.radixflags and not RWF_MISSILEWALL;
   end;
 end;
 
