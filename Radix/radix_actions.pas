@@ -1487,6 +1487,7 @@ type
     linelength: integer;
     baseangle: angle_t;
     nextticfire: integer;
+    destheight: fixed_t;
   end;
   radixfloormissilewall_p = ^radixfloormissilewall_t;
 
@@ -1534,10 +1535,19 @@ begin
     parms.linelength := round(RX_LineLengthf(li));
     parms.baseangle := R_PointToAngle2(li.v1.x, li.v1.y, li.v2.x, li.v2.y) - ANG90;
     parms.nextticfire := -1;
+    parms.destheight := li.backsector.ceilingheight;
     parms.initialized := true;
   end
   else
     target := P_FindMobjFromKey(parms.mobjid);
+
+  // JVAL: 20200413 - Raise backsector's floor
+  if li.backsector.floorheight < parms.destheight then
+  begin
+    li.backsector.floorheight := li.backsector.floorheight + 2 * FRACUNIT;
+    if li.backsector.floorheight > parms.destheight then
+      li.backsector.floorheight := parms.destheight;
+  end;
 
   if leveltime < parms.nextticfire then
     exit;
@@ -1550,6 +1560,9 @@ begin
   else
     zlen := (li.backsector.floorheight div FRACUNIT - li.frontsector.floorheight div FRACUNIT + 32) div 64; // front side
 
+  if zlen = 0 then
+    exit;
+    
   if xlen = 0 then
   begin
     x := li.v1.x div 2 + li.v2.x div 2;
