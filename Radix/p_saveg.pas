@@ -95,6 +95,7 @@ uses
   d_player,
   d_think,
   g_game,
+  m_compress,
   m_fixed,
   mn_screenshot,
   info_h,
@@ -1035,107 +1036,166 @@ end;
 
 procedure P_ArchiveGrid;
 var
-  i, x, y: integer;
+  x, y: integer;
+  Source, Target: Pointer;
+  SourceSize, TargetSize: integer;
 begin
   x := RX_RadixGridX;
   PInteger(save_p)^ := x;
   incp(pointer(save_p), SizeOf(integer));
 
-  if x = 0 then
-    exit;
-
   y := RX_RadixGridY;
   PInteger(save_p)^ := y;
   incp(pointer(save_p), SizeOf(integer));
 
-  for i := 0 to RADIXGRIDSIZE - 1 do
-  begin
-    PSmallInt(save_p)^ := radixgrid[i];
-    incp(pointer(save_p), SizeOf(smallint));
-  end;
+  if (x = 0) or (y = 0) then
+    exit;
+
+  // JVAL: 20200413 - Compress RADIX grid to saved game
+  Source := @radixgrid;
+  SourceSize := SizeOf(radixgrid_t);
+  Target := malloc(SizeOf(radixgrid_t));
+  TargetSize := M_FastPack(Source, Target, SourceSize);
+  PInteger(save_p)^ := TargetSize;
+  incp(pointer(save_p), SizeOf(integer));
+  memcpy(save_p, Target, TargetSize);
+  incp(pointer(save_p), TargetSize);
+  memfree(Target, SizeOf(radixgrid_t));
 end;
 
 procedure P_UnArchiveGrid;
 var
   x, y: integer;
+  Source, Target: Pointer;
+  SourceSize, TargetSize: integer;
 begin
   x := PInteger(save_p)^;
   incp(pointer(save_p), SizeOf(integer));
   if x <> RX_RadixGridX then
     I_Error('P_UnArchiveGrid(): Invalid grid x size %d', [x]);
-  if x = 0 then
-  begin
-    RX_InitRadixGrid(0, 0, nil); // JVAL: 20200305 - Unused
-    exit;
-  end;
 
   y := PInteger(save_p)^;
   incp(pointer(save_p), SizeOf(integer));
   if y <> RX_RadixGridY then
     I_Error('P_UnArchiveGrid(): Invalid grid y size %d', [y]);
 
-  RX_InitRadixGrid(x, y, Pradixgrid_t(save_p));
-  incp(pointer(save_p), SizeOf(radixgrid_t));
+  if (x = 0) or (y = 0) then
+  begin
+    RX_InitRadixGrid(0, 0, nil); // JVAL: 20200305 - Unused
+    exit;
+  end;
+
+  // JVAL: 20200413 - Uncompress RADIX grid from saved game
+  SourceSize := PInteger(save_p)^;
+  incp(pointer(save_p), SizeOf(integer));
+  Source := save_p;
+  Target := malloc(SizeOf(radixgrid_t));
+  TargetSize := M_FastUnPack(Source, Target, SourceSize);
+  if TargetSize <> SizeOf(radixgrid_t) then
+    I_Error('P_UnArchiveGrid(): Grid compression consistency error, got grid size %d, should be %d ', [TargetSize, SizeOf(radixgrid_t)]);
+  RX_InitRadixGrid(x, y, Pradixgrid_t(Target));
+  incp(pointer(save_p), SourceSize);
+  memfree(Target, SizeOf(radixgrid_t));
 end;
 
 procedure P_ArchiveRadixActions;
 var
-  i: integer;
+  Source, Target: Pointer;
+  SourceSize, TargetSize: integer;
 begin
   PInteger(save_p)^ := numradixactions;
   incp(pointer(save_p), SizeOf(integer));
 
-  for i := 0 to numradixactions - 1 do
-  begin
-    Pradixaction_t(save_p)^ := radixactions[i];
-    incp(pointer(save_p), SizeOf(radixaction_t));
-  end;
+  if numradixactions = 0 then
+    exit;
+
+  // JVAL: 20200413 - Compress RADIX actions to saved game
+  Source := radixactions;
+  SourceSize := SizeOf(radixaction_t) * numradixactions;
+  Target := malloc(SizeOf(radixaction_t) * numradixactions);
+  TargetSize := M_FastPack(Source, Target, SourceSize);
+  PInteger(save_p)^ := TargetSize;
+  incp(pointer(save_p), SizeOf(integer));
+  memcpy(save_p, Target, TargetSize);
+  incp(pointer(save_p), TargetSize);
+  memfree(Target, SizeOf(radixaction_t) * numradixactions);
 end;
 
 procedure P_UnArchiveRadixActions;
 var
-  i, x: integer;
+  x: integer;
+  Source, Target: Pointer;
+  SourceSize, TargetSize: integer;
 begin
   x := PInteger(save_p)^;
   incp(pointer(save_p), SizeOf(integer));
   if x <> numradixactions then
     I_Error('P_UnArchiveRadixActions(): Invalid actions number %d', [x]);
 
-  for i := 0 to x - 1 do
-  begin
-    radixactions[i] := Pradixaction_t(save_p)^;
-    incp(pointer(save_p), SizeOf(radixaction_t));
-  end;
+  if x = 0 then
+    exit;
+
+  // JVAL: 20200413 - Uncompress RADIX actions from saved game
+  SourceSize := PInteger(save_p)^;
+  incp(pointer(save_p), SizeOf(integer));
+  Source := save_p;
+  Target := malloc(SizeOf(radixaction_t) * numradixactions);
+  TargetSize := M_FastUnPack(Source, Target, SourceSize);
+  if TargetSize <> SizeOf(radixaction_t) * numradixactions then
+    I_Error('P_UnArchiveRadixActions(): Action compression consistency error, got size %d, should be %d ', [TargetSize, SizeOf(radixaction_t) * numradixactions]);
+  memcpy(radixactions, Target, SizeOf(radixaction_t) * numradixactions);
+  incp(pointer(save_p), SourceSize);
+  memfree(Target, SizeOf(radixaction_t) * numradixactions);
 end;
 
 procedure P_ArchiveRadixTriggers;
 var
-  i: integer;
+  Source, Target: Pointer;
+  SourceSize, TargetSize: integer;
 begin
   PInteger(save_p)^ := numradixtriggers;
   incp(pointer(save_p), SizeOf(integer));
 
-  for i := 0 to numradixtriggers - 1 do
-  begin
-    Pradixtrigger_t(save_p)^ := radixtriggers[i];
-    incp(pointer(save_p), SizeOf(radixtrigger_t));
-  end;
+  if numradixtriggers = 0 then
+    exit;
+
+  // JVAL: 20200413 - Compress RADIX triggers to saved game
+  Source := radixtriggers;
+  SourceSize := SizeOf(radixtrigger_t) * numradixtriggers;
+  Target := malloc(SizeOf(radixtrigger_t) * numradixtriggers);
+  TargetSize := M_FastPack(Source, Target, SourceSize);
+  PInteger(save_p)^ := TargetSize;
+  incp(pointer(save_p), SizeOf(integer));
+  memcpy(save_p, Target, TargetSize);
+  incp(pointer(save_p), TargetSize);
+  memfree(Target, SizeOf(radixtrigger_t) * numradixtriggers);
 end;
 
 procedure P_UnArchiveRadixTriggers;
 var
-  i, x: integer;
+  x: integer;
+  Source, Target: Pointer;
+  SourceSize, TargetSize: integer;
 begin
   x := PInteger(save_p)^;
   incp(pointer(save_p), SizeOf(integer));
   if x <> numradixtriggers then
     I_Error('P_UnArchiveRadixTriggers(): Invalid triggers number %d', [x]);
 
-  for i := 0 to x - 1 do
-  begin
-    radixtriggers[i] := Pradixtrigger_t(save_p)^;
-    incp(pointer(save_p), SizeOf(radixtrigger_t));
-  end;
+  if x = 0 then
+    exit;
+
+  // JVAL: 20200413 - Uncompress RADIX actions from saved game
+  SourceSize := PInteger(save_p)^;
+  incp(pointer(save_p), SizeOf(integer));
+  Source := save_p;
+  Target := malloc(SizeOf(radixtrigger_t) * numradixtriggers);
+  TargetSize := M_FastUnPack(Source, Target, SourceSize);
+  if TargetSize <> SizeOf(radixtrigger_t) * numradixtriggers then
+    I_Error('P_UnArchiveRadixActions(): Trigger compression consistency error, got size %d, should be %d ', [TargetSize, SizeOf(radixtrigger_t) * numradixtriggers]);
+  memcpy(radixtriggers, Target, SizeOf(radixtrigger_t) * numradixtriggers);
+  incp(pointer(save_p), SourceSize);
+  memfree(Target, SizeOf(radixtrigger_t) * numradixtriggers);
 end;
 
 procedure P_ArchiveScreenShot;
