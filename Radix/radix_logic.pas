@@ -67,6 +67,7 @@ begin
   case ra.activationflags of
     SPR_FLG_ACTIVATE:
       radixactions[ra.actionid].suspend := 0;
+      radixactions[ra.actionid].enabled := 1;
     SPR_FLG_DEACTIVATE:
       radixactions[ra.actionid].suspend := 1; // Distinguist from $FFFF in radix.dat
     SPR_FLG_ACTIVATEONSPACE: ; // ?
@@ -74,7 +75,10 @@ begin
       if radixactions[ra.actionid].suspend = 0 then
         radixactions[ra.actionid].suspend := 1
       else
+      begin
         radixactions[ra.actionid].suspend := 0
+        radixactions[ra.actionid].enabled := 1;
+      end;
   end;
 end;
 
