@@ -45,6 +45,7 @@ type
 
 var
   mn_screenshotbuffer: menuscreenbuffer_t;
+  mn_makescreenshot: boolean = false;
 
 procedure MN_ScreenShotFromBlitBuffer;
 
@@ -68,6 +69,7 @@ var
   c: LongWord;
   xpos, ypos: integer;
 begin
+  I_BlitBuffer;
   bufsize := SCREENWIDTH * SCREENHEIGHT * 4;
   buf := malloc(bufsize);
   I_ReadScreen32(buf);
@@ -75,7 +77,7 @@ begin
   for y := 0 to MN_SCREENSHOTHEIGHT - 1 do
   begin
     ypos := viewwindowy + ((y * viewheight) div MN_SCREENSHOTHEIGHT);
-    {$IFDEF OPENGL}y := SCREENHEIGHT - y - 1;{$ENDIF};
+    {$IFDEF OPENGL}ypos := SCREENHEIGHT - y - 1;{$ENDIF};
     ypos := GetIntegerInRange(ypos, 0, SCREENHEIGHT - 1);
     xlinesource := @buf[ypos * SCREENWIDTH * 4];
     for x := 0 to MN_SCREENSHOTWIDTH - 1 do
@@ -87,6 +89,7 @@ begin
     end;
   end;
   memfree(pointer(buf), bufsize);
+  mn_makescreenshot := false;
 end;
 
 procedure MN_ScreenShotFromSaveGame(const path: string; const outbuff: Pmenuscreenbuffer_t);

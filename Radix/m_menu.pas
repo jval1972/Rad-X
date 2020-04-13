@@ -354,7 +354,7 @@ begin
   else
     messageRoutine := nil;
   messageNeedsInput := input;
-  MN_ScreenShotFromBlitBuffer;
+  mn_makescreenshot := true;
   menuactive := true;
 end;
 
@@ -3190,7 +3190,7 @@ begin
   if menuactive then
     exit;
 
-  MN_ScreenShotFromBlitBuffer;
+  mn_makescreenshot := true;
   menuactive := true;
   currentMenu := @MainDef;// JDC
   itemOn := currentMenu.lastOn; // JDC
