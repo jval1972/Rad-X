@@ -1436,7 +1436,7 @@ var
   sector: Psector_t;
   pss: Psubsector_t;
   seg: Pseg_t;
-  bbox: array[0..3] of int64;
+  bbox: array[0..3] of fixed_t;
   block: integer;
 begin
   // look up sector number for each subsector
