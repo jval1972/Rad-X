@@ -173,7 +173,7 @@ begin
     31: RA_LightMovement(action);
     32: RA_MultLightOscilate(action);
     33: RA_MultRandLightsFlicker(action);
-    34: RA_SkillRatio(action);
+    34: RA_KillRatio(action);
     35: RA_HurtPlayerExplosion(action);
     36: RA_SwitchShadeType(action);
     37: RA_SixLightMovement(action);

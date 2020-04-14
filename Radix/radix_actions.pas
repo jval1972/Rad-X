@@ -106,7 +106,7 @@ procedure RA_MultLightOscilate(const action: Pradixaction_t);
 
 procedure RA_MultRandLightsFlicker(const action: Pradixaction_t);
 
-procedure RA_SkillRatio(const action: Pradixaction_t);
+procedure RA_KillRatio(const action: Pradixaction_t);
 
 procedure RA_HurtPlayerExplosion(const action: Pradixaction_t);
 
@@ -2095,17 +2095,32 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 // Sprite type = 34
 type
-  radixskillratio_t = packed record
-    trigger: integer;
+  radixkillratio_t = packed record
+    trigger_number: integer;
     percentage: smallint;
   end;
-  radixskillratio_p = ^radixskillratio_t;
+  radixkillratio_p = ^radixkillratio_t;
 
-procedure RA_SkillRatio(const action: Pradixaction_t);
+procedure RA_KillRatio(const action: Pradixaction_t);
 var
-  parms: radixskillratio_p;
+  parms: radixkillratio_p;
+  runtrigger: boolean;
 begin
-  parms := radixskillratio_p(@action.params);
+  parms := radixkillratio_p(@action.params);
+
+  runtrigger := false;
+  if players[radixplayer].killcount >= totalkills then
+    runtrigger := true
+  else if (players[radixplayer].killcount * 100) div totalkills >= parms.percentage then
+    runtrigger := true;
+
+  if runtrigger then
+  begin
+    radixtriggers[parms.trigger_number].suspended := 0;
+    RX_RunTrigger(parms.trigger_number);
+
+    action.suspend := 1; // JVAL: 20200414 - Disable action
+  end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
