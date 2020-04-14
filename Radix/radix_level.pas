@@ -920,6 +920,7 @@ var
     begin
       result := true;
 
+      doomsidedefs[529].textureoffset := 0;
       fix_changevertexes(1473, -1344, 1537, -1344);
     end
     else if levelname = 'E2M5' then
