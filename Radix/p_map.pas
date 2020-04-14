@@ -2583,10 +2583,10 @@ begin
 
   inc(validcount); // used to make sure we only process a line once
 
-  xl := MapBlockIntX(tmbbox[BOXLEFT] - bmaporgx);
-  xh := MapBlockIntX(tmbbox[BOXRIGHT] - bmaporgx);
-  yl := MapBlockIntY(tmbbox[BOXBOTTOM] - bmaporgy);
-  yh := MapBlockIntY(tmbbox[BOXTOP] - bmaporgy);
+  xl := MapBlockIntX(int64(tmbbox[BOXLEFT]) - int64(bmaporgx));
+  xh := MapBlockIntX(int64(tmbbox[BOXRIGHT]) - int64(bmaporgx));
+  yl := MapBlockIntY(int64(tmbbox[BOXBOTTOM]) - int64(bmaporgy));
+  yh := MapBlockIntY(int64(tmbbox[BOXTOP]) - int64(bmaporgy));
 
   for bx := xl to xh do
     for by := yl to yh do
@@ -2594,7 +2594,7 @@ begin
 
   // Add the sector of the (x,y) point to sector_list.
 
-  sector_list := P_AddSecnode(Psubsector_t(thing.subsector).sector,thing,sector_list);
+  sector_list := P_AddSecnode(Psubsector_t(thing.subsector).sector, thing, sector_list);
 
   // Now delete any nodes that won't be used. These are the ones where
   // m_thing is still nil.

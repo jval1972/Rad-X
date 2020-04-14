@@ -143,6 +143,9 @@ function P_GameValidThing(const doomdnum: integer): boolean;
 var
   useglnodesifavailable: boolean;
 
+var
+  largemap: boolean;
+
 implementation
 
 uses
@@ -212,6 +215,11 @@ var
   i: integer;
   ml: Pmapvertex_t;
   li: Pvertex_t;
+  minx: integer;
+  maxx: integer;
+  miny: integer;
+  maxy: integer;
+  dx, dy: integer;
 begin
   // Determine number of lumps:
   //  total lump length / vertex record length.
@@ -228,14 +236,33 @@ begin
   // Copy and convert vertex coordinates,
   // internal representation as fixed.
   li := @vertexes[0];
+
+  // JVAL: 20200414 -> Find map boundaries
+  minx := 100000;
+  maxx := -100000;
+  miny := 100000;
+  maxy := -100000;
   for i := 0 to numvertexes - 1 do
   begin
+    if ml.x > maxx then
+      maxx := ml.x;
+    if ml.x < minx then
+      minx := ml.x;
+    if ml.y > maxy then
+      maxy := ml.y;
+    if ml.y < miny then
+      miny := ml.y;
     li.x := ml.x * FRACUNIT;
     li.y := ml.y * FRACUNIT;
     li.amvalidcount := 0;
     inc(ml);
     inc(li);
   end;
+
+  dx := maxx - minx;
+  dy := maxy - miny;
+
+  largemap := (dx < -32767) or (dx > 32767) or (dy < -32767) or (dy > 32767);
 
   // Free buffer memory.
   Z_Free(data);

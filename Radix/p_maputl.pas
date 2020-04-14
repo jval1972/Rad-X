@@ -201,7 +201,7 @@ end;
 // P_PointOnDivlineSide
 // Returns 0 or 1.
 //
-function P_PointOnDivlineSide(x: fixed_t; y: fixed_t; line: Pdivline_t): integer;
+function P_PointOnDivlineSide32(x: fixed_t; y: fixed_t; line: Pdivline_t): integer;
 var
   dx: fixed_t;
   dy: fixed_t;
@@ -267,6 +267,70 @@ begin
     result := 1; // back side
 end;
 
+function P_PointOnDivlineSide64(x: fixed_t; y: fixed_t; line: Pdivline_t): integer;
+var
+  dx64: int64;
+  dy64: int64;
+  left64: int64;
+  right64: int64;
+begin
+  if line.dx = 0 then
+  begin
+    if x <= line.x then
+    begin
+      if line.dy > 0 then
+        result := 1
+      else
+        result := 0;
+    end
+    else
+    begin
+      if line.dy < 0 then
+        result := 1
+      else
+        result := 0;
+    end;
+    exit;
+  end;
+
+  if line.dy = 0 then
+  begin
+    if y <= line.y then
+    begin
+      if line.dx < 0 then
+        result := 1
+      else
+        result := 0;
+    end
+    else
+    begin
+      if line.dx > 0 then
+        result := 1
+      else
+        result := 0;
+    end;
+    exit;
+  end;
+
+  dx64 := int64(x) - int64(line.x);
+  dy64 := int64(y) - int64(line.y);
+
+  left64 := int64(line.dy) * (dx64 div 256);
+  right64 := (dy64 div 256) * int64(line.dx);
+
+  if right64 < left64 then
+    result := 0  // front side
+  else
+    result := 1; // back side
+end;
+
+function P_PointOnDivlineSide(x: fixed_t; y: fixed_t; line: Pdivline_t): integer;
+begin
+  if largemap then
+    result := P_PointOnDivlineSide64(x, y, line)
+  else
+    result := P_PointOnDivlineSide32(x, y, line);
+end;
 
 //
 // P_MakeDivline

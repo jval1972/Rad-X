@@ -358,6 +358,9 @@ uses
   deh_base in 'Base\deh_base.pas',
   r_sprite in 'Base\r_sprite.pas',
   r_tallcolumn in 'Base\r_tallcolumn.pas',
+{$IFDEF DEBUG}
+  r_debug in 'Base\r_debug.pas',
+{$ENDIF}
   radix_bitmap in 'Radix\radix_bitmap.pas',
   radix_defs in 'Radix\radix_defs.pas',
   radix_end_screen in 'Radix\radix_end_screen.pas',

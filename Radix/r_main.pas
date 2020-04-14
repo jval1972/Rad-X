@@ -454,7 +454,7 @@ end;
 //  check point against partition plane.
 // Returns side 0 (front) or 1 (back).
 //
-function R_PointOnSide(const x: fixed_t; const y: fixed_t; const node: Pnode_t): boolean;
+function R_PointOnSide32(const x: fixed_t; const y: fixed_t; const node: Pnode_t): boolean;
 var
   dx: fixed_t;
   dy: fixed_t;
@@ -479,8 +479,8 @@ begin
     exit;
   end;
 
-  dx := (x - node.x);
-  dy := (y - node.y);
+  dx := x - node.x;
+  dy := y - node.y;
 
   // Try to quickly decide by looking at sign bits.
   if ((node.dy xor node.dx xor dx xor dy) and $80000000) <> 0 then
@@ -495,7 +495,49 @@ begin
   result := right >= left;
 end;
 
-function R_PointOnSegSide(x: fixed_t; y: fixed_t; line: Pseg_t): boolean;
+function R_PointOnSide64(const x: fixed_t; const y: fixed_t; const node: Pnode_t): boolean;
+var
+  dx64: int64;
+  dy64: int64;
+  left64: int64;
+  right64: int64;
+begin
+  if node.dx = 0 then
+  begin
+    if x <= node.x then
+      result := node.dy > 0
+    else
+      result := node.dy < 0;
+    exit;
+  end;
+
+  if node.dy = 0 then
+  begin
+    if y <= node.y then
+      result := node.dx < 0
+    else
+      result := node.dx > 0;
+    exit;
+  end;
+
+  dx64 := int64(x) - int64(node.x);
+  dy64 := int64(y) - int64(node.y);
+
+  left64 := int64(node.dy div 256) * (dx64 div 256);
+  right64 := (dy64 div 256) * int64(node.dx div 256);
+
+  result := right64 >= left64;
+end;
+
+function R_PointOnSide(const x: fixed_t; const y: fixed_t; const node: Pnode_t): boolean;
+begin
+  if largemap then
+    result := R_PointOnSide64(x, y, node)
+  else
+    result := R_PointOnSide32(x, y, node);
+end;
+
+function R_PointOnSegSide32(x: fixed_t; y: fixed_t; line: Pseg_t): boolean;
 var
   lx: fixed_t;
   ly: fixed_t;
@@ -546,7 +588,59 @@ begin
   result := left <= right;
 end;
 
-function R_PointOnLineSide(x: fixed_t; y: fixed_t; line: Pline_t): boolean;
+function R_PointOnSegSide64(x: fixed_t; y: fixed_t; line: Pseg_t): boolean;
+var
+  lx: fixed_t;
+  ly: fixed_t;
+  ldx: fixed_t;
+  ldy: fixed_t;
+  dx64: int64;
+  dy64: int64;
+  left64: int64;
+  right64: int64;
+begin
+  lx := line.v1.x;
+  ly := line.v1.y;
+
+  ldx := line.v2.x - lx;
+  ldy := line.v2.y - ly;
+
+  if ldx = 0 then
+  begin
+    if x <= lx then
+      result := ldy > 0
+    else
+      result := ldy < 0;
+    exit;
+  end;
+
+  if ldy = 0 then
+  begin
+    if y <= ly then
+      result := ldx < 0
+    else
+      result := ldx > 0;
+    exit;
+  end;
+
+  dx64 := int64(x) - int64(lx);
+  dy64 := int64(y) - int64(ly);
+
+  left64 := int64(ldy div 256) * (dx64 div 256);
+  right64 := (dy64 div 256) * int64(ldx div 256);
+
+  result := left64 <= right64;
+end;
+
+function R_PointOnSegSide(x: fixed_t; y: fixed_t; line: Pseg_t): boolean;
+begin
+  if largemap then
+    result := R_PointOnSegSide64(x, y, line)
+  else
+    result := R_PointOnSegSide32(x, y, line);
+end;
+
+function R_PointOnLineSide32(x: fixed_t; y: fixed_t; line: Pline_t): boolean;
 var
   lx: fixed_t;
   ly: fixed_t;
@@ -584,17 +678,62 @@ begin
   dx := x - lx;
   dy := y - ly;
 
-  // Try to quickly decide by looking at sign bits.
-  if ((ldy xor ldx xor dx xor dy) and $80000000) <> 0 then
-  begin
-    result := ((ldy xor dx) and $80000000) <> 0;
-    exit;
-  end;
-
   left := IntFixedMul(ldy, dx);
   right := FixedIntMul(dy, ldx);
 
   result := left <= right;
+end;
+
+function R_PointOnLineSide64(x: fixed_t; y: fixed_t; line: Pline_t): boolean;
+var
+  lx: fixed_t;
+  ly: fixed_t;
+  ldx: fixed_t;
+  ldy: fixed_t;
+  dx64: int64;
+  dy64: int64;
+  left64: int64;
+  right64: int64;
+begin
+  lx := line.v1.x;
+  ly := line.v1.y;
+
+  ldx := line.v2.x - lx;
+  ldy := line.v2.y - ly;
+
+  if ldx = 0 then
+  begin
+    if x <= lx then
+      result := ldy > 0
+    else
+      result := ldy < 0;
+    exit;
+  end;
+
+  if ldy = 0 then
+  begin
+    if y <= ly then
+      result := ldx < 0
+    else
+      result := ldx > 0;
+    exit;
+  end;
+
+  dx64 := int64(x) - int64(lx);
+  dy64 := int64(y) - int64(ly);
+
+  left64 := int64(ldy div 256) * (dx64 div 256);
+  right64 := (dy64 div 256) * int64(ldx div 256);
+
+  result := left64 <= right64;
+end;
+
+function R_PointOnLineSide(x: fixed_t; y: fixed_t; line: Pline_t): boolean;
+begin
+  if largemap then
+    result := R_PointOnLineSide64(x, y, line)
+  else
+    result := R_PointOnLineSide32(x, y, line)
 end;
 
 //
