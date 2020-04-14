@@ -1602,14 +1602,123 @@ end;
 type
   radixceilingmissilewall_t = packed record
     wall_number: smallint;
+    //RTL
+    initialized: boolean;
+    mobjid: LongWord;
+    linelength: integer;
+    baseangle: angle_t;
+    nextticfire: integer;
+    destheight: fixed_t;
   end;
   radixceilingmissilewall_p = ^radixceilingmissilewall_t;
 
 procedure RA_CeilingMissileWall(const action: Pradixaction_t);
 var
   parms: radixceilingmissilewall_p;
+  li: Pline_t;
+  x, y, z: integer;
+  xlen, zlen: integer;
+  xpos, zpos: integer;
+  an: angle_t;
+  c, s: fixed_t;
+  mo: Pmobj_t;
+  target: Pmobj_t;
 begin
   parms := radixceilingmissilewall_p(@action.params);
+
+  if parms.wall_number < 0 then
+    exit;
+
+  li := @lines[parms.wall_number];
+
+  if li.backsector = nil then
+    exit;
+
+  if li.radixhitpoints <= 0 then  // Died
+  begin
+    if sides[li.sidenum[0]].toptexture = R_TextureNumForName(RX_WALL_PREFIX + '0064') then
+      sides[li.sidenum[0]].toptexture := R_TextureNumForName(RX_WALL_PREFIX + '0083');
+    if sides[li.sidenum[1]].toptexture = R_TextureNumForName(RX_WALL_PREFIX + '0064') then
+      sides[li.sidenum[1]].toptexture := R_TextureNumForName(RX_WALL_PREFIX + '0083');
+    action.suspend := 1;
+    exit;
+  end;
+
+  if not parms.initialized then
+  begin
+    target :=
+      PX_SpawnWallMissileObject(
+        li.v1.x div 2 + li.v2.x div 2,
+        li.v1.y div 2 + li.v2.y div 2,
+        li.frontsector.ceilingheight div 2 + li.frontsector.floorheight div 2
+      );
+    parms.mobjid := target.key;
+    parms.linelength := round(RX_LineLengthf(li));
+    parms.baseangle := R_PointToAngle2(li.v1.x, li.v1.y, li.v2.x, li.v2.y) - ANG90;
+    parms.nextticfire := -1;
+    parms.destheight := li.backsector.floorheight;
+    parms.initialized := true;
+  end
+  else
+    target := P_FindMobjFromKey(parms.mobjid);
+
+  // JVAL: 20200414 - Raise backsector's floor
+  if li.backsector.ceilingheight > parms.destheight then
+  begin
+    li.backsector.ceilingheight := li.backsector.ceilingheight - 2 * FRACUNIT;
+    if li.backsector.ceilingheight < parms.destheight then
+      li.backsector.ceilingheight := parms.destheight;
+  end;
+
+  if leveltime < parms.nextticfire then
+    exit;
+
+  parms.nextticfire := leveltime + TICRATE;
+
+  xlen := (parms.linelength + 64) div 128;
+  if li.frontsector.ceilingheight > li.backsector.ceilingheight then
+    zlen := (li.frontsector.ceilingheight div FRACUNIT - li.backsector.ceilingheight div FRACUNIT + 32) div 64  // front side
+  else
+    zlen := (li.backsector.ceilingheight div FRACUNIT - li.frontsector.ceilingheight div FRACUNIT + 32) div 64; // back side
+
+  if zlen = 0 then
+    exit;
+
+  if xlen = 0 then
+  begin
+    x := li.v1.x div 2 + li.v2.x div 2;
+    y := li.v1.y div 2 + li.v2.y div 2;
+  end
+  else
+  begin
+    xpos := Sys_Random mod xlen;
+    x := round((li.v1.x div xlen) * (xpos + 0.5) + (li.v2.x div xlen) * (xlen - xpos - 0.5));
+    y := round((li.v1.y div xlen) * (xpos + 0.5) + (li.v2.y div xlen) * (xlen - xpos - 0.5));
+  end;
+
+  if zlen = 0 then
+    z := li.frontsector.ceilingheight div 2 + li.backsector.ceilingheight div 2
+  else
+  begin
+    zpos := Sys_Random mod zlen;
+    z := round((li.frontsector.ceilingheight div zlen) * (zpos + 0.5) + (li.backsector.ceilingheight div zlen) * (zlen - zpos - 0.5));
+  end;
+
+  an := parms.baseangle + _SHLW(P_Random - P_Random, 21);
+  c := finecosine[an shr ANGLETOFINESHIFT];
+  s := finesine[an shr ANGLETOFINESHIFT];
+  x := x + WALLMISSILEOFFSET * c;
+  y := y + WALLMISSILEOFFSET * s;
+
+  mo := RX_SpawnRadixEnemyMissile(x, y, z);
+  if mo = nil then
+    exit;
+
+  mo.angle := an;
+  mo.target := target;
+  mo.momx := FixedMul(mo.info.speed, c);
+  mo.momy := FixedMul(mo.info.speed, s);
+  P_CheckMissileSpawn(mo);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

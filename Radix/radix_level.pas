@@ -910,6 +910,12 @@ var
         if doomsidedefs[j].sector = 64 then
           doomsidedefs[j].sector := 65;
     end
+    else if levelname = 'E2M3' then
+    begin
+      result := true;
+      doomsidedefs[329].textureoffset := 0;
+      doomsidedefs[330].textureoffset := 0;
+    end
     else if levelname = 'E2M4' then
     begin
       result := true;
