@@ -682,8 +682,17 @@ begin
   if backsector <> nil then
   begin
     // two sided line
-    pds.sprtopclip := nil;
-    pds.sprbottomclip := nil;
+    if completewall then
+    begin
+      pds.sprtopclip := @screenheightarray;
+      pds.sprbottomclip := @negonearray;
+    end
+    else
+    begin
+      pds.sprtopclip := nil;
+      pds.sprbottomclip := nil;
+    end;
+
     pds.silhouette := 0;
 
     if frontsector.floorheight > backsector.floorheight then
@@ -1275,8 +1284,17 @@ begin
   if backsector <> nil then
   begin
     // two sided line
-    pds.sprtopclip := nil;
-    pds.sprbottomclip := nil;
+    if completewall then
+    begin
+      pds.sprtopclip := @screenheightarray;
+      pds.sprbottomclip := @negonearray;
+    end
+    else
+    begin
+      pds.sprtopclip := nil;
+      pds.sprbottomclip := nil;
+    end;
+
     pds.silhouette := 0;
 
     if frontsector.floorheight > backsector.floorheight then
