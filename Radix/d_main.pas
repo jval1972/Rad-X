@@ -1960,16 +1960,24 @@ begin
     if W_CheckNumForName('e3m1') <> -1 then
     begin
       gamemode := registered;
-      SUC_SetGameMode('Registered Doom');
     end
     else if W_CheckNumForName('e1m1') <> -1 then
     begin
       gamemode := shareware;
-      SUC_SetGameMode('Shareware Doom');
     end
     else
       I_Error('Game mode indetermined'#13#10);
   end;
+
+  if radixversion = rvunknown then
+  begin
+    if gamemode = shareware then
+      SUC_SetGameMode('Radix Shareware')
+    else
+      SUC_SetGameMode('Radix Registered');
+  end
+  else
+    SUC_SetGameMode(radixversioninfo[Ord(radixversion)].versionstring);
 
   SUC_Progress(59);
 

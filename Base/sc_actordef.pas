@@ -2695,19 +2695,22 @@ begin
       lumplist.Add(i);
 
   {$IFNDEF FPC}
-  SUC_SecondaryProgressInit(lumplist.Count);
+  if lumplist.Count > 50 then
+    SUC_SecondaryProgressInit(lumplist.Count);
   {$ENDIF}
 
   for i := 0 to lumplist.Count - 1 do
   begin
     {$IFNDEF FPC}
-    SUC_SecondaryProgress(i);
+    if lumplist.Count > 50 then
+      SUC_SecondaryProgress(i);
     {$ENDIF}
     SC_ParseActordefLump(W_TextLumpNum(lumplist[i]));
   end;
 
   {$IFNDEF FPC}
-  SUC_SecondaryProgressDone;
+  if lumplist.Count > 50 then
+    SUC_SecondaryProgressDone;
   {$ENDIF}
   PAK_StringIterator(ACTORDEFLUMPNAME, SC_ParseActordefLump);
   PAK_StringIterator(ACTORDEFLUMPNAME + '.txt', SC_ParseActordefLump);

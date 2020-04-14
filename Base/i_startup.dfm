@@ -35,9 +35,8 @@ object StartUpConsoleForm: TStartUpConsoleForm
       '')
     ParentFont = False
     ReadOnly = True
-    ScrollBars = ssBoth
+    ScrollBars = ssVertical
     TabOrder = 0
-    WordWrap = False
   end
   object GamePanel: TPanel
     Left = 0

@@ -971,10 +971,7 @@ begin
 
   if not parms.initialized then
   begin
-    S_AmbientSound(
-      sec.soundorg.x,
-      sec.soundorg.y,
-      radixsounds[parms.start_sound].name);
+    S_AmbientSound(sec.soundorg.x, sec.soundorg.y, radixsounds[parms.start_sound].name);
     parms.initialized := true;
   end;
 
