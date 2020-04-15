@@ -111,6 +111,7 @@ var
   num: integer;
   N: TDNumberList;
   i: integer;
+  mnextx, mnexty: fixed_t;
 begin
   if (grid_X_size = 0) or (grid_Y_size = 0) or (mo = nil) then
   begin
@@ -118,14 +119,30 @@ begin
     exit;
   end;
 
+  if (mo.momx = 0) and (mo.momy = 0) then
+  begin
+    rx := (sec.radixmapXmult * (mo.x div FRACUNIT) - sec.radixmapXadd) div 64;
+    ry := (sec.radixmapYmult * (mo.y div FRACUNIT) - sec.radixmapYadd) div 64;
+
+    num := ry * grid_X_size + rx;
+
+    result.numpositions := 1;
+    result.positions[0] := num;
+    
+    exit;
+  end;
+
   N := TDNumberList.Create;
+
+  mnextx := mo.x + mo.momx;
+  mnexty := mo.y + mo.momy;
 
   // 3 steps between the mo movement
 
   //////////////////////////////////////////////////////////////////////////////
   // Step 1
-  mx := ((mo.prevx div FRACUNIT) * 2 + (mo.x div FRACUNIT)) div 3;
-  my := ((mo.prevy div FRACUNIT) * 2 + (mo.y div FRACUNIT)) div 3;
+  mx := ((mnextx div FRACUNIT) * 2 + (mo.x div FRACUNIT)) div 3;
+  my := ((mnexty div FRACUNIT) * 2 + (mo.y div FRACUNIT)) div 3;
   sec := R_PointInSubSector(mx * FRACUNIT, my * FRACUNIT).sector;
 
   // JVAL: 20200305 - Works only when ::radixmapXmult & ::radixmapYmult are -1 or 1
@@ -137,8 +154,8 @@ begin
 
   //////////////////////////////////////////////////////////////////////////////
   // Step 2
-  mx := ((mo.prevx div FRACUNIT) + (mo.x div FRACUNIT) * 2) div 3;
-  my := ((mo.prevy div FRACUNIT) + (mo.y div FRACUNIT) * 2) div 3;
+  mx := ((mnextx div FRACUNIT) + (mo.x div FRACUNIT) * 2) div 3;
+  my := ((mnexty div FRACUNIT) + (mo.y div FRACUNIT) * 2) div 3;
   sec := R_PointInSubSector(mx * FRACUNIT, my * FRACUNIT).sector;
 
   // JVAL: 20200305 - Works only when ::radixmapXmult & ::radixmapYmult are -1 or 1
