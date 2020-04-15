@@ -1567,17 +1567,34 @@ end;
 //  and possibly explodes it right there.
 //
 function P_CheckMissileSpawn(th: Pmobj_t): boolean;
+var
+  maxmom: fixed_t;
+  dx, dy, dz: fixed_t;
 begin
   th.tics := th.tics - (P_Random and 3);
 
   if th.tics < 1 then
     th.tics := 1;
 
+  maxmom := Max3I(abs(th.momx), abs(th.momy), abs(th.momz));
+  if maxmom > 16 * FRACUNIT then
+  begin
+    dx := FixedMul(th.momx, FixedDiv(16 * FRACUNIT, maxmom)) div 2;
+    dy := FixedMul(th.momx, FixedDiv(16 * FRACUNIT, maxmom)) div 2;
+    dz := FixedMul(th.momx, FixedDiv(16 * FRACUNIT, maxmom)) div 2;
+  end
+  else
+  begin
+    dx := th.momx div 2;
+    dy := th.momy div 2;
+    dz := th.momz div 2;
+  end;
+
   // move a little forward so an angle can
   // be computed if it immediately explodes
-  th.x := th.x + th.momx div 2;
-  th.y := th.y + th.momy div 2;
-  th.z := th.z + th.momz div 2;
+  th.x := th.x + dx;
+  th.y := th.y + dy;
+  th.z := th.z + dz;
 
   if not P_TryMove(th, th.x, th.y) then
   begin
