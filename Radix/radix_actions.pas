@@ -1257,14 +1257,63 @@ type
     sector_id: smallint;
     approx_x: LongWord;
     approx_y: LongWord;
+    // RTL
+    doom_x: fixed_t;
+    doom_y: fixed_t;
+    sndcountdown: integer;
+    sndcalced: boolean;
   end;
   radixsectorbasedgravity_p = ^radixsectorbasedgravity_t;
 
 procedure RA_SectorBasedGravity(const action: Pradixaction_t);
 var
   parms: radixsectorbasedgravity_p;
+  cnt: integer;
+  i: integer;
+  mo: Pmobj_t;
+  momz: fixed_t;
 begin
   parms := radixsectorbasedgravity_p(@action.params);
+
+  for i := 0 to MAXPLAYERS - 1 do
+    if playeringame[i] then
+    begin
+      mo := players[i].mo;
+      if mo <> nil then
+        if Psubsector_t(mo.subsector).sector.iSectorID = parms.sector_id then
+        begin
+          momz := mo.momz;
+          if IsIntegerInRange(momz, -16 * FRACUNIT, 16 * FRACUNIT) then
+          begin
+            momz := GetIntegerInRange(momz + parms.direction * 8192 * (1 shl parms.strength), -16 * FRACUNIT, 16 * FRACUNIT);
+            mo.momz := momz;
+          end;
+        end;
+    end;
+
+  if not parms.sndcalced then
+  begin
+    parms.doom_x := RX_RadixX2Doom(parms.approx_x, parms.approx_y) * FRACUNIT;
+    parms.doom_y := RX_RadixY2Doom(parms.approx_x, parms.approx_y) * FRACUNIT;
+    parms.sndcalced := true;
+  end;
+
+  if parms.sndcountdown > 0 then
+  begin
+    dec(parms.sndcountdown);
+    exit;
+  end;
+
+  S_AmbientSound(
+      parms.doom_x,
+      parms.doom_y,
+      radixsounds[Ord(sfx_SndGravityWell)].name);
+
+  cnt := S_RadixSoundDuration(Ord(sfx_SndGravityWell));
+  if cnt < 0 then
+    parms.sndcountdown := 10 * TICRATE // JVAL: 10 seconds to replay sound
+  else
+    parms.sndcountdown := cnt; // JVAL: 20200415 - Restart sound after it finishes
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
