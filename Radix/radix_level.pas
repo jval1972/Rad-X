@@ -929,6 +929,8 @@ var
       for j := 0 to numdoomsidedefs - 1 do
         if doomsidedefs[j].sector = 2 then
           doomsidedefs[j].sector := 1;
+      doomsectors[140].ceilingheight := 768;
+      doomsectors[160].ceilingpic := stringtochar8('F_SKY1');
     end
     else if levelname = 'E2M7' then
     begin
