@@ -393,7 +393,7 @@ begin
            (ceilingline.backsector <> nil) and
            (ceilingline.backsector.ceilingpic = skyflatnum) then
           // JVAL: 20200416 - Extra check for lower textures up to ceiling
-          if ceilingline.backsector.floorheight < ceilingline.frontsector.ceilingheight then
+          if mo.z >= ceilingline.backsector.floorheight then
           begin
             // Hack to prevent missiles exploding
             // against the sky.
