@@ -392,13 +392,15 @@ begin
         if (ceilingline <> nil) and
            (ceilingline.backsector <> nil) and
            (ceilingline.backsector.ceilingpic = skyflatnum) then
-        begin
-          // Hack to prevent missiles exploding
-          // against the sky.
-          // Does not handle sky floors.
-          P_RemoveMobj(mo);
-          exit;
-        end;
+          // JVAL: 20200416 - Extra check for lower textures up to ceiling
+          if ceilingline.backsector.floorheight < ceilingline.frontsector.ceilingheight then
+          begin
+            // Hack to prevent missiles exploding
+            // against the sky.
+            // Does not handle sky floors.
+            P_RemoveMobj(mo);
+            exit;
+          end;
         P_ExplodeMissile(mo);
       end
       else
