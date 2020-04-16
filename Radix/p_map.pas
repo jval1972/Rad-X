@@ -437,14 +437,14 @@ begin
     exit;
   end;
 
-  if not P_ThingsInSameZ(thing, tmthing) then // JVAL: 20200412 -> Check z axis
+  // don't clip against self
+  if thing = tmthing then
   begin
     result := true;
     exit;
   end;
 
-  // don't clip against self
-  if thing = tmthing then
+  if not P_ThingsInSameZ(thing, tmthing) then // JVAL: 20200412 -> Check z axis
   begin
     result := true;
     exit;
@@ -950,6 +950,8 @@ var
   oldonfloorz: boolean;
   dropoffmargin: fixed_t;
   jumpupmargin: fixed_t;
+  dist: fixed_t;
+  iters: integer;
 begin
   floatok := false;
   if (thing.flags and MF_MISSILE = 0) and (thing.flags3_ex and MF3_EX_NOMAXMOVE = 0) then
@@ -962,10 +964,17 @@ begin
   end
   else
   begin
-    for i := 1 to 4 do
+    if thing.radius = 0 then
+      iters := 8
+    else
     begin
-      x1 := (thing.x div 4) * (4 - i) + (x div 4) * i;
-      y1 := (thing.y div 4) * (4 - i) + (y div 4) * i;
+      dist := P_AproxDistance(thing.x - x, thing.y - y);
+      iters := MinI(8, FixedDiv(dist, thing.radius) div FRACUNIT + 4);
+    end;
+    for i := 1 to iters do
+    begin
+      x1 := (thing.x div iters) * (iters - i) + (x div iters) * i;
+      y1 := (thing.y div iters) * (iters - i) + (y div iters) * i;
       if not P_CheckPosition(thing, x1, y1) then
       begin
         result := false;  // solid wall or thing
