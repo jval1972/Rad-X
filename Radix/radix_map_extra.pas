@@ -533,7 +533,8 @@ begin
   area := (P_AproxDistance(x2 - x1, y2 - y1) div FRACUNIT * dz) div (64 * 64);
   cnt := (area * fracdensity) div FRACUNIT;
 
-  if cnt <= 0 then cnt := 1;  // At least one explosion
+  if cnt <= 0 then
+    cnt := 1;  // At least one explosion
 
   for i := 0 to cnt - 1 do
   begin
@@ -547,15 +548,16 @@ begin
       angle := R_PointToAngle2(x1, y1, x2, y2) + ANG90;
 
     angle := angle shr ANGLETOFINESHIFT;
-    c := finecosine[angle shr ANGLETOFINESHIFT];
-    s := finesine[angle shr ANGLETOFINESHIFT];
+    c := finecosine[angle];
+    s := finesine[angle];
     x := x + WALLEXPLOSIONOFFSET * c;
     y := y + WALLEXPLOSIONOFFSET * s;
 
     mo := RX_SpawnRadixBigExplosion(x, y, z);
     mo.flags3_ex := mo.flags3_ex or MF3_EX_NOSOUND;
-    mo.tics := mo.tics + (P_Random and 15); // Some delay
+    mo.tics := mo.tics + (P_Random and 63); // Some delay
   end;
+
   S_AmbientSound(x1 div 2 + x2 div 2, y1 div 2 + y2 div 2, 'radix/SndExplode');
 end;
 
@@ -572,7 +574,7 @@ begin
   begin
     z1 := l.frontsector.floorheight;
     z2 := l.frontsector.ceilingheight;
-    RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 0, FRACUNIT);
+    RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 0, 2 * FRACUNIT);
   end
   else
   begin
@@ -581,28 +583,28 @@ begin
     begin
       z1 := l.frontsector.ceilingheight;
       z2 := l.backsector.ceilingheight;
-      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 1, FRACUNIT);
+      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 1, 2 * FRACUNIT);
     end;
     if (l.frontsector.ceilingheight > l.backsector.ceilingheight) and
        (l.frontsector.renderflags or SRF_SLOPECEILING <> 0) then
     begin
       z1 := l.backsector.ceilingheight;
       z2 := l.frontsector.ceilingheight;
-      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 0, FRACUNIT);
+      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 0, 2 * FRACUNIT);
     end;
     if (l.frontsector.floorheight < l.backsector.floorheight) and
        (l.frontsector.renderflags or SRF_SLOPEFLOOR <> 0) then
     begin
       z1 := l.frontsector.floorheight;
       z2 := l.backsector.floorheight;
-      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 0, FRACUNIT);
+      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 0, 2 * FRACUNIT);
     end;
     if (l.frontsector.floorheight > l.backsector.floorheight) and
        (l.backsector.renderflags or SRF_SLOPEFLOOR <> 0) then
     begin
       z1 := l.backsector.floorheight;
       z2 := l.frontsector.floorheight;
-      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 1, FRACUNIT);
+      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 1, 2 * FRACUNIT);
     end;
   end;
 end;
@@ -624,11 +626,8 @@ begin
       l.radixflags := l.radixflags and not RWF_ACTIVATETRIGGER;
       radixtriggers[l.radixtrigger].suspended := 0;
       RX_RunTrigger(l.radixtrigger);
-    end
-    else
-    begin
-      RX_LineExplosion(l);
     end;
+    RX_LineExplosion(l);
     l.radixflags := l.radixflags and not RWF_MISSILEWALL;
   end;
 end;
