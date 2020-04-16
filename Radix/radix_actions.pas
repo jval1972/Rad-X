@@ -240,11 +240,11 @@ type
     surface: smallint;
     max_height: smallint;
     min_height: smallint;
-    max_delay: smallint;
-    speed: byte;
-    surface_type: byte;
-    direction: byte;
-    stop_position: byte;
+    max_delay: smallint;  // JVAL: 20200416 -> 0, 35, 70 in RADIX.DAT
+    speed: byte;          // JVAL: 20200416 -> 0, 1, 3, 4, 6, 7, 8, 9, 10 & 12 in RADIX.DAT
+    surface_type: byte;   // JVAL: 20200416 -> 0, 1 in RADIX.DAT
+    direction: byte;      // JVAL: 20200416 -> 1, 255 in RADIX.DAT
+    stop_position: byte;  // JVAL: 20200416 -> 1, 2 in RADIX.DAT
     // RTL
     initialized: boolean;
   end;
@@ -914,9 +914,11 @@ type
     activate_trig: smallint;
     trigger_number: smallint;
     // RTL
-    initialized: boolean;
+    sound_initialized: boolean;
     delay_saved: boolean;
     save_delay: integer;
+    dir_initialized: boolean;
+    initial_direction: byte;
   end;
   radixnewmovingsurface_p = ^radixnewmovingsurface_t;
 
@@ -941,6 +943,7 @@ label
     begin
       changed_direction := true;
       parms.direction := $FF;
+      parms.stop_position := 1;
     end
     // JVAL: 20200405
     //  If "direction" is Down ($FF) and "stop position" is Max (1)
@@ -949,6 +952,7 @@ label
     begin
       changed_direction := true;
       parms.direction := 1;
+      parms.stop_position := 2;
     end;
   end;
 
@@ -969,16 +973,24 @@ begin
 
   sec := @sectors[parms.surface];
 
-  if not parms.initialized then
+  if not parms.sound_initialized then
   begin
     S_AmbientSound(sec.soundorg.x, sec.soundorg.y, radixsounds[parms.start_sound].name);
-    parms.initialized := true;
+    parms.sound_initialized := true;
+  end;
+
+  if not parms.dir_initialized then
+  begin
+    parms.initial_direction := parms.direction;
+    parms.dir_initialized := true;
   end;
 
   if parms.direction = 1 then // Up
   begin
     dest_height := parms.max_height * FRACUNIT;
-    if parms.speed > MOVINGSURFACETHRESHHOLD then
+    if parms.speed = 35 then
+      step := 10 * FRACUNIT
+    else if parms.speed > MOVINGSURFACETHRESHHOLD then
       step := (1 shl MOVINGSURFACETHRESHHOLD) * FRACUNIT
     else
       step := (1 shl parms.speed) * FRACUNIT;
@@ -986,13 +998,29 @@ begin
   else if (parms.direction = $FF) or ((parms.direction = 0) and (parms.stop_position = 2)) then // Down
   begin
     dest_height := parms.min_height * FRACUNIT;
-    if parms.speed > MOVINGSURFACETHRESHHOLD then
+    if parms.speed = 35 then
+      step := -10 * FRACUNIT
+    else if parms.speed > MOVINGSURFACETHRESHHOLD then
       step := -(1 shl MOVINGSURFACETHRESHHOLD) * FRACUNIT
     else
       step := -(1 shl parms.speed) * FRACUNIT;
   end
-  else
+  else if parms.direction = 0 then
+  begin
+    if parms.surface_type = 1 then // floor
+    begin
+      parms.direction := $FF; // Down
+      parms.stop_position := 1;
+      dest_height := parms.min_height;
+    end
+    else
+    begin
+      parms.direction := 1; // Up
+      parms.stop_position := 2;
+      dest_height := parms.max_height;
+    end;
     exit; // ouch
+  end;
 
   changed_direction := false;
   // JVAL: 20200403 - Avoid interpolation for fast moving sectors
@@ -1041,9 +1069,11 @@ finish_move:
     sec.soundorg.x,
     sec.soundorg.y,
     radixsounds[parms.stop_sound].name);
-  parms.initialized := false;
+  parms.sound_initialized := false;
   if not changed_direction then
-    action.suspend := 1;  // JVAL: 202003 - Disable action
+    action.suspend := 1  // JVAL: 202003 - Disable action
+  else if (parms.initial_direction = parms.direction) and (parms.stop_position in [1, 2]) then
+    action.suspend := 1;
   parms.max_delay := parms.save_delay;  // JVAL: 20200405 - Restore old delay
   if parms.activate_trig <> 0 then
   begin
