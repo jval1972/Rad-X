@@ -365,6 +365,8 @@ const
   MF3_EX_DAMAGEWHENTOUCHED = $1000;
   // Same as above but the toucher is player
   MF3_EX_DAMAGEONPLAYERTOUCH = $2000;
+  // Bobing all the time
+  MF3_EX_BOBING = $4000;
 
 type
 // Map Object definition.

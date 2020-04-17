@@ -337,6 +337,10 @@ procedure A_TraceNearestPlayer(actor: Pmobj_t);
 
 procedure A_PlayerHurtExplode(actor: Pmobj_t);
 
+procedure A_NoBobing(actor: Pmobj_t);
+
+procedure A_Bobing(actor: Pmobj_t);
+
 const
   FLOATBOBSIZE = 64;
   FLOATBOBMASK = FLOATBOBSIZE - 1;
@@ -3434,6 +3438,16 @@ begin
 
   if actor.z <= actor.floorz then
     P_HitFloor(actor);
+end;
+
+procedure A_NoBobing(actor: Pmobj_t);
+begin
+  actor.flags3_ex := actor.flags3_ex and not MF3_EX_BOBING;
+end;
+
+procedure A_Bobing(actor: Pmobj_t);
+begin
+  actor.flags3_ex := actor.flags3_ex or MF3_EX_BOBING;
 end;
 
 end.

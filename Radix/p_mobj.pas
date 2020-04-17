@@ -789,45 +789,55 @@ begin
     mobj.z := mobj.floorz + FloatBobOffsets[mobj.bob];
     mobj.bob := (mobj.bob + 1) and FLOATBOBMASK;
   end
-  else if (mobj.z <> mobj.floorz) or (mobj.momz <> 0) then
+  else
   begin
-    if mobj.flags2_ex and MF2_EX_PASSMOBJ <> 0 then
+    // JVAL: 20200417 - MF3_EX_BOBING flag
+    if mobj.flags3_ex and MF3_EX_BOBING <> 0 then
     begin
-      onmo := P_CheckOnmobj(mobj);
-      if onmo = nil then
-        P_ZMovement(mobj)
-      else
+      mobj.momz := mobj.momz - FloatBobOffsets[mobj.bob] div 4;
+      mobj.bob := (mobj.bob + 1) and FLOATBOBMASK;
+      mobj.momz := mobj.momz + FloatBobOffsets[mobj.bob] div 4;
+    end;
+    if (mobj.z <> mobj.floorz) or (mobj.momz <> 0) then
+    begin
+      if mobj.flags2_ex and MF2_EX_PASSMOBJ <> 0 then
       begin
-        if (mobj.player <> nil) and (mobj.momz < 0) then
+        onmo := P_CheckOnmobj(mobj);
+        if onmo = nil then
+          P_ZMovement(mobj)
+        else
         begin
-          mobj.flags2_ex := mobj.flags2_ex or MF2_EX_ONMOBJ;
-          mobj.momz := 0;
-        end;
-        if (mobj.player <> nil) and (onmo.player <> nil) then
-        begin
-          mobj.momx := onmo.momx;
-          mobj.momy := onmo.momy;
-          if onmo.z < onmo.floorz then
+          if (mobj.player <> nil) and (mobj.momz < 0) then
           begin
-            mobj.z := mobj.z + onmo.floorz - onmo.z;
-            if onmo.player <> nil then
+            mobj.flags2_ex := mobj.flags2_ex or MF2_EX_ONMOBJ;
+            mobj.momz := 0;
+          end;
+          if (mobj.player <> nil) and (onmo.player <> nil) then
+          begin
+            mobj.momx := onmo.momx;
+            mobj.momy := onmo.momy;
+            if onmo.z < onmo.floorz then
             begin
-              Pplayer_t(onmo.player).viewheight := Pplayer_t(onmo.player).viewheight - (onmo.floorz - onmo.z);
-              Pplayer_t(onmo.player).deltaviewheight := (PVIEWHEIGHT - Pplayer_t(onmo.player).viewheight) div 8;
+              mobj.z := mobj.z + onmo.floorz - onmo.z;
+              if onmo.player <> nil then
+              begin
+                Pplayer_t(onmo.player).viewheight := Pplayer_t(onmo.player).viewheight - (onmo.floorz - onmo.z);
+                Pplayer_t(onmo.player).deltaviewheight := (PVIEWHEIGHT - Pplayer_t(onmo.player).viewheight) div 8;
+              end;
+              onmo.z := onmo.floorz;
             end;
-            onmo.z := onmo.floorz;
           end;
         end;
-      end;
-    end
-    else
-      P_ZMovement(mobj);
+      end
+      else
+        P_ZMovement(mobj);
 
-    if mobj.player <> nil then
-      P_FixPlayerViewz(mobj.player);
+      if mobj.player <> nil then
+        P_FixPlayerViewz(mobj.player);
 
-    if not Assigned(mobj.thinker._function.acv) then
-      exit; // mobj was removed
+      if not Assigned(mobj.thinker._function.acv) then
+        exit; // mobj was removed
+    end;
   end;
 
 
@@ -914,7 +924,7 @@ begin
   mobj.pushfactor := info.pushfactor;
   mobj.renderstyle := info.renderstyle;
   mobj.alpha := info.alpha;
-  if mobj.flags_ex and MF_EX_FLOATBOB <> 0 then
+  if (mobj.flags_ex and MF_EX_FLOATBOB <> 0) or (mobj.flags3_ex and MF3_EX_BOBING <> 0) then
     mobj.bob := N_Random and FLOATBOBMASK;
   mobj.health := info.spawnhealth;
 

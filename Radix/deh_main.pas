@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 283;
+  DEHNUMACTIONS = 285;
 
 type
   deh_action_t = record
@@ -2013,6 +2013,7 @@ begin
   mobj_flags3_ex.Add('MF3_EX_NOSOUND');
   mobj_flags3_ex.Add('MF3_EX_DAMAGEWHENTOUCHED');
   mobj_flags3_ex.Add('MF3_EX_DAMAGEONPLAYERTOUCH');
+  mobj_flags3_ex.Add('MF3_EX_BOBING');
 
   mobj_flags4_ex := TDTextList.Create;
 
@@ -2891,6 +2892,12 @@ begin
   deh_actions[282].action.acp1 := @A_PlayerHurtExplode;
   deh_actions[282].name := strupper('A_PlayerHurtExplode');
   {$IFDEF DLL}deh_actions[282].decl := 'A_PlayerHurtExplode(damage: integer, radius: integer)';{$ENDIF}
+  deh_actions[283].action.acp1 := @A_NoBobing;
+  deh_actions[283].name := strupper('A_NoBobing');
+  {$IFDEF DLL}deh_actions[283].decl := 'A_NoBobing()';{$ENDIF}
+  deh_actions[284].action.acp1 := @A_Bobing;
+  deh_actions[284].name := strupper('A_Bobing');
+  {$IFDEF DLL}deh_actions[284].decl := 'A_Bobing()';{$ENDIF}
 
   deh_strings.numstrings := 0;
   deh_strings.realnumstrings := 0;
