@@ -122,7 +122,9 @@ var
               end
               else
                 I_Warning('SC_Preprocess(): Invalid recoursive call of include file %s'#13#10, [s2]);
-            end;
+            end
+            else
+              I_Warning('SC_Preprocess(): Can not find include file %s'#13#10, [s2]);
           end;
         end;
       end
