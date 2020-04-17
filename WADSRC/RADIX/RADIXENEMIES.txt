@@ -135,21 +135,91 @@ ACTOR MT_BIOMINE1 1028
 ///////////////////////////////
 // MT_BIOMINE2
 ///////////////////////////////
+ACTOR MT_BIOMINE2_CHUNK1
+{
+  Radius 12
+  Height 12
+  Health 1000
+  Mass 2
+  Reactiontime 8
+  +MF3_EX_FLOORBOUNCE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4))
+      XR29 E -1
+    }
+  }
+}
+
+ACTOR MT_BIOMINE2_CHUNK2
+{
+  Radius 32
+  Height 16
+  Health 1000
+  Mass 10
+  Reactiontime 8
+  +MF3_EX_FLOORBOUNCE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3))
+      XR29 F -1
+    }
+  }
+}
+
 ACTOR MT_BIOMINE2 1029
 {
   Radius 32
   Height 56
   Health 40
-  Gravity 0
-  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT
+  Mass 40
+  Speed 8
+  TouchDamage 10
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_NOGRAVITY
+  +MF_FLOAT
+  +MF_COUNTKILL
+  +MF_NOBLOOD
+  +MF_EX_SPAWNFLOAT
+  +MF2_EX_JUMPDOWN
+  +MF2_EX_JUMPUP
+  +MF3_EX_DAMAGEONPLAYERTOUCH
+  +MF3_EX_BOBING
   States
   {
-  Spawn:
-    XR29 A 5
-    XR29 B 5
-    XR29 C 5
-    XR29 B 5
-    Loop
+    Spawn:
+      XR29 A 5
+      XR29 B 5
+      XR29 C 5
+      XR29 B 5 A_Wander
+      Loop
+    Death:
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_Fall
+	  TNT1 A 0 A_Gravity
+      TNT1 A 0 A_NoBobing
+      TNT1 A 0 A_PlayerHurtExplode(RANDOMPICK(100,110,120), 64)
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,0,0,0,0,0,0,0)
+      TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
+      TNT1 A 0 A_SpawnItemEx("MT_BIOMINE2_CHUNK1",0,0,0,RANDOMPICK(-1,1),RANDOMPICK(-1,1),FLOATRANDOM(2,3),RANDOM(0,179)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_BIOMINE2_CHUNK1",0,0,0,RANDOMPICK(-1,1),RANDOMPICK(-1,1),FLOATRANDOM(2,3),RANDOM(0,179)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_BIOMINE2_CHUNK1",0,0,0,RANDOMPICK(-1,1),RANDOMPICK(-1,1),FLOATRANDOM(2,3),RANDOM(0,179)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_BIOMINE2_CHUNK1",0,0,0,RANDOMPICK(-1,1),RANDOMPICK(-1,1),FLOATRANDOM(2,3),RANDOM(0,179)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_BIOMINE2_CHUNK2",0,0,0,RANDOMPICK(-1,0,1)/2,RANDOMPICK(-1,0,1)/2,FLOATRANDOM(3,4),RANDOM(0,179)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,0,0)
+      XR29 D 5 BRIGHT A_GlowLight "YELLOW"
+      XR29 D 5 A_GlowLight "NONE"
+      XR29 D -1
   }
 }
 

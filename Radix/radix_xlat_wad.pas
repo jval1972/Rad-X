@@ -1618,6 +1618,10 @@ begin
 
   // MT_BIOMINE2
   MakeNonRotatingSprite('PowerBiomine', _MTRX_BIOMINE2, 3);
+  MakeOneSprite('BlackBioBottom', _MTRX_BIOMINE2, nil, 32, 32, false, false, 'D');
+  MakeOneSprite('BlackBioChunk', _MTRX_BIOMINE2, nil, 7, 14, false, false, 'E');
+  MakeOneSprite('BlackBioTop', _MTRX_BIOMINE2, nil, 31, 22, false, false, 'F');
+
 
   // MT_ALIENFODDER
   MakeRotatingSprite8('AlienFodder', _MTRX_ALIENFODDER, 3, nil, 68, 101, false, false);
