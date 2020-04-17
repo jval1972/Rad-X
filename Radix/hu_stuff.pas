@@ -109,9 +109,12 @@ var
   message_dontfuckwithme: boolean;
   message_nottobefuckedwith: boolean;
 
+const
+  NUMMAPNAMES = 45;
+
 var
 // DOOM shareware/registered/retail (Ultimate) names.
-  mapnames: array[0..44] of string;
+  mapnames: array[0..NUMMAPNAMES - 1] of string;
 
   player_names: array[0..3] of string;
 
@@ -209,8 +212,14 @@ begin
 end;
 
 function HU_TITLE: string;
+var
+  mapid: integer;
 begin
-  result := mapnames[(gameepisode - 1) * 9 + gamemap - 1];
+  mapid := (gameepisode - 1) * 9 + gamemap - 1;
+  if IsIntegerInRange(mapid, 0, NUMMAPNAMES - 1) then
+    result := mapnames[mapid]
+  else
+    sprintf(result, 'E%dM%d', [gameepisode, gamemap]);
 end;
 
 var
