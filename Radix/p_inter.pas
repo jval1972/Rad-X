@@ -1130,9 +1130,8 @@ begin
 
   // Some close combat weapons should not
   // inflict thrust and push the victim out of reach,
-  // thus kick away unless using the chainsaw.
-  if (inflictor <> nil) and (target.flags and MF_NOCLIP = 0) and
-    ((source = nil) or (source.player = nil) or (Pplayer_t(source.player).readyweapon <> wp_enchancedepc)) then
+  // thus kick away
+  if (inflictor <> nil) and (target.flags and MF_NOCLIP = 0) then
   begin
     ang := R_PointToAngle2(inflictor.x, inflictor.y, target.x, target.y);
 
