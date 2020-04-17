@@ -228,7 +228,8 @@ end;
 function PIT_AddRadarThing(thing: Pmobj_t): boolean;
 begin
   if thing.flags and MF_COUNTKILL <> 0 then
-    radar_list.Add(integer(thing));
+    if thing.health > 0 then
+      radar_list.Add(integer(thing));
   result := true;
 end;
 
