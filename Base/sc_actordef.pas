@@ -2695,6 +2695,10 @@ begin
   SUC_Disable;
   {$ENDIF}
 
+  // JVAL: 20200417 - Parse PK3 lumps first for ACTORDEF lumps
+  PAK_StringIterator(ACTORDEFLUMPNAME, SC_ParseActordefLump);
+  PAK_StringIterator(ACTORDEFLUMPNAME + '.txt', SC_ParseActordefLump);
+
 // Retrive actordef lumps
   lumplist := TDNumberList.Create;
   for i := 0 to W_NumLumps - 1 do
@@ -2719,8 +2723,6 @@ begin
   if lumplist.Count > 50 then
     SUC_SecondaryProgressDone;
   {$ENDIF}
-  PAK_StringIterator(ACTORDEFLUMPNAME, SC_ParseActordefLump);
-  PAK_StringIterator(ACTORDEFLUMPNAME + '.txt', SC_ParseActordefLump);
 
   lumplist.Free;
 
