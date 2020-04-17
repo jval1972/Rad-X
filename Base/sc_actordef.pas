@@ -256,6 +256,7 @@ end;
 
 const
   ORIGINALSTATEMARKER = $FFFFF;
+  RADIXDEFLUMPNAME = 'RADIXDEF';
   ACTORDEFLUMPNAME = 'ACTORDEF';
   SNDINFOLUMPNAME = 'SNDINFO';
 
@@ -2695,12 +2696,22 @@ begin
   SUC_Disable;
   {$ENDIF}
 
+
+  // JVAL: 20200417 - Parse RADIXDEF lump
+  PAK_StringIterator(RADIXDEFLUMPNAME, SC_ParseActordefLump);
+  PAK_StringIterator(RADIXDEFLUMPNAME + '.txt', SC_ParseActordefLump);
+
   // JVAL: 20200417 - Parse PK3 lumps first for ACTORDEF lumps
   PAK_StringIterator(ACTORDEFLUMPNAME, SC_ParseActordefLump);
   PAK_StringIterator(ACTORDEFLUMPNAME + '.txt', SC_ParseActordefLump);
 
-// Retrive actordef lumps
+// Retrive RADIXDEF lumps
   lumplist := TDNumberList.Create;
+  for i := 0 to W_NumLumps - 1 do
+    if char8tostring(W_GetNameForNum(i)) = RADIXDEFLUMPNAME then
+      lumplist.Add(i);
+
+// Retrive ACTORDEF lumps
   for i := 0 to W_NumLumps - 1 do
     if char8tostring(W_GetNameForNum(i)) = ACTORDEFLUMPNAME then
       lumplist.Add(i);
