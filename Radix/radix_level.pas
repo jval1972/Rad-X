@@ -1048,6 +1048,84 @@ var
     end;
   end;
 
+  // Slpit long linedefs
+  function split_long_lidedefs: boolean;
+  const
+    SPLITDELTA = 260.0;
+    SPLITSIZE = 256.0;
+  var
+    j: integer;
+    cnt: integer;
+    flen: float;
+    dx, dy: integer;
+    dline1, dline2: Pmaplinedef_t;
+    newx, newy: integer;
+    newv: integer;
+    A: PBooleanArray;
+    at: byte;
+  begin
+    A := mallocz(numdoomlinedefs);
+
+    for j := 0 to header.numactions - 1 do
+    begin
+      at := ractions[j].action_type;
+      if at in [0, 2, 4, 5, 21, 24, 25, 30, 40] then
+      begin
+        if ractions[j].params[0] >= 0 then
+          A[ractions[j].params[0]] := true;
+      end
+      else if at = 28 then
+      begin
+        if ractions[j].params[2] >= 0 then
+          A[ractions[j].params[2]] := true;
+        if ractions[j].params[3] >= 0 then
+          A[ractions[j].params[3]] := true;
+        if ractions[j].params[4] >= 0 then
+          A[ractions[j].params[4]] := true;
+        if ractions[j].params[5] >= 0 then
+          A[ractions[j].params[5]] := true;
+        if ractions[j].params[6] >= 0 then
+          A[ractions[j].params[6]] := true;
+      end;
+    end;
+
+    for j := 0 to header.numwalls - 1 do
+      if rwalls[j].flags and RWF_TWOSIDEDCOMPLETE <> 0 then
+        A[j] := true;
+
+    cnt := numdoomlinedefs;
+    result := false;
+    for j := 0 to cnt - 1 do
+      if not A[j] then
+      begin
+        dline1 := @doomlinedefs[j];
+        dx := doomvertexes[dline1.v1].x - doomvertexes[dline1.v2].x;
+        dy := doomvertexes[dline1.v1].y - doomvertexes[dline1.v2].y;
+        flen := sqr(dx) + sqr(dy);
+        if flen > SPLITDELTA * SPLITDELTA then
+        begin
+          flen := sqrt(flen);
+
+          newx := doomvertexes[dline1.v1].x - round(SPLITSIZE * dx / flen);
+          newy := doomvertexes[dline1.v1].y - round(SPLITSIZE * dy / flen);
+
+          newv := AddVertexToWAD(newx, newy);
+
+          realloc(pointer(doomlinedefs), numdoomlinedefs * SizeOf(maplinedef_t), (numdoomlinedefs  + 1) * SizeOf(maplinedef_t));
+          dline2 := @doomlinedefs[numdoomlinedefs];
+          inc(numdoomlinedefs);
+
+          dline2^ := dline1^;
+
+          dline1.v2 := newv;
+          dline2.v1 := newv;
+          result := true;
+        end;
+      end;
+
+    memfree(pointer(A), numdoomlinedefs);
+  end;
+
 begin
   ms := TAttachableMemoryStream.Create;
   ms.Attach(rlevel, rsize);
@@ -1268,6 +1346,8 @@ begin
     end;
 
   memfree(pointer(sectormapped), numdoomsectors);
+
+//  repeat until not split_long_lidedefs;
 
   // Move stub linedefs
   stubx := minx + 64;

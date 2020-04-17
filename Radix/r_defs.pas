@@ -399,6 +399,7 @@ type
     length: single;
     iSegID: integer;
 {$ELSE}
+    map_length: integer;
     inv_length: double;      
 {$ENDIF}
     miniseg: boolean;
