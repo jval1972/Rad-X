@@ -1603,7 +1603,7 @@ begin
 
   // MT_BIOMINE1
   MakeNonRotatingSprite('WeakBiomine', _MTRX_BIOMINE1, 3);
-  MakeOneSprite('WeakBio-MineFall', _MTRX_BIOMINE1, nil, 31, 23, false, false, 'D');
+  MakeOneSprite('WeakBio-MineFall', _MTRX_BIOMINE1, nil, 31, 31, false, false, 'D');
   MakeOneSprite('WeakBio-MineDead1', _MTRX_BIOMINE1, nil, 8, 6, false, false, 'E');
   MakeOneSprite('WeakBio-MineDead2', _MTRX_BIOMINE1, nil, 18, 10, false, false, 'F');
   MakeOneSprite('WeakBio-MineDead3', _MTRX_BIOMINE1, nil, 14, 11, false, false, 'G');

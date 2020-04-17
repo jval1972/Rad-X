@@ -1,0 +1,7 @@
+///////////////////////////////
+// ACTORALIAS.TXT
+///////////////////////////////
+
+
+ACTORALIAS "PLAYER" "RadixPlayer"
+ACTORALIAS "MT_BIOMINE1" "Weak biomine"

@@ -1,0 +1,859 @@
+///////////////////////////////
+// RADIXPICKUPS.TXT
+///////////////////////////////
+
+
+///////////////////////////////
+// MT_FULLARMOR
+///////////////////////////////
+ACTOR MT_FULLARMOR 1000
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +WHITELIGHT 
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    ARMOR SET 100
+    PICKUPMESSAGE "Full Armor"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR00 A 10
+    XR00 B 10
+    XR00 C 10
+    XR00 B 10
+    Loop
+  }
+}
+
+///////////////////////////////
+// MT_FULLSHIED
+///////////////////////////////
+ACTOR MT_FULLSHIED 1001
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +BLUELIGHT 
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    SHIELD SET 100
+    PICKUPMESSAGE "Full Shield"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR01 A 10
+    XR01 B 10
+    XR01 C 10
+    XR01 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_FULLENERGY
+///////////////////////////////
+ACTOR MT_FULLENERGY 1002
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +GREENLIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    ENERGY SET 100
+    PICKUPMESSAGE "Full Energy"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR02 A 10
+    XR02 B 10
+    XR02 C 10
+    XR02 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_SUPERCHARGE
+///////////////////////////////
+ACTOR MT_SUPERCHARGE 1003
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +BLUELIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    ARMOR SET 100
+    SHIELD SET 100
+    ENERGY SET 100
+    PICKUPMESSAGE "SUPERCHARGE!"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR03 A 10
+    XR03 B 10
+    XR03 C 10
+    XR03 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_RAPIDSHIELD
+///////////////////////////////
+ACTOR MT_RAPIDSHIELD 1004
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +BLUELIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    RAPIDSHIELD 3500
+    PICKUPMESSAGE "Rapid Shield Regeneration"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR04 A 10
+    XR04 B 10
+    XR04 C 10
+    XR04 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_RAPIDENERGY
+///////////////////////////////
+ACTOR MT_RAPIDENERGY 1005
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +GREENLIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    RAPIDENERGY 3500
+    PICKUPMESSAGE "Rapid Energy Regeneration"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR05 A 10
+    XR05 B 10
+    XR05 C 10
+    XR05 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_MANEUVERJETS
+///////////////////////////////
+ACTOR MT_MANEUVERJETS 1006
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +WHITELIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    MANEUVERJETS 3500
+    PICKUPMESSAGE "Maneuver Jets acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR06 A 10
+    XR06 B 10
+    XR06 C 10
+    XR06 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_NIGHTVISION
+///////////////////////////////
+ACTOR MT_NIGHTVISION 1007
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +GREENLIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    NIGHTVISION 3500
+    PICKUPMESSAGE "Night Vision acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR07 A 10 BRIGHT
+    XR07 B 10 BRIGHT
+    XR07 C 10 BRIGHT
+    XR07 B 10 BRIGHT
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_PLASMABOMB
+///////////////////////////////
+ACTOR MT_PLASMABOMB 1008
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +REDLIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    PLASMABOMB 1
+    PICKUPMESSAGE "Plasma bomb acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR08 A 10
+    XR08 B 10
+    XR08 C 10
+    XR08 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_ALDS
+///////////////////////////////
+ACTOR MT_ALDS 1009
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +REDLIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    ALDS 3500
+    PICKUPMESSAGE "A.L.D.S. Acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR09 A 10
+    XR09 B 10
+    XR09 C 10
+    XR09 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_ULTRASHIELDS
+///////////////////////////////
+ACTOR MT_ULTRASHIELDS 1010
+{
+  Radius 96
+  Height 96
+  +FLOAT
+  +REDLIGHT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    SHIELD SET 200
+    PICKUPMESSAGE "Ultra Shields acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR10 A 10
+    XR10 B 10
+    XR10 C 10
+    XR10 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_LEVEL2NEUTRONCANNONS
+///////////////////////////////
+ACTOR MT_LEVEL2NEUTRONCANNONS 1011
+{
+  Radius 128
+  Height 96
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    ENERGY SET 100
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR11 A 10
+    XR11 B 10
+    XR11 C 10
+    XR11 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_STANDARDEPC
+///////////////////////////////
+ACTOR MT_STANDARDEPC 1012
+{
+  Radius 128
+  Height 96
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    STANDARDEPC
+    AMMO 200 0 0 0
+    PICKUPMESSAGE "Standard EPC Acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR12 A 10
+    XR12 B 10
+    XR12 C 10
+    XR12 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_LEVEL1PLASMASPREADER
+///////////////////////////////
+ACTOR MT_LEVEL1PLASMASPREADER 1013
+{
+  Radius 128
+  Height 96
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    PLASMASPREADER
+    PICKUPMESSAGE "Plasma Spreader Acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR13 A 10
+    XR13 B 10
+    XR13 C 10
+    XR13 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_NUCLEARCAPABILITY
+///////////////////////////////
+ACTOR MT_NUCLEARCAPABILITY 1014
+{
+  Radius 128
+  Height 96
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    NUKE
+    AMMO 0 0 0 2
+    PICKUPMESSAGE "Nuclear Capability Acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR14 A 10
+    XR14 B 10
+    XR14 C 10
+    XR14 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_MISSILECAPABILITY
+///////////////////////////////
+ACTOR MT_MISSILECAPABILITY 1015
+{
+  Radius 128
+  Height 96
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    SEEKINGMISSILES
+    AMMO 0 16 0 0
+    PICKUPMESSAGE "Missile Capability Acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR15 A 10
+    XR15 B 10
+    XR15 C 10
+    XR15 B 10
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_TORPEDOCAPABILITY
+///////////////////////////////
+ACTOR MT_TORPEDOCAPABILITY 1016
+{
+  Radius 128
+  Height 96
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    PHASETORPEDOES
+    AMMO 0 0 15 0
+    PICKUPMESSAGE "Torpedo Capability Acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR16 A 10
+    XR16 B 10
+    XR16 C 10
+    XR16 D 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_GRAVITYDEVICE
+///////////////////////////////
+ACTOR MT_GRAVITYDEVICE 1017
+{
+  Radius 128
+  Height 96
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    GRAVITYWAVE
+    ENERGY SET 100
+    PICKUPMESSAGE "Gravity Device Acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR17 A 10
+    XR17 B 10
+    XR17 C 10
+    XR17 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_250SHELLS
+///////////////////////////////
+ACTOR MT_250SHELLS 1018
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 250 0 0 0
+    PICKUPMESSAGE "250 Shells Acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR18 A 10
+    XR18 B 10
+    XR18 C 10
+    XR18 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_500SHELLS
+///////////////////////////////
+ACTOR MT_500SHELLS 1019
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 500 0 0 0
+    PICKUPMESSAGE "500 Shells Acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR19 A 10
+    XR19 B 10
+    XR19 C 10
+    XR19 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_1000SHELLS
+///////////////////////////////
+ACTOR MT_1000SHELLS 1020
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 1000 0 0 0
+    PICKUPMESSAGE "1000 Shells Acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR20 A 10
+    XR20 B 10
+    XR20 C 10
+    XR20 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_4NUKES
+///////////////////////////////
+ACTOR MT_4NUKES 1021
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 0 0 0 4
+    PICKUPMESSAGE "4 Nukes Acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR21 A 10
+    XR21 B 10
+    XR21 C 10
+    XR21 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_10NUKES
+///////////////////////////////
+ACTOR MT_10NUKES 1022
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 0 0 0 10
+    PICKUPMESSAGE "10 Nukes Acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR22 A 10
+    XR22 B 10
+    XR22 C 10
+    XR22 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_15TORPEDOES
+///////////////////////////////
+ACTOR MT_15TORPEDOES 1023
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 0 0 15 0
+    PICKUPMESSAGE "15 Torpedoes Acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR23 A 10
+    XR23 B 10
+    XR23 C 10
+    XR23 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_75TORPEDOES
+///////////////////////////////
+ACTOR MT_75TORPEDOES 1024
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 0 0 75 0
+    PICKUPMESSAGE "75 Torpedoes Acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR24 A 10
+    XR24 B 10
+    XR24 C 10
+    XR24 B 10
+    Stop
+  }
+}
+
+
+///////////////////////////////
+// MT_20MISSILES
+///////////////////////////////
+ACTOR MT_20MISSILES 1025
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 0 20 0 0
+    PICKUPMESSAGE "20 Missiles Acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR25 A 10
+    XR25 B 10
+    XR25 C 10
+    XR25 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_50MISSILES
+///////////////////////////////
+ACTOR MT_50MISSILES 1026
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 0 50 0 0
+    PICKUPMESSAGE "50 Missiles Acquired"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR26 A 10
+    XR26 B 10
+    XR26 C 10
+    XR26 B 10
+    Loop
+  }
+}
+
+
+///////////////////////////////
+// MT_BOOMPACK
+///////////////////////////////
+ACTOR MT_BOOMPACK 1027
+{
+  Radius 112
+  Height 112
+  +FLOAT
+  +CUSTOMPICKUP 
+  +SPECIAL
+  +MF_NOGRAVITY
+  +MF3_EX_NOCRASH
+  INVENTORY
+  {
+    AMMO 5000 100 210 25
+    PICKUPMESSAGE "BOOM Pack :)"
+    PICKUPSOUND "radix/SndPowerUp"
+  }
+  States
+  {
+  Spawn:
+    XR27 A 10
+    XR27 B 10
+    XR27 C 10
+    XR27 B 10
+    Loop
+  }
+}

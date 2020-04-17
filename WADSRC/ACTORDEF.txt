@@ -1,0 +1,5 @@
+#include "RADIX\BASEACTORS.txt"
+#include "RADIX\RADIXPICKUPS.txt"
+#include "RADIX\RADIXENEMIES.txt"
+#include "RADIX\RADIXWEAPONS.txt"
+#include "RADIX\ACTORALIAS.txt"
