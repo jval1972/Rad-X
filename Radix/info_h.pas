@@ -566,6 +566,7 @@ type
     weapon_inc: array[0..Ord(NUMWEAPONS) - 1] of boolean; // JVAL 20200321 - Weapon pickable objects
     pickupmessage: string[64];
     pickupsound: integer;
+    touchdamage: integer; // JVAL: 20200417 - Damage when touched
   end;
 
   Pmobjinfo_t = ^mobjinfo_t;

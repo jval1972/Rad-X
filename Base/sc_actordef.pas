@@ -1356,6 +1356,7 @@ var
     AddRes('Night Vision = ' + itoa(mobj.nightvision));
     AddRes('A.L.D.S. = ' + itoa(mobj.alds));
     AddRes('Plasma Bomb = ' + itoa(mobj.plasmabomb));
+    AddRes('Touch Damage = ' + itoa(mobj.touchdamage));
 
     str := '';
     for k := 0 to Ord(NUMAMMO) - 1 do
@@ -2074,6 +2075,12 @@ begin
         begin
           sc.GetInteger;
           mobj.damage := sc._integer;
+          sc.GetString;
+        end
+        else if sc.MatchString('touchdamage') then
+        begin
+          sc.GetInteger;
+          mobj.touchdamage := sc._integer;
           sc.GetString;
         end
         else if sc.MatchString('painchance') then

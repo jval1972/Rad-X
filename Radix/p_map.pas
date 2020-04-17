@@ -605,6 +605,20 @@ begin
     end;
   end;
 
+  // JVAL: 20200417 - Touch damage (touching thing)
+  if thing.flags and MF_SHOOTABLE <> 0 then
+    if thing.flags3_ex and MF3_EX_DAMAGEWHENTOUCHED <> 0 then
+      if thing.health > 0 then
+        if thing.info.touchdamage > 0 then
+          P_DamageMobj(thing, tmthing, tmthing.target, thing.info.touchdamage);
+
+  // JVAL: 20200417 - Touch damage (toucher)
+  if tmthing.flags and MF_SHOOTABLE <> 0 then
+    if tmthing.flags3_ex and MF3_EX_DAMAGEWHENTOUCHED <> 0 then
+      if tmthing.health > 0 then
+        if tmthing.info.touchdamage > 0 then
+          P_DamageMobj(tmthing, thing, thing.target, tmthing.info.touchdamage);
+
   // check for special pickup
   if thing.flags and MF_SPECIAL <> 0 then
   begin

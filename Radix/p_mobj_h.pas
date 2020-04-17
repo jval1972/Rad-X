@@ -358,6 +358,8 @@ const
   MF3_EX_NOPHASETORPEDOSPLIT = 1024;
   // No sound flag
   MF3_EX_NOSOUND = $800;
+  // Damaged when push/pushed/touched
+  MF3_EX_DAMAGEWHENTOUCHED = $1000;
 
 type
 // Map Object definition.

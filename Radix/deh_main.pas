@@ -574,6 +574,7 @@ begin
           62: mobjinfo[mobj_no].nightvision := mobj_val;
           63: mobjinfo[mobj_no].alds := mobj_val;
           64: mobjinfo[mobj_no].plasmabomb := mobj_val;
+          65: mobjinfo[mobj_no].touchdamage := mobj_val;
 
         end;
       end;
@@ -1617,6 +1618,7 @@ begin
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[62]), mobjinfo[i].nightvision]);
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[63]), mobjinfo[i].alds]);
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[64]), mobjinfo[i].plasmabomb]);
+    result.Add('%s = %d', [capitalizedstring(mobj_tokens[65]), mobjinfo[i].touchdamage]);
 
     result.Add('');
   end;
@@ -1890,6 +1892,7 @@ begin
   mobj_tokens.Add('NIGHT VISION');       // .nightvision (Radix)      // 62
   mobj_tokens.Add('A.L.D.S.');           // .alds (Radix)             // 63
   mobj_tokens.Add('PLASMA BOMB');        // .plasmabomb (Radix)       // 64
+  mobj_tokens.Add('TOUCH DAMAGE');       // .touchdamage (Radix)      // 65
 
 
   mobj_flags := TDTextList.Create;
@@ -2008,6 +2011,7 @@ begin
   mobj_flags3_ex.Add('MF3_EX_WALLBOUNCEFACTOR');
   mobj_flags3_ex.Add('MF3_EX_NOPHASETORPEDOSPLIT');
   mobj_flags3_ex.Add('MF3_EX_NOSOUND');
+  mobj_flags3_ex.Add('MF3_EX_DAMAGEWHENTOUCHED');
 
   mobj_flags4_ex := TDTextList.Create;
 
