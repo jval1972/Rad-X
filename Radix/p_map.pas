@@ -607,14 +607,14 @@ begin
 
   // JVAL: 20200417 - Touch damage (touching thing)
   if thing.flags and MF_SHOOTABLE <> 0 then
-    if thing.flags3_ex and MF3_EX_DAMAGEWHENTOUCHED <> 0 then
+    if (thing.flags3_ex and MF3_EX_DAMAGEWHENTOUCHED <> 0) or ((thing.flags3_ex or MF3_EX_DAMAGEONPLAYERTOUCH <> 0) and (tmthing.player <> nil)) then
       if thing.health > 0 then
         if thing.info.touchdamage > 0 then
           P_DamageMobj(thing, tmthing, tmthing.target, thing.info.touchdamage);
 
   // JVAL: 20200417 - Touch damage (toucher)
   if tmthing.flags and MF_SHOOTABLE <> 0 then
-    if tmthing.flags3_ex and MF3_EX_DAMAGEWHENTOUCHED <> 0 then
+    if (tmthing.flags3_ex and MF3_EX_DAMAGEWHENTOUCHED <> 0) or ((tmthing.flags3_ex or MF3_EX_DAMAGEONPLAYERTOUCH <> 0) and (thing.player <> nil)) then
       if tmthing.health > 0 then
         if tmthing.info.touchdamage > 0 then
           P_DamageMobj(tmthing, thing, thing.target, tmthing.info.touchdamage);

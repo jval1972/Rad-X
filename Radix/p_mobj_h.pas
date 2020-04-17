@@ -360,6 +360,8 @@ const
   MF3_EX_NOSOUND = $800;
   // Damaged when push/pushed/touched
   MF3_EX_DAMAGEWHENTOUCHED = $1000;
+  // Same as above but the toucher is player
+  MF3_EX_DAMAGEONPLAYERTOUCH = $2000;
 
 type
 // Map Object definition.

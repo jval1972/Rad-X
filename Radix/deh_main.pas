@@ -2012,6 +2012,7 @@ begin
   mobj_flags3_ex.Add('MF3_EX_NOPHASETORPEDOSPLIT');
   mobj_flags3_ex.Add('MF3_EX_NOSOUND');
   mobj_flags3_ex.Add('MF3_EX_DAMAGEWHENTOUCHED');
+  mobj_flags3_ex.Add('MF3_EX_DAMAGEONPLAYERTOUCH');
 
   mobj_flags4_ex := TDTextList.Create;
 
