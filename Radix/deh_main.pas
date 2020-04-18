@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 285;
+  DEHNUMACTIONS = 286;
 
 type
   deh_action_t = record
@@ -2898,6 +2898,9 @@ begin
   deh_actions[284].action.acp1 := @A_Bobing;
   deh_actions[284].name := strupper('A_Bobing');
   {$IFDEF DLL}deh_actions[284].decl := 'A_Bobing()';{$ENDIF}
+  deh_actions[285].action.acp1 := @A_MatchTargetZ;
+  deh_actions[285].name := strupper('A_MatchTargetZ');
+  {$IFDEF DLL}deh_actions[285].decl := 'A_MatchTargetZ(zspeed: integer; threshold: integer)';{$ENDIF}
 
   deh_strings.numstrings := 0;
   deh_strings.realnumstrings := 0;

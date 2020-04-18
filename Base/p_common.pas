@@ -341,6 +341,8 @@ procedure A_NoBobing(actor: Pmobj_t);
 
 procedure A_Bobing(actor: Pmobj_t);
 
+procedure A_MatchTargetZ(actor: Pmobj_t);
+
 const
   FLOATBOBSIZE = 64;
   FLOATBOBMASK = FLOATBOBSIZE - 1;
@@ -3448,6 +3450,36 @@ end;
 procedure A_Bobing(actor: Pmobj_t);
 begin
   actor.flags3_ex := actor.flags3_ex or MF3_EX_BOBING;
+end;
+
+//
+//  A_MatchTargetZ(const zspeed, threshold)
+procedure A_MatchTargetZ(actor: Pmobj_t);
+var
+  speed: fixed_t;
+  threshold: fixed_t;
+begin
+  if actor.target = nil then
+    exit;
+
+  if actor.state.params.Count > 0 then
+  begin
+    speed := actor.state.params.FixedVal[0];
+    if speed = 0 then
+      exit;
+  end
+  else
+    speed := FRACUNIT;
+
+  if actor.state.params.Count > 1 then
+    threshold := actor.state.params.FixedVal[1]
+  else
+    threshold := FRACUNIT;
+
+  if actor.z + actor.momz < actor.target.z - threshold then
+    actor.momz := actor.momz + speed
+  else if actor.z + actor.momz > actor.target.z + threshold then
+    actor.momz := actor.momz - speed;
 end;
 
 end.
