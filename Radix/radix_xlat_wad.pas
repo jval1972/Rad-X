@@ -1848,6 +1848,9 @@ begin
   MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 32, 12, false, false, 15);
   MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 22, 12, false, false, 16);
 
+  // MT_DRONEBODY
+  MakeRotatingSprite8('DroneBBody', _MTTX_DRONEBODY, 1, nil, 93, 48, false, false);
+
   bmp := TRadixBitmap.Create;
 
   for j := 0 to numsprinfo - 1 do

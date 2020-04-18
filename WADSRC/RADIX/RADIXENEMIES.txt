@@ -373,6 +373,25 @@ ACTOR MT_ALIENFODDER 1030
 }
 
 ///////////////////////////////
+// MT_DRONEBODY
+///////////////////////////////
+ACTOR "MT_DRONEBODY"
+{
+  Health 1000
+  Width 16
+  Height 16
+  Mass 100
+  Reactiontime 8
+  States
+  {
+    Spawn:
+    {
+      X083 A -1
+    }
+  }
+}
+
+///////////////////////////////
 // MT_DEFENCEDRONE_STUB1
 ///////////////////////////////
 ACTOR MT_DEFENCEDRONE_STUB1 1031
@@ -381,7 +400,11 @@ ACTOR MT_DEFENCEDRONE_STUB1 1031
   Height 56
   Health 50
   Gravity 0
-  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_NOGRAVITY
+  +MF_FLOAT
+  +MF_COUNTKILL
   +MF2_EX_DONTINFIGHTMONSTERS
   States
   {
