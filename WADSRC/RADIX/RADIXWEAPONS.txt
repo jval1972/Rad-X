@@ -432,7 +432,7 @@ ACTOR "MT_RADIXNUKESMOKE"
       TNT1 A 0 A_ThrustXY(RANDOM(2,8), 0)
       PUFF A RANDOMRANGE(4,8) BRIGHT A_FadeOut20
       PUFF B RANDOMRANGE(4,8) BRIGHT A_FadeOut20
-      SMOS C RANDOMRANGE(4,8) BRIGHT A_FadeOut20
+      PUFF C RANDOMRANGE(4,8) BRIGHT A_FadeOut20
       Stop
     }
   }
@@ -762,7 +762,6 @@ ACTOR "MT_ENEMYMISSILESMOKE"
     }
   }
 }
-
 
 ///////////////////////////////
 // MT_ENEMYMISSILE

@@ -1421,7 +1421,8 @@ var
   procedure MakeRotatingSprite8(const rprefix: string; const r_id: integer;
     const numframes: integer; const trans: PByteArray = nil;
     const xofs: integer = -255; const yofs: integer = -255;
-    const cofs: boolean = true; const defofs: boolean = true);
+    const cofs: boolean = true; const defofs: boolean = true;
+    const startframe: char = 'A');
   var
     ii: integer;
     jj: integer;
@@ -1432,7 +1433,7 @@ var
         check_sprite_overflow;
 
         spr.rname := rprefix + '_' + itoa(jj + (ii - 1) * 8);
-        spr.dname := get_sprite_name(r_id) + Chr(Ord('A') + ii - 1) + itoa(jj);
+        spr.dname := get_sprite_name(r_id) + Chr(Ord(startframe) + ii - 1) + itoa(jj);
         spr.translation := trans;
         spr.xoffs := xofs;
         spr.yoffs := yofs;
@@ -1447,7 +1448,7 @@ var
     const numframes: integer; const trans: PByteArray = nil;
     const xofs: integer = -255; const yofs: integer = -255;
     const cofs: boolean = true; const defofs: boolean = true;
-    const mask: integer = -1);
+    const mask: integer = -1; const startframe: char = 'A');
   const
     SPR16 = '192A3B4C5D6E7F8G';
   var
@@ -1461,7 +1462,7 @@ var
           check_sprite_overflow;
 
           spr.rname := rprefix + '_' + itoa(jj + (ii - 1) * 16);
-          spr.dname := get_sprite_name(r_id) + Chr(Ord('A') + ii - 1) + SPR16[jj];
+          spr.dname := get_sprite_name(r_id) + Chr(Ord(startframe) + ii - 1) + SPR16[jj];
           spr.translation := trans;
           spr.xoffs := xofs;
           spr.yoffs := yofs;
@@ -1476,12 +1477,12 @@ var
     const trans: PByteArray = nil;
     const xofs: integer = -255; const yofs: integer = -255;
     const cofs: boolean = true; const defofs: boolean = true;
-    const frm: char = 'A');
+    const frm: char = 'A'; const spriteangle: char = '0');
   begin
     check_sprite_overflow;
 
     spr.rname := rname;
-    spr.dname := get_sprite_name(r_id) + frm + '0';
+    spr.dname := get_sprite_name(r_id) + frm + spriteangle;
     spr.translation := trans;
     spr.xoffs := xofs;
     spr.yoffs := yofs;
@@ -1625,6 +1626,29 @@ begin
 
   // MT_ALIENFODDER
   MakeRotatingSprite8('AlienFodder', _MTRX_ALIENFODDER, 3, nil, 68, 101, false, false);
+  MakeOneSprite('FodderFire1', _MTRX_ALIENFODDER, nil, 68, 101, false, false, 'D', '1');
+  MakeOneSprite('FodderFire2', _MTRX_ALIENFODDER, nil, 68, 101, false, false, 'D', '2');
+  MakeOneSprite('FodderFire3', _MTRX_ALIENFODDER, nil, 75, 101, false, false, 'D', '3');
+  MakeOneSprite('FodderFire4', _MTRX_ALIENFODDER, nil, 75, 101, false, false, 'D', '4');
+  MakeOneSprite('FodderFire5', _MTRX_ALIENFODDER, nil, 75, 101, false, false, 'D', '5');
+  MakeOneSprite('FodderFire6', _MTRX_ALIENFODDER, nil, 75, 101, false, false, 'D', '6');
+  MakeOneSprite('FodderFire7', _MTRX_ALIENFODDER, nil, 75, 101, false, false, 'D', '7');
+  MakeOneSprite('FodderFire8', _MTRX_ALIENFODDER, nil, 75, 101, false, false, 'D', '8');
+  MakeOneSprite('FodderBust1', _MTRX_ALIENFODDER, nil, 71, 102, false, false, 'E');
+  MakeOneSprite('FodderBust2', _MTRX_ALIENFODDER, nil, 71, 102, false, false, 'F');
+  MakeOneSprite('FodderBust3', _MTRX_ALIENFODDER, nil, 71, 108, false, false, 'G');
+  MakeOneSprite('FodderBust4', _MTRX_ALIENFODDER, nil, 86, 123, false, false, 'H');
+  MakeOneSprite('FodderBust5', _MTRX_ALIENFODDER, nil, 71, 108, false, false, 'I');
+  MakeOneSprite('FodderDEAD', _MTRX_ALIENFODDER, nil, 71, 108, false, false, 'J');
+  MakeOneSprite('FodderHead1', _MTRX_ALIENFODDER, nil, 51, 58, false, false, 'K');
+  MakeOneSprite('FodderHead2', _MTRX_ALIENFODDER, nil, 46, 68, false, false, 'L');
+  MakeOneSprite('FodderHead3', _MTRX_ALIENFODDER, nil, 53, 93, false, false, 'M');
+  MakeOneSprite('FodderHead4', _MTRX_ALIENFODDER, nil, 68, 85, false, false, 'N');
+  MakeOneSprite('FodderHead5', _MTRX_ALIENFODDER, nil, 79, 85, false, false, 'O');
+  MakeOneSprite('FodderHead6', _MTRX_ALIENFODDER, nil, 62, 74, false, false, 'P');
+  MakeOneSprite('FodderHead7', _MTRX_ALIENFODDER, nil, 68, 84, false, false, 'Q');
+  MakeOneSprite('FodderHead8', _MTRX_ALIENFODDER, nil, 66, 71, false, false, 'R');
+  MakeOneSprite('FodderShot', _MTRX_ALIENFODDER, nil, 8, 8, false, false, 'S');
 
   // MT_DEFENCEDRONE_STUB1
   MakeRotatingSprite8('DroneB', _MTRX_DEFENCEDRONE_STUB1, 1, nil, 63, 67, false, false);

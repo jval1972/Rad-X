@@ -226,20 +226,148 @@ ACTOR MT_BIOMINE2 1029
 ///////////////////////////////
 // MT_ALIENFODDER
 ///////////////////////////////
+ACTOR MT_ALIENFODDER_HEAD
+{
+  Radius 16
+  Height 16
+  Health 1000
+  Mass 12
+  Reactiontime 8
+  +MF3_EX_FLOORBOUNCE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(1,2))
+      XR30 KLMNOPQR 5
+      XR30 K -1
+    }
+  }
+}
+
+///////////////////////////////
+// MT_ALIENFODDER_SMOKE
+///////////////////////////////
+ACTOR "MT_ALIENFODDER_SMOKE"
+{
+  Health 1000
+  Width 10
+  Height 10
+  Mass 50
+  Reactiontime 8
+  Alpha 0.3
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_EX_TRANSPARENT
+  +MF2_EX_NOHITFLOOR
+  +MF2_EX_DONOTRENDERSHADOW
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      PUFF A RANDOMRANGE(4,8) BRIGHT 
+      PUFF B RANDOMRANGE(4,8) BRIGHT 
+      PUFF C RANDOMRANGE(4,8) BRIGHT 
+      Stop
+    }
+  }
+}
+
+ACTOR "MT_ALIENFODDER_SHOT"
+{
+  Health 1000
+  Radius 14
+  Height 14
+  Speed 1310720
+  Damage 20
+  Mass 100
+  Reactiontime 8
+  Seesound "radix/SndEnemyFire"
+  Deathsound "radix/SndExplodeShort"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF_EX_REDLIGHT
+  +DEFAULTTRANSPARENT
+  +THRUSKY
+  States
+  {
+    Spawn:
+    {
+      XR30 S 1 BRIGHT
+      XR30 S 1 A_SpawnItemEx("MT_ALIENFODDER_SMOKE",24,0,velz/2)
+      XR30 S 5 BRIGHT
+      TNT1 A 0 A_GlowLight "NONE"
+    SpawnLoop:
+      XR30 S 5 BRIGHT
+      GoTo SpawnLoop
+    }
+    Death:
+    {
+      TNT1 A 0 A_SetScale(RANDOMPICK(4,5,6)/10)
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_PlayerHurtExplode(RANDOMPICK(20,25,30), 20)
+      EXPS A RANDOMRANGE(2,3) BRIGHT A_GlowLight "YELLOW"
+      EXPS B RANDOMRANGE(2,3) BRIGHT A_FadeOut10
+      EXPS C RANDOMRANGE(2,3) BRIGHT A_FadeOut10
+      EXPS D RANDOMRANGE(2,3) BRIGHT A_FadeOut10
+      EXPS E RANDOMRANGE(2,3) BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
 ACTOR MT_ALIENFODDER 1030
 {
   Radius 32
-  Height 64
-  Health 150
-  SOLID SHOOTABLE COUNTKILL
+  Height 80
+  Health 60
+  Painchance 150
+  Mass 100
+  Speed 16
+  Reactiontime 8
+  TouchDamage 20
+  SeeSound "radix/SndAlienHum"
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_COUNTKILL
   States
   {
-  Spawn:
-    XR30 A 5
-    XR30 B 5
-    XR30 C 5
-    XR30 B 5
-    Loop
+    Spawn:
+      XR30 B 10 A_Look
+      Loop
+    See:
+      XR30 A 6 A_Chase
+      XR30 B 6 A_Chase
+      XR30 C 6 A_Chase
+      XR30 B 6 A_Chase
+      Loop
+    Missile:
+      XR30 D 10 A_FaceTarget
+      XR30 D 10 BRIGHT A_CustomMissile("MT_ALIENFODDER_SHOT", 72, 16)
+      XR30 D 10 A_FaceTarget    
+      TNT1 A 0 A_Jump(128, 2)
+      XR30 D 10 BRIGHT A_CustomMissile("MT_ALIENFODDER_SHOT", 72, 16)
+      XR30 D 10 A_CPosRefire
+      Goto Missile
+    Pain:
+      XR30 B 10 
+      Goto See
+    Death:
+      TNT1 A 0 A_SpawnItemEx("MT_ALIENFODDER_HEAD",0,0,0,RANDOMPICK(-3,-2,2,3),RANDOMPICK(-3,-2,2,3),FLOATRANDOM(2,4),RANDOM(0,179)*2)
+      TNT1 A 0 A_PlaySound("radix/SndFodderExp")
+      XR30 E 5
+      XR30 F 5
+      XR30 G 5 A_Fall
+      XR30 H 5
+      XR30 I 5
+      XR30 J -1
   }
 }
 

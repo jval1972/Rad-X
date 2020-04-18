@@ -5,3 +5,5 @@
 
 ACTORALIAS "PLAYER" "RadixPlayer"
 ACTORALIAS "MT_BIOMINE1" "Weak biomine"
+ACTORALIAS "MT_BIOMINE2" "Black biomine"
+ACTORALIAS "MT_ALIENFODDER" "Alien Fodder"
