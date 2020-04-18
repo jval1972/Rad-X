@@ -343,6 +343,8 @@ procedure A_Bobing(actor: Pmobj_t);
 
 procedure A_MatchTargetZ(actor: Pmobj_t);
 
+procedure A_DropFarTarget(actor: Pmobj_t);
+
 const
   FLOATBOBSIZE = 64;
   FLOATBOBMASK = FLOATBOBSIZE - 1;
@@ -3480,6 +3482,32 @@ begin
     actor.momz := actor.momz + speed
   else if actor.z + actor.momz > actor.target.z + threshold then
     actor.momz := actor.momz - speed;
+end;
+
+//
+// A_DropFarTarget(dist, propability)
+procedure A_DropFarTarget(actor: Pmobj_t);
+var
+  dist: fixed_t;
+  propability: integer;
+begin
+  if not P_CheckStateParams(actor, 1, CSP_AT_LEAST) then
+    exit;
+
+  if actor.target = nil then
+    exit;
+
+  if actor.state.params.Count > 1 then
+    propability := actor.state.params.IntVal[1]
+  else
+    propability := 256;
+
+  if N_Random < propability then
+    exit;
+
+  dist := actor.state.params.FixedVal[0];
+  if P_AproxDistance(actor.x - actor.target.x, actor.y - actor.target.y) > dist then
+    P_SetMobjState(actor, statenum_t(actor.info.spawnstate));
 end;
 
 end.

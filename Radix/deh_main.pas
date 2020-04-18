@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 286;
+  DEHNUMACTIONS = 287;
 
 type
   deh_action_t = record
@@ -2901,6 +2901,9 @@ begin
   deh_actions[285].action.acp1 := @A_MatchTargetZ;
   deh_actions[285].name := strupper('A_MatchTargetZ');
   {$IFDEF DLL}deh_actions[285].decl := 'A_MatchTargetZ(zspeed: integer; threshold: integer)';{$ENDIF}
+  deh_actions[286].action.acp1 := @A_DropFarTarget;
+  deh_actions[286].name := strupper('A_DropFarTarget');
+  {$IFDEF DLL}deh_actions[286].decl := 'A_DropFarTarget(distance: integer; propability: integer)';{$ENDIF}
 
   deh_strings.numstrings := 0;
   deh_strings.realnumstrings := 0;
