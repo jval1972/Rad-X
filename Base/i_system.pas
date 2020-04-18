@@ -339,7 +339,6 @@ begin
   I_InitMusic;
   printf('I_InitInput: Initializing Input Devices.'#13#10);
   I_InitInput;
-
   C_AddCmd('usemmx, mmx', @I_CmdUseMMX);
 end;
 

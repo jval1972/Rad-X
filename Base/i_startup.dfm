@@ -8,7 +8,7 @@ object StartUpConsoleForm: TStartUpConsoleForm
   ClientHeight = 361
   ClientWidth = 624
   Color = clBtnFace
-  Font.Charset = GREEK_CHARSET
+  Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
   Font.Height = -13
   Font.Name = 'Arial'
@@ -26,7 +26,7 @@ object StartUpConsoleForm: TStartUpConsoleForm
     Cursor = crHourGlass
     Align = alClient
     Color = 4210752
-    Font.Charset = GREEK_CHARSET
+    Font.Charset = ANSI_CHARSET
     Font.Color = clWhite
     Font.Height = -11
     Font.Name = 'Courier New'
