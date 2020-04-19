@@ -1888,6 +1888,9 @@ begin
   MakeOneSprite('MetalChunk3', _MTTX_CHUNK, nil, 10, 15, false, false, 'F');
   MakeOneSprite('MetalChunk4', _MTTX_CHUNK, nil, 11, 14, false, false, 'G');
 
+  // MT_ALDSLASER
+  MakeRotatingSprite16('ALDSLaser', _MTTX_ALDSLASER, 1, nil, 24, 4, false, false);
+
   bmp := TRadixBitmap.Create;
 
   for j := 0 to numsprinfo - 1 do
