@@ -446,6 +446,7 @@ ACTOR MT_DEFENCEDRONE_STUB1 1031
   Radius 32
   Height 56
   Health 50
+  Speed 4
   Gravity 0
   +MF_SOLID
   +MF_SHOOTABLE
