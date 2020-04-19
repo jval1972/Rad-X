@@ -2198,7 +2198,7 @@ begin
   {$IFDEF DLL}deh_actions[51].decl := 'A_CPosAttack()';{$ENDIF}
   deh_actions[52].action.acp1 := @A_CPosRefire;
   deh_actions[52].name := strupper('CPosRefire');
-  {$IFDEF DLL}deh_actions[52].decl := 'A_CPosRefire()';{$ENDIF}
+  {$IFDEF DLL}deh_actions[52].decl := 'A_CPosRefire(propability: integer)';{$ENDIF}
   deh_actions[53].action.acp1 := @A_TroopAttack;
   deh_actions[53].name := strupper('TroopAttack');
   {$IFDEF DLL}deh_actions[53].decl := 'A_TroopAttack()';{$ENDIF}
