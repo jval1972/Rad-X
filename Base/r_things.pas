@@ -1627,7 +1627,7 @@ begin
     end;
   end;
 
-  if flip xor (thing.flags3_ex and MF3_EX_FLIPSPRITE <> 0) then
+  if flip <> (thing.flags3_ex and MF3_EX_FLIPSPRITE <> 0) then
   begin
     vis.startfrac := spritewidth[lump] - 1;
     vis.xiscale := -iscale;
@@ -1639,7 +1639,7 @@ begin
   end;
   {$ENDIF}
 {$IFDEF OPENGL}
-  vis.flip := flip;
+  vis.flip := flip <> (thing.flags3_ex and MF3_EX_FLIPSPRITE <> 0);
 {$ENDIF}
 
 {$IFNDEF OPENGL}
