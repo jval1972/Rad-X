@@ -1682,13 +1682,15 @@ begin
   MakeOneSprite('DroneCSingleChunk1', _MTRX_MISSILEBOAT, nil, 11, 17, false, false, 'K');
   MakeOneSprite('DroneCSingleChunk2', _MTRX_MISSILEBOAT, nil, 17, 16, false, false, 'L');
 
-  // MT_STORMBIRDHEAVYBOMBER
-  MakeRotatingSprite8('HeavyFighter', _MTRX_STORMBIRDHEAVYBOMBER, 1, nil, 86, 54, false, false);
-  MakeOneSprite('StormBirdChunk5', _MTRX_STORMBIRDHEAVYBOMBER, nil, 50, 45, false, false, 'B');
-  MakeRotatingSprite8('StormBirdBodyBust', _MTRX_STORMBIRDHEAVYBOMBER, 1, nil, 82, 48, false, false, 'C');
-
   // MT_SKYFIREASSULTFIGHTER
   MakeRotatingSprite8('LightAssault', _MTRX_SKYFIREASSULTFIGHTER, 1, nil, 62, 51, false, false);
+  MakeOneSprite('StormBirdChunk5', _MTRX_SKYFIREASSULTFIGHTER, nil, 50, 45, false, false, 'B');
+  MakeRotatingSprite8('SkyFireBodyBusted', _MTRX_SKYFIREASSULTFIGHTER, 1, nil, 72, 31, false, false, 'C');
+
+  // MT_STORMBIRDHEAVYBOMBER
+  MakeRotatingSprite8('HeavyFighter', _MTRX_STORMBIRDHEAVYBOMBER, 1, nil, 86, 54, false, false);
+  MakeOneSprite('SkyFireChunk1', _MTRX_STORMBIRDHEAVYBOMBER, nil, 51, 53, false, false, 'B');
+  MakeRotatingSprite8('StormBirdBodyBust', _MTRX_STORMBIRDHEAVYBOMBER, 1, nil, 82, 48, false, false, 'C');
 
   // MT_SPAWNER
   MakeRotatingSprite8('Spawner', _MTRX_SPAWNER, 1, nil, 146, 154, false, false);
