@@ -1670,6 +1670,17 @@ begin
 
   // MT_MISSILEBOAT
   MakeRotatingSprite8('DroneC', _MTRX_MISSILEBOAT, 1, nil, 83, 68, false, false);
+  MakeOneSprite('DroneCLeftChunk1', _MTRX_MISSILEBOAT, nil, 46, 46, false, false, 'B');
+  MakeOneSprite('DroneCLeftChunk2', _MTRX_MISSILEBOAT, nil, 44, 50, false, false, 'C');
+  MakeOneSprite('DroneCLeftChunk3', _MTRX_MISSILEBOAT, nil, 38, 45, false, false, 'D');
+  MakeOneSprite('DroneCLeftChunk4', _MTRX_MISSILEBOAT, nil, 35, 39, false, false, 'E');
+  MakeOneSprite('DroneCLeftChunk5', _MTRX_MISSILEBOAT, nil, 37, 34, false, false, 'F');
+  MakeOneSprite('DroneCLeftChunk6', _MTRX_MISSILEBOAT, nil, 41, 36, false, false, 'G');
+  MakeOneSprite('DroneCLeftChunk7', _MTRX_MISSILEBOAT, nil, 42, 35, false, false, 'H');
+  MakeOneSprite('DroneCLeftChunk8', _MTRX_MISSILEBOAT, nil, 44, 35, false, false, 'I');
+  MakeRotatingSprite8('MissileBoatBody', _MTRX_MISSILEBOAT, 1, nil, 85, 42, false, false, 'J');
+  MakeOneSprite('DroneCSingleChunk1', _MTRX_MISSILEBOAT, nil, 11, 17, false, false, 'K');
+  MakeOneSprite('DroneCSingleChunk2', _MTRX_MISSILEBOAT, nil, 17, 16, false, false, 'L');
 
   // MT_STORMBIRDHEAVYBOMBER
   MakeRotatingSprite8('HeavyFighter', _MTRX_STORMBIRDHEAVYBOMBER, 1, nil, 86, 54, false, false);
