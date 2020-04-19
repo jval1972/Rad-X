@@ -17,7 +17,8 @@ ACTOR MT_BIOMINE1_CHUNK1
   {
     Spawn:
     {
-      TNT1 A 1 A_Jump(128, 2)
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
       TNT1 A 0 A_FlipSprite
       TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4))
       XR28 E -1
@@ -37,7 +38,8 @@ ACTOR MT_BIOMINE1_CHUNK2
   {
     Spawn:
     {
-      TNT1 A 1 A_Jump(128, 2)
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
       TNT1 A 0 A_FlipSprite
       TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4))
       XR28 F -1
@@ -57,7 +59,8 @@ ACTOR MT_BIOMINE1_CHUNK3
   {
     Spawn:
     {
-      TNT1 A 1 A_Jump(128, 2)
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
       TNT1 A 0 A_FlipSprite
       TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4))
       XR28 G -1
@@ -76,7 +79,8 @@ ACTOR MT_BIOMINE1_CHUNK4
   {
     Spawn:
     {
-      TNT1 A 1 A_Jump(128, 2)
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
       TNT1 A 0 A_FlipSprite
       XR28 HIJKLMNO 5
       XR28 H -1
@@ -147,7 +151,8 @@ ACTOR MT_BIOMINE2_CHUNK1
   {
     Spawn:
     {
-      TNT1 A 1 A_Jump(128, 2)
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
       TNT1 A 0 A_FlipSprite
       TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4))
       XR29 E -1
@@ -167,7 +172,8 @@ ACTOR MT_BIOMINE2_CHUNK2
   {
     Spawn:
     {
-      TNT1 A 1 A_Jump(128, 2)
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
       TNT1 A 0 A_FlipSprite
       TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3))
       XR29 F -1
@@ -238,7 +244,8 @@ ACTOR MT_ALIENFODDER_HEAD
   {
     Spawn:
     {
-      TNT1 A 1 A_Jump(128, 2)
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
       TNT1 A 0 A_FlipSprite
       TNT1 A 0 A_LimitBounceControl(RANDOMPICK(1,2))
       XR30 KLMNOPQR 5
@@ -267,7 +274,8 @@ ACTOR "MT_ALIENFODDER_SMOKE"
   {
     Spawn:
     {
-      TNT1 A 1 A_Jump(128, 2)
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
       TNT1 A 0 A_FlipSprite
       PUFF A RANDOMRANGE(4,8) BRIGHT 
       PUFF B RANDOMRANGE(4,8) BRIGHT 
@@ -373,9 +381,9 @@ ACTOR MT_ALIENFODDER 1030
 }
 
 ///////////////////////////////
-// MT_DRONEBODY
+// MT_DRONEBODYA
 ///////////////////////////////
-ACTOR "MT_DRONEBODY"
+ACTOR "MT_DRONEBODYA"
 {
   Health 1000
   Width 16
@@ -386,7 +394,7 @@ ACTOR "MT_DRONEBODY"
   {
     Spawn:
     {
-      X083 A -1
+      X085 A -1
       Loop
     }
   }
@@ -480,7 +488,7 @@ ACTOR MT_DEFENCEDRONE_STUB1 1031
       TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,0,0,0,0,0,0,0)
       TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
       TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,0,0)
-      TNT1 A 0 A_SpawnItemEx("MT_DRONEBODY")
+      TNT1 A 0 A_SpawnItemEx("MT_DRONEBODYA")
       Stop
   }
 }
@@ -495,21 +503,201 @@ ACTOR MT_DEFENCEDRONE_STUB2: MT_DEFENCEDRONE_STUB1 1032
 }
 
 ///////////////////////////////
-// MT_BATTLEDRONE1
+// MT_DRONEBODYB
 ///////////////////////////////
+ACTOR "MT_DRONEBODYB"
+{
+  Health 1000
+  Width 16
+  Height 16
+  Mass 100
+  Reactiontime 8
+  States
+  {
+    Spawn:
+    {
+      X083 A -1
+      Loop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_ENEMYLASER
+///////////////////////////////
+ACTOR "MT_ENEMYLASER"
+{
+  Health 1000
+  Radius 14
+  Height 14
+  Speed 1572864
+  Damage 10
+  Mass 100
+  Reactiontime 8
+  Seesound "radix/SndEnemyFire"
+  Deathsound "radix/SndExplodeShort"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF_EX_REDLIGHT
+  +DEFAULTTRANSPARENT
+  +THRUSKY
+  States
+  {
+    Spawn:
+    {
+      X084 A 6 BRIGHT
+      TNT1 A 0 A_GlowLight "NONE"
+      X084 B 6 BRIGHT
+      X084 C 6 BRIGHT
+      X084 B 6 BRIGHT
+    SpawnLoop:
+      X084 A 6 BRIGHT
+      X084 B 6 BRIGHT
+      X084 C 6 BRIGHT
+      X084 B 6 BRIGHT
+      GoTo SpawnLoop
+    }
+    Death:
+    {
+      TNT1 A 0 A_SetScale(RANDOMPICK(4,5,6)/10)
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_PlayerHurtExplode(RANDOMPICK(15,20,25), 15)
+      EXPS A RANDOMRANGE(2,3) BRIGHT A_GlowLight "YELLOW"
+      EXPS B RANDOMRANGE(2,3) BRIGHT A_FadeOut10
+      EXPS C RANDOMRANGE(2,3) BRIGHT A_FadeOut10
+      EXPS D RANDOMRANGE(2,3) BRIGHT A_FadeOut10
+      EXPS E RANDOMRANGE(2,3) BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_BATTLEDRONE1_CHUNK1
+///////////////////////////////
+ACTOR MT_BATTLEDRONE1_CHUNK1
+{
+  Radius 48
+  Height 24
+  Health 1000
+  Mass 10
+  Reactiontime 8
+  +MF3_EX_FLOORBOUNCE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4))
+      XR33 BCDEFGHI 5
+      XR33 B -1
+    }
+  }
+}
+
+///////////////////////////////
+// MT_BATTLEDRONE1_CHUNK2
+///////////////////////////////
+ACTOR MT_BATTLEDRONE1_CHUNK2
+{
+  Radius 48
+  Height 24
+  Health 1000
+  Mass 10
+  Reactiontime 8
+  +MF3_EX_FLIPSPRITE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4))
+      XR33 BCDEFGHI 5
+      XR33 B -1
+    }
+  }
+}
+
+///////////////////////////////
+// MT_BATTLEDRONE1_CHUNK3
+///////////////////////////////
+ACTOR MT_BATTLEDRONE1_CHUNK3
+{
+  Radius 12
+  Height 12
+  Health 1000
+  Mass 5
+  Reactiontime 8
+  States
+  {
+    Spawn:
+    {
+      XR33 J RANDOMSELECT(70,105)
+      XR33 J 5 A_FadeOut10
+      XR33 J 5 A_FadeOut10
+      XR33 J 5 A_FadeOut10
+      XR33 J 5 A_FadeOut10
+      XR33 J 5 A_FadeOut10
+      XR33 J 5 A_FadeOut10
+      XR33 J 5 A_FadeOut10
+      XR33 J 5 A_FadeOut10
+      XR33 J 5 A_FadeOut10
+      XR33 J 5 A_FadeOut10
+      Stop
+    }
+  }
+}
+
 ACTOR MT_BATTLEDRONE1 1033
 {
-  Radius 32
+{
+  Radius 64
   Height 56
   Health 50
+  Speed 8
   Gravity 0
-  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_NOGRAVITY
+  +MF_FLOAT
+  +MF_COUNTKILL
   +MF2_EX_DONTINFIGHTMONSTERS
   States
   {
-  Spawn:
-    XR32 A -1
-    Stop
+    Spawn:
+      XR33 A 5 A_Look
+      Loop
+    See:
+      XR33 A 6 A_Chase
+      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,1)),5)
+      XR33 A 6 A_Chase
+      Loop
+    Missile:
+      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,1)),10)
+      XR33 A 10 A_FaceTarget
+      TNT1 A 0 A_MatchTargetZ(0.1,10)
+      XR33 A 10 BRIGHT A_CustomMissile("MT_ENEMYLASER")
+      TNT1 A 0 A_DropFarTarget(768,128)
+      XR33 A 10 A_CPosRefire
+      Goto Missile
+    Pain:
+      XR33 A 10 
+      Goto See
+    Death:
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,0,0,0,0,0,0,0)
+      TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_DRONEBODYB")
+      TNT1 A 0 A_SpawnItemEx("MT_BATTLEDRONE1_CHUNK1",0,-20,0,RANDOMPICK(-1,1),RANDOMPICK(-3,-2),RANDOMPICK(1,2),RANDOMPICK(355,0,5))
+      TNT1 A 0 A_SpawnItemEx("MT_BATTLEDRONE1_CHUNK2",0,20,0,RANDOMPICK(-1,1),RANDOMPICK(3,2),RANDOMPICK(1,2),RANDOMPICK(175,180,185))
+      TNT1 A 0 A_SpawnItemEx("MT_BATTLEDRONE1_CHUNK3",0,0,0,RANDOMPICK(-2,-1,1,2),RANDOMPICK(-2,-1,1,2),RANDOMPICK(2,3),RANDOM(0,179)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_BATTLEDRONE1_CHUNK3",0,0,0,RANDOMPICK(-2,-1,1,2),RANDOMPICK(-2,-1,1,2),RANDOMPICK(2,3),RANDOM(0,179)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_BATTLEDRONE1_CHUNK3",0,0,0,RANDOMPICK(-2,-1,1,2),RANDOMPICK(-2,-1,1,2),RANDOMPICK(2,3),RANDOM(0,179)*2)
+      Stop
   }
 }
 
