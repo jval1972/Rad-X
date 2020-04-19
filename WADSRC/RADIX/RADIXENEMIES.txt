@@ -488,20 +488,9 @@ ACTOR MT_DEFENCEDRONE_STUB1 1031
 ///////////////////////////////
 // MT_DEFENCEDRONE_STUB2
 ///////////////////////////////
-ACTOR MT_DEFENCEDRONE_STUB2 1032
+ACTOR MT_DEFENCEDRONE_STUB2: MT_DEFENCEDRONE_STUB1 1032
 {
-  Radius 32
-  Height 56
-  Health 50
-  Gravity 0
-  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
-  +MF2_EX_DONTINFIGHTMONSTERS
-  States
-  {
-  Spawn:
-    XR32 A -1
-    Stop
-  }
+  Speed 8
 }
 
 ///////////////////////////////
