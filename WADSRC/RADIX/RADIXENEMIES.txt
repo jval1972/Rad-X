@@ -878,22 +878,179 @@ ACTOR MT_MISSILEBOAT 1034
 }
 
 ///////////////////////////////
+// MT_STORMBIRD_BODY
+///////////////////////////////
+ACTOR MT_STORMBIRD_BODY
+{
+  Radius 48
+  Height 24
+  Health 1000
+  Mass 50
+  Reactiontime 8
+  States
+  {
+    Spawn:
+    {
+      XR35 C -1
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_STORMBIRD_CHUNK1
+///////////////////////////////
+ACTOR MT_STORMBIRD_CHUNK1
+{
+  Radius 24
+  Height 8
+  Health 1000
+  Mass 5
+  Reactiontime 8
+  +MF3_EX_FLOORBOUNCE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4,5))
+      XR35 B -1
+      Stop      
+    }
+  }
+}
+
+///////////////////////////////
+// MT_CHUNK1
+///////////////////////////////
+ACTOR MT_CHUNK1
+{
+  Radius 12
+  Height 12
+  Health 1000
+  Mass 5
+  Reactiontime 8
+  +MF3_EX_FLOORBOUNCE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4,5))
+      X086 A RANDOMRANGE(1000, 1200)
+      X086 AAAAAAAAA 5 A_FadeOut10
+      Stop      
+    }
+  }
+}
+
+///////////////////////////////
+// MT_CHUNK2
+///////////////////////////////
+ACTOR MT_CHUNK2
+{
+  Radius 12
+  Height 12
+  Health 1000
+  Mass 5
+  Reactiontime 8
+  +MF3_EX_FLOORBOUNCE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4,5))
+      X086 B RANDOMRANGE(1000, 1200)
+      X086 BBBBBBBBB 5 A_FadeOut10
+      Stop      
+    }
+  }
+}
+
+///////////////////////////////
+// MT_CHUNK3
+///////////////////////////////
+ACTOR MT_CHUNK3
+{
+  Radius 16
+  Height 16
+  Health 1000
+  Mass 8
+  Reactiontime 8
+  +MF3_EX_FLOORBOUNCE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4,5))
+      X086 C RANDOMRANGE(1000, 1200)
+      X086 CCCCCCCCC 5 A_FadeOut10
+      Stop      
+    }
+  }
+}
+
+///////////////////////////////
 // MT_STORMBIRDHEAVYBOMBER
 ///////////////////////////////
 ACTOR MT_STORMBIRDHEAVYBOMBER 1035
 {
-  Radius 32
-  Height 56
+  Radius 64
+  Height 32
   Health 100
-  Mass 150
+  Mass 130
+  Speed 8
   Gravity 0
-  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  PainChance 128
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_NOGRAVITY
+  +MF_FLOAT
+  +MF_COUNTKILL
   +MF2_EX_DONTINFIGHTMONSTERS
   States
   {
-  Spawn:
-    XR35 A -1
-    Stop
+    Spawn:
+      XR35 A 5 A_Look
+      Loop
+    See:
+      XR35 A 6 A_Chase
+      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,0.5)),5)
+      XR35 A 6 A_Chase
+      Loop
+    Missile:
+      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,0.5)),8)
+      XR35 A 10 A_FaceTarget
+      TNT1 A 0 A_MatchTargetZ(0.1,8)
+      TNT1 A 0 BRIGHT A_CustomMissile("MT_LASER",1,64)
+      XR35 A 10 BRIGHT A_CustomMissile("MT_LASER",1,-64)
+      TNT1 A 0 A_DropFarTarget(2048,128)
+      XR35 A 10 A_CPosRefire(30)
+      Goto Missile
+    Pain:
+      XR35 A 10 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,FRANDOM(1,2),0)
+      Goto See
+    Death:
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,0,0,0,0,0,0,0)
+      TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_STORMBIRD_BODY")
+      TNT1 A 0 A_SpawnItemEx("MT_STORMBIRD_CHUNK1",0,-20,0,RANDOMPICK(-1,1),RANDOMPICK(-3,-2),RANDOMPICK(1,2),RANDOMPICK(355,0,5))
+      TNT1 A 0 A_SpawnItemEx("MT_STORMBIRD_CHUNK1",0,20,0,RANDOMPICK(-1,1),RANDOMPICK(3,2),RANDOMPICK(1,2),RANDOMPICK(175,180,185))
+      TNT1 A 0 A_SpawnItemEx("MT_CHUNK1",0,0,0,RANDOMPICK(-2,-1,1,2),RANDOMPICK(-2,-1,1,2),RANDOMPICK(2,3),RANDOM(0,179)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_CHUNK2",0,0,0,RANDOMPICK(-2,-1,1,2),RANDOMPICK(-2,-1,1,2),RANDOMPICK(2,3),RANDOM(0,179)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_CHUNK3",0,0,0,RANDOMPICK(-2,-1,1,2),RANDOMPICK(-2,-1,1,2),RANDOMPICK(2,3),RANDOM(0,179)*2)
+      Stop
   }
 }
 
