@@ -1210,11 +1210,18 @@ begin
 end;
 
 procedure A_CPosRefire(actor: Pmobj_t);
+var
+  prob: integer;
 begin
   // keep firing unless target got out of sight
   A_FaceTarget(actor);
 
-  if P_Random < 40 then
+  if actor.state.params.Count > 0 then
+    prob := actor.state.params.IntVal[0]
+  else
+    prob := 40;
+
+  if P_Random < prob then
     exit;
 
   if (actor.target = nil) or (actor.target.health <= 0) or
