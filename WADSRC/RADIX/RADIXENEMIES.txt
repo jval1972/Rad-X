@@ -455,7 +455,9 @@ ACTOR MT_DEFENCEDRONE_STUB1 1031
   Height 56
   Health 50
   Speed 4
+  Mass 100
   Gravity 0
+  PainChance 160
   +MF_SOLID
   +MF_SHOOTABLE
   +MF_NOGRAVITY
@@ -655,12 +657,13 @@ ACTOR MT_BATTLEDRONE1_CHUNK3
 
 ACTOR MT_BATTLEDRONE1 1033
 {
-{
   Radius 64
   Height 56
   Health 50
+  Mass 30
   Speed 8
   Gravity 0
+  PainChance 128
   +MF_SOLID
   +MF_SHOOTABLE
   +MF_NOGRAVITY
@@ -703,21 +706,175 @@ ACTOR MT_BATTLEDRONE1 1033
 }
 
 ///////////////////////////////
+// MT_MISSILEBOAT_BODY
+///////////////////////////////
+ACTOR MT_MISSILEBOAT_BODY
+{
+  Radius 48
+  Height 24
+  Health 1000
+  Mass 50
+  Reactiontime 8
+  States
+  {
+    Spawn:
+    {
+      XR34 J -1
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_MISSILEBOAT_CHUNK1
+///////////////////////////////
+ACTOR MT_MISSILEBOAT_CHUNK1
+{
+  Radius 48
+  Height 24
+  Health 1000
+  Mass 10
+  Reactiontime 8
+  +MF3_EX_FLOORBOUNCE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3))
+      XR34 BCDEFGHI 5
+      XR34 B -1
+    }
+  }
+}
+
+///////////////////////////////
+// MT_MISSILEBOAT_CHUNK2
+///////////////////////////////
+ACTOR MT_MISSILEBOAT_CHUNK2
+{
+  Radius 48
+  Height 24
+  Health 1000
+  Mass 10
+  Reactiontime 8
+  +MF3_EX_FLIPSPRITE
+  +MF3_EX_FLOORBOUNCE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3))
+      XR34 BCDEFGHI 5
+      XR34 B -1
+    }
+  }
+}
+
+///////////////////////////////
+// MT_MISSILEBOAT_CHUNK3
+///////////////////////////////
+ACTOR MT_MISSILEBOAT_CHUNK3
+{
+  Radius 48
+  Height 24
+  Health 1000
+  Mass 5
+  Reactiontime 8
+  +MF3_EX_FLOORBOUNCE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4,5))
+      XR34 K 1000
+      XR34 KKKKKKKKK 5 A_FadeOut10
+      Stop      
+    }
+  }
+}
+
+///////////////////////////////
+// MT_MISSILEBOAT_CHUNK4
+///////////////////////////////
+ACTOR MT_MISSILEBOAT_CHUNK4
+{
+  Radius 48
+  Height 24
+  Health 1000
+  Mass 5
+  Reactiontime 8
+  +MF3_EX_FLOORBOUNCE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4,5))
+      XR34 L 1000
+      XR34 LLLLLLLLL 5 A_FadeOut10
+      Stop      
+    }
+  }
+}
+
+///////////////////////////////
 // MT_MISSILEBOAT
 ///////////////////////////////
 ACTOR MT_MISSILEBOAT 1034
 {
-  Radius 32
+  Radius 64
   Height 56
-  Health 150
+  Health 100
+  Mass 130
+  Speed 6
   Gravity 0
-  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  PainChance 128
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_NOGRAVITY
+  +MF_FLOAT
+  +MF_COUNTKILL
   +MF2_EX_DONTINFIGHTMONSTERS
   States
   {
-  Spawn:
-    XR34 A -1
-    Stop
+    Spawn:
+      XR34 A 5 A_Look
+      Loop
+    See:
+      XR34 A 6 A_Chase
+      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,0.5)),5)
+      XR34 A 6 A_Chase
+      Loop
+    Missile:
+      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,0.5)),8)
+      XR34 A 10 A_FaceTarget
+      TNT1 A 0 A_MatchTargetZ(0.1,8)
+      XR34 A 10 BRIGHT A_CustomMissile("MT_ENEMYMISSILE")
+      TNT1 A 0 A_DropFarTarget(1024,100)
+      XR34 A 10 A_CPosRefire
+      Goto Missile
+    Pain:
+      XR34 A 10 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,FRANDOM(1,2),0)
+      Goto See
+    Death:
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,0,0,0,0,0,0,0)
+      TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_MISSILEBOAT_BODY")
+      TNT1 A 0 A_SpawnItemEx("MT_MISSILEBOAT_CHUNK1",0,-20,0,RANDOMPICK(-1,1),RANDOMPICK(-3,-2),RANDOMPICK(1,2),RANDOMPICK(355,0,5))
+      TNT1 A 0 A_SpawnItemEx("MT_MISSILEBOAT_CHUNK2",0,20,0,RANDOMPICK(-1,1),RANDOMPICK(3,2),RANDOMPICK(1,2),RANDOMPICK(175,180,185))
+      TNT1 A 0 A_SpawnItemEx("MT_MISSILEBOAT_CHUNK3",0,0,0,RANDOMPICK(-2,-1,1,2),RANDOMPICK(-2,-1,1,2),RANDOMPICK(2,3),RANDOM(0,179)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_MISSILEBOAT_CHUNK3",0,0,0,RANDOMPICK(-2,-1,1,2),RANDOMPICK(-2,-1,1,2),RANDOMPICK(2,3),RANDOM(0,179)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_MISSILEBOAT_CHUNK4",0,0,0,RANDOMPICK(-2,-1,1,2),RANDOMPICK(-2,-1,1,2),RANDOMPICK(2,3),RANDOM(0,179)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_MISSILEBOAT_CHUNK4",0,0,0,RANDOMPICK(-2,-1,1,2),RANDOMPICK(-2,-1,1,2),RANDOMPICK(2,3),RANDOM(0,179)*2)
+      Stop
   }
 }
 
@@ -728,7 +885,8 @@ ACTOR MT_STORMBIRDHEAVYBOMBER 1035
 {
   Radius 32
   Height 56
-  Health 150
+  Health 100
+  Mass 150
   Gravity 0
   SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
   +MF2_EX_DONTINFIGHTMONSTERS
