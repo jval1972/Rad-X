@@ -3498,12 +3498,11 @@ begin
     exit;
 
   if actor.state.params.Count > 1 then
-    propability := actor.state.params.IntVal[1]
-  else
-    propability := 256;
-
-  if N_Random < propability then
-    exit;
+  begin
+    propability := actor.state.params.IntVal[1];
+    if N_Random < propability then
+      exit;
+  end;
 
   dist := actor.state.params.FixedVal[0];
   if P_AproxDistance(actor.x - actor.target.x, actor.y - actor.target.y) > dist then
