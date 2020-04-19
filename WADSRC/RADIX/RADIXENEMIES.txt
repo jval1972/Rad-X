@@ -1007,7 +1007,7 @@ ACTOR MT_SKYFIREASSULTFIGHTER 1035
 {
   Radius 64
   Height 32
-  Health 100
+  Health 150
   Mass 120
   Speed 12
   Gravity 0
@@ -1106,7 +1106,7 @@ ACTOR MT_STORMBIRDHEAVYBOMBER 1036
 {
   Radius 80
   Height 48
-  Health 150
+  Health 300
   Mass 150
   Speed 10
   Gravity 0
@@ -1159,17 +1159,65 @@ ACTOR MT_STORMBIRDHEAVYBOMBER 1036
 ///////////////////////////////
 ACTOR MT_SPAWNER 1037
 {
-  Radius 32
-  Height 56
-  Health 200
+  Radius 128
+  Height 64
+  Health 600
+  Mass 300
+  Speed 10
   Gravity 0
-  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  PainChance 128
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_NOGRAVITY
+  +MF_FLOAT
+  +MF_COUNTKILL
   +MF2_EX_DONTINFIGHTMONSTERS
   States
   {
-  Spawn:
-    XR37 A -1
-    Stop
+    Spawn:
+      XR37 A 5 A_Look
+      Loop
+    See:
+      XR37 A 6 A_Chase
+      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,0.8)),12)
+      XR37 A 6 A_Chase
+      Loop
+    Missile:
+      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,0.8)),8)
+      XR37 A 10 A_FaceTarget
+      TNT1 A 0 A_MatchTargetZ(0.1,8)
+      TNT1 A 0 BRIGHT A_CustomMissile("MT_LASER",17,108)
+      XR37 A 10 BRIGHT A_CustomMissile("MT_LASER",17,-108)
+      XR37 A 10 A_FaceTarget
+      TNT1 A 0 BRIGHT A_CustomMissile("MT_LASER",110,80)
+      XR37 A 10 BRIGHT A_CustomMissile("MT_LASER",110,-80)
+      TNT1 A 0 A_Jump(160,3)
+      XR37 A 10 A_FaceTarget
+      XR37 A 10 BRIGHT A_CustomMissile("MT_ENEMYSEEKERMISSILE",103)
+      TNT1 A 0 A_DropFarTarget(1536,128)
+      XR37 A 10 A_CPosRefire(40)
+      Goto Missile
+    Pain:
+      XR37 A 10 A_SpawnItemEx("MT_RADIXBIGSMOKE",RANDOM(-10,10),RANDOM(-10,10),RANDOM(30,40),0,0,FRANDOM(1,2),0)
+      Goto See
+    Death:
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,0,30,0,0,0,0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,-70,15,0,0,0,0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,70,15,0,0,0,0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,-50,50,0,0,0,0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,50,50,0,0,0,0,0)
+      TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
+      TNT1 AAAAAA 0 A_SpawnItemEx("MT_RADIXBIGSMOKE",RANDOM(-40,40),RANDOM(-40,40),RANDOM(-40,40),0,0,RANDOM(0,2),0)
+      TNT1 A 0 A_SpawnItemEx("MT_CHUNK1",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(0,59)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_CHUNK1",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(60,119)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_CHUNK1",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(120,179)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_CHUNK2",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(0,59)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_CHUNK2",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(60,119)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_CHUNK2",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(120,179)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_CHUNK3",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(0,59)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_CHUNK3",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(60,119)*2)
+      TNT1 A 0 A_SpawnItemEx("MT_CHUNK3",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(120,179)*2)
+      Stop
   }
 }
 
