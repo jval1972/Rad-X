@@ -1658,6 +1658,15 @@ begin
 
   // MT_BATTLEDRONE1
   MakeRotatingSprite8('DroneA', _MTRX_BATTLEDRONE1, 1, nil, 91, 50, false, false);
+  MakeOneSprite('DroneA1Chunk1', _MTRX_BATTLEDRONE1, nil, 27, 35, false, false, 'B');
+  MakeOneSprite('DroneA1Chunk2', _MTRX_BATTLEDRONE1, nil, 31, 34, false, false, 'C');
+  MakeOneSprite('DroneA1Chunk3', _MTRX_BATTLEDRONE1, nil, 35, 25, false, false, 'D');
+  MakeOneSprite('DroneA1Chunk4', _MTRX_BATTLEDRONE1, nil, 30, 19, false, false, 'E');
+  MakeOneSprite('DroneA1Chunk5', _MTRX_BATTLEDRONE1, nil, 25, 15, false, false, 'F');
+  MakeOneSprite('DroneA1Chunk6', _MTRX_BATTLEDRONE1, nil, 19, 18, false, false, 'G');
+  MakeOneSprite('DroneA1Chunk7', _MTRX_BATTLEDRONE1, nil, 14, 25, false, false, 'H');
+  MakeOneSprite('DroneA1Chunk8', _MTRX_BATTLEDRONE1, nil, 17, 31, false, false, 'I');
+  MakeOneSprite('DroneA3Chunk', _MTRX_BATTLEDRONE1, nil, 7, 11, false, false, 'J');
 
   // MT_MISSILEBOAT
   MakeRotatingSprite8('DroneC', _MTRX_MISSILEBOAT, 1, nil, 83, 68, false, false);
@@ -1848,13 +1857,16 @@ begin
   MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 32, 12, false, false, 15);
   MakeRotatingSprite16('Missile', _MTTX_ENEMYMISSILE, 1, nil, 22, 12, false, false, 16);
 
-  // MT_DRONEBODY
-  MakeRotatingSprite8('DroneBBody', _MTTX_DRONEBODY, 1, nil, 93, 48, false, false);
+  // MT_DRONEBODYB
+  MakeRotatingSprite8('DroneBBody', _MTTX_DRONEBODYB, 1, nil, 93, 48, false, false);
 
   // MT_ENEMYLASER
   MakeOneSprite('EnemyLaser1', _MTTX_ENEMYLASER, nil, 19, 18, false, false, 'A');
   MakeOneSprite('EnemyLaser2', _MTTX_ENEMYLASER, nil, 16, 18, false, false, 'B');
-  MakeOneSprite('EnemyLaser3', _MTTX_ENEMYLASER, nil, 17, 18, false, false, 'B');
+  MakeOneSprite('EnemyLaser3', _MTTX_ENEMYLASER, nil, 17, 18, false, false, 'C');
+
+  // MT_DRONEBODYA
+  MakeOneSprite('DroneABodyBusted1', _MTTX_DRONEBODYA, nil, 63, 37, false, false);
 
   bmp := TRadixBitmap.Create;
 
