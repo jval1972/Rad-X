@@ -1,4 +1,4 @@
-4//
+//
 //  RAD: Recreation of the game "Radix - beyond the void"
 //       powered by the DelphiDoom engine
 //
@@ -1878,6 +1878,15 @@ begin
 
   // MT_DRONEBODYA
   MakeOneSprite('DroneABodyBusted1', _MTTX_DRONEBODYA, nil, 63, 37, false, false);
+
+  // MT_CHUNK
+  MakeOneSprite('StrongBio-MineDead1', _MTTX_CHUNK, nil, 11, 13, false, false, 'A');
+  MakeOneSprite('StrongBio-MineDead2', _MTTX_CHUNK, nil, 15, 15, false, false, 'B');
+  MakeOneSprite('StrongBio-MineDead3', _MTTX_CHUNK, nil, 17, 24, false, false, 'C');
+  MakeOneSprite('MetalChunk1', _MTTX_CHUNK, nil, 8, 8, false, false, 'D');
+  MakeOneSprite('MetalChunk2', _MTTX_CHUNK, nil, 9, 10, false, false, 'E');
+  MakeOneSprite('MetalChunk3', _MTTX_CHUNK, nil, 10, 15, false, false, 'F');
+  MakeOneSprite('MetalChunk4', _MTTX_CHUNK, nil, 11, 14, false, false, 'G');
 
   bmp := TRadixBitmap.Create;
 
