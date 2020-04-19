@@ -610,6 +610,7 @@ ACTOR MT_BATTLEDRONE1_CHUNK2
   Mass 10
   Reactiontime 8
   +MF3_EX_FLIPSPRITE
+  +MF3_EX_FLOORBOUNCE
   States
   {
     Spawn:
