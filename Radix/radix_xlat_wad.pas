@@ -1891,6 +1891,9 @@ begin
   // MT_ALDSLASER
   MakeRotatingSprite16('ALDSLaser', _MTTX_ALDSLASER, 1, nil, 24, 4, false, false);
 
+  // MT_LASER
+  MakeRotatingSprite16('Laser', _MTTX_LASER, 1, nil, 24, 4, false, false);
+
   bmp := TRadixBitmap.Create;
 
   for j := 0 to numsprinfo - 1 do
