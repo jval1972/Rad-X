@@ -1,4 +1,4 @@
-//
+4//
 //  RAD: Recreation of the game "Radix - beyond the void"
 //       powered by the DelphiDoom engine
 //
@@ -1684,6 +1684,8 @@ begin
 
   // MT_STORMBIRDHEAVYBOMBER
   MakeRotatingSprite8('HeavyFighter', _MTRX_STORMBIRDHEAVYBOMBER, 1, nil, 86, 54, false, false);
+  MakeOneSprite('StormBirdChunk5', _MTRX_STORMBIRDHEAVYBOMBER, nil, 50, 45, false, false, 'B');
+  MakeRotatingSprite8('StormBirdBodyBust', _MTRX_STORMBIRDHEAVYBOMBER, 1, nil, 82, 48, false, false, 'C');
 
   // MT_SKYFIREASSULTFIGHTER
   MakeRotatingSprite8('LightAssault', _MTRX_SKYFIREASSULTFIGHTER, 1, nil, 62, 51, false, false);
@@ -1740,11 +1742,9 @@ begin
   MakeOneSprite('Rui_1', _MTRX_RUI, nil, 16, 58, false, false, 'A');
   MakeOneSprite('Rui_2', _MTRX_RUI, nil, 25, 58, false, false, 'B');
   MakeOneSprite('Rui_3', _MTRX_RUI, nil, 31, 64, false, false, 'C');
-
   MakeOneSprite('RuiBust_1', _MTRX_RUI, nil, 32, 58, false, false, 'D');
   MakeOneSprite('RuiBust_2', _MTRX_RUI, nil, 32, 58, false, false, 'E');
   MakeOneSprite('RuiBust_3', _MTRX_RUI, nil, 32, 58, false, false, 'F');
-
   MakeOneSprite('RuiFall', _MTRX_RUI, nil, 42, 52, false, false, 'G');
   MakeOneSprite('RuiDead', _MTRX_RUI, nil, 54, 19, false, false, 'H');
 
