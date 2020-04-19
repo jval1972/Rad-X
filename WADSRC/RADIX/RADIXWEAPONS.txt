@@ -911,10 +911,10 @@ ACTOR "MT_ALDSLASER"
   {
     Spawn:
     {
-      X087 S 5 BRIGHT
+      X087 A 5 BRIGHT
       TNT1 A 0 A_GlowLight "NONE"
     SpawnLoop:
-      X087 S 5 BRIGHT
+      X087 A 5 BRIGHT
       GoTo SpawnLoop
     }
     Death:
@@ -955,10 +955,10 @@ ACTOR "MT_LASER"
   {
     Spawn:
     {
-      X088 S 5 BRIGHT
+      X088 A 5 BRIGHT
       TNT1 A 0 A_GlowLight "NONE"
     SpawnLoop:
-      X088 S 5 BRIGHT
+      X088 A 5 BRIGHT
       GoTo SpawnLoop
     }
     Death:
