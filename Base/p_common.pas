@@ -193,6 +193,8 @@ procedure A_SpawnItem(actor: Pmobj_t);
 
 procedure A_SpawnItemEx(actor: Pmobj_t);
 
+procedure A_SpawnChildEx(actor: Pmobj_t);
+
 procedure A_SeekerMissile(actor: Pmobj_t);
 
 procedure A_CStaffMissileSlither(actor: Pmobj_t);
@@ -345,6 +347,8 @@ procedure A_MatchTargetZ(actor: Pmobj_t);
 
 procedure A_DropFarTarget(actor: Pmobj_t);
 
+procedure A_FollowMaster(actor: Pmobj_t);
+
 const
   FLOATBOBSIZE = 64;
   FLOATBOBMASK = FLOATBOBSIZE - 1;
@@ -383,6 +387,7 @@ uses
   deh_main,
   d_player,
   m_vectors,
+  m_bbox,
   i_system,
   c_con,
   g_game,
@@ -2113,7 +2118,7 @@ const
 // flags -> parm8
 // chance -> parm9
 //
-procedure A_SpawnItemEx(actor: Pmobj_t);
+function P_SpawnItemEx(actor: Pmobj_t): Pmobj_t;
 var
   mobj_no: integer;
   x, y: fixed_t;
@@ -2125,6 +2130,8 @@ var
   flags: integer;
   chance: integer;
 begin
+  result := nil;
+
   if not P_CheckStateParams(actor) then
     exit;
 
@@ -2142,7 +2149,7 @@ begin
   end;
   if mobj_no = -1 then
   begin
-    I_Warning('A_SpawnItemEx(): Unknown item %s'#13#10, [actor.state.params.StrVal[0]]);
+    I_Warning('P_SpawnItemEx(): Unknown item %s'#13#10, [actor.state.params.StrVal[0]]);
     exit;
   end;
 
@@ -2192,7 +2199,22 @@ begin
     mo.angle := ang1;
     if (flags and SIXF_TRANSFERAMBUSHFLAG) <> 0 then
       mo.flags := (mo.flags and not MF_AMBUSH) or (actor.flags and MF_AMBUSH);
+    result := mo;
   end;
+end;
+
+procedure A_SpawnItemEx(actor: Pmobj_t);
+begin
+  P_SpawnItemEx(actor);
+end;
+
+procedure A_SpawnChildEx(actor: Pmobj_t);
+var
+  mo: Pmobj_t;
+begin
+  mo := P_SpawnItemEx(actor);
+  if mo <> nil then
+    mo.master := actor;
 end;
 
 //
@@ -3515,6 +3537,198 @@ begin
   dist := actor.state.params.FixedVal[0];
   if P_AproxDistance(actor.x - actor.target.x, actor.y - actor.target.y) > dist then
     P_SetMobjState(actor, statenum_t(actor.info.spawnstate));
+end;
+
+//
+// A_FollowXXXXX(minxy, maxxy: fixed_t; minz, maxz: fixed_t; tics: integer; maxmomxy: fixed_t = 16 * FRACUNIT;
+//               maxmomz: fixed_t = 16 * FRACUNIT; stepxy: fixed_t = FRACUNIT; stepz: fixed_t = FRACUNIT)
+//
+const
+  BOXMINZ = BOXTOP;
+  BOXMAXZ = BOXBOTTOM;
+
+procedure P_FollowActor(const actor: Pmobj_t; const targ: Pmobj_t);
+var
+  minxy, maxxy, minz, maxz: fixed_t;
+  destxy, destz: fixed_t;
+  distxy, distz: fixed_t;
+  dx, dy, dz: fixed_t;
+  newmomx, newmomy, newmomz: fixed_t;
+  maxmomxy, maxmomz: fixed_t;
+  stepxy, stepz: fixed_t;
+  tics: integer;
+  outbox: array[0..3] of fixed_t;
+  inbox: array[0..3] of fixed_t;
+begin
+  if not P_CheckStateParams(actor, 5, CSP_AT_LEAST) then
+    exit;
+
+  if targ = nil then
+    exit;
+
+  // Retrieve parameters
+  minxy := actor.state.params.FixedVal[0];
+  maxxy := actor.state.params.FixedVal[1];
+  minz := actor.state.params.FixedVal[2];
+  maxz := actor.state.params.FixedVal[3];
+  tics := actor.state.params.IntVal[4];
+  if tics <= 0 then
+    tics := 1;
+
+  if actor.state.params.Count >= 6 then
+    maxmomxy := actor.state.params.FixedVal[5]
+  else
+    maxmomxy := 16 * FRACUNIT;
+
+  if actor.state.params.Count >= 7 then
+    maxmomz := actor.state.params.FixedVal[6]
+  else
+    maxmomz := 16 * FRACUNIT;
+
+  if actor.state.params.Count >= 8 then
+    stepxy := actor.state.params.FixedVal[7]
+  else
+    stepxy := FRACUNIT;
+
+  if actor.state.params.Count >= 9 then
+    stepz := actor.state.params.FixedVal[8]
+  else
+    stepz := FRACUNIT;
+
+  // Calculate xy bounding boxes
+  // We need to bee inside outbox, but outside inbox
+  outbox[BOXTOP] := targ.y - maxxy;
+  outbox[BOXBOTTOM] := targ.y + maxxy;
+  outbox[BOXRIGHT] := targ.x + maxxy;
+  outbox[BOXLEFT] := targ.x - maxxy;
+
+  inbox[BOXTOP] := targ.y - minxy;
+  inbox[BOXBOTTOM] := targ.y + minxy;
+  inbox[BOXRIGHT] := targ.x + minxy;
+  inbox[BOXLEFT] := targ.x - minxy;
+
+  // Adjust x axis
+  if actor.x < outbox[BOXLEFT] then
+  begin
+    // Too far, move in x axis - inc x
+    dx := MinI(stepxy, (targ.x - actor.x) div tics);
+    actor.momx := actor.momx + dx;
+    if actor.momx > maxmomxy then
+      actor.momx := maxmomxy;
+  end
+  else if actor.x > outbox[BOXRIGHT] then
+  begin
+    // Too far, move in x axis - dec x
+    dx := MinI(stepxy, (actor.x - targ.x) div tics);
+    actor.momx := actor.momx - dx;
+    if actor.momx < -maxmomxy then
+      actor.momx := -maxmomxy;
+  end;
+
+  // Adjust y axis
+  if actor.y < outbox[BOXTOP] then
+  begin
+    // Too far, move in y axis - inc y
+    dy := MinI(stepxy, (targ.y - actor.y) div tics);
+    actor.momy := actor.momy + dy;
+    if actor.momy > maxmomxy then
+      actor.momy := maxmomxy;
+  end
+  else if actor.y > outbox[BOXBOTTOM] then
+  begin
+    dy := MinI(stepxy, (actor.y - targ.y) div tics);
+    actor.momy := actor.momy - dy;
+    if actor.momy < -maxmomxy then
+      actor.momy := -maxmomxy;
+    // Too far, move in y axis - dec y
+  end;
+
+  // Too close ?
+  if (actor.x > inbox[BOXLEFT]) and (actor.x < inbox[BOXBOTTOM]) and (actor.y > inbox[BOXTOP]) and (actor.y < inbox[BOXBOTTOM]) then
+  begin
+    // Too close, move in x & y axis away from targ
+    if actor.x > targ.x then
+    begin
+      dx := MinI(stepxy, (actor.x - targ.x) div tics);
+      actor.momx := actor.momx + dx;
+      if actor.momx > maxmomxy then
+        actor.momx := maxmomxy;
+    end
+    else if actor.x < targ.x then
+    begin
+      dx := MinI(stepxy, (targ.x - actor.x) div tics);
+      actor.momx := actor.momx - dx;
+      if actor.momx < -maxmomxy then
+        actor.momx := -maxmomxy;
+    end;
+
+    if actor.y > targ.y then
+    begin
+      dy := MinI(stepxy, (actor.y - targ.y) div tics);
+      actor.momy := actor.momy + dy;
+      if actor.momy > maxmomxy then
+        actor.momy := maxmomxy;
+    end
+    else if actor.y < targ.y then
+    begin
+      dy := MinI(stepxy, (targ.y - actor.y) div tics);
+      actor.momy := actor.momy - dy;
+      if actor.momy < -maxmomxy then
+        actor.momy := -maxmomxy;
+    end;
+
+  end;
+
+  outbox[BOXMINZ] := targ.z - maxz;
+  outbox[BOXMAXZ] := targ.z + maxz;
+
+  inbox[BOXMINZ] := targ.z - minz;
+  inbox[BOXMAXZ] := targ.z + minz;
+
+  // Adjust z axis
+  if actor.z < outbox[BOXMINZ] then
+  begin
+    // Too low, move up
+    dz := MinI(stepz, (targ.z - actor.z) div tics);
+    actor.momz := actor.momz + dz;
+    if actor.momz > maxmomz then
+      actor.momz := maxmomz;
+  end
+  else if actor.z > outbox[BOXMAXZ] then
+  begin
+    // Too high, move down
+    dz := MinI(stepz, (actor.z - targ.z) div tics);
+    actor.momz := actor.momz - dz;
+    if actor.momz < -maxmomz then
+      actor.momz := -maxmomz;
+  end
+  else if (actor.z > inbox[BOXMINZ]) and  (actor.z < inbox[BOXMAXZ]) then
+  begin
+    // Too close
+    if actor.z > targ.z then
+    begin
+      // Too low, move up
+      dz := MinI(stepz, (actor.z - targ.z) div tics);
+      actor.momz := actor.momz + dz;
+      if actor.momz > maxmomz then
+        actor.momz := maxmomz;
+    end
+    else if actor.z < targ.z then
+    begin
+      // Too low, move up
+      dz := MinI(stepz, (targ.z - actor.z) div tics);
+      actor.momz := actor.momz - dz;
+      if actor.momz > -maxmomz then
+        actor.momz := -maxmomz;
+    end
+
+  end;
+
+end;
+
+procedure A_FollowMaster(actor: Pmobj_t);
+begin
+  P_FollowActor(actor, actor.master);
 end;
 
 end.

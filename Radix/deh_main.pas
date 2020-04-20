@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 287;
+  DEHNUMACTIONS = 289;
 
 type
   deh_action_t = record
@@ -2904,6 +2904,13 @@ begin
   deh_actions[286].action.acp1 := @A_DropFarTarget;
   deh_actions[286].name := strupper('A_DropFarTarget');
   {$IFDEF DLL}deh_actions[286].decl := 'A_DropFarTarget(distance: integer; propability: integer)';{$ENDIF}
+  deh_actions[287].action.acp1 := @A_FollowMaster;
+  deh_actions[287].name := strupper('A_FollowMaster');
+  {$IFDEF DLL}deh_actions[287].decl := 'A_FollowMaster((minxy, maxxy: fixed_t; minz, maxz: fixed_t; tics: integer; maxmomxy: fixed_t = 16 * FRACUNIT; maxmomz: fixed_t = 16 * FRACUNIT; stepxy: fixed_t = FRACUNIT; stepz: fixed_t = FRACUNIT)';{$ENDIF}
+  deh_actions[288].action.acp1 := @A_SpawnChildEx;
+  deh_actions[288].name := strupper('A_SpawnChildEx');
+  {$IFDEF DLL}deh_actions[288].decl := 'A_SpawnChildEx(itemtype: string, [xofs: float], [yofs: float], [zofs: float], [momx: float], [momy: float], [momz: float], [ang: angle], [flags: integer], [chance: integer])';{$ENDIF}
+
 
   deh_strings.numstrings := 0;
   deh_strings.realnumstrings := 0;
