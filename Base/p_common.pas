@@ -2212,9 +2212,12 @@ procedure A_SpawnChildEx(actor: Pmobj_t);
 var
   mo: Pmobj_t;
 begin
-  mo := P_SpawnItemEx(actor);
-  if mo <> nil then
-    mo.master := actor;
+  if actor.flags3_ex and MF3_EX_CANSPAWNCHILDREN <> 0 then
+  begin
+    mo := P_SpawnItemEx(actor);
+    if mo <> nil then
+      mo.master := actor;
+  end;
 end;
 
 //

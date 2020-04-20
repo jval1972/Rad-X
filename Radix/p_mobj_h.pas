@@ -367,6 +367,8 @@ const
   MF3_EX_DAMAGEONPLAYERTOUCH = $2000;
   // Bobing all the time
   MF3_EX_BOBING = $4000;
+  // Can spawn children
+  MF3_EX_CANSPAWNCHILDREN = $8000;
 
 type
 // Map Object definition.
