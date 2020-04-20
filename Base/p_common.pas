@@ -2091,7 +2091,7 @@ begin
   ang := (ang + actor.angle) shr ANGLETOFINESHIFT;
   mo := P_SpawnMobj(actor.x + FixedMul(distance, finecosine[ang]),
                     actor.y + FixedMul(distance, finesine[ang]),
-                    actor.z{ - actor.floorz }+ zheight, mobj_no);
+                    actor.z + zheight, mobj_no);
   if mo <> nil then
     mo.angle := actor.angle;
 end;
