@@ -3466,7 +3466,7 @@ begin
 
   if actor.state.params = nil then
   begin
-    speed := FACUNIT;
+    speed := FRACUNIT;
     threshold := FRACUNIT;
   end
   else
