@@ -3464,19 +3464,27 @@ begin
   if actor.target = nil then
     exit;
 
-  if actor.state.params.Count > 0 then
+  if actor.state.params = nil then
   begin
-    speed := actor.state.params.FixedVal[0];
-    if speed = 0 then
-      exit;
+    speed := FACUNIT;
+    threshold := FRACUNIT;
   end
   else
-    speed := FRACUNIT;
+  begin
+    if actor.state.params.Count > 0 then
+    begin
+      speed := actor.state.params.FixedVal[0];
+      if speed = 0 then
+        exit;
+    end
+    else
+      speed := FRACUNIT;
 
-  if actor.state.params.Count > 1 then
-    threshold := actor.state.params.FixedVal[1]
-  else
-    threshold := FRACUNIT;
+    if actor.state.params.Count > 1 then
+      threshold := actor.state.params.FixedVal[1]
+    else
+      threshold := FRACUNIT;
+  end;
 
   if actor.z + actor.momz < actor.target.z - threshold then
     actor.momz := actor.momz + speed
