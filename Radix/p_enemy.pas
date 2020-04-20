@@ -1216,10 +1216,10 @@ begin
   // keep firing unless target got out of sight
   A_FaceTarget(actor);
 
-  if actor.state.params.Count > 0 then
-    prob := actor.state.params.IntVal[0]
-  else
-    prob := 40;
+  prob := 40;
+  if actor.state.params <> nil then
+    if actor.state.params.Count > 0 then
+      prob := actor.state.params.IntVal[0];
 
   if P_Random < prob then
     exit;
