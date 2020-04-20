@@ -349,6 +349,10 @@ procedure A_DropFarTarget(actor: Pmobj_t);
 
 procedure A_FollowMaster(actor: Pmobj_t);
 
+procedure A_CanSpawnChildren(actor: Pmobj_t);
+
+procedure A_NoCanSpawnChildren(actor: Pmobj_t);
+
 const
   FLOATBOBSIZE = 64;
   FLOATBOBMASK = FLOATBOBSIZE - 1;
@@ -3732,6 +3736,16 @@ end;
 procedure A_FollowMaster(actor: Pmobj_t);
 begin
   P_FollowActor(actor, actor.master);
+end;
+
+procedure A_CanSpawnChildren(actor: Pmobj_t);
+begin
+  actor.flags3_ex := actor.flags3_ex or MF3_EX_CANSPAWNCHILDREN;
+end;
+
+procedure A_NoCanSpawnChildren(actor: Pmobj_t);
+begin
+  actor.flags3_ex := actor.flags3_ex and not MF3_EX_CANSPAWNCHILDREN;
 end;
 
 end.

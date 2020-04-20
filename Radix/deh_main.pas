@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 289;
+  DEHNUMACTIONS = 291;
 
 type
   deh_action_t = record
@@ -2911,6 +2911,12 @@ begin
   deh_actions[288].action.acp1 := @A_SpawnChildEx;
   deh_actions[288].name := strupper('A_SpawnChildEx');
   {$IFDEF DLL}deh_actions[288].decl := 'A_SpawnChildEx(itemtype: string, [xofs: float], [yofs: float], [zofs: float], [momx: float], [momy: float], [momz: float], [ang: angle], [flags: integer], [chance: integer])';{$ENDIF}
+  deh_actions[289].action.acp1 := @A_CanSpawnChildren;
+  deh_actions[289].name := strupper('A_CanSpawnChildren');
+  {$IFDEF DLL}deh_actions[289].decl := 'A_CanSpawnChildren()';{$ENDIF}
+  deh_actions[290].action.acp1 := @A_NoCanSpawnChildren;
+  deh_actions[290].name := strupper('A_NoCanSpawnChildren');
+  {$IFDEF DLL}deh_actions[290].decl := 'A_NoCanSpawnChildren()';{$ENDIF}
 
 
   deh_strings.numstrings := 0;
