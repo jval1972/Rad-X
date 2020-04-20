@@ -104,6 +104,7 @@ type
     function GenerateMusic: boolean;
     function GenerateCockpitOverlay: boolean;
     function GenerateSounds: boolean;
+    function GenerateMissionText: boolean;
     procedure WritePK3Entry;
   public
     constructor Create; virtual;
@@ -800,6 +801,11 @@ begin
   GenerateOpaqueGraphicWithPalette(rname, wname, 0);
   aliases.Add(wname + '=' + rname);
 
+  rname := 'BriefScreen';
+  wname := 'M_BRIEF';
+  GenerateOpaqueGraphicWithPalette(rname, wname, 0);
+  aliases.Add(wname + '=' + rname);
+
   result := true;
 end;
 
@@ -909,7 +915,6 @@ begin
   AddGraphicWithPalette('NetworkMenu');
   AddGraphicWithPalette('NetworkMenuOverlay');
   AddGraphicWithPalette('StatsScreen');
-  AddGraphicWithPalette('BriefScreen');
   AddGraphicWithPalette('DebriefScreen1');
   AddGraphicWithPalette('DebriefScreen2');
   AddGraphicWithPalette('DebriefScreen3');
@@ -2158,6 +2163,29 @@ begin
   sndinfo.Free;
 end;
 
+function TRadixToWADConverter.GenerateMissionText: boolean;
+var
+  rname, wname: string;
+  i, j: integer;
+  tbuffer: pointer;
+  tsize: integer;
+begin
+  result := false;
+  for i := 1 to 3 do
+    for j := 1 to 9 do
+    begin
+      rname := 'MissionText[' + itoa(i) +'][' + itoa(j) + ']';
+      if ReadLump(lumps, numlumps, rname, tbuffer, tsize) then
+      begin
+        wname := 'MNTEXT' + itoa(i) + itoa(j);
+        wadwriter.AddData(wname, tbuffer, tsize);
+        aliases.Add(wname + '=' + rname);
+        result := true;
+        memfree(tbuffer, tsize);
+      end;
+    end;
+end;
+
 procedure TRadixToWADConverter.WritePK3Entry;
 begin
   if aliases = nil then
@@ -2197,6 +2225,7 @@ begin
   GenerateMusic;
   GenerateCockpitOverlay;
   GenerateSounds;
+  GenerateMissionText;
   WritePK3Entry;
 end;
 

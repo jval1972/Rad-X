@@ -1094,6 +1094,56 @@ begin
   saveOldkey := KeyBindingsInfo[Ord(kb_lookup) + choice].pkey^;
 end;
 
+//
+// JVAL: 20200420 - In game mission briefing
+//
+type
+  intextmenu_e = (
+    intextmenuempty2,
+    intextmenu_end
+  );
+
+var
+  InTextMenu: array[0..Ord(intextmenu_end) - 1] of menuitem_t;
+  InTextDef: menu_t;
+
+procedure M_InTextMenu(choice: integer);
+begin
+end;
+
+procedure M_DrawInMissionText;
+var
+  p: Ppatch_t;
+  lump: integer;
+  lst: TDStringList;
+  i: integer;
+begin
+  p := W_CacheLumpName('BriefScreen', PU_STATIC);
+  V_DrawPatch(InTextDef.x, InTextDef.y, SCN_TMP, p, false);
+  Z_ChangeTag(p, PU_CACHE);
+
+  lump := W_CheckNumForName('MissionPrimary[' + itoa(gameepisode) + '][' + itoa(gamemap) + ']');
+  if lump >= 0 then
+    V_DrawPatch(InTextDef.x + 4, InTextDef.y + 45, SCN_TMP, lump, false);
+
+  lump := W_CheckNumForName('MissionSecondary[' + itoa(gameepisode) + '][' + itoa(gamemap) + ']');
+  if lump >= 0 then
+    V_DrawPatch(InTextDef.x + 160, InTextDef.y + 45, SCN_TMP, lump, false);
+
+  lump := W_CheckNumForName('MissionText[' + itoa(gameepisode) + '][' + itoa(gamemap) + ']');
+  if lump >= 0 then
+  begin
+    lst := TDStringList.Create;
+    lst.Text := W_TextLumpNum(lump);
+    for i := 0 to 7 do
+    begin
+      M_WriteSmallText(InTextDef.x + 2, 128 + i * 8, lst.Strings[i], SCN_TMP);
+      M_WriteSmallText(InTextDef.x + 158, 128 + i * 8, lst.Strings[i + 8], SCN_TMP);
+    end;
+    lst.Free;
+  end;
+end;
+
 type
 //
 // SYSTEM  MENU
@@ -3000,6 +3050,19 @@ begin
           result := true;
           exit;
         end;
+      KEY_F12:  // JVAL: 20200420 - In game briefing/objectives
+        begin
+          if usergame and (gamestate = GS_LEVEL) then
+          begin
+            M_StartControlPanel;
+            currentMenu := @InTextDef;
+
+            itemOn := 0;
+            M_MenuSound;
+          end;
+          result := true;
+          exit;
+        end;
       KEY_ENTER:
         begin
           if m_altdown then
@@ -3136,6 +3199,17 @@ begin
         currentMenu.lastOn := itemOn;
         M_ClearMenus;
         M_MenuSound;
+        result := true;
+        exit;
+      end;
+    KEY_F12:
+      begin
+        if currentmenu = @InTextDef then
+        begin
+          currentMenu.lastOn := itemOn;
+          M_ClearMenus;
+          M_MenuSound;
+        end;
         result := true;
         exit;
       end;
@@ -5347,6 +5421,28 @@ begin
   KeyBindingsDef2.lastOn := 0; // last item user was on in menu
   KeyBindingsDef2.itemheight := SMALLLINEHEIGHT;
   KeyBindingsDef2.flags := FLG_MN_TEXTUREBK or FLG_MN_DRAWITEMON;
+
+////////////////////////////////////////////////////////////////////////////////
+//InTextMenu
+  pmi := @InTextMenu[0];
+  pmi.status := 1;
+  pmi.name := '';
+  pmi.cmd := '';
+  pmi.routine := @M_InTextMenu;
+  pmi.pBoolVal := nil;
+  pmi.alphaKey := #0;
+
+////////////////////////////////////////////////////////////////////////////////
+//InTextDef
+  InTextDef.numitems := Ord(intextmenu_end); // # of menu items
+  InTextDef.prevMenu := nil; // previous menu
+  InTextDef.menuitems := Pmenuitem_tArray(@InTextMenu);  // menu items
+  InTextDef.drawproc := @M_DrawInMissionText;  // draw routine
+  InTextDef.x := 10;
+  InTextDef.y := 8; // x,y of menu
+  InTextDef.lastOn := 0; // last item user was on in menu
+  InTextDef.itemheight := BIGLINEHEIGHT;
+  InTextDef.flags := 0;
 
 ////////////////////////////////////////////////////////////////////////////////
 //LoadMenu
