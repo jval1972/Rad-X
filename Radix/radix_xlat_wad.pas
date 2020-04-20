@@ -1477,12 +1477,12 @@ var
     const trans: PByteArray = nil;
     const xofs: integer = -255; const yofs: integer = -255;
     const cofs: boolean = true; const defofs: boolean = true;
-    const frm: char = 'A'; const spriteangle: char = '0');
+    const frm: char = 'A'; const spriteangle: char = '0'; const extraframe: string = '');
   begin
     check_sprite_overflow;
 
     spr.rname := rname;
-    spr.dname := get_sprite_name(r_id) + frm + spriteangle;
+    spr.dname := get_sprite_name(r_id) + frm + spriteangle + extraframe;
     spr.translation := trans;
     spr.xoffs := xofs;
     spr.yoffs := yofs;
@@ -1697,6 +1697,23 @@ begin
 
   // MT_EXODROID
   MakeRotatingSprite8('ExoDroid', _MTRX_EXODROID, 3, nil, 113, 188, false, false);
+  MakeOneSprite('ExoDroidFire1', _MTRX_EXODROID, nil, 56, 192, false, false, 'D', '1', 'E1');
+  MakeOneSprite('ExoDroidFire2', _MTRX_EXODROID, nil, 100, 192, false, false, 'D', '2', 'E8');
+  MakeOneSprite('ExoDroidFire3', _MTRX_EXODROID, nil, 126, 188, false, false, 'D', '3', 'E7');
+  MakeOneSprite('ExoDroidFire4', _MTRX_EXODROID, nil, 94, 190, false, false, 'D', '4', 'E6');
+  MakeOneSprite('ExoDroidFire5', _MTRX_EXODROID, nil, 48, 188, false, false, 'D', '5', 'E5');
+  MakeOneSprite('ExoDroidFire6', _MTRX_EXODROID, nil, 98, 188, false, false, 'D', '6', 'E4');
+  MakeOneSprite('ExoDroidFire7', _MTRX_EXODROID, nil, 121, 188, false, false, 'D', '7', 'E3');
+  MakeOneSprite('ExoDroidFire8', _MTRX_EXODROID, nil, 117, 191, false, false, 'D', '8', 'E2');
+  MakeOneSprite('Exo-DroidArm1', _MTRX_EXODROID, nil, 58, 63, false, false, 'F');
+  MakeOneSprite('Exo-DroidArm2', _MTRX_EXODROID, nil, 64, 56, false, false, 'G');
+  MakeOneSprite('Exo-DroidArm3', _MTRX_EXODROID, nil, 64, 46, false, false, 'H');
+  MakeOneSprite('Exo-DroidArm4', _MTRX_EXODROID, nil, 55, 35, false, false, 'I');
+  MakeOneSprite('Exo-DroidArm5', _MTRX_EXODROID, nil, 46, 33, false, false, 'J');
+  MakeOneSprite('Exo-DroidArm6', _MTRX_EXODROID, nil, 42, 38, false, false, 'K');
+  MakeOneSprite('Exo-DroidArm7', _MTRX_EXODROID, nil, 40, 48, false, false, 'L');
+  MakeOneSprite('Exo-DroidArm8', _MTRX_EXODROID, nil, 45, 55, false, false, 'M');
+  MakeOneSprite('Exo-DroidDeadBitmap', _MTRX_EXODROID, nil, 65, 24, false, false, 'N');
 
   // MT_SNAKEDEAMON
   MakeNonRotatingSprite('SnakeDemonBadassHead', _MTRX_SNAKEDEAMON, 3, nil, 57, 109, false, false);
