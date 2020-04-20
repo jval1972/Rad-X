@@ -482,6 +482,8 @@ begin
         mobj.tracer := Pmobj_t(mobj.tracer.key);
       if mobj.target <> nil then
         mobj.target := Pmobj_t(mobj.target.key);
+      if mobj.master <> nil then
+        mobj.master := Pmobj_t(mobj.master.key);
 
       if mobj.player <> nil then
         mobj.player := Pplayer_t(pDiff(mobj.player, @players[0], SizeOf(player_t)) + 1);
@@ -547,6 +549,7 @@ begin
             begin
               Pmobj_t(currentthinker).target := P_FindMobjFromKey(integer(Pmobj_t(currentthinker).target));
               Pmobj_t(currentthinker).tracer := P_FindMobjFromKey(integer(Pmobj_t(currentthinker).tracer));
+              Pmobj_t(currentthinker).master := P_FindMobjFromKey(integer(Pmobj_t(currentthinker).master));
             end;
 
             currentthinker := next;
@@ -570,6 +573,7 @@ begin
           mobj.info := @mobjinfo[Ord(mobj._type)];
           mobj.target := nil;
           mobj.tracer := nil;
+          mobj.master := nil;
           mobj.touching_sectorlist := nil;
 
           if mobj.customparams <> nil then

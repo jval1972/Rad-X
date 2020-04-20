@@ -499,6 +499,10 @@ type
     weapon_inc: array[0..Ord(NUMWEAPONS) - 1] of boolean; // JVAL 20200321 - Weapon pickable objects
     bouncecnt: integer; // JVAL: 20200402 - Bounce countdown
     wallbouncefactor: fixed_t; // JVAL: 20200402 - Speed modifier after wall bounce
+    master: Pmobj_t;
+    master_dx: fixed_t;
+    master_dy: fixed_t;
+    master_dz: fixed_t;
 
     // version 205
     lightvalidcount: integer;
