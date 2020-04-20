@@ -2287,7 +2287,7 @@ end;
 procedure A_FadeOut(actor: Pmobj_t);
 var
   reduce: fixed_t;
-begin                      
+begin
   reduce := FRACUNIT div 10;
 
   if actor.state.params <> nil then
