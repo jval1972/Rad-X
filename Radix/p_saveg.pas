@@ -478,6 +478,11 @@ begin
       mobj.state := Pstate_t(pDiff(mobj.state, @states[0], SizeOf(state_t)));
       mobj.prevstate := Pstate_t(pDiff(mobj.prevstate, @states[0], SizeOf(state_t)));
 
+      if mobj.tracer <> nil then
+        mobj.tracer := Pmobj_t(mobj.tracer.key);
+      if mobj.target <> nil then
+        mobj.target := Pmobj_t(mobj.target.key);
+
       if mobj.player <> nil then
         mobj.player := Pplayer_t(pDiff(mobj.player, @players[0], SizeOf(player_t)) + 1);
 
@@ -532,7 +537,22 @@ begin
     save_p := @save_p[1];
     case tclass of
       Ord(tc_end):
-        exit; // end of list
+        begin
+          currentthinker := thinkercap.next;
+          while currentthinker <> @thinkercap do
+          begin
+            next := currentthinker.next;
+
+            if @currentthinker._function.acp1 = @P_MobjThinker then
+            begin
+              Pmobj_t(currentthinker).target := P_FindMobjFromKey(integer(Pmobj_t(currentthinker).target));
+              Pmobj_t(currentthinker).tracer := P_FindMobjFromKey(integer(Pmobj_t(currentthinker).tracer));
+            end;
+
+            currentthinker := next;
+          end;
+          exit; // end of list
+        end;
 
       Ord(tc_mobj):
         begin
