@@ -1337,103 +1337,21 @@ ACTOR MT_EXODROID 1038
 }
 
 ///////////////////////////////
-// MT_SNAKEDEAMON_SHOT
-///////////////////////////////
-ACTOR "MT_SNAKEDEAMON_SHOT"
-{
-  Health 20
-  Radius 64
-  Height 64
-  Speed 1572864
-  Damage 30
-  Mass 200
-  Reactiontime 8
-  Seesound "radix/SndEnemyFire"
-  +MF_SOLID
-  +MF_SHOOTABLE
-  +MF_NOGRAVITY
-  +MF_DROPOFF
-  +MF_MISSILE
-  +THRUSKY
-  States
-  {
-    Spawn:
-    {
-      XR39 D 5 BRIGHT
-      Loop
-    }
-    Death:
-    {
-      TNT1 A 1 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,FRANDOM(1,2),0)
-      TNT1 A 1 A_SpawnItemEx("MT_RADIXBIGEXPLOSION")
-      TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
-      TNT1 A 1 A_PlayerHurtExplode(RANDOMPICK(20,25,30),20)
-      Stop
-    }
-  }
-}
-
-///////////////////////////////
 // MT_SNAKEDEAMON
 ///////////////////////////////
 ACTOR MT_SNAKEDEAMON 1039
 {
-  Radius 80
-  Height 64
-  Health 1500
-  Mass 300
-  Speed 16
+  Radius 32
+  Height 56
+  Health 200
   Gravity 0
-  PainChance 64
-  SeeSound "radix/SndAlienHum"
-  ActiveSound "radix/SndAlienHum"
-  +MF_SOLID
-  +MF_SHOOTABLE
-  +MF_NOGRAVITY
-  +MF_FLOAT
-  +MF_COUNTKILL
-  +MF_EX_LOOKALLAROUND
+  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT
   +MF2_EX_DONTINFIGHTMONSTERS
   States
   {
-    Spawn:
-      XR39 A 5 A_Look
-      Loop
-    See:
-      XR39 A 6 A_Chase
-      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,0.8)),12)
-      XR39 B 6 A_Chase
-      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,0.8)),12)
-      XR39 C 6 A_Chase
-      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,0.8)),12)
-      XR39 B 6 A_Chase
-      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,0.8)),12)
-      Loop
-    Missile:
-      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,0.8)),8)
-      XR39 C 10 A_FaceTarget
-      TNT1 A 0 A_MatchTargetZ(0.1,8)
-      XR39 A 10 A_CustomMissile("MT_SNAKEDEAMON_SHOT",30,0)
-      TNT1 A 0 A_DropFarTarget(2048,128)
-      XR39 A 10 A_CPosRefire(10)
-      Goto Missile
-    Pain:
-      XR39 A 10 A_SpawnItemEx("MT_RADIXBIGSMOKE",RANDOM(-10,10),RANDOM(-10,10),RANDOM(30,40),0,0,FRANDOM(1,2),0)
-      Goto See
-    Death:
-      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,0,30,0,0,0,0,0)
-      TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
-      TNT1 AAAAAA 0 A_SpawnItemEx("MT_RADIXBIGSMOKE",RANDOM(-40,40),RANDOM(-40,40),RANDOM(-40,40),0,0,RANDOM(0,2),0)
-      TNT1 A 0 A_SpawnItemEx("MT_CHUNK1",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(0,59)*2)
-      TNT1 A 0 A_SpawnItemEx("MT_CHUNK1",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(60,119)*2)
-      TNT1 A 0 A_SpawnItemEx("MT_CHUNK1",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(120,179)*2)
-      TNT1 A 0 A_SpawnItemEx("MT_CHUNK2",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(0,59)*2)
-      TNT1 A 0 A_SpawnItemEx("MT_CHUNK2",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(60,119)*2)
-      TNT1 A 0 A_SpawnItemEx("MT_CHUNK2",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(120,179)*2)
-      TNT1 A 0 A_SpawnItemEx("MT_CHUNK3",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(0,59)*2)
-      TNT1 A 0 A_SpawnItemEx("MT_CHUNK3",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(60,119)*2)
-      TNT1 A 0 A_SpawnItemEx("MT_CHUNK3",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(120,179)*2)
-      Stop
+  Spawn:
+    XR39 A -1
+    Stop
   }
 }
 
