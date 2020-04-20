@@ -1723,6 +1723,7 @@ begin
   // MT_SNAKEDEAMON
   MakeNonRotatingSprite('SnakeDemonBadassHead', _MTRX_SNAKEDEAMON, 3, nil, 57, 109, false, false);
   MakeOneSprite('SnakeDemonBadassBody', _MTRX_SNAKEDEAMON, nil, 41, 34, false, false, 'D');
+  MakeOneSprite('SnakeDemonBadassBody', _MTRX_SNAKEDEAMON, nil, 41, 65, false, false, 'E');
 
   // MT_MINE
   MakeNonRotatingSprite('Airmine', _MTRX_MINE, 3, nil, 51, 93, false, false);
