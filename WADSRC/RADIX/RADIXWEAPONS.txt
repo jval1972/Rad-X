@@ -353,6 +353,14 @@ ACTOR "MT_RADIXBIGSMOKE"
 }
 
 ///////////////////////////////
+// MT_RADIXVERYBIGSMOKE
+///////////////////////////////
+ACTOR "MT_RADIXVERYBIGSMOKE":  "MT_RADIXBIGSMOKE"
+{
+  Scale 2
+}
+
+///////////////////////////////
 // MT_RADIXBURNERSMOKE
 ///////////////////////////////
 ACTOR "MT_RADIXBURNERSMOKE"
