@@ -121,6 +121,7 @@ begin
 
   if (mo.momx = 0) and (mo.momy = 0) then
   begin
+    sec := R_PointInSubSector(mo.x, mo.y).sector;
     rx := (sec.radixmapXmult * (mo.x div FRACUNIT) - sec.radixmapXadd) div 64;
     ry := (sec.radixmapYmult * (mo.y div FRACUNIT) - sec.radixmapYadd) div 64;
 
