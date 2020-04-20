@@ -42,6 +42,7 @@ uses
   p_local,
   p_mobj_h,
   m_fixed,
+  tables,
   r_defs;
 
 function P_AproxDistance(dx: fixed_t; dy: fixed_t): fixed_t;
@@ -66,6 +67,8 @@ function P_BlockThingsIterator(x, y: integer; func: ttraverser_t): boolean;
 
 function P_PathTraverse(x1, y1, x2, y2: fixed_t; flags: integer;
   trav: traverser_t): boolean;
+
+function P_AngleInRange(const an: angle_t; const an1, an2: angle_t): boolean;
 
 var
   opentop: fixed_t;
@@ -1157,6 +1160,14 @@ begin
 
   // go through the sorted list
   result := P_TraverseIntercepts(trav, FRACUNIT);
+end;
+
+function P_AngleInRange(const an: angle_t; const an1, an2: angle_t): boolean;
+begin
+  if an1 > an2 then
+    result := P_AngleInRange(an, an1, ANGLE_MAX) or P_AngleInRange(an, 0, an2)
+  else
+    result := (an >= an1) and (an <= an2);
 end;
 
 end.
