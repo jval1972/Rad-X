@@ -3806,6 +3806,9 @@ begin
   if nearest > mindist then
     exit;
 
+  if abs(dest.z - actor.z) > mindist then
+    exit;
+    
   actor.health := 0;
 end;
 
