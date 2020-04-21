@@ -94,11 +94,13 @@ uses
   ps_compiler,
   uPSDisassembly,
   ps_utils,
-  ps_defs;
+  ps_defs,
+  radix_weapons;
 
 procedure DD_InitDoomEngine;
 begin
   PS_InitProcLists;
+  RX_InitWeaponStates;
   DEH_Init;
   SC_Init;
   SC_ParseStatedefLump;
@@ -615,14 +617,14 @@ var
   afstr: string;
   i: integer;
 begin
-  DEH_Init;
+  DD_InitDoomEngine;
   try
     afstr := '';
     for i := 0 to DEHNUMACTIONS - 1 do
       afstr := afstr + deh_actions[i].decl + #13#10;
     DD_CopyStringToPChar(afstr, _out, _outsize);
   finally
-    DEH_ShutDown;
+    DD_ShutDownDoomEngine;
   end;
 end;
 
@@ -633,14 +635,14 @@ var
   lst: TDStringList;
 begin
   Info_Init(true);
-  DEH_Init;
+  DD_InitDoomEngine;
   try
     lst := DEH_MobjInfoCSV;
     csvstr := lst.Text;
     lst.Free;
     DD_CopyStringToPChar(csvstr, _out, _outsize);
   finally
-    DEH_ShutDown;
+    DD_ShutDownDoomEngine;
   end;
   Info_ShutDown;
 end;
@@ -652,14 +654,14 @@ var
   lst: TDStringList;
 begin
   Info_Init(true);
-  DEH_Init;
+  DD_InitDoomEngine;
   try
     lst := DEH_StatesCSV;
     csvstr := lst.Text;
     lst.Free;
     DD_CopyStringToPChar(csvstr, _out, _outsize);
   finally
-    DEH_ShutDown;
+    DD_ShutDownDoomEngine;
   end;
   Info_ShutDown;
 end;
@@ -671,14 +673,14 @@ var
   lst: TDStringList;
 begin
   Info_Init(true);
-  DEH_Init;
+  DD_InitDoomEngine;
   try
     lst := DEH_SpritesCSV;
     csvstr := lst.Text;
     lst.Free;
     DD_CopyStringToPChar(csvstr, _out, _outsize);
   finally
-    DEH_ShutDown;
+    DD_ShutDownDoomEngine;
   end;
   Info_ShutDown;
 end;

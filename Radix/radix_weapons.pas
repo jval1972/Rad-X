@@ -67,6 +67,9 @@ procedure A_PhaseTorpedoSplit(actor: Pmobj_t);
 
 procedure A_FireRadixGravityWave(player: Pplayer_t; psp: Ppspdef_t);
 
+var
+  cnt_radixweaponstates: integer = 0;
+
 implementation
 
 uses
@@ -113,6 +116,7 @@ begin
   st.tics := tics;
   st.nextstate := statenum_t(result);
   st.action.acp2 := proc;
+  inc(cnt_radixweaponstates);  // JVAL: 20200421 - Save # of new weapon states to add them to statetokens
 end;
 
 procedure A_RaiseRadixWeapon(player: Pplayer_t; psp: Ppspdef_t);
@@ -165,6 +169,8 @@ var
   end;
 
 begin
+  cnt_radixweaponstates := 0;
+
   get_def_weapon_states;
   weaponinfo[Ord(wp_neutroncannons)].upstate := sraise;
   weaponinfo[Ord(wp_neutroncannons)].downstate := slower;

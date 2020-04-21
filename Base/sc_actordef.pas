@@ -2708,6 +2708,7 @@ var
   lumplist: TDNumberList;
 begin
   SC_ParseStatedefLump;
+  SC_AddRadixWeaponStates;  // JVAL: 20200421 - Save # of new weapon states to add them to statetokens
 
   {$IFNDEF FPC}
   SUC_Disable;

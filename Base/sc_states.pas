@@ -47,6 +47,8 @@ var
 
 procedure SC_ParseStatedefLump;
 
+procedure SC_AddRadixWeaponStates;
+
 function P_GetStateFromName(const actor: Pmobj_t; const s: string): integer;
 
 function P_GetStateFromNameWithOffsetCheck(const actor: Pmobj_t; const s: string): integer;
@@ -61,6 +63,7 @@ uses
   info_h,
   info,
   info_common,
+  radix_weapons,
   sc_engine,
   w_wad;
 
@@ -90,6 +93,15 @@ begin
   if not found then
     for st := statenum_t(0) to statenum_t(Ord(DO_NUMSTATES) - 1) do
       statenames.Add(strupper(GetENumName(TypeInfo(statenum_t), Ord(st))));
+end;
+
+// JVAL: 20200421 - Save # of new weapon states to add them to statetokens
+procedure SC_AddRadixWeaponStates;
+var
+  i: integer;
+begin
+  for i := 0 to cnt_radixweaponstates - 1 do
+    statenames.Add('S_RADIXWEAPONINFO' + itoa(i));
 end;
 
 function P_GetStateFromName(const actor: Pmobj_t; const s: string): integer;

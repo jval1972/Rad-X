@@ -389,7 +389,11 @@ uses
   radix_patch in 'Radix\radix_patch.pas',
   radix_bitmap in 'Radix\radix_bitmap.pas',
   radix_font in 'Radix\radix_font.pas',
-  radix_hud in 'Radix\radix_hud.pas';
+  radix_hud in 'Radix\radix_hud.pas',
+  radix_weapons in 'Radix\radix_weapons.pas',
+  radix_player in 'Radix\radix_player.pas',
+  radix_objects in 'Radix\radix_objects.pas',
+  m_compress in 'Base\m_compress.pas';
 
 exports
   dd_compile_radix,

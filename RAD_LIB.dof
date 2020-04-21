@@ -101,7 +101,7 @@ DebugSourceDirs=
 UsePackages=0
 [Parameters]
 RunParams=
-HostApplication=
+HostApplication=F:\DelphiDoom_Release\RAD\bin\RAD_IDE.exe
 Launcher=
 UseLauncher=0
 DebugCWD=
@@ -111,11 +111,11 @@ ProjectLang=
 RootDir=
 [Version Info]
 IncludeVerInfo=1
-AutoIncBuild=0
+AutoIncBuild=1
 MajorVer=2
 MinorVer=0
 Release=5
-Build=723
+Build=724
 Debug=0
 PreRelease=0
 Special=0
@@ -125,12 +125,12 @@ Locale=1033
 CodePage=1252
 [Version Info Keys]
 CompanyName=Jim Valavanis
-FileDescription=DelphiDoom Script DLL
-FileVersion=2.0.5.723
+FileDescription=RAD Script DLL
+FileVersion=2.0.5.724
 InternalName=
 LegalCopyright=Copyright 2016-2020, Jim Valavanis
 LegalTrademarks=
-OriginalFilename=ddc_doom.dll
+OriginalFilename=RAD_LIB.dll
 ProductName=
 ProductVersion=2.0
 [HistoryLists\hlConditionals]
