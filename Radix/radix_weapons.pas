@@ -116,7 +116,7 @@ begin
   st.tics := tics;
   st.nextstate := statenum_t(result);
   st.action.acp2 := proc;
-  inc(cnt_radixweaponstates);  // JVAL: 20200421 - Save # of new weapon states to add them to statetokens
+  inc(cnt_radixweaponstates);  // JVAL: 20200421 - Save # of new weapon states to add them later to statetokens
 end;
 
 procedure A_RaiseRadixWeapon(player: Pplayer_t; psp: Ppspdef_t);
