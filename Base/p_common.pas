@@ -3775,14 +3775,9 @@ end;
 procedure A_CheckPlayerAndExplode(actor: Pmobj_t);
 var
   mindist: fixed_t;
-  exact: angle_t;
-  dist: fixed_t;
-  slope: fixed_t;
   dest: Pmobj_t;
   i: integer;
   nearest: integer;
-  mindist: integer;
-  maxturn: angle_t;
 begin
   if not P_CheckStateParams(actor, 1, CSP_AT_LEAST) then
     exit;
