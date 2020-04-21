@@ -3777,7 +3777,7 @@ var
   mindist: fixed_t;
   dest: Pmobj_t;
   i: integer;
-  nearest: integer;
+  nearest, distance: integer;
 begin
   if not P_CheckStateParams(actor, 1, CSP_AT_LEAST) then
     exit;
@@ -3792,10 +3792,10 @@ begin
       if players[i].mo <> nil then
         if players[i].mo.health >= 0 then
         begin
-          mindist := P_AproxDistance(players[i].mo.x - actor.x, players[i].mo.y - actor.y);
-          if mindist < nearest then
+          distance := P_AproxDistance(players[i].mo.x - actor.x, players[i].mo.y - actor.y);
+          if distance < nearest then
           begin
-            nearest := mindist;
+            nearest := distance;
             dest := players[i].mo;
           end;
         end;
@@ -3808,8 +3808,8 @@ begin
 
   if abs(dest.z - actor.z) > mindist then
     exit;
-    
-  actor.health := 0;
+
+  P_ExplodeMissile(actor);
 end;
 
 end.
