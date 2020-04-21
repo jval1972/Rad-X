@@ -1898,6 +1898,8 @@ begin
       z := spawnheight * FRACUNIT
     else
       z := (spawnheight - 32) * FRACUNIT;
+    if z + mobjinfo[mobj_no].height > actor.ceilingz - 4 * FRACUNIT then
+      z := actor.ceilingz - 4 * FRACUNIT - mobjinfo[mobj_no].height;
     case aimmode of
       1:
         begin
