@@ -1342,22 +1342,26 @@ ACTOR MT_EXODROID 1038
 ACTOR "MT_SNAKEDEAMON_SHOT"
 {
   Health 20
-  Radius 32
-  Height 32
+  Radius 20
+  Height 20
   Speed 1572864
   Damage 30
-  Mass 200
+  Mass 20
   Reactiontime 8
   Seesound "radix/SndEnemyFire"
   +MF_NOBLOCKMAP
   +MF_NOGRAVITY
   +MF_DROPOFF
   +MF_MISSILE
+  +THRUSKY
   States
   {
     Spawn:
     {
-      XR39 D 5 BRIGHT
+      XR39 D 1 BRIGHT A_CheckPlayerAndExplode(40)
+      TNT1 A 0 A_TraceNearestPlayer(30, 20)
+      XR39 D 1 BRIGHT A_CheckPlayerAndExplode(40)
+      TNT1 A 0 A_TraceNearestPlayer(30, 20)
       Loop
     }
     Death:
@@ -1371,44 +1375,68 @@ ACTOR "MT_SNAKEDEAMON_SHOT"
   }
 }
 
-ACTOR MT_SNAKEDEAMON_TAIL1
-{
-  Radius 48
-  Height 48
-  Health 1000
-  Mass 50
-  Reactiontime 8
-  Gravity 0
-  RENDERSTYLE TRANSLUCENT
-  Alpha 0.4
-  +MF_NOGRAVITY
-  +MF_NOBLOCKMAP
-  +MF_NOCLIP
-  +MF3_EX_CANSPAWNCHILDREN
-  States
-  {
-    Spawn:
-    {
-      XR39 E 1 
-      XR39 E 1 A_SpawnChildEx("MT_SNAKEDEAMON_TAIL2", 0, -48, FRANDOM(-2,2))
-      TNT1 A 0 A_NoCanSpawnChildren
-    SpawnLoop:
-      XR39 E 5 A_FollowMaster(20, 64, -1, 20, 5, 20, 20, 10, 10)
-      GoTo SpawnLoop      
-    }
-  }
-}
+SCRIPT SnakeTailPosition
+uses
+  all;
 
-ACTOR MT_SNAKEDEAMON_TAIL2
+const
+  FOLLOWOFFSET = 8;
+  FOLLOWRANGE_XY = 4;
+  FOLLOWRANGE_Z = 2;
+  MAXMOVE_XY = 12;
+
+var
+  mst: integer;
+  cx, cy, cz: integer;
+  an: LongWord;
+  dx, dy, dz: integer;
+  tailid: integer;
+begin
+  mst := Actors[0].Master.Key;
+  if (mst = ACTOR_INVALID) or (Actors[mst].Health <= 0) then
+  begin
+    Actors[0].Flag[MF_SHOOTABLE] := true;
+    Actors[0].Health := -100;
+    Exit;
+  end;
+  
+  tailid := Actors[0].CustomParams['SNAKE_TAIL_ID'];
+  Actors[0].angle := Actors[mst].angle + ANG5 * (((tailid + leveltime div 32) mod 10) - 5);
+  
+  an := (Actors[mst].angle + ANG180) div ANGLETOFINEUNIT;
+  cx := Actors[mst].x + FOLLOWOFFSET * FineCosine(an) + FOLLOWRANGE_XY * FineSine(leveltime * 128 + tailid * 20);
+  cy := Actors[mst].y + FOLLOWOFFSET * FineSine(an) + FOLLOWRANGE_XY * FineCosine(leveltime * 128 + tailid * 20);
+  cz := Actors[mst].z + FOLLOWRANGE_Z * FineCosine(leveltime * 128 + tailid * 50);
+  
+  dx := cx - Actors[0].x;
+  if dx > MAXMOVE_XY * FRACUNIT then
+    dx := MAXMOVE_XY * FRACUNIT
+  else if dx < -MAXMOVE_XY * FRACUNIT then
+    dx := -MAXMOVE_XY * FRACUNIT;
+  Actors[0].x := Actors[0].x + dx;
+  
+  dy := cy - Actors[0].y;
+  if dy > MAXMOVE_XY * FRACUNIT then
+    dy := MAXMOVE_XY * FRACUNIT
+  else if dy < -MAXMOVE_XY * FRACUNIT then
+    dy := -MAXMOVE_XY * FRACUNIT;
+  Actors[0].y := Actors[0].y + dy;
+  
+  Actors[0].z := cz;
+end.
+  
+ENDSCRIPT
+
+ACTOR MT_SNAKEDEAMON_TAIL
 {
   Radius 48
   Height 48
-  Health 1000
+  Health 100
   Mass 50
   Reactiontime 8
   Gravity 0
   RENDERSTYLE TRANSLUCENT
-  Alpha 0.4
+  Alpha 0.7
   +MF_NOGRAVITY
   +MF_NOBLOCKMAP
   +MF_NOCLIP
@@ -1417,12 +1445,23 @@ ACTOR MT_SNAKEDEAMON_TAIL2
   {
     Spawn:
     {
-      XR39 E 1 
-      XR39 E 1 
+      TNT1 A 1 
+      TNT1 A 0 A_SetCustomParam("SNAKE_TAIL_ID",MasterCustomParam("SNAKE_TAIL_ID")+1)
+      TNT1 A 0 A_GoToIfCustomParamGreater("SNAKE_TAIL_ID",15,"SkipChild")
+      TNT1 A 0 A_SpawnChildEx("MT_SNAKEDEAMON_TAIL", RANDOM(-40,-20), RANDOM(-40,-20), FRANDOM(-2,2))
+    SkipChild:
       TNT1 A 0 A_NoCanSpawnChildren
+      TNT1 A 1 A_RunScript SnakeTailPosition
     SpawnLoop:
-      XR39 E 5 A_FollowMaster(20, 64, -1, 20, 5, 20, 20, 10, 10)
-      GoTo SpawnLoop      
+      XR39 E 1 A_RunScript SnakeTailPosition
+      GoTo SpawnLoop 
+    Death:
+      XR39 E 2 A_FadeOut10
+      XR39 E 2 A_FadeOut10
+      XR39 E 2 A_FadeOut10
+      XR39 E 2 A_FadeOut10
+      XR39 E 2 A_FadeOut10
+      Stop
     }
   }
 }
@@ -1432,9 +1471,9 @@ ACTOR MT_SNAKEDEAMON_TAIL2
 ///////////////////////////////
 ACTOR MT_SNAKEDEAMON 1039
 {
-  Radius 80
+  Radius 64
   Height 64
-  Health 1500
+  Health 2500
   Mass 300
   Speed 16
   Gravity 0
@@ -1453,7 +1492,7 @@ ACTOR MT_SNAKEDEAMON 1039
   {
     Spawn:
       TNT1 A 1 
-      TNT1 A 1 A_SpawnChildEx("MT_SNAKEDEAMON_TAIL1", 0, -48, FRANDOM(-2,2))
+      TNT1 A 1 A_SpawnChildEx("MT_SNAKEDEAMON_TAIL", RANDOM(-40,-20), RANDOM(-40,-20), FRANDOM(-2,2))
       TNT1 A 0 A_NoCanSpawnChildren
     SpawnLoop:
       XR39 A 5 A_Look
@@ -1468,13 +1507,17 @@ ACTOR MT_SNAKEDEAMON 1039
       XR39 B 6 A_Chase
       TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,0.8)),12)
       Loop
+    Melee:
+      XR39 B 6 A_FaceTarget
+      TNT1 A 0 A_ThrustXY(5,180)
+      GoTo See
     Missile:
       TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,0.8)),8)
-      XR39 C 10 A_FaceTarget
+      XR39 B 10 A_FaceTarget
       TNT1 A 0 A_MatchTargetZ(0.1,8)
-      XR39 A 10 A_CustomMissile("MT_SNAKEDEAMON_SHOT",30,0)
+      XR39 C 10 A_CustomMissile("MT_SNAKEDEAMON_SHOT",30,0)
       TNT1 A 0 A_DropFarTarget(2048,128)
-      XR39 A 10 A_CPosRefire(10)
+      XR39 B 10 A_CPosRefire(80)
       Goto Missile
     Pain:
       XR39 A 10 A_SpawnItemEx("MT_RADIXBIGSMOKE",RANDOM(-10,10),RANDOM(-10,10),RANDOM(30,40),0,0,FRANDOM(1,2),0)
@@ -1482,7 +1525,7 @@ ACTOR MT_SNAKEDEAMON 1039
     Death:
       TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,0,30,0,0,0,0,0)
       TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
-      TNT1 AAAAAA 0 A_SpawnItemEx("MT_RADIXBIGSMOKE",RANDOM(-40,40),RANDOM(-40,40),RANDOM(-40,40),0,0,RANDOM(0,2),0)
+      TNT1 AAAAAA 1 A_SpawnItemEx("MT_RADIXBIGSMOKE",RANDOM(-40,40),RANDOM(-40,40),RANDOM(-40,40),0,0,RANDOM(0,2),0)
       TNT1 A 0 A_SpawnItemEx("MT_CHUNK1",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(0,59)*2)
       TNT1 A 0 A_SpawnItemEx("MT_CHUNK1",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(60,119)*2)
       TNT1 A 0 A_SpawnItemEx("MT_CHUNK1",0,0,RANDOM(20,50),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(-3,-2,-1,1,2,3),RANDOMPICK(2,3),RANDOM(120,179)*2)
