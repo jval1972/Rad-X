@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 292;
+  DEHNUMACTIONS = 301;
 
 type
   deh_action_t = record
@@ -2920,6 +2920,33 @@ begin
   deh_actions[291].action.acp1 := @A_CheckPlayerAndExplode;
   deh_actions[291].name := strupper('A_CheckPlayerAndExplode');
   {$IFDEF DLL}deh_actions[291].decl := 'A_CheckPlayerAndExplode(mindist: float)';{$ENDIF}
+  deh_actions[292].action.acp1 := @A_SetMasterCustomParam;
+  deh_actions[292].name := strupper('SetMasterCustomParam');
+  {$IFDEF DLL}deh_actions[292].decl := 'A_SetMasterCustomParam(param: string, value: integer)';{$ENDIF}
+  deh_actions[293].action.acp1 := @A_AddMasterCustomParam;
+  deh_actions[293].name := strupper('AddMasterCustomParam');
+  {$IFDEF DLL}deh_actions[293].decl := 'A_AddMasterCustomParam(param: string, value: integer)';{$ENDIF}
+  deh_actions[294].action.acp1 := @A_SubtractMasterCustomParam;
+  deh_actions[294].name := strupper('SubtractMasterCustomParam');
+  {$IFDEF DLL}deh_actions[294].decl := 'A_SubtractMasterCustomParam(param: string, value: integer)';{$ENDIF}
+  deh_actions[295].action.acp1 := @A_JumpIfMasterCustomParam;
+  deh_actions[295].name := strupper('JumpIfMasterCustomParam');
+  {$IFDEF DLL}deh_actions[295].decl := 'A_JumpIfMasterCustomParam(param: string, value: integer, offset: integer)';{$ENDIF}
+  deh_actions[296].action.acp1 := @A_JumpIfMasterCustomParamLess;
+  deh_actions[296].name := strupper('JumpIfMasterCustomParamLess');
+  {$IFDEF DLL}deh_actions[296].decl := 'A_JumpIfMasterCustomParamLess(param: string, value: integer, offset: integer)';{$ENDIF}
+  deh_actions[297].action.acp1 := @A_JumpIfMasterCustomParamGreater;
+  deh_actions[297].name := strupper('JumpIfMasterCustomParamGreater');
+  {$IFDEF DLL}deh_actions[297].decl := 'A_JumpIfMasterCustomParamGreater(param: string, value: integer, offset: integer)';{$ENDIF}
+  deh_actions[298].action.acp1 := @A_GoToIfMasterCustomParam;
+  deh_actions[298].name := strupper('GoToIfMasterCustomParam');
+  {$IFDEF DLL}deh_actions[298].decl := 'A_GoToIfMasterCustomParam(param: string, value: integer, state: state_t)';{$ENDIF}
+  deh_actions[299].action.acp1 := @A_GoToIfMasterCustomParamLess;
+  deh_actions[299].name := strupper('GoToIfMasterCustomParamLess');
+  {$IFDEF DLL}deh_actions[299].decl := 'A_GoToIfMasterCustomParamLess(param: string, value: integer, state: state_t)';{$ENDIF}
+  deh_actions[300].action.acp1 := @A_GoToIfMasterCustomParamGreater;
+  deh_actions[300].name := strupper('GoToIfMasterCustomParamGreater');
+  {$IFDEF DLL}deh_actions[300].decl := 'A_GoToIfMasterCustomParamGreater(param: string, value: integer, state: state_t)';{$ENDIF}
 
 
   deh_strings.numstrings := 0;

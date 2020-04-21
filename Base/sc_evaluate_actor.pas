@@ -105,6 +105,7 @@ type
     // Custom params
     function PF_CUSTOMPARAM(p: TDStrings): string;
     function PF_TARGETCUSTOMPARAM(p: TDStrings): string;
+    function PF_MASTERCUSTOMPARAM(p: TDStrings): string;
     // States
     function PF_SPAWN(p: TDStrings): string;
     function PF_SEE(p: TDStrings): string;
@@ -181,6 +182,8 @@ begin
   AddFunc('PARAM', PF_CUSTOMPARAM, 1);
   AddFunc('TARGETCUSTOMPARAM', PF_TARGETCUSTOMPARAM, 1);
   AddFunc('TARGETPARAM', PF_TARGETCUSTOMPARAM, 1);
+  AddFunc('MASTERCUSTOMPARAM', PF_MASTERCUSTOMPARAM, 1);
+  AddFunc('MASTERPARAM', PF_MASTERCUSTOMPARAM, 1);
   // States
   AddFunc('SPAWN', PF_SPAWN, 0);
   AddFunc('SEE', PF_SEE, 0);
@@ -462,6 +465,22 @@ begin
   if factor.target <> nil then
   begin
     parm := P_GetMobjCustomParam(factor.target, p[0]);
+    if parm <> nil then
+    begin
+      result := itoa(parm.value);
+      exit;
+    end;
+  end;
+  result := '0';
+end;
+
+function TActorEvaluator.PF_MASTERCUSTOMPARAM(p: TDStrings): string;
+var
+  parm: Pmobjcustomparam_t;
+begin
+  if factor.master <> nil then
+  begin
+    parm := P_GetMobjCustomParam(factor.master, p[0]);
     if parm <> nil then
     begin
       result := itoa(parm.value);
