@@ -1624,20 +1624,26 @@ var
   th: Pmobj_t;
   an: angle_t;
   dist: integer;
+  z: fixed_t;
 begin
   // JVAL: Prevent savegame bug
-  if dest = nil then
+  if (dest = nil) or (source = nil) then
   begin
     result := nil;
     exit;
   end;
 
   if source.info.missileheight = 0 then
-    th := P_SpawnMobj(source.x, source.y, source.z + 4 * 8 * FRACUNIT, _type)
+    z := source.z + 4 * 8 * FRACUNIT
   else if source.info.missileheight < FRACUNIT div 2 then
-    th := P_SpawnMobj(source.x, source.y, source.z + source.info.missileheight * FRACUNIT, _type)
+    z := source.z + source.info.missileheight * FRACUNIT
   else
-    th := P_SpawnMobj(source.x, source.y, source.z + source.info.missileheight, _type);
+    z := source.z + source.info.missileheight;
+
+  if z + source.info.height > source.ceilingz - 4 * FRACUNIT then
+    z := source.ceilingz - 4 * FRACUNIT - source.info.height;
+
+  th := P_SpawnMobj(source.x, source.y, z, _type);
 
   A_SeeSound(th, th);
 
@@ -1669,6 +1675,7 @@ begin
     dist := 1;
 
   th.momz := (dest.z - source.z) div dist;
+
   P_CheckMissileSpawn(th);
 
   result := th;

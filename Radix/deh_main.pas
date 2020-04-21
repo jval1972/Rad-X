@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 291;
+  DEHNUMACTIONS = 292;
 
 type
   deh_action_t = record
@@ -2917,6 +2917,9 @@ begin
   deh_actions[290].action.acp1 := @A_NoCanSpawnChildren;
   deh_actions[290].name := strupper('A_NoCanSpawnChildren');
   {$IFDEF DLL}deh_actions[290].decl := 'A_NoCanSpawnChildren()';{$ENDIF}
+  deh_actions[291].action.acp1 := @A_CheckPlayerAndExplode;
+  deh_actions[291].name := strupper('A_CheckPlayerAndExplode');
+  {$IFDEF DLL}deh_actions[291].decl := 'A_CheckPlayerAndExplode(mindist: float)';{$ENDIF}
 
 
   deh_strings.numstrings := 0;

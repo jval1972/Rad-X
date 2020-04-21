@@ -353,6 +353,8 @@ procedure A_CanSpawnChildren(actor: Pmobj_t);
 
 procedure A_NoCanSpawnChildren(actor: Pmobj_t);
 
+procedure A_CheckPlayerAndExplode(actor: Pmobj_t);
+
 const
   FLOATBOBSIZE = 64;
   FLOATBOBMASK = FLOATBOBSIZE - 1;
@@ -3451,12 +3453,21 @@ begin
 
   if dist < 1 then
     dist := 1;
-  slope := (dest.z + 40 * FRACUNIT - actor.z) div dist;
+
+  slope := (dest.z - actor.z) div dist;
 
   if slope < actor.momz then
-    actor.momz := actor.momz - FRACUNIT div 8
+  begin
+    actor.momz := actor.momz - FRACUNIT div 8;
+    if actor.momz < slope then
+      actor.momz := slope;
+  end
   else
+  begin
     actor.momz := actor.momz + FRACUNIT div 8;
+    if actor.momz > slope then
+      actor.momz := slope;
+  end;
 end;
 
 procedure A_PlayerHurtExplode(actor: Pmobj_t);
@@ -3759,6 +3770,48 @@ end;
 procedure A_NoCanSpawnChildren(actor: Pmobj_t);
 begin
   actor.flags3_ex := actor.flags3_ex and not MF3_EX_CANSPAWNCHILDREN;
+end;
+
+procedure A_CheckPlayerAndExplode(actor: Pmobj_t);
+var
+  mindist: fixed_t;
+  exact: angle_t;
+  dist: fixed_t;
+  slope: fixed_t;
+  dest: Pmobj_t;
+  i: integer;
+  nearest: integer;
+  mindist: integer;
+  maxturn: angle_t;
+begin
+  if not P_CheckStateParams(actor, 1, CSP_AT_LEAST) then
+    exit;
+
+  mindist := actor.state.params.FixedVal[0];
+
+  dest := nil;
+  nearest := MAXINT;
+
+  for i := 0 to MAXPLAYERS - 1 do
+    if playeringame[i] then
+      if players[i].mo <> nil then
+        if players[i].mo.health >= 0 then
+        begin
+          mindist := P_AproxDistance(players[i].mo.x - actor.x, players[i].mo.y - actor.y);
+          if mindist < nearest then
+          begin
+            nearest := mindist;
+            dest := players[i].mo;
+          end;
+        end;
+
+  if dest = nil then
+    exit;
+
+  if nearest > mindist then
+    exit;
+
+  actor.health := 0;
 end;
 
 end.
