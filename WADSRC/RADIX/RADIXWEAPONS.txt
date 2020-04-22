@@ -46,8 +46,8 @@ ACTOR "MT_RADIXPLASMA"
 ACTOR "MT_RADIXEPCSHELL"
 {
   Health 1000
-  Width 17
-  Height 15
+  Width 8
+  Height 8
   Speed 16777216
   Damage 1
   Mass 100
