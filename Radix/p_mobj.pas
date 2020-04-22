@@ -77,6 +77,9 @@ function P_SpawnMissileAngleZSpeed(source: Pmobj_t; z: fixed_t; _type: integer; 
 
 procedure P_SpawnPlayerMissile(source: Pmobj_t; _type: integer);
 
+// JVAL: 20200422 - New function
+procedure P_SpawnRadixPlayerMissile(source: Pmobj_t; _type: integer);
+
 procedure P_RespawnSpecials;
 
 procedure P_SpawnBlood(x, y, z: fixed_t; damage: integer);
@@ -1590,8 +1593,8 @@ begin
   if maxmom > 16 * FRACUNIT then
   begin
     dx := FixedMul(th.momx, FixedDiv(16 * FRACUNIT, maxmom)) div 2;
-    dy := FixedMul(th.momx, FixedDiv(16 * FRACUNIT, maxmom)) div 2;
-    dz := FixedMul(th.momx, FixedDiv(16 * FRACUNIT, maxmom)) div 2;
+    dy := FixedMul(th.momy, FixedDiv(16 * FRACUNIT, maxmom)) div 2;
+    dz := FixedMul(th.momz, FixedDiv(16 * FRACUNIT, maxmom)) div 2;
   end
   else
   begin
@@ -1833,6 +1836,59 @@ begin
     z := source.z + 4 * 8 * FRACUNIT + (Pplayer_t(source.player).lookdir16 * (FRACUNIT div 16)) div 173
   else
     z := source.z + 4 * 8 * FRACUNIT;
+
+  th := P_SpawnMobj(x, y, z, _type);
+
+  A_SeeSound(th, th);
+
+  th.target := source;
+  th.angle := an;
+  an := an shr ANGLETOFINESHIFT;
+  speed := th.info.speed;
+  th.momx := FixedMul(speed, finecosine[an]);
+  th.momy := FixedMul(speed, finesine[an]);
+  th.momz := FixedMul(speed, slope);
+
+  P_CheckMissileSpawn(th);
+end;
+
+// JVAL: 20200422 - New function
+procedure P_SpawnRadixPlayerMissile(source: Pmobj_t; _type: integer);
+var
+  th: Pmobj_t;
+  an: angle_t;
+  x: fixed_t;
+  y: fixed_t;
+  z: fixed_t;
+  slope: fixed_t;
+  speed: fixed_t;
+begin
+  // see which target is to be aimed at
+  an := source.angle;
+  slope := P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
+
+  if linetarget = nil then
+  begin
+    an := an + $4000000;
+    slope := P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
+
+    if linetarget = nil then
+    begin
+      an := an - $8000000;
+      slope := P_AimLineAttack(source, an, 16 * 64 * FRACUNIT);
+
+      if linetarget = nil then
+      begin
+        an := source.angle;
+        slope := (Pplayer_t(source.player).lookdir16 * (FRACUNIT div 16)) div 173;
+      end;
+
+    end;
+  end;
+
+  x := source.x;
+  y := source.y;
+  z := source.z;
 
   th := P_SpawnMobj(x, y, z, _type);
 

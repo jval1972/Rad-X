@@ -78,6 +78,8 @@ uses
   d_think,
   d_items,
   g_game,
+  r_defs,
+  r_main,
   info,
   info_h,
   info_common,
@@ -87,6 +89,7 @@ uses
   p_tick,
   p_pspr,
   p_mobj,
+  p_3dfloors,
   radix_map_extra;
 
 //
@@ -268,11 +271,22 @@ begin
   states[Ord(states[st2].nextstate)].nextstate := statenum_t(sready);
 end;
 
+const
+  WEAPON_SIDE_OFFSET = 32 * FRACUNIT;
+  WEAPON_Z_OFFSET = 32 * FRACUNIT;
+
 procedure P_SpawnPlayerMissileOffsZ(source: Pmobj_t; _type: integer; const doffs, dz: fixed_t);
 var
   oldx, oldy, oldz: fixed_t;
+  spawnx, spawny, spawnz: fixed_t;
+  newx, newy, newz: fixed_t;
   dx, dy: fixed_t;
+  offs: fixed_t;
+  offsx, offsy: fixed_t;
+  stepx, stepy: fixed_t;
+  sfloor, sceiling: fixed_t;
   ang: angle_t;
+  sec: Psector_t;
 begin
   oldx := source.x;
   oldy := source.y;
@@ -280,16 +294,39 @@ begin
 
   ang := (source.angle - ANG90) shr ANGLETOFINESHIFT;
 
-  dx := FixedMul(doffs, finecosine[ang]);
-  dy := FixedMul(doffs, finesine[ang]);
+  offs := doffs + Isign(doffs) * mobjinfo[_type].radius;
+  dx := FixedMul(offs, finecosine[ang]);
+  dy := FixedMul(offs, finesine[ang]);
 
-  source.x := source.x + dx;
-  source.y := source.y + dy;
-  source.z := source.z + dz;
+  // A little forward
+  stepx := Fixedmul(source.radius div 2, finecosine[source.angle shr ANGLETOFINESHIFT]);
+  stepy := Fixedmul(source.radius div 2, finesine[source.angle shr ANGLETOFINESHIFT]);
 
-  RX_LineTrace(oldx, oldy, oldz, source.x, source.y, source.z, source.x, source.y, source.z);
+  spawnx := source.x + dx + stepx;
+  spawny := source.y + dy + stepy;
+  spawnz := source.z + dz;
 
-  P_SpawnPlayerMissile(source, _type);
+  RX_LineTrace(oldx, oldy, oldz, spawnx, spawny, spawnz, newx, newy, newz);
+
+  offsx := FixedMul(Isign(doffs) * mobjinfo[_type].radius, finecosine[ang]);
+  offsy := FixedMul(Isign(doffs) * mobjinfo[_type].radius, finesine[ang]);
+
+  source.x := newx - offsx;
+  source.y := newy - offsy;
+
+  sec := R_PointInSubsector(source.x, source.y).sector;
+
+  sfloor := P_3dFloorHeight(sec, source.x, source.y, newz);
+  sceiling := P_3dCeilingHeight(sec, source.x, source.y, newz);
+
+  if newz - mobjinfo[_type].height < sfloor then
+    newz := sfloor + mobjinfo[_type].height;
+
+  if newz + mobjinfo[_type].height > sceiling then
+    newz := sceiling - mobjinfo[_type].height;
+
+  source.z := newz;
+  P_SpawnRadixPlayerMissile(source, _type);
 
   source.x := oldx;
   source.y := oldy;
@@ -361,31 +398,31 @@ begin
       begin
         if player.weaponflags and PWF_NEURONCANNON <> 0 then
         begin
-          spawn_neutron(-32 * FRACUNIT, -8 * FRACUNIT);
+          spawn_neutron(-WEAPON_SIDE_OFFSET, -8 * FRACUNIT + WEAPON_Z_OFFSET);
           player.weaponflags := player.weaponflags and not PWF_NEURONCANNON;
         end
         else
         begin
-          spawn_neutron(32 * FRACUNIT, -8 * FRACUNIT);
+          spawn_neutron(WEAPON_SIDE_OFFSET, -8 * FRACUNIT + WEAPON_Z_OFFSET);
           player.weaponflags := player.weaponflags or PWF_NEURONCANNON;
         end;
       end;
     1:
       begin
-        spawn_neutron(-32 * FRACUNIT, -32 * FRACUNIT);
-        spawn_neutron(32 * FRACUNIT, -32 * FRACUNIT);
+        spawn_neutron(-WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
+        spawn_neutron(WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
       end;
     2:
       begin
-        spawn_neutron(-32 * FRACUNIT, -32 * FRACUNIT);
+        spawn_neutron(-WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
         spawn_neutron(0, 32 * FRACUNIT);
-        spawn_neutron(32 * FRACUNIT, -32 * FRACUNIT);
+        spawn_neutron(WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
       end;
   else
-    spawn_neutron(-32 * FRACUNIT, -32 * FRACUNIT);
-    spawn_neutron(-32 * FRACUNIT, 32 * FRACUNIT);
-    spawn_neutron(32 * FRACUNIT, -32 * FRACUNIT);
-    spawn_neutron(32 * FRACUNIT, 32 * FRACUNIT);
+    spawn_neutron(-WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
+    spawn_neutron(-WEAPON_SIDE_OFFSET, 32 * FRACUNIT + WEAPON_Z_OFFSET);
+    spawn_neutron(WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
+    spawn_neutron(WEAPON_SIDE_OFFSET, 32 * FRACUNIT + WEAPON_Z_OFFSET);
   end;
 end;
 
@@ -454,8 +491,8 @@ end;
 //
 const
   standardEPCtbl: array[0..1] of epccoord_t = (
-    (offs: -32 * FRACUNIT; z: -32 * FRACUNIT),
-    (offs:  32 * FRACUNIT; z: -32 * FRACUNIT)
+    (offs: -WEAPON_SIDE_OFFSET; z: -32 * FRACUNIT + WEAPON_Z_OFFSET),
+    (offs:  WEAPON_SIDE_OFFSET; z: -32 * FRACUNIT + WEAPON_Z_OFFSET)
   );
 
 procedure A_FireRadixStandardEPC(player: Pplayer_t; psp: Ppspdef_t);
@@ -471,10 +508,10 @@ end;
 //
 const
   enchancedEPCtbl: array[0..3] of epccoord_t = (
-    (offs: -32 * FRACUNIT; z:  32 * FRACUNIT),
-    (offs:  32 * FRACUNIT; z:  32 * FRACUNIT),
-    (offs: -32 * FRACUNIT; z: -32 * FRACUNIT),
-    (offs:  32 * FRACUNIT; z: -32 * FRACUNIT)
+    (offs: -WEAPON_SIDE_OFFSET; z:  32 * FRACUNIT + WEAPON_Z_OFFSET),
+    (offs:  WEAPON_SIDE_OFFSET; z:  32 * FRACUNIT + WEAPON_Z_OFFSET),
+    (offs: -WEAPON_SIDE_OFFSET; z: -32 * FRACUNIT + WEAPON_Z_OFFSET),
+    (offs:  WEAPON_SIDE_OFFSET; z: -32 * FRACUNIT + WEAPON_Z_OFFSET)
   );
 
 procedure A_FireRadixEnhancedEPC(player: Pplayer_t; psp: Ppspdef_t);
@@ -490,20 +527,20 @@ end;
 //
 const
   superEPCtbl1: array[0..5] of epccoord_t = (
-    (offs: 0 * FRACUNIT; z:  32 * FRACUNIT),
-    (offs: 28 * FRACUNIT; z:  16 * FRACUNIT),
-    (offs: 28 * FRACUNIT; z:  -16 * FRACUNIT),
-    (offs: 0 * FRACUNIT; z:  -32 * FRACUNIT),
-    (offs: -28 * FRACUNIT; z:  -16 * FRACUNIT),
-    (offs: -28 * FRACUNIT; z:  16 * FRACUNIT)
+    (offs: 0 * WEAPON_SIDE_OFFSET; z:  32 * FRACUNIT + WEAPON_Z_OFFSET),
+    (offs: 28 * WEAPON_SIDE_OFFSET div 32; z:  16 * FRACUNIT + WEAPON_Z_OFFSET),
+    (offs: 28 * WEAPON_SIDE_OFFSET div 32; z:  -16 * FRACUNIT + WEAPON_Z_OFFSET),
+    (offs: 0 * WEAPON_SIDE_OFFSET; z:  -32 * FRACUNIT + WEAPON_Z_OFFSET),
+    (offs: -28 * WEAPON_SIDE_OFFSET div 32; z:  -16 * FRACUNIT + WEAPON_Z_OFFSET),
+    (offs: -28 * WEAPON_SIDE_OFFSET div 32; z:  16 * FRACUNIT + WEAPON_Z_OFFSET)
   );
   superEPCtbl2: array[0..5] of epccoord_t = (
-    (offs: 16 * FRACUNIT; z:  28 * FRACUNIT),
-    (offs: 32 * FRACUNIT; z:  0 * FRACUNIT),
-    (offs: 16 * FRACUNIT; z:  -28 * FRACUNIT),
-    (offs: -16 * FRACUNIT; z:  -28 * FRACUNIT),
-    (offs: -32 * FRACUNIT; z:  0 * FRACUNIT),
-    (offs: -16 * FRACUNIT; z:  28 * FRACUNIT)
+    (offs: 16 * WEAPON_SIDE_OFFSET div 32; z:  28 * FRACUNIT + WEAPON_Z_OFFSET),
+    (offs: 32 * WEAPON_SIDE_OFFSET div 32; z:  0 * FRACUNIT + WEAPON_Z_OFFSET),
+    (offs: 16 * WEAPON_SIDE_OFFSET div 32; z:  -28 * FRACUNIT + WEAPON_Z_OFFSET),
+    (offs: -16 * WEAPON_SIDE_OFFSET div 32; z:  -28 * FRACUNIT + WEAPON_Z_OFFSET),
+    (offs: -32 * WEAPON_SIDE_OFFSET div 32; z:  0 * FRACUNIT + WEAPON_Z_OFFSET),
+    (offs: -16 * WEAPON_SIDE_OFFSET div 32; z:  28 * FRACUNIT + WEAPON_Z_OFFSET)
   );
 
 procedure A_FireRadixSuperEPC1(player: Pplayer_t; psp: Ppspdef_t);
@@ -551,12 +588,12 @@ begin
 
   P_SpawnPlayerMissileOffsZ(
     player.mo, radixplasmaspreadleft_id,
-      -32 * FRACUNIT, -8 * FRACUNIT
+      -WEAPON_SIDE_OFFSET, -8 * FRACUNIT + WEAPON_Z_OFFSET
   );
 
   P_SpawnPlayerMissileOffsZ(
     player.mo, radixplasmaspreadright_id,
-      32 * FRACUNIT, -8 * FRACUNIT
+      WEAPON_SIDE_OFFSET, -8 * FRACUNIT + WEAPON_Z_OFFSET
   );
 
 end;
@@ -589,7 +626,7 @@ begin
 
   P_SpawnPlayerMissileOffsZ(
     player.mo, radixseekingmissile_id,
-      -32 * FRACUNIT, -8 * FRACUNIT
+      -32 * FRACUNIT, -8 * FRACUNIT + WEAPON_Z_OFFSET
   );
 
   if player.ammo[ammoid] <= 0 then
@@ -598,7 +635,7 @@ begin
 
   P_SpawnPlayerMissileOffsZ(
     player.mo, radixseekingmissile_id,
-      32 * FRACUNIT, -8 * FRACUNIT
+      32 * FRACUNIT, -8 * FRACUNIT + WEAPON_Z_OFFSET
   );
 end;
 
@@ -631,7 +668,7 @@ begin
   begin
     P_SpawnPlayerMissileOffsZ(
       player.mo, radixnuke_id,
-        -32 * FRACUNIT, -8 * FRACUNIT
+        -32 * FRACUNIT, -8 * FRACUNIT + WEAPON_Z_OFFSET
     );
     player.weaponflags := player.weaponflags and not PWF_NUKE;
   end
@@ -639,7 +676,7 @@ begin
   begin
     P_SpawnPlayerMissileOffsZ(
       player.mo, radixnuke_id,
-        32 * FRACUNIT, -8 * FRACUNIT
+        32 * FRACUNIT, -8 * FRACUNIT + WEAPON_Z_OFFSET
     );
     player.weaponflags := player.weaponflags or PWF_NUKE;
   end;
@@ -674,7 +711,7 @@ begin
   begin
     P_SpawnPlayerMissileOffsZ(
       player.mo, radixphasetorpedo_id,
-        -32 * FRACUNIT, 8 * FRACUNIT
+        -32 * FRACUNIT, 8 * FRACUNIT + WEAPON_Z_OFFSET
     );
     player.weaponflags := player.weaponflags and not PWF_PHASETORPEDO;
   end
@@ -682,7 +719,7 @@ begin
   begin
     P_SpawnPlayerMissileOffsZ(
       player.mo, radixphasetorpedo_id,
-        32 * FRACUNIT, 8 * FRACUNIT
+        32 * FRACUNIT, 8 * FRACUNIT + WEAPON_Z_OFFSET
     );
     player.weaponflags := player.weaponflags or PWF_PHASETORPEDO;
   end;
@@ -746,9 +783,6 @@ begin
   if RX_CheckNextRefire(player) then
   begin
 
-//  P_SetPsprite(player,
-//    Ord(ps_flash), statenum_t(weaponinfo[Ord(player.readyweapon)].flashstate + (P_Random and 1)));
-
     if (player.gravitywave > 0) and (player.energy >= GRAVITYWAVEENERGY) then
     begin
       if radixgravitywave_id < 0 then
@@ -756,7 +790,7 @@ begin
 
       dec(player.gravitywave);
       player.energy := player.energy - GRAVITYWAVEENERGY;
-      P_SpawnPlayerMissileOffsZ(player.mo, radixgravitywave_id, 0, 0);
+      P_SpawnPlayerMissileOffsZ(player.mo, radixgravitywave_id, 0, 0 + WEAPON_Z_OFFSET);
     end;
   end;
 

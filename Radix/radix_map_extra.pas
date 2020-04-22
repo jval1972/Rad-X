@@ -72,7 +72,9 @@ procedure RX_DamageLine(const l: Pline_t; const damage: integer);
 
 function RX_LineLengthf(li: Pline_t): float;
 
-procedure RX_LineTrace(const fromx, fromy, fromz: fixed_t; const tox, toy, toz: fixed_t; var newx, newy, newz: fixed_t);
+procedure RX_LineTrace(const fromx, fromy, fromz: fixed_t; const tox, toy, toz: fixed_t; out newx, newy, newz: fixed_t);
+
+function RX_PointLineSqrDistance(const x, y: fixed_t; const line: Pline_t): integer;
 
 var
   level_position_hack: boolean;
@@ -702,7 +704,7 @@ begin
   result := true;
 end;
 
-procedure RX_LineTrace(const fromx, fromy, fromz: fixed_t; const tox, toy, toz: fixed_t; var newx, newy, newz: fixed_t);
+procedure RX_LineTrace(const fromx, fromy, fromz: fixed_t; const tox, toy, toz: fixed_t; out newx, newy, newz: fixed_t);
 var
   xl: integer;
   xh: integer;
@@ -741,14 +743,56 @@ begin
   begin
     floor := P_3dFloorHeight(newx, newy, LTfromz);
     ceiling := P_3dCeilingHeight(newx, newy, LTfromz);
-    newz := GetIntegerInRange(LTfromz, floor, ceiling);
+    newz := GetIntegerInRange(LTtoz, floor, ceiling);
   end
   else
   begin
     floor := P_3dFloorHeight(LTline.frontsector, newx, newy, LTfromz);
     ceiling := P_3dCeilingHeight(LTline.frontsector, newx, newy, LTfromz);
-    newz := GetIntegerInRange(LTfromz, floor, ceiling);
+    newz := GetIntegerInRange(LTtoz, floor, ceiling);
   end;
 end;
 
+function RX_PointLineSqrDistance(const x, y: fixed_t; const line: Pline_t): integer;
+var
+  A, B, C, D: integer;
+  dot: int64;
+  len_sq: int64;
+  param: int64;
+  xx, yy: integer;
+  dx, dy: integer;
+begin
+  A := (x div FRACUNIT) - (line.v1.x div FRACUNIT);
+  B := (y div FRACUNIT) - (line.v1.y div FRACUNIT);
+  C := (line.v2.x div FRACUNIT) - (line.v1.x div FRACUNIT);
+  D := (line.v2.y div FRACUNIT) - (line.v1.y div FRACUNIT);
+
+  dot := (A * C) + (B * D);
+  len_sq := (C * C) + (D * D);
+  param := -1;
+  if len_sq <> 0 then
+    param := (dot * FRACUNIT) div int64(len_sq);
+
+  if param < 0 then
+  begin
+    xx := (line.v1.x div FRACUNIT);
+    yy := (line.v1.y div FRACUNIT);
+  end
+  else if param > FRACUNIT then
+  begin
+    xx := (line.v2.x div FRACUNIT);
+    yy := (line.v2.y div FRACUNIT);
+  end
+  else
+  begin
+    xx := (line.v1.x div FRACUNIT) + (param * C) div FRACUNIT;
+    yy := (line.v1.y div FRACUNIT) + (param * D) div FRACUNIT;
+  end;
+
+  dx := (x div FRACUNIT) - xx;
+  dy := (y div FRACUNIT) - yy;
+  result := (dx * dx) + (dy * dy);
+end;
+
 end.
+

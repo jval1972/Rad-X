@@ -276,6 +276,9 @@ end;
 //
 
 
+var
+  tmcheckline: Pline_t;
+
 //
 // PIT_CheckLine
 // Adjusts tmfloorz and tmceilingz as lines are contacted
@@ -285,6 +288,8 @@ function PIT_CheckLineTM(ld: Pline_t): boolean;
 var
   docheckbox: boolean;
 begin
+  tmcheckline := nil;
+
   if (tmbbox[BOXRIGHT] <= ld.bbox[BOXLEFT]) or
      (tmbbox[BOXLEFT] >= ld.bbox[BOXRIGHT]) or
      (tmbbox[BOXTOP] <= ld.bbox[BOXBOTTOM]) or
@@ -301,11 +306,13 @@ begin
     docheckbox := true;
 
   if docheckbox then
+  begin
     if P_BoxOnLineSide(@tmbbox, ld) <> -1 then
     begin
       result := true;
       exit;
     end;
+  end;
 
   // A line has been hit
 
@@ -324,6 +331,7 @@ begin
     // JVAL: 20200328 - Missile damage line
     if tmthing.flags and MF_MISSILE <> 0 then
       tmline := ld;
+    tmcheckline := ld;
     exit;
   end;
 
@@ -634,6 +642,7 @@ begin
     result := (thing.flags and MF_SOLID) = 0;
 end;
 
+
 //
 // MOVEMENT CLIPPING
 //
@@ -738,6 +747,10 @@ begin
     for by := yl to yh do
       if not P_BlockLinesIterator(bx, by, PIT_CheckLineTM) then // JVAL: Slopes
       begin
+        // JVAL: 20200422 - Presice cheching
+        if tmcheckline <> nil then
+          if RX_PointLineSqrDistance(x, y, tmcheckline) > (r div FRACUNIT) * (r div FRACUNIT) then
+            Continue;
         result := false;
         exit;
       end;
@@ -983,7 +996,10 @@ begin
     else
     begin
       dist := P_AproxDistance(thing.x - x, thing.y - y);
-      iters := MinI(8, FixedDiv(dist, thing.radius) div FRACUNIT + 4);
+      if dist = 0 then
+        iters := 1
+      else
+        iters := MinI(8, FixedDiv(dist, thing.radius) div FRACUNIT + 4);
     end;
     for i := 1 to iters do
     begin
