@@ -342,7 +342,9 @@ begin
   p.energyweaponfiretics := PLASMAENERGYFIRETICS;
   if p.plasmaenergycountdown <= 0 then
   begin
-    if p.energy > 0 then
+    if p.energy_reserve > 0 then
+      dec(p.energy_reserve) // JVAL: 20200423 - Added energy when refiring
+    else if p.energy > 0 then
       dec(p.energy);
     p.plasmaenergycountdown := PLASMAENERGYDRAINTICS;
     exit;

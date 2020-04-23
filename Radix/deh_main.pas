@@ -1302,6 +1302,8 @@ begin
           PLAYERSPAWNSHIELD := plyr_val
         else if token1 = 'PLAYERSPAWNENERGY' then
           PLAYERSPAWNENERGY := plyr_val
+        else if token1 = 'PLAYERRESERVEENERGY' then
+          PLAYERRESERVEENERGY := plyr_val
         else if token1 = 'PLAYERMAXSHIELD' then
           PLAYERMAXSHIELD := plyr_val
         else if token1 = 'PLAYERMAXENERGY' then
@@ -1760,6 +1762,7 @@ begin
   result.Add('%s = %d', ['PLAYERMAXARMOR', PLAYERMAXARMOR]);
   result.Add('%s = %d', ['PLAYERSPAWNSHIELD', PLAYERSPAWNSHIELD]);
   result.Add('%s = %d', ['PLAYERSPAWNENERGY', PLAYERSPAWNENERGY]);
+  result.Add('%s = %d', ['PLAYERRESERVEENERGY', PLAYERRESERVEENERGY]);
   result.Add('%s = %d', ['PLAYERMAXSHIELD', PLAYERMAXSHIELD]);
   result.Add('%s = %d', ['PLAYERMAXENERGY', PLAYERMAXENERGY]);
   result.Add('%s = %d', ['PLAYERMAXPLASMABOMBS', PLAYERMAXPLASMABOMBS]);
@@ -1781,17 +1784,6 @@ begin
     else
       result.Add('%d = %s', [i, S_music[i].name]);
   end;
-  result.Add('');
-
-  //////////////////////////////////////////////////////////////////////////////
-  // Add player misc
-  //////////////////////////////////////////////////////////////////////////////
-  result.Add('');
-  result.Add('# Player');
-  result.Add('');
-  result.Add('[PLAYER]');
-  result.Add('%s = %d', ['PLAYERSPAWNSHIELD', PLAYERSPAWNSHIELD]);
-  result.Add('%s = %d', ['PLAYERSPAWNENERGY', PLAYERSPAWNENERGY]);
   result.Add('');
 
   //////////////////////////////////////////////////////////////////////////////

@@ -85,7 +85,12 @@ begin
       else
       begin  // JVAL: 20200412 - If we refire energy weapon regenerate only if rapid energy 
         if p.radixpowers[Ord(rpu_rapidenergy)] > 0 then
-          new_energy := p.energy + 1;
+        begin
+          // JVAL: 20200423 - Added energy when refiring
+          if p.energy_reserve < PLAYERRESERVEENERGY then
+            p.energy_reserve := p.energy_reserve + 1;
+          new_energy := p.energy;
+        end;
       end;
 
       if new_energy <= PLAYERSPAWNENERGY then

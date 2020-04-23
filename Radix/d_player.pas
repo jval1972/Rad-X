@@ -137,6 +137,7 @@ type
     armortype: integer;
 
     energy: integer;  // JVAL: 20200314 - Radix energy
+    energy_reserve: integer;  // JVAL: 20200423 - Added energy when refiring
     threat: boolean;  // JVAL: 20200314 - Any threat nearby?
 
     plasmaenergycountdown: integer; // JVAL: 20200412 - How many plasma balls to drain energy
