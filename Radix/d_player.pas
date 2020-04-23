@@ -46,6 +46,7 @@ uses
   d_ticcmd,
   m_fixed,
   tables,
+  radix_messages,
   doomdef;
 
 //
@@ -232,6 +233,8 @@ type
     planetranspo_target_a: angle_t;   // JVAL: 20200313 - Radix (RA_PlaneTranspo)
     planetranspo_start_tics: integer; // JVAL: 20200313 - Radix (RA_PlaneTranspo)
     planetranspo_tics: integer;       // JVAL: 20200313 - Radix (RA_PlaneTranspo)
+
+    radixmessages: array[0..NUMRADIXMESSAGES - 1] of integer; // JVAL: 20200423 - Last leveltime displayed
 
     last_grid_trigger: integer;
 

@@ -39,11 +39,15 @@ uses
 
 procedure RX_PlayerThink(p: Pplayer_t);
 
+function RX_PlayerMessage(p: Pplayer_t; const msgid: integer): boolean;
+
 implementation
 
 uses
   doomdef,
+  d_delphi,
   g_game,
+  radix_messages,
   info,
   info_h,
   p_tick;
@@ -99,6 +103,22 @@ begin
       end;
     end;
 
+end;
+
+const
+  MSGTIMEOUT = 4 * TICRATE;
+
+function RX_PlayerMessage(p: Pplayer_t; const msgid: integer): boolean;
+begin
+  if IsIntegerInRange(msgid, 0, NUMRADIXMESSAGES - 1) then
+    if (p.radixmessages[msgid] = 0) or (leveltime > p.radixmessages[msgid] + MSGTIMEOUT) then
+    begin
+      p._message := radixmessages[msgid].radix_msg;
+      p.radixmessages[msgid] := leveltime;
+      result := true;
+      exit;
+    end;
+  result := false;
 end;
 
 end.

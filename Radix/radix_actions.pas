@@ -151,6 +151,7 @@ uses
   radix_logic,
   radix_objects,
   radix_sounds,
+  radix_player,
   r_data,
   r_main,
   r_defs,
@@ -1535,7 +1536,7 @@ begin
 
   if IsIntegerInRange(parms.message_id, 0, NUMRADIXMESSAGES - 1) then
   begin
-    players[radixplayer]._message := radixmessages[parms.message_id].radix_msg;
+    RX_PlayerMessage(@players[radixplayer], parms.message_id);
     if leveltime >= parms.nextsoundtime then
     begin
       snd := radixmessages[parms.message_id].radix_snd;
@@ -1967,7 +1968,7 @@ begin
   end;
 
   players[radixplayer].secondaryobjective := true;
-  players[radixplayer]._message := radixmessages[MSG_SECONDARY].radix_msg;
+  RX_PlayerMessage(@players[radixplayer], MSG_SECONDARY);
 
   if leveltime >= parms.nextsoundtime then
   begin
