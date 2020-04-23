@@ -1743,7 +1743,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 1;                 // frame
+    frame: 0;                 // frame
     tics: 4;                  // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_RUN3;   // nextstate
@@ -1754,7 +1754,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 2;                 // frame
+    frame: 0;                 // frame
     tics: 4;                  // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_RUN4;   // nextstate
@@ -1765,7 +1765,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 3;                 // frame
+    frame: 0;                 // frame
     tics: 4;                  // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_RUN1;   // nextstate
@@ -1776,7 +1776,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 4;                 // frame
+    frame: 0;                 // frame
     tics: 12;                 // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY;        // nextstate
@@ -1787,7 +1787,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 32773;             // frame
+    frame: $8000;             // frame
     tics: 6;                  // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_ATK1;   // nextstate
@@ -1798,7 +1798,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 6;                 // frame
+    frame: 0;                 // frame
     tics: 4;                  // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_PAIN2;  // nextstate
@@ -1809,7 +1809,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 6;                 // frame
+    frame: 0;                 // frame
     tics: 4;                  // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY;        // nextstate
@@ -1820,7 +1820,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 7;                 // frame
+    frame: 0;                 // frame
     tics: 10;                 // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_DIE2;   // nextstate
@@ -1831,7 +1831,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 8;                 // frame
+    frame: 0;                 // frame
     tics: 10;                 // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_DIE3;   // nextstate
@@ -1842,7 +1842,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 9;                 // frame
+    frame: 0;                 // frame
     tics: 10;                 // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_DIE4;   // nextstate
@@ -1853,7 +1853,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 10;                // frame
+    frame: 0;                 // frame
     tics: 10;                 // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_DIE5;   // nextstate
@@ -1864,7 +1864,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 11;                // frame
+    frame: 0;                 // frame
     tics: 10;                 // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_DIE6;   // nextstate
@@ -1875,7 +1875,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 12;                // frame
+    frame: 0;                 // frame
     tics: 10;                 // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_DIE7;   // nextstate
@@ -1886,7 +1886,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 13;                // frame
+    frame: 0;                 // frame
     tics: -1;                 // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_NULL;        // nextstate
@@ -1897,7 +1897,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 14;                // frame
+    frame: 0;                 // frame
     tics: 5;                  // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_XDIE2;  // nextstate
@@ -1908,7 +1908,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 15;                // frame
+    frame: 0;                 // frame
     tics: 5;                  // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_XDIE3;  // nextstate
@@ -1919,7 +1919,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 16;                // frame
+    frame: 0;                 // frame
     tics: 5;                  // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_XDIE4;  // nextstate
@@ -1930,7 +1930,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 17;                // frame
+    frame: 0;                 // frame
     tics: 5;                  // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_XDIE5;  // nextstate
@@ -1941,7 +1941,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 18;                // frame
+    frame: 0;                 // frame
     tics: 5;                  // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_XDIE6;  // nextstate
@@ -1952,7 +1952,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 19;                // frame
+    frame: 0;                 // frame
     tics: 5;                  // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_XDIE7;  // nextstate
@@ -1963,7 +1963,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 20;                // frame
+    frame: 0;                 // frame
     tics: 5;                  // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_XDIE8;  // nextstate
@@ -1974,7 +1974,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 21;                // frame
+    frame: 0;                 // frame
     tics: 5;                  // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_PLAY_XDIE9;  // nextstate
@@ -1985,7 +1985,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 22;                // frame
+    frame: 0;                 // frame
     tics: -1;                 // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_NULL;        // nextstate
@@ -9892,7 +9892,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 13;                // frame
+    frame: 0;                 // frame (Dead)
     tics: -1;                 // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_NULL;        // nextstate
@@ -9903,7 +9903,7 @@ const
 
    (
     sprite: Ord(SPR_PLAY);    // sprite
-    frame: 18;                // frame
+    frame: 0;                 // frame  (Dead)
     tics: -1;                 // tics
     action: (acp1: nil);      // action, will be set after
     nextstate: S_NULL;        // nextstate

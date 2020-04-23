@@ -1347,10 +1347,10 @@ type
 function TRadixToWADConverter.GenerateSprites: boolean;
 const
   MAX_SPR_INFO = 1024;
-  NUMEXTRASPRITENAMES = 5;
+  NUMEXTRASPRITENAMES = 6;
 const
   SPREXTRANAMES: array[0..NUMEXTRASPRITENAMES - 1] of string[4] = (
-    'EXPB', 'EXPS', 'SMOB', 'SMOS', 'PUFF'
+    'EXPB', 'EXPS', 'SMOB', 'SMOS', 'PUFF', 'PLAY'
   );
 var
   position: integer;
@@ -1919,6 +1919,9 @@ begin
 
   // MT_LASER
   MakeRotatingSprite16('Laser', _MTTX_LASER, 1, nil, 24, 4, false, false);
+
+  // 'PLAY' sprite
+  MakeRotatingSprite8('NetRadixPlane', _DOOM_THING_2_RADIX_ + 5, 1);
 
   bmp := TRadixBitmap.Create;
 
