@@ -47,18 +47,39 @@ uses
   doomdef,
   d_delphi,
   g_game,
+  m_rnd,
+  m_fixed,
   radix_messages,
+  radix_objects,
   info,
   info_h,
-  p_tick;
+  p_tick,
+  p_mobj_h,
+  tables;
 
 procedure RX_PlayerThink(p: Pplayer_t);
 var
   new_health: integer;
   new_energy: integer;
+  x, y: fixed_t;
+  dist: integer;
+  an: angle_t;
+  mo: Pmobj_t;
 begin
   if p.playerstate = PST_DEAD then
+  begin
+    // JVAL: 20200423 - Spawn smoke if player is dead
+    if (leveltime and 15 = 0) or (P_Random < 50) then
+    begin
+      an := P_Random * 32;
+      dist := 16 + (P_Random and 32);
+      x := p.mo.x + dist * finecosine[an];
+      y := p.mo.y + dist * finesine[an];
+      mo := RX_SpawnRadixBigSmoke(x, y, p.mo.z);
+      mo.momz := FRACUNIT div 2 + P_Random * 128;
+    end;
     exit;
+  end;
 
   if p.energyweaponfiretics > 0 then
     dec(p.energyweaponfiretics);  // JVAL: 20201204
