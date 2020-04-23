@@ -500,10 +500,16 @@ begin
     M_WriteSmallText(55, 200 - STATUSBAR_HEIGHT + 16, IntToStrzFill(2, hud_player.gravitywave), SCN_HUD);
 end;
 
+type
+  cockpitmode_t = (cm_fulldisplay, cm_halfdisplay);
+
+const
+  COCKPIT_UP_PART = 120;
+
 ////////////////////////////////////////////////////////////////////////////////
 // Draw Cockpit
 ////////////////////////////////////////////////////////////////////////////////
-procedure RX_HudDrawerCockpit;
+procedure RX_HudDrawerCockpit(const mode: cockpitmode_t);
 var
   p: Ppatch_t;
   i: integer;
@@ -511,6 +517,9 @@ var
 begin
   // Draw cockpit
   V_DrawPatch(0, 0, SCN_HUD, cockpit, false);
+
+  if mode = cm_halfdisplay then
+    MT_ZeroMemory(screens[SCN_HUD], 320 * COCKPIT_UP_PART);
 
   // Draw ready weapon
   case Ord(hud_player.readyweapon) of
@@ -562,7 +571,8 @@ begin
   M_WriteSmallText(168, 141, stmp, SCN_HUD);
 
   // Draw threat indicator
-  V_DrawPatch(147, 23, SCN_HUD, treatimages[hud_player.threat], false);
+  if mode = cm_fulldisplay then
+    V_DrawPatch(147, 23, SCN_HUD, treatimages[hud_player.threat], false);
 
   // Draw armor, shield and energy bars
   RX_HudDrawBar(202, 156, ArmourBar, hud_player.armorpoints);
@@ -602,12 +612,29 @@ begin
     M_WriteSmallText(73, 154, IntToStrzFill(2, hud_player.gravitywave), SCN_HUD);
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+// Mini hud
+////////////////////////////////////////////////////////////////////////////////
+procedure RX_HudDrawerSmall;
+begin
+  // Draw armor, shield and energy bars
+  RX_HudDrawBar(10, 200 - 21, ArmourBar, hud_player.armorpoints);
+  RX_HudDrawBar(10, 200 - 14, ShieldBar, hud_player.health);
+  RX_HudDrawBar(10, 200 - 7, EnergyBar, hud_player.energy);
+
+  // Draw power up icons
+  RX_HudDrawPowerUpIcons;
+
+  // Draw plasma balls
+  RX_HudDrawPlasmaBall;
+end;
+
 //
 // RX_HudDrawer
 //
 procedure RX_HudDrawer;
 begin
-  if (screenblocks > 11) and (amstate <> am_only) then
+  if (screenblocks > 13) and (amstate <> am_only) then
     exit;
 
   if firstinterpolation then
@@ -617,7 +644,11 @@ begin
     MT_ZeroMemory(screens[SCN_HUD], 320 * 200);
 
     if (screenblocks = 11) and (amstate <> am_only) then
-      RX_HudDrawerCockpit
+      RX_HudDrawerCockpit(cm_fulldisplay)
+    else if (screenblocks = 12) and (amstate <> am_only) then
+      RX_HudDrawerCockpit(cm_halfdisplay)
+    else if (screenblocks = 13) and (amstate <> am_only) then
+      RX_HudDrawerSmall
     else
       RX_HudDrawerStatusbar;
   end;

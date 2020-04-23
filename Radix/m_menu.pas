@@ -2153,7 +2153,7 @@ begin
   end;
 
   M_DrawThermo(
-    78, DEF_MENU_ITEMS_START_Y + 14 * (Ord(scrnsize) + 1) + 2, 20, m_screensize, 9);
+    78, DEF_MENU_ITEMS_START_Y + 14 * (Ord(scrnsize) + 1) + 2, 20, m_screensize, 11);
 
   M_DrawThermo(
     78, DEF_MENU_ITEMS_START_Y + 14 * (Ord(mousesens) + 1) + 2, 20, mouseSensitivity, 20);
@@ -2707,7 +2707,7 @@ begin
       end;
     1:
       begin
-        if m_screensize < 8 then
+        if m_screensize < 10 then
         begin
           inc(screenblocks);
           inc(m_screensize);
