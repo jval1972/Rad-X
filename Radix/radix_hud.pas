@@ -618,9 +618,9 @@ end;
 procedure RX_HudDrawerSmall;
 begin
   // Draw armor, shield and energy bars
-  RX_HudDrawBar(10, 200 - 21, ArmourBar, hud_player.armorpoints);
-  RX_HudDrawBar(10, 200 - 14, ShieldBar, hud_player.health);
-  RX_HudDrawBar(10, 200 - 7, EnergyBar, hud_player.energy);
+  RX_HudDrawBar(2, 200 - 21, ArmourBar, hud_player.armorpoints);
+  RX_HudDrawBar(2, 200 - 14, ShieldBar, hud_player.health);
+  RX_HudDrawBar(2, 200 - 7, EnergyBar, hud_player.energy);
 
   // Draw power up icons
   RX_HudDrawPowerUpIcons;
