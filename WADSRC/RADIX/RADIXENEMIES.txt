@@ -1598,7 +1598,7 @@ ACTOR MT_ROTATINGRADAR1 1041
   States
   {
     Spawn:
-      XR41 A 5 A_Turn(45)
+      XR41 A 1 A_Turn(9)
       Loop
     Death:
       TNT1 A 0 A_Fall
