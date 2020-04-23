@@ -2008,8 +2008,6 @@ begin
 
   R_Execute3DTransform;
 
-  R_DrawPlayer;
-
   // Check for new console commands.
   NetUpdate;
 
@@ -2064,8 +2062,6 @@ begin
   NetUpdate;
 
   R_Execute3DTransform;
-
-  R_DrawPlayer;
 
   // Check for new console commands.
   NetUpdate;
@@ -2139,7 +2135,6 @@ begin
 
   R_Execute3DTransform;
 
-  R_DrawPlayer;
 {$ENDIF}
 
 

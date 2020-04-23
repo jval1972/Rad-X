@@ -86,6 +86,7 @@ var
   sec: Psector_t;
   sec2: Psector_t;
   ceilz, floorz: fixed_t;
+  dist: double;
 begin
   if chasecamera then
   begin
@@ -95,11 +96,13 @@ begin
 
     loops := 0;
     repeat
-      cx := viewx + dx;
-      cy := viewy + dy;
-
+      cx := viewplayer.mo.x + dx;
+      cy := viewplayer.mo.y + dy;
       sec := R_PointInSubSector(cx, cy).sector;
-      cz := viewz + chasecamera_viewz * FRACUNIT; // JVAL: Slopes
+
+      // JVAL: 20200423 - New viewz calculation
+      dist := Sqrt(Sqr(dx / FRACUNIT) + Sqr(dy / FRACUNIT));
+      cz := viewplayer.mo.z + viewplayer.mo.height + chasecamera_viewz * FRACUNIT - round((dist * viewplayer.lookdir16 * (FRACUNIT div 16)) / 173); // JVAL: Slopes
       ceilz := P_3dCeilingHeight(sec, cx, cy, cz) +
                P_SectorJumpOverhead(sec, viewplayer.mo) - 1 - CAMERARADIOUS; // JVAL: 3d floors
       if cz > ceilz then
