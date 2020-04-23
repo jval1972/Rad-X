@@ -68,7 +68,7 @@ var
 begin
   if p.playerstate = PST_DEAD then
   begin
-    // JVAL: 20200423 - Spawn smoke if player is dead
+    // JVAL: 20200423 - Spawn random smoke when player dies
     if (leveltime and 15 = 0) or (P_Random < 50) then
     begin
       an := P_Random * 32;

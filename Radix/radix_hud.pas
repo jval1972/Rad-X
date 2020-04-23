@@ -44,6 +44,7 @@ implementation
 
 uses
   d_delphi,
+  d_englsh,
   doomdef,
   am_map,
   d_net,
@@ -390,6 +391,12 @@ begin
   M_WriteSmallText(305, 4, IntToStrzFill(2, hud_player.plasmabombs), SCN_HUD);
 end;
 
+procedure RX_HUDRestartMessage;
+begin
+  if hud_player.playerstate = PST_DEAD then
+    M_WriteSmallTextCenter(76, S_PRESS_SPACE_RESTART, SCN_HUD);
+end;
+
 ////////////////////////////////////////////////////////////////////////////////
 // Draw Status Bar
 ////////////////////////////////////////////////////////////////////////////////
@@ -498,6 +505,9 @@ begin
   // Gravity wave shots left
   if hud_player.readyweapon = wp_gravitywave then
     M_WriteSmallText(55, 200 - STATUSBAR_HEIGHT + 16, IntToStrzFill(2, hud_player.gravitywave), SCN_HUD);
+
+  // Draw restart message if the player is dead
+  RX_HUDRestartMessage;
 end;
 
 type
@@ -610,6 +620,9 @@ begin
   // Gravity wave shots left
   if hud_player.readyweapon = wp_gravitywave then
     M_WriteSmallText(73, 154, IntToStrzFill(2, hud_player.gravitywave), SCN_HUD);
+
+  // Draw restart message if the player is dead
+  RX_HUDRestartMessage;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -627,6 +640,9 @@ begin
 
   // Draw plasma balls
   RX_HudDrawPlasmaBall;
+
+  // Draw restart message if the player is dead
+  RX_HUDRestartMessage;
 end;
 
 //
@@ -634,16 +650,23 @@ end;
 //
 procedure RX_HudDrawer;
 begin
-  if (screenblocks > 13) and (amstate <> am_only) then
-    exit;
-
   if firstinterpolation then
   begin
     hud_player := @players[consoleplayer];
 
+    if (screenblocks > 13) and (amstate <> am_only) and (hud_player.playerstate <> PST_DEAD) then
+      exit;
+
     MT_ZeroMemory(screens[SCN_HUD], 320 * 200);
 
-    if (screenblocks = 11) and (amstate <> am_only) then
+    if (screenblocks > 13) and (amstate <> am_only) then
+    begin
+      if hud_player.playerstate = PST_DEAD then
+        RX_HUDRestartMessage
+      else
+        exit;
+    end
+    else if (screenblocks = 11) and (amstate <> am_only) then
       RX_HudDrawerCockpit(cm_fulldisplay)
     else if (screenblocks = 12) and (amstate <> am_only) then
       RX_HudDrawerCockpit(cm_halfdisplay)

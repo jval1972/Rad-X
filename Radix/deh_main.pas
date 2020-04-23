@@ -3183,6 +3183,7 @@ begin
   DEH_AddString(@deh_strings, @S_MANEUVER_JETS_DEPLETED, 'S_MANEUVER_JETS_DEPLETED');
   DEH_AddString(@deh_strings, @S_ULTRA_SHIELDS_DEPLETED, 'S_ULTRA_SHIELDS_DEPLETED');
   DEH_AddString(@deh_strings, @S_ALDS_DEPLETED, 'S_ALDS_DEPLETED');
+  DEH_AddString(@deh_strings, @S_PRESS_SPACE_RESTART, 'S_PRESS_SPACE_RESTART');
 
   ammo_tokens := TDTextList.Create;
 

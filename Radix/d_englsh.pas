@@ -684,6 +684,11 @@ var
   S_ULTRA_SHIELDS_DEPLETED: string = 'Ultra Shields Depleted';
   S_ALDS_DEPLETED: string = 'A.L.D.S. Depleted';
 
+var
+  S_PRESS_SPACE_RESTART: string =
+    'PRESS SPACE' + #13#10 +
+    'TO RESTART LEVEL';
+
 implementation
 
 
