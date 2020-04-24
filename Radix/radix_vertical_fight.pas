@@ -43,14 +43,20 @@ function P_FindVericalPlayerTarget(vthing: Pmobj_t; const z1, z2: fixed_t; const
 
 procedure A_VericalLookForPlayers(actor: Pmobj_t);
 
+procedure A_VerticalMissileUp(actor: Pmobj_t);
+
+procedure A_VerticalMissileDown(actor: Pmobj_t);
+
 implementation
 
 uses
   d_delphi,
   doomdef,
+  i_system,
   d_player,
   info,
   info_h,
+  info_common,
   g_game,
   r_defs,
   r_main,
@@ -159,6 +165,7 @@ begin
   vsthing := vthing;
   vsz1 := z1;
   vsz2 := z2;
+  vsradius := radius;
   for i := 0 to MAXPLAYERS - 1 do
     if playeringame[i] then
       if players[i].mo <> nil then
@@ -194,6 +201,7 @@ begin
   if targ <> nil then
   begin
     actor.threshold := 0;
+    actor.target := targ;
 
     if actor.info.seesound <> 0 then
       A_SeeSound(actor, actor);
@@ -207,6 +215,102 @@ begin
     else
       P_SetMobjState(actor, statenum_t(actor.info.seestate));
   end;
+end;
+
+//
+//  A_VerticalMissile(missiletype: string, x, y, z, maxmomxy)
+//
+procedure P_VerticalMissile(actor: Pmobj_t; const direction: integer);
+var
+  targ, th: Pmobj_t;
+  mobj_no: integer;
+  x, y, z: fixed_t;
+  speed: fixed_t;
+  tics: integer;
+  maxmomxy: fixed_t;
+  dx, dy, dz: fixed_t;
+begin
+  if not P_CheckStateParams(actor, 4, CSP_AT_LEAST) then
+    exit;
+
+  targ := actor.target;
+  if (targ = nil) or (targ = actor) then
+    exit;
+
+  if actor.state.params.IsComputed[0] then
+    mobj_no := actor.state.params.IntVal[0]
+  else
+  begin
+    mobj_no := Info_GetMobjNumForName(actor.state.params.StrVal[0]);
+    actor.state.params.IntVal[0] := mobj_no;
+  end;
+  if mobj_no = -1 then
+  begin
+    I_Warning('A_VerticalMissile(): Unknown missile %s'#13#10, [actor.state.params.StrVal[0]]);
+    exit;
+  end;
+
+  x := actor.x + actor.state.params.FixedVal[1];
+  y := actor.y + actor.state.params.FixedVal[2];
+  z := actor.z + actor.state.params.FixedVal[3];
+
+  dx := targ.x - x;
+  dy := targ.y - y;
+  dz := targ.z - z;
+
+  if Isign(dz) <> Isign(direction) then
+    exit;
+
+  th := P_SpawnMobj(x, y, z, mobj_no);
+
+  speed := th.info.speed;
+  if speed < 2048 then
+    speed := speed * FRACUNIT;
+  if speed = 0 then
+    speed := 12 * FRACUNIT;
+
+  tics := abs(dz) div speed;
+  if tics < 1 then
+    tics := 1;
+
+  A_SeeSound(th, th);
+
+  th.target := actor;  // where it came from
+
+  th.momx := dx div tics;
+  th.momy := dy div tics;
+
+  // Match target velocity
+  if (targ.flags and MF_SHADOW = 0) or (actor.flags2_ex and MF2_EX_SEEINVISIBLE <> 0) then
+  begin
+    th.momx := th.momx + targ.momx;
+    th.momy := th.momy + targ.momy;
+  end;
+
+  if actor.state.params.Count >= 5 then
+    maxmomxy := abs(actor.state.params.FixedVal[4])
+  else
+    maxmomxy := speed;
+  // Limit speed
+  th.momx := GetIntegerInRange(dx div tics, -maxmomxy, maxmomxy);
+  th.momy := GetIntegerInRange(dy div tics, -maxmomxy, maxmomxy);
+
+  if dz < 0 then
+    th.momz := -speed
+  else
+    th.momz := speed;
+
+  P_CheckMissileSpawn(th);
+end;
+
+procedure A_VerticalMissileUp(actor: Pmobj_t);
+begin
+  P_VerticalMissile(actor, 1);
+end;
+
+procedure A_VerticalMissileDown(actor: Pmobj_t);
+begin
+  P_VerticalMissile(actor, -1);
 end;
 
 end.
