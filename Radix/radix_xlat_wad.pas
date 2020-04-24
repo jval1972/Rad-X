@@ -1743,9 +1743,9 @@ begin
   MakeOneSprite('BioMechChunk', _MTRX_BIOMECHUP, nil, 14, 14, false, false, 'C');
   MakeOneSprite('BioXplode1', _MTRX_BIOMECHUP, nil, 35, 29, false, false, 'D');
   MakeOneSprite('BioXplode2', _MTRX_BIOMECHUP, nil, 57, 44, false, false, 'E');
-  MakeOneSprite('BioXplode3', _MTRX_BIOMECHUP, nil, 58, 48, false, false, 'E');
-  MakeOneSprite('BioXplode4', _MTRX_BIOMECHUP, nil, 62, 60, false, false, 'F');
-  MakeOneSprite('BioXplode5', _MTRX_BIOMECHUP, nil, 63, 56, false, false, 'G');
+  MakeOneSprite('BioXplode3', _MTRX_BIOMECHUP, nil, 58, 48, false, false, 'F');
+  MakeOneSprite('BioXplode4', _MTRX_BIOMECHUP, nil, 62, 60, false, false, 'G');
+  MakeOneSprite('BioXplode5', _MTRX_BIOMECHUP, nil, 63, 56, false, false, 'H');
 
   // MT_ENGINECORE
   MakeNonRotatingSprite('EngineCore', _MTRX_ENGINECORE, 1, nil, 59, 178, false, false);
