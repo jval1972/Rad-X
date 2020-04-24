@@ -359,9 +359,7 @@ uses
   deh_base in 'Base\deh_base.pas',
   r_sprite in 'Base\r_sprite.pas',
   r_tallcolumn in 'Base\r_tallcolumn.pas',
-{$IFDEF DEBUG}
   r_debug in 'Base\r_debug.pas',
-{$ENDIF}
   radix_bitmap in 'Radix\radix_bitmap.pas',
   radix_defs in 'Radix\radix_defs.pas',
   radix_end_screen in 'Radix\radix_end_screen.pas',
@@ -388,7 +386,8 @@ uses
   radix_weapons in 'Radix\radix_weapons.pas',
   radix_objects in 'Radix\radix_objects.pas',
   radix_player in 'Radix\radix_player.pas',
-  m_compress in 'Base\m_compress.pas';
+  m_compress in 'Base\m_compress.pas',
+  radix_vertical_fight in 'Radix\radix_vertical_fight.pas';
 
 var
   Saved8087CW: Word;

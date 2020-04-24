@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 301;
+  DEHNUMACTIONS = 302;
 
 type
   deh_action_t = record
@@ -56,7 +56,7 @@ type
     name: string;
     {$IFDEF DLL}
     decl: string;
-//    params: string; TODO 
+//    params: string; TODO
     {$ENDIF}
   end;
 
@@ -128,6 +128,7 @@ uses
   radix_messages,
   radix_weapons,
   radix_sounds,
+  radix_vertical_fight,
   r_renderstyle,
   sounds,
   sound_data,
@@ -2939,6 +2940,9 @@ begin
   deh_actions[300].action.acp1 := @A_GoToIfMasterCustomParamGreater;
   deh_actions[300].name := strupper('GoToIfMasterCustomParamGreater');
   {$IFDEF DLL}deh_actions[300].decl := 'A_GoToIfMasterCustomParamGreater(param: string, value: integer, state: state_t)';{$ENDIF}
+  deh_actions[301].action.acp1 := @A_VericalLookForPlayers;
+  deh_actions[301].name := strupper('A_VericalLookForPlayers');
+  {$IFDEF DLL}deh_actions[301].decl := 'A_VericalLookForPlayers(z1: float, z2: float, radius: float=128, state: state_t=see])';{$ENDIF}
 
 
   deh_strings.numstrings := 0;
