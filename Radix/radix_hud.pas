@@ -251,6 +251,7 @@ var
   mo: Pmobj_t;
   px, py: integer;
   pb: PByte;
+  newcolor: byte;
   xpos, ypos: integer;
   pitch: integer;
   sqdist: integer;
@@ -259,21 +260,34 @@ var
   an: angle_t;
   asin, acos: fixed_t;
 begin
-  if hud_player.scannerjam then
+  pitch := V_GetScreenWidth(SCN_HUD);
+  if (hud_player.playerstate = PST_DEAD) or (hud_player.scannerjam and (leveltime and 16 <> 0)) then
   begin
-    if leveltime and 16 <> 0 then
-    begin
-      pitch := V_GetScreenWidth(SCN_HUD);
-      for i := x - range - 1 to x + range + 1 do
-        for j := y - range to y + range do
-        begin
-          pb := @screens[SCN_HUD][pitch * j + i];
-          if pb^ = 124 then
-            pb^ := 63;
-        end;
-    end;
+    for i := x - range - 1 to x + range + 1 do
+      for j := y - range to y + range do
+      begin
+        pb := @screens[SCN_HUD][pitch * j + i];
+        if pb^ = 124 then
+          pb^ := 63;
+      end;
     exit; // JVAL: 20200324 - When true can not see the radar in hud
   end;
+
+  // JVAL: 20200424 - Radar glow effect
+  case (leveltime div 8) and 3 of
+    0: newcolor := 123;
+    2: newcolor := 125;
+  else
+    newcolor := 124;
+  end;
+  if newcolor <> 124 then
+    for i := x - range - 1 to x + range + 1 do
+      for j := y - range to y + range do
+      begin
+        pb := @screens[SCN_HUD][pitch * j + i];
+        if pb^ = 124 then
+          pb^ := newcolor;
+      end;
 
   r := range * 64 * FRACUNIT;
   xl := MapBlockIntX(int64(hud_player.mo.x) - r - int64(bmaporgx));
@@ -391,7 +405,7 @@ begin
   M_WriteSmallText(305, 4, IntToStrzFill(2, hud_player.plasmabombs), SCN_HUD);
 end;
 
-procedure RX_HUDRestartMessage;
+procedure RX_HudDrawRestartMessage;
 begin
   if hud_player.playerstate = PST_DEAD then
     M_WriteSmallTextCenter(76, S_PRESS_SPACE_RESTART, SCN_HUD);
@@ -507,7 +521,7 @@ begin
     M_WriteSmallText(55, 200 - STATUSBAR_HEIGHT + 16, IntToStrzFill(2, hud_player.gravitywave), SCN_HUD);
 
   // Draw restart message if the player is dead
-  RX_HUDRestartMessage;
+  RX_HudDrawRestartMessage;
 end;
 
 type
@@ -622,7 +636,7 @@ begin
     M_WriteSmallText(73, 154, IntToStrzFill(2, hud_player.gravitywave), SCN_HUD);
 
   // Draw restart message if the player is dead
-  RX_HUDRestartMessage;
+  RX_HudDrawRestartMessage;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -642,7 +656,7 @@ begin
   RX_HudDrawPlasmaBall;
 
   // Draw restart message if the player is dead
-  RX_HUDRestartMessage;
+  RX_HudDrawRestartMessage;
 end;
 
 //
@@ -662,7 +676,7 @@ begin
     if (screenblocks > 13) and (amstate <> am_only) then
     begin
       if hud_player.playerstate = PST_DEAD then
-        RX_HUDRestartMessage
+        RX_HudDrawRestartMessage
       else
         exit;
     end
