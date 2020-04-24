@@ -149,6 +149,8 @@ const
   NUMBONUSPALS = 4;
 // Radiation suit, green shift.
   RADIATIONPAL = 13;
+// Dead palette
+  DEADPAL = 4;
 
 // N/256*100% probability
 //  that the normal face state will change
@@ -918,42 +920,47 @@ var
 begin
   if plyr = nil then
     exit;
-    
-  cnt := plyr.damagecount;
 
-  if plyr.powers[Ord(pw_strength)] <> 0 then
-  begin
-    // slowly fade the berzerk out
-    bzc := 12 - _SHR(plyr.powers[Ord(pw_strength)], 6);
-
-    if bzc > cnt then
-      cnt := bzc;
-  end;
-
-  if cnt <> 0 then
-  begin
-    palette := _SHR(cnt + 7, 3);
-
-    if palette >= NUMREDPALS then
-      palette := NUMREDPALS - 1;
-
-    palette := palette + STARTREDPALS;
-  end
-  else if plyr.bonuscount <> 0 then
-  begin
-    palette := _SHR(plyr.bonuscount + 7, 3);
-
-    if palette >= NUMBONUSPALS then
-      palette := NUMBONUSPALS - 1;
-
-    palette := palette + STARTBONUSPALS;
-  end
-  else if (plyr.powers[Ord(pw_ironfeet)] > 4 * 32) or
-          (plyr.powers[Ord(pw_ironfeet)] and 8 <> 0) then
-    palette := RADIATIONPAL
+  if plyr.playerstate = PST_DEAD then
+    palette := DEADPAL
   else
-    palette := 0;
+  begin
+    cnt := plyr.damagecount;
 
+    if plyr.powers[Ord(pw_strength)] <> 0 then
+    begin
+      // slowly fade the berzerk out
+      bzc := 12 - _SHR(plyr.powers[Ord(pw_strength)], 6);
+
+      if bzc > cnt then
+        cnt := bzc;
+    end;
+
+    if cnt <> 0 then
+    begin
+      palette := _SHR(cnt + 7, 3);
+
+      if palette >= NUMREDPALS then
+        palette := NUMREDPALS - 1;
+
+      palette := palette + STARTREDPALS;
+    end
+    else if plyr.bonuscount <> 0 then
+    begin
+      palette := _SHR(plyr.bonuscount + 7, 3);
+
+      if palette >= NUMBONUSPALS then
+        palette := NUMBONUSPALS - 1;
+
+      palette := palette + STARTBONUSPALS;
+    end
+    else if (plyr.powers[Ord(pw_ironfeet)] > 4 * 32) or
+            (plyr.powers[Ord(pw_ironfeet)] and 8 <> 0) then
+      palette := RADIATIONPAL
+    else
+      palette := 0;
+  end;
+  
   if palette <> st_palette then
   begin
     st_palette := palette;
