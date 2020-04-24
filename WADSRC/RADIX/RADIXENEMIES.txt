@@ -1623,14 +1623,22 @@ ACTOR MT_DEFENCEDRONE_STUB3: MT_DEFENCEDRONE_STUB1 1042
 ACTOR MT_SHIELDGENERATOR1 1043
 {
   Radius 32
-  Height 56
+  Height 80
   Health 100
-  SOLID SHOOTABLE NOBLOOD
+  +MF_SOLID 
+  +MF_SHOOTABLE 
+  +MF_NOBLOOD
   States
   {
-  Spawn:
-    XR43 A -1
-    Stop
+    Spawn:
+      XR43 A 5
+      Loop
+    Death:
+      TNT1 A 0 A_Fall
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,0,30,0,0,0,0,0)
+      TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
+      TNT1 AAA 1 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,30,0,0,RANDOM(1,2),0)
+      Stop
   }
 }
 
