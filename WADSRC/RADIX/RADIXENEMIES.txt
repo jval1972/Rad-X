@@ -1677,6 +1677,86 @@ ACTOR MT_SECONDCOOLAND1 1044
 }
 
 ///////////////////////////////
+// MT_BIOMECH_CHUNK
+///////////////////////////////
+ACTOR MT_BIOMECH_CHUNK
+{
+  Radius 16
+  Height 10
+  Health 1000
+  Mass 5
+  Reactiontime 8
+  +MF3_EX_FLOORBOUNCE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4))
+      XR45 C -1
+    }
+  }
+}
+
+///////////////////////////////
+// MT_BATTLEDRONE1_CHUNK1
+///////////////////////////////
+ACTOR MT_BIOMECH_BODY
+{
+  Radius 48
+  Height 24
+  Health 1000
+  Mass 50
+  Reactiontime 8
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      XR45 B -1
+    }
+  }
+}
+
+///////////////////////////////
+// MT_BIOMECH_EXPLODE
+///////////////////////////////
+ACTOR "MT_BIOMECH_EXPLODE"
+{
+  Health 1000
+  Radius 40
+  Height 40
+  Mass 5
+  Reactiontime 8
+  RenderStyle Transparent
+  Alpha 0.8
+  Gravity 0
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF2_EX_NOHITFLOOR
+  +MF2_EX_DONOTRENDERSHADOW
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      XR45 D RANDOMRANGE(2,4) 
+      XR45 E RANDOMRANGE(2,4) 
+      XR45 F RANDOMRANGE(2,4) 
+      XR45 G RANDOMRANGE(2,4) A_FadeOut20
+      XR45 H RANDOMRANGE(2,4) A_FadeOut20
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
 // MT_BIOMECHUP
 ///////////////////////////////
 ACTOR MT_BIOMECHUP 1045
@@ -1684,14 +1764,38 @@ ACTOR MT_BIOMECHUP 1045
   Radius 32
   Height 56
   Health 50
-  Gravity 0
-  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  Speed 0
+  TouchDamage 5
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_COUNTKILL
+  +MF_NOBLOOD
+  +PUSHABLE
   +MF2_EX_DONTINFIGHTMONSTERS
+  +MF3_EX_DAMAGEONPLAYERTOUCH
   States
   {
-  Spawn:
-    XR45 A -1
-    Stop
+    Spawn:
+      XR45 A 5 A_VericalLookForPlayers(100,400,128,Missile)
+      XR45 A 5 A_VericalLookForPlayers(400,1200,256,Missile)
+      Loop
+    Missile:
+      XR45 A 10 A_VerticalMissileUp("MT_ENEMYLASER",0,0,90,1)
+      TNT1 A 0 A_Jump(128,2)
+      XR45 A 10 A_VerticalMissileUp("MT_ENEMYLASER",0,0,90,1)
+      XR45 A 10 A_VerticalMissileUp("MT_ENEMYLASER",0,0,90,1)
+      GoTo Spawn
+    Death:
+      TNT1 A 0 A_Fall
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",RANDOMPICK(-30,30),RANDOMPICK(-30,30),20,0,0,0,0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",RANDOMPICK(-20,20),RANDOMPICK(-20,20),20,0,0,0,0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,0,RANDOM(25,40),0,0,0,0,0)
+      TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
+      TNT1 A 0 A_SpawnItemEx("MT_BIOMECH_BODY",0,0,0,0,0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_BIOMECH_EXPLODE",0,0,0,0,0,0)
+      TNT1 AAA 1 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,RANDOMPICK(20,25,30,35,40),0,0,RANDOM(1,2),0)
+      TNT1 AAAA 1 A_SpawnItemEx("MT_BIOMECH_CHUNK",0,0,RANDOM(20,30),RANDOMPICK(-1,1)*FRANDOM(0.5,1.5),RANDOMPICK(-1,1)*FRANDOM(0.5,1.5),FRANDOM(2,3),RANDOM(0,179)*2)
+      Stop
   }
 }
 
