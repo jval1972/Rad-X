@@ -1748,7 +1748,7 @@ begin
   MakeOneSprite('BioXplode5', _MTRX_BIOMECHUP, nil, 63, 56, false, false, 'H');
 
   // MT_ENGINECORE
-  MakeNonRotatingSprite('EngineCore', _MTRX_ENGINECORE, 1, nil, 59, 178, false, false);
+  MakeNonRotatingSprite('EngineCore', _MTRX_ENGINECORE, 3, nil, 59, 184, false, false);
 
   // MT_DEFENCEDRONE1
   MakeRotatingSprite8('DroneB', _MTRX_DEFENCEDRONE1, 1, nil, 63, 67, false, false);
