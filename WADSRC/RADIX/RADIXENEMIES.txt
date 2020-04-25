@@ -2083,9 +2083,9 @@ ACTOR MT_ROTATINGRADAR2 1057
 }
 
 ///////////////////////////////
-// MT_MISSILEBOAT2
+// MT_MISSILEBOAT_STUB
 ///////////////////////////////
-ACTOR MT_MISSILEBOAT2 1058
+ACTOR MT_MISSILEBOAT_STUB 1058
 {
   Radius 32
   Height 56

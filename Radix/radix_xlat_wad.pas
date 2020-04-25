@@ -1790,8 +1790,8 @@ begin
   // MT_ROTATINGRADAR2
   MakeRotatingSprite8('RadarDish', _MTRX_ROTATINGRADAR2, 1, nil, 53, 91, false, false);
 
-  // MT_MISSILEBOAT2
-  MakeRotatingSprite8('DroneC', _MTRX_MISSILEBOAT2, 1, nil, 83, 68, false, false);
+  // MT_MISSILEBOAT_STUB
+  MakeRotatingSprite8('DroneC', _MTRX_MISSILEBOAT_STUB, 1, nil, 83, 68, false, false);
 
   // MT_BATTLEDRONE3
   MakeRotatingSprite8('DroneA', _MTRX_BATTLEDRONE3, 1, nil, 91, 50, false, false);

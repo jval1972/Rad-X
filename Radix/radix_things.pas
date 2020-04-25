@@ -92,7 +92,7 @@ const
   _MTRX_SHIELDGENERATOR2 = 55; // Shield generator #2 (obstacle) - ShldGenerator1.bmp
   _MTRX_COOLANDGENERATOR = 56; // Cooland generator (obstacle) - CoolantGener1.bmp
   _MTRX_ROTATINGRADAR2 = 57; // rotating radar dish (obstacle) - RadarDish1.bmp
-  _MTRX_MISSILEBOAT2 = 58; // missile boat (enemy) - DroneC1.bmp
+  _MTRX_MISSILEBOAT_STUB = 58; // missile boat (enemy) - DroneC1.bmp (stub)
   _MTRX_BATTLEDRONE3 = 59; // battle drone (enemy) - DroneA_1.bmp
   _MTRX_ROTATINGLIGHT = 60; // rotating light (obstacle) - RotatingLight2.bmp
   _MTRX_EGG = 61; // egg (obstacle) - Egg.bmp
@@ -189,7 +189,7 @@ const
   MT_SHIELDGENERATOR2 = _DOOM_THING_2_RADIX_ + _MTRX_SHIELDGENERATOR2;
   MT_COOLANDGENERATOR = _DOOM_THING_2_RADIX_ + _MTRX_COOLANDGENERATOR;
   MT_ROTATINGRADAR2 = _DOOM_THING_2_RADIX_ + _MTRX_ROTATINGRADAR2;
-  MT_MISSILEBOAT2 = _DOOM_THING_2_RADIX_ + _MTRX_MISSILEBOAT2;
+  MT_MISSILEBOAT_STUB = _DOOM_THING_2_RADIX_ + _MTRX_MISSILEBOAT_STUB;
   MT_BATTLEDRONE3 = _DOOM_THING_2_RADIX_ + _MTRX_BATTLEDRONE3;
   MT_ROTATINGLIGHT = _DOOM_THING_2_RADIX_ + _MTRX_ROTATINGLIGHT;
   MT_EGG = _DOOM_THING_2_RADIX_ + _MTRX_EGG;
