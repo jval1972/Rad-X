@@ -1842,14 +1842,49 @@ ACTOR MT_DEFENCEDRONE1 1047
   Radius 32
   Height 56
   Health 50
+  Speed 10
+  Mass 100
   Gravity 0
-  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  PainChance 160
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_NOGRAVITY
+  +MF_FLOAT
+  +MF_COUNTKILL
   +MF2_EX_DONTINFIGHTMONSTERS
   States
   {
-  Spawn:
-    XR47 A -1
-    Stop
+    Spawn:
+      XR47 A 5 A_Look
+      Loop
+    See:
+      XR47 A 6 A_Chase
+      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,1)),5)
+      XR47 A 6 A_Chase
+      Loop
+    Missile:
+      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,1)),10)
+      XR47 A 10 A_FaceTarget
+      TNT1 A 0 A_MatchTargetZ(0.1,10)
+      XR47 A 10 BRIGHT A_CustomMissile("MT_DRONE_SHOT",11,20)
+      XR47 A 10 BRIGHT A_CustomMissile("MT_DRONE_SHOT",11,-20)
+      TNT1 A 0 A_DropFarTarget(1024,128)
+      XR47 A 10 A_CPosRefire
+      Goto Missile
+    Pain:
+      XR47 A 10 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,FRANDOM(1,2),0)
+      Goto See
+    Death:
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,0,0,0,0,0,0,0)
+      TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_DRONEBODYA")
+      TNT1 A 1 A_SpawnItemEx("MT_CHUNK1",0,0,RANDOM(0,20),RANDOMPICK(-3,-2,2,3),RANDOMPICK(-3,-2,2,3),FRANDOM(2,3),RANDOM(0,179)*2)
+      TNT1 A 1 A_Turn(30)
+      TNT1 A 1 A_SpawnItemEx("MT_CHUNK2",0,0,RANDOM(0,20),RANDOMPICK(-3,-2,2,3),RANDOMPICK(-3,-2,2,3),FRANDOM(2,3),RANDOM(0,179)*2)
+      TNT1 A 1 A_Turn(30)
+      TNT1 A 1 A_SpawnItemEx("MT_CHUNK3",0,0,RANDOM(0,20),RANDOMPICK(-3,-2,2,3),RANDOMPICK(-3,-2,2,3),FRANDOM(2,3),RANDOM(0,179)*2)
+      Stop
   }
 }
 
