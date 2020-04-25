@@ -1118,9 +1118,18 @@ begin
   end;
 
   player := target.player;
-  if (player <> nil) and (gameskill = sk_baby) then
-    damage := _SHR1(damage); // take half damage in trainer mode
-
+  if player <> nil then
+  begin
+    if gameskill <> sk_nightmare then
+    begin
+      damage := damage * (1 + Ord(gameskill)) div (1 + Ord(sk_nightmare));
+      if damage < 1 then
+        damage := 1;
+    end;
+    damage := (damage * (128 + P_Random)) div 384;
+    if damage < 1 then
+      damage := 1;
+  end;
 
   if (inflictor <> nil) and (target.flags_ex and MF_EX_FIRERESIST <> 0) then
   begin
