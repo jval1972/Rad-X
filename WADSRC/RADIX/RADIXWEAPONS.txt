@@ -901,7 +901,7 @@ ACTOR "MT_ALDSLASER"
   Health 1000
   Radius 8
   Height 8
-  Speed 1966080
+  Speed 1572864
   Damage 20
   Mass 100
   Reactiontime 8
@@ -945,7 +945,7 @@ ACTOR "MT_LASER"
   Health 1000
   Radius 8
   Height 8
-  Speed 1966080
+  Speed 1572864
   Damage 20
   Mass 100
   Reactiontime 8
