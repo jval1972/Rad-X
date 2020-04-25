@@ -238,7 +238,7 @@ procedure RX_DrawRadar(const x, y: integer; const range: integer);
 const
   RADAR_SHIFT_BITS = 8;
   RADAR_SHIFT_UNIT = 1 shl RADAR_SHIFT_BITS;
-  RADAR_RANGE_FACTOR = 64 * (1 shl (FRACBITS - RADAR_SHIFT_BITS));
+  RADAR_RANGE_FACTOR = 128 * (1 shl (FRACBITS - RADAR_SHIFT_BITS));
 var
   r: int64;
   xl: integer;
@@ -289,7 +289,7 @@ begin
           pb^ := newcolor;
       end;
 
-  r := range * 64 * FRACUNIT;
+  r := range * 128 * FRACUNIT;
   xl := MapBlockIntX(int64(hud_player.mo.x) - r - int64(bmaporgx));
   xh := MapBlockIntX(int64(hud_player.mo.x) + r - int64(bmaporgx));
   yl := MapBlockIntY(int64(hud_player.mo.y) - r - int64(bmaporgy));
