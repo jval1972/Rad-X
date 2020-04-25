@@ -83,7 +83,7 @@ const
   _MTRX_ENGINECORE = 46; // engine core (obstacle)
   _MTRX_DEFENCEDRONE1 = 47; // defence drones (enemy) (DroneB1.bmp)
   _MTRX_BATTLEDRONE2 = 48; // battle drone (enemy) (DroneA_1.bmp) - unused in original
-  _MTRX_SKYFIREASSULTFIGHTER2 = 49; // skyfire assult fighter (enemy) LightAssault1.bmp
+  _MTRX_MISSILEBOAT2 = 49; // missile boat #2 (enemy) LightAssault1.bmp
   _MTRX_SKYFIREASSULTFIGHTER3 = 50; // skyfire assult fighter (enemy) LightAssault1.bmp
   _MTRX_SKYFIREASSULTFIGHTER4 = 51; // skyfire assult fighter (enemy) LightAssault1.bmp
   _MTRX_BIOMECH = 52; // bio-mechs (enemy) BioMech1.bmp
@@ -180,7 +180,7 @@ const
   MT_ENGINECORE = _DOOM_THING_2_RADIX_ + _MTRX_ENGINECORE;
   MT_DEFENCEDRONE1 = _DOOM_THING_2_RADIX_ + _MTRX_DEFENCEDRONE1;
   MT_BATTLEDRONE2 = _DOOM_THING_2_RADIX_ + _MTRX_BATTLEDRONE2;
-  MT_SKYFIREASSULTFIGHTER2 = _DOOM_THING_2_RADIX_ + _MTRX_SKYFIREASSULTFIGHTER2;
+  MT_MISSILEBOAT2 = _DOOM_THING_2_RADIX_ + _MTRX_MISSILEBOAT2;
   MT_SKYFIREASSULTFIGHTER3 = _DOOM_THING_2_RADIX_ + _MTRX_SKYFIREASSULTFIGHTER3;
   MT_SKYFIREASSULTFIGHTER4 = _DOOM_THING_2_RADIX_ + _MTRX_SKYFIREASSULTFIGHTER4;
   MT_BIOMECH = _DOOM_THING_2_RADIX_ + _MTRX_BIOMECH;

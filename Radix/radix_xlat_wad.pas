@@ -1756,8 +1756,8 @@ begin
   // MT_BATTLEDRONE2
   MakeRotatingSprite8('DroneA', _MTRX_BATTLEDRONE2, 1, nil, 91, 50, false, false);
 
-  // MT_SKYFIREASSULTFIGHTER2
-  MakeRotatingSprite8('LightAssault', _MTRX_SKYFIREASSULTFIGHTER2, 1, nil, 62, 51, false, false);
+  // MT_MISSILEBOAT2
+  MakeRotatingSprite8('LightAssault', _MTRX_MISSILEBOAT2, 1, nil, 62, 51, false, false);
 
   // MT_SKYFIREASSULTFIGHTER3
   MakeRotatingSprite8('LightAssault', _MTRX_SKYFIREASSULTFIGHTER3, 1, nil, 62, 51, false, false);
