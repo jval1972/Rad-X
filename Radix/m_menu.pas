@@ -3806,7 +3806,7 @@ begin
   NewDef.drawproc := @M_DrawNewGame;  // draw routine
   NewDef.x := DEF_MENU_ITEMS_START_X;
   NewDef.y := DEF_MENU_ITEMS_START_Y;
-  NewDef.lastOn := Ord(newg_hurtme); // last item user was on in menu
+  NewDef.lastOn := Ord(newg_toorough); // last item user was on in menu
   NewDef.itemheight := BIGLINEHEIGHT;
   NewDef.flags := 0;
 

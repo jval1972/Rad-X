@@ -186,7 +186,7 @@ var
 
   wminfo: wbstartstruct_t; // parms for world map / intermission
 
-  gameskill: skill_t;
+  gameskill: skill_t = sk_easy;
 
   bodyqueslot: integer;
 

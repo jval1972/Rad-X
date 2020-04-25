@@ -1483,7 +1483,7 @@ begin
   end;
 
   // get skill / episode / map from parms
-  startskill := sk_medium;
+  startskill := sk_easy;
   startepisode := 1;
   startmap := 1;
   autostart := false;
