@@ -1904,20 +1904,9 @@ ACTOR MT_BATTLEDRONE2: MT_BATTLEDRONE1 1048
 ///////////////////////////////
 // MT_MISSILEBOAT2
 ///////////////////////////////
-ACTOR MT_MISSILEBOAT2 1049
+ACTOR MT_MISSILEBOAT2: MT_MISSILEBOAT1 1049
 {
-  Radius 32
-  Height 56
-  Health 100
-  Gravity 0
-  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
-  +MF2_EX_DONTINFIGHTMONSTERS
-  States
-  {
-  Spawn:
-    XR49 A -1
-    Stop
-  }
+  Speed 10
 }
 
 ///////////////////////////////
