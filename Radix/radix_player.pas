@@ -69,6 +69,7 @@ begin
   if p.playerstate = PST_DEAD then
   begin
     // JVAL: 20200423 - Spawn random smoke when player dies
+    p.threat := false;
     if (leveltime and 15 = 0) or (P_Random < 50) then
     begin
       an := P_Random * 32;
@@ -80,6 +81,8 @@ begin
     end;
     exit;
   end;
+
+  p.threat := p.health < p.mo.info.spawnhealth div 4;
 
   if p.energyweaponfiretics > 0 then
     dec(p.energyweaponfiretics);  // JVAL: 20201204

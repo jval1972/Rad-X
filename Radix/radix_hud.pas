@@ -481,7 +481,7 @@ begin
   M_WriteSmallText(227, 200 - STATUSBAR_HEIGHT + 30, stmp, SCN_HUD);
 
   // Draw threat indicator
-  V_DrawPatch(290, 200 - STATUSBAR_HEIGHT + 16, SCN_HUD, treatimages[hud_player.threat], false);
+  V_DrawPatch(290, 200 - STATUSBAR_HEIGHT + 16, SCN_HUD, treatimages[hud_player.threat and ((leveltime shr 4) and 1 <> 0)], false);
 
   // Draw armor, shield and energy bars
   RX_HudDrawBar(189, 200 - STATUSBAR_HEIGHT + 7, ArmourBar, hud_player.armorpoints);
@@ -596,7 +596,7 @@ begin
 
   // Draw threat indicator
   if mode = cm_fulldisplay then
-    V_DrawPatch(147, 23, SCN_HUD, treatimages[hud_player.threat], false);
+    V_DrawPatch(147, 23, SCN_HUD, treatimages[hud_player.threat and ((leveltime shr 4) and 1 <> 0)], false);
 
   // Draw armor, shield and energy bars
   RX_HudDrawBar(202, 156, ArmourBar, hud_player.armorpoints);

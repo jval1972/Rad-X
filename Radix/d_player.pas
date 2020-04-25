@@ -139,7 +139,7 @@ type
 
     energy: integer;  // JVAL: 20200314 - Radix energy
     energy_reserve: integer;  // JVAL: 20200423 - Added energy when refiring
-    threat: boolean;  // JVAL: 20200314 - Any threat nearby?
+    threat: boolean;  // JVAL: 20200314 - Player in threat
 
     plasmaenergycountdown: integer; // JVAL: 20200412 - How many plasma balls to drain energy
     energyweaponfiretics: integer;  // JVAL: 20200412 - Energy weapon has been fired - wait to zero to regenerate
