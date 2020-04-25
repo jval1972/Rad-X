@@ -1008,7 +1008,7 @@ ACTOR MT_CHUNK3
 ///////////////////////////////
 // MT_SKYFIREASSULTFIGHTER
 ///////////////////////////////
-ACTOR MT_SKYFIREASSULTFIGHTER 1035
+ACTOR MT_SKYFIREASSULTFIGHTER1 1035
 {
   Radius 64
   Height 32
