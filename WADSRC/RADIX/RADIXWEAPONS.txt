@@ -966,7 +966,7 @@ ACTOR "MT_LASER"
       X088 A 5 BRIGHT
       TNT1 A 0 A_GlowLight "NONE"
     SpawnLoop:
-      X088 A 5 BRIGHT
+      X088 A 1 BRIGHT A_CheckPlayerAndExplode(40)
       GoTo SpawnLoop
     }
     Death:
