@@ -681,6 +681,7 @@ var
   by: integer;
   newsubsec: Psubsector_t;
   r: fixed_t;
+  sqdist: integer;
 begin
   tmthing := thing;
   tmflags := thing.flags;
@@ -742,6 +743,7 @@ begin
 
   inc(validcount);
 
+  sqdist := (r div FRACUNIT) * (r div FRACUNIT);
   // JVAL: Slopes
   for bx := xl to xh do
     for by := yl to yh do
@@ -749,7 +751,7 @@ begin
       begin
         // JVAL: 20200422 - Presice cheching
         if tmcheckline <> nil then
-          if RX_PointLineSqrDistance(x, y, tmcheckline) > (r div FRACUNIT) * (r div FRACUNIT) then
+          if RX_PointLineSqrDistance(x, y, tmcheckline) > sqdist then
             Continue;
         result := false;
         exit;

@@ -761,11 +761,20 @@ var
   param: int64;
   xx, yy: integer;
   dx, dy: integer;
+  x1, x2, y1, y2: integer;
+  ix, iy: integer;
 begin
-  A := (x div FRACUNIT) - (line.v1.x div FRACUNIT);
-  B := (y div FRACUNIT) - (line.v1.y div FRACUNIT);
-  C := (line.v2.x div FRACUNIT) - (line.v1.x div FRACUNIT);
-  D := (line.v2.y div FRACUNIT) - (line.v1.y div FRACUNIT);
+  x1 := line.v1.x div FRACUNIT;
+  y1 := line.v1.y div FRACUNIT;
+  x2 := line.v2.x div FRACUNIT;
+  y2 := line.v2.y div FRACUNIT;
+  ix := x div FRACUNIT;
+  iy := y div FRACUNIT;
+
+  A := ix - x1;
+  B := iy - y1;
+  C := x2 - x1;
+  D := y2 - y1;
 
   dot := (A * C) + (B * D);
   len_sq := (C * C) + (D * D);
@@ -775,22 +784,22 @@ begin
 
   if param < 0 then
   begin
-    xx := (line.v1.x div FRACUNIT);
-    yy := (line.v1.y div FRACUNIT);
+    xx := x1;
+    yy := y1;
   end
   else if param > FRACUNIT then
   begin
-    xx := (line.v2.x div FRACUNIT);
-    yy := (line.v2.y div FRACUNIT);
+    xx := x2;
+    yy := y2;
   end
   else
   begin
-    xx := (line.v1.x div FRACUNIT) + (param * C) div FRACUNIT;
-    yy := (line.v1.y div FRACUNIT) + (param * D) div FRACUNIT;
+    xx := x1 + (param * C) div FRACUNIT;
+    yy := y1 + (param * D) div FRACUNIT;
   end;
 
-  dx := (x div FRACUNIT) - xx;
-  dy := (y div FRACUNIT) - yy;
+  dx := ix - xx;
+  dy := iy - yy;
   result := (dx * dx) + (dy * dy);
 end;
 

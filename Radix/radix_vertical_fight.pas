@@ -22,8 +22,7 @@
 //  02111-1307, USA.
 //
 // DESCRIPTION:
-//  Movement, collision handling.
-//  Shooting and aiming.
+//  Vertical fighting actions
 //
 //------------------------------------------------------------------------------
 //  Site: https://sourceforge.net/projects/rad-x/
@@ -66,7 +65,11 @@ uses
   p_setup,
   sc_states;
 
-function P_PtInMap(const x, y, z: fixed_t; const radius: fixed_t): boolean;
+//
+// P_PtInMap
+// Checks if a given point is in map boundaries, also checks 3d floors
+//
+function P_PtInMap(const x, y, z: fixed_t; const step: fixed_t): boolean;
 var
   s: Psubsector_t;
   sec: Psector_t;
@@ -75,12 +78,12 @@ begin
   if s.sector.midsec >= 0 then
   begin
     sec := @sectors[s.sector.midsec];
-    result := (z >= sec.floorheight - radius) and (z <= sec.ceilingheight + radius);
+    result := (z >= sec.floorheight - step) and (z <= sec.ceilingheight + step);
   end
   else
     result := false;
   if not result then
-    result := (z + radius > s.sector.floorheight) and (z - radius < s.sector.ceilingheight);
+    result := (z + step > s.sector.floorheight) and (z - step < s.sector.ceilingheight);
 end;
 
 
@@ -218,7 +221,7 @@ begin
 end;
 
 //
-//  A_VerticalMissile(missiletype: string, x, y, z, maxmomxy)
+// P_VerticalMissile
 //
 procedure P_VerticalMissile(actor: Pmobj_t; const direction: integer);
 var
@@ -246,7 +249,7 @@ begin
   end;
   if mobj_no = -1 then
   begin
-    I_Warning('A_VerticalMissile(): Unknown missile %s'#13#10, [actor.state.params.StrVal[0]]);
+    I_Warning('P_VerticalMissile(): Unknown missile %s'#13#10, [actor.state.params.StrVal[0]]);
     exit;
   end;
 
@@ -303,11 +306,17 @@ begin
   P_CheckMissileSpawn(th);
 end;
 
+//
+// A_VerticalMissileUp(missiletype: string, x, y, z, maxmomxy)
+//
 procedure A_VerticalMissileUp(actor: Pmobj_t);
 begin
   P_VerticalMissile(actor, 1);
 end;
 
+//
+// A_VerticalMissileDown(missiletype: string, x, y, z, maxmomxy)
+//
 procedure A_VerticalMissileDown(actor: Pmobj_t);
 begin
   P_VerticalMissile(actor, -1);
