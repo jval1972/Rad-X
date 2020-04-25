@@ -1667,17 +1667,22 @@ begin
   th.momx := FixedMul(th.info.speed, finecosine[an]);
   th.momy := FixedMul(th.info.speed, finesine[an]);
 
-  dist := P_AproxDistance(dest.x - source.x, dest.y - source.y);
-  // JVAL: If forgot to set custom missile speed we use default (12 * FRACUNIT)
-  if th.info.speed = 0 then
-    dist := dist div (12 * FRACUNIT)
+  if IsIntegerInRange(th.z, dest.z, dest.z + dest.height) then
+    th.momz := 0
   else
-    dist := dist div th.info.speed;
+  begin
+    dist := P_AproxDistance(dest.x - source.x, dest.y - source.y);
+    // JVAL: If forgot to set custom missile speed we use default (12 * FRACUNIT)
+    if th.info.speed = 0 then
+      dist := dist div (12 * FRACUNIT)
+    else
+      dist := dist div th.info.speed;
 
-  if dist < 1 then
-    dist := 1;
+    if dist < 1 then
+      dist := 1;
 
-  th.momz := (dest.z - source.z) div dist;
+    th.momz := (dest.z + dest.height div 2 - th.z) div dist;
+  end;
 
   P_CheckMissileSpawn(th);
 
