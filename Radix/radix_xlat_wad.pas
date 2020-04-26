@@ -1938,6 +1938,9 @@ begin
   // MT_LASER
   MakeRotatingSprite16('Laser', _MTTX_LASER, 1, nil, 24, 4, false, false);
 
+  // MT_BLOODSPLAT
+  MakeNonRotatingSprite('BloodSplat', _MTTX_BLOODSPLAT, 3, nil, 31, 33, false, false);
+
   // 'PLAY' sprite
   MakeRotatingSprite8('NetRadixPlane', _DOOM_THING_2_RADIX_ + 5, 1);
 
