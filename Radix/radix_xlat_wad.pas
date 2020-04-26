@@ -1753,6 +1753,10 @@ begin
   MakeOneSprite('BioXplode3', _MTRX_BIOMECHUP, nil, 58, 48, false, false, 'G');
   MakeOneSprite('BioXplode4', _MTRX_BIOMECHUP, nil, 62, 60, false, false, 'H');
   MakeOneSprite('BioXplode5', _MTRX_BIOMECHUP, nil, 63, 56, false, false, 'I');
+  MakeOneSprite('BioChunk1', _MTRX_BIOMECHUP, nil, 24, 20, false, false, 'J');
+  MakeOneSprite('BioChunk2', _MTRX_BIOMECHUP, nil, 7, 18, false, false, 'K');
+  MakeOneSprite('BioChunk3', _MTRX_BIOMECHUP, nil, 9, 11, false, false, 'L');
+  MakeOneSprite('BioChunk4', _MTRX_BIOMECHUP, nil, 6, 13, false, false, 'M');
 
   // MT_ENGINECORE
   MakeNonRotatingSprite('EngineCore', _MTRX_ENGINECORE, 3, nil, 59, 184, false, false);
