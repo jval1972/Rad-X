@@ -3,7 +3,7 @@
 ///////////////////////////////
 
 ///////////////////////////////
-// MT_BIOMINE1
+// MT_BIOMINE1_CHUNK4
 ///////////////////////////////
 ACTOR MT_BIOMINE1_CHUNK1
 {
@@ -26,6 +26,9 @@ ACTOR MT_BIOMINE1_CHUNK1
   }
 }
 
+///////////////////////////////
+// MT_BIOMINE1_CHUNK2
+///////////////////////////////
 ACTOR MT_BIOMINE1_CHUNK2
 {
   Radius 24
@@ -47,6 +50,9 @@ ACTOR MT_BIOMINE1_CHUNK2
   }
 }
 
+///////////////////////////////
+// MT_BIOMINE1_CHUNK3
+///////////////////////////////
 ACTOR MT_BIOMINE1_CHUNK3
 {
   Radius 24
@@ -68,6 +74,9 @@ ACTOR MT_BIOMINE1_CHUNK3
   }
 }
 
+///////////////////////////////
+// MT_BIOMINE1_CHUNK4
+///////////////////////////////
 ACTOR MT_BIOMINE1_CHUNK4
 {
   Radius 24
@@ -88,6 +97,9 @@ ACTOR MT_BIOMINE1_CHUNK4
   }
 }
 
+///////////////////////////////
+// MT_BIOMINE1
+///////////////////////////////
 ACTOR MT_BIOMINE1 1028
 {
   Radius 32
@@ -137,7 +149,7 @@ ACTOR MT_BIOMINE1 1028
 
 
 ///////////////////////////////
-// MT_BIOMINE2
+// MT_BIOMINE2_CHUNK1
 ///////////////////////////////
 ACTOR MT_BIOMINE2_CHUNK1
 {
@@ -160,6 +172,9 @@ ACTOR MT_BIOMINE2_CHUNK1
   }
 }
 
+///////////////////////////////
+// MT_BIOMINE2_CHUNK2
+///////////////////////////////
 ACTOR MT_BIOMINE2_CHUNK2
 {
   Radius 32
@@ -181,6 +196,9 @@ ACTOR MT_BIOMINE2_CHUNK2
   }
 }
 
+///////////////////////////////
+// MT_BIOMINE2
+///////////////////////////////
 ACTOR MT_BIOMINE2 1029
 {
   Radius 32
@@ -248,9 +266,9 @@ ACTOR MT_BLOODSPLAT
   {
     Spawn:
     {
-      X089 A 8
-      X089 B 8
-      X089 C 8 A_FadeOut20
+      X089 A 5
+      X089 B 5
+      X089 CCCCCCC 1 A_FadeOut10
       Stop
     }
   }
@@ -380,6 +398,7 @@ ACTOR MT_ALIENFODDER 1030
   +MF_SHOOTABLE
   +MF_COUNTKILL
   +MF2_EX_DONTINFIGHTMONSTERS
+  +MF3_EX_ALIENBLOOD
   States
   {
     Spawn:
@@ -400,7 +419,7 @@ ACTOR MT_ALIENFODDER 1030
       XR30 D 10 A_CPosRefire
       Goto Missile
     Pain:
-      XR30 B 10 
+      XR30 B 10 A_SpawnItemEx("MT_BLOODSPLAT",RANDOMPICK(-10,0,10),0,RANDOM(40,60))
       Goto See
     Death:
       TNT1 A 0 A_SpawnItemEx("MT_ALIENFODDER_HEAD",0,0,72,RANDOMPICK(-3,-2,2,3),RANDOMPICK(-3,-2,2,3),FRANDOM(1,2),RANDOM(0,179)*2)
@@ -2279,6 +2298,7 @@ ACTOR MT_RUI 1054
   Height 56
   Health 30
   Mass 30
+  Painchance 255
   TouchDamage 4
   +MF_NOGRAVITY
   +MF_FLOAT
@@ -2292,6 +2312,12 @@ ACTOR MT_RUI 1054
       XR54 C 10
       XR54 B 10
       Loop
+    Pain:
+      XR54 A 10 A_SpawnItemEx("MT_BLOODSPLAT",RANDOMPICK(-10,0,10),0,RANDOM(25,40))
+      XR54 B 10
+      XR54 C 10
+      XR54 B 10
+      GoTo Spawn
     Death:
       XR54 D 5 A_Fall
       TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,0,RANDOM(25,40),0,0,0,0,0)
