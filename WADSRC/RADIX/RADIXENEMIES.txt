@@ -2478,20 +2478,9 @@ ACTOR MT_ROTATINGRADAR2 1057
 ///////////////////////////////
 // MT_MISSILEBOAT_STUB
 ///////////////////////////////
-ACTOR MT_MISSILEBOAT_STUB 1058
+ACTOR MT_MISSILEBOAT_STUB: MT_MISSILEBOAT1 1058
 {
-  Radius 32
-  Height 56
-  +NOGRAVITY
-  +FLOAT
-  +PUSHABLE
-  +MF2_EX_DONTINFIGHTMONSTERS
-  States
-  {
-  Spawn:
-    XR58 A -1
-    Stop
-  }
+  Health 120
 }
 
 ///////////////////////////////
