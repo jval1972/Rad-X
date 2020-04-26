@@ -230,7 +230,35 @@ ACTOR MT_BIOMINE2 1029
 }
 
 ///////////////////////////////
-// MT_ALIENFODDER
+// MT_BLOODSPLAT
+///////////////////////////////
+ACTOR MT_BLOODSPLAT
+{
+  Health 1000
+  Width 20
+  Height 16
+  Mass 100
+  Reactiontime 8
+  Renderstyle Translucent
+  Alpha 0.8
+  +MF_NOBLOCKMAP
+  +MF_EX_REDLIGHT
+  +MF2_EX_DONOTRENDERSHADOW
+  States
+  {
+    Spawn:
+    {
+      X089 A 8
+      X089 B 8
+      X089 C 8 A_FadeOut20
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_ALIENFODDER_HEAD
 ///////////////////////////////
 ACTOR MT_ALIENFODDER_HEAD
 {
