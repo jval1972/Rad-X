@@ -285,6 +285,9 @@ ACTOR "MT_ALIENFODDER_SMOKE"
   }
 }
 
+///////////////////////////////
+// MT_ALIENFODDER_SHOT
+///////////////////////////////
 ACTOR "MT_ALIENFODDER_SHOT"
 {
   Health 1000
@@ -331,6 +334,9 @@ ACTOR "MT_ALIENFODDER_SHOT"
   }
 }
 
+///////////////////////////////
+// MT_ALIENFODDER
+///////////////////////////////
 ACTOR MT_ALIENFODDER 1030
 {
   Radius 32
@@ -2243,26 +2249,43 @@ ACTOR MT_RUI 1054
 {
   Radius 32
   Height 56
-  Health 20
-  +NOGRAVITY
-  +FLOAT
-  +SOLID
-  +SHOOTABLE
+  Health 30
+  Mass 30
+  TouchDamage 4
+  +MF_NOGRAVITY
+  +MF_FLOAT
+  +MF_SOLID
+  +MF_SHOOTABLE
   States
   {
-  Spawn:
-    XR54 A 10
-    XR54 B 10
-    XR54 C 10
-    XR54 B 10
-    Loop
-   Death:
-    XR54 D 5 A_NoBlocking
-    XR54 E 5
-    XR54 F 5
-    XR54 G 5
-    XR54 H -1
-	Stop
+    Spawn:
+      XR54 A 10
+      XR54 B 10
+      XR54 C 10
+      XR54 B 10
+      Loop
+    Death:
+      XR54 D 5 A_Fall
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,0,RANDOM(25,40),0,0,0,0,0)
+      TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
+      XR54 E 5
+      XR54 F 5
+      TNT1 A 0 A_SpawnItemEx("MT_BIO_CHUNK_SPREADER")
+      XR54 G 5
+      XR54 H -1
+      Stop
+    XDeath:
+      XR54 D 5 A_Fall
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",RANDOMPICK(-20,20),RANDOMPICK(-20,20),20,0,0,0,0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",RANDOMPICK(-10,10),RANDOMPICK(-10,10),20,0,0,0,0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,0,RANDOM(25,40),0,0,0,0,0)
+      TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
+      XR54 E 5
+      XR54 F 5
+      TNT1 A 0 A_SpawnItemEx("MT_BIO_CHUNK_SPREADER")
+      XR54 G 5
+      XR54 H -1
+      Stop
   }
 }
 
