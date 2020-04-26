@@ -50,9 +50,13 @@ function RX_SpawnRadixEnemySeekerMissile(const x, y, z: fixed_t): Pmobj_t;
 
 function RX_SpawnRadixBigSmoke(const x, y, z: fixed_t): Pmobj_t;
 
+procedure RX_SpawnAlienBlood(x, y, z: fixed_t);
+
 implementation
 
 uses
+  d_delphi,
+  m_rnd,
   info_common,
   p_mobj;
 
@@ -120,6 +124,24 @@ begin
     radixbigsmoke_id := Info_GetMobjNumForName('MT_RADIXBIGSMOKE');
 
   result := P_SpawnMobj(x, y, z, radixbigsmoke_id);
+end;
+
+var
+  radixalienblood_id: integer = -1;
+
+procedure RX_SpawnAlienBlood(x, y, z: fixed_t);
+var
+  th: Pmobj_t;
+begin
+  z := z + _SHL(P_Random - P_Random, 10);
+  if radixalienblood_id < 0 then
+    radixalienblood_id := Info_GetMobjNumForName('MT_BLOODSPLAT');
+  th := P_SpawnMobj(x, y, z, radixalienblood_id);
+  th.momz := FRACUNIT * 2;
+  th.tics := th.tics - (P_Random and 3);
+
+  if th.tics < 1 then
+    th.tics := 1;
 end;
 
 end.

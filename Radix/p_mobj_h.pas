@@ -369,6 +369,8 @@ const
   MF3_EX_BOBING = $4000;
   // Can spawn children
   MF3_EX_CANSPAWNCHILDREN = $8000;
+  // Radix Alien BLOOD
+  MF3_EX_ALIENBLOOD = $10000;
 
 type
 // Map Object definition.

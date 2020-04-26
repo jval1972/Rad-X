@@ -141,6 +141,7 @@ uses
   p_terrain,
   ps_main,  // JVAL: Script Events
   radix_map_extra, // JVAL: 20200307 - Wall Damage
+  radix_objects,  // JVAL: 20200426 - Alien blood
   r_main,
   r_sky,
   r_intrpl,
@@ -1803,8 +1804,11 @@ begin
     P_SpawnPuff(x, y, z)
   else
   begin
-  // JVAL 18/09/2009 Added Blue and Green blood spawners
-    if intr.d.thing.flags2_ex and MF2_EX_BLUEBLOOD <> 0 then
+    // JVAL: 20200426 - Radix Alien Blood
+    if intr.d.thing.flags3_ex and MF3_EX_ALIENBLOOD <> 0 then
+      RX_SpawnAlienBlood(x, y, z)
+    // JVAL 18/09/2009 Added Blue and Green blood spawners
+    else if intr.d.thing.flags2_ex and MF2_EX_BLUEBLOOD <> 0 then
       P_SpawnBlueBlood(x, y, z, la_damage)
     else if intr.d.thing.flags2_ex and MF2_EX_GREENBLOOD <> 0 then
       P_SpawnGreenBlood(x, y, z, la_damage)

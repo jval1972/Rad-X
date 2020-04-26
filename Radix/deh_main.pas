@@ -2008,6 +2008,7 @@ begin
   mobj_flags3_ex.Add('MF3_EX_DAMAGEONPLAYERTOUCH');
   mobj_flags3_ex.Add('MF3_EX_BOBING');
   mobj_flags3_ex.Add('MF3_EX_CANSPAWNCHILDREN');
+  mobj_flags3_ex.Add('MF3_EX_ALIENBLOOD');
 
   mobj_flags4_ex := TDTextList.Create;
 
