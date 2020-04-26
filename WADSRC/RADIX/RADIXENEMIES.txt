@@ -2486,20 +2486,10 @@ ACTOR MT_MISSILEBOAT_STUB: MT_MISSILEBOAT1 1058
 ///////////////////////////////
 // MT_BATTLEDRONE3
 ///////////////////////////////
-ACTOR MT_BATTLEDRONE3 1059
+ACTOR MT_BATTLEDRONE3: MT_BATTLEDRONE1 1059
 {
-  Radius 32
-  Height 56
-  +NOGRAVITY
-  +FLOAT
-  +PUSHABLE
-  +MF2_EX_DONTINFIGHTMONSTERS
-  States
-  {
-  Spawn:
-    XR59 A -1
-    Stop
-  }
+  Speed 14
+  Health 40
 }
 
 ///////////////////////////////
