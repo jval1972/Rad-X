@@ -1941,6 +1941,9 @@ begin
   // MT_BLOODSPLAT
   MakeNonRotatingSprite('BloodSplat', _MTTX_BLOODSPLAT, 3, nil, 31, 33, false, false);
 
+  // MT_SPARKS
+  MakeNonRotatingSprite('Sparks', _MTTX_SPARKS, 5, nil, 73, 63, false, false);
+
   // 'PLAY' sprite
   MakeRotatingSprite8('NetRadixPlane', _DOOM_THING_2_RADIX_ + 5, 1);
 
