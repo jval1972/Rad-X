@@ -1516,6 +1516,30 @@ begin
   f.Seek(bstart, sFromBeginning);
   f.Read(blumps^, bnumlumps * SizeOf(radixbitmaplump_t));
 
+  // JVAL: 20200426 - Patch doublicated names of ObjectBitmaps
+  
+  if bnumlumps > 2 then
+  begin
+    if (radixlumpname(blumps[0]) = 'SecondCoolant1') and
+       (radixlumpname(blumps[1]) = 'SecondCoolant1') and
+       (radixlumpname(blumps[2]) = 'SecondCoolant1') then
+    begin
+      blumps[1].name[13] := '2';
+      blumps[2].name[13] := '3';
+    end;
+  end;
+
+  if bnumlumps > 8 then
+  begin
+    if (radixlumpname(blumps[6]) = 'CoolantGener1') and
+       (radixlumpname(blumps[7]) = 'CoolantGener1') and
+       (radixlumpname(blumps[8]) = 'CoolantGener1') then
+    begin
+      blumps[7].name[12] := '2';
+      blumps[8].name[12] := '3';
+    end;
+  end;
+  
   wadwriter.AddSeparator('S_START');
 
 
@@ -1735,7 +1759,7 @@ begin
   MakeNonRotatingSprite('ShieldGen', _MTRX_SHIELDGENERATOR1, 3, nil, 34, 135, false, false);
 
   // MT_SECONDCOOLAND1
-  MakeNonRotatingSprite('SecondCoolant', _MTRX_SECONDCOOLAND1, 1, nil, 64, 183, false, false);
+  MakeNonRotatingSprite('SecondCoolant', _MTRX_SECONDCOOLAND1, 3, nil, 64, 183, false, false);
 
   // MT_BIOMECHUP
   MakeOneSprite('BioMech9', _MTRX_BIOMECHUP, nil, 45, 89, false, false);
@@ -1796,7 +1820,7 @@ begin
   MakeNonRotatingSprite('ShldGenerator', _MTRX_SHIELDGENERATOR2, 3, nil, 44, 176, false, false);
 
   // MT_COOLANDGENERATOR
-  MakeNonRotatingSprite('CoolantGener', _MTRX_COOLANDGENERATOR, 1, nil, 55, 190, false, false);
+  MakeNonRotatingSprite('CoolantGener', _MTRX_COOLANDGENERATOR, 3, nil, 55, 190, false, false);
 
   // MT_ROTATINGRADAR2
   MakeRotatingSprite8('RadarDish', _MTRX_ROTATINGRADAR2, 1, nil, 53, 91, false, false);
