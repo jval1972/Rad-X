@@ -779,7 +779,7 @@ ACTOR MT_BATTLEDRONE1 1033
       TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
       TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,0,0)
       TNT1 A 0 A_SpawnItemEx("MT_DRONEBODYB")
-      TNT1 A  A_SpawnItemEx("MT_BATTLEDRONE1_CHUNK1",0,-20,0,RANDOMPICK(-1,1),RANDOMPICK(-3,-2),FRANDOM(1,2),RANDOMPICK(355,0,5))
+      TNT1 A 0 A_SpawnItemEx("MT_BATTLEDRONE1_CHUNK1",0,-20,0,RANDOMPICK(-1,1),RANDOMPICK(-3,-2),FRANDOM(1,2),RANDOMPICK(355,0,5))
       TNT1 A 1 A_SpawnItemEx("MT_BATTLEDRONE1_CHUNK2",0,20,0,RANDOMPICK(-1,1),RANDOMPICK(3,2),FRANDOM(1,2),RANDOMPICK(175,180,185))
       TNT1 A 1 A_SpawnItemEx("MT_BATTLEDRONE1_CHUNK3",0,0,0,RANDOMPICK(-2,-1,1,2),RANDOMPICK(-2,-1,1,2),FRANDOM(2,3),RANDOM(0,179)*2)
       TNT1 A 0 A_Turn(30)
@@ -1081,6 +1081,110 @@ ACTOR MT_CHUNK3
       TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4,5))
       X086 C RANDOMRANGE(1000, 1200)
       X086 CCCCCCCCC 5 A_FadeOut10
+      Stop      
+    }
+  }
+}
+
+///////////////////////////////
+// MT_METALCHUNK1
+///////////////////////////////
+ACTOR MT_METAlCHUNK1
+{
+  Radius 8
+  Height 8
+  Health 1000
+  Mass 5
+  Reactiontime 8
+  +MF3_EX_FLOORBOUNCE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4,5))
+      X086 D RANDOMRANGE(1000, 1200)
+      X086 DDDDDDDDD 5 A_FadeOut10
+      Stop      
+    }
+  }
+}
+
+///////////////////////////////
+// MT_METALCHUNK2
+///////////////////////////////
+ACTOR MT_METAlCHUNK2
+{
+  Radius 8
+  Height 8
+  Health 1000
+  Mass 5
+  Reactiontime 8
+  +MF3_EX_FLOORBOUNCE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4,5))
+      X086 E RANDOMRANGE(1000, 1200)
+      X086 EEEEEEEEE 5 A_FadeOut10
+      Stop      
+    }
+  }
+}
+
+///////////////////////////////
+// MT_METALCHUNK3
+///////////////////////////////
+ACTOR MT_METAlCHUNK3
+{
+  Radius 8
+  Height 8
+  Health 1000
+  Mass 5
+  Reactiontime 8
+  +MF3_EX_FLOORBOUNCE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4,5))
+      X086 F RANDOMRANGE(1000, 1200)
+      X086 FFFFFFFFF 5 A_FadeOut10
+      Stop      
+    }
+  }
+}
+
+///////////////////////////////
+// MT_METALCHUNK4
+///////////////////////////////
+ACTOR MT_METAlCHUNK4
+{
+  Radius 8
+  Height 8
+  Health 1000
+  Mass 5
+  Reactiontime 8
+  +MF3_EX_FLOORBOUNCE
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4,5))
+      X086 G RANDOMRANGE(1000, 1200)
+      X086 GGGGGGGGG 5 A_FadeOut10
       Stop      
     }
   }
@@ -1970,7 +2074,7 @@ ACTOR "MT_BIOMECH_EXPLODE"
   RenderStyle Transparent
   Alpha 0.8
   Gravity 0
-  +MF_NOBLOCKMAPMT_BIOMECH_EXPLODE
+  +MF_NOBLOCKMAP
   +MF_NOGRAVITY
   +MF2_EX_NOHITFLOOR
   +MF2_EX_DONOTRENDERSHADOW
@@ -2497,16 +2601,48 @@ ACTOR MT_BATTLEDRONE3: MT_BATTLEDRONE1 1059
 ///////////////////////////////
 ACTOR MT_ROTATINGLIGHT 1060
 {
-  Radius 32
-  Height 56
-  +NOGRAVITY
-  +FLOAT
-  +PUSHABLE
+  Radius 16
+  Height 48
+  Health 30
+  Mass 20
+  TouchDamage 4
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_NOBLOOD
   States
   {
-  Spawn:
-    XR60 A -1
-    Stop
+    Spawn:
+      XR60 HGFEDCBA 3
+      Loop
+    Death:
+      XR60 I 1 A_Fall
+      XR60 I 1 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,20,0,0,RANDOM(1,2),0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXSMALLEXPLOSION",0,0,20,0,0,0,0,0)
+      XR60 I 1 A_AmbientSound(0,0,"radix/SndExplode")
+      XR60 I 1 A_SpawnItemEx("MT_METALCHUNK1",0,0,20,RANDOMPICK(1,2),RANDOMPICK(1,2),RANDOMPICK(2,3))
+      TNT1 A 0 A_Turn(120)
+      XR60 I 1 A_SpawnItemEx("MT_METALCHUNK2",0,0,20,RANDOMPICK(1,2),RANDOMPICK(1,2),RANDOMPICK(2,3))
+      TNT1 A 0 A_Turn(120)
+      XR60 I 1 A_SpawnItemEx("MT_METALCHUNK3",0,0,20,RANDOMPICK(1,2),RANDOMPICK(1,2),RANDOMPICK(2,3))
+      XR60 I -1
+      Stop
+    XDeath:
+      TNT1 A 1 A_Fall
+      TNT1 A 1 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,20,0,0,RANDOM(1,2),0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,0,20,0,0,0,0,0)
+      TNT1 A 1 A_AmbientSound(0,0,"radix/SndExplode")
+      TNT1 A 1 A_SpawnItemEx("MT_METALCHUNK1",0,0,20,RANDOMPICK(1,2),RANDOMPICK(1,2),RANDOMPICK(2,3))
+      TNT1 A 0 A_Turn(60)
+      TNT1 A 1 A_SpawnItemEx("MT_METALCHUNK2",0,0,20,RANDOMPICK(1,2),RANDOMPICK(1,2),RANDOMPICK(2,3))
+      TNT1 A 0 A_Turn(60)
+      TNT1 A 1 A_SpawnItemEx("MT_METALCHUNK3",0,0,20,RANDOMPICK(1,2),RANDOMPICK(1,2),RANDOMPICK(2,3))
+      TNT1 A 0 A_Turn(60)
+      TNT1 A 1 A_SpawnItemEx("MT_METALCHUNK1",0,0,20,RANDOMPICK(1,2),RANDOMPICK(1,2),RANDOMPICK(2,3))
+      TNT1 A 0 A_Turn(60)
+      TNT1 A 1 A_SpawnItemEx("MT_METALCHUNK2",0,0,20,RANDOMPICK(1,2),RANDOMPICK(1,2),RANDOMPICK(2,3))
+      TNT1 A 0 A_Turn(60)
+      TNT1 A 1 A_SpawnItemEx("MT_METALCHUNK3",0,0,20,RANDOMPICK(1,2),RANDOMPICK(1,2),RANDOMPICK(2,3))
+      Stop
   }
 }
 
