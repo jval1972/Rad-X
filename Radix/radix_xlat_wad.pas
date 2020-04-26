@@ -1739,13 +1739,20 @@ begin
 
   // MT_BIOMECHUP
   MakeOneSprite('BioMech9', _MTRX_BIOMECHUP, nil, 45, 89, false, false);
-  MakeRotatingSprite8('BioMechBodyBust', _MTRX_BIOMECHUP, 1, nil, 75, 47, false, false, 'B');
-  MakeOneSprite('BioMechChunk', _MTRX_BIOMECHUP, nil, 14, 14, false, false, 'C');
-  MakeOneSprite('BioXplode1', _MTRX_BIOMECHUP, nil, 35, 29, false, false, 'D');
-  MakeOneSprite('BioXplode2', _MTRX_BIOMECHUP, nil, 57, 44, false, false, 'E');
-  MakeOneSprite('BioXplode3', _MTRX_BIOMECHUP, nil, 58, 48, false, false, 'F');
-  MakeOneSprite('BioXplode4', _MTRX_BIOMECHUP, nil, 62, 60, false, false, 'G');
-  MakeOneSprite('BioXplode5', _MTRX_BIOMECHUP, nil, 63, 56, false, false, 'H');
+  MakeOneSprite('BioMechBodyBust1', _MTRX_BIOMECHUP, nil, 75, 47, false, false, 'B', '1', 'C1');
+  MakeOneSprite('BioMechBodyBust2', _MTRX_BIOMECHUP, nil, 75, 47, false, false, 'B', '2', 'C8');
+  MakeOneSprite('BioMechBodyBust3', _MTRX_BIOMECHUP, nil, 75, 47, false, false, 'B', '3', 'C7');
+  MakeOneSprite('BioMechBodyBust4', _MTRX_BIOMECHUP, nil, 75, 47, false, false, 'B', '4', 'C6');
+  MakeOneSprite('BioMechBodyBust5', _MTRX_BIOMECHUP, nil, 75, 47, false, false, 'B', '5', 'C5');
+  MakeOneSprite('BioMechBodyBust6', _MTRX_BIOMECHUP, nil, 75, 47, false, false, 'B', '6', 'C4');
+  MakeOneSprite('BioMechBodyBust7', _MTRX_BIOMECHUP, nil, 75, 47, false, false, 'B', '7', 'C3');
+  MakeOneSprite('BioMechBodyBust8', _MTRX_BIOMECHUP, nil, 75, 47, false, false, 'B', '8', 'C2');
+  MakeOneSprite('BioMechChunk', _MTRX_BIOMECHUP, nil, 14, 14, false, false, 'D');
+  MakeOneSprite('BioXplode1', _MTRX_BIOMECHUP, nil, 35, 29, false, false, 'E');
+  MakeOneSprite('BioXplode2', _MTRX_BIOMECHUP, nil, 57, 44, false, false, 'F');
+  MakeOneSprite('BioXplode3', _MTRX_BIOMECHUP, nil, 58, 48, false, false, 'G');
+  MakeOneSprite('BioXplode4', _MTRX_BIOMECHUP, nil, 62, 60, false, false, 'H');
+  MakeOneSprite('BioXplode5', _MTRX_BIOMECHUP, nil, 63, 56, false, false, 'I');
 
   // MT_ENGINECORE
   MakeNonRotatingSprite('EngineCore', _MTRX_ENGINECORE, 3, nil, 59, 184, false, false);
