@@ -667,6 +667,7 @@ ACTOR MT_BATTLEDRONE1 1033
   Speed 10
   Gravity 0
   PainChance 128
+  Reactiontime 8
   +MF_SOLID
   +MF_SHOOTABLE
   +MF_NOGRAVITY
@@ -841,6 +842,7 @@ ACTOR MT_MISSILEBOAT1 1034
   Speed 12
   Gravity 0
   PainChance 128
+  Reactiontime 8
   +MF_SOLID
   +MF_SHOOTABLE
   +MF_NOGRAVITY
@@ -1017,6 +1019,7 @@ ACTOR MT_SKYFIREASSULTFIGHTER1 1035
   Speed 12
   Gravity 0
   PainChance 160
+  Reactiontime 8
   +MF_SOLID
   +MF_SHOOTABLE
   +MF_NOGRAVITY
@@ -1116,6 +1119,7 @@ ACTOR MT_STORMBIRDHEAVYBOMBER 1036
   Speed 10
   Gravity 0
   PainChance 160
+  Reactiontime 8
   +MF_SOLID
   +MF_SHOOTABLE
   +MF_NOGRAVITY
@@ -1171,6 +1175,7 @@ ACTOR MT_SPAWNER 1037
   Speed 10
   Gravity 0
   PainChance 128
+  Reactiontime 8
   +MF_SOLID
   +MF_SHOOTABLE
   +MF_NOGRAVITY
@@ -1485,6 +1490,7 @@ ACTOR MT_SNAKEDEAMON 1039
   PainChance 64
   SeeSound "radix/SndAlienHum"
   ActiveSound "radix/SndAlienHum"
+  Reactiontime 8
   +MF_SOLID
   +MF_SHOOTABLE
   +MF_NOGRAVITY
@@ -1700,7 +1706,7 @@ ACTOR MT_BIOMECH_CHUNK
       TNT1 A 0 A_Jump(128, 2)
       TNT1 A 0 A_FlipSprite
       TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4))
-      XR45 C -1
+      XR45 D -1
     }
   }
 }
@@ -1719,10 +1725,10 @@ ACTOR MT_BIOMECH_BODY
   {
     Spawn:
     {
-      TNT1 A 1
-      TNT1 A 0 A_Jump(128, 2)
-      TNT1 A 0 A_FlipSprite
+      TNT1 A 1 
+      TNT1 A 0 A_Jump(128,2)
       XR45 B -1
+      XR45 C -1
     }
   }
 }
@@ -1751,11 +1757,11 @@ ACTOR "MT_BIOMECH_EXPLODE"
       TNT1 A 1
       TNT1 A 0 A_Jump(128, 2)
       TNT1 A 0 A_FlipSprite
-      XR45 D RANDOMRANGE(2,4) 
       XR45 E RANDOMRANGE(2,4) 
       XR45 F RANDOMRANGE(2,4) 
-      XR45 G RANDOMRANGE(2,4) A_FadeOut20
+      XR45 G RANDOMRANGE(2,4) 
       XR45 H RANDOMRANGE(2,4) A_FadeOut20
+      XR45 I RANDOMRANGE(2,4) A_FadeOut20
       Stop
     }
   }
@@ -1770,6 +1776,7 @@ ACTOR MT_BIOMECHUP 1045
   Height 56
   Health 50
   Speed 0
+  Mass 60
   TouchDamage 5
   +MF_SOLID
   +MF_SHOOTABLE
@@ -1851,6 +1858,7 @@ ACTOR MT_DEFENCEDRONE1 1047
   Mass 100
   Gravity 0
   PainChance 160
+  Reactiontime 8
   +MF_SOLID
   +MF_SHOOTABLE
   +MF_NOGRAVITY
@@ -1929,6 +1937,7 @@ ACTOR MT_SKYFIREASSULTFIGHTER4 1051
   Speed 12
   Gravity 0
   PainChance 160
+  Reactiontime 8
   +MF_SOLID
   +MF_SHOOTABLE
   +MF_NOGRAVITY
@@ -1982,14 +1991,53 @@ ACTOR MT_BIOMECH 1052
   Radius 32
   Height 56
   Health 50
-  Gravity 0
-  SOLID SHOOTABLE FLOAT NOGRAVITY COUNTKILL FLOATBOB NOBLOOD SPAWNFLOAT PUSHABLE
+  Mass 60
+  Speed 6
+  PainChance 160
+  Reactiontime 8
+  TouchDamage 5
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_COUNTKILL
+  +MF_NOBLOOD
+  +PUSHABLE
   +MF2_EX_DONTINFIGHTMONSTERS
+  +MF2_EX_JUMPDOWN
+  +MF2_EX_JUMPUP
+  +MF3_EX_DAMAGEONPLAYERTOUCH
   States
   {
-  Spawn:
-    XR52 A 10
-    Loop
+    Spawn:
+      XR52 A 10 A_Look
+      Loop
+    See:
+      XR52 A 5 A_Chase
+      XR52 A 5 A_Chase
+      TNT1 A 0 A_Jump(128,"Missile")
+      XR52 A 5 A_Chase
+      Loop
+    Missile:
+      XR52 A 10 A_FaceTarget
+      XR52 A 10 A_CustomMissile("MT_ENEMYLASER",28,15)
+      XR52 A 10 A_FaceTarget
+      XR52 A 10 A_CustomMissile("MT_ENEMYLASER",28,-15)
+      TNT1 A 0 A_DropFarTarget(2048,128)
+      XR52 A 10 A_CPosRefire(80)
+      Goto Missile
+    Pain:
+      XR52 A 10 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,RANDOMPICK(20,25),0,0,RANDOM(1,2),0)
+      GoTo See
+    Death:
+      TNT1 A 0 A_Fall
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",RANDOMPICK(-20,20),RANDOMPICK(-20,20),20,0,0,0,0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",RANDOMPICK(-10,10),RANDOMPICK(-10,10),20,0,0,0,0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,0,RANDOM(25,40),0,0,0,0,0)
+      TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
+      TNT1 A 0 A_SpawnItemEx("MT_BIOMECH_BODY",0,0,0,0,0,0)
+      TNT1 A 0 A_SpawnItemEx("MT_BIOMECH_EXPLODE",0,0,0,0,0,0)
+      TNT1 AAA 1 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,RANDOMPICK(20,25,30,35,40),0,0,RANDOM(1,2),0)
+      TNT1 AAAA 1 A_SpawnItemEx("MT_BIOMECH_CHUNK",0,0,RANDOM(20,30),RANDOMPICK(-1,1)*FRANDOM(0.5,1.5),RANDOMPICK(-1,1)*FRANDOM(0.5,1.5),FRANDOM(2,3),RANDOM(0,179)*2)
+      Stop
   }
 }
 
