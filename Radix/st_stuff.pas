@@ -399,9 +399,6 @@ var
 // used to use appopriately pained face
   st_oldhealth: integer;
 
-// used for evil grin
-  oldweaponsowned: array[0..Ord(NUMWEAPONS) - 1] of integer;
-
  // count until face changes
   st_facecount: integer;
 
@@ -1064,9 +1061,6 @@ begin
   st_palette := -1;
 
   st_oldhealth := -1;
-
-  for i := 0 to Ord(NUMWEAPONS) - 1 do
-    oldweaponsowned[i] := plyr.weaponowned[i];
 
   for i := 0 to 2 do
     keyboxes[i] := -1;

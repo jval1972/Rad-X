@@ -1147,7 +1147,7 @@ begin
   ZeroMemory(@p.powers, SizeOf(p.powers));
   ZeroMemory(@p.cards, SizeOf(p.cards));
   if p.mo <> nil then
-    p.mo.flags := p.mo.flags and (not MF_SHADOW); // cancel invisibility
+    p.mo.flags := p.mo.flags and not MF_SHADOW; // cancel invisibility
   p.lookdir16 := 0;     // JVAL cancel lookdir
   p.centering := false;
   p.lookdir2 := 0;      // JVAL cancel lookdir Left/Right
@@ -1234,12 +1234,16 @@ var
   itemcount: integer;
   secretcount: integer;
   cheats: integer;
+  oldscores: array[1..3] of array[1..9] of playerscore_t;
+  oldskill: skill_t;
 begin
   p := @players[player];
   memcpy(@frags, @p.frags, SizeOf(frags));
+  memcpy(@oldscores, @p.scores, SizeOf(oldscores));
   killcount := p.killcount;
   itemcount := p.itemcount;
   secretcount := p.secretcount;
+  oldskill := p.scoreskill;
 
   // JVAL: added option to keep cheats
   if keepcheatsinplayerreborn and not preparingdemoplayback then
@@ -1252,9 +1256,12 @@ begin
     ZeroMemory(p, SizeOf(player_t));
 
   memcpy(@p.frags, @frags, SizeOf(players[player].frags));
+  memcpy(@p.scores, @oldscores, SizeOf(oldscores));
+
   p.killcount := killcount;
   p.itemcount := itemcount;
   p.secretcount := secretcount;
+  p.scoreskill := oldskill;
 
   p.usedown := true;
   p.attackdown := true;  // don't do anything immediately
@@ -1534,6 +1541,7 @@ begin
     wminfo.plyr[i].ssecret := players[i].secretcount;
     wminfo.plyr[i].stime := leveltime;
     wminfo.plyr[i].secondaryobjective := players[i].secondaryobjective;
+    wminfo.plyr[i].wallhits := players[i].wallhits;
     memcpy(@wminfo.plyr[i].frags, @players[i].frags, SizeOf(wminfo.plyr[i].frags));
   end;
 

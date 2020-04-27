@@ -104,6 +104,18 @@ const
   PWF_PHASETORPEDO = 4;
 
 type
+  playerscore_t = record
+    episode: integer;
+    map: integer;
+    secondary_pct: integer;
+    killratio_pct: integer;
+    flyingtime_pct: integer;
+    secrets_pct: integer;
+    proficientflying_pct: integer;
+  end;
+  Pplayerscore_t = ^playerscore_t;
+
+type
 //
 // Extended player object info: player_t
 //
@@ -238,6 +250,12 @@ type
 
     radixmessages: array[0..NUMRADIXMESSAGES - 1] of integer; // JVAL: 20200423 - Last leveltime displayed
 
+    playername: string[34];
+    scoreskill: skill_t;
+    scores: array[1..3] of array[1..9] of playerscore_t;
+    currentscore: playerscore_t;
+    wallhits: integer;
+
     last_grid_trigger: integer;
 
     angletargetx: fixed_t;
@@ -266,6 +284,7 @@ type
     ssecret: integer;
     stime: integer;
     secondaryobjective: boolean;
+    wallhits: integer;
     frags: array[0..3] of integer;
     score: integer; // current score on entry, modified on return
   end;

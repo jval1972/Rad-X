@@ -49,6 +49,7 @@ implementation
 uses
   d_delphi,
   doomdef,
+  m_fixed,
   d_player,
   d_event,
   g_game,
@@ -104,11 +105,63 @@ begin
   result := result + ':' + IntToStrzFill(2, t); // Seconds
 end;
 
+function RX_FracPercentToSring(const pctfrac: fixed_t): string;
+begin
+  sprintf(result, '%d', [(pctfrac * 100) div FRACUNIT]);
+  while length(result) < 3 do
+    result := ' ' + result;
+end;
+
+procedure RX_StorePlayerScore;
+var
+  score: Pplayerscore_t;
+begin
+  score := @players[consoleplayer].currentscore;
+  score.episode := gameepisode;
+  score.map := in_struct.last + 1;
+
+  if not in_struct.hassecondaryobjective then
+    score.secondary_pct := FRACUNIT
+  else if in_struct.plyr[consoleplayer].secondaryobjective then
+    score.secondary_pct := FRACUNIT
+  else
+    score.secondary_pct := 0;
+
+  if in_struct.maxkills = 0 then
+    score.killratio_pct := FRACUNIT
+  else
+    score.killratio_pct := (in_struct.plyr[consoleplayer].skills * FRACUNIT) div  in_struct.maxkills;
+
+  if (in_struct.plyr[consoleplayer].stime <= in_struct.partime) or (in_struct.plyr[consoleplayer].stime = 0) then
+    score.flyingtime_pct := FRACUNIT
+  else
+    score.flyingtime_pct := (in_struct.partime * FRACUNIT) div in_struct.plyr[consoleplayer].stime;
+
+  if in_struct.maxsecret = 0 then
+    score.secrets_pct := FRACUNIT
+  else
+    score.secrets_pct := (in_struct.plyr[consoleplayer].ssecret * FRACUNIT) div in_struct.maxsecret;
+
+  if (in_struct.plyr[consoleplayer].wallhits = 0) or (in_struct.partime div TICRATE = 0) then
+    score.proficientflying_pct := FRACUNIT
+  else
+  begin
+    score.proficientflying_pct := FRACUNIT - (in_struct.plyr[consoleplayer].wallhits div (in_struct.partime div TICRATE)) * FRACUNIT;
+    if score.proficientflying_pct < 0 then
+      score.proficientflying_pct := 0;
+  end;
+
+  if IsIntegerInRange(score.episode, 1, 3) then
+    if IsIntegerInRange(score.map, 1, 9) then
+      players[consoleplayer].scores[score.episode, score.map] := score^;
+end;
+
 procedure RX_Intermission_Drawer;
 var
   backscreen: string;
   skillplace: integer;
   sobj: string;
+  meanscore: fixed_t;
 begin
   sprintf(backscreen, 'DebriefScreen%d', [gameepisode]);
   V_DrawPatchFullScreenTMP320x200(backscreen);
@@ -120,6 +173,12 @@ begin
   skillplace := 10;
   M_WriteSmallTextCenter(60, 'YOU WILL ACHIEVE ' + itoa(skillplace) + ' PLACE IN THE TOP TEN', SCN_TMP);
 
+  meanscore := (players[consoleplayer].currentscore.secondary_pct +
+                players[consoleplayer].currentscore.killratio_pct +
+                players[consoleplayer].currentscore.flyingtime_pct +
+                players[consoleplayer].currentscore.secrets_pct +
+                players[consoleplayer].currentscore.proficientflying_pct) div 5;
+  M_WriteSmallText(121, 71, RX_FracPercentToSring(meanscore), SCN_TMP);
   if in_struct.hassecondaryobjective then
   begin
     if in_struct.plyr[consoleplayer].secondaryobjective then
@@ -134,6 +193,7 @@ begin
   M_WriteSmallText(108, 91, IntToStrBfill(3, in_struct.plyr[consoleplayer].skills), SCN_TMP);
   M_WriteSmallText(130, 91, itoa(in_struct.maxkills), SCN_TMP);
 
+  M_WriteSmallText(144, 101, RX_FracPercentToSring(players[consoleplayer].currentscore.proficientflying_pct), SCN_TMP);
   M_WriteSmallText(114, 111, RX_TimeToString(in_struct.plyr[consoleplayer].stime div TICRATE), SCN_TMP);
   M_WriteSmallText(101, 121, RX_TimeToString(in_struct.partime div TICRATE), SCN_TMP);
 
@@ -147,6 +207,7 @@ end;
 procedure RX_Intermission_Start;
 begin
   in_struct := @wminfo;
+  RX_StorePlayerScore;
 end;
 
 end.
