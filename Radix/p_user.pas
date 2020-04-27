@@ -136,7 +136,7 @@ begin
 
   if (player.cheats and CF_NOMOMENTUM <> 0) or (not onground) then
   begin
-    player.viewz := player.mo.z + PVIEWHEIGHT;
+    player.viewz := player.mo.z + PVIEWHEIGHT + 2 * finesine[(leveltime * (FINEANGLES div 64)) and FINEMASK];
 
     if player.viewz > player.mo.ceilingz - 4 * FRACUNIT then
       player.viewz := player.mo.ceilingz - 4 * FRACUNIT;
