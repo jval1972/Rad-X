@@ -115,6 +115,8 @@ type
     //  including viewpoint bobbing during movement.
     // Focal origin above r.z
     viewz: fixed_t;
+    // JVAL: 20200427 - Separate field (interpolated)
+    bobviewz: fixed_t;
     // Base height above floor for viewz.
     viewheight: fixed_t;
     // Bob/squat speed.

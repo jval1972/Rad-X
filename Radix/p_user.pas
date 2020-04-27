@@ -136,7 +136,10 @@ begin
 
   if (player.cheats and CF_NOMOMENTUM <> 0) or (not onground) then
   begin
-    player.viewz := player.mo.z + PVIEWHEIGHT + 2 * finesine[(leveltime * (FINEANGLES div 64)) and FINEMASK];
+    player.viewz := player.mo.z + PVIEWHEIGHT;
+
+    // JVAL: 20200427 - New field (interpolated)
+    player.bobviewz := 2 * finesine[(leveltime * (FINEANGLES div 64)) and FINEMASK];
 
     if player.viewz > player.mo.ceilingz - 4 * FRACUNIT then
       player.viewz := player.mo.ceilingz - 4 * FRACUNIT;
@@ -145,6 +148,8 @@ begin
 
     exit;
   end;
+
+  player.bobviewz := 0;
 
   angle := (FINEANGLES div 20 * leveltime) and FINEMASK;
   if player.mo.flags3_ex and MF3_EX_DOOMBOB <> 0 then

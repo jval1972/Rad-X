@@ -1781,7 +1781,7 @@ begin
   viewangle := player.mo.angle + shiftangle * DIR256TOANGLEUNIT + viewangleoffset;
   extralight := player.extralight;
 
-  viewz := player.viewz;
+  viewz := player.viewz + player.bobviewz;
 
   R_AdjustTeleportZoom(player);
   R_AdjustChaseCamera;

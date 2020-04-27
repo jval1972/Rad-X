@@ -346,6 +346,7 @@ begin
   R_AddInterpolationItem(@player.lookdir2, ibyte);
   R_AddInterpolationItem(@player.teleporttics, iinteger);
   R_AddInterpolationItem(@player.quaketics, iinteger);
+  R_AddInterpolationItem(@player.bobviewz, iinteger);
 
   // Interpolate Sectors
   sec := @sectors[0];
