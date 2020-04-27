@@ -213,7 +213,6 @@ const
 var
   savegamestrings: array[0..Ord(load_end) - 1] of string;
   savegameshots: array[0..Ord(load_end) - 1] of menuscreenbuffer_t;
-  endstring: string;
 
 type
   menuitem_t = record
@@ -416,6 +415,23 @@ type
 var
   EpisodeMenu: array[0..Ord(ep_end) - 1] of menuitem_t;
   EpiDef: menu_t;
+
+type
+  pilotname_e = (
+    pilotname1,
+    pn_end
+  );
+
+var
+  PilotNameMenu: array[0..Ord(pn_end) - 1] of menuitem_t;
+  PilotNameDef: menu_t;
+
+var
+// we are going to be entering the pilot's name
+  pilotStringEnter: integer = 0;
+  pilotCharIndex: integer; // which char we're editing
+// old pilot name before edit
+  pilotOldString: string;
 
 type
 //
@@ -2059,7 +2075,9 @@ begin
     exit;
   end;
 
-  M_SetupNextMenu(@EpiDef);
+  pilotStringEnter := 1;
+  pilotOldString := pilotNameString;
+  M_SetupNextMenu(@PilotNameDef);
 end;
 
 //
@@ -2077,6 +2095,22 @@ begin
     1: V_DrawPatch(36, 81, SCN_TMP, 'EpisodeButton2', false);
     2: V_DrawPatch(37, 142, SCN_TMP, 'EpisodeButton3', false);
   end;
+end;
+
+procedure M_DrawPilotName;
+const
+  XPILOT = 12;
+  YPILOT = 22;
+begin
+  V_DrawPatch(0, 0, SCN_TMP, 'SelectEpisode', false);
+  V_DrawPatch(PilotNameDef.x, PilotNameDef.y, SCN_TMP, 'PlayerNameBox', false);
+
+  M_WriteSmallText(PilotNameDef.x + XPILOT, PilotNameDef.y + YPILOT, pilotNameString, SCN_TMP);
+
+  if pilotStringEnter <> 0 then
+    if Length(pilotNameString) < PILOTNAMESIZE then
+      if (gametic div 18) mod 2 = 0 then
+        M_WriteSmallText(PilotNameDef.x + XPILOT + M_SmallStringWidth(pilotNameString), PilotNameDef.y + YPILOT, '_', SCN_TMP);
 end;
 
 procedure M_VerifyNightmare(ch: integer);
@@ -2106,6 +2140,11 @@ begin
   epi := choice;
 
   M_SetupNextMenu(@NewDef);
+end;
+
+procedure M_PilotName(choice: integer);
+begin
+  M_SetupNextMenu(@EpiDef);
 end;
 
 //
@@ -2578,6 +2617,8 @@ begin
 end;
 
 procedure M_QuitRADIX(choice: integer);
+var
+  endstring: string;
 begin
   sprintf(endstring, '%s'#13#10#13#10 + DOSY, [QUITMSG]);
 
@@ -2836,6 +2877,54 @@ begin
   if ch = -1 then
   begin
     result := false;
+    exit;
+  end;
+
+  if pilotStringEnter <> 0 then
+  begin
+    case ch of
+      KEY_BACKSPACE:
+        begin
+          if pilotCharIndex > 0 then
+          begin
+            dec(pilotCharIndex);
+            SetLength(pilotNameString, pilotCharIndex);
+            pilotname := pilotNameString;
+          end;
+        end;
+      KEY_ESCAPE:
+        begin
+          pilotStringEnter := 0;
+          pilotNameString := pilotOldString;
+          pilotname := pilotNameString;
+          M_PilotName(0);
+        end;
+      KEY_ENTER:
+        begin
+          pilotStringEnter := 0;
+          players[consoleplayer].playername := pilotNameString;
+          pilotname := pilotNameString;
+          M_PilotName(0);
+        end
+    else
+      begin
+        ch := Ord(toupper(Chr(ch)));
+        if ch <> 32 then
+        if (ch - Ord(HU_FONTSTART) < 0) or (ch - Ord(HU_FONTSTART) >= HU_FONTSIZE) then
+        else
+        begin
+          if (ch >= 32) and (ch <= 127) and
+             (pilotCharIndex < PILOTNAMESIZE - 1) {and
+             (M_SmallStringWidth(savegamestrings[saveSlot]) < (SAVESTRINGSIZE - 2) * 8)} then
+          begin
+            inc(pilotCharIndex);
+            pilotNameString := pilotNameString + Chr(ch);
+            pilotname := pilotNameString;
+          end;
+        end;
+      end;
+    end;
+    result := true;
     exit;
   end;
 
@@ -3764,6 +3853,28 @@ begin
   EpiDef.itemheight := BIGLINEHEIGHT;
   EpiDef.flags := 0;
 
+////////////////////////////////////////////////////////////////////////////////
+//PilotNameMenu
+  pmi := @PilotNameMenu[0];
+  pmi.status := 1;
+  pmi.name := 'Pilot name';
+  pmi.cmd := '';
+  pmi.routine := @M_PilotName;
+  pmi.pBoolVal := nil;
+  pmi.alphaKey := 'P';
+
+////////////////////////////////////////////////////////////////////////////////
+//PilotNameDef
+  PilotNameDef.numitems := Ord(pn_end); // # of menu items
+  PilotNameDef.prevMenu := @MainDef; // previous menu
+  PilotNameDef.menuitems := Pmenuitem_tArray(@PilotNameMenu);  // menu items
+  PilotNameDef.drawproc := @M_DrawPilotName;  // draw routine
+  PilotNameDef.x := 108;
+  PilotNameDef.y := 80;
+  PilotNameDef.lastOn := Ord(pilotname1); // last item user was on in menu
+  PilotNameDef.itemheight := BIGLINEHEIGHT;
+  PilotNameDef.flags := 0;
+                                   
 ////////////////////////////////////////////////////////////////////////////////
 //NewGameMenu
   pmi := @NewGameMenu[0];

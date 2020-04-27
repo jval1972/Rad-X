@@ -115,6 +115,14 @@ type
   end;
   Pplayerscore_t = ^playerscore_t;
 
+const
+  PILOTNAMESIZE = 16;
+
+var
+  pilotNameString: string[PILOTNAMESIZE] = '';
+  pilotname: string;
+
+
 type
 //
 // Extended player object info: player_t
@@ -250,7 +258,7 @@ type
 
     radixmessages: array[0..NUMRADIXMESSAGES - 1] of integer; // JVAL: 20200423 - Last leveltime displayed
 
-    playername: string[34];
+    playername: string[PILOTNAMESIZE];
     scoreskill: skill_t;
     scores: array[1..3] of array[1..9] of playerscore_t;
     currentscore: playerscore_t;
