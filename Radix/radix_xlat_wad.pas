@@ -1846,18 +1846,21 @@ begin
   MakeOneSprite('Egg', _MTRX_EGG, nil, 62, 82, false, false, 'A');
   MakeOneSprite('Eggbust', _MTRX_EGG, nil, 62, 82, false, false, 'B');
 
-  // MT_BARREL
-  MakeOneSprite('Barrel', _MTRX_BARREL, nil, 25, 57, false, false, 'A');
-  MakeOneSprite('BarrelDUDbust', _MTRX_BARREL, nil, 22, 23, false, false, 'B');
+  // MT_RADIXBARREL
+  MakeOneSprite('Barrel', _MTRX_RADIXBARREL, nil, 25, 57, false, false, 'A');
+  MakeOneSprite('BarrelDUDbust', _MTRX_RADIXBARREL, nil, 22, 23, false, false, 'B');
 
-  MakeOneSprite('BarrelRotate1', _MTRX_BARREL, nil, 41, 77, false, false, 'C');
-  MakeOneSprite('BarrelRotate2', _MTRX_BARREL, nil, 41, 77, false, false, 'D');
-  MakeOneSprite('BarrelRotate3(end)', _MTRX_BARREL, nil, 41, 77, false, false, 'E');
-  MakeOneSprite('BarrelRotate4', _MTRX_BARREL, nil, 41, 77, false, false, 'F');
-  MakeOneSprite('BarrelRotate5(end)', _MTRX_BARREL, nil, 41, 77, false, false, 'G');
-  MakeOneSprite('BarrelRotate6', _MTRX_BARREL, nil, 41, 77, false, false, 'H');
-  MakeOneSprite('BarrelRotate7(end)', _MTRX_BARREL, nil, 41, 77, false, false, 'I');
-  MakeOneSprite('BarrelRotate8', _MTRX_BARREL, nil, 41, 77, false, false, 'J');
+  MakeOneSprite('BarrelRotate1', _MTRX_RADIXBARREL, nil, 41, 77, false, false, 'C');
+  MakeOneSprite('BarrelRotate2', _MTRX_RADIXBARREL, nil, 41, 77, false, false, 'D');
+  MakeOneSprite('BarrelRotate3(end)', _MTRX_RADIXBARREL, nil, 41, 77, false, false, 'E');
+  MakeOneSprite('BarrelRotate4', _MTRX_RADIXBARREL, nil, 41, 77, false, false, 'F');
+  MakeOneSprite('BarrelRotate5(end)', _MTRX_RADIXBARREL, nil, 41, 77, false, false, 'G');
+  MakeOneSprite('BarrelRotate6', _MTRX_RADIXBARREL, nil, 41, 77, false, false, 'H');
+  MakeOneSprite('BarrelRotate7(end)', _MTRX_RADIXBARREL, nil, 41, 77, false, false, 'I');
+  MakeOneSprite('BarrelRotate8', _MTRX_RADIXBARREL, nil, 41, 77, false, false, 'J');
+  MakeOneSprite('BarrelRotate3(end)', _MTRX_RADIXBARREL, nil, 41, 60, false, false, 'K');
+  MakeOneSprite('BarrelRotate5(end)', _MTRX_RADIXBARREL, nil, 41, 60, false, false, 'L');
+  MakeOneSprite('BarrelRotate7(end)', _MTRX_RADIXBARREL, nil, 41, 60, false, false, 'M');
 
   // MT_DOZZER
   MakeRotatingSprite8('Dozer', _MTRX_DOZZER, 1, nil, 100, 80, false, false);

@@ -96,7 +96,7 @@ const
   _MTRX_BATTLEDRONE3 = 59; // battle drone (enemy) - DroneA_1.bmp
   _MTRX_ROTATINGLIGHT = 60; // rotating light (obstacle) - RotatingLight2.bmp
   _MTRX_EGG = 61; // egg (obstacle) - Egg.bmp
-  _MTRX_BARREL = 62; // barrel - shootable (obstacle) - Barrel.bmp
+  _MTRX_RADIXBARREL = 62; // barrel - shootable (obstacle) - Barrel.bmp
   _MTRX_DOZZER = 63; // dozer - shootable (vehicle) - Dozer1.bmp
   _MTRX_LIFT = 64; // lift - shootable (vehicle) - Lift1.bmp
   _MTRX_SECONDCOOLAND2 = 65; // second cooland - not animated (obstacle) - SecondCoolant1.bmp
@@ -195,7 +195,7 @@ const
   MT_BATTLEDRONE3 = _DOOM_THING_2_RADIX_ + _MTRX_BATTLEDRONE3;
   MT_ROTATINGLIGHT = _DOOM_THING_2_RADIX_ + _MTRX_ROTATINGLIGHT;
   MT_EGG = _DOOM_THING_2_RADIX_ + _MTRX_EGG;
-  MT_BARREL = _DOOM_THING_2_RADIX_ + _MTRX_BARREL;
+  MT_RADIXBARREL = _DOOM_THING_2_RADIX_ + _MTRX_RADIXBARREL;
   MT_DOZZER = _DOOM_THING_2_RADIX_ + _MTRX_DOZZER;
   MT_LIFT = _DOOM_THING_2_RADIX_ + _MTRX_LIFT;
   MT_SECONDCOOLAND2 = _DOOM_THING_2_RADIX_ + _MTRX_SECONDCOOLAND2;
