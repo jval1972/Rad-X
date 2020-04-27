@@ -1863,7 +1863,11 @@ begin
   MakeOneSprite('BarrelRotate7(end)', _MTRX_RADIXBARREL, nil, 41, 60, false, false, 'M');
 
   // MT_DOZZER
-  MakeRotatingSprite8('Dozer', _MTRX_DOZZER, 1, nil, 100, 80, false, false);
+  MakeOneSprite('Dozer1', _MTRX_DOZZER, nil, 98, 70, false, false, 'A', '1');
+  MakeOneSprite('Dozer2', _MTRX_DOZZER, nil, 98, 70, false, false, 'A', '2', 'A8');
+  MakeOneSprite('Dozer3', _MTRX_DOZZER, nil, 98, 70, false, false, 'A', '3', 'A7');
+  MakeOneSprite('Dozer4', _MTRX_DOZZER, nil, 98, 78, false, false, 'A', '4', 'A6');
+  MakeOneSprite('Dozer5', _MTRX_DOZZER, nil, 98, 70, false, false, 'A', '5');
 
   // MT_LIFT
   MakeRotatingSprite8('Lift', _MTRX_LIFT, 1, nil, 110, 88, false, false);
@@ -2053,7 +2057,7 @@ begin
       bmp.Crop(bmp.width, 96);
     end;
 
-    if spr.defaultoffs then                             
+    if spr.defaultoffs then
       RX_CreateDoomPatch(bmp.Image, bl.width, bl.height, false, p, size)
     else if spr.centeroffs then
       RX_CreateDoomPatch(bmp.Image, bl.width, bl.height, false, p, size, bl.width div 2, bl.height div 2)
