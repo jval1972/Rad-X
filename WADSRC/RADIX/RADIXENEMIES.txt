@@ -293,9 +293,9 @@ ACTOR MT_SPARKS
     {
       X090 A 4
       X090 B 4
-      X089 C 4
-      X089 DDDD 1 A_FadeOut10
-      X089 EEEE 1 A_FadeOut10
+      X090 C 4
+      X090 DDDD 1 A_FadeOut10
+      X090 EEEE 1 A_FadeOut10
       Stop
     }
   }
