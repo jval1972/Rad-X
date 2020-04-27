@@ -2460,7 +2460,6 @@ ACTOR MT_RUI 1054
       TNT1 A 0 A_SpawnItemEx("MT_BIO_CHUNK_SPREADER")
       XR54 G 5
       XR54 H -1
-      Stop
     XDeath:
       XR54 D 5 A_Fall
       TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",RANDOMPICK(-20,20),RANDOMPICK(-20,20),20,0,0,0,0,0)
@@ -2472,7 +2471,6 @@ ACTOR MT_RUI 1054
       TNT1 A 0 A_SpawnItemEx("MT_BIO_CHUNK_SPREADER")
       XR54 G 5
       XR54 H -1
-      Stop
   }
 }
 
@@ -2625,7 +2623,6 @@ ACTOR MT_ROTATINGLIGHT 1060
       TNT1 A 0 A_Turn(120)
       XR60 I 1 A_SpawnItemEx("MT_METALCHUNK3",0,0,20,RANDOMPICK(1,2),RANDOMPICK(1,2),RANDOMPICK(2,3))
       XR60 I -1
-      Stop
     XDeath:
       TNT1 A 1 A_Fall
       TNT1 A 1 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,20,0,0,RANDOM(1,2),0,0)
@@ -2673,25 +2670,70 @@ ACTOR MT_EGG 1061
       TNT1 A 0 A_Turn(180+Random(20,40)-Random(20,40))
       XR61 B 5 A_SpawnItemEx("MT_BIO_CHUNK_SPREADER",0,0,30)
       XR61 B -1
-      Stop
   }
 }
 
 ///////////////////////////////
-// MT_BARREL
+// MT_RADIXBARREL_CHUNK
 ///////////////////////////////
-ACTOR MT_BARREL 1062
+ACTOR MT_RADIXBARREL_CHUNK
 {
-  Radius 32
-  Height 56
-  +NOGRAVITY
-  +FLOAT
-  +PUSHABLE
+  Radius 24
+  Height 32
+  Health 1000
+  Mass 30
   States
   {
-  Spawn:
-    XR62 A -1
-    Stop
+    Spawn:
+      XR62 C 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)
+      XR62 D 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)
+      XR62 E 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)
+      XR62 F 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)
+      XR62 G 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)
+      XR62 H 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)
+      XR62 I 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop3)
+      XR62 J 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop3)
+      GoTo Spawn
+    Stop1:
+      TNT1 A 0 A_PlaySound("radix/SndPlaneHit")
+      XR62 K -1
+    Stop2:
+      TNT1 A 0 A_PlaySound("radix/SndPlaneHit")
+      XR62 L -1
+    Stop3:
+      TNT1 A 0 A_PlaySound("radix/SndPlaneHit")
+      XR62 M -1
+  }
+}
+
+///////////////////////////////
+// MT_RADIXBARREL
+///////////////////////////////
+ACTOR MT_RADIXBARREL 1062
+{
+  Radius 24
+  Height 56
+  Health 30
+  Mass 50
+  PainChance 255
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_NOBLOOD
+  States
+  {
+    Spawn:
+      XR62 A 10
+      Loop
+    Pain:
+      XR62 A 5 A_SpawnItemEx("MT_SPARKS",RANDOMPICK(-10,0,10),0,RANDOM(20,40))
+      GoTo Spawn
+    Death:
+      XR62 B 5 A_Fall
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBARREL_CHUNK",0,10,0,RANDOMPICK(-1,1)*FRANDOM(0.2,0.3),RANDOMPICK(-1,1)*FRANDOM(0.2,0.3),FRANDOM(22,28))
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,20,0,0,RANDOM(1,2),0,0)
+      TNT1 A 0 A_AmbientSound(0,0,"radix/SndScrape")
+      XR62 B -1
+      Stop
   }
 }
 
