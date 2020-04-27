@@ -117,6 +117,7 @@ var
   angle: integer;
   oldviewz: fixed_t;
   oldviewz2: fixed_t;
+  viewbob: fixed_t; // JVAL: Slopes
 begin
   // Regular movement bobbing
   // (needs to be calculated for gun swing
@@ -142,12 +143,14 @@ begin
 
     player.oldviewz := oldviewz;
 
-//    player.viewz := player.mo.z + player.viewheight;  JVAL removed!
     exit;
   end;
 
   angle := (FINEANGLES div 20 * leveltime) and FINEMASK;
-  player.viewbob := FixedMul(player.bob div 2, finesine[angle]) div (player.slopetics + 1);
+  if player.mo.flags3_ex and MF3_EX_DOOMBOB <> 0 then
+    viewbob := FixedMul(player.bob div 2, finesine[angle]) div (player.slopetics + 1)
+  else
+    viewbob := 0;
 
   // move viewheight
   if player.playerstate = PST_LIVE then
@@ -184,7 +187,7 @@ begin
 
     player.viewz :=
       (player.slopetics * player.viewz +
-       player.mo.z + player.viewheight + player.viewbob) div (player.slopetics + 1); // Extra smooth
+       player.mo.z + player.viewheight + viewbob) div (player.slopetics + 1); // Extra smooth
 
     if oldviewz2 < oldviewz then
     begin
@@ -203,7 +206,7 @@ begin
       player.viewz := player.mo.floorz + 4 * FRACUNIT;
   end
   else
-    player.viewz := player.mo.z + player.viewheight + player.viewbob;
+    player.viewz := player.mo.z + player.viewheight + viewbob;
 
   if player.viewz > player.mo.ceilingz - 4 * FRACUNIT then
     player.viewz := player.mo.ceilingz - 4 * FRACUNIT;

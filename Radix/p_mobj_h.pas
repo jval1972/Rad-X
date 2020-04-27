@@ -371,6 +371,8 @@ const
   MF3_EX_CANSPAWNCHILDREN = $8000;
   // Radix Alien BLOOD
   MF3_EX_ALIENBLOOD = $10000;
+  // Doom BOB
+  MF3_EX_DOOMBOB = $20000;
 
 type
 // Map Object definition.
@@ -428,7 +430,7 @@ type
     flags2_ex: integer; // JVAL extended flags (MF_EX_????)
     renderstyle: mobjrenderstyle_t;
     alpha: fixed_t;
-    bob: integer;
+    floatbob: integer;
 
     health: integer;
 

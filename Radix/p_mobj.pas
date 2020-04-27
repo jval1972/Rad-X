@@ -789,17 +789,17 @@ begin
 
   if mobj.flags_ex and MF_EX_FLOATBOB <> 0 then
   begin
-    mobj.z := mobj.floorz + FloatBobOffsets[mobj.bob];
-    mobj.bob := (mobj.bob + 1) and FLOATBOBMASK;
+    mobj.z := mobj.floorz + FloatBobOffsets[mobj.floatbob];
+    mobj.floatbob := (mobj.floatbob + 1) and FLOATBOBMASK;
   end
   else
   begin
     // JVAL: 20200417 - MF3_EX_BOBING flag
     if mobj.flags3_ex and MF3_EX_BOBING <> 0 then
     begin
-      mobj.momz := mobj.momz - FloatBobOffsets[mobj.bob] div 4;
-      mobj.bob := (mobj.bob + 1) and FLOATBOBMASK;
-      mobj.momz := mobj.momz + FloatBobOffsets[mobj.bob] div 4;
+      mobj.momz := mobj.momz - FloatBobOffsets[mobj.floatbob] div 4;
+      mobj.floatbob := (mobj.floatbob + 1) and FLOATBOBMASK;
+      mobj.momz := mobj.momz + FloatBobOffsets[mobj.floatbob] div 4;
     end;
     if (mobj.z <> mobj.floorz) or (mobj.momz <> 0) then
     begin
@@ -928,7 +928,7 @@ begin
   mobj.renderstyle := info.renderstyle;
   mobj.alpha := info.alpha;
   if (mobj.flags_ex and MF_EX_FLOATBOB <> 0) or (mobj.flags3_ex and MF3_EX_BOBING <> 0) then
-    mobj.bob := N_Random and FLOATBOBMASK;
+    mobj.floatbob := N_Random and FLOATBOBMASK;
   mobj.health := info.spawnhealth;
 
   mobj.armour_inc := info.armour_inc;  // JVAL 20200321 - Armour inc for pickable objects

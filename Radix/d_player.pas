@@ -242,7 +242,6 @@ type
     angletargety: fixed_t;
     angletargetticks: integer;
     laddertics: integer;
-    viewbob: fixed_t; // JVAL: Slopes
     slopetics: integer; // JVAL: Slopes
     oldviewz: fixed_t; // JVAL: Slopes
     teleporttics: integer;
