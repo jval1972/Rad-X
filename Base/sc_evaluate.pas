@@ -126,6 +126,7 @@ type
     function PF_str_pos(p: TDStrings): string;
     function PF_if(p: TDStrings): string;
     // Math functions
+    function PF_val(p: TDStrings): string;
     function PF_abs(p: TDStrings): string;
     function PF_min(p: TDStrings): string;
     function PF_max(p: TDStrings): string;
@@ -522,6 +523,7 @@ begin
   AddFunc('IF', PF_if, 3);
   AddFunc('IFF', PF_if, 3);
   // Math Functions
+  AddFunc('VAL', PF_val, 1);
   AddFunc('ABS', PF_abs, 1);
   AddFunc('MIN', PF_min, -1);
   AddFunc('MAX', PF_max, -1);
@@ -1059,6 +1061,11 @@ begin
     result := p[1]
   else
     result := p[2];
+end;
+
+function TEvaluator.PF_val(p: TDStrings): string;
+begin
+  Result := p[0];
 end;
 
 function TEvaluator.PF_abs(p: TDStrings): string;
