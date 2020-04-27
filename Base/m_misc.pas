@@ -858,6 +858,8 @@ begin
   finally
     s.Free;
   end;
+
+  pilotNameString := pilotname;
   {$IFNDEF STRIFE}
   if confignotfound then
     G_SetKeyboardMode(1);

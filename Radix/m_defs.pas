@@ -35,6 +35,7 @@ uses
   am_map,
   c_con,
   doomdef,
+  d_player,
   d_englsh,
   d_main,
   g_game,
@@ -161,7 +162,7 @@ type
   Pdefault_t = ^default_t;
 
 const
-  NUMDEFAULTS = {$IFDEF FPC}192{$ELSE}194{$ENDIF};
+  NUMDEFAULTS = 196;
 
 // JVAL
 // Note: All setable defaults must be in lowercase, don't ask why. Just do it. :)
@@ -832,7 +833,6 @@ const
      defaultbvalue: true;
      _type: tBoolean),
 
-{$IFNDEF FPC}
     (name: 'pngtransparentcolor';
      location: @pngtransparentcolor;
      setable: DFS_ALWAYS;
@@ -856,7 +856,7 @@ const
      defaultivalue: 0;
      defaultbvalue: false;
      _type: tBoolean),
-{$ENDIF}
+
      // Compatibility
     (name: 'Compatibility';
      location: nil;
@@ -1708,7 +1708,6 @@ const
      defaultbvalue: false;
      _type: tString),
 
-
     (name: 'Autoload';
      location: nil;
      setable: DFS_NEVER;
@@ -1731,7 +1730,25 @@ const
      defaultsvalue: '';
      defaultivalue: 0;
      defaultbvalue: false;
+     _type: tString),
+
+    (name: 'Pilot';
+     location: nil;
+     setable: DFS_NEVER;
+     defaultsvalue: '';
+     defaultivalue: 0;
+     defaultbvalue: false;
+     _type: tGroup),
+
+    (name: 'pilotname';
+     location: @pilotname;
+     setable: DFS_ALWAYS;
+     defaultsvalue: '';
+     defaultivalue: 0;
+     defaultbvalue: false;
      _type: tString)
+
+
   );
 
 implementation
