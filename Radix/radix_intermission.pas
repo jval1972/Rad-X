@@ -143,11 +143,11 @@ begin
   else
     score.secrets_pct := (in_struct.plyr[consoleplayer].ssecret * FRACUNIT) div in_struct.maxsecret;
 
-  if (in_struct.plyr[consoleplayer].wallhits = 0) or (in_struct.partime div TICRATE = 0) then
+  if (in_struct.plyr[consoleplayer].wallhits div TICRATE = 0) or (in_struct.partime div TICRATE = 0) then
     score.proficientflying_pct := FRACUNIT
   else
   begin
-    score.proficientflying_pct := FRACUNIT - (in_struct.plyr[consoleplayer].wallhits div (in_struct.partime div TICRATE)) * FRACUNIT;
+    score.proficientflying_pct := FRACUNIT - ((in_struct.plyr[consoleplayer].wallhits div TICRATE) * FRACUNIT) div (in_struct.partime div TICRATE);
     if score.proficientflying_pct < 0 then
       score.proficientflying_pct := 0;
   end;

@@ -361,7 +361,10 @@ begin
       if mo.player <> nil then
       begin
         if not P_LadderMove(mo) then
+        begin
           P_SlideMove(mo); // try to slide along it
+          inc(Pplayer_t(mo.player).wallhits); // JVAL: 20200428 - inc wall count to use in score
+        end;
       end
       // JVAL: 20200308 - Bounce on walls
       else if mo.flags3_ex and MF3_EX_WALLBOUNCE <> 0 then
@@ -415,7 +418,7 @@ begin
   until not ((xmove <> 0) or (ymove <> 0));
 
   // slow down
-  if (player <> nil) and  (player.cheats and CF_NOMOMENTUM <> 0) then
+  if (player <> nil) and (player.cheats and CF_NOMOMENTUM <> 0) then
   begin
     // debug option for no sliding at all
     mo.momx := 0;
@@ -426,7 +429,7 @@ begin
   if (mo.flags and (MF_MISSILE or MF_SKULLFLY)) <> 0 then
     exit; // no friction for missiles ever
 
-  if (mo.flags3_ex and MF3_EX_BOUNCE) <> 0 then
+  if mo.flags3_ex and MF3_EX_BOUNCE <> 0 then
     exit; // no friction for bouncing objects
 
   if (player <> nil) and (player.laddertics > 0) then
@@ -2076,6 +2079,9 @@ begin
 
   if sec.heightsec <> -1 then
     exit;
+
+  if thing.player <> nil then
+    inc(Pplayer_t(thing.player).wallhits, TICRATE); // JVAL: 20200428 - inc wall count to use in score
 
   // JVAL: 3d Floors
   z := thing.floorz;
