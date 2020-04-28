@@ -901,7 +901,8 @@ var
     else if levelname = 'E1M9' then
     begin
       result := true;
-//      fix_movevertex(dfssd
+      doomsectors[18].ceilingheight := 704;
+      doomsectors[172].ceilingheight := 704;
     end
     else if levelname = 'E2M1' then
     begin
