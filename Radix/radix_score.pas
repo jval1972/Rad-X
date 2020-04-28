@@ -68,6 +68,8 @@ procedure RX_LoadScoreTable;
 
 procedure RX_SaveScoreTable;
 
+function RX_GetScoreTableId(const id: integer): Pscrotetableitem_t;
+
 implementation
 
 uses
@@ -238,6 +240,14 @@ begin
       I_Warning('RX_LoadScoreTable(): Wrote %d bytes instead of %d bytes'#13#10, [count, size]);
     close(handle);
   end;
+end;
+
+function RX_GetScoreTableId(const id: integer): Pscrotetableitem_t;
+begin
+  if IsIntegerInRange(id, 0, NUMSCORES - 1) then
+    result := @scoretable[id]
+  else
+    result := nil;
 end;
 
 end.

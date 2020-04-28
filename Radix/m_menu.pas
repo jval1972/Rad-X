@@ -139,6 +139,7 @@ uses
   p_user,
   p_adjust,
   radix_sounds,
+  radix_score,
   r_aspect,
   r_data,
   r_defs,
@@ -393,12 +394,13 @@ type
     mm_loadgame,
     mm_savegame,
     mm_readthis,
+    mm_topten,
     mm_quitradix,
     main_end
   );
 
 var
-  MainMenu: array[0..5] of menuitem_t;
+  MainMenu: array[0..Ord(main_end) - 1] of menuitem_t;
   MainDef: menu_t;
 
 type
@@ -429,7 +431,7 @@ var
 var
 // we are going to be entering the pilot's name
   pilotStringEnter: integer = 0;
-  pilotCharIndex: integer; // which char we're editing
+  pilotCharIndex: integer = 0; // which char we're editing
 // old pilot name before edit
   pilotOldString: string;
 
@@ -466,6 +468,19 @@ type
 var
   OptionsMenu: array[0..Ord(opt_end) - 1] of menuitem_t;
   OptionsDef: menu_t;
+
+//
+// Top Ten
+//
+type
+  topten_e = (
+    topten1,
+    tt_end
+  );
+
+var
+  TopTenMenu: array[0..Ord(tt_end) - 1] of menuitem_t;
+  TopTenDef: menu_t;
 
 // GENERAL MENU
 type
@@ -2077,6 +2092,7 @@ begin
 
   pilotStringEnter := 1;
   pilotOldString := pilotNameString;
+  pilotCharIndex := Length(pilotNameString);
   M_SetupNextMenu(@PilotNameDef);
 end;
 
@@ -2498,6 +2514,83 @@ end;
 procedure M_Options(choice: integer);
 begin
   M_SetupNextMenu(@OptionsDef);
+end;
+
+procedure M_TopTen(choice: integer);
+begin
+  M_SetupNextMenu(@TopTenDef);
+end;
+
+procedure M_TopTenExit(choice: integer);
+begin
+  M_SetupNextMenu(@MainDef);
+end;
+
+procedure M_DrawTopTen;
+const
+  AA_START = 18;
+  NAME_START = 26;
+  EPIDODE_START = 112;
+  MAP_START = 174;
+  SKILL_START = 204;
+  SCORE_START = 250;
+  Y_TITLE = 30;
+  Y_START = 50;
+  Y_SPACING = 12;
+var
+  i, y: integer;
+  score: Pscrotetableitem_t;
+  s: string;
+  len: integer;
+begin
+  V_DrawPatch(0, 0, SCN_TMP, 'TopTenScreen', false);
+
+  // Header
+  M_WriteSmallWhiteText(NAME_START, Y_TITLE, 'Name', SCN_TMP);
+  M_WriteSmallWhiteText(EPIDODE_START, Y_TITLE, 'Episode', SCN_TMP);
+  M_WriteSmallWhiteText(MAP_START, Y_TITLE, 'Map', SCN_TMP);
+  M_WriteSmallWhiteText(SKILL_START, Y_TITLE, 'Skill', SCN_TMP);
+  M_WriteSmallWhiteText(SCORE_START, Y_TITLE, 'Score', SCN_TMP);
+
+  // Scores
+  for i := 0 to NUMSCORES - 1 do
+  begin
+    score := RX_GetScoreTableId(i);
+    if score <> nil then
+      if (score.episode <> 0) and (score.map <> 0) then
+      begin
+        y := Y_START + i * Y_SPACING;
+
+        s := itoa(i + 1);
+        len := M_SmallStringWidth(s);
+        M_WriteSmallWhiteText(AA_START - len, y, s, SCN_TMP);
+
+        M_WriteSmallText(NAME_START, y, score.name, SCN_TMP);
+
+        case score.episode of
+          1: s := 'THETA 2';
+          2: s := 'VEGEANCE';
+          3: s := 'THE VOID';
+        else
+          s := itoa(score.episode);
+        end;
+        M_WriteSmallText(EPIDODE_START, y, s, SCN_TMP);
+
+        M_WriteSmallText(MAP_START, y, itoa(score.map), SCN_TMP);
+
+        case Ord(score.skill) of
+          0: s := 'Easiest';
+          1: s := 'Easy';
+          2: s := 'Normal';
+          3: s := 'Hard';
+        else
+          s := itoa(Ord(score.skill));
+        end;
+        M_WriteSmallText(SKILL_START, y, s, SCN_TMP);
+
+        M_WriteSmallText(SCORE_START, y, itoa(score.rating), SCN_TMP);
+      end;
+  end;
 end;
 
 //
@@ -3360,8 +3453,6 @@ begin
 end;
 
 //
-
-//
 // JVAL
 // Threaded shades the half screen
 //
@@ -3786,7 +3877,6 @@ begin
   pmi.pBoolVal := nil;
   pmi.alphaKey := 's';
 
-  // Another hickup with Special edition.
   inc(pmi);
   pmi.status := 1;
   pmi.name := 'Ordering Info';
@@ -3794,6 +3884,14 @@ begin
   pmi.routine := @M_ReadThis;
   pmi.pBoolVal := nil;
   pmi.alphaKey := 'o';
+
+  inc(pmi);
+  pmi.status := 1;
+  pmi.name := 'Top Ten';
+  pmi.cmd := '';
+  pmi.routine := @M_TopTen;
+  pmi.pBoolVal := nil;
+  pmi.alphaKey := 't';
 
   inc(pmi);
   pmi.status := 1;
@@ -3982,6 +4080,29 @@ begin
   OptionsDef.lastOn := 0; // last item user was on in menu
   OptionsDef.itemheight := BIGLINEHEIGHT;
   OptionsDef.flags := FLG_MN_TEXTUREBK;
+
+////////////////////////////////////////////////////////////////////////////////
+//TopTenMenu
+  pmi := @TopTenMenu[0];
+  pmi.status := 1;
+  pmi.name := '';
+  pmi.cmd := '';
+  pmi.routine := @M_TopTenExit;
+  pmi.pBoolVal := nil;
+  pmi.alphaKey := 'g';
+
+
+////////////////////////////////////////////////////////////////////////////////
+//TopTenDef
+  TopTenDef.numitems := Ord(tt_end); // # of menu items
+  TopTenDef.prevMenu := @MainDef; // previous menu
+  TopTenDef.menuitems := Pmenuitem_tArray(@TopTenMenu);  // menu items
+  TopTenDef.drawproc := @M_DrawTopTen;  // draw routine
+  TopTenDef.x := DEF_MENU_ITEMS_START_X;
+  TopTenDef.y := DEF_MENU_ITEMS_START_Y;
+  TopTenDef.lastOn := 0; // last item user was on in menu
+  TopTenDef.itemheight := BIGLINEHEIGHT;
+  TopTenDef.flags := FLG_MN_TEXTUREBK;
 
 ////////////////////////////////////////////////////////////////////////////////
 //OptionsGeneralMenu
