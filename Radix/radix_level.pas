@@ -893,6 +893,11 @@ var
         else if doomsidedefs[j].sector = 211 then
           doomsidedefs[j].sector := 212;
     end
+    else if levelname = 'E1M5' then
+    begin
+      result := true;
+      doomsidedefs[413].textureoffset := -16; // JVAL: 20200428 - Does not work :(
+    end
     else if levelname = 'E1M6' then
     begin
       result := true;
