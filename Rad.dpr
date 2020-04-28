@@ -387,7 +387,8 @@ uses
   radix_objects in 'Radix\radix_objects.pas',
   radix_player in 'Radix\radix_player.pas',
   m_compress in 'Base\m_compress.pas',
-  radix_vertical_fight in 'Radix\radix_vertical_fight.pas';
+  radix_vertical_fight in 'Radix\radix_vertical_fight.pas',
+  radix_score in 'Radix\radix_score.pas';
 
 var
   Saved8087CW: Word;

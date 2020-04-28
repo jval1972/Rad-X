@@ -56,6 +56,7 @@ uses
   mn_font,
   s_sound,
   sound_data,
+  radix_score,
   v_data,
   v_video;
 
@@ -130,7 +131,7 @@ begin
   if in_struct.maxkills = 0 then
     score.killratio_pct := FRACUNIT
   else
-    score.killratio_pct := (in_struct.plyr[consoleplayer].skills * FRACUNIT) div  in_struct.maxkills;
+    score.killratio_pct := (in_struct.plyr[consoleplayer].skills * FRACUNIT) div in_struct.maxkills;
 
   if (in_struct.plyr[consoleplayer].stime <= in_struct.partime) or (in_struct.plyr[consoleplayer].stime = 0) then
     score.flyingtime_pct := FRACUNIT
@@ -154,6 +155,10 @@ begin
   if IsIntegerInRange(score.episode, 1, 3) then
     if IsIntegerInRange(score.map, 1, 9) then
       players[consoleplayer].scores[score.episode, score.map] := score^;
+
+  if not netgame then
+    if not demoplayback then
+      RX_UpdateScoreTable(@players[consoleplayer], gameepisode, in_struct.last + 1, gameskill);
 end;
 
 procedure RX_Intermission_Drawer;
@@ -170,8 +175,12 @@ begin
 
   M_WriteSmallTextCenter(52, 'AT YOUR CURRENT SKILL RATING', SCN_TMP);
 
-  skillplace := 10;
-  M_WriteSmallTextCenter(60, 'YOU WILL ACHIEVE ' + itoa(skillplace) + ' PLACE IN THE TOP TEN', SCN_TMP);
+  skillplace := RX_QueryPlayerScorePosition(@players[consoleplayer].currentscore);
+
+  if IsIntegerInRange(skillplace, 1, NUMSCORES) then
+    M_WriteSmallTextCenter(60, 'YOU WILL ACHIEVE ' + SCOREPOSITIONTEXT[skillplace] + ' PLACE IN THE TOP TEN', SCN_TMP)
+  else
+    M_WriteSmallTextCenter(60, 'YOU WILL NOT ACHIEVE A PLACE IN THE TOP TEN', SCN_TMP);
 
   meanscore := (players[consoleplayer].currentscore.secondary_pct +
                 players[consoleplayer].currentscore.killratio_pct +

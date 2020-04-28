@@ -127,7 +127,7 @@ type
 //
 // Extended player object info: player_t
 //
-  player_t = record
+  player_t = packed record
     mo: Pmobj_t;
     playerstate: playerstate_t;
 

@@ -32,20 +32,9 @@ unit m_base;
 interface
 
 const
-{$IFDEF DOOM}
-  _GAME = 'Doom';
-{$ENDIF}
-{$IFDEF HERETIC}
-  _GAME = 'Heretic';
-{$ENDIF}
-{$IFDEF HEXEN}
-  _GAME = 'Hexen';
-{$ENDIF}
-{$IFDEF STRIFE}
-  _GAME = 'Strife';
-{$ENDIF}
+  _GAME = 'Radix';
 
-  APPNAME = 'Delphi' + _GAME;
+  APPNAME = _GAME;
   DEFARGVFILENAME = _GAME + '32.cmd';
   WINCLASSNAME = _GAME + '32';
 

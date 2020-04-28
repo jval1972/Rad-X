@@ -1235,6 +1235,7 @@ var
   secretcount: integer;
   cheats: integer;
   oldscores: array[1..3] of array[1..9] of playerscore_t;
+  oldplayername: string;
   oldskill: skill_t;
 begin
   p := @players[player];
@@ -1243,6 +1244,7 @@ begin
   killcount := p.killcount;
   itemcount := p.itemcount;
   secretcount := p.secretcount;
+  oldplayername := p.playername;
   oldskill := p.scoreskill;
 
   // JVAL: added option to keep cheats
@@ -1262,6 +1264,7 @@ begin
   p.itemcount := itemcount;
   p.secretcount := secretcount;
   p.scoreskill := oldskill;
+  p.playername := oldplayername;
 
   p.usedown := true;
   p.attackdown := true;  // don't do anything immediately

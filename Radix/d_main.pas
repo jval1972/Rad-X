@@ -176,6 +176,7 @@ uses
   ps_main,
   psi_overlay,
   radix_alias,
+  radix_score,
   radix_weapons,
   radix_version,
   radix_intermission,
@@ -2092,6 +2093,11 @@ begin
 
   SUC_Progress(81);
 
+  printf('RX_LoadScoreTable: Loading score table.'#13#10);
+  RX_LoadScoreTable;
+
+  SUC_Progress(82);
+
   printf('D_CheckNetGame: Checking network game status.'#13#10);
   D_CheckNetGame;
 
@@ -2233,6 +2239,8 @@ begin
   M_ShutDownMenus;
   printf('RX_ShutDownRadixHud: Shut down RADIX HUD.'#13#10);
   RX_ShutDownRadixHud;
+  printf('RX_SaveScoreTable: Saving score table.'#13#10);
+  RX_SaveScoreTable;
   printf('SC_ShutDown: Shut down script engine.'#13#10);
   SC_ShutDown;
   // JVAL: PascalScript

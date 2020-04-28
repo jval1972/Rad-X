@@ -38,8 +38,6 @@ function SHA1_CalcSHA1String(const Buf: AnsiString): AnsiString;
 
 function SHA1_CalcSHA1Buf(const Buf; const BufSize: Integer): AnsiString;
 
-implementation
-
 type
   T160BitDigest = record
     case integer of
@@ -48,6 +46,8 @@ type
       2 : (Bytes : array[0..19] of Byte);
     end;
   P160BitDigest = ^T160BitDigest;
+
+implementation
 
 procedure SHA1InitDigest(var Digest: T160BitDigest);
 begin

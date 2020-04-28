@@ -1208,15 +1208,25 @@ begin
   plnum := mthing._type - 1;
   p := @players[plnum];
 
+  if plnum = consoleplayer then
+    p.playername := pilotname;
+
   if p.playerstate = PST_REBORN then
     G_PlayerReborn(plnum);
 
   x := mthing.x * FRACUNIT;
   y := mthing.y * FRACUNIT;
-  z := ONFLOORZ;
+  z := mthing.z * FRACUNIT;
+
+  ss := R_PointInSubsector(x, y);
+
+  // JVAL: 20200428 - Spawn Player Position
+  if z < ss.sector.floorheight then
+    z := ss.sector.floorheight
+  else if z > ss.sector.ceilingheight - mobjinfo[Ord(MT_PLAYER)].height then
+    z := ss.sector.ceilingheight - mobjinfo[Ord(MT_PLAYER)].height;
 
   // JVAL: 20191209 - 3d floors - Fixed Player spawned in 3d floor
-  ss := R_PointInSubsector(x, y);
   if ss.sector.midsec >= 0 then
     if mthing.options and MTF_ONMIDSECTOR <> 0 then
       z := sectors[ss.sector.midsec].ceilingheight;
