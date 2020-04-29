@@ -1493,7 +1493,12 @@ begin
   if result.tics > 0 then
     result.tics := 1 + (P_Random mod result.tics);
   if result.flags and MF_COUNTKILL <> 0 then
+  begin
     inc(totalkills);
+    // JVAL: 20200429 - To compensate for dead enemies that the player didn't kill
+    if mthing.options and MTF_RADIXTHING <> 0 then
+      inc(totalradixkills);
+  end;
   if result.flags and MF_COUNTITEM <> 0 then
     inc(totalitems);
 

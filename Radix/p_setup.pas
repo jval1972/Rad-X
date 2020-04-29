@@ -1801,6 +1801,7 @@ var
   gwaloaded: boolean;
 begin
   totalkills := 0;
+  totalradixkills := 0; // JVAL: 20200429 - To compensate for dead enemies that the player didn't kill
   totalitems := 0;
   totalsecret := 0;
 

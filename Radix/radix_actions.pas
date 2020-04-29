@@ -2294,14 +2294,49 @@ procedure RA_KillRatio(const action: Pradixaction_t);
 var
   parms: radixkillratio_p;
   runtrigger: boolean;
+  mo: Pmobj_t;
+  think: Pthinker_t;
+  living: integer;
 begin
   parms := radixkillratio_p(@action.params);
 
   runtrigger := false;
-  if players[radixplayer].killcount >= totalkills then
+  if (totalradixkills = 0) or (totalkills = 0) then
+    runtrigger := true
+  else if players[radixplayer].killcount >= totalkills then
     runtrigger := true
   else if (players[radixplayer].killcount * 100) div totalkills >= parms.percentage then
-    runtrigger := true;
+    runtrigger := true
+  else if leveltime and 31 = 0 then
+  begin
+    // JVAL: 20200429 - To compensate for dead enemies that the player didn't kill (count living radix map enemies)
+    living := 0;
+    think := thinkercap.next;
+    while think <> @thinkercap do
+    begin
+      if @think._function.acp1 <> @P_MobjThinker then
+      begin
+        think := think.next;
+        continue;
+      end;
+
+      mo := Pmobj_t(think);
+
+      if (mo.flags and MF_COUNTKILL = 0) or (mo.health <= 0) or (mo.player <> nil) then
+      begin // Not a valid monster
+        think := think.next;
+        continue;
+      end;
+
+      if mo.spawnpoint.options and MTF_RADIXTHING <> 0 then
+        inc(living);
+
+      think := think.next;
+    end;
+
+    if totalradixkills - living * 100 div totalkills >= parms.percentage then
+      runtrigger := true;
+  end;
 
   if runtrigger then
   begin

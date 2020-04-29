@@ -180,7 +180,7 @@ var
   // https://www.doomworld.com/forum/topic/95719-a_tracer-and-gametic/?do=findComment&comment=1788516
   demostarttic: integer; // JVAL: Thanks fabian :)
 
-  totalkills, totalitems, totalsecret: integer; // for intermission
+  totalkills, totalradixkills, totalitems, totalsecret: integer; // for intermission
 
   levelhassecondaryobjective: boolean;
 
