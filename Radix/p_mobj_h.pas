@@ -418,6 +418,8 @@ type
 
     // If == validcount, already checked.
     validcount: integer;
+    // JVAL: 20200429 - Sector thinglist consistency
+    sectorvalidcount: integer;
 
     _type: integer;
     info: Pmobjinfo_t;  // &mobjinfo[mobj->type]

@@ -576,6 +576,9 @@ begin
           mobj.master := nil;
           mobj.touching_sectorlist := nil;
 
+          // JVAL: 20200429 - Sector thinglist consistency
+          mobj.sectorvalidcount := 0;
+          mobj.validcount := 0;
           if mobj.customparams <> nil then
           begin
             mobj.customparams := nil;

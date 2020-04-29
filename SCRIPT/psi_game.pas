@@ -2236,8 +2236,11 @@ begin
     Exit;
 
   mo := sectors[sec].thinglist;
-  while mo <> nil do
+  // JVAL: 20200429 - Sector thinglist consistency
+  inc(sectorvalidcount);
+  while (mo <> nil) and (mo.sectorvalidcount <> sectorvalidcount) do
   begin
+    mo.sectorvalidcount := sectorvalidcount;
     Add(mo.key);
     mo := mo.snext;
   end;
@@ -3744,8 +3747,11 @@ begin
     Exit;
 
   mo := sectors[sec].thinglist;
-  while mo <> nil do
+  // JVAL: 20200429 - Sector thinglist consistency
+  inc(sectorvalidcount);
+  while (mo <> nil) and (mo.sectorvalidcount <> sectorvalidcount) do
   begin
+    mo.sectorvalidcount := sectorvalidcount;
     Inc(Result);
     mo := mo.snext;
   end;

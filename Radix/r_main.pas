@@ -230,6 +230,8 @@ var
 
 // increment every time a check is made
   validcount: integer = 1;
+// JVAL: 20200429 - Sector thinglist consistency
+  sectorvalidcount: integer = 1;
 
 // bumped light from gun blasts
   extralight: integer;

@@ -1763,8 +1763,11 @@ begin
 
   // Handle all things in sector.
   thing := sec.thinglist;
-  while thing <> nil do
+  // JVAL: 20200429 - Sector thinglist consistency
+  inc(sectorvalidcount);
+  while (thing <> nil) and (thing.sectorvalidcount <> sectorvalidcount) do
   begin
+    thing.sectorvalidcount := sectorvalidcount;
     R_ProjectSprite(thing);
     thing := thing.snext;
   end;

@@ -329,6 +329,7 @@ uses
 {$ELSE}
   gl_automap,
 {$ENDIF}
+  r_main,
   v_data,
   v_video;
 
@@ -1578,8 +1579,12 @@ begin
   for i := 0 to numsectors - 1 do
   begin
     t := sectors[i].thinglist;
-    while t <> nil do
+    // JVAL: 20200429 - Sector thinglist consistancy
+    inc(sectorvalidcount);
+    while (t <> nil) and (t.sectorvalidcount <> sectorvalidcount) do
     begin
+      t.sectorvalidcount := sectorvalidcount;
+      
       x := t.x div FRACTOMAPUNIT;
       y := t.y div FRACTOMAPUNIT;
 
@@ -1590,7 +1595,7 @@ begin
         color := aprox_yellow
       else if (t.flags and MF_SPECIAL <> 0) or (t.flags3_ex and MF3_EX_CUSTOMPICKUP <> 0) then
         color := approx_white
-      else                      
+      else
         color := aprox_green;
 
       AM_drawLineCharacter

@@ -60,6 +60,7 @@ uses
   d_player,
   g_game,
   r_defs,
+  r_main,
   p_params,
   p_setup,
   p_levelinfo,
@@ -94,8 +95,11 @@ begin
 
   sec := Psubsector_t(actor.subsector).sector;
   mo := sec.thinglist;
-  while mo <> nil do
+  // JVAL: 20200429 - Sector thinglist consistency
+  inc(sectorvalidcount);
+  while (mo <> nil) and (mo.sectorvalidcount <> sectorvalidcount) do
   begin
+    mo.sectorvalidcount := sectorvalidcount;
     if mo.player <> nil then
       if mo.player = @players[consoleplayer] then
       begin

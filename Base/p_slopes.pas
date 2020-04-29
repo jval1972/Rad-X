@@ -313,12 +313,15 @@ var
  mo: Pmobj_t;
 begin
   mo := s.thinglist;
-  while mo <> nil do
+  // JVAL: 20200429 - Sector thinglist consistency
+  inc(sectorvalidcount);
+  while (mo <> nil) and (mo.sectorvalidcount <> sectorvalidcount) do
   begin
+    mo.sectorvalidcount := sectorvalidcount;
     mo.floorz := P_FloorHeight(s, mo.x, mo.y);
     if  mo.z < mo.floorz then
       mo.z := mo.floorz;
-    mo := mo.snext;
+    mo := mo.snext; 
   end;
 end;
 
