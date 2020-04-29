@@ -1,0 +1,28 @@
+////////////////////////////////////////////////////////////////////////////////
+// FORCEFIELD
+////////////////////////////////////////////////////////////////////////////////
+
+ACTOR MT_FORCEFIELD
+{
+  Radius 2
+  Height 32
+  Health 1
+  Gravity 0
+  Renderstyle Add
+  Alpha 0.5
+  +NOGRAVITY
+  +NOBLOCKMAP
+  +FLOAT
+  +NOHITFLOOR
+  States
+  {
+  Spawn:
+    TNT1 A 1
+    FFFF A RANDOMRANGE(10,15)
+    FFFF A 1 A_FadeOut10
+    FFFF A 1 A_FadeOut10
+    FFFF A 1 A_FadeOut10
+    FFFF A 1 A_FadeOut10
+    Stop
+  }
+}
