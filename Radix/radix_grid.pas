@@ -41,11 +41,14 @@ uses
 
 var
   radixgrid: radixgrid_t;
+  radixmapgrid: radixmappointsgrid_t;
 
 //
 // JVAL: 20200203 -  Initialize Radix Trigger Grid
 //
 procedure RX_InitRadixGrid(const x, y: integer; const pgrid: Pradixgrid_t);
+
+procedure RX_InitRadixMapGrid(const pmgrid: Pradixmappointsgrid_t);
 
 function RX_RadixGridX: integer;
 
@@ -62,6 +65,8 @@ type
   Pgridmovementpositions_t = ^gridmovementpositions_t;
 
 function RX_PosInGrid(const mo: Pmobj_t): gridmovementpositions_t;
+
+function RX_GridToMap(const grid_id: integer; var x, y: integer): boolean;
 
 implementation
 
@@ -93,6 +98,14 @@ begin
     memcpy(@radixgrid, pgrid, RADIXGRIDSIZE * SizeOf(smallint));
 end;
 
+procedure RX_InitRadixMapGrid(const pmgrid: Pradixmappointsgrid_t);
+begin
+  if pmgrid = nil then
+    memset(@radixmapgrid, 0, SizeOf(radixmappointsgrid_t))
+  else
+    memcpy(@radixmapgrid, pmgrid, SizeOf(radixmappointsgrid_t));
+end;
+
 function RX_RadixGridX: integer;
 begin
   result := grid_X_size;
@@ -122,14 +135,14 @@ begin
   if (mo.momx = 0) and (mo.momy = 0) then
   begin
     sec := R_PointInSubSector(mo.x, mo.y).sector;
-    rx := (sec.radixmapXmult * (mo.x div FRACUNIT) - sec.radixmapXadd) div 64;
-    ry := (sec.radixmapYmult * (mo.y div FRACUNIT) - sec.radixmapYadd) div 64;
+    rx := (sec.radixmapXmult * (mo.x div FRACUNIT) - sec.radixmapXadd) div RADIXGRIDCELLSIZE;
+    ry := (sec.radixmapYmult * (mo.y div FRACUNIT) - sec.radixmapYadd) div RADIXGRIDCELLSIZE;
 
     num := ry * grid_X_size + rx;
 
     result.numpositions := 1;
     result.positions[0] := num;
-    
+
     exit;
   end;
 
@@ -147,8 +160,8 @@ begin
   sec := R_PointInSubSector(mx * FRACUNIT, my * FRACUNIT).sector;
 
   // JVAL: 20200305 - Works only when ::radixmapXmult & ::radixmapYmult are -1 or 1
-  rx := (sec.radixmapXmult * mx - sec.radixmapXadd) div 64;
-  ry := (sec.radixmapYmult * my - sec.radixmapYadd) div 64;
+  rx := (sec.radixmapXmult * mx - sec.radixmapXadd) div RADIXGRIDCELLSIZE;
+  ry := (sec.radixmapYmult * my - sec.radixmapYadd) div RADIXGRIDCELLSIZE;
 
   num := ry * grid_X_size + rx;
   N.Add(num);
@@ -160,8 +173,8 @@ begin
   sec := R_PointInSubSector(mx * FRACUNIT, my * FRACUNIT).sector;
 
   // JVAL: 20200305 - Works only when ::radixmapXmult & ::radixmapYmult are -1 or 1
-  rx := (sec.radixmapXmult * mx - sec.radixmapXadd) div 64;
-  ry := (sec.radixmapYmult * my - sec.radixmapYadd) div 64;
+  rx := (sec.radixmapXmult * mx - sec.radixmapXadd) div RADIXGRIDCELLSIZE;
+  ry := (sec.radixmapYmult * my - sec.radixmapYadd) div RADIXGRIDCELLSIZE;
 
   num := ry * grid_X_size + rx;
   if N.IndexOf(num) < 0 then
@@ -172,8 +185,8 @@ begin
   sec := Psubsector_t(mo.subsector).sector;
 
   // JVAL: 20200305 - Works only when ::radixmapXmult & ::radixmapYmult are -1 or 1
-  rx := (sec.radixmapXmult * (mo.x div FRACUNIT) - sec.radixmapXadd) div 64;
-  ry := (sec.radixmapYmult * (mo.y div FRACUNIT) - sec.radixmapYadd) div 64;
+  rx := (sec.radixmapXmult * (mo.x div FRACUNIT) - sec.radixmapXadd) div RADIXGRIDCELLSIZE;
+  ry := (sec.radixmapYmult * (mo.y div FRACUNIT) - sec.radixmapYadd) div RADIXGRIDCELLSIZE;
 
   num := ry * grid_X_size + rx;
   if N.IndexOf(num) < 0 then
@@ -186,4 +199,28 @@ begin
   N.Free;
 end;
 
+//
+// RX_GridToMap
+// Returns the upper-left corner of the grid rect in map (fixed_t) coordinates
+//
+function RX_GridToMap(const grid_id: integer; var x, y: integer): boolean;
+begin
+  if (grid_X_size = 0) or (grid_Y_size = 0) then
+  begin
+    result := false;
+    exit;
+  end;
+
+  if (grid_id < 0) or (grid_id >= RADIXGRIDSIZE) then
+  begin
+    result := false;
+    exit;
+  end;
+
+  x := radixmapgrid[grid_id].x;
+  y := radixmapgrid[grid_id].y;
+  result := true;
+end;
+
 end.
+

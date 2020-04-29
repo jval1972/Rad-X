@@ -133,9 +133,10 @@ procedure RX_SpawnAlienBlood(x, y, z: fixed_t);
 var
   th: Pmobj_t;
 begin
-  z := z + _SHL(P_Random - P_Random, 10);
   if radixalienblood_id < 0 then
     radixalienblood_id := Info_GetMobjNumForName('MT_BLOODSPLAT');
+
+  z := z + _SHL(P_Random - P_Random, 10);
   th := P_SpawnMobj(x, y, z, radixalienblood_id);
   th.momz := FRACUNIT * 2;
   th.tics := th.tics - (P_Random and 3);

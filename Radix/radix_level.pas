@@ -184,6 +184,9 @@ type
 const
   RADIXGRIDSIZE = 40960;
 
+const
+  RADIXGRIDCELLSIZE = 64; // JVAL: 20200429 - Size of a grid cell in units
+
 type
   radixgrid_t = packed array[0..RADIXGRIDSIZE - 1] of smallint;
   Pradixgrid_t = ^radixgrid_t;
@@ -194,6 +197,15 @@ type
     grid: radixgrid_t;
   end;
   Pradixgridinfo_t = ^radixgridinfo_t;
+
+type
+  radixdoommappoint_t = packed record
+    x, y: smallint;
+  end;
+
+type
+  radixmappointsgrid_t = packed array[0..RADIXGRIDSIZE - 1] of radixdoommappoint_t;
+  Pradixmappointsgrid_t = ^radixmappointsgrid_t;
 
 const
   MAX_RADIX_ACTION_PARAMS = 64;
@@ -387,7 +399,10 @@ var
   doomsectorsextra: Pradixmapsectorextra_tArray;
   numdoomsectors: integer;
   gridinfoextra: Pradixgridinfo_t;
+  mappointsgridextra: Pradixmappointsgrid_t;
   doommapscript: TDStringList;
+  grid_X_size: integer;
+  grid_Y_size: integer;
   i, j: integer;
   minx, maxx, miny, maxy: integer;
   sectormapped: PBooleanArray;
@@ -477,8 +492,6 @@ var
   procedure ReadRadixGrid(const pgrid: Pradixgridinfo_t);
   var
     grid: Pradixgrid_t;
-    grid_X_size: integer;
-    grid_Y_size: integer;
     i_grid_x, i_grid_y: integer;
     g, l, k: smallint;
     ii: integer;
@@ -527,6 +540,27 @@ var
     end;
 
     memfree(pointer(grid), grid_X_size * grid_Y_size * SizeOf(smallint));
+  end;
+
+  procedure CreateRadixMapToGrid;
+  var
+    i_grid_x, i_grid_y: integer;
+    idx: integer;
+    xx, yy: integer;
+  begin
+    idx := 0;
+    for i_grid_y := 0 to grid_Y_size - 1 do
+    begin
+      for i_grid_x := 0 to grid_X_size - 1 do
+      begin
+        xx := i_grid_x * RADIXGRIDCELLSIZE;
+        yy := i_grid_y * RADIXGRIDCELLSIZE;
+        fix_wall_coordXY(xx, yy);
+        mappointsgridextra[idx].x := xx;
+        mappointsgridextra[idx].y := yy;
+        inc(idx);
+      end;
+    end;
   end;
 
   function get_flat_texture(const id: integer): char8_t;
@@ -1237,6 +1271,10 @@ begin
   // Read Trigger's grid
   ReadRadixGrid(gridinfoextra);
 
+  // Allocate grid to map convertion matrix
+  mappointsgridextra := malloc(SizeOf(radixmappointsgrid_t));
+  CreateRadixMapToGrid; // Must run after read grid
+
   // Read Radix sprites/actions
   ractions := mallocz(header.numactions * SizeOf(radixaction_t)); // SOS -> use mallocz
   for i := 0 to header.numactions - 1 do
@@ -1385,6 +1423,8 @@ begin
   wadwriter.AddData('RTHINGS', doomthingsextra, numdoomthings * SizeOf(radixmapthingextra_t));
   // Trigger grid (binary)
   wadwriter.AddData('RGRID', gridinfoextra, SizeOf(radixgridinfo_t));
+  // Grid to map convertion matrix
+  wadwriter.AddData('RMAPGRID', mappointsgridextra, SizeOf(radixmappointsgrid_t));
   // Sprites/Actions (binary)
   wadwriter.AddData('RACTION', ractions, header.numactions * SizeOf(radixaction_t));
   // Triggers (binary)
@@ -1407,6 +1447,7 @@ begin
   // Free extra lumps
   memfree(pointer(doomthingsextra), numdoomthings * SizeOf(radixmapthingextra_t));
   memfree(pointer(gridinfoextra), SizeOf(radixgridinfo_t));
+  memfree(pointer(mappointsgridextra), SizeOf(radixmappointsgrid_t));
 
   // Free Extra Radix Data
   memfree(pointer(doomsectorsextra), numdoomsectors * SizeOf(radixmapsectorextra_t));

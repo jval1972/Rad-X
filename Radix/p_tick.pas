@@ -77,6 +77,7 @@ uses
   p_mobj_h,
   p_mobjlist,
   radix_logic,
+  radix_forcefield, // JVAL: 20200429 - Forcefields
   ps_main,  // JVAL: Script Events
   z_zone;
 
@@ -212,6 +213,7 @@ begin
   P_RunThinkers;
   if not isgamefreezed then
   begin
+    RX_RunForceFields; // JVAL: 20200429 - Forcefields
     RX_RunTriggers; // JVAL: 20200305 - Run radix triggers
     RX_RunActions;  // JVAL: 20200305 - Run radix actions
     P_UpdateSpecials;

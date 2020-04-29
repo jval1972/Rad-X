@@ -197,6 +197,7 @@ uses
   s_sound,
   doomstat,
   radix_level,
+  radix_forcefield,
   radix_grid,
   radix_logic,
   radix_map_extra;
@@ -1733,6 +1734,25 @@ begin
 end;
 
 //
+// P_LoadMapGrid
+// JVAL: 20200429 - Load grid to map convertion matrix
+//
+procedure P_LoadMapGrid(lump: integer);
+var
+  data: Pradixmappointsgrid_t;
+begin
+  if lump = -1 then
+  begin
+    RX_InitRadixMapGrid(nil);
+    exit;
+  end;
+
+  data := W_CacheLumpNum(lump, PU_STATIC);
+  RX_InitRadixMapGrid(data);
+  Z_Free(data);
+end;
+
+//
 // P_LoadRadixSprites
 // JVAL: 20200303 - Load radix sprites/actions from RSPRITE lump
 //
@@ -1977,9 +1997,13 @@ begin
 
   P_LoadGrid(P_RadixLump(lumpnum + Ord(ML_RGRID), 'RGRID')); // JVAL: 20200303 - Load radix grid
 
+  P_LoadMapGrid(P_RadixLump(lumpnum + Ord(ML_RMAPGRID), 'RMAPGRID')); // JVAL: 20200429 - Grid to map convertion matrix
+
   P_LoadRadixSprites(P_RadixLump(lumpnum + Ord(ML_RACTION), 'RACTION')); // JVAL: 20200303 - Load radix sprites/actions
 
   P_LoadRadixTriggers(P_RadixLump(lumpnum + Ord(ML_RTRIGGER), 'RTRIGGER'));  // JVAL: 20200303 - Load radix triggers
+
+  RX_InitForceFields; // JVAL: 20200429 - Initalize forcefields
 
   // if deathmatch, randomly spawn the active players
   if deathmatch <> 0 then
