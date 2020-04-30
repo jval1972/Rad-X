@@ -571,9 +571,6 @@ begin
           mobj.state := @states[integer(mobj.state)];
           mobj.prevstate := @states[integer(mobj.prevstate)];
           mobj.info := @mobjinfo[Ord(mobj._type)];
-          mobj.target := nil;
-          mobj.tracer := nil;
-          mobj.master := nil;
           mobj.touching_sectorlist := nil;
 
           // JVAL: 20200429 - Sector thinglist consistency
