@@ -100,6 +100,7 @@ var
   lastopening: integer;
 
   yslope: array[0..MAXHEIGHT - 1] of fixed_t;
+  slyslope: array[0..MAXHEIGHT - 1] of fixed_t; // JVAL: 20200430 - For slope lightmap
   distscale: array[0..MAXWIDTH - 1] of fixed_t;
   distscalef: array[0..MAXWIDTH - 1] of float;
 {$ENDIF}

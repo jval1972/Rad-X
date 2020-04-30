@@ -96,6 +96,7 @@ uses
   r_span,
   r_span32,
   r_things,
+  r_zbuffer,
   radix_map_extra,
   r_utils,
   tables,
@@ -245,6 +246,7 @@ procedure R_MapSlopePerPixelLight(const y: integer; const x1, x2: integer);
 var
   angle: angle_t;
   distance: fixed_t;
+  yslopey: fixed_t;
   length: fixed_t;
   index: LongWord;
   ncolornum: integer;
@@ -297,6 +299,9 @@ begin
   ds_xstep := 0;
   ds_ystep := 0;
 
+  // JVAL: 20200430 - For slope lightmap
+  yslopey := slyslope[y];
+
   for x := x1 to x2 do
   begin
     if x = xleft then
@@ -348,6 +353,14 @@ begin
 
     // high or low detail
     slopefunc;
+
+    // JVAL: 20200430 - Cast lightmap to slopes
+    if zbufferactive then
+    begin
+      planeheight := FixedDivEx(distance, yslopey);
+      R_DrawSlopeToZBuffer;
+    end;
+
   end;
 
 end;
@@ -365,6 +378,7 @@ procedure R_MapSlope(const y: integer; const x1, x2: integer);
 var
   angle: angle_t;
   distance: fixed_t;
+  yslopey: fixed_t;
   length: fixed_t;
   index: LongWord;
   ncolornum: integer;
@@ -424,6 +438,9 @@ begin
 
   ds_x1 := x1;
   cnt := 0;
+
+  // JVAL: 20200430 - For slope lightmap
+  yslopey := slyslope[y];
 
   for x := x1 to x2 do
   begin
@@ -489,6 +506,13 @@ begin
       // high or low detail
       slopefunc;
 
+      // JVAL: 20200430 - Cast lightmap to slopes
+      if zbufferactive then
+      begin
+        planeheight := FixedDivEx(distance, yslopey);
+        R_DrawSlopeToZBuffer;
+      end;
+
       cnt := 0;
 
       ds_x1 := x + 1;
@@ -507,6 +531,7 @@ procedure R_MapSlopeAngle(const y: integer; const x1, x2: integer);
 var
   angle: fixed_t;
   distance: fixed_t;
+  yslopey: fixed_t;
   length: fixed_t;
   index: LongWord;
   ncolornum: integer;
@@ -577,6 +602,9 @@ begin
   tviewx := Round(viewx * tcos - viewy * tsin);
   tviewy := Round(viewx * tsin + viewy * tcos);
 
+  // JVAL: 20200430 - For slope lightmap
+  yslopey := slyslope[y];
+
   for x := x1 to x2 do
   begin
     Inc(cnt);
@@ -641,6 +669,13 @@ begin
 
       // high or low detail
       slopefunc;
+
+      // JVAL: 20200430 - Cast lightmap to slopes
+      if zbufferactive then
+      begin
+        planeheight := FixedDivEx(distance, yslopey);
+        R_DrawSlopeToZBuffer;
+      end;
 
       cnt := 0;
 
