@@ -220,6 +220,7 @@ const
   // State flags
   MF_EX_STATE_RANDOM_SELECT = $40;
   MF_EX_STATE_RANDOM_RANGE = $80;
+  MF_EX_STATE_PARAMS_ERROR = $100;
 
   // Float BOB
   MF_EX_FLOATBOB = $40;
