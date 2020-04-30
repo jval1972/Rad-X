@@ -1167,7 +1167,7 @@ function P_ThingHeightClip(thing: Pmobj_t): boolean;
 var
   onfloor: boolean;
 begin
-  onfloor := thing.z = thing.floorz;
+  onfloor := thing.z <= thing.floorz;
 
   P_CheckPosition(thing, thing.x, thing.y);
   // what about stranding a monster partially off an edge?
@@ -1182,9 +1182,20 @@ begin
   end
   else
   begin
-    // don't adjust a floating monster unless forced to
-    if thing.z + thing.height > thing.ceilingz then
-      thing.z := thing.ceilingz - thing.height;
+    if thing.player <> nil then
+    begin
+      // Adjust player
+      if thing.z + thing.height > thing.ceilingz - 4 * FRACUNIT then
+        thing.z := thing.ceilingz - thing.height - 4 * FRACUNIT;
+      if thing.z + Pplayer_t(thing.player).viewheight > thing.ceilingz - 4 * FRACUNIT then
+        thing.z := thing.ceilingz - Pplayer_t(thing.player).viewheight - 4 * FRACUNIT;
+    end
+    else
+    begin
+      // don't adjust a floating monster unless forced to
+      if thing.z + thing.height > thing.ceilingz then
+        thing.z := thing.ceilingz - thing.height;
+    end;
   end;
 
   result := thing.ceilingz - thing.floorz >= thing.height;

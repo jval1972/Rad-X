@@ -289,7 +289,7 @@ begin
     exit; // ouch
 
   // JVAL: 20200403 - Avoid interpolation for fast moving sectors
-  if parms.speed > MOVINGSURFACETHRESHHOLD div 2 then
+  if parms.speed > MOVINGSURFACETHRESHHOLD - 2 then
     sec.renderflags := sec.renderflags or SRF_NO_INTERPOLATE;
 
   case parms.surface_type of
