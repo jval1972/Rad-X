@@ -1549,143 +1549,141 @@ begin
   plane.slopeviewZ := slopeheight;
   {$ENDIF}
 
+  for i := 0 to numsspoints - 2 do
   begin
-    for i := 0 to numsspoints - 2 do
+    p1 := @sspoints[i];
+    p2 := @sspoints[i + 1];
+    if p1.screenY > p2.screenY then
     begin
-      p1 := @sspoints[i];
-      p2 := @sspoints[i + 1];
-      if p1.screenY > p2.screenY then
-      begin
-        p := p1;
-        p1 := p2;
-        p2 := p;
-      end;
-
-      y1 := Round(p1.screenY);
-      if y1 < 0 then
-        y1 := 0
-      else if y1 >= viewheight then
-        y1 := viewheight - 1;
-
-      y2 := Round(p2.screenY);
-      if y2 < 0 then
-      begin
-        y2 := 0;
-        y2stop := 0;
-      end
-      else if y2 >= viewheight then
-      begin
-        y2 := viewheight;
-        y2stop := y2;
-      end
-      else
-        y2stop := y2 + 1;
-
-      if y1 < plane.miny then
-        plane.miny := y1;
-      if y2 > plane.maxy then
-        plane.maxy := y2;
-
-      if y1 = y2 then
-      begin
-        xfrac := 0.0;
-        tfrac := 0.0;
-      end
-      else
-      begin
-        xfrac := (p1.screenX - p2.screenX) / (p1.screenY - p2.screenY);
-        tfrac := (p1.screenZ - p2.screenZ) / (p1.screenY - p2.screenY);
-      end;
-
-      xpos := p1.screenX + xfrac * (y1 - p1.screenY);
-      tpos := p1.screenZ + tfrac * (y1 - p1.screenY);
-
-      // For all columns in span
-      repeat
-        x := Round(xpos);
-        if x < plane.screenleft[y1] then
-        begin
-          plane.screenleft[y1] := x;
-          if (y1 = p1.screenY) then
-          begin
-            plane.ds_zleft[y1] := Round(p1.worldZ);
-          end
-          else if (y1 = p2.screenY) then
-          begin
-            plane.ds_zleft[y1] := Round(p2.worldZ);
-          end
-          else if (p1.worldZ = p2.worldZ) then
-          begin
-            plane.ds_zleft[y1] := Round(p2.worldZ);
-          end
-          else if (p1.screenZ = p2.screenZ) then
-          begin
-            plane.ds_zleft[y1] := Round(p2.worldZ);
-          end
-          else
-          begin
-            Theta := (1.0 / tpos - 1.0 / p1.screenZ) / (1.0 / p2.screenZ - 1.0 / p1.screenZ);
-            rTheta := 1.0 - Theta;
-
-            plane.ds_zleft[y1] :=
-              Round(rTheta * p1.worldZ + Theta * p2.worldZ);
-          end;
-        end;
-        if x > plane.screenright[y1] then
-        begin
-          plane.screenright[y1] := x;
-          if (y1 = p1.screenY) then
-          begin
-            plane.ds_zright[y1] := Round(p1.worldZ);
-          end
-          else if (y1 = p2.screenY) then
-          begin
-            plane.ds_zright[y1] := Round(p2.worldZ);
-          end
-          else if (p1.worldZ = p2.worldZ) then
-          begin
-            plane.ds_zright[y1] := Round(p2.worldZ);
-          end
-          else if (p1.screenZ = p2.screenZ) then
-          begin
-            plane.ds_zright[y1] := Round(p2.worldZ);
-          end
-          else
-          begin
-            Theta := (1.0 / tpos - 1.0 / p1.screenZ) / (1.0 / p2.screenZ - 1.0 / p1.screenZ);
-            rTheta := 1.0 - Theta;
-
-            plane.ds_zright[y1] :=
-              Round(rTheta * p1.worldZ + Theta * p2.worldZ);
-          end;
-        end;
-
-        xpos := xpos + xfrac;
-        tpos := tpos + tfrac;
-
-        Inc(y1);
-      until y1 >= y2stop;
+      p := p1;
+      p1 := p2;
+      p2 := p;
     end;
 
-    // JVAL: MINZ correction
-    if plane.maxy = viewheight then
-      if plane.miny < viewheight - 2 then
+    y1 := Round(p1.screenY);
+    if y1 < 0 then
+      y1 := 0
+    else if y1 >= viewheight then
+      y1 := viewheight - 1;
+
+    y2 := Round(p2.screenY);
+    if y2 < 0 then
+    begin
+      y2 := 0;
+      y2stop := 0;
+    end
+    else if y2 >= viewheight then
+    begin
+      y2 := viewheight;
+      y2stop := y2;
+    end
+    else
+      y2stop := y2 + 1;
+
+    if y1 < plane.miny then
+      plane.miny := y1;
+    if y2 > plane.maxy then
+      plane.maxy := y2;
+
+    if y1 = y2 then
+    begin
+      xfrac := 0.0;
+      tfrac := 0.0;
+    end
+    else
+    begin
+      xfrac := (p1.screenX - p2.screenX) / (p1.screenY - p2.screenY);
+      tfrac := (p1.screenZ - p2.screenZ) / (p1.screenY - p2.screenY);
+    end;
+
+    xpos := p1.screenX + xfrac * (y1 - p1.screenY);
+    tpos := p1.screenZ + tfrac * (y1 - p1.screenY);
+
+    // For all columns in span
+    repeat
+      x := Round(xpos);
+      if x < plane.screenleft[y1] then
       begin
-        plane.screenleft[viewheight - 1] := 2 * plane.screenleft[viewheight - 2] - plane.screenleft[viewheight - 3];
-        plane.screenright[viewheight - 1] := 2 * plane.screenright[viewheight - 2] - plane.screenright[viewheight - 3];
-        plane.ds_zleft[viewheight - 1] := 2 * plane.ds_zleft[viewheight - 2] - plane.ds_zleft[viewheight - 3];
-        plane.ds_zright[viewheight - 1] := 2 * plane.ds_zright[viewheight - 2] - plane.ds_zright[viewheight - 3];
+        plane.screenleft[y1] := x;
+        if (y1 = p1.screenY) then
+        begin
+          plane.ds_zleft[y1] := Round(p1.worldZ);
+        end
+        else if (y1 = p2.screenY) then
+        begin
+          plane.ds_zleft[y1] := Round(p2.worldZ);
+        end
+        else if (p1.worldZ = p2.worldZ) then
+        begin
+          plane.ds_zleft[y1] := Round(p2.worldZ);
+        end
+        else if (p1.screenZ = p2.screenZ) then
+        begin
+          plane.ds_zleft[y1] := Round(p2.worldZ);
+        end
+        else
+        begin
+          Theta := (1.0 / tpos - 1.0 / p1.screenZ) / (1.0 / p2.screenZ - 1.0 / p1.screenZ);
+          rTheta := 1.0 - Theta;
+
+          plane.ds_zleft[y1] :=
+            Round(rTheta * p1.worldZ + Theta * p2.worldZ);
+        end;
+      end;
+      if x > plane.screenright[y1] then
+      begin
+        plane.screenright[y1] := x;
+        if (y1 = p1.screenY) then
+        begin
+          plane.ds_zright[y1] := Round(p1.worldZ);
+        end
+        else if (y1 = p2.screenY) then
+        begin
+          plane.ds_zright[y1] := Round(p2.worldZ);
+        end
+        else if (p1.worldZ = p2.worldZ) then
+        begin
+          plane.ds_zright[y1] := Round(p2.worldZ);
+        end
+        else if (p1.screenZ = p2.screenZ) then
+        begin
+          plane.ds_zright[y1] := Round(p2.worldZ);
+        end
+        else
+        begin
+          Theta := (1.0 / tpos - 1.0 / p1.screenZ) / (1.0 / p2.screenZ - 1.0 / p1.screenZ);
+          rTheta := 1.0 - Theta;
+
+          plane.ds_zright[y1] :=
+            Round(rTheta * p1.worldZ + Theta * p2.worldZ);
+        end;
       end;
 
-    if plane.miny = 0 then
-      if plane.maxy > 1 then
-      begin
-        plane.screenleft[0] := 2 * plane.screenleft[1] - plane.screenleft[2];
-        plane.screenright[0] := 2 * plane.screenright[1] - plane.screenright[2];
-        plane.ds_zleft[0] := 2 * plane.ds_zleft[1] - plane.ds_zleft[2];
-        plane.ds_zright[0] := 2 * plane.ds_zright[1] - plane.ds_zright[2];
-      end;
+      xpos := xpos + xfrac;
+      tpos := tpos + tfrac;
+
+      Inc(y1);
+    until y1 >= y2stop;
   end;
+
+  // JVAL: MINZ correction
+  if plane.maxy = viewheight then
+    if plane.miny < viewheight - 2 then
+    begin
+      plane.screenleft[viewheight - 1] := 2 * plane.screenleft[viewheight - 2] - plane.screenleft[viewheight - 3];
+      plane.screenright[viewheight - 1] := 2 * plane.screenright[viewheight - 2] - plane.screenright[viewheight - 3];
+      plane.ds_zleft[viewheight - 1] := 2 * plane.ds_zleft[viewheight - 2] - plane.ds_zleft[viewheight - 3];
+      plane.ds_zright[viewheight - 1] := 2 * plane.ds_zright[viewheight - 2] - plane.ds_zright[viewheight - 3];
+    end;
+
+  if plane.miny = 0 then
+    if plane.maxy > 1 then
+    begin
+      plane.screenleft[0] := 2 * plane.screenleft[1] - plane.screenleft[2];
+      plane.screenright[0] := 2 * plane.screenright[1] - plane.screenright[2];
+      plane.ds_zleft[0] := 2 * plane.ds_zleft[1] - plane.ds_zleft[2];
+      plane.ds_zright[0] := 2 * plane.ds_zright[1] - plane.ds_zright[2];
+    end;
 
   SetLength(solutionI[0], 0);
   SetLength(solutionI, 0);
