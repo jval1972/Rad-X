@@ -147,6 +147,7 @@ uses
   m_crc32,
   m_misc,
   m_menu,
+  mn_font,
   mt_utils,
   info,
   info_common,
@@ -333,7 +334,6 @@ procedure D_Display;
 procedure D_DisplayHU;
 {$ENDIF}
 var
-  y: integer;
   redrawbkscn: boolean;
   palette: PByteArray;
   drawhu: boolean;
@@ -485,12 +485,10 @@ begin
   // draw pause pic
   if paused then
   begin
-    if amstate = am_only then
-      y := 4
-    else
-      y := (viewwindowy * 200) div SCREENHEIGHT + 4;
-    V_DrawPatch((320 - 68) div 2, y, SCN_FG,
-      'M_PAUSE', true);
+    MT_ZeroMemory(screens[SCN_TMP], 320 * 200);
+    M_WriteSmallTextCenter(80, 'GAME PAUSED', SCN_TMP);
+    M_WriteSmallTextCenter(88, 'PRESS PAUSE AGAIN TO CONTINUE', SCN_TMP);
+    V_CopyRectTransparent(0, 0, SCN_TMP, 320, 200, 0, 0, SCN_FG, true);
   end;
 
   if drawhu then
