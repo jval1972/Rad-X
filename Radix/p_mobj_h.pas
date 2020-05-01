@@ -374,6 +374,8 @@ const
   MF3_EX_ALIENBLOOD = $10000;
   // Doom BOB
   MF3_EX_DOOMBOB = $20000;
+  // Damage Walls
+  MF3_EX_CANDAMAGEWALLS = $40000;
 
 type
 // Map Object definition.

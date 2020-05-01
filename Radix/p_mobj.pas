@@ -259,7 +259,9 @@ begin
   // JVAL: 20200328 - Missile Damage Wall
   if tmline <> nil then
   begin
-    RX_DamageLine(tmline, mo.info.damage * ((P_Random mod 3) + 1));
+    // JVAL: 20200501 - Only missiles with MF3_EX_CANDAMAGEWALLS can damage walls
+    if mo.flags3_ex and MF3_EX_CANDAMAGEWALLS <> 0 then
+      RX_DamageLine(tmline, mo.info.damage * ((P_Random mod 3) + 1));
     tmline := nil;
   end;
 
