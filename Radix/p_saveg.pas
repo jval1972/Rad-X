@@ -154,8 +154,10 @@ begin
       if dest.psprites[j].state <> nil then
         dest.psprites[j].state := Pstate_t(pDiff(dest.psprites[j].state, @states[0], SizeOf(dest.psprites[j].state^)));
 
-    dest.plinetarget := Pmobj_t(dest.plinetarget.key);
-    dest.enginesoundtarget := Pmobj_t(dest.enginesoundtarget.key);
+    if dest.plinetarget <> nil then
+      dest.plinetarget := Pmobj_t(dest.plinetarget.key);
+    if dest.enginesoundtarget <> nil then
+      dest.enginesoundtarget := Pmobj_t(dest.enginesoundtarget.key);
   end;
 end;
 
