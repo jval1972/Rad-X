@@ -142,6 +142,7 @@ uses
   p_ladder,
   p_musinfo,
   radix_map_extra,
+  radix_sounds,
   r_defs,
   r_sky,
   r_main,
@@ -2057,6 +2058,11 @@ end;
 // FUNC P_HitFloor
 //
 //---------------------------------------------------------------------------
+var
+  id_radixwatersplash: integer = -1;
+  id_radixmudsplash: integer = -1;
+  id_radixlavasplash: integer = -1;
+
 function P_HitFloor(thing: Pmobj_t): integer;
 var
   mo: Pmobj_t;
@@ -2156,6 +2162,45 @@ begin
             S_StartSound(mo, Ord(sfx_sgloop));
         end;
         result := FLOOR_NUKAGE;
+        exit;
+      end;
+    FLOOR_RADIXLAVA:
+      begin
+        if allowterrainsplashes or demorecording or demoplayback then
+        begin
+          if id_radixlavasplash < 0 then
+            id_radixlavasplash := Info_GetMobjNumForName('MT_RADIXLAVASPLASH');
+          mo := P_SpawnMobj(thing.x, thing.y, z, id_radixlavasplash);
+          if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+            S_AmbientSound(mo.x, mo.y, 'radix/SndSplash');
+        end;
+        result := FLOOR_RADIXLAVA;
+        exit;
+      end;
+    FLOOR_RADIXMUD:
+      begin
+        if allowterrainsplashes or demorecording or demoplayback then
+        begin
+          if id_radixmudsplash < 0 then
+            id_radixmudsplash := Info_GetMobjNumForName('MT_RADIXMUDSPLASH');
+          mo := P_SpawnMobj(thing.x, thing.y, z, id_radixmudsplash);
+          if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+            S_AmbientSound(mo.x, mo.y, 'radix/SndSplash');
+        end;
+        result := FLOOR_RADIXMUD;
+        exit;
+      end;
+    FLOOR_RADIXWATER:
+      begin
+        if allowterrainsplashes or demorecording or demoplayback then
+        begin
+          if id_radixwatersplash < 0 then
+            id_radixwatersplash := Info_GetMobjNumForName('MT_RADIXWATERSPLASH');
+          mo := P_SpawnMobj(thing.x, thing.y, z, id_radixwatersplash);
+          if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+            S_AmbientSound(mo.x, mo.y, 'radix/SndSplash');
+        end;
+        result := FLOOR_RADIXMUD;
         exit;
       end;
   end;
