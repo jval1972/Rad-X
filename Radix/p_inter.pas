@@ -1134,7 +1134,7 @@ begin
   if (inflictor <> nil) and (target.flags_ex and MF_EX_FIRERESIST <> 0) then
   begin
     if damage > 1 then
-      damage := _SHR1(damage);
+      damage := damage div 2;
   end;
 
   // Some close combat weapons should not

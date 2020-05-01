@@ -852,7 +852,7 @@ begin
       continue;   // out of sight
 
     if actor.flags3_ex and MF3_EX_LIMITPATROLRANGE <> 0 then
-      if P_AproxDistance(player.mo.x - actor.x, player.mo.y - actor.y) < actor.patrolrange then
+      if P_AproxDistance(player.mo.x - actor.x, player.mo.y - actor.y) > actor.patrolrange then
         continue;   // out of patrol range
 
     if not allaround then

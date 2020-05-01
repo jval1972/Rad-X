@@ -345,7 +345,7 @@ begin
     end;
 
     // killough 8/9/98: monster-blockers don't affect friends
-    if ((tmthing.player = nil) or (tmthing.flags2_ex and MF2_EX_FRIEND <> 0)) and ((ld.flags and ML_BLOCKMONSTERS) <> 0) then
+    if ((tmthing.player = nil) or (tmthing.flags2_ex and MF2_EX_FRIEND <> 0)) and (ld.flags and ML_BLOCKMONSTERS <> 0) then
     begin
       result := false;  // block monsters only
       exit;
@@ -440,7 +440,7 @@ var
   damage: integer;
   pushfactor: fixed_t;
 begin
-  if (thing.flags and (MF_SOLID or MF_SPECIAL or MF_SHOOTABLE)) = 0 then
+  if thing.flags and (MF_SOLID or MF_SPECIAL or MF_SHOOTABLE) = 0 then
   begin
     result := true;
     exit;
@@ -982,6 +982,7 @@ var
   jumpupmargin: fixed_t;
   dist: fixed_t;
   iters: integer;
+  newsec: Psector_t;
 begin
   floatok := false;
   if (thing.flags and MF_MISSILE = 0) and (thing.flags3_ex and MF3_EX_NOMAXMOVE = 0) then
@@ -1031,8 +1032,12 @@ begin
     begin
       if Psubsector_t(thing.subsector).sector.renderflags and SRF_SLOPECEILING = 0 then
       begin
-        result := false;  // mobj must lower itself to fit
-        exit;
+        newsec := R_PointInSubsector(x, y).sector;
+        if newsec.renderflags and SRF_SLOPECEILING = 0 then
+        begin
+          result := false;  // mobj must lower itself to fit
+          exit;
+        end;
       end;
     end;
 

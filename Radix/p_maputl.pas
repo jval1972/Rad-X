@@ -96,13 +96,20 @@ uses
 // Gives an estimation of distance (not exact)
 //
 function P_AproxDistance(dx: fixed_t; dy: fixed_t): fixed_t;
+var
+  dx64, dy64: int64;
+  dist: int64;
 begin
-  dx := abs(dx);
-  dy := abs(dy);
-  if dx < dy then
-    result := dx + dy - dx div 2
+  dx64 := abs(dx);
+  dy64 := abs(dy);
+  if dx64 < dy64 then
+    dist := dx64 + dy64 - dx64 div 2
   else
-    result := dx + dy - dy div 2;
+    dist := dx64 + dy64 - dy64 div 2;
+  if dist > MAXINT then
+    result := MAXINT
+  else
+    result := dist;
 end;
 
 //
