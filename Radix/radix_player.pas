@@ -51,12 +51,55 @@ uses
   m_fixed,
   radix_messages,
   radix_objects,
+  radix_sounds,
   info,
   info_h,
+  info_common,
   p_map,
+  p_maputl,
   p_tick,
+  p_mobj,
   p_mobj_h,
+  s_sound,
   tables;
+
+const
+  STR_ENGINESOUND = 'ENGINESOUND';
+
+var
+  enginesound_id: integer = -1;
+
+procedure RX_PlayerEngineSound(p: Pplayer_t);
+var
+  sndid: integer;
+begin
+  if p.enginesoundtarget = nil then
+  begin
+    if enginesound_id = -1 then
+      enginesound_id := Info_GetMobjNumForName(STR_ENGINESOUND);
+
+    p.enginesoundtarget := P_SpawnMobj(p.mo.x, p.mo.y, p.mo.z, enginesound_id);
+  end
+  else
+  begin
+    p.enginesoundtarget.x := p.mo.x;
+    p.enginesoundtarget.y := p.mo.y;
+    p.enginesoundtarget.z := p.mo.z;
+  end;
+
+  if p.enginesoundtarget.reactiontime <= 0 then
+  begin
+    if p.radixpowers[Ord(rpu_maneuverjets)] > 0 then
+      sndid := Ord(sfx_SndEngineAfter)
+    else
+      sndid := Ord(sfx_SndEngine);
+
+    S_StartSound(p.enginesoundtarget, radixsounds[sndid].name);
+    p.enginesoundtarget.reactiontime := S_RadixSoundDuration(sndid);
+  end;
+
+  dec(p.enginesoundtarget.reactiontime);
+end;
 
 procedure RX_PlayerThink(p: Pplayer_t);
 var
@@ -84,6 +127,9 @@ begin
     end;
     exit;
   end;
+
+  // JVAL: 20200501 - Engine Sound
+  RX_PlayerEngineSound(p);
 
   // JVAL: 20200501 - Retrieve Linetarget
   P_AimLineAttack(p.mo, p.mo.angle, 16 * 64 * FRACUNIT);

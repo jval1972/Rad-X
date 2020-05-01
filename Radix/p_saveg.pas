@@ -153,6 +153,9 @@ begin
     for j := 0 to Ord(NUMPSPRITES) - 1 do
       if dest.psprites[j].state <> nil then
         dest.psprites[j].state := Pstate_t(pDiff(dest.psprites[j].state, @states[0], SizeOf(dest.psprites[j].state^)));
+
+    dest.plinetarget := Pmobj_t(dest.plinetarget.key);
+    dest.enginesoundtarget := Pmobj_t(dest.enginesoundtarget.key);
   end;
 end;
 
@@ -180,6 +183,9 @@ begin
     for j := 0 to Ord(NUMPSPRITES) - 1 do
       if players[i].psprites[j].state <> nil then
         players[i].psprites[j].state := @states[integer(players[i].psprites[j].state)];
+
+    players[i].plinetarget := P_FindMobjFromKey(integer(players[i].plinetarget));
+    players[i].enginesoundtarget := P_FindMobjFromKey(integer(players[i].enginesoundtarget));
   end;
 end;
 

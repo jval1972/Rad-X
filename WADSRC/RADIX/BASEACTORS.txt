@@ -35,7 +35,26 @@ ACTOR AMBIENTSOUND 1200
         Stop
     }
 }
-   
+
+////////////////////////////////////////////////////////////////////////////////
+// ENGINE SOUND
+ACTOR ENGINESOUND
+{
+    HEALTH 10000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 100
+    SPEED 0
+    +NOBLOCKMAP +DONTDRAW +NOGRAVITY +SPAWNFLOAT +NOSECTOR
+    States
+    {
+    Spawn:
+        TNT1 A -1
+        Stop
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // UNKNOWN EDITOR THING
 ACTOR Unknown
