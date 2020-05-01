@@ -172,6 +172,7 @@ begin
     scoretable[NUMSCORES - 1].rating := totalscore;
     RX_CalcScoreSha1(NUMSCORES - 1);
     RX_SortScoreTable;
+    RX_SaveScoreTable;
   end;
 end;
 
