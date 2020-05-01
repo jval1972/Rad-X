@@ -1,0 +1,167 @@
+///////////////////////////////
+// MT_RADIXWATERSPLASH
+///////////////////////////////
+ACTOR "MT_RADIXWATERSPLASH_EXTRA"
+{
+  Health 1000
+  Width 20
+  Height 16
+  Mass 100
+  Reactiontime 8
+  Renderstyle Translucent
+  Alpha 0.7
+  +MF_NOBLOCKMAP
+  +MF2_EX_NOHITFLOOR
+  +MF2_EX_DONOTRENDERSHADOW
+  States
+  {
+    Spawn:
+    {
+      X091 G 5
+      X091 H 5
+      X091 I 5
+      Stop
+    }
+  }
+}
+
+ACTOR "MT_RADIXWATERSPLASH"
+{
+  Health 1000
+  Width 20
+  Height 16
+  Mass 100
+  Reactiontime 8
+  Renderstyle Translucent
+  Alpha 0.7
+  +MF_NOBLOCKMAP
+  +MF2_EX_NOHITFLOOR
+  +MF2_EX_DONOTRENDERSHADOW
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXWATERSPLASH_EXTRA")
+      X091 A 5
+      X091 B 5
+      X091 C 5
+      X091 D 5
+      X091 E 5
+      X091 F 5
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_RADIXMUDSPLASH
+///////////////////////////////
+ACTOR "MT_RADIXMUDSPLASH_EXTRA"
+{
+  Health 1000
+  Width 20
+  Height 16
+  Mass 100
+  Reactiontime 8
+  Renderstyle Translucent
+  Alpha 0.7
+  +MF_NOBLOCKMAP
+  +MF2_EX_NOHITFLOOR
+  +MF2_EX_DONOTRENDERSHADOW
+  States
+  {
+    Spawn:
+    {
+      X092 G 5
+      X092 H 5
+      X092 I 5
+      Stop
+    }
+  }
+}
+
+ACTOR "MT_RADIXMUDSPLASH"
+{
+  Health 1000
+  Width 20
+  Height 16
+  Mass 100
+  Reactiontime 8
+  Renderstyle Translucent
+  Alpha 0.7
+  +MF_NOBLOCKMAP
+  +MF2_EX_NOHITFLOOR
+  +MF2_EX_DONOTRENDERSHADOW
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXMUDSPLASH_EXTRA")
+      X092 A 5
+      X092 B 5
+      X092 C 5
+      X092 D 5
+      X092 E 5
+      X092 F 5
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_RADIXLAVASPLASH
+///////////////////////////////
+ACTOR "MT_RADIXLAVASPLASH_EXTRA"
+{
+  Health 1000
+  Width 20
+  Height 16
+  Mass 100
+  Reactiontime 8
+  Renderstyle Translucent
+  Alpha 0.7
+  +MF_NOBLOCKMAP
+  +MF2_EX_NOHITFLOOR
+  +MF2_EX_DONOTRENDERSHADOW
+  States
+  {
+    Spawn:
+    {
+      X093 G 5
+      X093 H 5
+      X093 I 5
+      Stop
+    }
+  }
+}
+
+ACTOR "MT_RADIXLAVASPLASH"
+{
+  Health 1000
+  Width 20
+  Height 16
+  Mass 100
+  Reactiontime 8
+  Renderstyle Translucent
+  Alpha 0.7
+  +MF_NOBLOCKMAP
+  +MF2_EX_NOHITFLOOR
+  +MF2_EX_DONOTRENDERSHADOW
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXLAVASPLASH_EXTRA")
+      X093 A 5
+      X093 B 5
+      X093 C 5
+      X093 D 5
+      X093 E 5
+      X093 F 5
+      Stop
+    }
+  }
+}

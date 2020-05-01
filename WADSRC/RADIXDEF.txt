@@ -4,4 +4,5 @@
 #include "RADIX\RADIXENEMIES.txt"
 #include "RADIX\RADIXWEAPONS.txt"
 #include "RADIX\FORCEFIELD.txt"
+#include "RADIX\RADIXSPLASHES.txt"
 #include "RADIX\ACTORALIAS.txt"
