@@ -529,7 +529,7 @@ begin
     damage := ((P_Random mod 8) + 1) * tmthing.info.damage;
     P_DamageMobj(thing, tmthing, tmthing, damage);
 
-    tmthing.flags := tmthing.flags and (not MF_SKULLFLY);
+    tmthing.flags := tmthing.flags and not MF_SKULLFLY;
     tmthing.momx := 0;
     tmthing.momy := 0;
     tmthing.momz := 0;
@@ -1255,13 +1255,8 @@ begin
     deltaangle := deltaangle + ANG180;
     //  I_Error ("SlideLine: ang>ANG180");
 
-  {$IFDEF FPC}
-  lineangle := _SHRW(lineangle, ANGLETOFINESHIFT);
-  deltaangle := _SHRW(deltaangle, ANGLETOFINESHIFT);
-  {$ELSE}
   lineangle := lineangle shr ANGLETOFINESHIFT;
   deltaangle := deltaangle shr ANGLETOFINESHIFT;
-  {$ENDIF}
 
   movelen := P_AproxDistance(tmxmove, tmymove);
   newlen := FixedMul(movelen, finecosine[deltaangle]);
@@ -1843,16 +1838,12 @@ var
   x2: fixed_t;
   y2: fixed_t;
 begin
-  {$IFDEF FPC}
-  angle := _SHRW(angle, ANGLETOFINESHIFT);
-  {$ELSE}
   angle := angle shr ANGLETOFINESHIFT;
-  {$ENDIF}
   shootthing := t1;
 
   x2 := t1.x + FixedInt(distance) * finecosine[angle];
   y2 := t1.y + FixedInt(distance) * finesine[angle];
-  shootz := t1.z + _SHR1(t1.height) + 8 * FRACUNIT;
+  shootz := t1.z + t1.height div 2 + 8 * FRACUNIT;
 
   // can't shoot outside view angles
   topslope := (100 * FRACUNIT) div 160; // JVAL maybe screenwidth / 2
@@ -1880,16 +1871,12 @@ var
   x2: fixed_t;
   y2: fixed_t;
 begin
-  {$IFDEF FPC}
-  angle := _SHRW(angle, ANGLETOFINESHIFT);
-  {$ELSE}
   angle := angle shr ANGLETOFINESHIFT;
-  {$ENDIF}
   shootthing := t1;
   la_damage := damage;
   x2 := t1.x + FixedInt(distance) * finecosine[angle];
   y2 := t1.y + FixedInt(distance) * finesine[angle];
-  shootz := t1.z + _SHR1(t1.height) + 8 * FRACUNIT;
+  shootz := t1.z + t1.height div 2 + 8 * FRACUNIT;
   attackrange := distance;
   aimslope := slope;
 
@@ -1935,7 +1922,7 @@ begin
   //WAS can't use for than one special line in a row
   //jff 3/21/98 NOW multiple use allowed with enabling line flag
 
-  result := (not G_NeedsCompatibilityMode) and ((li.flags and ML_PASSUSE) <> 0);
+  result := not G_NeedsCompatibilityMode and ((li.flags and ML_PASSUSE) <> 0);
 end;
 
 // JVAL: mobjs interaction
@@ -2005,11 +1992,7 @@ var
 begin
   usething := player.mo;
 
-  {$IFDEF FPC}
-  angle := _SHRW(player.mo.angle, ANGLETOFINESHIFT);
-  {$ELSE}
   angle := player.mo.angle shr ANGLETOFINESHIFT;
-  {$ENDIF}
 
   x1 := player.mo.x;
   y1 := player.mo.y;
@@ -2276,7 +2259,7 @@ begin
   begin
     P_SetMobjState(thing, S_GIBS);
 
-    thing.flags := thing.flags and (not MF_SOLID);
+    thing.flags := thing.flags and not MF_SOLID;
     thing.height := 0;
     thing.radius := 0;
 

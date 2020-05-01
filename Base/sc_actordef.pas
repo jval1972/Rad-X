@@ -64,9 +64,7 @@ uses
   deh_main,
   m_fixed,
   i_system,
-  {$IFNDEF FPC}
   i_startup,
-  {$ENDIF}
   info,
   info_common,
   r_renderstyle,
@@ -2710,10 +2708,7 @@ begin
   SC_ParseStatedefLump;
   SC_AddRadixWeaponStates;  // JVAL: 20200421 - Save # of new weapon states to add them to statetokens
 
-  {$IFNDEF FPC}
   SUC_Disable;
-  {$ENDIF}
-
 
   // JVAL: 20200417 - Parse RADIXDEF lump
   PAK_StringIterator(RADIXDEFLUMPNAME, SC_ParseActordefLump);
@@ -2734,30 +2729,22 @@ begin
     if char8tostring(W_GetNameForNum(i)) = ACTORDEFLUMPNAME then
       lumplist.Add(i);
 
-  {$IFNDEF FPC}
   if lumplist.Count > 50 then
     SUC_SecondaryProgressInit(lumplist.Count);
-  {$ENDIF}
 
   for i := 0 to lumplist.Count - 1 do
   begin
-    {$IFNDEF FPC}
     if lumplist.Count > 50 then
       SUC_SecondaryProgress(i);
-    {$ENDIF}
     SC_ParseActordefLump(W_TextLumpNum(lumplist[i]));
   end;
 
-  {$IFNDEF FPC}
   if lumplist.Count > 50 then
     SUC_SecondaryProgressDone;
-  {$ENDIF}
 
   lumplist.Free;
 
-  {$IFNDEF FPC}
   SUC_Enable;
-  {$ENDIF}
 end;
 
 procedure SC_Init;

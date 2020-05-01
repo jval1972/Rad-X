@@ -649,7 +649,7 @@ begin
   if player.cheats and CF_NOCLIP <> 0 then
     player.mo.flags := player.mo.flags or MF_NOCLIP
   else
-    player.mo.flags := player.mo.flags and (not MF_NOCLIP);
+    player.mo.flags := player.mo.flags and not MF_NOCLIP;
 
   // chain saw run forward
   cmd := @player.cmd;
@@ -658,7 +658,7 @@ begin
     cmd.angleturn := 0;
     cmd.forwardmove := $c800 div 512;
     cmd.sidemove := 0;
-    player.mo.flags := player.mo.flags and (not MF_JUSTATTACKED);
+    player.mo.flags := player.mo.flags and not MF_JUSTATTACKED;
   end;
 
   if player.quaketics > 0 then
@@ -766,7 +766,7 @@ begin
   begin
     player.powers[Ord(pw_invisibility)] := player.powers[Ord(pw_invisibility)] - 1;
     if player.powers[Ord(pw_invisibility)] = 0 then
-      player.mo.flags := player.mo.flags and (not MF_SHADOW);
+      player.mo.flags := player.mo.flags and not MF_SHADOW;
   end;
 
   if player.powers[Ord(pw_infrared)] <> 0 then

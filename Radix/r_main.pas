@@ -880,11 +880,7 @@ begin
     dy := temp;
   end;
 
-  {$IFDEF FPC}
-  angle := _SHRW(tantoangle[FixedDiv(dy, dx) shr DBITS], ANGLETOFINESHIFT);
-  {$ELSE}
   angle := tantoangle[FixedDiv(dy, dx) shr DBITS] shr ANGLETOFINESHIFT;
-  {$ENDIF}
 
   result := FixedDiv(dx, finecosine[angle]);
 end;

@@ -1300,12 +1300,8 @@ var
   s1, s2: string;
   kparm: string;
 begin
-  {$IFDEF FPC}
-  outproc := @I_IOprintf;
-  {$ELSE}
   SUC_Open;
   outproc := @SUC_Outproc;
-  {$ENDIF}
   wadfiles := TDSTringList.Create;
 
   printf('Starting %s, %s'#13#10, [D_Version, D_VersionBuilt]);
@@ -2030,7 +2026,7 @@ begin
     if showmessageboxonmodified then
     begin
       oldoutproc := outproc;
-      I_IOSetWindowHandle({$IFDEF FPC}0{$ELSE}SUC_GetHandle{$ENDIF});
+      I_IOSetWindowHandle(SUC_GetHandle);
       outproc := @I_IOMessageBox; // Print the message again to messagebox
       printf(MSG_MODIFIEDGAME);
       outproc := oldoutproc;

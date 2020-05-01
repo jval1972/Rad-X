@@ -234,7 +234,7 @@ const
 procedure A_Fall(actor: Pmobj_t);
 begin
   // actor is on ground, it can be walked over
-  actor.flags := actor.flags and (not MF_SOLID);
+  actor.flags := actor.flags and not MF_SOLID;
 
   // So change this if corpse objects
   // are meant to be obstacles.
@@ -404,7 +404,7 @@ begin
   begin
     // the target just hit the enemy,
     // so fight back!
-    actor.flags := actor.flags and (not MF_JUSTHIT);
+    actor.flags := actor.flags and not MF_JUSTHIT;
     result := true;
     exit;
   end;
@@ -446,14 +446,14 @@ begin
       result := false; // close for fist attack
       exit;
     end;
-    dist := _SHR1(dist);
+    dist := dist div 2;
   end;
 
 
   if (actor._type = Ord(MT_CYBORG)) or
      (actor._type = Ord(MT_SPIDER)) or
      (actor._type = Ord(MT_SKULL)) then
-    dist := _SHR1(dist);
+    dist := dist div 2;
 
   if dist > 200 then
     dist := 200;
@@ -542,7 +542,7 @@ begin
     exit;
   end
   else
-    actor.flags := actor.flags and (not MF_INFLOAT);
+    actor.flags := actor.flags and not MF_INFLOAT;
 
   if actor.flags and MF_FLOAT = 0 then
   begin
@@ -1040,8 +1040,8 @@ begin
   // do not attack twice in a row
   if actor.flags and MF_JUSTATTACKED <> 0 then
   begin
-    actor.flags := actor.flags and (not MF_JUSTATTACKED);
-    if (gameskill <> sk_nightmare) and (not fastparm) then
+    actor.flags := actor.flags and not MF_JUSTATTACKED;
+    if (gameskill <> sk_nightmare) and not fastparm then
       P_NewChaseDir(actor);
     exit;
   end;
@@ -1058,7 +1058,7 @@ begin
   // check for missile attack
   if actor.info.missilestate <> 0 then
   begin
-    if (gameskill < sk_nightmare) and (not fastparm) and (actor.movecount <> 0) then
+    if (gameskill < sk_nightmare) and not fastparm and (actor.movecount <> 0) then
       nomissile := true
     else if not P_CheckMissileRange(actor) then
       nomissile := true;
@@ -1071,17 +1071,13 @@ begin
   end;
 
   // possibly choose another target
-  if netgame and
-    (actor.threshold = 0) and
-    (not P_CheckSight(actor, actor.target)) then
-  begin
+  if netgame and (actor.threshold = 0) and not P_CheckSight(actor, actor.target) then
     if P_LookForTargets(actor, true) then
       exit;  // got a new target
-  end;
 
   // chase towards player
   actor.movecount := actor.movecount - 1;
-  if (actor.movecount < 0) or (not P_Move(actor)) then
+  if (actor.movecount < 0) or not P_Move(actor) then
     P_NewChaseDir(actor);
 
   if fast then
@@ -1129,7 +1125,7 @@ begin
   if actor.target = nil then
     exit;
 
-  actor.flags := actor.flags and (not MF_AMBUSH);
+  actor.flags := actor.flags and not MF_AMBUSH;
 
   actor.angle :=
     R_PointToAngle2(actor.x, actor.y, actor.target.x, actor.target.y);
@@ -1224,8 +1220,7 @@ begin
   if P_Random < prob then
     exit;
 
-  if (actor.target = nil) or (actor.target.health <= 0) or
-     (not P_CheckSight(actor, actor.target)) then
+  if (actor.target = nil) or (actor.target.health <= 0) or not P_CheckSight(actor, actor.target) then
     P_SetMobjState(actor, statenum_t(actor.info.seestate));
 end;
 
@@ -1237,8 +1232,7 @@ begin
   if P_Random < 10 then
     exit;
 
-  if (actor.target = nil) or (actor.target.health <= 0) or
-     (not P_CheckSight(actor, actor.target)) then
+  if (actor.target = nil) or (actor.target.health <= 0) or not P_CheckSight(actor, actor.target) then
     P_SetMobjState(actor, statenum_t(actor.info.seestate));
 end;
 
@@ -1376,20 +1370,23 @@ var
   dest: Pmobj_t;
   th: Pmobj_t;
 begin
-  if ((gametic - demostarttic) and 3) <> 0 then // [crispy] fix revenant internal demo bug
+  if (gametic - demostarttic) and 3 <> 0 then // [crispy] fix revenant internal demo bug
     exit;
 
   // spawn a puff of smoke behind the rocket
   P_SpawnPuff(actor.x, actor.y, actor.z);
 
- { th := P_SpawnMobj(actor.x - actor.momx,
-                    actor.y - actor.momy,
-                    actor.z, Ord(MT_SMOKE));
+  if gameepisode = 0 then
+  begin
+    th := P_SpawnMobj(actor.x - actor.momx,
+                      actor.y - actor.momy,
+                      actor.z, Ord(MT_SMOKE));
 
-  th.momz := FRACUNIT;
-  th.tics := th.tics - P_Random and 3;
-  if th.tics < 1 then
-    th.tics := 1;      }
+    th.momz := FRACUNIT;
+    th.tics := th.tics - P_Random and 3;
+    if th.tics < 1 then
+      th.tics := 1;
+  end;
 
   // adjust direction
   dest := actor.tracer;
@@ -1416,11 +1413,7 @@ begin
     end;
   end;
 
-  {$IFDEF FPC}
-  exact := _SHRW(actor.angle, ANGLETOFINESHIFT);
-  {$ELSE}
   exact := actor.angle shr ANGLETOFINESHIFT;
-  {$ENDIF}
   actor.momx := FixedMul(actor.info.speed, finecosine[exact]);
   actor.momy := FixedMul(actor.info.speed, finesine[exact]);
 
@@ -1480,6 +1473,7 @@ function PIT_VileCheck(thing: Pmobj_t): boolean;
 var
   maxdist: integer;
   check: boolean;
+  oldheight: fixed_t;
 begin
   if thing.flags and MF_CORPSE = 0 then
   begin
@@ -1511,9 +1505,10 @@ begin
   corpsehit := thing;
   corpsehit.momx := 0;
   corpsehit.momy := 0;
-  corpsehit.height := _SHL(corpsehit.height, 2);
+  oldheight := corpsehit.height;
+  corpsehit.height := corpsehit.height * 4;
   check := P_CheckPosition(corpsehit, corpsehit.x, corpsehit.y);
-  corpsehit.height := _SHR2(corpsehit.height);
+  corpsehit.height := oldheight;
 
   if not check then
     result := true    // doesn't fit here
@@ -1625,11 +1620,7 @@ begin
   if not P_CheckSight(actor.target, dest) then
     exit;
 
-  {$IFDEF FPC}
-  an := _SHRW(dest.angle, ANGLETOFINESHIFT);
-  {$ELSE}
   an := dest.angle shr ANGLETOFINESHIFT;
-  {$ENDIF}
 
   P_UnsetThingPosition(actor);
   actor.x := dest.x + FixedMul(24 * FRACUNIT, finecosine[an]);
@@ -1696,11 +1687,7 @@ begin
   P_DamageMobj(actor.target, actor, actor, 20);
   actor.target.momz := 1000 * FRACUNIT div actor.target.info.mass;
 
-  {$IFDEF FPC}
-  an := _SHRW(actor.angle, ANGLETOFINESHIFT);
-  {$ELSE}
   an := actor.angle shr ANGLETOFINESHIFT;
-  {$ENDIF}
 
   fire := actor.tracer;
 
@@ -1744,11 +1731,7 @@ begin
     exit;
 
   mo.angle := mo.angle + FATSPREAD;
-  {$IFDEF FPC}
-  an := _SHRW(mo.angle, ANGLETOFINESHIFT);
-  {$ELSE}
   an := mo.angle shr ANGLETOFINESHIFT;
-  {$ENDIF}
   mo.momx := FixedMul(mo.info.speed, finecosine[an]);
   mo.momy := FixedMul(mo.info.speed, finesine[an]);
 end;
@@ -1768,11 +1751,7 @@ begin
     exit;
 
   mo.angle := mo.angle - FATSPREAD * 2;
-  {$IFDEF FPC}
-  an := _SHRW(mo.angle, ANGLETOFINESHIFT);
-  {$ELSE}
   an := mo.angle shr ANGLETOFINESHIFT;
-  {$ENDIF}
   mo.momx := FixedMul(mo.info.speed, finecosine[an]);
   mo.momy := FixedMul(mo.info.speed, finesine[an]);
 end;
@@ -1789,11 +1768,7 @@ begin
     exit;
 
   mo.angle := mo.angle - FATSPREAD div 2;
-  {$IFDEF FPC}
-  an := _SHRW(mo.angle, ANGLETOFINESHIFT);
-  {$ELSE}
   an := mo.angle shr ANGLETOFINESHIFT;
-  {$ENDIF}
   mo.momx := FixedMul(mo.info.speed, finecosine[an]);
   mo.momy := FixedMul(mo.info.speed, finesine[an]);
 
@@ -1802,11 +1777,7 @@ begin
     exit;
 
   mo.angle := mo.angle + FATSPREAD div 2;
-  {$IFDEF FPC}
-  an := _SHRW(mo.angle, ANGLETOFINESHIFT);
-  {$ELSE}
   an := mo.angle shr ANGLETOFINESHIFT;
-  {$ENDIF}
   mo.momx := FixedMul(mo.info.speed, finecosine[an]);
   mo.momy := FixedMul(mo.info.speed, finesine[an]);
 end;
@@ -1832,11 +1803,7 @@ begin
 
   A_AttackSound(actor, actor);
   A_FaceTarget(actor);
-  {$IFDEF FPC}
-  an := _SHRW(actor.angle, ANGLETOFINESHIFT);
-  {$ELSE}
   an := actor.angle shr ANGLETOFINESHIFT;
-  {$ENDIF}
   actor.momx := FixedMul(SKULLSPEED, finecosine[an]);
   actor.momy := FixedMul(SKULLSPEED, finesine[an]);
   dist := P_AproxDistance(dest.x - actor.x, dest.y - actor.y);
@@ -1844,7 +1811,7 @@ begin
 
   if dist < 1 then
     dist := 1;
-  actor.momz := (dest.z + _SHR1(dest.height) - actor.z) div dist;
+  actor.momz := (dest.z + dest.height div 2 - actor.z) div dist;
 end;
 
 //
@@ -1882,11 +1849,7 @@ begin
 
 
   // okay, there's playe for another one
-  {$IFDEF FPC}
-  an := _SHRW(angle, ANGLETOFINESHIFT);
-  {$ELSE}
   an := angle shr ANGLETOFINESHIFT;
-  {$ENDIF}
 
   prestep := 4 * FRACUNIT +
              3 * (actor.info.radius + mobjinfo[Ord(MT_SKULL)].radius) div 2;
@@ -2007,8 +1970,59 @@ var
   junk: line_t;
   i: integer;
 begin
-  if gamemap <> 8 then
-    exit;
+  if gameepisode = 0 then
+  begin
+    if gamemap <> 7 then
+      exit;
+
+    if (mo._type <> Ord(MT_FATSO)) and (mo._type <> Ord(MT_BABY)) then
+      exit;
+  end
+  else
+  begin
+    case gameepisode of
+      1:
+        begin
+          if gamemap <> 8 then
+            exit;
+          if mo._type <> Ord(MT_BRUISER) then
+            exit;
+        end;
+      2:
+        begin
+          if gamemap <> 8 then
+            exit;
+          if mo._type <> Ord(MT_CYBORG) then
+            exit;
+        end;
+      3:
+        begin
+          if gamemap <> 8 then
+            exit;
+          if mo._type <> Ord(MT_SPIDER) then
+            exit;
+        end;
+      4:
+        begin
+          case gamemap of
+            6: if mo._type <> Ord(MT_CYBORG) then
+                 exit;
+            8: if mo._type <> Ord(MT_SPIDER) then
+                 exit;
+          else  // JVAL 21/9/2007 Fixed bug that ended E4M2 after cyberdeamon death
+            begin
+              if not majorbossdeathendsdoom1level then
+                exit;
+            end;
+          end;
+        end;
+    else
+      begin
+        if gamemap <> 8 then
+          exit;
+      end;
+    end;
+  end;
 
   // make sure there is a player alive for victory
   i := 0;
@@ -2025,7 +2039,7 @@ begin
   // scan the remaining thinkers to see
   // if all bosses are dead
   th := thinkercap.next;
-  while Pointer(th) <> Pointer(@thinkercap) do
+  while th <> @thinkercap do
   begin
     if @th._function.acp1 = @P_MobjThinker then
     begin
@@ -2039,6 +2053,51 @@ begin
     th := th.next;
   end;
 
+  // victory!
+  if gameepisode = 0 then
+  begin
+    if gamemap = 7 then
+    begin
+      if mo._type = Ord(MT_FATSO) then
+      begin
+        junk.tag := 666;
+        EV_DoFloor(@junk, lowerFloorToLowest);
+        exit;
+      end;
+      if mo._type = Ord(MT_BABY) then
+      begin
+        junk.tag := 667;
+        EV_DoFloor(@junk, raiseToTexture);
+        exit;
+      end;
+    end;
+  end
+  else
+  begin
+    case gameepisode of
+      1:
+        begin
+          junk.tag := 666;
+          EV_DoFloor(@junk, lowerFloorToLowest);
+          exit;
+        end;
+      4:
+        begin
+          if gamemap = 6 then
+          begin
+            junk.tag := 666;
+            EV_DoDoor(@junk, blazeOpen);
+            exit;
+          end
+          else if gamemap = 8 then
+          begin
+            junk.tag := 666;
+            EV_DoFloor(@junk, lowerFloorToLowest);
+            exit;
+          end;
+        end;
+    end;
+  end;
   G_ExitLevel;
 end;
 

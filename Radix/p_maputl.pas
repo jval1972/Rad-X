@@ -100,9 +100,9 @@ begin
   dx := abs(dx);
   dy := abs(dy);
   if dx < dy then
-    result := dx + dy - _SHR1(dx)
+    result := dx + dy - dx div 2
   else
-    result := dx + dy - _SHR1(dy);
+    result := dx + dy - dy div 2;
 end;
 
 //

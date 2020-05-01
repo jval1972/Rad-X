@@ -3085,7 +3085,7 @@ end;
 
 procedure A_DoRunScripts(actor: Pmobj_t);
 begin
-  actor.flags2_ex := actor.flags2_ex and (not MF2_EX_DONTRUNSCRIPTS);
+  actor.flags2_ex := actor.flags2_ex and not MF2_EX_DONTRUNSCRIPTS;
 end;
 
 procedure A_SetDropItem(actor: Pmobj_t);
@@ -3665,11 +3665,7 @@ begin
     end;
   end;
 
-  {$IFDEF FPC}
-  exact := _SHRW(actor.angle, ANGLETOFINESHIFT);
-  {$ELSE}
   exact := actor.angle shr ANGLETOFINESHIFT;
-  {$ENDIF}
   actor.momx := FixedMul(actor.info.speed, finecosine[exact]);
   actor.momy := FixedMul(actor.info.speed, finesine[exact]);
 

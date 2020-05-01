@@ -984,10 +984,10 @@ var
   item: integer;
 begin
   target.flags := target.flags and (not (MF_SHOOTABLE or MF_FLOAT or MF_SKULLFLY));
-  target.flags3_ex := target.flags3_ex and (not MF3_EX_BOUNCE);
+  target.flags3_ex := target.flags3_ex and not MF3_EX_BOUNCE;
 
   if target._type <> Ord(MT_SKULL) then
-    target.flags := target.flags and (not MF_NOGRAVITY);
+    target.flags := target.flags and not MF_NOGRAVITY;
 
   target.flags := target.flags or (MF_CORPSE or MF_DROPOFF);
   target.flags2_ex := target.flags2_ex and not MF2_EX_PASSMOBJ;
@@ -1017,7 +1017,7 @@ begin
       Pplayer_t(target.player).frags[pDiff(target.player, @players[0], SizeOf(players[0]))] :=
         Pplayer_t(target.player).frags[pDiff(target.player, @players[0], SizeOf(players[0]))] + 1;
 
-    target.flags := target.flags and (not MF_SOLID);
+    target.flags := target.flags and not MF_SOLID;
     Pplayer_t(target.player).playerstate := PST_DEAD;
 
     // JVAL
@@ -1161,11 +1161,7 @@ begin
       thrust := thrust * 4;
     end;
 
-    {$IFDEF FPC}
-    ang := _SHRW(ang, ANGLETOFINESHIFT);
-    {$ELSE}
     ang := ang shr ANGLETOFINESHIFT;
-    {$ENDIF}
     target.momx := target.momx + FixedMul(thrust, finecosine[ang]);
     target.momy := target.momy + FixedMul(thrust, finesine[ang]);
   end;

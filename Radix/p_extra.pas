@@ -136,9 +136,9 @@ uses
 //
 procedure A_LowGravity(actor: Pmobj_t);
 begin
-  actor.flags := actor.flags and (not MF_NOGRAVITY);
+  actor.flags := actor.flags and not MF_NOGRAVITY;
   actor.flags_ex := actor.flags_ex or MF_EX_LOWGRAVITY;
-  actor.flags2_ex := actor.flags2_ex and (not MF2_EX_MEDIUMGRAVITY);
+  actor.flags2_ex := actor.flags2_ex and not MF2_EX_MEDIUMGRAVITY;
 end;
 
 //
@@ -148,8 +148,8 @@ end;
 procedure A_NoGravity(actor: Pmobj_t);
 begin
   actor.flags := actor.flags or MF_NOGRAVITY;
-  actor.flags_ex := actor.flags_ex and (not MF_EX_LOWGRAVITY);
-  actor.flags2_ex := actor.flags2_ex and (not MF2_EX_MEDIUMGRAVITY);
+  actor.flags_ex := actor.flags_ex and not MF_EX_LOWGRAVITY;
+  actor.flags2_ex := actor.flags2_ex and not MF2_EX_MEDIUMGRAVITY;
 end;
 
 //
@@ -158,9 +158,9 @@ end;
 //
 procedure A_Gravity(actor: Pmobj_t);
 begin
-  actor.flags := actor.flags and (not MF_NOGRAVITY);
-  actor.flags_ex := actor.flags_ex and (not MF_EX_LOWGRAVITY);
-  actor.flags2_ex := actor.flags2_ex and (not MF2_EX_MEDIUMGRAVITY);
+  actor.flags := actor.flags and not MF_NOGRAVITY;
+  actor.flags_ex := actor.flags_ex and not MF_EX_LOWGRAVITY;
+  actor.flags2_ex := actor.flags2_ex and not MF2_EX_MEDIUMGRAVITY;
 end;
 
 //
@@ -169,7 +169,7 @@ end;
 //
 procedure A_NoBlocking(actor: Pmobj_t);
 begin
-  actor.flags := actor.flags and (not MF_SOLID);
+  actor.flags := actor.flags and not MF_SOLID;
 end;
 
 //
@@ -386,8 +386,8 @@ end;
 //
 procedure A_MediumGravity(actor: Pmobj_t);
 begin
-  actor.flags := actor.flags and (not MF_NOGRAVITY);
-  actor.flags_ex := actor.flags_ex and (not MF_EX_LOWGRAVITY);
+  actor.flags := actor.flags and not MF_NOGRAVITY;
+  actor.flags_ex := actor.flags_ex and not MF_EX_LOWGRAVITY;
   actor.flags2_ex := actor.flags2_ex or MF2_EX_MEDIUMGRAVITY;
 end;
 
@@ -525,7 +525,7 @@ end;
 
 procedure A_UnSetShootable(actor: Pmobj_t);
 begin
-  actor.flags := actor.flags and (not MF_SHOOTABLE);
+  actor.flags := actor.flags and not MF_SHOOTABLE;
 end;
 
 //
@@ -583,7 +583,7 @@ end;
 
 procedure A_UnSetFloorClip(actor: Pmobj_t);
 begin
-  actor.flags2_ex := actor.flags2_ex and (not MF2_EX_FLOORCLIP);
+  actor.flags2_ex := actor.flags2_ex and not MF2_EX_FLOORCLIP;
 end;
 
 procedure A_AnnihilatorAttack(actor: Pmobj_t);

@@ -882,11 +882,7 @@ begin
   else
     angle := angle + ($ffffffff - langle);
 
-  {$IFDEF FPC}
-  angle := angle div ANGLETOFINEUNIT;
-  {$ELSE}
   angle := angle shr ANGLETOFINESHIFT;
-  {$ENDIF}
 
   // stereo separation
   sep^ := NORM_SEP - (FixedMul(S_STEREO_SWING, finesine[angle]) div FRACUNIT);

@@ -194,8 +194,6 @@ end;
 // F_Ticker
 //
 procedure F_Ticker;
-var
-  i: integer;
 begin
   // advance animation
   inc(finalecount);

@@ -228,9 +228,7 @@ uses
   t_tga,
   t_jpeg,
   t_pcx,
-{$IFNDEF FPC}
   t_png,
-{$ENDIF}
   t_material,
   t_patch,
   t_draw,
@@ -1447,10 +1445,8 @@ var
   tm_jpg: TJPGTextureManager;
   tm_jpeg: TJPGTextureManager;
   tm_pcx: TPCXTextureManager;
-{$IFNDEF FPC}
   tm_png: TPNGTextureManager;
   tm_pngsprite: TPNGSpriteTextureManager;
-{$ENDIF}
   tm_mat: TMaterialTextureManager;
   tm_patch: TPatchTextureManager;
 
@@ -1458,11 +1454,9 @@ procedure T_Init;
 begin
   TextureExtensions := TDStringList.Create;
   ImageFormats := nil;
-{$IFNDEF FPC}
   PNG_RegisterCommonChunks(True);
   tm_png.Create;
   tm_pngsprite.Create;
-{$ENDIF}
   tm_jpg.Create('.JPG');
   tm_jpeg.Create('.JPEG');
   tm_pcx.Create;
@@ -1477,11 +1471,9 @@ end;
 procedure T_ShutDown;
 begin
   TextureExtensions.Free;
-{$IFNDEF FPC}
   tm_png.Destroy;
   tm_pngsprite.Destroy;
   PNG_FreeChunkClassList;
-{$ENDIF}
   tm_jpg.Destroy;
   tm_jpeg.Destroy;
   tm_pcx.Destroy;
