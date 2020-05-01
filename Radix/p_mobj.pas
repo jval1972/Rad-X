@@ -578,7 +578,7 @@ begin
     begin
       dist := P_AproxDistance(mo.x - mo.target.x, mo.y - mo.target.y);
 
-      delta := (mo.target.z + _SHR1(mo.height)) - mo.z; // JVAL is it right ???
+      delta := (mo.target.z + mo.height div 2) - mo.z; // JVAL is it right ???
 
       if (delta < 0) and (dist < -(delta * 3)) then
         mo.z := mo.z - FLOATSPEED
@@ -978,11 +978,12 @@ begin
   mobj.armour_set := info.armour_set;  // JVAL 20200321 - Armour set for pickable objects
   mobj.energy_set := info.energy_set;  // JVAL 20200321 - Energy set for pickable objects
   mobj.shield_set := info.shield_set;  // JVAL 20200321 - Shield set for pickable objects
-  mobj.patrolrange := mobj.info.patrolrange;  // JVAL: 20200501 - Patrol Range
   for i := 0 to Ord(NUMAMMO) - 1 do
     mobj.ammo_inc[i] := info.ammo_inc[i]; // JVAL 20200321 - Ammo inc for pickable objects
   for i := 0 to Ord(NUMWEAPONS) - 1 do  // JVAL 20200321 - Weapon pickable objects
     mobj.weapon_inc[i] := info.weapon_inc[i];
+
+  mobj.patrolrange := mobj.info.patrolrange;  // JVAL: 20200501 - Patrol Range
 
   if gameskill <> sk_nightmare then
     mobj.reactiontime := info.reactiontime;
@@ -1665,6 +1666,13 @@ begin
   th.x := th.x + dx;
   th.y := th.y + dy;
   th.z := th.z + dz;
+
+  // JVAL: 20200501 - Extra missile check
+  if not P_PtInAir(th.x, th.y, th.z, th.radius div 2) then
+  begin
+    P_ExplodeMissile(th);
+    result := false;
+  end;
 
   if not P_TryMove(th, th.x, th.y) then
   begin

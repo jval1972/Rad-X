@@ -62,7 +62,9 @@ function P_3dCeilingHeight(const s: Psector_t; const x, y, z: fixed_t): fixed_t;
 
 function P_PtInSolidFloor(const x, y, z: fixed_t): boolean;
 
-function P_PtInSolidFloor2(const x, y, z: fixed_t; const radious: fixed_t): boolean;
+function P_PtInSolidFloor2(const x, y, z: fixed_t; const radius: fixed_t): boolean;
+
+function P_PtInAir(const x, y, z: fixed_t; const radius: fixed_t): boolean;
 
 function P_SubSectorCentroid(const s: Psubsector_t): Psubsector_t;
 
@@ -280,7 +282,7 @@ begin
     result := false;
 end;
 
-function P_PtInSolidFloor2(const x, y, z: fixed_t; const radious: fixed_t): boolean;
+function P_PtInSolidFloor2(const x, y, z: fixed_t; const radius: fixed_t): boolean;
 var
   s: Psubsector_t;
   sec: Psector_t;
@@ -289,11 +291,44 @@ begin
   if s.sector.midsec >= 0 then
   begin
     sec := @sectors[s.sector.midsec];
-    result := (z >= sec.floorheight - radious) and (z <= sec.ceilingheight + radious);
+    result := (z >= sec.floorheight - radius) and (z <= sec.ceilingheight + radius);
   end
   else
     result := false;
 end;
+
+function P_PtInAir(const x, y, z: fixed_t; const radius: fixed_t): boolean;
+var
+  s: Psubsector_t;
+  sec: Psector_t;
+begin
+  s := R_PointInSubsector(x, y);
+  if s.sector.midsec >= 0 then
+  begin
+    sec := @sectors[s.sector.midsec];
+    if (z >= sec.floorheight - radius) and (z <= sec.ceilingheight + radius) then
+    begin
+      result := false;
+      exit;
+    end;
+  end;
+
+  sec := s.sector;
+  if z < P_FloorHeight(sec, x, y) + radius then
+  begin
+    result := false;
+    exit;
+  end;
+
+  if z > P_CeilingHeight(sec, x, y) - radius then
+  begin
+    result := false;
+    exit;
+  end;
+
+  result := true;
+end;
+
 
 //
 // JVAL: Calculate the centroid of a subsector
