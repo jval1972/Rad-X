@@ -75,6 +75,7 @@ uses
   r_hires,
   r_lights,
   r_intrpl,
+  radix_hud,
   vx_base,
 {$IFNDEF OPENGL}
   r_fake3d,
@@ -85,7 +86,7 @@ uses
   r_sky,
 {$IFNDEF OPENGL}
   r_segs,
-{$ENDIF}  
+{$ENDIF}
   r_dynlights,
   s_sound,
   t_main,
@@ -162,7 +163,7 @@ type
   Pdefault_t = ^default_t;
 
 const
-  NUMDEFAULTS = 196;
+  NUMDEFAULTS = 197;
 
 // JVAL
 // Note: All setable defaults must be in lowercase, don't ask why. Just do it. :)
@@ -345,6 +346,14 @@ const
 
     (name: 'showdemoplaybackprogress';
      location: @showdemoplaybackprogress;
+     setable: DFS_ALWAYS;
+     defaultsvalue: '';
+     defaultivalue: 0;
+     defaultbvalue: true;
+     _type: tBoolean),
+
+    (name: 'drawcrosshair';
+     location: @drawcrosshair;
      setable: DFS_ALWAYS;
      defaultsvalue: '';
      defaultivalue: 0;

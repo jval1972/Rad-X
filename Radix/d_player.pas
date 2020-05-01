@@ -264,6 +264,9 @@ type
     currentscore: playerscore_t;
     wallhits: integer;
 
+    plinetarget: Pmobj_t; // JVAL: 20200501 - Basically for the crosshair target
+    pcrosstic: integer;
+
     last_grid_trigger: integer;
 
     angletargetx: fixed_t;

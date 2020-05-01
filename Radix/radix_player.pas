@@ -53,6 +53,7 @@ uses
   radix_objects,
   info,
   info_h,
+  p_map,
   p_tick,
   p_mobj_h,
   tables;
@@ -68,6 +69,8 @@ var
 begin
   if p.playerstate = PST_DEAD then
   begin
+    // JVAL: 20200501 - Linetarget is null when dead
+    p.plinetarget := nil;
     // JVAL: 20200423 - Spawn random smoke when player dies
     p.threat := false;
     if (leveltime and 15 = 0) or (P_Random < 50) then
@@ -81,6 +84,12 @@ begin
     end;
     exit;
   end;
+
+  // JVAL: 20200501 - Retrieve Linetarget
+  P_AimLineAttack(p.mo, p.mo.angle, 16 * 64 * FRACUNIT);
+  if (p.plinetarget = nil) and (linetarget <> nil) then
+    p.pcrosstic := leveltime;
+  p.plinetarget := linetarget;
 
   p.threat := p.health < p.mo.info.spawnhealth div 4;
 

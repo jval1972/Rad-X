@@ -138,6 +138,7 @@ uses
   p_enemy,
   p_user,
   p_adjust,
+  radix_hud,
   radix_sounds,
   radix_score,
   r_aspect,
@@ -551,6 +552,7 @@ type
     od_displaydiskbusyicon,
     od_displayendscreen,
     od_showdemoplaybackprogress,
+    od_drawcrosshair,
     optdispappearance_end
   );
 
@@ -4408,6 +4410,14 @@ begin
   pmi.routine := @M_BoolCmd;
   pmi.pBoolVal := @showdemoplaybackprogress;
   pmi.alphaKey := 'p';
+
+  inc(pmi);
+  pmi.status := 1;
+  pmi.name := '!Draw crosshair';
+  pmi.cmd := 'drawcrosshair';
+  pmi.routine := @M_BoolCmd;
+  pmi.pBoolVal := @drawcrosshair;
+  pmi.alphaKey := 'c';
 
 ////////////////////////////////////////////////////////////////////////////////
 //OptionsDisplayAppearanceDef

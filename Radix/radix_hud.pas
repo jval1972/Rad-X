@@ -40,6 +40,9 @@ procedure RX_ShutDownRadixHud;
 
 procedure RX_HudDrawer;
 
+var
+  drawcrosshair: boolean = true;
+
 implementation
 
 uses
@@ -95,6 +98,7 @@ var
   statammo: array[0..3] of Ppatch_t;
   PowerUpIcons: array[0..4] of Ppatch_t;
   PlasmaIcon: Ppatch_t;
+  crosshairs: array[0..6] of Ppatch_t;
 
 procedure RX_InitRadixHud;
 var
@@ -158,6 +162,13 @@ begin
   end;
 
   PlasmaIcon := W_CacheLumpName('PlasmaIcon', PU_STATIC);
+
+  crosshairs[0] := W_CacheLumpName('CrossHair', PU_STATIC);
+  for i := 1 to 6 do
+  begin
+    sprintf(stmp, 'CrossLock%d', [i]);
+    crosshairs[i] := W_CacheLumpName(stmp, PU_STATIC);
+  end;
 end;
 
 procedure RX_ShutDownRadixHud;
@@ -411,6 +422,31 @@ begin
     M_WriteSmallTextCenter(76, S_PRESS_SPACE_RESTART, SCN_HUD);
 end;
 
+// JVAL: 20200501 - Draw crosshair
+procedure RX_HudDrawCrossHair;
+var
+  cidx: integer;
+  p: Ppatch_t;
+begin
+  if not drawcrosshair then
+    exit;
+
+  if amstate = am_only then
+    exit;
+
+  if hud_player.plinetarget = nil then
+    cidx := 0
+  else
+  begin
+    cidx := leveltime - hud_player.pcrosstic + 1;
+    if cidx > 6 then
+      cidx := 6;
+  end;
+
+  p := crosshairs[cidx];
+  V_DrawPatch(160 - p.width div 2, 100 - p.height div 2, SCN_HUD, p, false);
+end;
+
 ////////////////////////////////////////////////////////////////////////////////
 // Draw Status Bar
 ////////////////////////////////////////////////////////////////////////////////
@@ -522,6 +558,9 @@ begin
 
   // Draw restart message if the player is dead
   RX_HudDrawRestartMessage;
+
+  // Draw crosshair
+  RX_HudDrawCrossHair;
 end;
 
 type
@@ -637,6 +676,9 @@ begin
 
   // Draw restart message if the player is dead
   RX_HudDrawRestartMessage;
+  
+  // Draw crosshair
+  RX_HudDrawCrossHair;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -657,6 +699,9 @@ begin
 
   // Draw restart message if the player is dead
   RX_HudDrawRestartMessage;
+
+  // Draw crosshair
+  RX_HudDrawCrossHair;
 end;
 
 //
