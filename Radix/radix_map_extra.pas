@@ -616,11 +616,7 @@ begin
   if l.radixflags and (RWF_ACTIVATETRIGGER or RWF_MISSILEWALL) = 0 then
     exit;
 
-  // Already dead
- // if l.radixhitpoints <= 0 then
- //   exit;
-
-  l.radixhitpoints := l.radixhitpoints - damage;
+  l.radixhitpoints := l.radixhitpoints - damage - (damage * P_Random) div 128;
   if l.radixhitpoints <= 0 then
   begin
     if l.radixflags and RWF_ACTIVATETRIGGER <> 0 then
