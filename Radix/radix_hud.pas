@@ -447,7 +447,10 @@ begin
   end;
 
   p := crosshairs[cidx];
-  V_DrawPatch(160 - p.width div 2, 100 - p.height div 2, SCN_HUD, p, false);
+  if screenblocks > 10 then
+    V_DrawPatch(160 - p.width div 2, 100 - p.height div 2, SCN_HUD, p, false)
+  else
+    V_DrawPatch(160 - p.width div 2, 100 - (STATUSBAR_HEIGHT + p.height) div 2, SCN_HUD, p, false);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
