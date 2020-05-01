@@ -51,6 +51,8 @@ function P_TicsFromState(const st: Pstate_t): integer;
 
 function P_SetMobjState(mobj: Pmobj_t; state: statenum_t): boolean;
 
+function P_SetMobjStateNF(mobj: Pmobj_t; state: statenum_t): boolean;
+
 procedure P_ExplodeMissile(mo: Pmobj_t);
 
 procedure P_MobjThinker(mobj: Pmobj_t);
@@ -237,6 +239,39 @@ begin
   until mobj.tics <> 0;
 
   result := true;
+end;
+
+//----------------------------------------------------------------------------
+//
+// FUNC P_SetMobjStateNF
+//
+// Same as P_SetMobjState, but does not call the state function.
+//
+//----------------------------------------------------------------------------
+function P_SetMobjStateNF(mobj: Pmobj_t; state: statenum_t): boolean;
+var
+  st: Pstate_t;
+begin
+  if state = S_NULL then
+  begin // Remove mobj
+    if mobj.flags_ex and MF_EX_DONOTREMOVE = 0 then // JVAL Do not remove missile
+    begin
+      mobj.state := @states[Ord(S_NULL)];
+      P_RemoveMobj(mobj);
+    end;
+    result := false;
+  end
+  else
+  begin
+    st := @states[Ord(state)];
+    mobj.state := st;
+    mobj.tics := P_TicsFromState(st);
+    if mobj.tics = 0 then
+      mobj.tics := 1;
+    mobj.sprite := st.sprite;
+    mobj.frame := st.frame;
+    result := true;
+  end;
 end;
 
 //
@@ -943,6 +978,7 @@ begin
   mobj.armour_set := info.armour_set;  // JVAL 20200321 - Armour set for pickable objects
   mobj.energy_set := info.energy_set;  // JVAL 20200321 - Energy set for pickable objects
   mobj.shield_set := info.shield_set;  // JVAL 20200321 - Shield set for pickable objects
+  mobj.patrolrange := mobj.info.patrolrange;  // JVAL: 20200501 - Patrol Range
   for i := 0 to Ord(NUMAMMO) - 1 do
     mobj.ammo_inc[i] := info.ammo_inc[i]; // JVAL 20200321 - Ammo inc for pickable objects
   for i := 0 to Ord(NUMWEAPONS) - 1 do  // JVAL 20200321 - Weapon pickable objects

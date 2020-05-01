@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 304;
+  DEHNUMACTIONS = 306;
 
 type
   deh_action_t = record
@@ -576,6 +576,7 @@ begin
           63: mobjinfo[mobj_no].alds := mobj_val;
           64: mobjinfo[mobj_no].plasmabomb := mobj_val;
           65: mobjinfo[mobj_no].touchdamage := mobj_val;
+          66: mobjinfo[mobj_no].patrolrange := mobj_val;
 
         end;
       end;
@@ -1622,6 +1623,7 @@ begin
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[63]), mobjinfo[i].alds]);
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[64]), mobjinfo[i].plasmabomb]);
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[65]), mobjinfo[i].touchdamage]);
+    result.Add('%s = %d', [capitalizedstring(mobj_tokens[66]), mobjinfo[i].patrolrange]);
 
     result.Add('');
   end;
@@ -1886,6 +1888,7 @@ begin
   mobj_tokens.Add('A.L.D.S.');           // .alds (Radix)             // 63
   mobj_tokens.Add('PLASMA BOMB');        // .plasmabomb (Radix)       // 64
   mobj_tokens.Add('TOUCH DAMAGE');       // .touchdamage (Radix)      // 65
+  mobj_tokens.Add('PATROL RANGE');       // .patrolrange (Radix)      // 66
 
 
   mobj_flags := TDTextList.Create;
@@ -2011,6 +2014,7 @@ begin
   mobj_flags3_ex.Add('MF3_EX_ALIENBLOOD');
   mobj_flags3_ex.Add('MF3_EX_DOOMBOB');
   mobj_flags3_ex.Add('MF3_EX_CANDAMAGEWALLS');
+  mobj_flags3_ex.Add('MF3_EX_LIMITPATROLRANGE');
 
   mobj_flags4_ex := TDTextList.Create;
 
@@ -2952,6 +2956,12 @@ begin
   deh_actions[303].action.acp1 := @A_VerticalMissileDown;
   deh_actions[303].name := strupper('VerticalMissileDown');
   {$IFDEF DLL}deh_actions[303].decl := 'A_VerticalMissileDown(missiletype: string, x: float, y: float, z: float, [maxmomxy: fixed_t])';{$ENDIF}
+  deh_actions[304].action.acp1 := @A_SetPatrolRange;
+  deh_actions[304].name := strupper('SetPatrolRange');
+  {$IFDEF DLL}deh_actions[304].decl := 'A_SetPatrolRange([range: fixed_t])';{$ENDIF}
+  deh_actions[305].action.acp1 := @A_UnSetPatrolRange;
+  deh_actions[305].name := strupper('UnSetPatrolRange');
+  {$IFDEF DLL}deh_actions[305].decl := 'A_UnSetPatrolRange';{$ENDIF}
 
 
   deh_strings.numstrings := 0;

@@ -376,6 +376,8 @@ const
   MF3_EX_DOOMBOB = $20000;
   // Damage Walls
   MF3_EX_CANDAMAGEWALLS = $40000;
+  // Limit patrol range
+  MF3_EX_LIMITPATROLRANGE = $80000;
 
 type
 // Map Object definition.
@@ -464,6 +466,8 @@ type
 
     // For nightmare respawn.
     spawnpoint: mapthing_t;
+
+    patrolrange: fixed_t;
 
     // Thing being chased/attacked for tracers.
     tracer: Pmobj_t;

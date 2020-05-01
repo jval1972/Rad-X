@@ -373,6 +373,10 @@ procedure A_NoCanSpawnChildren(actor: Pmobj_t);
 
 procedure A_CheckPlayerAndExplode(actor: Pmobj_t);
 
+procedure A_SetPatrolRange(actor: Pmobj_t);
+
+procedure A_UnSetPatrolRange(actor: Pmobj_t);
+
 const
   FLOATBOBSIZE = 64;
   FLOATBOBMASK = FLOATBOBSIZE - 1;
@@ -4033,6 +4037,28 @@ begin
     exit;
 
   P_ExplodeMissile(actor);
+end;
+
+
+procedure A_SetPatrolRange(actor: Pmobj_t);
+begin
+  actor.flags3_ex := actor.flags3_ex or MF3_EX_LIMITPATROLRANGE;
+
+  if actor.state.params <> nil then
+    if actor.state.params.Count > 0 then
+    begin
+      actor.patrolrange := actor.state.params.FixedVal[0];
+      if actor.patrolrange <= 0 then
+      begin
+        actor.flags3_ex := actor.flags3_ex and not MF3_EX_LIMITPATROLRANGE;
+        actor.patrolrange := 0;
+      end;
+    end;
+end;
+
+procedure A_UnSetPatrolRange(actor: Pmobj_t);
+begin
+  actor.flags3_ex := actor.flags3_ex and not MF3_EX_LIMITPATROLRANGE;
 end;
 
 end.

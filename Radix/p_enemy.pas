@@ -716,6 +716,7 @@ var
   mo: Pmobj_t;
   think: Pthinker_t;
   inher: integer;
+  dist: fixed_t;
 begin
   if actor.flags2_ex and MF2_EX_FRIEND = 0 then
     if not P_CheckSight(players[0].mo, actor) then
@@ -763,7 +764,9 @@ begin
       end;
     end;
 
-    if P_AproxDistance(actor.x - mo.x, actor.y - mo.y) > MONS_LOOK_RANGE then
+    dist := P_AproxDistance(actor.x - mo.x, actor.y - mo.y);
+
+    if dist > MONS_LOOK_RANGE then
     begin // Out of range
       think := think.next;
       continue;
@@ -847,6 +850,10 @@ begin
 
     if not P_CheckSight(actor, player.mo) then
       continue;   // out of sight
+
+    if actor.flags3_ex and MF3_EX_LIMITPATROLRANGE <> 0 then
+      if P_AproxDistance(player.mo.x - actor.x, player.mo.y - actor.y) < actor.patrolrange then
+        continue;   // out of patrol range
 
     if not allaround then
     begin

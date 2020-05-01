@@ -567,6 +567,7 @@ type
     pickupmessage: string[64];
     pickupsound: integer;
     touchdamage: integer; // JVAL: 20200417 - Damage when touched
+    patrolrange: integer; // JVAL: 20200501 - Maximum Patrol Range
   end;
 
   Pmobjinfo_t = ^mobjinfo_t;

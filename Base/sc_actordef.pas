@@ -1359,6 +1359,7 @@ var
     {$ENDIF}
     AddRes('Scale = ' + itoa(round(mobj.scale * FRACUNIT)));
     AddRes('Gravity = ' + itoa(round(mobj.gravity * FRACUNIT)));
+    
     AddRes('Armor Inc = ' + itoa(mobj.armour_inc));
     AddRes('Energy Inc = ' + itoa(mobj.energy_inc));
     AddRes('Shield Inc = ' + itoa(mobj.shield_inc));
@@ -1372,7 +1373,9 @@ var
     AddRes('Night Vision = ' + itoa(mobj.nightvision));
     AddRes('A.L.D.S. = ' + itoa(mobj.alds));
     AddRes('Plasma Bomb = ' + itoa(mobj.plasmabomb));
+
     AddRes('Touch Damage = ' + itoa(mobj.touchdamage));
+    AddRes('Patrol Range = ' + itoa(mobj.patrolrange * FRACUNIT));
 
     str := '';
     for k := 0 to Ord(NUMAMMO) - 1 do
@@ -2097,6 +2100,12 @@ begin
         begin
           sc.GetInteger;
           mobj.touchdamage := sc._integer;
+          sc.GetString;
+        end
+        else if sc.MatchString('patrolrange') then
+        begin
+          sc.GetInteger;
+          mobj.patrolrange := sc._integer;
           sc.GetString;
         end
         else if sc.MatchString('painchance') then
