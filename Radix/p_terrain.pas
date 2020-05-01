@@ -42,6 +42,9 @@ const
   FLOOR_LAVA = 2;
   FLOOR_SLUDGE = 3;
   FLOOR_NUKAGE = 4;
+  FLOOR_RADIXLAVA = 5;
+  FLOOR_RADIXMUD = 6;
+  FLOOR_RADIXWATER = 7;
 
 implementation
 
@@ -55,7 +58,7 @@ type
   end;
 
 var
-  terraintypedefs: array[0..23] of terraintypedef_t = (
+  terraintypedefs: array[0..32] of terraintypedef_t = (
     (name: 'FWATER1'; _type: FLOOR_WATER),
     (name: 'FWATER2'; _type: FLOOR_WATER),
     (name: 'FWATER3'; _type: FLOOR_WATER),
@@ -79,6 +82,17 @@ var
     (name: 'NUKAGE1'; _type: FLOOR_NUKAGE),
     (name: 'NUKAGE2'; _type: FLOOR_NUKAGE),
     (name: 'NUKAGE3'; _type: FLOOR_NUKAGE),
+    // JVAL: 20200501 - Radix terrain types
+    (name: 'RDXF0088'; _type: FLOOR_RADIXLAVA),
+    (name: 'RDXF0089'; _type: FLOOR_RADIXLAVA),
+    (name: 'RDXF0090'; _type: FLOOR_RADIXLAVA),
+    (name: 'RDXF0120'; _type: FLOOR_RADIXMUD),
+    (name: 'RDXF0121'; _type: FLOOR_RADIXMUD),
+    (name: 'RDXF0122'; _type: FLOOR_RADIXMUD),
+    (name: 'RDXF0123'; _type: FLOOR_RADIXWATER),
+    (name: 'RDXF0124'; _type: FLOOR_RADIXWATER),
+    (name: 'RDXF0125'; _type: FLOOR_RADIXWATER),
+
     (name: 'END'; _type: -1)
   );
 
