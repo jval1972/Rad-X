@@ -434,6 +434,9 @@ begin
   if amstate = am_only then
     exit;
 
+  if hud_player.playerstate = PST_DEAD then
+    exit;
+
   if hud_player.plinetarget = nil then
     cidx := 0
   else
