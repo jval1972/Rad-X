@@ -1344,6 +1344,16 @@ type
   end;
   Pspriteinfo_t = ^spriteinfo_t;
 
+var
+  TNT1A0: array[0..87] of Byte = (
+    $10, $00, $10, $00, $08, $00, $08, $00, $48, $00, $00, $00, $49, $00, $00,
+    $00, $4A, $00, $00, $00, $4B, $00, $00, $00, $4C, $00, $00, $00, $4D, $00,
+    $00, $00, $4E, $00, $00, $00, $4F, $00, $00, $00, $50, $00, $00, $00, $51,
+    $00, $00, $00, $52, $00, $00, $00, $53, $00, $00, $00, $54, $00, $00, $00,
+    $55, $00, $00, $00, $56, $00, $00, $00, $57, $00, $00, $00, $FF, $FF, $FF,
+    $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+  );
+
 function TRadixToWADConverter.GenerateSprites: boolean;
 const
   MAX_SPR_INFO = 1024;
@@ -1359,6 +1369,7 @@ var
   blumps: Pradixbitmaplump_tArray;
   bl: Pradixbitmaplump_t;
   i, j: integer;
+  splash_bmps: array[1..6] of TDNumberList;
   buf: PByteArray;
   stmp: string;
   SPRITEINFO: array[0..MAX_SPR_INFO - 1] of spriteinfo_t;
@@ -1539,9 +1550,61 @@ begin
       blumps[8].name[12] := '3';
     end;
   end;
-  
-  wadwriter.AddSeparator('S_START');
 
+  // JVAL: 20200501 - Check splashes
+  for i := 1 to 6 do
+    splash_bmps[i] := TDNumberList.Create;
+
+  // Check watersplash
+  for j := 0 to bnumlumps - 1 do
+    for i := 1 to 6 do
+      if radixlumpname(blumps[j]) = 'WaterSplash' + itoa(i) then
+        splash_bmps[i].Add(j);
+
+  if splash_bmps[1].Count = 2 then
+    blumps[splash_bmps[1].Numbers[0]].name[11] := '7';
+  if splash_bmps[2].Count = 2 then
+    blumps[splash_bmps[2].Numbers[0]].name[11] := '8';
+  if splash_bmps[3].Count = 2 then
+    blumps[splash_bmps[3].Numbers[0]].name[11] := '9';
+
+  for i := 1 to 6 do
+    splash_bmps[i].FastClear;
+
+  // Check mudsplash
+  for j := 0 to bnumlumps - 1 do
+    for i := 1 to 6 do
+      if radixlumpname(blumps[j]) = 'MudSplash' + itoa(i) then
+        splash_bmps[i].Add(j);
+
+  if splash_bmps[1].Count = 2 then
+    blumps[splash_bmps[1].Numbers[0]].name[9] := '7';
+  if splash_bmps[2].Count = 2 then
+    blumps[splash_bmps[2].Numbers[0]].name[9] := '8';
+  if splash_bmps[3].Count = 2 then
+    blumps[splash_bmps[3].Numbers[0]].name[9] := '9';
+
+  for i := 1 to 6 do
+    splash_bmps[i].FastClear;
+
+  // Check LavaSplash
+  for j := 0 to bnumlumps - 1 do
+    for i := 1 to 6 do
+      if radixlumpname(blumps[j]) = 'LavaSplash' + itoa(i) then
+        splash_bmps[i].Add(j);
+
+  if splash_bmps[1].Count = 2 then
+    blumps[splash_bmps[1].Numbers[0]].name[10] := '7';
+  if splash_bmps[2].Count = 2 then
+    blumps[splash_bmps[2].Numbers[0]].name[10] := '8';
+  if splash_bmps[3].Count = 2 then
+    blumps[splash_bmps[3].Numbers[0]].name[10] := '9';
+
+  for i := 1 to 6 do
+    splash_bmps[i].Free;
+  // JVAL: 20200501 - End of splashes check
+
+  wadwriter.AddSeparator('S_START');
 
   numsprinfo := 0;
 
@@ -1975,6 +2038,24 @@ begin
   // MT_SPARKS
   MakeNonRotatingSprite('Sparks', _MTTX_SPARKS, 5, nil, 73, 63, false, false);
 
+  // MT_RADIXWATERSPLASH
+  MakeNonRotatingSprite('WaterSplash', _MTTX_RADIXWATERSPLASH, 6, nil, 35, 43, false, false);
+  MakeOneSprite('WaterSplash7', _MTTX_RADIXWATERSPLASH, nil, 55, 33, false, false, 'G');
+  MakeOneSprite('WaterSplash8', _MTTX_RADIXWATERSPLASH, nil, 55, 33, false, false, 'H');
+  MakeOneSprite('WaterSplash9', _MTTX_RADIXWATERSPLASH, nil, 55, 33, false, false, 'I');
+
+  // MT_RADIXMUDSPLASH
+  MakeNonRotatingSprite('MudSplash', _MTTX_RADIXMUDSPLASH, 6, nil, 35, 43, false, false);
+  MakeOneSprite('MudSplash7', _MTTX_RADIXMUDSPLASH, nil, 55, 33, false, false, 'G');
+  MakeOneSprite('MudSplash8', _MTTX_RADIXMUDSPLASH, nil, 55, 33, false, false, 'H');
+  MakeOneSprite('MudSplash9', _MTTX_RADIXMUDSPLASH, nil, 55, 33, false, false, 'I');
+
+  // MT_RADIXLAVASPLASH
+  MakeNonRotatingSprite('LavaSplash', _MTTX_RADIXLAVASPLASH, 6, nil, 35, 43, false, false);
+  MakeOneSprite('LavaSplash7', _MTTX_RADIXLAVASPLASH, nil, 55, 33, false, false, 'G');
+  MakeOneSprite('LavaSplash8', _MTTX_RADIXLAVASPLASH, nil, 55, 33, false, false, 'H');
+  MakeOneSprite('LavaSplash9', _MTTX_RADIXLAVASPLASH, nil, 55, 33, false, false, 'I');
+
   // 'PLAY' sprite
   MakeRotatingSprite8('NetRadixPlane', _DOOM_THING_2_RADIX_ + 5, 1);
 
@@ -2006,7 +2087,11 @@ begin
     end;
 
     if bl = nil then
+    begin
+      stmp := spr.dname;
+      wadwriter.AddData(stmp, @TNT1A0, SizeOf(TNT1A0));
       Continue;
+    end;
 
     f.Seek(bl.position + (bl.width - 1) * SizeOf(radixcolumn_t), sFromBeginning);
     f.Read(rcol, SizeOf(radixcolumn_t));
