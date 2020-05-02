@@ -59,6 +59,8 @@ procedure P_MobjThinker(mobj: Pmobj_t);
 
 function P_SpawnMobj(x, y, z: fixed_t; _type: integer; const mthing: Pmapthing_t = nil): Pmobj_t;
 
+function P_SpawnPlayerMissileMobj(x, y, z: fixed_t; _type: integer): Pmobj_t;
+
 procedure P_RemoveMobj(mobj: Pmobj_t);
 
 function P_SpawnPlayer(mthing: Pmapthing_t): Pmobj_t;
@@ -279,6 +281,13 @@ end;
 //
 procedure P_ExplodeMissile(mo: Pmobj_t);
 begin
+  if mo.z + mo.momz < mo.floorz + 4 * FRACUNIT then
+  begin
+    mo.z := mo.floorz;
+    P_HitFloor(mo);
+    mo.flags2_ex := mo.flags2_ex and not MF2_EX_NOHITFLOOR;
+  end;
+  
   mo.momx := 0;
   mo.momy := 0;
   mo.momz := 0;
@@ -1116,6 +1125,171 @@ begin
   result := mobj;
 end;
 
+function P_SpawnPlayerMissileMobj(x, y, z: fixed_t; _type: integer): Pmobj_t;
+var
+  mobj: Pmobj_t;
+  st: Pstate_t;
+  info: Pmobjinfo_t;
+  i: integer;
+  space: fixed_t;
+  sec: Psector_t;
+  msec: Psector_t;  // JVAL: 3d floors
+  lowfloorheight, hifloorheight: fixed_t; // JVAL: 3d floors
+  spawnfloorheight, spawnceilingheight: fixed_t;  // JVAL: Slopes
+begin
+  if _type < 0 then
+  begin
+    result := nil;
+    exit;
+  end;
+
+  mobj := Z_Malloc(SizeOf(mobj_t), PU_LEVEL, nil);
+
+  ZeroMemory(mobj, SizeOf(mobj_t));
+
+  mobj.key := P_GenGlobalMobjKey;
+
+  info := @mobjinfo[_type];
+  mobj._type := _type;
+  mobj.info := info;
+  mobj.x := x;
+  mobj.y := y;
+  mobj.radius := info.radius;
+  mobj.height := info.height;
+// JVAL: Set MF_JUSTAPPEARED flag
+  mobj.flags := info.flags or MF_JUSTAPPEARED;
+  mobj.flags_ex := info.flags_ex;
+  mobj.flags2_ex := info.flags2_ex;
+  mobj.flags3_ex := info.flags3_ex;
+  mobj.flags4_ex := info.flags4_ex;
+  mobj.scale := info.scale;
+  mobj.gravity := info.gravity;
+  mobj.pushfactor := info.pushfactor;
+  mobj.renderstyle := info.renderstyle;
+  mobj.alpha := info.alpha;
+  if (mobj.flags_ex and MF_EX_FLOATBOB <> 0) or (mobj.flags3_ex and MF3_EX_BOBING <> 0) then
+    mobj.floatbob := N_Random and FLOATBOBMASK;
+  mobj.health := info.spawnhealth;
+
+  mobj.armour_inc := info.armour_inc;  // JVAL 20200321 - Armour inc for pickable objects
+  mobj.energy_inc := info.energy_inc;  // JVAL 20200321 - Energy inc for pickable objects
+  mobj.shield_inc := info.shield_inc;  // JVAL 20200321 - Shield inc for pickable objects
+  mobj.armour_set := info.armour_set;  // JVAL 20200321 - Armour set for pickable objects
+  mobj.energy_set := info.energy_set;  // JVAL 20200321 - Energy set for pickable objects
+  mobj.shield_set := info.shield_set;  // JVAL 20200321 - Shield set for pickable objects
+  for i := 0 to Ord(NUMAMMO) - 1 do
+    mobj.ammo_inc[i] := info.ammo_inc[i]; // JVAL 20200321 - Ammo inc for pickable objects
+  for i := 0 to Ord(NUMWEAPONS) - 1 do  // JVAL 20200321 - Weapon pickable objects
+    mobj.weapon_inc[i] := info.weapon_inc[i];
+
+  mobj.patrolrange := mobj.info.patrolrange;  // JVAL: 20200501 - Patrol Range
+
+  if gameskill <> sk_nightmare then
+    mobj.reactiontime := info.reactiontime;
+
+  mobj.lastlook := P_Random mod MAXPLAYERS;
+  // do not set the state with P_SetMobjState,
+  // because action routines can not be called yet
+
+  // Set the state, but do not use P_SetMobjState, because action
+  // routines can't be called yet.  If the spawnstate has an action
+  // routine, it will not be called.
+  st := @states[info.spawnstate];
+
+  mobj.state := st;
+  mobj.prevstate := st;
+  mobj.validcount := validcount;
+  mobj.tics := P_TicsFromState(st);
+  mobj.sprite := st.sprite;
+  mobj.frame := st.frame;
+  mobj.touching_sectorlist := nil; // NULL head of sector list // phares 3/13/98
+
+  // set subsector and/or block links
+  P_SetThingPosition(mobj);
+
+  sec := Psubsector_t(mobj.subsector).sector;
+
+  // JVAL: Slopes
+  spawnfloorheight := P_FloorHeight(sec, x, y);
+  spawnceilingheight := P_CeilingHeight(sec, x, y);
+  mobj.floorz := spawnfloorheight;  // JVAL: Slopes
+  mobj.ceilingz := spawnceilingheight;  // JVAL: Slopes
+
+// JVAL: 3d floors
+  if sec.midsec >= 0 then
+  begin
+    msec := @sectors[sec.midsec];
+    if z = ONCEILINGZ then
+      mobj.ceilingz := msec.floorheight
+    else if z = ONFLOATZ then
+    begin
+      lowfloorheight := msec.floorheight - spawnfloorheight;  // JVAL: Slopes
+      hifloorheight := spawnceilingheight - msec.ceilingheight; // JVAL: Slopes
+      if lowfloorheight < mobj.info.height then
+        mobj.floorz := msec.ceilingheight
+      else if hifloorheight < mobj.info.height then
+        mobj.ceilingz := msec.floorheight
+      else
+      begin
+        if N_Random < Round(lowfloorheight / (lowfloorheight + hifloorheight) * 255) then
+          mobj.ceilingz := msec.floorheight
+        else
+          mobj.floorz := msec.ceilingheight;
+      end;
+    end
+    else
+    begin
+      if z > msec.floorheight then
+        mobj.floorz := msec.ceilingheight
+      else
+        mobj.ceilingz := msec.floorheight;
+    end;
+  end;
+
+  if z = ONFLOORZ then
+    mobj.z := mobj.floorz
+  else if z = ONCEILINGZ then
+    mobj.z := mobj.ceilingz - mobj.info.height
+  else if z = ONFLOATZ then
+  begin
+    space := mobj.ceilingz - mobj.info.height - mobj.floorz;
+    if space > 48 * FRACUNIT then
+    begin
+      space := space - 40 * FRACUNIT;
+      mobj.z := FixedMul(space, N_Random * 256) + mobj.floorz + 40 * FRACUNIT
+    end
+    else
+      mobj.z := mobj.floorz
+  end
+  else
+    mobj.z := z;
+
+  if (mobj.flags2_ex and MF2_EX_FLOORCLIP <> 0) and
+     (P_GetThingFloorType(mobj) > FLOOR_SOLID) and
+     (mobj.z = sec.floorheight) then
+    mobj.floorclip := FOOTCLIPSIZE
+  else
+    mobj.floorclip := 0;
+
+  mobj.momz := mobj.info.vspeed;
+
+  mobj.thinker._function.acp1 := @P_MobjThinker;
+
+  P_AddThinker(@mobj.thinker);
+
+  mobj.prevx := mobj.x;
+  mobj.prevy := mobj.y;
+  mobj.prevz := mobj.z;
+  mobj.nextx := mobj.x;
+  mobj.nexty := mobj.y;
+  mobj.nextz := mobj.z;
+  mobj.prevangle := mobj.angle;
+  mobj.nextangle := mobj.angle;
+  mobj.intrplcnt := 0;
+
+  result := mobj;
+end;
+
 //
 // P_RemoveMobj
 //
@@ -1641,18 +1815,28 @@ function P_CheckMissileSpawn(th: Pmobj_t): boolean;
 var
   maxmom: fixed_t;
   dx, dy, dz: fixed_t;
+  dxstep, dystep, dzstep: fixed_t;
+  xtest, ytest, ztest: fixed_t;
+  i: integer;
+  steps: integer;
+  halfradius: fixed_t;
 begin
   th.tics := th.tics - (P_Random and 3);
 
   if th.tics < 1 then
     th.tics := 1;
 
+  if th.radius < 2 * FRACUNIT then
+    halfradius := FRACUNIT
+  else
+    halfradius := th.radius div 2;
   maxmom := Max3I(abs(th.momx), abs(th.momy), abs(th.momz));
-  if maxmom > 16 * FRACUNIT then
+  if maxmom > 64 * FRACUNIT then
   begin
-    dx := FixedMul(th.momx, FixedDiv(16 * FRACUNIT, maxmom)) div 2;
-    dy := FixedMul(th.momy, FixedDiv(16 * FRACUNIT, maxmom)) div 2;
-    dz := FixedMul(th.momz, FixedDiv(16 * FRACUNIT, maxmom)) div 2;
+    dx := FixedMul(th.momx, FixedDiv(64 * FRACUNIT, maxmom)) div 2;
+    dy := FixedMul(th.momy, FixedDiv(64 * FRACUNIT, maxmom)) div 2;
+    dz := FixedMul(th.momz, FixedDiv(64 * FRACUNIT, maxmom)) div 2;
+    maxmom := 64 * FRACUNIT;
   end
   else
   begin
@@ -1661,18 +1845,46 @@ begin
     dz := th.momz div 2;
   end;
 
+  steps := maxmom div halfradius + 1;
+
+  dxstep := dx div steps;
+  dystep := dy div steps;
+  dzstep := dz div steps;
+
+  xtest := th.x;
+  ytest := th.y;
+  ztest := th.z;
+
   // move a little forward so an angle can
   // be computed if it immediately explodes
+  for i := 0 to steps - 1 do
+  begin
+    inc(xtest, dxstep);
+    inc(ytest, dystep);
+    inc(ztest, dzstep);
+    // JVAL: 20200501 - Extra missile check
+    if not P_PtInAir(xtest, ytest, ztest, th.radius div 2) then
+    begin
+      // JVAL: 20200502 - Position between valid and invalid point
+      th.x := xtest - dxstep div 2;
+      th.y := ytest - dystep div 2;
+      th.z := ztest - dzstep div 2;
+      // Step back if invalid position
+      if not P_PtInAir(th.x, th.y, th.y, th.radius div 2) then
+      begin
+        th.x := th.x - dxstep div 2;
+        th.y := th.y - dystep div 2;
+        th.z := th.z - dzstep div 2;
+      end;
+      P_ExplodeMissile(th);
+      result := false;
+      exit;
+    end;
+  end;
+
   th.x := th.x + dx;
   th.y := th.y + dy;
   th.z := th.z + dz;
-
-  // JVAL: 20200501 - Extra missile check
-  if not P_PtInAir(th.x, th.y, th.z, th.radius div 2) then
-  begin
-    P_ExplodeMissile(th);
-    result := false;
-  end;
 
   if not P_TryMove(th, th.x, th.y) then
   begin
@@ -1960,7 +2172,7 @@ begin
   y := source.y;
   z := source.z;
 
-  th := P_SpawnMobj(x, y, z, _type);
+  th := P_SpawnPlayerMissileMobj(x, y, z, _type);
 
   A_SeeSound(th, th);
 
@@ -2130,6 +2342,7 @@ begin
     exit;
 
   sec := ss.sector;
+
   // don't splash if landing on the edge above water/lava/etc....
   if thing.floorz <> sec.floorheight then
     exit;

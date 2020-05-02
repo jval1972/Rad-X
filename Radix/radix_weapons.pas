@@ -274,6 +274,7 @@ end;
 const
   WEAPON_SIDE_OFFSET = 32 * FRACUNIT;
   WEAPON_Z_OFFSET = 32 * FRACUNIT;
+  MAX_WEAPON_Z_OFFSET = 32 * FRACUNIT;
 
 procedure P_SpawnPlayerMissileOffsZ(source: Pmobj_t; _type: integer; const doffs, dz: fixed_t);
 var
@@ -308,6 +309,10 @@ begin
 
   RX_LineTrace(oldx, oldy, oldz, spawnx, spawny, spawnz, newx, newy, newz);
 
+  // JVAL: 20200502 - Limit z spawn height of missile
+  if abs(oldz - newz) > MAX_WEAPON_Z_OFFSET then
+    newz := oldz + Isign(newz - oldz) * MAX_WEAPON_Z_OFFSET;
+
   offsx := FixedMul(Isign(doffs) * mobjinfo[_type].radius, finecosine[ang]);
   offsy := FixedMul(Isign(doffs) * mobjinfo[_type].radius, finesine[ang]);
 
@@ -320,10 +325,10 @@ begin
   sceiling := P_3dCeilingHeight(sec, source.x, source.y, newz);
 
   if newz - mobjinfo[_type].height < sfloor then
-    newz := sfloor + mobjinfo[_type].height;
+    newz := newz + mobjinfo[_type].height;
 
   if newz + mobjinfo[_type].height > sceiling then
-    newz := sceiling - mobjinfo[_type].height;
+    newz := newz - mobjinfo[_type].height;
 
   source.z := newz;
   P_SpawnRadixPlayerMissile(source, _type);

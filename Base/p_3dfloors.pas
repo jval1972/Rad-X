@@ -314,13 +314,13 @@ begin
   end;
 
   sec := s.sector;
-  if z < P_FloorHeight(sec, x, y) + radius then
+  if z < P_FloorHeight(sec, x, y){ + radius} then
   begin
     result := false;
     exit;
   end;
 
-  if z > P_CeilingHeight(sec, x, y) - radius then
+  if z > P_CeilingHeight(sec, x, y){ - radius} then
   begin
     result := false;
     exit;

@@ -970,7 +970,7 @@ function P_TryMove(thing: Pmobj_t; x, y: fixed_t): boolean;
 var
   oldx: fixed_t;
   oldy: fixed_t;
-  x1, y1: fixed_t;
+  x1, y1, z1, dz: fixed_t;
   i: integer;
   side: integer;
   oldside: integer;
@@ -1003,16 +1003,40 @@ begin
       if dist = 0 then
         iters := 1
       else
-        iters := MinI(8, FixedDiv(dist, thing.radius) div FRACUNIT + 4);
+        iters := MaxI(8, FixedDiv(dist, thing.radius) div FRACUNIT + 4);
     end;
-    for i := 1 to iters do
+    if thing.flags and MF_MISSILE <> 0 then
     begin
-      x1 := (thing.x div iters) * (iters - i) + (x div iters) * i;
-      y1 := (thing.y div iters) * (iters - i) + (y div iters) * i;
-      if not P_CheckPosition(thing, x1, y1) then
+      dz := thing.momz div iters;
+      z1 := thing.z;
+      for i := 1 to iters do
       begin
-        result := false;  // solid wall or thing
-        exit;
+        x1 := (thing.x div iters) * (iters - i) + (x div iters) * i;
+        y1 := (thing.y div iters) * (iters - i) + (y div iters) * i;
+        if not P_CheckPosition(thing, x1, y1) then
+        begin
+          result := false;  // solid wall or thing
+          exit;
+        end;
+        z1 := z1 + dz;
+        if not P_PtInAir(x1, y1, z1, thing.radius) then
+        begin
+          result := false;  // JVAL: 20200502 - 3d Floors check
+          exit;
+        end;
+      end;
+    end
+    else
+    begin
+      for i := 1 to iters do
+      begin
+        x1 := (thing.x div iters) * (iters - i) + (x div iters) * i;
+        y1 := (thing.y div iters) * (iters - i) + (y div iters) * i;
+        if not P_CheckPosition(thing, x1, y1) then
+        begin
+          result := false;  // solid wall or thing
+          exit;
+        end;
       end;
     end;
   end;
