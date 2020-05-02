@@ -47,7 +47,7 @@ var
   D_DEVSTR: string =
     'Development mode ON.' + #13#10;
   D_CDROM: string =
-    'CD-ROM Version: Doom32.ini from c:\doomdata' + #13#10;
+    'CD-ROM Version: RAD.ini from c:\doomdata' + #13#10;
 
 //
 //  M_Menu.C
