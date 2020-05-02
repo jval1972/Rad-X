@@ -3010,6 +3010,8 @@ begin
   end;
   if m.touchdamage <> 0 then
     AddLn('Touchdamage ' + itoa(m.touchdamage));
+  if m.patrolrange <> 0 then
+    AddLn('Patrolrange' + itoa(m.patrolrange));
   for i := 0 to mobj_flags.Count - 1 do
     if m.flags and (1 shl i) <> 0 then
       AddLn('+' + mobj_flags[i]);
