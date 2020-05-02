@@ -83,6 +83,7 @@ implementation
 
 uses
   d_delphi,
+  mt_utils,
   am_map,
   d_player,
   d_main,
@@ -140,44 +141,25 @@ begin
   // Okay - IWAD dependend stuff.
   // This has been changed severly, and
   //  some stuff might have changed in the process.
-  case gamemode of
-    // DOOM 1 - E1, E3 or E4, but each nine missions
-    shareware,
-    registered:
+  S_ChangeMusic(Ord(mus_victor), true);
+  case gameepisode of
+    1:
       begin
-        S_ChangeMusic(Ord(mus_victor), true);
-        case gameepisode of
-          1:
-            begin
-              finaleflat := bgflatE1;
-              finaletext := E1TEXT;
-            end;
-          2:
-            begin
-              finaleflat := bgflatE2;
-              finaletext := E2TEXT;
-            end;
-          3:
-            begin
-              finaleflat := bgflatE3;
-              finaletext := E3TEXT;
-            end;
-          4:
-            begin
-              finaleflat := bgflatE4;
-              finaletext := E4TEXT;
-            end;
-        else
-          // Ouch.
-        end;
+        finaleflat := bgflatE1;
+        finaletext := W_TextLumpName('EndEpisode1Text');
       end;
-  else
-    begin
-      S_ChangeMusic(Ord(mus_read_m), true);
-      finaleflat := 'F_SKY1'; // Not used anywhere else.
-      finaletext := C1TEXT;   // FIXME - other text, music?
-    end;
+    2:
+      begin
+        finaleflat := bgflatE2;
+        finaletext := W_TextLumpName('EndEpisode2Text');
+      end;
+    3:
+      begin
+        finaleflat := bgflatE3;
+        finaletext := W_TextLumpName('EndEpisode3Text');
+      end;
   end;
+  S_StartMusic(Ord(mus_intro));
   finalestage := 0;
   finalecount := 0;
 end;
@@ -190,6 +172,145 @@ begin
     result := false;
 end;
 
+var
+  starsinitialized: boolean = false;
+
+const
+  STARS_MAX_Z = 2048;
+  STARS_MAX_VELOCITY = 32;
+
+type
+  starinfo_t = record
+    x, y, z: integer;
+    velocity: integer;
+    color: byte;
+  end;
+  Pstarinfo_t = ^starinfo_t;
+
+const
+  NUMSTARS = 128;
+
+var
+  starinfo: array[0..NUMSTARS - 1] of starinfo_t;
+
+const
+  NUMSTARCOLORS = 32;
+
+var
+  STARCOLORS: array[0..NUMSTARCOLORS - 1] of byte;
+
+procedure F_StarAnimationTicker;
+var
+  i: integer;
+  pstar: Pstarinfo_t;
+
+  procedure calc_pstar_xy;
+  begin
+    case i mod 8 of
+    0:
+      begin
+        pstar.x := -random(160);
+        pstar.y := -100;
+      end;
+    1:
+      begin
+        pstar.x := random(160);
+        pstar.y := -100;
+      end;
+    2:
+      begin
+        pstar.x := 160;
+        pstar.y := -random(100);
+      end;
+    3:
+      begin
+        pstar.x := 160;
+        pstar.y := random(100);
+      end;
+    4:
+      begin
+        pstar.x := random(160);
+        pstar.y := 100;
+      end;
+    5:
+      begin
+        pstar.x := -random(160);
+        pstar.y := 100;
+      end;
+    6:
+      begin
+        pstar.x := -160;
+        pstar.y := random(100);
+      end;
+    7:
+      begin
+        pstar.x := -160;
+        pstar.y := -random(100);
+      end;
+    end;
+  end;
+
+begin
+  if not starsinitialized then
+  begin
+    // JVAL: 20200502 - Initialize stars
+    randomize;
+    for i := 0 to NUMSTARCOLORS - 1 do
+      STARCOLORS[i] := V_FindAproxColorIndex(@videopal, (i * 6) shl 16 + (i * 6) shl 8 + (i * 6), 1, 252);
+    for i := 0 to NUMSTARS - 1 do
+    begin
+      pstar := @starinfo[i];
+      pstar.x := random(320) - 160;
+      pstar.y := random(200) - 100;
+      calc_pstar_xy;
+      pstar.z := random(STARS_MAX_Z) + 1;
+      pstar.velocity := STARS_MAX_VELOCITY + random(STARS_MAX_VELOCITY);
+      pstar.color := random(NUMSTARCOLORS div 8);
+    end;
+    starsinitialized := true;
+  end;
+
+  // JVAL: 20200502 - Animate flight simulation
+  for i := 0 to NUMSTARS - 1 do
+  begin
+    pstar := @starinfo[i];
+    pstar.z := pstar.z - pstar.velocity;
+    if pstar.z <= 0 then
+    begin
+      pstar.x := random(320) - 160;
+      pstar.y := random(200) - 100;
+      calc_pstar_xy;
+      pstar.z := STARS_MAX_Z;
+      pstar.velocity := STARS_MAX_VELOCITY + random(STARS_MAX_VELOCITY);
+      pstar.color := random(NUMSTARCOLORS div 8);
+    end;
+  end;
+
+end;
+
+procedure F_StarAnimationDrawer;
+var
+  i: integer;
+  pstar: Pstarinfo_t;
+  z: integer;
+  screenx, screeny: integer;
+begin
+  if not starsinitialized then
+    F_StarAnimationTicker;
+
+  // JVAL: 20200502 - Draw star flight simulation
+  MT_ZeroMemory(screens[SCN_TMP], 320 * 200);
+  for i := 0 to NUMSTARS - 1 do
+  begin
+    pstar := @starinfo[i];
+    z := decide(pstar.z <= 0, 1, pstar.z);
+    screenx := 160 + round(pstar.x * (1 - z / STARS_MAX_Z));
+    screeny := 100 + round(pstar.y * (1 - z / STARS_MAX_Z));
+    if IsIntegerInRange(screenx, 0, 319) and IsIntegerInRange(screeny, 0, 199) then
+      screens[SCN_TMP][screeny * 320 + screenx] := STARCOLORS[GetIntegerInRange(round(pstar.color + (1 - sqrt(z / STARS_MAX_Z)) * NUMSTARCOLORS), 0, NUMSTARCOLORS - 1)];
+  end;
+end;
+
 //
 // F_Ticker
 //
@@ -198,20 +319,23 @@ begin
   // advance animation
   inc(finalecount);
 
+  F_StarAnimationTicker;
+
+  // Leave cast for last episode
   if finalestage = 2 then
   begin
     F_CastTicker;
     exit;
   end;
 
-  if (finalestage = 0) and (finalecount > Length(finaletext) * TEXTSPEED + TEXTWAIT) then
+{  if (finalestage = 0) and (finalecount > Length(finaletext) * TEXTSPEED + TEXTWAIT) then
   begin
     finalecount := 0;
     finalestage := 1;
     wipegamestate := -1;    // force a wipe
     if gameepisode = 3 then
       S_StartMusic(Ord(mus_bunny));
-  end;
+  end;}
 end;
 
 procedure F_TextWrite;
@@ -227,9 +351,9 @@ var
   len: integer;
   cx: integer;
   cy: integer;
+  commahack: boolean;
 begin
   // erase the entire screen to a tiled background
-
   src := W_CacheLumpNum(R_GetLumpForFlat(R_FlatNumForName(finaleflat)), PU_STATIC);
   dest := 0;
 
@@ -249,49 +373,56 @@ begin
   end;
   Z_ChangeTag(src, PU_CACHE);
 
+  F_StarAnimationDrawer;
+
   // draw some of the text onto the screen
-  cx := 10;
-  cy := 10;
+  cx := 4;
+  cy := 4;
   ch := finaletext;
   len := Length(ch);
 
   count := (finalecount - 10) div TEXTSPEED;
   if count < 0 then
-    count := 0;
+    count := 0
+  else if count > len then
+    count := len;
 
-  i := 1;
-  while count > 0 do
+  for i := 1 to count do
   begin
-
     if i > len then
       break;
 
     c := ch[i];
-    inc(i);
     if c = #13 then
-    begin
-      cy := cy + 11;
       continue;
-    end;
     if c = #10 then
     begin
-      cx := 10;
+      cx := 3;
+      cy := cy + 8;
       continue;
     end;
 
-    c1 := Ord(toupper(c)) - Ord(HU_FONTSTART);
-    if (c1 < 0) or (c1 > HU_FONTSIZE) then
+    if c = Chr($27) then
     begin
-      cx := cx + 4;
-      continue;
+      c1 := Ord(toupper(',')) - Ord(HU_FONTSTART);
+      commahack := true;
+    end
+    else
+    begin
+      commahack := false;
+      c1 := Ord(toupper(c)) - Ord(HU_FONTSTART);
+      if (c1 < 0) or (c1 > HU_FONTSIZE) then
+      begin
+        cx := cx + 3;
+        continue;
+      end;
     end;
-
+    
     w := hu_font[c1].width;
     if cx + w > 320 then
-      break;
-    V_DrawPatch(cx, cy, SCN_TMP, hu_font[c1], false);
+      continue;
+    V_DrawPatch(cx, decide(commahack, cy - 4, cy), SCN_TMP, hu_font[c1], false);
     cx := cx + w;
-    dec(count);
   end;
   V_CopyRect(0, 0, SCN_TMP, 320, 200, 0, 0, SCN_FG, true);
 
@@ -596,70 +727,6 @@ begin
 end;
 
 //
-// F_BunnyScroll
-//
-var
-  laststage: integer;
-
-procedure F_BunnyScroll;
-var
-  scrolled: integer;
-  x: integer;
-  p1: Ppatch_t;
-  p2: Ppatch_t;
-  name: string;
-  stage: integer;
-begin
-  p1 := W_CacheLumpName('PFUB2', PU_LEVEL);
-  p2 := W_CacheLumpName('PFUB1', PU_LEVEL);
-
-  scrolled := 320 - (finalecount - 230) div 2;
-  if scrolled > 320 then
-    scrolled := 320
-  else if scrolled < 0 then
-    scrolled := 0;
-
-  for x := 0 to 320 - 1 do
-  begin
-    if x + scrolled < 320 then
-      F_DrawPatchCol(x, p1, x + scrolled)
-    else
-      F_DrawPatchCol(x, p2, x + scrolled - 320);
-  end;
-
-  if finalecount >= 1130 then
-  begin
-    if finalecount < 1180 then
-    begin
-      V_DrawPatch((320 - 13 * 8) div 2,
-                  (200 - 8 * 8) div 2,
-                   SCN_TMP, 'END0', false);
-      laststage := 0;
-    end
-    else
-    begin
-      stage := (finalecount - 1180) div 5;
-      if stage > 6 then
-        stage := 6;
-      if stage > laststage then
-      begin
-        S_StartSound(nil, Ord(sfx_pistol));
-        laststage := stage;
-      end;
-
-      sprintf(name,'END%d', [stage]);
-      V_DrawPatch((320 - 13 * 8) div 2,
-                  (200 - 8 * 8) div 2,
-                   SCN_TMP, name, false);
-    end;
-  end;
-
-  V_CopyRect(0, 0, SCN_TMP, 320, 200, 0, 0, SCN_FG, true);
-
-  V_FullScreenStretch;
-end;
-
-//
 // F_Drawer
 //
 procedure F_Drawer;
@@ -675,26 +742,6 @@ begin
     F_TextWrite;
     exit;
   end;
-
-{  case gameepisode of
-    1:
-      begin
-        V_PageDrawer(pg_HELP2);
-      end;
-    2:
-      begin
-        V_PageDrawer(pg_VICTORY2);
-      end;
-    3:
-      begin
-        F_BunnyScroll;
-      end;
-    4:
-      begin
-        V_PageDrawer(pg_ENDPIC);
-      end;
-  end;}
-
 end;
 
 initialization
@@ -751,9 +798,6 @@ initialization
 
   castorder[17].name := '';
   castorder[17]._type := mobjtype_t(0);
-
-
-  laststage := 0;
 
 end.
 
