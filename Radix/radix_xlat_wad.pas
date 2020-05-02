@@ -105,6 +105,7 @@ type
     function GenerateCockpitOverlay: boolean;
     function GenerateSounds: boolean;
     function GenerateMissionText: boolean;
+    function GenerateEndText: boolean;
     procedure WritePK3Entry;
   public
     constructor Create; virtual;
@@ -2331,6 +2332,28 @@ begin
     end;
 end;
 
+function TRadixToWADConverter.GenerateEndText: boolean;
+var
+  rname, wname: string;
+  i: integer;
+  tbuffer: pointer;
+  tsize: integer;
+begin
+  result := false;
+  for i := 1 to 3 do
+  begin
+    rname := 'EndEpisode' + itoa(i) + 'Text';
+    if ReadLump(lumps, numlumps, rname, tbuffer, tsize) then
+    begin
+      wname := 'C' + itoa(i) + 'TEXT';
+      wadwriter.AddData(wname, tbuffer, tsize);
+      aliases.Add(wname + '=' + rname);
+      result := true;
+      memfree(tbuffer, tsize);
+    end;
+  end;
+end;
+
 procedure TRadixToWADConverter.WritePK3Entry;
 begin
   if aliases = nil then
@@ -2371,6 +2394,7 @@ begin
   GenerateCockpitOverlay;
   GenerateSounds;
   GenerateMissionText;
+  GenerateEndText;
   WritePK3Entry;
 end;
 
