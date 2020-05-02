@@ -101,8 +101,6 @@ const
 function V_ReadPalette(tag: integer): PByteArray;
 
 var
-  pg_HELP1: string = 'HELP1';
-  pg_HELP2: string = 'HELP2';
   pg_VICTORY2: string = 'VICTORY2';
   pg_ENDPIC: string = 'ENDPIC';
   pg_TITLE: string = 'TITLEPIC';

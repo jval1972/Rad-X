@@ -676,7 +676,7 @@ begin
     exit;
   end;
 
-  case gameepisode of
+{  case gameepisode of
     1:
       begin
         V_PageDrawer(pg_HELP2);
@@ -693,7 +693,7 @@ begin
       begin
         V_PageDrawer(pg_ENDPIC);
       end;
-  end;
+  end;}
 
 end;
 

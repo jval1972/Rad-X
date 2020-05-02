@@ -319,6 +319,18 @@ begin
   M_WriteBigTextGray(25, y, str, SCN_TMP);
 end;
 
+procedure M_DrawSmallLine(const y: integer; const str: string);
+var
+  i: integer;
+begin
+  M_HorzLine(0, 319, y, 64);
+  M_HorzLine(0, 319, y + 9, 80);
+  for i := y + 1 to y + 8 do
+    M_HorzLine(0, 319, i, 63);
+
+  M_WriteSmallWhiteTextCenter(y + 2, str, SCN_TMP);
+end;
+
 const
   DEF_MENU_ITEMS_START_X = 32;
   DEF_MENU_ITEMS_START_Y = 65;
@@ -1492,23 +1504,200 @@ begin
   M_StartMessage(tempstring, @M_QuickLoadResponse, true);
 end;
 
+procedure M_DrawFlatBackground(const sflat: string);
+var
+  x, y: integer;
+  src: PByteArray;
+  dest: integer;
+  iflat: integer;
+begin
+  iflat := R_FlatNumForName(sflat);
+  if iflat < 0 then
+  begin
+    iflat := R_FlatNumForName(DEFMENUBACKGROUNDFLAT);
+    if iflat < 0 then
+      exit;
+  end;
+
+  src := W_CacheLumpNum(R_GetLumpForFlat(iflat), PU_STATIC);
+  dest := 0;
+
+  for y := 0 to 200 - 1 do
+  begin
+    for x := 0 to (320 div 64) - 1 do
+    begin
+      memcpy(@screens[SCN_TMP, dest], @src[_SHL(y and 63, 6)], 64);
+      dest := dest + 64;
+    end;
+
+    if 320 and 63 <> 0 then
+    begin
+      memcpy(@screens[SCN_TMP, dest], @src[_SHL(y and 63, 6)], 320 and 63);
+      dest := dest + (320 and 63);
+    end;
+  end;
+  Z_ChangeTag(src, PU_CACHE);
+end;
+
 //
 // Read This Menus
 // Had a "quick hack to fix romero bug"
 //
+function M_WriteHelpText(const x, y: integer; const s1, s2: string): menupos_t;
+var
+  mp: menupos_t;
+begin
+  mp := M_WriteSmallWhiteText(x, y, s1 + ': ', SCN_TMP);
+  result := M_WriteSmallText(mp.x, mp.y, s2, SCN_TMP);
+end;
+
 procedure M_DrawReadThis1;
+var
+  y: integer;
 begin
   inhelpscreens := true;
-  V_PageDrawer(pg_HELP1);
+  M_DrawFlatBackground(menubackgroundflat);
+
+  M_DrawHeadLine(15, 'HELP');
+
+  y := 34;
+  M_DrawSmallLine(y, 'MISCELLANIOUS OPTIONS');
+
+  y := y + 14;
+  M_WriteHelpText(10, y, 'F1', 'HELP');
+  M_WriteHelpText(110, y, 'F2', 'LOAD');
+  M_WriteHelpText(210, y, 'F3', 'SAVE');
+
+  y := y + 10;
+  M_WriteHelpText(10, y, 'F4', 'SOUND VOLUME');
+  M_WriteHelpText(110, y, 'F5', 'TOGGLE DETAIL');
+  M_WriteHelpText(210, y, 'F6', 'QUICKSAVE');
+
+  y := y + 10;
+  M_WriteHelpText(10, y, 'F7', 'END GAME');
+  M_WriteHelpText(110, y, 'F8', 'MESSAGES');
+  M_WriteHelpText(210, y, 'F9', 'QUICKLOAD');
+
+  y := y + 10;
+  M_WriteHelpText(10, y, 'F10', 'QUIT GAME');
+  M_WriteHelpText(110, y, 'F11', 'GAMMA');
+  M_WriteHelpText(210, y, 'F12', 'OBJECTIVES');
+
+  y := y + 10;
+  M_WriteHelpText(10, y, 'TAB', 'AUTOMAP');
+  M_WriteHelpText(110, y, 'ESC', 'MENU');
+  M_WriteHelpText(210, y, '+/-', 'VIEW SIZE');
+
+  y := y + 10;
+  M_WriteHelpText(10, y, 'PRTSC', 'SCREENSHOT');
+  M_WriteHelpText(110, y, 'PAUSE', 'PAUSE GAME');
+
+  y := y + 14;
+  M_DrawSmallLine(y, 'AUTOMAP');
+
+  y := y + 14;
+  M_WriteHelpText(10, y, 'F', 'FOLLOW MODE');
+  M_WriteHelpText(110, y, 'M', 'ADD MARK');
+  M_WriteHelpText(210, y, 'C', 'CLEAR MARKS');
+
+  y := y + 10;
+  M_WriteHelpText(10, y, 'G', 'TOGGLE GRID');
+  M_WriteHelpText(110, y, 'T', 'TOGGLE TEXTURES');
+  M_WriteHelpText(210, y, '+/-', 'ZOOM SIZE');
+
+  y := y + 14;
+  M_DrawSmallLine(y, 'MENU');
+
+  y := y + 14;
+  M_WriteHelpText(10, y, 'ARROWS', 'NAVIGATE');
+  M_WriteHelpText(110, y, 'ENTER', 'SELECT');
+  M_WriteHelpText(210, y, 'BACKSPACE', 'GO BACK');
 end;
 
 //
 // Read This Menus - optional second page.
 //
+function M_WriteHelpControlText(const x, y: integer; const control: PInteger): menupos_t;
+var
+  i: integer;
+begin
+  for i := 0 to Ord(kb_end) - 1 do
+    if KeyBindingsInfo[i].pkey = control then
+    begin
+      result := M_WriteSmallText(x, y, KeyBindingsInfo[i].text + ': ', SCN_TMP);
+      result := M_WriteSmallWhiteText(result.x, result.y, M_KeyToString(control^), SCN_TMP);
+      exit;
+    end;
+
+  result.x := x;
+  result.y := y;
+end;
+
 procedure M_DrawReadThis2;
+var
+  y: integer;
 begin
   inhelpscreens := true;
-  V_PageDrawer(pg_HELP2);
+  M_DrawFlatBackground(menubackgroundflat);
+
+  M_DrawHeadLine(15, 'HELP');
+
+  y := 34;
+  M_DrawSmallLine(y, 'MOVEMENT CONTROLS');
+
+  y := y + 14;
+  M_WriteHelpControlText(10, y, @key_up);
+  M_WriteHelpControlText(160, y, @key_down);
+
+  y := y + 10;
+  M_WriteHelpControlText(10, y, @key_left);
+  M_WriteHelpControlText(160, y, @key_right);
+
+  y := y + 10;
+  M_WriteHelpControlText(10, y, @key_strafeleft);
+  M_WriteHelpControlText(160, y, @key_straferight);
+
+  y := y + 10;
+  M_WriteHelpControlText(10, y, @key_flyup);
+  M_WriteHelpControlText(160, y, @key_flydown);
+
+  y := y + 10;
+  M_WriteHelpControlText(10, y, @key_fire);
+  M_WriteHelpControlText(160, y, @key_use);
+
+  y := y + 10;
+  M_WriteHelpControlText(10, y, @key_strafe);
+  M_WriteHelpControlText(160, y, @key_speed);
+
+  y := y + 10;
+  M_WriteHelpControlText(10, y, @key_lookup);
+  M_WriteHelpControlText(160, y, @key_lookdown);
+
+  y := y + 10;
+  M_WriteHelpControlText(10, y, @key_lookcenter);
+  M_WriteHelpControlText(160, y, @key_lookleft);
+
+  y := y + 10;
+  M_WriteHelpControlText(10, y, @key_lookright);
+
+  y := y + 14;
+  M_DrawSmallLine(y, 'WEAPON SELECTION');
+
+  y := y + 14;
+  M_WriteHelpControlText(10, y, @key_weapon0);
+  M_WriteHelpControlText(160, y, @key_weapon1);
+
+  y := y + 10;
+  M_WriteHelpControlText(10, y, @key_weapon2);
+  M_WriteHelpControlText(160, y, @key_weapon3);
+
+  y := y + 10;
+  M_WriteHelpControlText(10, y, @key_weapon4);
+  M_WriteHelpControlText(160, y, @key_weapon5);
+
+  y := y + 10;
+  M_WriteHelpControlText(10, y, @key_weapon6);
+  M_WriteHelpControlText(160, y, @key_weapon7);
 end;
 
 procedure M_DrawReadThisExt;
@@ -3516,41 +3705,6 @@ begin
     M_MenuShader;
     V_CopyRectTransparent(0, 0, SCN_TMP, 320, height, 0, 0, SCN_FG, true);
   end;
-end;
-
-procedure M_DrawFlatBackground(const sflat: string);
-var
-  x, y: integer;
-  src: PByteArray;
-  dest: integer;
-  iflat: integer;
-begin
-  iflat := R_FlatNumForName(sflat);
-  if iflat < 0 then
-  begin
-    iflat := R_FlatNumForName(DEFMENUBACKGROUNDFLAT);
-    if iflat < 0 then
-      exit;
-  end;
-
-  src := W_CacheLumpNum(R_GetLumpForFlat(iflat), PU_STATIC);
-  dest := 0;
-
-  for y := 0 to 200 - 1 do
-  begin
-    for x := 0 to (320 div 64) - 1 do
-    begin
-      memcpy(@screens[SCN_TMP, dest], @src[_SHL(y and 63, 6)], 64);
-      dest := dest + 64;
-    end;
-
-    if 320 and 63 <> 0 then
-    begin
-      memcpy(@screens[SCN_TMP, dest], @src[_SHL(y and 63, 6)], 320 and 63);
-      dest := dest + (320 and 63);
-    end;
-  end;
-  Z_ChangeTag(src, PU_CACHE);
 end;
 
 //

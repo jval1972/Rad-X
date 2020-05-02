@@ -2997,8 +2997,6 @@ begin
   DEH_AddString(@deh_strings, @castorder[15].name, 'CC_CYBER');
   DEH_AddString(@deh_strings, @castorder[16].name, 'CC_HERO');
 
-  DEH_AddString(@deh_strings, @pg_HELP1, 'PAGE_HELP1');
-  DEH_AddString(@deh_strings, @pg_HELP2, 'PAGE_HELP2');
   DEH_AddString(@deh_strings, @pg_VICTORY2, 'PAGE_VICTORY2');
   DEH_AddString(@deh_strings, @pg_ENDPIC, 'PAGE_ENDPIC');
   DEH_AddString(@deh_strings, @pg_TITLE, 'PAGE_TITLE');
