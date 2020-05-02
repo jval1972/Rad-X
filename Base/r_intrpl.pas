@@ -410,7 +410,8 @@ begin
 
   sec := R_PointInSubsector(viewx, viewy).sector;
   if sec.renderflags and SRF_NO_INTERPOLATE = 0 then
-    R_AddInterpolationItem(@player.viewz, iinteger);
+    if player.mo.z = player.mo.floorz then
+      R_AddInterpolationItem(@player.viewz, iinteger);
 
   {$IFDEF DEBUG}
   I_DevWarning('R_StoreInterpolationData(): - finished - fractime = %5.3f, gametic = %d'#13#10, [I_GetFracTime / FRACUNIT, gametic]);
