@@ -1780,13 +1780,14 @@ var
   vangle: angle_t;
 begin
   viewplayer := player;
+
   viewx := player.mo.x;
   viewy := player.mo.y;
+  viewz := player.viewz + player.bobviewz;
+
   shiftangle := player.lookdir2;
   viewangle := player.mo.angle + shiftangle * DIR256TOANGLEUNIT + viewangleoffset;
   extralight := player.extralight;
-
-  viewz := player.viewz + player.bobviewz;
 
   R_AdjustTeleportZoom(player);
   R_AdjustChaseCamera;

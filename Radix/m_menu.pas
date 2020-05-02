@@ -2086,7 +2086,7 @@ end;
 
 procedure M_NewGame(choice: integer);
 begin
-  if netgame and (not demoplayback) then
+  if netgame and not demoplayback then
   begin
     M_StartMessage(SNEWGAME + #13#10 + PRESSKEY, nil, false);
     exit;
@@ -3478,7 +3478,7 @@ var
 procedure M_MenuShader;
 begin
   shademenubackground := shademenubackground mod 3;
-  if (not wipedisplay) and (shademenubackground >= 1) then
+  if not wipedisplay and (shademenubackground >= 1) then
   begin
     if usemultithread then
     begin

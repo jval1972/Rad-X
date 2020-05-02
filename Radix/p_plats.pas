@@ -86,7 +86,7 @@ begin
             S_StartSound(Pmobj_t(@plat.sector.soundorg), Ord(sfx_stnmov));
         end;
 
-        if (res = crushed) and (not plat.crush) then
+        if (res = crushed) and not plat.crush then
         begin
           plat.count := plat.wait;
           plat.status := down;

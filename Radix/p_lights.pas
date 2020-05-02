@@ -103,7 +103,7 @@ var
 begin
   // Note that we are resetting sector attributes.
   // Nothing special about it during gameplay.
-  sector.special := sector.special and (not 31); // clear non-generalized sector type
+  sector.special := sector.special and not 31; // clear non-generalized sector type
 
   flick := Z_Malloc(SizeOf(fireflicker_t), PU_LEVSPEC, nil);
 
@@ -153,7 +153,7 @@ var
   flash: Plightflash_t;
 begin
   // nothing special about it during gameplay
-  sector.special := sector.special and (not 31); // clear non-generalized sector type
+  sector.special := sector.special and not 31; // clear non-generalized sector type
 
   flash := Z_Malloc(SizeOf(lightflash_t), PU_LEVSPEC, nil);
 
@@ -219,7 +219,7 @@ begin
     flash.minlight := 0;
 
   // nothing special about it during gameplay
-  sector.special := sector.special and (not 31); // clear non-generalized sector type
+  sector.special := sector.special and not 31; // clear non-generalized sector type
 
   if inSync = 0 then
     flash.count := (P_Random and 7) + 1
@@ -367,7 +367,7 @@ begin
   g.thinker._function.acp1 := @T_Glow;
   g.direction := -1;
 
-  sector.special := sector.special and (not 31); // clear non-generalized sector type
+  sector.special := sector.special and not 31; // clear non-generalized sector type
 end;
 
 end.
