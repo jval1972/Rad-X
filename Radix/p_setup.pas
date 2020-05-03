@@ -1404,37 +1404,9 @@ end;
 //
 procedure P_LoadBlockMap(lump: integer);
 var
-  i, count: integer;
-  t: smallint;
-  wadblockmaplump: PSmallIntArray;
+  count: integer;
 begin
-  count := W_LumpLength(lump) div 2; // Number of smallint values
-  if (M_CheckParm('-blockmap') > 0) or (count < 4) or (count >= $10000) then
-  begin
-    P_CreateBlockMap
-  end
-  else
-  begin
-    wadblockmaplump := W_CacheLumpNum(lump, PU_STATIC);
-    blockmaplump := Z_Malloc(count * SizeOf(integer), PU_LEVEL, nil);
-
-    blockmaplump[0] := wadblockmaplump[0];
-    blockmaplump[1] := wadblockmaplump[1];
-    blockmaplump[2] := wadblockmaplump[2];
-    blockmaplump[3] := wadblockmaplump[3];
-
-    for i := 4 to count - 1 do
-    begin
-      t := wadblockmaplump[i];
-      if t = -1 then
-        blockmaplump[i] := -1
-      else if t < 0 then
-        blockmaplump[i] := $10000 + t
-      else
-        blockmaplump[i] := t
-    end;
-    Z_Free(wadblockmaplump);
-  end;
+  P_CreateBlockMap;
 
   blockmap := @blockmaplump[4];
 
