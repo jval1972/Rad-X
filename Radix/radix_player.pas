@@ -52,6 +52,7 @@ uses
   radix_messages,
   radix_objects,
   radix_sounds,
+  radix_weapons,
   info,
   info_h,
   info_common,
@@ -136,6 +137,19 @@ begin
   if (p.plinetarget = nil) and (linetarget <> nil) then
     p.pcrosstic := leveltime;
   p.plinetarget := linetarget;
+
+  // JVAL: 20200503 - ALDS
+  if (p.radixpowers[Ord(rpu_alds)] > 0) and (leveltime and $3 = 0) then
+  begin
+    if linetarget = nil then
+    begin
+      P_AimLineAttack(p.mo, p.mo.angle + $4000000, 16 * 64 * FRACUNIT);
+      if linetarget = nil then
+        P_AimLineAttack(p.mo, p.mo.angle - $4000000, 16 * 64 * FRACUNIT);
+    end;
+    if linetarget <> nil then
+      A_FireALDS(p);
+  end;
 
   p.threat := p.health < p.mo.info.spawnhealth div 4;
 

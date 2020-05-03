@@ -67,6 +67,8 @@ procedure A_PhaseTorpedoSplit(actor: Pmobj_t);
 
 procedure A_FireRadixGravityWave(player: Pplayer_t; psp: Ppspdef_t);
 
+procedure A_FireALDS(const player: Pplayer_t);
+
 var
   cnt_radixweaponstates: integer = 0;
 
@@ -805,6 +807,23 @@ begin
     for i := Ord(wp_gravitywave) - 1 downto 0 do
       if player.weaponowned[i] <> 0 then
         player.pendingweapon := weapontype_t(i);
+end;
+
+//
+// A_FireALDS
+// 
+var
+  radixaldslaser_id: integer = -1;
+
+procedure A_FireALDS(const player: Pplayer_t);
+begin
+  if radixaldslaser_id < 0 then
+    radixaldslaser_id := Info_GetMobjNumForName('MT_ALDSLASER');
+
+  if player.extralight = 0 then
+    player.extralight := 1;
+
+  P_SpawnPlayerMissileOffsZ(player.mo, radixaldslaser_id, 0, WEAPON_Z_OFFSET);
 end;
 
 end.
