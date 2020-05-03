@@ -378,6 +378,8 @@ const
   MF3_EX_CANDAMAGEWALLS = $40000;
   // Limit patrol range
   MF3_EX_LIMITPATROLRANGE = $80000;
+  // Do not adjust ceiling missile height
+  MF3_EX_NOADJUSTMISSILECEILING = $100000;
 
 type
 // Map Object definition.

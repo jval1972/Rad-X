@@ -1920,8 +1920,9 @@ begin
   else
     z := source.z + source.info.missileheight;
 
-  if z + source.info.height > source.ceilingz - 4 * FRACUNIT then
-    z := source.ceilingz - 4 * FRACUNIT - source.info.height;
+  if source.flags3_ex and MF3_EX_NOADJUSTMISSILECEILING = 0 then
+    if z + source.info.height > source.ceilingz - 4 * FRACUNIT then
+      z := source.ceilingz - 4 * FRACUNIT - source.info.height;
 
   th := P_SpawnMobj(source.x, source.y, z, _type);
 

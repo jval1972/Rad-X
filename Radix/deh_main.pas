@@ -2015,6 +2015,7 @@ begin
   mobj_flags3_ex.Add('MF3_EX_DOOMBOB');
   mobj_flags3_ex.Add('MF3_EX_CANDAMAGEWALLS');
   mobj_flags3_ex.Add('MF3_EX_LIMITPATROLRANGE');
+  mobj_flags3_ex.Add('MF3_EX_NOADJUSTMISSILECEILING');
 
   mobj_flags4_ex := TDTextList.Create;
 
