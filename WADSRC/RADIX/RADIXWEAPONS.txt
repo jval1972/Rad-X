@@ -25,6 +25,7 @@ ACTOR "MT_RADIXPLASMA"
     Spawn:
     {
       X067 A 6 BRIGHT
+      TNT1 A 0 A_IdleExplode(1.0)
       X067 B 6 BRIGHT A_GlowLight "NONE"
       X067 C 6 BRIGHT
       X067 B 6 BRIGHT
@@ -104,17 +105,19 @@ ACTOR "MT_RADIXPLASMASPREADLEFT"
   +MF3_EX_CEILINGBOUNCE
   +MF3_EX_WALLBOUNCE
   +MF3_EX_CANDAMAGEWALLS
+  +MF3_EX_PREVENTTHRYSKY
   States
   {
     Spawn:
     {
       X067 AAAAAA 1 BRIGHT A_ThrustXY(6, 90)
       TNT1 A 0 A_GlowLight "NONE"
-      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4))
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(4,5,6,7))
       TNT1 A 0 A_WallBounceFactor(1.0)
       X067 BBBBBB 1 BRIGHT A_ThrustXY(5, -90)
       X067 CCCCCC 1 BRIGHT A_ThrustXY(5, -90)
       X067 BBBBBB 1 BRIGHT A_ThrustXY(5, 90)
+      TNT1 A 0 A_IdleExplode(1.0)
     Spread:
       X067 AAAAAA 1 BRIGHT A_ThrustXY(5, 90)
       X067 BBBBBB 1 BRIGHT A_ThrustXY(5, -90)
@@ -158,17 +161,19 @@ ACTOR "MT_RADIXPLASMASPREADRIGHT"
   +MF3_EX_CEILINGBOUNCE
   +MF3_EX_WALLBOUNCE
   +MF3_EX_CANDAMAGEWALLS
+  +MF3_EX_PREVENTTHRYSKY
   States
   {
     Spawn:
     {
       X067 AAAAAA 1 BRIGHT A_ThrustXY(6, -90)
       TNT1 A 0 A_GlowLight "NONE"
-      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(2,3,4))
+      TNT1 A 0 A_LimitBounceControl(RANDOMPICK(4,5,6,7))
       TNT1 A 0 A_WallBounceFactor(1.0)
       X067 BBBBBB 1 BRIGHT A_ThrustXY(5, 90)
       X067 CCCCCC 1 BRIGHT A_ThrustXY(5, 90)
       X067 BBBBBB 1 BRIGHT A_ThrustXY(5, -90)
+      TNT1 A 0 A_IdleExplode(1.0)
     Spread:
       X067 AAAAAA 1 BRIGHT A_ThrustXY(5, -90)
       X067 BBBBBB 1 BRIGHT A_ThrustXY(5, 90)
