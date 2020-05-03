@@ -2017,6 +2017,7 @@ begin
   mobj_flags3_ex.Add('MF3_EX_LIMITPATROLRANGE');
   mobj_flags3_ex.Add('MF3_EX_NOADJUSTMISSILECEILING');
   mobj_flags3_ex.Add('MF3_EX_IDLEEXPLODE');
+  mobj_flags3_ex.Add('MF3_EX_PREVENTTHRYSKY');
 
   mobj_flags4_ex := TDTextList.Create;
 

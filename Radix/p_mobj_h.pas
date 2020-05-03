@@ -382,6 +382,8 @@ const
   MF3_EX_NOADJUSTMISSILECEILING = $100000;
   // Explode on idle
   MF3_EX_IDLEEXPLODE = $200000;
+  // Missile does not go thru sky
+  MF3_EX_PREVENTTHRYSKY = $400000;
 
 type
 // Map Object definition.

@@ -678,7 +678,7 @@ begin
 
   sec := Psubsector_t(mo.subsector).sector;
   // clip movement
-  if mo.z <= mo.floorz - P_SectorJumpUnderhead(sec, mo) then
+  if mo.z <= mo.floorz then
   begin
     // hit the floor
 
@@ -933,13 +933,13 @@ begin
 
   if mobj.flags and MF_MISSILE <> 0 then
   begin
-    if mobj.floorz > mobj.z - FRACUNIT - P_SectorJumpUnderhead(Psubsector_t(mobj.subsector).sector, mobj) then
+    if mobj.z <= mobj.floorz - FRACUNIT then
     begin
       P_ExplodeMissile(mobj);
       exit;
     end;
 
-    if mobj.ceilingz < mobj.z + FRACUNIT + P_SectorJumpOverhead(Psubsector_t(mobj.subsector).sector, mobj) then
+    if mobj.z >= mobj.ceilingz + FRACUNIT then
     begin
       P_ExplodeMissile(mobj);
       exit;

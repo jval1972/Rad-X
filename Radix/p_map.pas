@@ -2437,6 +2437,8 @@ begin
   result := nofit;
 end;
 
+const
+  THRUSKY_OFFSET = 64 * FRACUNIT;
 
 // JVAL Allow jumps in sectors with sky ceiling.... (7/8/2007)
 function P_SectorJumpOverhead(const s: Psector_t; const mo: Pmobj_t): integer;
@@ -2455,7 +2457,8 @@ begin
   if s.ceilingpic = skyflatnum then
     if mo <> nil then
       if (mo.flags and MF_MISSILE <> 0) or (mo.flags3_ex and MF3_EX_THRUSKY <> 0) then
-        result := 128 * FRACUNIT;
+        if mo.flags3_ex and MF3_EX_PREVENTTHRYSKY = 0 then
+          result := THRUSKY_OFFSET;
 end;
 
 function P_SectorJumpUnderhead(const s: Psector_t; const mo: Pmobj_t): integer;
@@ -2474,7 +2477,8 @@ begin
   if s.floorpic = skyflatnum then
     if mo <> nil then
       if (mo.flags and MF_MISSILE <> 0) or (mo.flags3_ex and MF3_EX_THRUSKY <> 0) then
-        result := 128 * FRACUNIT;
+        if mo.flags3_ex and MF3_EX_PREVENTTHRYSKY = 0 then
+          result := THRUSKY_OFFSET;
 end;
 
 // phares 3/16/98
