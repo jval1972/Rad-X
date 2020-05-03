@@ -116,6 +116,8 @@ var
 var
   tmthing: Pmobj_t;
   tmline: Pline_t;
+  tmbounceline: Pline_t;
+  tmfailfromptinair: boolean;
   tmx: fixed_t; // JVAL: Slopes - move from implementation section to interface
   tmy: fixed_t; // JVAL: Slopes - move from implementation section to interface
 
@@ -333,6 +335,7 @@ begin
     if tmthing.flags and MF_MISSILE <> 0 then
       tmline := ld;
     tmcheckline := ld;
+    tmbounceline := ld;
     exit;
   end;
 
@@ -341,6 +344,7 @@ begin
     if ld.flags and ML_BLOCKING <> 0 then
     begin
       result := false;  // explicitly blocking everything
+      tmbounceline := ld;
       exit;
     end;
 
@@ -348,6 +352,7 @@ begin
     if ((tmthing.player = nil) or (tmthing.flags2_ex and MF2_EX_FRIEND <> 0)) and (ld.flags and ML_BLOCKMONSTERS <> 0) then
     begin
       result := false;  // block monsters only
+      tmbounceline := ld;
       exit;
     end;
   end;
@@ -360,10 +365,14 @@ begin
   begin
     tmceilingz := opentop;
     ceilingline := ld;
+    tmbounceline := ld;
   end;
 
   if openbottom > tmfloorz then
+  begin
+    tmbounceline := ld;
     tmfloorz := openbottom;
+  end;
 
   if lowfloor < tmdropoffz then
     tmdropoffz := lowfloor;
@@ -687,6 +696,7 @@ begin
   tmthing := thing;
   tmflags := thing.flags;
   tmline := nil;
+  tmbounceline := nil;
 
   tmx := x;
   tmy := y;
@@ -985,6 +995,7 @@ var
   newsec: Psector_t;
 begin
   floatok := false;
+  tmfailfromptinair := false;
   if (thing.flags and MF_MISSILE = 0) and (thing.flags3_ex and MF3_EX_NOMAXMOVE = 0) then
   begin
     if not P_CheckPosition(thing, x, y) then
@@ -1021,6 +1032,7 @@ begin
         z1 := z1 + dz;
         if not P_PtInAir(x1, y1, z1, thing.radius) then
         begin
+          tmfailfromptinair := true;
           result := false;  // JVAL: 20200502 - 3d Floors check
           exit;
         end;
@@ -1729,9 +1741,9 @@ begin
     if li.special <> 0 then
       P_ShootSpecialLine(shootthing, li);
 
-   // JVAL: 20200307 - Damage Wall
-   if la_damage > 0 then
-     RX_DamageLine(li, la_damage);
+    // JVAL: 20200307 - Damage Wall
+    if la_damage > 0 then
+      RX_DamageLine(li, la_damage);
 
     if li.flags and ML_TWOSIDED = 0 then
     begin

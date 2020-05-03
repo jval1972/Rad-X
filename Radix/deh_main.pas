@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 306;
+  DEHNUMACTIONS = 308;
 
 type
   deh_action_t = record
@@ -2016,6 +2016,7 @@ begin
   mobj_flags3_ex.Add('MF3_EX_CANDAMAGEWALLS');
   mobj_flags3_ex.Add('MF3_EX_LIMITPATROLRANGE');
   mobj_flags3_ex.Add('MF3_EX_NOADJUSTMISSILECEILING');
+  mobj_flags3_ex.Add('MF3_EX_IDLEEXPLODE');
 
   mobj_flags4_ex := TDTextList.Create;
 
@@ -2959,10 +2960,16 @@ begin
   {$IFDEF DLL}deh_actions[303].decl := 'A_VerticalMissileDown(missiletype: string, x: float, y: float, z: float, [maxmomxy: fixed_t])';{$ENDIF}
   deh_actions[304].action.acp1 := @A_SetPatrolRange;
   deh_actions[304].name := strupper('SetPatrolRange');
-  {$IFDEF DLL}deh_actions[304].decl := 'A_SetPatrolRange([range: fixed_t])';{$ENDIF}
+  {$IFDEF DLL}deh_actions[304].decl := 'A_SetPatrolRange([range: float])';{$ENDIF}
   deh_actions[305].action.acp1 := @A_UnSetPatrolRange;
   deh_actions[305].name := strupper('UnSetPatrolRange');
-  {$IFDEF DLL}deh_actions[305].decl := 'A_UnSetPatrolRange';{$ENDIF}
+  {$IFDEF DLL}deh_actions[305].decl := 'A_UnSetPatrolRange()';{$ENDIF}
+  deh_actions[306].action.acp1 := @A_IdleExplode;
+  deh_actions[306].name := strupper('IdleExplode');
+  {$IFDEF DLL}deh_actions[306].decl := 'A_IdleExplode([minidlevelocity: float=1.0])';{$ENDIF}
+  deh_actions[307].action.acp1 := @A_NoIdleExplode;
+  deh_actions[307].name := strupper('NoIdleExplode');
+  {$IFDEF DLL}deh_actions[307].decl := 'A_NoIdleExplode()';{$ENDIF}
 
 
   deh_strings.numstrings := 0;

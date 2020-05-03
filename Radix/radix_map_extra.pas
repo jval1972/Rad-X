@@ -70,6 +70,8 @@ function RX_LightLevel(const l: integer): byte;
 
 procedure RX_DamageLine(const l: Pline_t; const damage: integer);
 
+function RX_ShootableLine(const l: Pline_t): boolean;
+
 function RX_LineLengthf(li: Pline_t): float;
 
 procedure RX_LineTrace(const fromx, fromy, fromz: fixed_t; const tox, toy, toz: fixed_t; out newx, newy, newz: fixed_t);
@@ -628,6 +630,17 @@ begin
     RX_LineExplosion(l);
     l.radixflags := l.radixflags and not RWF_MISSILEWALL;
   end;
+end;
+
+function RX_ShootableLine(const l: Pline_t): boolean;
+begin
+  if l.radixflags and (RWF_ACTIVATETRIGGER or RWF_MISSILEWALL) = 0 then
+  begin
+    result := false;
+    exit;
+  end;
+
+  result := l.radixhitpoints > 0;
 end;
 
 function RX_LineLengthf(li: Pline_t): float;

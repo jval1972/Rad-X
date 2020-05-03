@@ -341,6 +341,32 @@ var
   wasonfloorz: boolean;
   wasonslope: boolean;
   oldsector: Psector_t;
+  speed: fixed_t;
+  tangle, langle: angle_t;
+  anglediff, newangle: angle_t;
+  dobounce: boolean;
+  sfront, sback: Psector_t;
+  ltop, lbottom: fixed_t;
+
+  function xy_check_missile_explode: boolean;
+  begin
+    if (ceilingline <> nil) and
+       (ceilingline.backsector <> nil) and
+       (ceilingline.backsector.ceilingpic = skyflatnum) then
+      // JVAL: 20200416 - Extra check for lower textures up to ceiling
+      if mo.z >= ceilingline.backsector.floorheight then
+      begin
+        // Hack to prevent missiles exploding
+        // against the sky.
+        // Does not handle sky floors.
+        P_RemoveMobj(mo);
+        result := false;
+        exit;
+      end;
+    P_ExplodeMissile(mo);
+    result := true;
+  end;
+
 begin
   if (mo.momx = 0) and (mo.momy = 0) then
   begin
@@ -416,45 +442,99 @@ begin
       // JVAL: 20200308 - Bounce on walls
       else if mo.flags3_ex and MF3_EX_WALLBOUNCE <> 0 then
       begin
-        if mo.flags3_ex and MF3_EX_WALLBOUNCEFACTOR <> 0 then
+        if tmbounceline <> nil then
         begin
-          mo.momx := FixedMul(mo.momx, mo.wallbouncefactor);
-          mo.momy := FixedMul(mo.momy, mo.wallbouncefactor);
+          if tmbounceline.flags and ML_BLOCKING <> 0 then
+            dobounce := not RX_ShootableLine(tmbounceline)
+          else if (tmbounceline.sidenum[1] = -1) or (tmbounceline.sidenum[0] = -1) then
+            dobounce := not RX_ShootableLine(tmbounceline)
+          else
+          begin
+            if not RX_ShootableLine(tmbounceline) then
+            begin
+              sfront := sides[tmbounceline.sidenum[0]].sector;
+              sback := sides[tmbounceline.sidenum[1]].sector;
+              ltop := MinI(sfront.ceilingheight, sback.ceilingheight);
+              lbottom := MaxI(sfront.floorheight, sback.floorheight);
+              dobounce := not IsIntegerInRange(mo.z, lbottom, ltop);
+            end
+            else
+              dobounce := false;
+          end;
+          if dobounce then
+          begin
+            speed := P_AproxDistance(mo.momx, mo.momy);
+            tangle := mo.angle;
+            langle := R_PointToAngle2(tmbounceline.v1.x, tmbounceline.v1.y, tmbounceline.v2.x, tmbounceline.v2.y);
+            anglediff := tangle - langle;
+            newangle := langle - anglediff;
+            mo.angle := newangle;
+            newangle := newangle shr ANGLETOFINESHIFT;
+            mo.momx := FixedMul(speed, finecosine[newangle]);
+            mo.momy := FixedMul(speed, finesine[newangle]);
+          end;
+        end
+        else if not tmfailfromptinair then
+        begin
+          dobounce := true;
+          if mo.flags3_ex and MF3_EX_WALLBOUNCEFACTOR <> 0 then
+          begin
+            mo.momx := FixedMul(mo.momx, mo.wallbouncefactor);
+            mo.momy := FixedMul(mo.momy, mo.wallbouncefactor);
+          end
+          else
+          begin
+            mo.momx := mo.momx div 2;
+            mo.momy := mo.momy div 2;
+          end;
+
+          if P_TryMove(mo, mo.x - xmove, ymove + mo.y) then
+            mo.momy := -mo.momy
+          else
+            mo.momx := -mo.momx;
+
+          mo.angle := R_PointToAngle2(0, 0, -mo.momx, -mo.momy);
         end
         else
+          dobounce := false;
+
+        if dobounce then
         begin
-          mo.momx := mo.momx div 2;
-          mo.momy := mo.momy div 2;
+          P_ResolveBounceBehaviour(mo);
+          xmove := 0;
+          ymove := 0;
+        end
+        else if mo.flags and MF_MISSILE <> 0 then
+        begin
+          if mo.flags3_ex and (MF3_EX_FLOORBOUNCE or MF3_EX_CEILINGBOUNCE) = 0 then
+            if not xy_check_missile_explode then
+              exit;
+          if (mo.flags3_ex and MF3_EX_FLOORBOUNCE <> 0) and (mo.z <= mo.floorz) then
+          begin
+            if Psubsector_t(mo.subsector).sector.floorpic = skyflatnum then
+            begin
+              P_RemoveMobj(mo);
+              exit;
+            end;
+            speed := mo.info.speed;
+            mo.momz := speed;
+          end
+          else if (mo.flags3_ex and MF3_EX_CEILINGBOUNCE <> 0) and (mo.z >= mo.ceilingz) then
+          begin
+            if Psubsector_t(mo.subsector).sector.ceilingpic = skyflatnum then
+            begin
+              P_RemoveMobj(mo);
+              exit;
+            end;
+            speed := mo.info.speed;
+            mo.momz := -speed;
+          end;
         end;
-
-        if P_TryMove(mo, mo.x - xmove, ymove + mo.y) then
-          mo.momy := -mo.momy
-        else
-          mo.momx := -mo.momx;
-
-        xmove := 0;
-        ymove := 0;
-
-        P_ResolveBounceBehaviour(mo);
-
-        mo.angle := R_PointToAngle2(0, 0, -mo.momx, -mo.momy);
       end
       else if mo.flags and MF_MISSILE <> 0 then
       begin
-        // explode a missile
-        if (ceilingline <> nil) and
-           (ceilingline.backsector <> nil) and
-           (ceilingline.backsector.ceilingpic = skyflatnum) then
-          // JVAL: 20200416 - Extra check for lower textures up to ceiling
-          if mo.z >= ceilingline.backsector.floorheight then
-          begin
-            // Hack to prevent missiles exploding
-            // against the sky.
-            // Does not handle sky floors.
-            P_RemoveMobj(mo);
-            exit;
-          end;
-        P_ExplodeMissile(mo);
+        if not xy_check_missile_explode then
+          exit;
       end
       else
       begin
@@ -606,19 +686,29 @@ begin
     begin
       // villsa [STRIFE] affect reactiontime
       // momz is also shifted by 1
-      mo.momz := -mo.momz div 2;
+      if mo.flags and MF_MISSILE <> 0 then
+        mo.momz := -mo.momz
+      else
+        mo.momz := -mo.momz div 2;
       mo.reactiontime := mo.reactiontime div 2;
 
       // villsa [STRIFE] get terrain type
       if P_GetThingFloorType(mo) <> FLOOR_SOLID then
       begin
         mo.flags3_ex := mo.flags3_ex and not MF3_EX_FLOORBOUNCE;
+        bouncing := false;
         mo.bouncecnt := 0;
       end
       else
+      begin
         P_ResolveBounceBehaviour(mo);
-
-      bouncing := true;
+        bouncing := true;
+      end;
+    end
+    else if (mo.flags and MF_MISSILE <> 0) and (mo.flags3_ex and MF3_EX_FLOORBOUNCE <> 0) and (sec.floorpic = skyflatnum) then
+    begin
+      P_ExplodeMissile(mo);
+      exit;
     end;
 
     if mo.flags and MF_SKULLFLY <> 0 then
@@ -696,11 +786,21 @@ begin
     begin
       if (mo.flags3_ex and MF3_EX_CEILINGBOUNCE <> 0) and (sec.ceilingpic <> skyflatnum) then
       begin
-        mo.momz := -mo.momz div 2;
+        if mo.flags and MF_MISSILE <> 0 then
+          mo.momz := -mo.momz
+        else
+          mo.momz := -mo.momz div 2;
         P_ResolveBounceBehaviour(mo);
       end
       else
+      begin
+        if mo.flags and MF_MISSILE <> 0 then
+        begin
+          P_ExplodeMissile(mo);
+          exit;
+        end;
         mo.momz := 0;
+      end;
 
       bouncing := true;
     end;
@@ -811,16 +911,49 @@ begin
     p.viewz := floorz + 4 * FRACUNIT;
 end;
 
+procedure P_VelocityHandler(const mobj: Pmobj_t);
+begin
+  if mobj.flags3_ex and MF3_EX_IDLEEXPLODE <> 0 then
+  begin
+    // Explode in very low speeds
+    if mobj.velocity <= mobj.idleexplodespeed then
+    begin
+      mobj.flags3_ex := mobj.flags3_ex and not MF3_EX_IDLEEXPLODE;
+      P_ExplodeMissile(mobj);
+      exit;
+    end;
+    // Accelerate in low (but not very low) speeds
+    if mobj.velocity < mobj.info.speed div 4 then
+    begin
+      mobj.momx := mobj.momx * 5 div 4;
+      mobj.momy := mobj.momy * 5 div 4;
+      mobj.momz := mobj.momz * 5 div 4;
+    end;
+  end;
+
+  if mobj.flags and MF_MISSILE <> 0 then
+  begin
+    if mobj.floorz > mobj.z - FRACUNIT - P_SectorJumpUnderhead(Psubsector_t(mobj.subsector).sector, mobj) then
+    begin
+      P_ExplodeMissile(mobj);
+      exit;
+    end;
+
+    if mobj.ceilingz < mobj.z + FRACUNIT + P_SectorJumpOverhead(Psubsector_t(mobj.subsector).sector, mobj) then
+    begin
+      P_ExplodeMissile(mobj);
+      exit;
+    end;
+  end;
+end;
+
 //
 // P_MobjThinker
 //
-procedure P_MobjThinker(mobj: Pmobj_t);
+procedure P_DoMobjThinker(mobj: Pmobj_t);
 var
   onmo: Pmobj_t;
 begin
-  // JVAL: Clear just spawned flag
-  mobj.flags := mobj.flags and not MF_JUSTAPPEARED;
-
   // momentum movement
   if (mobj.momx <> 0) or
      (mobj.momy <> 0) or
@@ -929,6 +1062,29 @@ begin
 
     P_NightmareRespawn(mobj);
   end;
+end;
+
+procedure P_MobjThinker(mobj: Pmobj_t);
+begin
+  // JVAL: 20200503 - Caclulate velocity
+  mobj.velocityxy := P_AproxDistance(mobj.x - mobj.oldx, mobj.y - mobj.oldy);
+  mobj.velocity := P_AproxDistance(mobj.velocityxy, mobj.z - mobj.oldz);
+
+  if mobj.flags and MF_JUSTAPPEARED = 0 then
+    P_VelocityHandler(mobj);
+
+  // JVAL: 20200503 - Keep previous tic position
+  mobj.oldx := mobj.x;
+  mobj.oldy := mobj.y;
+  mobj.oldz := mobj.z;
+
+  // JVAL: Clear just spawned flag
+  mobj.flags := mobj.flags and not MF_JUSTAPPEARED;
+
+  P_DoMobjThinker(mobj);
+
+  if not Assigned(mobj.thinker._function.acv) then
+    exit; // mobj was removed
 end;
 
 //
@@ -1277,6 +1433,9 @@ begin
 
   P_AddThinker(@mobj.thinker);
 
+  mobj.oldx := mobj.x;
+  mobj.oldy := mobj.y;
+  mobj.oldz := mobj.z;
   mobj.prevx := mobj.x;
   mobj.prevy := mobj.y;
   mobj.prevz := mobj.z;

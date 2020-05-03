@@ -380,6 +380,8 @@ const
   MF3_EX_LIMITPATROLRANGE = $80000;
   // Do not adjust ceiling missile height
   MF3_EX_NOADJUSTMISSILECEILING = $100000;
+  // Explode on idle
+  MF3_EX_IDLEEXPLODE = $200000;
 
 type
 // Map Object definition.
@@ -422,6 +424,15 @@ type
     momx: fixed_t;
     momy: fixed_t;
     momz: fixed_t;
+
+    // JVAL: 20200503 - previous tic position
+    oldx: fixed_t;
+    oldy: fixed_t;
+    oldz: fixed_t;
+
+    velocityxy: fixed_t;  // JVAL: 20200503 - actual velocity in XY axis
+    velocity: fixed_t;  // JVAL: 20200503 - actual velocity
+    idleexplodespeed: fixed_t; 
 
     // If == validcount, already checked.
     validcount: integer;

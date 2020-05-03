@@ -377,6 +377,10 @@ procedure A_SetPatrolRange(actor: Pmobj_t);
 
 procedure A_UnSetPatrolRange(actor: Pmobj_t);
 
+procedure A_IdleExplode(actor: Pmobj_t);
+
+procedure A_NoIdleExplode(actor: Pmobj_t);
+
 const
   FLOATBOBSIZE = 64;
   FLOATBOBMASK = FLOATBOBSIZE - 1;
@@ -4059,6 +4063,21 @@ end;
 procedure A_UnSetPatrolRange(actor: Pmobj_t);
 begin
   actor.flags3_ex := actor.flags3_ex and not MF3_EX_LIMITPATROLRANGE;
+end;
+
+procedure A_IdleExplode(actor: Pmobj_t);
+begin
+  actor.flags3_ex := actor.flags3_ex or MF3_EX_IDLEEXPLODE;
+
+  actor.idleexplodespeed := FRACUNIT;
+  if actor.state.params <> nil then
+    if actor.state.params.Count > 0 then
+      actor.idleexplodespeed := actor.state.params.FixedVal[0];
+end;
+
+procedure A_NoIdleExplode(actor: Pmobj_t);
+begin
+  actor.flags3_ex := actor.flags3_ex and not MF3_EX_IDLEEXPLODE;
 end;
 
 end.
