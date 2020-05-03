@@ -1788,6 +1788,7 @@ ACTOR MT_ROTATINGRADAR1 1041
   Radius 32
   Height 56
   Health 100
+  Scale 2
   +MF_SOLID 
   +MF_SHOOTABLE 
   +MF_NOBLOOD
@@ -2556,7 +2557,7 @@ ACTOR MT_ROTATINGRADAR2 1057
   Radius 64
   Height 80
   Health 100
-  Scale 2
+  Scale 4
   +MF_SOLID 
   +MF_SHOOTABLE 
   +MF_NOBLOOD
