@@ -1595,6 +1595,8 @@ begin
         color := aprox_yellow
       else if (t.flags and MF_SPECIAL <> 0) or (t.flags3_ex and MF3_EX_CUSTOMPICKUP <> 0) then
         color := approx_white
+      else if t.flags and MF_MISSILE <> 0 then
+        color := approx_orange
       else
         color := aprox_green;
 
