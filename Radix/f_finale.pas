@@ -188,7 +188,7 @@ type
   Pstarinfo_t = ^starinfo_t;
 
 const
-  NUMSTARS = 128;
+  NUMSTARS = 200;
 
 var
   starinfo: array[0..NUMSTARS - 1] of starinfo_t;
