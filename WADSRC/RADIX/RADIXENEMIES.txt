@@ -1484,10 +1484,12 @@ ACTOR MT_EXODROID 1038
   +MF2_EX_DONTINFIGHTMONSTERS
   +MF2_EX_JUMPDOWN
   +MF2_EX_JUMPUP
+  +MF3_EX_NOADJUSTMISSILECEILING
   States
   {
     Spawn:
-      XR38 B 10 A_Look
+      XR38 BBBBBBBBBB 10 A_Look
+      XR38 B 10 A_Turn(RANDOMPICK(-45,45))
       Loop
     See:
       XR38 A 6 A_Chase
@@ -1497,12 +1499,12 @@ ACTOR MT_EXODROID 1038
       Loop
     Missile:
       XR38 D 10 A_FaceTarget
-      XR38 D 0 BRIGHT A_CustomMissile("MT_ENEMYMISSILE",290,60)
-      XR38 D 10 BRIGHT A_CustomMissile("MT_ENEMYMISSILE",290,-60)
+      XR38 D 0 BRIGHT A_CustomMissile("MT_ENEMYMISSILE",290,80)
+      XR38 D 10 BRIGHT A_CustomMissile("MT_ENEMYMISSILE",290,-80)
       XR38 E 10 A_FaceTarget    
       TNT1 A 0 A_Jump(128, "See")
-      XR38 E 0 BRIGHT A_CustomMissile("MT_ENEMYMISSILE",290,60)
-      XR38 E 10 BRIGHT A_CustomMissile("MT_ENEMYMISSILE",290,-60)
+      XR38 E 0 BRIGHT A_CustomMissile("MT_ENEMYMISSILE",290,80)
+      XR38 E 10 BRIGHT A_CustomMissile("MT_ENEMYMISSILE",290,-80)
       Goto See
     Pain:
       XR38 B 10 A_SpawnItemEx("MT_RADIXVERYBIGSMOKE",0,0,RANDOM(30,60)*6,0,0,FRANDOM(3,4),0)
