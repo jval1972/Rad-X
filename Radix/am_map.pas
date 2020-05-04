@@ -199,6 +199,12 @@ const
 var
   thintriangle_guy: array[0..NUMTHINTRIANGLEGUYLINES - 1] of mline_t;
 
+const
+  NUMFORCEFIELDLINES = 2;
+
+var
+  forcefield_guy: array[0..NUMFORCEFIELDLINES - 1] of mline_t;
+
 type
   automapstate_t = (am_inactive, am_only, am_overlay, AM_NUMSTATES);
 
@@ -1572,6 +1578,8 @@ var
   plrx, plry: fixed_t;
   plra: angle_t;
   color: byte;
+  tri_guy: Pmline_tArray;
+  num_tri: integer;
 begin
   plrx := plr.mo.x div FRACTOMAPUNIT;
   plry := plr.mo.y div FRACTOMAPUNIT;
@@ -1584,7 +1592,7 @@ begin
     while (t <> nil) and (t.sectorvalidcount <> sectorvalidcount) do
     begin
       t.sectorvalidcount := sectorvalidcount;
-      
+
       x := t.x div FRACTOMAPUNIT;
       y := t.y div FRACTOMAPUNIT;
 
@@ -1592,17 +1600,43 @@ begin
         AM_rotate(@x, @y, plra, plrx, plry);
 
       if t.flags and MF_COUNTKILL <> 0 then
-        color := aprox_yellow
+      begin
+        color := aprox_yellow;
+        tri_guy := @triangle_guy;
+        num_tri := NUMTRIANGLEGUYLINES;
+      end
       else if (t.flags and MF_SPECIAL <> 0) or (t.flags3_ex and MF3_EX_CUSTOMPICKUP <> 0) then
-        color := approx_white
+      begin
+        color := approx_white;
+        tri_guy := @triangle_guy;
+        num_tri := NUMTRIANGLEGUYLINES;
+      end
       else if t.flags and MF_MISSILE <> 0 then
-        color := approx_orange
+      begin
+        color := approx_orange;
+        tri_guy := @thintriangle_guy;
+        num_tri := NUMTHINTRIANGLEGUYLINES;
+      end
+      else if t.flags3_ex and MF3_EX_AMFORCEFIELD <> 0 then
+      begin
+        color := aprox_lightblue;
+        tri_guy := @forcefield_guy;
+        num_tri := NUMFORCEFIELDLINES;
+      end
+      else if t.flags3_ex and MF3_EX_AMTELEPORTFOG <> 0 then
+      begin
+        color := aprox_yellow;
+        tri_guy := @forcefield_guy;
+        num_tri := NUMFORCEFIELDLINES;
+      end
       else
+      begin
         color := aprox_green;
+        tri_guy := @triangle_guy;
+        num_tri := NUMTRIANGLEGUYLINES;
+      end;
 
-      AM_drawLineCharacter
-        (@thintriangle_guy, NUMTHINTRIANGLEGUYLINES,
-        16 * FRACUNIT, t.angle, color, x, y);
+      AM_drawLineCharacter(tri_guy, num_tri, 16 * FRACUNIT, t.angle, color, x, y);
       t := t.snext;
     end;
   end;
@@ -1877,6 +1911,20 @@ begin
   pl.a.y := round(0.7 * MAPUNIT);
   pl.b.x := round(-0.5 * MAPUNIT);
   pl.b.y := round(-0.7 * MAPUNIT);
+
+////////////////////////////////////////////////////////////////////////////////
+
+  pl := @forcefield_guy[0];
+  pl.a.x := -round(0.3 * MAPUNIT);
+  pl.a.y := 0;
+  pl.b.x := round(0.3 * MAPUNIT);
+  pl.b.y := 0;
+
+  inc(pl);
+  pl.a.x := 0;
+  pl.a.y := -round(0.3 * MAPUNIT);
+  pl.b.x := 0;
+  pl.b.y := round(0.3 * MAPUNIT);
 
 ////////////////////////////////////////////////////////////////////////////////
   cheat_amap.sequence := get_cheatseq_string(cheat_amap_seq);

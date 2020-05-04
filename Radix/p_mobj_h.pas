@@ -384,6 +384,10 @@ const
   MF3_EX_IDLEEXPLODE = $200000;
   // Missile does not go thru sky
   MF3_EX_PREVENTTHRYSKY = $400000;
+  // Forcefield rendering in automap
+  MF3_EX_AMFORCEFIELD = $800000;
+  // Teleport fog/forcefied in automap
+  MF3_EX_AMTELEPORTFOG = $1000000;
 
 type
 // Map Object definition.
