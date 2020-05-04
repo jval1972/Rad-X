@@ -1046,6 +1046,12 @@ var
       fix_cloneandmovewall(570, RADIX_MAP_X_ADD - RADIX_MAP_X_ADD2, RADIX_MAP_Y_ADD - RADIX_MAP_Y_ADD2);
       fix_cloneandmovewall(574, RADIX_MAP_X_ADD - RADIX_MAP_X_ADD2, RADIX_MAP_Y_ADD - RADIX_MAP_Y_ADD2);
       fix_cloneandmovewall(609, RADIX_MAP_X_ADD - RADIX_MAP_X_ADD2, RADIX_MAP_Y_ADD - RADIX_MAP_Y_ADD2);
+
+      // Fix arena sky
+      doomsectors[291].ceilingpic := stringtochar8('F_SKY1');
+      doomsectors[292].ceilingpic := stringtochar8('F_SKY1');
+      doomsectors[293].ceilingpic := stringtochar8('F_SKY1');
+      doomsectors[295].ceilingpic := stringtochar8('F_SKY1');
     end
     else if levelname = 'E3M3' then
     begin
