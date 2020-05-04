@@ -135,8 +135,8 @@ begin
   if (mo.momx = 0) and (mo.momy = 0) then
   begin
     sec := R_PointInSubSector(mo.x, mo.y).sector;
-    rx := (sec.radixmapXmult * (mo.x div FRACUNIT) - sec.radixmapXadd) div RADIXGRIDCELLSIZE;
-    ry := (sec.radixmapYmult * (mo.y div FRACUNIT) - sec.radixmapYadd) div RADIXGRIDCELLSIZE;
+    rx := (sec.radixmapXmult * (mo.x div FRACUNIT - sec.radixmapXadd)) div RADIXGRIDCELLSIZE;
+    ry := (sec.radixmapYmult * (mo.y div FRACUNIT - sec.radixmapYadd)) div RADIXGRIDCELLSIZE;
 
     num := ry * grid_X_size + rx;
 
@@ -160,8 +160,8 @@ begin
   sec := R_PointInSubSector(mx * FRACUNIT, my * FRACUNIT).sector;
 
   // JVAL: 20200305 - Works only when ::radixmapXmult & ::radixmapYmult are -1 or 1
-  rx := (sec.radixmapXmult * mx - sec.radixmapXadd) div RADIXGRIDCELLSIZE;
-  ry := (sec.radixmapYmult * my - sec.radixmapYadd) div RADIXGRIDCELLSIZE;
+  rx := (sec.radixmapXmult * (mx - sec.radixmapXadd)) div RADIXGRIDCELLSIZE;
+  ry := (sec.radixmapYmult * (my - sec.radixmapYadd)) div RADIXGRIDCELLSIZE;
 
   num := ry * grid_X_size + rx;
   N.Add(num);
@@ -173,8 +173,8 @@ begin
   sec := R_PointInSubSector(mx * FRACUNIT, my * FRACUNIT).sector;
 
   // JVAL: 20200305 - Works only when ::radixmapXmult & ::radixmapYmult are -1 or 1
-  rx := (sec.radixmapXmult * mx - sec.radixmapXadd) div RADIXGRIDCELLSIZE;
-  ry := (sec.radixmapYmult * my - sec.radixmapYadd) div RADIXGRIDCELLSIZE;
+  rx := (sec.radixmapXmult * (mx - sec.radixmapXadd)) div RADIXGRIDCELLSIZE;
+  ry := (sec.radixmapYmult * (my - sec.radixmapYadd)) div RADIXGRIDCELLSIZE;
 
   num := ry * grid_X_size + rx;
   if N.IndexOf(num) < 0 then
@@ -185,8 +185,8 @@ begin
   sec := Psubsector_t(mo.subsector).sector;
 
   // JVAL: 20200305 - Works only when ::radixmapXmult & ::radixmapYmult are -1 or 1
-  rx := (sec.radixmapXmult * (mo.x div FRACUNIT) - sec.radixmapXadd) div RADIXGRIDCELLSIZE;
-  ry := (sec.radixmapYmult * (mo.y div FRACUNIT) - sec.radixmapYadd) div RADIXGRIDCELLSIZE;
+  rx := (sec.radixmapXmult * (mo.x div FRACUNIT - sec.radixmapXadd)) div RADIXGRIDCELLSIZE;
+  ry := (sec.radixmapYmult * (mo.y div FRACUNIT - sec.radixmapYadd)) div RADIXGRIDCELLSIZE;
 
   num := ry * grid_X_size + rx;
   if N.IndexOf(num) < 0 then
