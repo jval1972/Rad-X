@@ -152,6 +152,7 @@ uses
   radix_objects,
   radix_sounds,
   radix_player,
+  radix_teleport,
   r_data,
   r_main,
   r_defs,
@@ -815,6 +816,9 @@ begin
   momx := p.mo.momx;
   momy := p.mo.momy;
 
+  // JVAL: 20200504 - Disappear teleport fog
+  RX_SpawnTeleportForceField(p.mo);
+
   if not P_TeleportMove(p.mo, x, y) then
     exit;
 
@@ -848,8 +852,12 @@ begin
   // Reset the delta to have the same dynamics as before
   p.deltaviewheight := deltaviewheight;
 
+  p.mo.reactiontime := 18;
   p.teleporttics := TELEPORTZOOM;
-  
+
+  // JVAL: 20200504 - Reappear teleport fog
+  RX_SpawnTeleportForceField(p.mo);
+
   action.suspend := 1;
 end;
 
