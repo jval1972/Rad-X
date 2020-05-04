@@ -339,10 +339,10 @@ begin
     exit;
   end;
 
-  // JVAL: 20200504 - Closed sector
+  // JVAL: 20200504 - Closed backsector
   if ld.backsector.ceilingheight <= ld.backsector.floorheight then
   begin
-    result := false;  // one sided line
+    result := false;  // Can not pass closed sector
     // JVAL: 20200328 - Missile damage line
     if tmthing.flags and MF_MISSILE <> 0 then
       tmline := ld;
