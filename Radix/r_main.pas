@@ -1793,6 +1793,9 @@ begin
   R_AdjustChaseCamera;
   R_AdjustGlobalEarthQuake(player);
 
+  sec := R_PointInSubSector(viewx, viewy).sector;
+  viewz := GetIntegerInRange(viewz, P_3dFloorHeight(sec, viewx, viewy, viewz), P_3dCeilingHeight(sec, viewx, viewy, viewz));
+
 {$IFNDEF OPENGL}
   viewsubsector := R_PointInSubSector(viewx, viewy); // JVAL: 3d Floors
   hasExtraFloors := viewsubsector.sector.midsec >= 0;  // JVAL: 3d Floors
@@ -1853,9 +1856,9 @@ begin
 {$ENDIF}
 
   cm := -1;
-  if Psubsector_t(player.mo.subsector).sector.heightsec > -1 then
+  if sec.heightsec > -1 then
   begin
-    sec := @sectors[Psubsector_t(player.mo.subsector).sector.heightsec];
+    sec := @sectors[sec.heightsec];
     if viewz < sec.floorheight then
       cm := sec.bottommap
     else if viewz > sec.ceilingheight then
