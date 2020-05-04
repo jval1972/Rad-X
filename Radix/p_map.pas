@@ -339,6 +339,18 @@ begin
     exit;
   end;
 
+{  // JVAL: 20200504 - Closed sector
+  if ld.backsector.ceilingheight <= ld.backsector.floorheight then
+  begin
+    result := false;  // one sided line
+    // JVAL: 20200328 - Missile damage line
+    if tmthing.flags and MF_MISSILE <> 0 then
+      tmline := ld;
+    tmcheckline := ld;
+    tmbounceline := ld;
+    exit;
+  end;}
+
   if tmthing.flags and MF_MISSILE = 0 then
   begin
     if ld.flags and ML_BLOCKING <> 0 then
