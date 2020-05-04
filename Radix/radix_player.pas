@@ -120,7 +120,7 @@ begin
     if (leveltime and 15 = 0) or (P_Random < 50) then
     begin
       an := P_Random * 32;
-      dist := 16 + (P_Random and 32);
+      dist := 16 + (P_Random and 31);
       x := p.mo.x + dist * finecosine[an];
       y := p.mo.y + dist * finesine[an];
       mo := RX_SpawnRadixBigSmoke(x, y, p.mo.z);
