@@ -339,7 +339,7 @@ begin
     exit;
   end;
 
-{  // JVAL: 20200504 - Closed sector
+  // JVAL: 20200504 - Closed sector
   if ld.backsector.ceilingheight <= ld.backsector.floorheight then
   begin
     result := false;  // one sided line
@@ -349,7 +349,7 @@ begin
     tmcheckline := ld;
     tmbounceline := ld;
     exit;
-  end;}
+  end;
 
   if tmthing.flags and MF_MISSILE = 0 then
   begin
