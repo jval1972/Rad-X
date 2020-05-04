@@ -942,6 +942,12 @@ begin
 
       palette := palette + STARTREDPALS;
     end
+    else if plyr.plasmabombcount <> 0 then
+    begin
+      palette := 13 + plyr.plasmabombcount;
+      if palette > 21 then
+        palette := 21;
+    end
     else if plyr.bonuscount <> 0 then
     begin
       palette := _SHR(plyr.bonuscount + 7, 3);

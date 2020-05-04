@@ -264,6 +264,9 @@ type
     currentscore: playerscore_t;
     wallhits: integer;
 
+    plasmabombcount: integer; // JVAL: 20200504 - Plasma bomb palette
+    plasmabombdown: boolean;  // JVAL: 20200504 - Plasma bomb key pressed
+
     plinetarget: Pmobj_t; // JVAL: 20200501 - Basically for the crosshair target
     pcrosstic: integer;
 

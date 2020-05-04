@@ -80,6 +80,7 @@ uses
   p_map,
   p_maputl,
   radix_player,
+  radix_weapons,
   r_main,
   r_defs,
   sounds,
@@ -749,6 +750,17 @@ begin
   end
   else
     player.usedown := false;
+
+  if cmd.buttons2 and BT2_PLASMABOMB <> 0 then
+  begin
+    if not player.plasmabombdown then
+    begin
+      RX_FirePlasmaBomb(player);
+      player.plasmabombdown := true;
+    end;
+  end
+  else
+    player.plasmabombdown := false;
 
   // cycle psprites
   P_MovePsprites(player);

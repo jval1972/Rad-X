@@ -46,8 +46,8 @@ type
     consistancy: smallint; // checks for net game
     chatchar: byte;
     buttons: byte;
-{$IFDEF STRIFE}
     buttons2: byte;
+{$IFDEF STRIFE}
     inventory: integer;
 {$ENDIF}
     commands: byte; // JVAL for special commands

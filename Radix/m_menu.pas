@@ -928,6 +928,7 @@ type
     kb_weapon5,
     kb_weapon6,
     kb_weapon7,
+    kb_plasmabomb,
     kb_end
   );
 
@@ -969,7 +970,8 @@ const
     (text: 'Nuke'; pkey: @key_weapon4),
     (text: 'Phase Torpedoes'; pkey: @key_weapon5),
     (text: 'Gravity Device'; pkey: @key_weapon6),
-    (text: 'Enhanced EPC'; pkey: @key_weapon7)
+    (text: 'Enhanced EPC'; pkey: @key_weapon7),
+    (text: 'Plasma Bomb'; pkey: @key_plasmabomb)
   );
 
 var
@@ -1697,7 +1699,8 @@ begin
 
   y := y + 10;
   M_WriteHelpControlText(10, y, @key_weapon6);
-  M_WriteHelpControlText(160, y, @key_weapon7);
+  M_WriteHelpControlText(160, y, @key_plasmabomb);
+//  M_WriteHelpControlText(160, y, @key_weapon7);
 end;
 
 procedure M_DrawReadThisExt;
@@ -1774,6 +1777,7 @@ begin
     key_weapon5 := Ord('6');
     key_weapon6 := Ord('7');
     key_weapon7 := Ord('8');
+    key_plasmabomb := Ord('b');
   end
   else if mode = 1 then
   begin
@@ -1803,6 +1807,7 @@ begin
     key_weapon5 := Ord('6');
     key_weapon6 := Ord('7');
     key_weapon7 := Ord('8');
+    key_plasmabomb := Ord('b');
   end
   else if mode = 2 then
   begin
@@ -1832,6 +1837,7 @@ begin
     key_weapon5 := Ord('6');
     key_weapon6 := Ord('7');
     key_weapon7 := Ord('8');
+    key_plasmabomb := Ord('b');
   end;
 end;
 
@@ -1862,7 +1868,8 @@ begin
      (key_weapon4 = Ord('5')) and
      (key_weapon5 = Ord('6')) and
      (key_weapon6 = Ord('7')) and
-     (key_weapon7 = Ord('8')) then
+     (key_weapon7 = Ord('8')) and
+     (key_plasmabomb = Ord('b')) then
   begin
     result := 0;
     exit;
@@ -1893,7 +1900,8 @@ begin
      (key_weapon4 = Ord('5')) and
      (key_weapon5 = Ord('6')) and
      (key_weapon6 = Ord('7')) and
-     (key_weapon7 = Ord('8')) then
+     (key_weapon7 = Ord('8')) and
+     (key_plasmabomb = Ord('b')) then
   begin
     result := 1;
     exit;
@@ -1924,7 +1932,8 @@ begin
      (key_weapon4 = Ord('5')) and
      (key_weapon5 = Ord('6')) and
      (key_weapon6 = Ord('7')) and
-     (key_weapon7 = Ord('8')) then
+     (key_weapon7 = Ord('8')) and
+     (key_plasmabomb = Ord('b')) then
   begin
     result := 2;
     exit;

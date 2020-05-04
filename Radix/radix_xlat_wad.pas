@@ -224,7 +224,7 @@ var
   p: pointer;
   pal: PByteArray;
   size: integer;
-  playpal: packed array[0..768 * 14 - 1] of byte;
+  playpal: packed array[0..768 * 22 - 1] of byte;
   colormap: packed array[0..34 * 256 - 1] of byte;
   i: integer;
   r, g, b: LongWord;

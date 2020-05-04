@@ -142,6 +142,7 @@ var
   key_weapon5: integer = Ord('6');
   key_weapon6: integer = Ord('7');
   key_weapon7: integer = Ord('8');
+  key_plasmabomb: integer = Ord('b');
 
   KEY_WEAPONS: array[0..Ord(NUMWEAPONS) - 1] of PInteger;
 
@@ -591,6 +592,11 @@ begin
     cmd.buttons := cmd.buttons or BT_USE;
   // clear double clicks if hit use button
     dclicks := 0;
+  end;
+
+  if gamekeydown[key_plasmabomb] then
+  begin
+    cmd.buttons2 := cmd.buttons2 or BT2_PLASMABOMB;
   end;
 
   // chainsaw overrides
@@ -1172,6 +1178,7 @@ begin
     key_weapon5 := Ord('6');
     key_weapon6 := Ord('7');
     key_weapon7 := Ord('8');
+    key_plasmabomb := Ord('b');
   end
   else if mode = 1 then
   begin
@@ -1201,6 +1208,7 @@ begin
     key_weapon5 := Ord('6');
     key_weapon6 := Ord('7');
     key_weapon7 := Ord('8');
+    key_plasmabomb := Ord('b');
   end;
 end;
 
@@ -2159,6 +2167,9 @@ begin
   cmd.buttons := demo_p[0] and not BT_SPECIAL;
   demo_p := @demo_p[1];
 
+  cmd.buttons2 := demo_p[0];
+  demo_p := @demo_p[1];
+
   // JVAL Smooth Look Up/Down
   cmd.lookupdown16 := PWord(demo_p)^;
   demo_p := @demo_p[2];
@@ -2230,6 +2241,9 @@ begin
   demo_p := @demo_p[2];
 
   demo_p[0] := cmd.buttons and not BT_SPECIAL;
+  demo_p := @demo_p[1];
+
+  demo_p[0] := cmd.buttons2;
   demo_p := @demo_p[1];
 
   // JVAL Smooth Look Up/Down

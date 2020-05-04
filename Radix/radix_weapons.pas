@@ -69,6 +69,8 @@ procedure A_FireRadixGravityWave(player: Pplayer_t; psp: Ppspdef_t);
 
 procedure A_FireALDS(const player: Pplayer_t);
 
+procedure RX_FirePlasmaBomb(const player: Pplayer_t);
+
 var
   cnt_radixweaponstates: integer = 0;
 
@@ -90,8 +92,14 @@ uses
   tables,
   p_tick,
   p_pspr,
+  p_inter,
+  p_local,
+  p_setup,
   p_mobj,
+  p_maputl,
+  p_sight,
   p_3dfloors,
+  radix_sounds,
   radix_map_extra;
 
 //
@@ -824,6 +832,81 @@ begin
     player.extralight := 1;
 
   P_SpawnPlayerMissileOffsZ(player.mo, radixaldslaser_id, 0, WEAPON_Z_OFFSET);
+end;
+
+//
+// Plasma bomb fire
+//
+const
+  PLASMABOMBEXPLOSIONRADIUS = 2048 * FRACUNIT;
+  PLASMABOMBEXPLOSIONDAMAGE = 50;
+
+var
+  pbplayer: Pplayer_t;
+
+function PIT_Plasmabomb(thing: Pmobj_t): boolean;
+var
+  dist: fixed_t;
+begin
+  if thing.player <> nil then
+  begin
+    result := true;
+    exit;
+  end;
+
+  dist := P_AproxDistance(thing.x - pbplayer.mo.x, thing.y - pbplayer.mo.y);
+
+  if dist >= PLASMABOMBEXPLOSIONRADIUS then
+  begin
+    result := true; // out of range
+    exit;
+  end;
+
+  if P_CheckSight(thing, pbplayer.mo) then
+  begin
+    // must be in direct path
+    P_DamageMobj(thing, pbplayer.mo, pbplayer.mo, PLASMABOMBEXPLOSIONDAMAGE);
+  end;
+
+  result := true;
+end;
+
+procedure P_PlasmaBombAttack(const p: Pplayer_t);
+var
+  x: integer;
+  y: integer;
+  xl: integer;
+  xh: integer;
+  yl: integer;
+  yh: integer;
+  dist: fixed_t;
+begin
+  dist := PLASMABOMBEXPLOSIONRADIUS;
+  yh := MapBlockIntY(int64(p.mo.y) + int64(dist) - int64(bmaporgy));
+  yl := MapBlockIntY(int64(p.mo.y) - int64(dist) - int64(bmaporgy));
+  xh := MapBlockIntX(int64(p.mo.x) + int64(dist) - int64(bmaporgx));
+  xl := MapBlockIntX(int64(p.mo.x) - int64(dist) - int64(bmaporgx));
+  pbplayer := p;
+
+  for y := yl to yh do
+    for x := xl to xh do
+      P_BlockThingsIterator(x, y, PIT_Plasmabomb);
+end;
+
+procedure RX_FirePlasmaBomb(const player: Pplayer_t);
+begin
+  if player.plasmabombs <= 0 then
+    exit;
+
+  if player.plasmabombcount <> 0 then
+    exit;
+
+  player.plasmabombcount := 8;
+
+  P_PlasmaBombAttack(player);
+  S_AmbientSound(player.mo.x, player.mo.y, 'radix/SndPlasmaBomb');
+
+  dec(player.plasmabombs);
 end;
 
 end.

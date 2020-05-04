@@ -270,7 +270,7 @@ var
 
   HUSTR_KEYGREEN: string = 'g';
   HUSTR_KEYINDIGO: string = 'i';
-  HUSTR_KEYBROWN: string = 'b';
+  HUSTR_KEYBROWN: string = 't';
   HUSTR_KEYRED: string = 'r';
 
 //

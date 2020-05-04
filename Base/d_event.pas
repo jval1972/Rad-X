@@ -115,6 +115,9 @@ const
   BTS_SAVEMASK = 4 + 8 + 16 + 32;
   BTS_SAVESHIFT = 2;
 
+const
+  BT2_PLASMABOMB = 1;
+
 {$IFDEF STRIFE}
 const
     BT2_INVUSE          = 8;

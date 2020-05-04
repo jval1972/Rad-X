@@ -132,6 +132,10 @@ begin
   // JVAL: 20200501 - Engine Sound
   RX_PlayerEngineSound(p);
 
+  // JVAL: 20200504 - Plasma bomb count down
+  if p.plasmabombcount > 0 then
+    dec(p.plasmabombcount);
+    
   // JVAL: 20200501 - Retrieve Linetarget
   P_AimLineAttack(p.mo, p.mo.angle, 16 * 64 * FRACUNIT);
   if (p.plinetarget = nil) and (linetarget <> nil) then

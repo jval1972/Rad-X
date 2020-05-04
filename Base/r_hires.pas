@@ -1103,6 +1103,13 @@ begin
       r_extra_green := palette * 25;
       r_extra_blue := palette * 8;
     end
+    else if (palette >= 14) and (palette <= 21) then
+    begin
+      palette := palette - 13;
+      r_extra_red := 28 * palette;
+      r_extra_green := 28 * palette;
+      r_extra_blue := 28 * palette;
+    end
     else
     begin
       r_extra_red := 32;
