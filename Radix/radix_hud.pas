@@ -715,12 +715,13 @@ end;
 //
 procedure RX_HudDrawer;
 begin
+  hud_player := @players[consoleplayer];
+
+  if (screenblocks > 13) and (amstate <> am_only) and (hud_player.playerstate <> PST_DEAD) then
+    exit;
+
   if firstinterpolation then
   begin
-    hud_player := @players[consoleplayer];
-
-    if (screenblocks > 13) and (amstate <> am_only) and (hud_player.playerstate <> PST_DEAD) then
-      exit;
 
     MT_ZeroMemory(screens[SCN_HUD], 320 * 200);
 
