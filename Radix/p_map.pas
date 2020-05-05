@@ -340,16 +340,17 @@ begin
   end;
 
   // JVAL: 20200504 - Closed backsector
-  if ld.backsector.ceilingheight <= ld.backsector.floorheight then
-  begin
-    result := false;  // Can not pass closed sector
-    // JVAL: 20200328 - Missile damage line
-    if tmthing.flags and MF_MISSILE <> 0 then
-      tmline := ld;
-    tmcheckline := ld;
-    tmbounceline := ld;
-    exit;
-  end;
+  if ld.backsector.renderflags and SRF_SLOPED = 0 then
+    if ld.backsector.ceilingheight <= ld.backsector.floorheight then
+    begin
+      result := false;  // Can not pass closed sector
+      // JVAL: 20200328 - Missile damage line
+      if tmthing.flags and MF_MISSILE <> 0 then
+        tmline := ld;
+      tmcheckline := ld;
+      tmbounceline := ld;
+      exit;
+    end;
 
   if tmthing.flags and MF_MISSILE = 0 then
   begin
