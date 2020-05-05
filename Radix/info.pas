@@ -11543,7 +11543,7 @@ const // Doom Original mobjinfo
     deathsound: Ord(sfx_pldeth);                                  // deathsound
     speed: 0;                                                     // speed
     radius: 24 * FRACUNIT;                                        // radius
-    height: 32 * FRACUNIT;                                        // height
+    height: 30 * FRACUNIT;                                        // height
     mass: 100;                                                    // mass
     damage: 0;                                                    // damage
     activesound: Ord(sfx_None);                                   // activesound
