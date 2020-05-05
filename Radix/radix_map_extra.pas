@@ -66,7 +66,7 @@ function RX_CalculateRadixSlopeTopOffs(const seg: PSeg_t): fixed_t;
 
 function RX_CalculateRadixSlopeBottomOffs(const seg: PSeg_t): fixed_t;
 
-function RX_LightLevel(const l: integer): byte;
+function RX_LightLevel(const l: integer; const flags: integer): byte;
 
 procedure RX_DamageLine(const l: Pline_t; const damage: integer);
 
@@ -508,9 +508,11 @@ end;
 const
   MAXRADIXLIGHTLEVEL = 64;
 
-function RX_LightLevel(const l: integer): byte;
+function RX_LightLevel(const l: integer; const flags: integer): byte;
 begin
-  if l >= MAXRADIXLIGHTLEVEL then
+  if flags and (RSF_FOG or RSF_DARKNESS) = 0 then
+    result := 200 + l div 2
+  else if l >= MAXRADIXLIGHTLEVEL then
     result := 255
   else
     result := l * 4 + 2;

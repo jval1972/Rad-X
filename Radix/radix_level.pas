@@ -586,7 +586,7 @@ var
       dsec.ceilingpic := stringtochar8('F_SKY1')
     else
       dsec.ceilingpic := get_flat_texture(ss.ceilingtexture);
-    dsec.lightlevel := RX_LightLevel(ss.lightlevel);
+    dsec.lightlevel := RX_LightLevel(ss.lightlevel, ss.flags);
     dsec.special := 0;
     dsec.tag := 0;
 

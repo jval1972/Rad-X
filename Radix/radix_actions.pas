@@ -681,12 +681,12 @@ begin
 
   if parms.oncountdown then
   begin
-    sectors[parms.sector].lightlevel := RX_LightLevel(parms.on_light_level);
+    sectors[parms.sector].lightlevel := RX_LightLevel(parms.on_light_level, sectors[parms.sector].radixflags);
     parms.countdown := parms.on_delay;
   end
   else
   begin
-    sectors[parms.sector].lightlevel := RX_LightLevel(parms.off_light_level);
+    sectors[parms.sector].lightlevel := RX_LightLevel(parms.off_light_level, sectors[parms.sector].radixflags);
     parms.countdown := parms.off_delay;
   end;
 
@@ -709,7 +709,7 @@ var
 begin
   parms := radixlightsoff_p(@action.params);
 
-  sectors[parms.sector].lightlevel := RX_LightLevel(parms.off_light_level);
+  sectors[parms.sector].lightlevel := RX_LightLevel(parms.off_light_level, sectors[parms.sector].radixflags);
 
   action.suspend := 1; // Disable action
 end;
@@ -730,7 +730,7 @@ var
 begin
   parms := radixlightson_p(@action.params);
 
-  sectors[parms.sector].lightlevel := RX_LightLevel(parms.on_light_level);
+  sectors[parms.sector].lightlevel := RX_LightLevel(parms.on_light_level, sectors[parms.sector].radixflags);
 
   action.suspend := 1; // Disable action
 end;
@@ -770,7 +770,7 @@ begin
       parms.direction := 0;
   end;
 
-  sectors[parms.sector].lightlevel := RX_LightLevel(parms.curlevel);
+  sectors[parms.sector].lightlevel := RX_LightLevel(parms.curlevel, sectors[parms.sector].radixflags);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1171,7 +1171,7 @@ begin
   begin
     if parms.off_countdown = 0 then
     begin
-      sectors[parms.sector].lightlevel := RX_LightLevel(parms.on_light_level);
+      sectors[parms.sector].lightlevel := RX_LightLevel(parms.on_light_level, sectors[parms.sector].radixflags);
       parms.on_countdown := P_RandomInRange(parms.on_min_delay, parms.on_max_delay);
       parms.on_off := 1;
     end
@@ -1182,7 +1182,7 @@ begin
   begin
     if parms.on_countdown = 0 then
     begin
-      sectors[parms.sector].lightlevel := RX_LightLevel(parms.off_light_level);
+      sectors[parms.sector].lightlevel := RX_LightLevel(parms.off_light_level, sectors[parms.sector].radixflags);
       parms.off_countdown := P_RandomInRange(parms.off_min_delay, parms.off_max_delay);
       parms.on_off := 0;
     end
@@ -2115,7 +2115,6 @@ type
 procedure RA_LightMovement(const action: Pradixaction_t);
 var
   parms: radixspritelightmovement_p;
-  l_off, l_on: integer;
   sec0, sec1, sec2, sec3: integer;
 begin
   parms := radixspritelightmovement_p(@action.params);
@@ -2125,8 +2124,6 @@ begin
 
   dec(parms.tick);
 
-  l_off := RX_LightLevel(parms.off_level);
-  l_on := RX_LightLevel(parms.on_level);
   sec0 := parms.the_sectors[0];
   sec1 := parms.the_sectors[1];
   sec2 := parms.the_sectors[2];
@@ -2135,46 +2132,46 @@ begin
     0:
       begin
         if sec0 >= 0 then
-          sectors[sec0].lightlevel := l_on;
+          sectors[sec0].lightlevel := RX_LightLevel(parms.on_level, sectors[sec0].radixflags);
         if sec1 >= 0 then
-          sectors[sec1].lightlevel := l_off;
+          sectors[sec1].lightlevel := RX_LightLevel(parms.off_level, sectors[sec1].radixflags);
         if sec2 >= 0 then
-          sectors[sec2].lightlevel := l_off;
+          sectors[sec2].lightlevel := RX_LightLevel(parms.off_level, sectors[sec2].radixflags);
         if sec3 >= 0 then
-          sectors[sec3].lightlevel := l_off;
+          sectors[sec3].lightlevel := RX_LightLevel(parms.off_level, sectors[sec3].radixflags);
       end;
     1:
       begin
         if sec0 >= 0 then
-          sectors[sec0].lightlevel := l_off;
+          sectors[sec0].lightlevel := RX_LightLevel(parms.off_level, sectors[sec0].radixflags);
         if sec1 >= 0 then
-          sectors[sec1].lightlevel := l_on;
+          sectors[sec1].lightlevel := RX_LightLevel(parms.on_level, sectors[sec1].radixflags);
         if sec2 >= 0 then
-          sectors[sec2].lightlevel := l_off;
+          sectors[sec2].lightlevel := RX_LightLevel(parms.off_level, sectors[sec2].radixflags);
         if sec3 >= 0 then
-          sectors[sec3].lightlevel := l_off;
+          sectors[sec3].lightlevel := RX_LightLevel(parms.off_level, sectors[sec3].radixflags);
       end;
     2:
       begin
         if sec0 >= 0 then
-          sectors[sec0].lightlevel := l_off;
+          sectors[sec0].lightlevel := RX_LightLevel(parms.off_level, sectors[sec0].radixflags);
         if sec1 >= 0 then
-          sectors[sec1].lightlevel := l_off;
+          sectors[sec1].lightlevel := RX_LightLevel(parms.off_level, sectors[sec1].radixflags);
         if sec2 >= 0 then
-          sectors[sec2].lightlevel := l_on;
+          sectors[sec2].lightlevel := RX_LightLevel(parms.on_level, sectors[sec2].radixflags);
         if sec3 >= 0 then
-          sectors[sec3].lightlevel := l_off;
+          sectors[sec3].lightlevel := RX_LightLevel(parms.off_level, sectors[sec3].radixflags);
       end;
     3:
       begin
         if sec0 >= 0 then
-          sectors[sec0].lightlevel := l_off;
+          sectors[sec0].lightlevel := RX_LightLevel(parms.off_level, sectors[sec0].radixflags);
         if sec1 >= 0 then
-          sectors[sec1].lightlevel := l_off;
+          sectors[sec1].lightlevel := RX_LightLevel(parms.off_level, sectors[sec1].radixflags);
         if sec2 >= 0 then
-          sectors[sec2].lightlevel := l_off;
+          sectors[sec2].lightlevel := RX_LightLevel(parms.off_level, sectors[sec2].radixflags);
         if sec3 >= 0 then
-          sectors[sec3].lightlevel := l_on;
+          sectors[sec3].lightlevel := RX_LightLevel(parms.on_level, sectors[sec3].radixflags);
       end;
   end;
 
@@ -2221,7 +2218,7 @@ begin
   begin
     secid := parms.the_sectors[i];
     if secid >= 0 then
-      sectors[secid].lightlevel := RX_LightLevel(parms.curlevel);
+      sectors[secid].lightlevel := RX_LightLevel(parms.curlevel, sectors[secid].radixflags);
   end;
 end;
 
@@ -2263,7 +2260,7 @@ begin
       begin
         if parms.info[i].sector < 0 then
           Continue;
-        sectors[parms.info[i].sector].lightlevel := RX_LightLevel(parms.info[i].on_light_level);
+        sectors[parms.info[i].sector].lightlevel := RX_LightLevel(parms.info[i].on_light_level, sectors[parms.info[i].sector].radixflags);
       end;
       parms.on_countdown := P_RandomInRange(parms.on_min_delay, parms.on_max_delay);
       parms.on_off := 1;
@@ -2279,7 +2276,7 @@ begin
       begin
         if parms.info[i].sector < 0 then
           Continue;
-        sectors[parms.info[i].sector].lightlevel := RX_LightLevel(parms.info[i].off_light_level);
+        sectors[parms.info[i].sector].lightlevel := RX_LightLevel(parms.info[i].off_light_level, sectors[parms.info[i].sector].radixflags);
       end;
       parms.off_countdown := P_RandomInRange(parms.off_min_delay, parms.off_max_delay);
       parms.on_off := 0;
@@ -2451,7 +2448,7 @@ var
 begin
   parms := radixswitchshadetype_p(@action.params);
 
-  sectors[parms.sector_id].lightlevel := RX_LightLevel(parms.new_light_level);
+  sectors[parms.sector_id].lightlevel := RX_LightLevel(parms.new_light_level, sectors[parms.sector_id].radixflags);
 
   action.suspend := 1;
 end;
@@ -2503,9 +2500,9 @@ begin
     if secid >= 0 then
     begin
       if i = parms.currid then
-        sectors[secid].lightlevel := RX_LightLevel(parms.on_level)
+        sectors[secid].lightlevel := RX_LightLevel(parms.on_level, sectors[secid].radixflags)
       else
-        sectors[secid].lightlevel := RX_LightLevel(parms.off_level)
+        sectors[secid].lightlevel := RX_LightLevel(parms.off_level, sectors[secid].radixflags)
     end;
   end;
 end;
@@ -2709,9 +2706,9 @@ begin
       if secid >= 0 then
       begin
         if i = parms.currsectoridx then
-          sectors[secid].lightlevel := RX_LightLevel(parms.on_light_level)
+          sectors[secid].lightlevel := RX_LightLevel(parms.on_light_level, sectors[secid].radixflags)
         else
-          sectors[secid].lightlevel := RX_LightLevel(parms.off_light_level);
+          sectors[secid].lightlevel := RX_LightLevel(parms.off_light_level, sectors[secid].radixflags);
       end;
     end;
     inc(parms.currsectoridx);
