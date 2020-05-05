@@ -147,6 +147,7 @@ uses
   p_musinfo,
   radix_map_extra,
   radix_sounds,
+  radix_player,
   r_defs,
   r_sky,
   r_main,
@@ -727,8 +728,7 @@ begin
         // after hitting the ground (hard),
         // and utter appropriate sound.
         player.deltaviewheight := _SHR(mo.momz, 3);
-        if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
-          S_StartSound(mo, Ord(sfx_oof));
+        RX_PlaneHitFloor(player);
       end;
       mo.momz := 0;
     end;

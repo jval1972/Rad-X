@@ -41,6 +41,8 @@ procedure RX_PlayerThink(p: Pplayer_t);
 
 function RX_PlayerMessage(p: Pplayer_t; const msgid: integer): boolean;
 
+procedure RX_PlaneHitFloor(p: Pplayer_t);
+
 implementation
 
 uses
@@ -61,6 +63,7 @@ uses
   p_tick,
   p_mobj,
   p_mobj_h,
+  p_terrain,
   s_sound,
   tables;
 
@@ -135,6 +138,9 @@ begin
   // JVAL: 20200504 - Plasma bomb count down
   if p.plasmabombcount > 0 then
     dec(p.plasmabombcount);
+
+  if p.planehittics > 0 then
+    dec(p.planehittics);
     
   // JVAL: 20200501 - Retrieve Linetarget
   P_AimLineAttack(p.mo, p.mo.angle, 16 * 64 * FRACUNIT);
@@ -216,6 +222,17 @@ begin
       exit;
     end;
   result := false;
+end;
+
+procedure RX_PlaneHitFloor(p: Pplayer_t);
+begin
+  if p.planehittics <= 0 then
+    if P_GetThingFloorType(p.mo) = FLOOR_SOLID then
+      if p.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+      begin
+        S_AmbientSound(p.mo.x, p.mo.y, 'radix/SndPlaneHit');
+        p.planehittics := S_RadixSoundDuration(Ord(sfx_SndPlaneHit));
+      end;
 end;
 
 end.
