@@ -993,6 +993,7 @@ function P_TryMove(thing: Pmobj_t; x, y: fixed_t): boolean;
 var
   oldx: fixed_t;
   oldy: fixed_t;
+  newz: fixed_t;
   x1, y1, z1, dz: fixed_t;
   i: integer;
   side: integer;
@@ -1005,6 +1006,7 @@ var
   jumpupmargin: fixed_t;
   dist: fixed_t;
   iters: integer;
+  sec: Psector_t;
   newsec: Psector_t;
 begin
   floatok := false;
@@ -1076,10 +1078,11 @@ begin
 
     floatok := true;
 
+    sec := Psubsector_t(thing.subsector).sector;
     if (thing.flags and MF_TELEPORT = 0) and
        (tmceilingz - thing.z < thing.height) then
     begin
-      if Psubsector_t(thing.subsector).sector.renderflags and SRF_SLOPECEILING = 0 then
+      if sec.renderflags and SRF_SLOPECEILING = 0 then
       begin
         newsec := R_PointInSubsector(x, y).sector;
         if newsec.renderflags and SRF_SLOPECEILING = 0 then
@@ -1103,13 +1106,29 @@ begin
     jumpupmargin := 24 * FRACUNIT;
     // JVAL: Version 205
     if (thing.flags2_ex and MF2_EX_JUMPUP <> 0) and (N_Random > 20) then
-      jumpupmargin := 56 * FRACUNIT;
+      jumpupmargin := 56 * FRACUNIT
+    else if thing.player <> nil then
+      jumpupmargin := 48 * FRACUNIT;
 
-    if (thing.flags and MF_TELEPORT = 0) and
-       (tmfloorz - thing.z > jumpupmargin) then
+    if (thing.player = nil) or (Psubsector_t(thing.subsector).sector.renderflags and SRF_SLOPEFLOOR = 0) then
     begin
-      result := false;  // too big a step up
-      exit;
+      if (thing.flags and MF_TELEPORT = 0) and
+         (tmfloorz - thing.z > jumpupmargin) then
+      begin
+        result := false;  // too big a step up
+        exit;
+      end;
+    end
+    else
+    begin
+      newz := P_FloorHeight(sec, x, y);
+      if newz < tmfloorz then
+        if (thing.flags and MF_TELEPORT = 0) and
+           (tmfloorz - thing.z > jumpupmargin) then
+        begin
+          result := false;  // too big a step up
+          exit;
+        end;
     end;
 
     dropoffmargin := 24 * FRACUNIT;
@@ -2452,6 +2471,7 @@ end;
 
 const
   THRUSKY_OFFSET = 64 * FRACUNIT;
+  PLAYER_SLOPE_OFFSET = 16 * FRACUNIT;
 
 // JVAL Allow jumps in sectors with sky ceiling.... (7/8/2007)
 function P_SectorJumpOverhead(const s: Psector_t; const mo: Pmobj_t): integer;
@@ -2462,8 +2482,8 @@ begin
   if s.midsec >= 0 then
   begin
     if mo = nil then
-      exit
-    else if mo.z < sectors[s.midsec].floorheight then
+      exit;
+    if mo.z < sectors[s.midsec].floorheight then
       exit;
   end;
 
@@ -2471,7 +2491,15 @@ begin
     if mo <> nil then
       if (mo.flags and MF_MISSILE <> 0) or (mo.flags3_ex and MF3_EX_THRUSKY <> 0) then
         if mo.flags3_ex and MF3_EX_PREVENTTHRYSKY = 0 then
+        begin
           result := THRUSKY_OFFSET;
+          exit;
+        end;
+
+  if mo <> nil then
+    if mo.player <> nil then
+      if s.renderflags and SRF_SLOPECEILING <> 0 then
+        result := PLAYER_SLOPE_OFFSET;
 end;
 
 function P_SectorJumpUnderhead(const s: Psector_t; const mo: Pmobj_t): integer;
@@ -2482,8 +2510,8 @@ begin
   if s.midsec >= 0 then
   begin
     if mo = nil then
-      exit
-    else if mo.z >= sectors[s.midsec].ceilingheight then
+      exit;
+    if mo.z >= sectors[s.midsec].ceilingheight then
       exit;
   end;
 
@@ -2491,7 +2519,15 @@ begin
     if mo <> nil then
       if (mo.flags and MF_MISSILE <> 0) or (mo.flags3_ex and MF3_EX_THRUSKY <> 0) then
         if mo.flags3_ex and MF3_EX_PREVENTTHRYSKY = 0 then
+        begin
           result := THRUSKY_OFFSET;
+          exit;
+        end;
+
+  if mo <> nil then
+    if mo.player <> nil then
+      if s.renderflags and SRF_SLOPEFLOOR <> 0 then
+        result := PLAYER_SLOPE_OFFSET;
 end;
 
 // phares 3/16/98
