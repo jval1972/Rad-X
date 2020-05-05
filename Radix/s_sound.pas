@@ -499,7 +499,12 @@ end;
 
 procedure S_StartSound(origin: pointer; sfx_id: integer; const fullvolume: boolean = false);
 begin
-  S_StartSoundAtVolume(origin, sfx_id, snd_SfxVolume, fullvolume);
+  if sfx_id < 0 then
+    exit;
+  if S_sfx[sfx_id].radixalias <> '' then
+    S_StartSoundAtVolume(origin, S_GetSoundNumForName(S_sfx[sfx_id].radixalias), snd_SfxVolume, fullvolume)
+  else
+    S_StartSoundAtVolume(origin, sfx_id, snd_SfxVolume, fullvolume);
 end;
 
 procedure S_StartSound(origin: pointer; const sndname: string; const fullvolume: boolean = false);
