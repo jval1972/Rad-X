@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 308;
+  DEHNUMACTIONS = 309;
 
 type
   deh_action_t = record
@@ -2974,6 +2974,9 @@ begin
   deh_actions[307].action.acp1 := @A_NoIdleExplode;
   deh_actions[307].name := strupper('NoIdleExplode');
   {$IFDEF DLL}deh_actions[307].decl := 'A_NoIdleExplode()';{$ENDIF}
+  deh_actions[308].action.acp1 := @A_PlayerPain;
+  deh_actions[308].name := strupper('PlayerPain');
+  {$IFDEF DLL}deh_actions[308].decl := 'A_PlayerPain()';{$ENDIF}
 
 
   deh_strings.numstrings := 0;

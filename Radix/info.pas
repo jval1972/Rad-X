@@ -17582,7 +17582,7 @@ begin
   states[Ord(S_BFGFLASH2)].action.acp1 := @A_Light2; // S_BFGFLASH2
   states[Ord(S_BFGLAND3)].action.acp1 := @A_BFGSpray; // S_BFGLAND3
   states[Ord(S_EXPLODE1)].action.acp1 := @A_Explode; // S_EXPLODE1
-  states[Ord(S_PLAY_PAIN2)].action.acp1 := @A_Pain; // S_PLAY_PAIN2
+  states[Ord(S_PLAY_PAIN2)].action.acp1 := @A_PlayerPain; // S_PLAY_PAIN2
   states[Ord(S_PLAY_DIE2)].action.acp1 := @A_PlayerScream; // S_PLAY_DIE2
   states[Ord(S_PLAY_DIE3)].action.acp1 := @A_Fall; // S_PLAY_DIE3
   states[Ord(S_PLAY_XDIE2)].action.acp1 := @A_XScream; // S_PLAY_XDIE2

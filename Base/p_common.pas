@@ -381,6 +381,8 @@ procedure A_IdleExplode(actor: Pmobj_t);
 
 procedure A_NoIdleExplode(actor: Pmobj_t);
 
+procedure A_PlayerPain(actor: Pmobj_t);
+
 const
   FLOATBOBSIZE = 64;
   FLOATBOBMASK = FLOATBOBSIZE - 1;
@@ -4078,6 +4080,12 @@ end;
 procedure A_NoIdleExplode(actor: Pmobj_t);
 begin
   actor.flags3_ex := actor.flags3_ex and not MF3_EX_IDLEEXPLODE;
+end;
+
+procedure A_PlayerPain(actor: Pmobj_t);
+begin
+  if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
+    S_StartSound(actor, 'radix/SndPlaneHit');
 end;
 
 end.
