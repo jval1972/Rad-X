@@ -351,11 +351,6 @@ var
 // !deathmatch
   st_fragson: boolean;
 
-// medikit
-  smedikit: integer;
-// Weapons ammo for small display
-  sammo: array[0..3] of integer;
-
 // 0-9, tall numbers
   tallnum: array[0..9] of Ppatch_t;
 
@@ -1008,19 +1003,6 @@ begin
     sprintf(namebuf, 'STKEYS%d', [i]);
     keys[i] := Ppatch_t(W_CacheLumpName(namebuf, PU_STATIC));
   end;
-
-// JVAL
-// Statusbar medikit, use stimpack patch (STIMA0)
-  smedikit := W_GetNumForName('STIMA0');
-
-// JVAL
-// Weapons ammo for small display
-  sammo[0] := W_GetNumForName('CLIPA0');
-  sammo[1] := W_GetNumForName('SHELA0');
-// JVAL
-// Cells do not exist in shareware version, use W_CheckNumForName instead of W_GetNumForName
-  sammo[2] := W_CheckNumForName('CELLA0');
-  sammo[3] := W_GetNumForName('ROCKA0');
 end;
 
 procedure ST_LoadData;
