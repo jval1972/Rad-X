@@ -11535,7 +11535,7 @@ const // Doom Original mobjinfo
     attacksound: Ord(sfx_None);                                   // attacksound
     painstate: Ord(S_PLAY_PAIN);                                  // painstate
     painchance: 255;                                              // painchance
-    painsound: Ord(sfx_plpain);                                   // painsound
+    painsound: Ord(sfx_None);                                     // painsound
     meleestate: Ord(S_NULL);                                      // meleestate
     missilestate: Ord(S_PLAY_ATK1);                               // missilestate
     deathstate: Ord(S_PLAY_DIE1);                                 // deathstate
