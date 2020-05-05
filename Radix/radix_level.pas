@@ -886,7 +886,12 @@ var
     AddWallToWad(@wall);
   end;
 
-  function fix_level_v10: boolean;
+  function fix_radix_level_v10: boolean;
+  begin
+    result := false;
+  end;
+
+  function fix_doom_level_v10: boolean;
   begin
     result := false;
     if levelname = 'E3M6' then
@@ -896,7 +901,12 @@ var
     end;
   end;
 
-  function fix_level_v11: boolean;
+  function fix_radix_level_v11: boolean;
+  begin
+    result := false;
+  end;
+
+  function fix_doom_level_v11: boolean;
   var
     j: integer;
   begin
@@ -912,7 +922,20 @@ var
     end;
   end;
 
-  function fix_level_v2: boolean;
+  function fix_radix_level_v2: boolean;
+  begin
+    result := false;
+    if levelname = 'E1M6' then
+    begin
+      result := true;
+      rsectors[156].ceilingheights[0] := rsectors[156].ceilingheights[0] + 64;
+      rsectors[156].ceilingheights[1] := rsectors[156].ceilingheights[1] + 64;
+      rsectors[156].ceilingheights[2] := rsectors[156].ceilingheights[2] + 64;
+      rsectors[157].ceilingheight := rsectors[157].ceilingheight + 64;
+    end;
+  end;
+
+  function fix_doom_level_v2: boolean;
   var
     j: integer;
     sd: integer;
@@ -935,6 +958,11 @@ var
     else if levelname = 'E1M6' then
     begin
       result := true;
+      fix_movevertex(-27583, -2624, -27584, -2592);
+      fix_movevertex(-27583, -2560, -27584, -2560);
+      fix_movevertex(-27583, -2688, -27584, -2688);
+      fix_movevertex(-27583, -2752, -27584, -2752);
+      doomsidedefs[758].textureoffset := 42;
       doomsidedefs[1365].textureoffset := 0;
     end
     else if levelname = 'E1M9' then
@@ -1302,6 +1330,14 @@ begin
   ms.Seek(header.playerstartoffsets, sFromBeginning);
   ms.Read(rplayerstarts, SizeOf(rplayerstarts));
 
+  if islevel_v = 2 then
+    fix_radix_level_v2
+  else if islevel_v = 11 then
+    fix_radix_level_v11
+  else if islevel_v = 10 then
+    fix_radix_level_v10;
+  fix_radix_level_v10;
+
   doomthings := nil;
   doomthingsextra := nil;
   numdoomthings := 0;
@@ -1355,11 +1391,11 @@ begin
   end;
 
   if islevel_v = 2 then
-    fix_level_v2
+    fix_doom_level_v2
   else if islevel_v = 11 then
-    fix_level_v11
+    fix_doom_level_v11
   else if islevel_v = 10 then
-    fix_level_v10;
+    fix_doom_level_v10;
 
   // Find mapped sectors
   sectormapped := mallocz(numdoomsectors);
