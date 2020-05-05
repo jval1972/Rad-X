@@ -1794,7 +1794,7 @@ begin
   R_AdjustGlobalEarthQuake(player);
 
   sec := R_PointInSubSector(viewx, viewy).sector;
-  viewz := GetIntegerInRange(viewz, P_3dFloorHeight(sec, viewx, viewy, viewz), P_3dCeilingHeight(sec, viewx, viewy, viewz));
+  viewz := GetIntegerInRange(viewz, P_3dFloorHeight(sec, viewx, viewy, viewz) + 4 * FRACUNIT, P_3dCeilingHeight(sec, viewx, viewy, viewz) - 4 * FRACUNIT);
 
 {$IFNDEF OPENGL}
   viewsubsector := R_PointInSubSector(viewx, viewy); // JVAL: 3d Floors
