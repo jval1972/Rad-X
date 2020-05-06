@@ -300,7 +300,7 @@ var
   setsizeneeded: boolean;
 
 // Blocky mode, has default, 0 = high, 1 = normal
-  screenblocks: integer;  // has default
+  screenblocks: integer = 11;  // has default
 
 function R_GetColormapLightLevel(const cmap: PByteArray): fixed_t;
 
