@@ -205,8 +205,6 @@ var
 
   usergame: boolean; // ok to save / end game
 
-procedure G_SetKeyboardMode(const mode: integer);
-
 procedure G_PlayerReborn(player: integer);
 
 procedure G_BuildTiccmd(cmd: Pticcmd_t);
@@ -1146,70 +1144,6 @@ begin
   p.fixedcolormap := 0; // cancel ir gogles
   p.damagecount := 0;   // no palette changes
   p.bonuscount := 0;
-end;
-
-procedure G_SetKeyboardMode(const mode: integer);
-begin
-  if mode = 0 then
-  begin
-    key_right := 174;
-    key_left := 172;
-    key_up := 173;
-    key_down := 175;
-    key_strafeleft := 44;
-    key_straferight := 46;
-    key_flyup := 97;
-    key_flydown := 122;
-    key_fire := 157;
-    key_use := 32;
-    key_strafe := 184;
-    key_speed := 182;
-    key_lookup := 197;
-    key_lookdown := 202;
-    key_lookcenter := 199;
-    key_lookright := 198;
-    key_lookleft := 200;
-    key_lookforward := 13;
-    key_weapon0 := Ord('1');
-    key_weapon1 := Ord('2');
-    key_weapon2 := Ord('3');
-    key_weapon3 := Ord('4');
-    key_weapon4 := Ord('5');
-    key_weapon5 := Ord('6');
-    key_weapon6 := Ord('7');
-    key_weapon7 := Ord('8');
-    key_plasmabomb := Ord('b');
-  end
-  else if mode = 1 then
-  begin
-    key_right := 174;
-    key_left := 172;
-    key_up := 119;
-    key_down := 115;
-    key_strafeleft := 97;
-    key_straferight := 100;
-    key_flyup := 106;
-    key_flydown := 122;
-    key_fire := 157;
-    key_use := 32;
-    key_strafe := 184;
-    key_speed := 182;
-    key_lookup := 197;
-    key_lookdown := 202;
-    key_lookcenter := 199;
-    key_lookright := 198;
-    key_lookleft := 200;
-    key_lookforward := 13;
-    key_weapon0 := Ord('1');
-    key_weapon1 := Ord('2');
-    key_weapon2 := Ord('3');
-    key_weapon3 := Ord('4');
-    key_weapon4 := Ord('5');
-    key_weapon5 := Ord('6');
-    key_weapon6 := Ord('7');
-    key_weapon7 := Ord('8');
-    key_plasmabomb := Ord('b');
-  end;
 end;
 
 //

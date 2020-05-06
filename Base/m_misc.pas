@@ -84,6 +84,7 @@ uses
   m_argv,
   m_base,
   m_defs,
+  m_menu,
   i_system,
   m_sshot_jpg,
   t_png,
@@ -878,7 +879,7 @@ begin
   pilotNameString := pilotname;
   {$IFNDEF STRIFE}
   if confignotfound then
-    G_SetKeyboardMode(1);
+    M_SetKeyboardMode(1);
   {$ENDIF}
   {$IFNDEF DEBUG}
   {$IFDEF OPENGL}
