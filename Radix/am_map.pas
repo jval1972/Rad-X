@@ -1429,6 +1429,11 @@ begin
         inc(pl);
         continue;
       end;
+      if pl.flags and ML_AUTOMAPIGNOGE <> 0 then
+      begin
+        inc(pl);
+        continue;
+      end;
       if pl.backsector = nil then
       begin
         AM_drawMline(@l, WALLCOLORS + lightlev);
@@ -1462,7 +1467,7 @@ begin
     end
     else if plr.powers[Ord(pw_allmap)] <> 0 then
     begin
-      if pl.flags and LINE_NEVERSEE = 0 then
+      if pl.flags and (LINE_NEVERSEE or ML_AUTOMAPIGNOGE) = 0 then
         AM_drawMline(@l, GRAYS + 3);
     end;
     inc(pl);

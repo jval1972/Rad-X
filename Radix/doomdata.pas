@@ -159,6 +159,8 @@ const
 //JVAL: Script Events
 //line triggers
   ML_TRIGGERSCRIPTS = 1024;
+// Stub line - ignoged in automap
+  ML_AUTOMAPIGNOGE = 2048;
 
 type
 // Sector definition, from editing.

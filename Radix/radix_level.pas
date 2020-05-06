@@ -795,7 +795,7 @@ var
       dline.flags := dline.flags or ML_TWOSIDED;
 
     if w.flags and RWF_STUBWALL <> 0 then
-      dline.flags := dline.flags or ML_DONTDRAW;
+      dline.flags := dline.flags or ML_DONTDRAW or ML_AUTOMAPIGNOGE;
 
     dline.special := 0;
     dline.tag := 0;
@@ -1465,6 +1465,7 @@ begin
       begin
         doomlinedefs[i].v1 := AddVertexToWAD(stubx, stuby);
         doomlinedefs[i].v2 := AddVertexToWAD(stubx + 32, stuby);
+        doomlinedefs[i].flags := doomlinedefs[i].flags or ML_AUTOMAPIGNOGE;
         stubx := stubx + 32;
       end;
 
