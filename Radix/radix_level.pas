@@ -1084,6 +1084,11 @@ var
       // Fix secondary target room
       doomsectors[323].ceilingheight := 1280;
       doomsectors[324].ceilingheight := 1280;
+
+      // Fix animated textures
+      ractions[67].enabled := 1;
+      ractions[68].enabled := 1;
+      ractions[69].enabled := 1;
     end
     else if levelname = 'E3M3' then
     begin
