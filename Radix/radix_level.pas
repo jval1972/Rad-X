@@ -894,7 +894,15 @@ var
   function fix_doom_level_v10: boolean;
   begin
     result := false;
-    if levelname = 'E3M6' then
+    if levelname = 'E2M4' then
+    begin
+      result := true;
+
+      // Fix final arena sky
+      doomsectors[48].ceilingheight := 1312;
+      doomsectors[49].ceilingheight := 1312;
+    end
+    else if levelname = 'E3M6' then
     begin
       result := true;
       doomsectors[62].ceilingheight := 1408;
@@ -990,6 +998,10 @@ var
 
       doomsidedefs[529].textureoffset := 0;
       fix_changevertexes(1473, -1344, 1537, -1344);
+
+      // Fix final arena sky
+      doomsectors[48].ceilingheight := 1312;
+      doomsectors[49].ceilingheight := 1312;
     end
     else if levelname = 'E2M5' then
     begin
@@ -1455,6 +1467,20 @@ begin
         doomlinedefs[i].v2 := AddVertexToWAD(stubx + 32, stuby);
         stubx := stubx + 32;
       end;
+
+  {$IFDEF DEBUG}
+  for i := 0 to numdoomlinedefs - 1 do
+    if doomlinedefs[i].sidenum[0] >= 0 then
+      if doomlinedefs[i].sidenum[1] >= 0 then
+      begin
+        if doomsectors[doomsidedefs[doomlinedefs[i].sidenum[0]].sector].ceilingheight <> doomsectors[doomsidedefs[doomlinedefs[i].sidenum[1]].sector].ceilingheight then
+          if doomsectors[doomsidedefs[doomlinedefs[i].sidenum[0]].sector].ceilingpic = stringtochar8('F_SKY1') then
+            if doomsectors[doomsidedefs[doomlinedefs[i].sidenum[1]].sector].ceilingpic = stringtochar8('F_SKY1') then
+              if doomsidedefs[doomlinedefs[i].sidenum[0]].toptexture = stringtochar8('-') then
+                if doomsidedefs[doomlinedefs[i].sidenum[1]].toptexture = stringtochar8('-') then
+                  printf('level %s, line %d joins skies with different ceiling heights'#13#10, [levelname, i]);
+      end;
+  {$ENDIF}
 
   wadwriter.AddSeparator(levelname);
   wadwriter.AddData('THINGS', doomthings, numdoomthings * SizeOf(doommapthing_t));
