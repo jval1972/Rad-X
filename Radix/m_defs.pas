@@ -1400,7 +1400,7 @@ const
      location: @numChannels;
      setable: DFS_NEVER;
      defaultsvalue: '';
-     defaultivalue: 32;
+     defaultivalue: 64;
      defaultbvalue: false;
      _type: tInteger),
 
