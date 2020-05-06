@@ -1058,7 +1058,7 @@ const
      location: @key_flyup;
      setable: DFS_NEVER;
      defaultsvalue: '';
-     defaultivalue: Ord('e');
+     defaultivalue: 101;
      defaultbvalue: false;
      _type: tInteger),
 
@@ -1067,7 +1067,7 @@ const
      location: @key_flydown;
      setable: DFS_NEVER;
      defaultsvalue: '';
-     defaultivalue: Ord('q');
+     defaultivalue: 113;
      defaultbvalue: false;
      _type: tInteger),
 
