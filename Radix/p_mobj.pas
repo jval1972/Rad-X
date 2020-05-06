@@ -96,9 +96,11 @@ function P_CheckMissileSpawn(th: Pmobj_t): boolean;
 
 function P_SeekerMissile(actor: Pmobj_t; thresh, turnMax: angle_t): boolean;
 
-function P_HitFloor(thing: Pmobj_t): integer;
+procedure P_HitFloor(thing: Pmobj_t);
 
-function P_GetThingFloorType(thing: Pmobj_t): integer;
+function P_GetThingFloorType(thing: Pmobj_t): byte;
+
+function P_GetThingCeilingType(thing: Pmobj_t): byte;
 
 procedure MObj_Init;
 
@@ -694,7 +696,7 @@ begin
       mo.reactiontime := mo.reactiontime div 2;
 
       // villsa [STRIFE] get terrain type
-      if P_GetThingFloorType(mo) <> FLOOR_SOLID then
+      if P_GetThingFloorType(mo) > FLOOR_SKY then
       begin
         mo.flags3_ex := mo.flags3_ex and not MF3_EX_FLOORBOUNCE;
         bouncing := false;
@@ -1248,7 +1250,7 @@ begin
       mobj.z := mobj.floorz;
 
     if (mobj.flags2_ex and MF2_EX_FLOORCLIP <> 0) and
-       (P_GetThingFloorType(mobj) > FLOOR_SOLID) and
+       (P_GetThingFloorType(mobj) > FLOOR_SKY) and
        (mobj.z = mobj.floorz) then
       mobj.floorclip := FOOTCLIPSIZE
     else
@@ -1257,7 +1259,7 @@ begin
   else
   begin
     if (mobj.flags2_ex and MF2_EX_FLOORCLIP <> 0) and
-       (P_GetThingFloorType(mobj) > FLOOR_SOLID) and
+       (P_GetThingFloorType(mobj) > FLOOR_SKY) and
        (mobj.z = sec.floorheight) then
       mobj.floorclip := FOOTCLIPSIZE
     else
@@ -1423,7 +1425,7 @@ begin
     mobj.z := z;
 
   if (mobj.flags2_ex and MF2_EX_FLOORCLIP <> 0) and
-     (P_GetThingFloorType(mobj) > FLOOR_SOLID) and
+     (P_GetThingFloorType(mobj) > FLOOR_SKY) and
      (mobj.z = sec.floorheight) then
     mobj.floorclip := FOOTCLIPSIZE
   else
@@ -2466,9 +2468,20 @@ end;
 //
 //---------------------------------------------------------------------------
 // JVAL: 9 December 2007, Added terrain types
-function P_GetThingFloorType(thing: Pmobj_t): integer;
+function P_GetThingFloorType(thing: Pmobj_t): byte;
 begin
   result := flats[Psubsector_t(thing.subsector).sector.floorpic].terraintype;
+end;
+
+//---------------------------------------------------------------------------
+//
+// FUNC P_GetThingFloorType
+//
+//---------------------------------------------------------------------------
+// JVAL: 20200506 - Added ceiling terrain types
+function P_GetThingCeilingType(thing: Pmobj_t): byte;
+begin
+  result := flats[Psubsector_t(thing.subsector).sector.ceilingpic].terraintype;
 end;
 
 //---------------------------------------------------------------------------
@@ -2481,15 +2494,13 @@ var
   id_radixmudsplash: integer = -1;
   id_radixlavasplash: integer = -1;
 
-function P_HitFloor(thing: Pmobj_t): integer;
+procedure P_HitFloor(thing: Pmobj_t);
 var
   mo: Pmobj_t;
   sec: Psector_t;
   z: fixed_t; // JVAL: 3d Floors
   ss: Psubsector_t;
 begin
-  result := FLOOR_SOLID;
-
   // don't splash if has MF2_EX_NOHITFLOOR flag
   if thing.flags2_ex and MF2_EX_NOHITFLOOR <> 0 then
     exit;
@@ -2535,7 +2546,6 @@ begin
           if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
             S_StartSound(mo, Ord(sfx_gloop));
         end;
-        result := FLOOR_WATER;
         exit;
       end;
     FLOOR_LAVA:
@@ -2548,7 +2558,6 @@ begin
           if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
             S_StartSound(mo, Ord(sfx_burn));
         end;
-        result := FLOOR_LAVA;
         exit;
       end;
     FLOOR_SLUDGE:
@@ -2564,7 +2573,6 @@ begin
           if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
             S_StartSound(mo, Ord(sfx_sgloop));
         end;
-        result := FLOOR_SLUDGE;
         exit;
       end;
     FLOOR_NUKAGE:
@@ -2580,7 +2588,6 @@ begin
           if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
             S_StartSound(mo, Ord(sfx_sgloop));
         end;
-        result := FLOOR_NUKAGE;
         exit;
       end;
     FLOOR_RADIXLAVA:
@@ -2593,7 +2600,6 @@ begin
           if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
             S_AmbientSound(mo.x, mo.y, 'radix/SndSplash');
         end;
-        result := FLOOR_RADIXLAVA;
         exit;
       end;
     FLOOR_RADIXMUD:
@@ -2606,7 +2612,6 @@ begin
           if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
             S_AmbientSound(mo.x, mo.y, 'radix/SndSplash');
         end;
-        result := FLOOR_RADIXMUD;
         exit;
       end;
     FLOOR_RADIXWATER:
@@ -2619,7 +2624,6 @@ begin
           if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
             S_AmbientSound(mo.x, mo.y, 'radix/SndSplash');
         end;
-        result := FLOOR_RADIXMUD;
         exit;
       end;
   end;

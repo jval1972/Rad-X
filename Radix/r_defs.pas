@@ -682,7 +682,7 @@ type
     {$IFNDEF OPENGL}
     flat32: PTexture; // External texture reference
     {$ENDIF}
-    terraintype: integer; // JVAL: 9 December 2007, Added terrain types
+    terraintype: byte; // JVAL: 9 December 2007, Added terrain types
     translation: integer;
     lump: integer;
   end;

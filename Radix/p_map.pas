@@ -1208,7 +1208,7 @@ begin
   if thing.flags2_ex and MF2_EX_FLOORCLIP <> 0 then
   begin
     if (thing.z = Psubsector_t(thing.subsector).sector.floorheight) and
-       (P_GetThingFloorType(thing) > FLOOR_SOLID) then
+       (P_GetThingFloorType(thing) > FLOOR_SKY) then
       thing.floorclip := FOOTCLIPSIZE
     else
       thing.floorclip := 0;

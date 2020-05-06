@@ -38,13 +38,14 @@ var
 
 const
   FLOOR_SOLID = 0;
-  FLOOR_WATER = 1;
-  FLOOR_LAVA = 2;
-  FLOOR_SLUDGE = 3;
-  FLOOR_NUKAGE = 4;
-  FLOOR_RADIXLAVA = 5;
-  FLOOR_RADIXMUD = 6;
-  FLOOR_RADIXWATER = 7;
+  FLOOR_SKY = 1;
+  FLOOR_WATER = 2;
+  FLOOR_LAVA = 3;
+  FLOOR_SLUDGE = 4;
+  FLOOR_NUKAGE = 5;
+  FLOOR_RADIXLAVA = 6;
+  FLOOR_RADIXMUD = 7;
+  FLOOR_RADIXWATER = 8;
 
 implementation
 
@@ -58,7 +59,8 @@ type
   end;
 
 var
-  terraintypedefs: array[0..32] of terraintypedef_t = (
+  terraintypedefs: array[0..33] of terraintypedef_t = (
+    (name: 'F_SKY1'; _type: FLOOR_SKY),
     (name: 'FWATER1'; _type: FLOOR_WATER),
     (name: 'FWATER2'; _type: FLOOR_WATER),
     (name: 'FWATER3'; _type: FLOOR_WATER),

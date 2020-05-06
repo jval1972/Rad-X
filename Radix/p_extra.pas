@@ -575,7 +575,7 @@ procedure A_SetFloorClip(actor: Pmobj_t);
 begin
   actor.flags2_ex := actor.flags2_ex or MF2_EX_FLOORCLIP;
   if (actor.z = Psubsector_t(actor.subsector).sector.floorheight) and
-     (P_GetThingFloorType(actor) > FLOOR_SOLID) then
+     (P_GetThingFloorType(actor) > FLOOR_SKY) then
       actor.floorclip := FOOTCLIPSIZE
     else
       actor.floorclip := 0;
