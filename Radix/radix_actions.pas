@@ -1522,7 +1522,7 @@ end;
 // Sprite type 23
 type
   radixprintmessage_t = packed record
-    message_id: byte; // id's 0-12
+    message_id: integer; // id's 0-12
     // RTL
     nextsoundtime: integer;
     initialized: boolean;
@@ -1954,7 +1954,7 @@ end;
 // Sprite type = 29
 type
   radixsecondaryobjective_t = packed record
-    return_value: byte;
+    return_value: integer;
     // RTL
     nextsoundtime: integer;
     initialized: boolean;
