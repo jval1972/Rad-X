@@ -1080,6 +1080,10 @@ var
       doomsectors[292].ceilingpic := stringtochar8('F_SKY1');
       doomsectors[293].ceilingpic := stringtochar8('F_SKY1');
       doomsectors[295].ceilingpic := stringtochar8('F_SKY1');
+
+      // Fix secondary target room
+      doomsectors[323].ceilingheight := 1280;
+      doomsectors[324].ceilingheight := 1280;
     end
     else if levelname = 'E3M3' then
     begin
