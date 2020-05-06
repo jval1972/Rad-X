@@ -1908,7 +1908,8 @@ begin
       mo := RX_SpawnRadixBigExplosion(x, y, z);
       mo.flags3_ex := mo.flags3_ex or MF3_EX_NOSOUND;
     end;
-    S_AmbientSound(x1, y1, 'radix/SndExplode');
+    if parms.number_of_explosions and 1 <> 0 then // JVAL: 20200506 - Do not bottleneck sound system
+      S_AmbientSound(x1, y1, 'radix/SndExplode');
     parms.x_coord := parms.x_coord + parms.delta_x;
     parms.y_coord := parms.y_coord + parms.delta_y;
     parms.delay_cnt := parms.delay_length;
@@ -2636,7 +2637,8 @@ begin
       mo := RX_SpawnRadixBigExplosion(x, y, z);
       mo.flags3_ex := mo.flags3_ex or MF3_EX_NOSOUND;
     end;
-    S_AmbientSound(x1, y1, 'radix/SndExplode');
+    if parms.number_of_explosions and 1 <> 0 then // JVAL: 20200506 - Do not bottleneck sound system
+      S_AmbientSound(x1, y1, 'radix/SndExplode');
     parms.x_coord := parms.x_coord + parms.delta_x;
     parms.y_coord := parms.y_coord + parms.delta_y;
     parms.height := parms.height + parms.delta_height;
