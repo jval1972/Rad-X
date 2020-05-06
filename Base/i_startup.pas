@@ -48,8 +48,10 @@ type
     NetPanel: TPanel;
     NetMsgLabel: TLabel;
     AbortNetButton: TButton;
+    OpenDialog1: TOpenDialog;
     procedure FormCreate(Sender: TObject);
     procedure AbortNetButtonClick(Sender: TObject);
+    procedure OpenDialog1CanClose(Sender: TObject; var CanClose: Boolean);
   private
     { Private declarations }
   public
@@ -81,6 +83,8 @@ procedure SUC_SecondaryProgress(const p: integer);
 procedure SUC_StartingNetwork(const msg: string);
 
 procedure SUC_FinishedNetwork;
+
+function SUC_LocateRadixDataFile: string;
 
 implementation
 
@@ -260,6 +264,47 @@ end;
 procedure SUC_FinishedNetwork;
 begin
   StartUpConsoleForm.NetPanel.Visible := False;
+end;
+
+function SUC_LocateRadixDataFile: string;
+begin
+  if StartUpConsoleForm.OpenDialog1.Execute then
+    result := StartUpConsoleForm.OpenDialog1.Filename
+  else
+    result := '';
+end;
+
+procedure TStartUpConsoleForm.OpenDialog1CanClose(Sender: TObject;
+  var CanClose: Boolean);
+var
+  f: TFileStream;
+  c: char;
+  i: integer;
+  check: string;
+begin
+  if OpenDialog1.FileName <> '' then
+    if fexists(OpenDialog1.FileName) then
+    begin
+      f := TFileStream.Create(OpenDialog1.FileName, fmOpenRead);
+      try
+        if f.Size < 12 then
+          CanClose := false
+        else
+        begin
+          check := '';
+          for i := 0 to 10 do
+          begin
+            f.Read(c, SizeOf(char));
+            check := check + c;
+          end;
+          CanClose := check = 'NSRes:Radix';
+        end;
+        if not CanClose then
+          ShowMessage('Invalid data file');
+      finally
+        f.Free;
+      end;
+    end;
 end;
 
 end.

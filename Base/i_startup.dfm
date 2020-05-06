@@ -111,4 +111,13 @@ object StartUpConsoleForm: TStartUpConsoleForm
       OnClick = AbortNetButtonClick
     end
   end
+  object OpenDialog1: TOpenDialog
+    FileName = 'RADIX.DAT'
+    Filter = 'RADIX.DAT|RADIX.DAT|DAT files (*.dat)|*.dat|All files (*.*)|*.*'
+    Options = [ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
+    Title = 'Locate RADIX.DAT file'
+    OnCanClose = OpenDialog1CanClose
+    Left = 112
+    Top = 208
+  end
 end

@@ -106,6 +106,10 @@ type
   PObjectArray = ^TObjectArray;
 
 type
+  string255 = string[255];
+  Pstring255 = ^string255;
+  
+type
   charset_t = set of char;
 
   twobytes_t = packed record

@@ -113,8 +113,9 @@ var
   additionalwadpaths: string = '';
 
 var
-  wads_autoload: string = '';
-  paks_autoload: string = '';
+  wads_autoload: string[255] = '';
+  paks_autoload: string[255] = '';
+  radix_dat_file: string[255] = '';
 
 function D_FileInDoomPath(const fn: string): string;
 
@@ -145,6 +146,7 @@ uses
   f_finale,
   m_argv,
   m_crc32,
+  m_defs,
   m_misc,
   m_menu,
   mn_font,
@@ -997,6 +999,7 @@ end;
 
 const
   RADIX_DATA_FILE = 'RADIX.DAT';
+  RADIX_DEF_DATA_FILE = 'C:\RADIX\RADIX.DAT';
 
 // Add RADIX.DAT
 procedure D_AddRadixDAT;
@@ -1009,9 +1012,29 @@ begin
   if (p > 0) and (p < myargc) then
     tmpdat := myargv[p + 1]
   else
+  begin
     tmpdat := RADIX_DATA_FILE;
+    if radix_dat_file <> '' then
+      if fexists(radix_dat_file) then
+        tmpdat := radix_dat_file;
+  end;
 
   raddat := D_FileInDoomPath(tmpdat);
+
+  if not fexists(raddat) then
+    if fexists(RADIX_DEF_DATA_FILE) then
+      raddat := RADIX_DEF_DATA_FILE;
+
+  if not fexists(raddat) then
+  begin
+    tmpdat := SUC_LocateRadixDataFile;
+    if tmpdat <> '' then
+      if fexists(tmpdat) then
+      begin
+        radix_dat_file := tmpdat;
+        raddat := tmpdat;
+      end;
+  end;
 
   if fexists(raddat) then
   begin
@@ -1034,8 +1057,6 @@ var
 //
 procedure IdentifyVersion;
 begin
-  basedefault := 'RAD.ini';
-
   gamemode := RX_GameModeFromCrc32(radix_crc32);
   radixversion := RX_RadixVersionFromCrc32(radix_crc32);
   printf(RX_VersionStringFromCrc32(radix_crc32) + #13#10);
@@ -1299,6 +1320,7 @@ var
   err_shown: boolean;
   s1, s2: string;
   kparm: string;
+  stmp: string;
 begin
   SUC_Open;
   outproc := @SUC_Outproc;
@@ -1321,6 +1343,17 @@ begin
   SUC_Progress(2);
 
   FindResponseFile;
+
+  if M_CheckParmCDROM then
+  begin
+    printf(D_CDROM);
+    basedefault := CD_WORKDIR + 'RAD.ini';
+  end
+  else
+    basedefault := 'RAD.ini';
+
+  printf('M_LoadDefaults: Load system defaults.'#13#10);
+  M_LoadDefaults;              // load before initing other systems
 
   printf('I_InitializeIO: Initializing input/output streams.'#13#10);
   I_InitializeIO;
@@ -1381,12 +1414,6 @@ begin
 
   if devparm then
     printf(D_DEVSTR);
-
-  if M_CheckParmCDROM then
-  begin
-    printf(D_CDROM);
-    basedefault := CD_WORKDIR + 'RAD.ini';
-  end;
 
   // turbo option
   p := M_CheckParm('-turbo');
@@ -1509,11 +1536,10 @@ begin
   if (p <> 0) and (p <= myargc - 1) and (deathmatch <> 0) then
     printf('Austin Virtual Gaming: Levels will end after 20 minutes'#13#10);
 
-  printf('M_LoadDefaults: Load system defaults.'#13#10);
-  M_LoadDefaults;              // load before initing other systems
-
-  D_WadsAutoLoad(wads_autoload);
-  D_PaksAutoload(paks_autoload);
+  stmp := wads_autoload;
+  D_WadsAutoLoad(stmp);
+  stmp := paks_autoload;
+  D_PaksAutoload(stmp);
 
   SUC_Progress(20);
 

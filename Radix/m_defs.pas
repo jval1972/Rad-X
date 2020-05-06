@@ -32,6 +32,7 @@ unit m_defs;
 interface
 
 uses
+  d_delphi,
   am_map,
   c_con,
   doomdef,
@@ -149,10 +150,10 @@ var
 {$ENDIF}
 
 type
-  ttype_t = (tString, tInteger, tBoolean, tGroup);
+  ttype_t = (tString, tstring255, tInteger, tBoolean, tGroup);
 
   default_t = record
-    name: string;
+    name: string[64];
     location: pointer;
     setable: byte;
     defaultsvalue: string;
@@ -163,7 +164,7 @@ type
   Pdefault_t = ^default_t;
 
 const
-  NUMDEFAULTS = 198;
+  NUMDEFAULTS = 199;
 
 // JVAL
 // Note: All setable defaults must be in lowercase, don't ask why. Just do it. :)
@@ -1270,7 +1271,7 @@ const
      setable: DFS_ALWAYS;
      defaultsvalue: '';
      defaultivalue: 0;
-     defaultbvalue: false;
+     defaultbvalue: true;
      _type: tBoolean),
 
     (name: 'invertmouseturn';
@@ -1739,7 +1740,7 @@ const
      defaultsvalue: '';
      defaultivalue: 0;
      defaultbvalue: false;
-     _type: tString),
+     _type: tString255),
 
     (name: 'paks_autoload';
      location: @paks_autoload;
@@ -1747,7 +1748,15 @@ const
      defaultsvalue: '';
      defaultivalue: 0;
      defaultbvalue: false;
-     _type: tString),
+     _type: tString255),
+
+    (name: 'radix_dat_file';
+     location: @radix_dat_file;
+     setable: DFS_NEVER;
+     defaultsvalue: '';
+     defaultivalue: 0;
+     defaultbvalue: false;
+     _type: tString255),
 
     (name: 'Pilot';
      location: nil;
