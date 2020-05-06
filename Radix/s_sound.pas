@@ -158,6 +158,7 @@ const
 // Adjustable by menu.
   NORM_PITCH = 128;
   NORM_PRIORITY = 64;
+  FULLVOL_PRIORITY = 48;
   NORM_SEP = 128;
 
   S_PITCH_PERTURB = 1;
@@ -405,7 +406,10 @@ begin
   else
   begin
     pitch := NORM_PITCH;
-    priority := NORM_PRIORITY;
+    if fullvolume then
+      priority := FULLVOL_PRIORITY
+    else
+      priority := NORM_PRIORITY;
   end;
 
   // Check to see if it is audible,
@@ -464,7 +468,10 @@ begin
   cnum := S_GetChannel(origin, sfx);
 
   if cnum < 0 then
+  begin
+    I_DevWarning('S_StartSoundAtVolume(): Can not find channel for sfx=%d'#13#10, [sfx_id]);
     exit;
+  end;
 
   //
   // This is supposed to handle the loading/caching.
@@ -607,7 +614,9 @@ begin
               S_StopChannel(cnum)
             else
               I_UpdateSoundParams(c.handle, volume, sep, pitch);
-          end;
+          end
+          else
+            I_UpdateSoundParams(c.handle, snd_SfxVolume, NORM_SEP, pitch);
         end
       end
       else

@@ -158,7 +158,7 @@ type
   LPTEMPEVENT = ^_TEMPEVENT;
 
 const
-  NUM_CHANNELS = 16; // 16 volume channels
+  NUM_MIDI_CHANNELS = 16; // 16 volume channels
   VOLUME_INIT = 100; // 100% volume by default
   NUM_STREAM_BUFFERS = 2;
   OUT_BUFFER_SIZE = 1024; // Max stream buffer size in bytes
@@ -472,9 +472,9 @@ begin
   m_dwSoundSize := dwSize;
 
   // allocate volume channels and initialise them
-  SetLength(m_Volumes, NUM_CHANNELS);
+  SetLength(m_Volumes, NUM_MIDI_CHANNELS);
   for i := Low(m_Volumes) to High(m_Volumes) do m_Volumes[i] := VOLUME_INIT;
-  //vc:m_Volumes.resize(NUM_CHANNELS, VOLUME_INIT);
+  //vc:m_Volumes.resize(NUM_MIDI_CHANNELS, VOLUME_INIT);
 
   if not StreamBufferSetup() then
   begin

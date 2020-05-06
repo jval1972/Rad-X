@@ -106,7 +106,7 @@ uses
 
 // Needed for calling the actual sound output.
 const
-  NUM_CHANNELS = 32;
+  NUM_CHANNELS = 64;
 
 var
   pDS: IDirectSound;
