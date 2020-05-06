@@ -886,7 +886,10 @@ begin
   p := @players[radixplayer];
 
   if p.planetranspo_tics > 0 then
+  begin
+    action.suspend := 1;
     exit; // Already transported
+  end;
 
   p.planetranspo_start_x := p.mo.x;
   p.planetranspo_start_y := p.mo.y;
