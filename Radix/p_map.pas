@@ -494,6 +494,20 @@ begin
     exit;
   end;
 
+  if (tmthing.flags3_ex and MF3_EX_DONTBLOCKSPECIES <> 0) and (thing.flags3_ex and MF3_EX_DONTBLOCKSPECIES <> 0) then
+  begin
+    if tmthing._type = thing._type then
+    begin
+      result := true;
+      exit;
+    end;
+    if Info_GetInheritance(tmthing.info) = Info_GetInheritance(tmthing.info) then
+    begin
+      result := true;
+      exit;
+    end;
+  end;
+
   blockdist := thing.radius + tmthing.radius;
 
   if (abs(thing.x - tmx) >= blockdist) or (abs(thing.y - tmy) >= blockdist) then

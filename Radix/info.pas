@@ -17468,7 +17468,7 @@ const // Doom Original mobjinfo
     pushfactor: DEFPUSHFACTOR;                                    // pushfactor
     scale: FRACUNIT;                                              // scale
     gravity: FRACUNIT;                                            // gravity
-    flags3_ex: 0;                                                 // flags3_ex
+    flags3_ex: MF3_EX_DONTBLOCKSPECIES;                           // flags3_ex
     flags4_ex: 0;                                                 // flags4_ex
   )
 

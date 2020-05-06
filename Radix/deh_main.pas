@@ -2020,6 +2020,7 @@ begin
   mobj_flags3_ex.Add('MF3_EX_PREVENTTHRYSKY');
   mobj_flags3_ex.Add('MF3_EX_AMFORCEFIELD');
   mobj_flags3_ex.Add('MF3_EX_AMTELEPORTFOG');
+  mobj_flags3_ex.Add('MF3_EX_DONTBLOCKSPECIES');
 
 
   mobj_flags4_ex := TDTextList.Create;
