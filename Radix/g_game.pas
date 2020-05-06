@@ -2653,10 +2653,10 @@ end;
 
 initialization
 
-  forwardmove[0] := $19;
+  forwardmove[0] := $24;
   forwardmove[1] := $32;
-  sidemove[0] := $18;
-  sidemove[1] := $28;
+  sidemove[0] := $20;
+  sidemove[1] := $2A;
   angleturn[0] := 640;
   angleturn[1] := 1280;
   angleturn[2] := 320;
