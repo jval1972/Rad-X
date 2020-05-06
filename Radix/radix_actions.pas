@@ -1087,7 +1087,9 @@ begin
       dest_height := parms.max_height;
     end;
     exit; // ouch
-  end;
+  end
+  else
+    exit;
 
   changed_direction := false;
   // JVAL: 20200403 - Avoid interpolation for fast moving sectors
