@@ -259,6 +259,30 @@ var
   dest_height: fixed_t;
   step: fixed_t;
   finished: boolean;
+
+  function playercheck(const fl, cl: fixed_t): boolean;
+  var
+    i: integer;
+    mo: Pmobj_t;
+  begin
+    for i := 0 to MAXPLAYERS - 1 do
+      if playeringame[i] then
+      begin
+        mo := players[i].mo;
+        if cl - fl <= players[i].mo.height then
+          if (Psubsector_t(mo.subsector).sector = sec) or
+             (R_PointInSubsector(mo.x - mo.radius, mo.y - mo.radius).sector = sec) or
+             (R_PointInSubsector(mo.x + mo.radius, mo.y - mo.radius).sector = sec) or
+             (R_PointInSubsector(mo.x + mo.radius, mo.y + mo.radius).sector = sec) or
+             (R_PointInSubsector(mo.x - mo.radius, mo.y + mo.radius).sector = sec) then
+          begin
+            result := false;
+            exit;
+          end;
+      end;
+    result := true;
+  end;
+
 begin
   parms := radixmovingsurface_p(@action.params);
 
@@ -296,6 +320,10 @@ begin
   case parms.surface_type of
     1: // floor
       begin
+        if step > 0 then
+          if not playercheck(sec.floorheight + step, sec.ceilingheight) then
+            exit;
+
         sec.floorheight := sec.floorheight + step;
 
         if parms.direction = 1 then // Up
@@ -310,6 +338,10 @@ begin
       end;
     0: // ceiling
       begin
+        if step < 0 then
+          if not playercheck(sec.floorheight, sec.ceilingheight + step) then
+            exit;
+            
         sec.ceilingheight := sec.ceilingheight + step;
 
         if parms.direction = 1 then // Up
@@ -968,6 +1000,29 @@ label
     end;
   end;
 
+  function playercheck(const fl, cl: fixed_t): boolean;
+  var
+    i: integer;
+    mo: Pmobj_t;
+  begin
+    for i := 0 to MAXPLAYERS - 1 do
+      if playeringame[i] then
+      begin
+        mo := players[i].mo;
+        if cl - fl <= players[i].mo.height then
+          if (Psubsector_t(mo.subsector).sector = sec) or
+             (R_PointInSubsector(mo.x - mo.radius, mo.y - mo.radius).sector = sec) or
+             (R_PointInSubsector(mo.x + mo.radius, mo.y - mo.radius).sector = sec) or
+             (R_PointInSubsector(mo.x + mo.radius, mo.y + mo.radius).sector = sec) or
+             (R_PointInSubsector(mo.x - mo.radius, mo.y + mo.radius).sector = sec) then
+          begin
+            result := false;
+            exit;
+          end;
+      end;
+    result := true;
+  end;
+
 begin
   parms := radixnewmovingsurface_p(@action.params);
 
@@ -1042,6 +1097,10 @@ begin
   case parms.surface_type of
     1: // floor
       begin
+        if step > 0 then
+          if not playercheck(sec.floorheight + step, sec.ceilingheight) then
+            exit;
+
         sec.floorheight := sec.floorheight + step;
 
         if parms.direction = 1 then // Up
@@ -1057,6 +1116,10 @@ begin
       end;
     0: // ceiling
       begin
+        if step < 0 then
+          if not playercheck(sec.floorheight, sec.ceilingheight + step) then
+            exit;
+            
         sec.ceilingheight := sec.ceilingheight + step;
 
         if parms.direction = 1 then // Up
