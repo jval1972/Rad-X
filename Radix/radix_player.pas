@@ -227,12 +227,14 @@ end;
 procedure RX_PlaneHitFloor(p: Pplayer_t);
 begin
   if p.planehittics <= 0 then
-    if P_GetThingFloorType(p.mo) = FLOOR_SOLID then
-      if p.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
-      begin
-        S_AmbientSound(p.mo.x, p.mo.y, 'radix/SndPlaneHit');
-        p.planehittics := S_RadixSoundDuration(Ord(sfx_SndPlaneHit));
-      end;
+    if p.mo.z <= p.mo.floorz then
+      if p.mo.oldz - p.mo.z > 8 * FRACUNIT then
+        if P_GetThingFloorType(p.mo) = FLOOR_SOLID then
+          if p.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
+          begin
+            S_AmbientSound(p.mo.x, p.mo.y, 'radix/SndPlaneHit');
+            p.planehittics := S_RadixSoundDuration(Ord(sfx_SndPlaneHit));
+          end;
 end;
 
 end.

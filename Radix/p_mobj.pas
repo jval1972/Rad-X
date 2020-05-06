@@ -728,7 +728,6 @@ begin
         // after hitting the ground (hard),
         // and utter appropriate sound.
         player.deltaviewheight := _SHR(mo.momz, 3);
-        RX_PlaneHitFloor(player);
       end;
       mo.momz := 0;
     end;
@@ -1072,6 +1071,9 @@ begin
 
   if mobj.flags and MF_JUSTAPPEARED = 0 then
     P_VelocityHandler(mobj);
+
+  if mobj.player <> nil then
+    RX_PlaneHitFloor(mobj.player);
 
   // JVAL: 20200503 - Keep previous tic position
   mobj.oldx := mobj.x;
