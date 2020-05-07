@@ -477,6 +477,30 @@ var
     inc(numdoomthings);
   end;
 
+  procedure AddDoomThingToWad(const x, y: integer; const angle: smallint; const mtype: word; const options: smallint);
+  var
+    mthing: Pdoommapthing_t;
+  begin
+    realloc(pointer(doomthings), numdoomthings * SizeOf(doommapthing_t), (numdoomthings + 1) * SizeOf(doommapthing_t));
+    mthing := @doomthings[numdoomthings];
+
+    mthing.x := x;
+    mthing.y := y;
+
+    mthing.angle := angle;
+    mthing._type := mtype;
+    mthing.options := options;
+
+    realloc(pointer(doomthingsextra), numdoomthings * SizeOf(radixmapthingextra_t), (numdoomthings + 1) * SizeOf(radixmapthingextra_t));
+    doomthingsextra[numdoomthings].z := 0;
+    doomthingsextra[numdoomthings].speed := 0;
+    doomthingsextra[numdoomthings].height_speed := 0;
+    doomthingsextra[numdoomthings].radix_skill := -1;
+    doomthingsextra[numdoomthings].radix_id := -1;
+
+    inc(numdoomthings);
+  end;
+
   procedure AddPlayerStarts;
   var
     j: integer;
@@ -886,6 +910,47 @@ var
     AddWallToWad(@wall);
   end;
 
+  procedure fix_slide_line(const x1, y1, x2, y2: integer); overload;
+  var
+    dx, dy: integer;
+    stepx, stepy: integer;
+    xx, yy: integer;
+    iters: integer;
+    j: integer;
+  begin
+    dx := x2 - x1;
+    dy := y2 - y1;
+
+    iters := round(sqrt(dx * dx + dy * dy) / 64 + 0.4999);
+    if iters < 1 then
+      iters := 1;
+    xx := x1;
+    yy := y1;
+    for j := 0 to iters - 1 do
+    begin
+      stepx := dx div (iters - j);
+      stepy := dy div (iters - j);
+      xx := xx + stepx div 2;
+      yy := yy + stepy div 2;
+      AddDoomThingToWad(xx, yy, 0, MT_PLAYERFLOORSLIDE64, MTF_EASY or MTF_NORMAL or MTF_HARD);
+      xx := xx + stepx div 2;
+      yy := yy + stepy div 2;
+      dx := dx - stepx;
+      dy := dy - stepy;
+    end;
+  end;
+
+  procedure fix_slide_line(ln: integer); overload;
+  var
+    x1, y1, x2, y2: integer;
+  begin
+    x1 := doomvertexes[doomlinedefs[ln].v1].x;
+    y1 := doomvertexes[doomlinedefs[ln].v1].y;
+    x2 := doomvertexes[doomlinedefs[ln].v2].x;
+    y2 := doomvertexes[doomlinedefs[ln].v2].y;
+    fix_slide_line(x1, y1, x2, y2);
+  end;
+
   function fix_radix_level_v10: boolean;
   begin
     result := false;
@@ -959,11 +1024,23 @@ var
     if levelname = 'E1M1' then
     begin
       result := true;
+      fix_slide_line(172);
+      fix_slide_line(198);
+      fix_slide_line(146);
+      fix_slide_line(269);
       for j := 0 to numdoomsidedefs - 1 do
         if doomsidedefs[j].sector = 206 then
           doomsidedefs[j].sector := 0
         else if doomsidedefs[j].sector = 211 then
           doomsidedefs[j].sector := 212;
+    end
+    else if levelname = 'E1M2' then
+    begin
+      result := true;
+      AddDoomThingToWad(-28735, -1376, 0, MT_PLAYERFLOORSLIDE64, MTF_EASY or MTF_NORMAL or MTF_HARD);
+      AddDoomThingToWad(-28735, -1312, 0, MT_PLAYERFLOORSLIDE64, MTF_EASY or MTF_NORMAL or MTF_HARD);
+      AddDoomThingToWad(-28415, -1376, 0, MT_PLAYERFLOORSLIDE64, MTF_EASY or MTF_NORMAL or MTF_HARD);
+      AddDoomThingToWad(-28415, -1312, 0, MT_PLAYERFLOORSLIDE64, MTF_EASY or MTF_NORMAL or MTF_HARD);
     end
     else if levelname = 'E1M5' then
     begin
