@@ -940,6 +940,11 @@ var
       rsectors[156].ceilingheights[1] := rsectors[156].ceilingheights[1] + 64;
       rsectors[156].ceilingheights[2] := rsectors[156].ceilingheights[2] + 64;
       rsectors[157].ceilingheight := rsectors[157].ceilingheight + 64;
+    end
+    else if levelname = 'E3M2' then
+    begin
+      result := true;
+      rsectors[143].flags := rsectors[142].flags and not (RSF_FLOORSLOPE or RSF_CEILINGSLOPE);
     end;
   end;
 
@@ -947,6 +952,8 @@ var
   var
     j: integer;
     sd: integer;
+    vv: integer;
+    v1, v2: integer;
   begin
     result := false;
     if levelname = 'E1M1' then
@@ -1096,6 +1103,97 @@ var
       // Fix secondary target room
       doomsectors[323].ceilingheight := 1280;
       doomsectors[324].ceilingheight := 1280;
+
+      // Fix sector 143 ending line (linedef #1174)
+      doomlinedefs[1174].sidenum[1] := -1;
+      doomsidedefs[doomlinedefs[1174].sidenum[0]].midtexture := doomsidedefs[doomlinedefs[1174].sidenum[0]].bottomtexture;
+      doomlinedefs[1174].flags := doomlinedefs[1174].flags or ML_BLOCKING;
+      doomlinedefs[1174].flags := doomlinedefs[1174].flags and not ML_TWOSIDED;
+
+      // Fix sector 141 ending line (linedef #1169)
+      vv := doomlinedefs[1169].v1;
+      doomlinedefs[1169].v1 := doomlinedefs[1169].v2;
+      doomlinedefs[1169].v2 := vv;
+      doomlinedefs[1169].sidenum[0] := doomlinedefs[1169].sidenum[1];
+      doomlinedefs[1169].sidenum[1] := -1;
+      doomsidedefs[doomlinedefs[1169].sidenum[0]].midtexture := doomsidedefs[doomlinedefs[1169].sidenum[0]].bottomtexture;
+      doomlinedefs[1169].flags := doomlinedefs[1169].flags or ML_BLOCKING;
+      doomlinedefs[1169].flags := doomlinedefs[1169].flags and not ML_TWOSIDED;
+
+      // Deny access to monsters in the trans-corridor
+      doomlinedefs[537].flags := doomlinedefs[537].flags or ML_BLOCKMONSTERS;
+      doomlinedefs[609].flags := doomlinedefs[609].flags or ML_BLOCKMONSTERS;
+
+      // Move map things from trans-corridor
+      for j := 0 to numdoomthings - 1 do
+      begin
+        if (doomthings[j].x = 14200) and (doomthings[j].y = -1506) then
+        begin
+          doomthings[j].x := 13120;
+          doomthings[j].y := -544;
+        end
+        else if (doomthings[j].x = 14823) and (doomthings[j].y = -1501) then
+        begin
+          doomthings[j].x := 13248;
+          doomthings[j].y := -256;
+        end
+        else if (doomthings[j].x = -17140) and (doomthings[j].y = -5602) then
+        begin
+          doomthings[j].x := -14208;
+          doomthings[j].y := -4576;
+        end
+        else if (doomthings[j].x = -16380) and (doomthings[j].y = -5576) then
+        begin
+          doomthings[j].x := -13856;
+          doomthings[j].y := -4576;
+        end
+        else if (doomthings[j].x = -16180) and (doomthings[j].y = -5610) then
+        begin
+          doomthings[j].x := -13888;
+          doomthings[j].y := -5472;
+        end
+        else if (doomthings[j].x = -15860) and (doomthings[j].y = -5610) then
+        begin
+          doomthings[j].x := -12640;
+          doomthings[j].y := -5472;
+        end;
+      end;
+
+      doomsidedefs[doomlinedefs[609].sidenum[0]].toptexture := stringtochar8('RDXW0194');
+      doomsidedefs[doomlinedefs[609].sidenum[0]].bottomtexture := stringtochar8('RDXW0194');
+      doomsidedefs[doomlinedefs[609].sidenum[1]].toptexture := stringtochar8('RDXW0194');
+      doomsidedefs[doomlinedefs[609].sidenum[1]].bottomtexture := stringtochar8('RDXW0194');
+      doomsidedefs[doomlinedefs[1174].sidenum[0]].toptexture := stringtochar8('RDXW0194');
+      doomsidedefs[doomlinedefs[1174].sidenum[0]].midtexture := stringtochar8('RDXW0194');
+      doomsidedefs[doomlinedefs[1174].sidenum[0]].bottomtexture := stringtochar8('RDXW0194');
+
+      // Silent teleport
+      sd := AddSidedefToWAD(0, stringtochar8('-'), stringtochar8('-'), stringtochar8('-'), 142);
+      v1 := AddVertexToWAD(15393, -1345);
+      v2 := AddVertexToWAD(15393, -1663);
+
+      realloc(pointer(doomlinedefs), numdoomlinedefs * SizeOf(maplinedef_t), (numdoomlinedefs  + 1) * SizeOf(maplinedef_t));
+      doomlinedefs[numdoomlinedefs].v1 := v1;
+      doomlinedefs[numdoomlinedefs].v2 := v2;
+      doomlinedefs[numdoomlinedefs].flags := ML_TWOSIDED;
+      doomlinedefs[numdoomlinedefs].special := 244;
+      doomlinedefs[numdoomlinedefs].tag := 1;
+      doomlinedefs[numdoomlinedefs].sidenum[0] := sd;
+      doomlinedefs[numdoomlinedefs].sidenum[1] := sd;
+      inc(numdoomlinedefs);
+
+      v1 := AddVertexToWAD(-17376, -5759);
+      v2 := AddVertexToWAD(-17376, -5441);
+
+      realloc(pointer(doomlinedefs), numdoomlinedefs * SizeOf(maplinedef_t), (numdoomlinedefs  + 1) * SizeOf(maplinedef_t));
+      doomlinedefs[numdoomlinedefs].v1 := v1;
+      doomlinedefs[numdoomlinedefs].v2 := v2;
+      doomlinedefs[numdoomlinedefs].flags := ML_TWOSIDED;
+      doomlinedefs[numdoomlinedefs].special := 244;
+      doomlinedefs[numdoomlinedefs].tag := 1;
+      doomlinedefs[numdoomlinedefs].sidenum[0] := sd;
+      doomlinedefs[numdoomlinedefs].sidenum[1] := sd;
+      inc(numdoomlinedefs);
 
       // Fix animated textures
       ractions[67].enabled := 1;
