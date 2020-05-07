@@ -199,6 +199,8 @@ function PAK_ReadAllFilesAsString(const filename: string): string;
 
 procedure PAK_LoadPendingPaks;
 
+procedure PAK_AddEntry(const aPos, aSize: integer; const aname: string; const Pakn: string);
+
 implementation
 
 uses
@@ -1373,12 +1375,39 @@ begin
   result := manager.PFilePos(entry);
 end;
 
+type
+  pendingentry_t = record
+    size: integer;
+    position: integer;
+    name: string[255];
+    filename: string[255];
+  end;
+  Ppendingentry_t = ^pendingentry_t;
+  pendingentry_tArray = array[0..$FFF] of pendingentry_t;
+  Ppendingentry_tArray = ^pendingentry_tArray;
+
+var
+  pendingentries: Ppendingentry_tArray = nil;
+  numpendingentries: integer = 0;
+
+var
+  pak_initialized: boolean = false;
+
 //
 // PAK_InitFileSystem
 //
 procedure PAK_InitFileSystem;
+var
+  i: integer;
 begin
   pakmanager := TPakManager.Create;
+  if pendingentries <> nil then
+  begin
+    for i := 0 to numpendingentries - 1 do
+      pakmanager.AddEntry(pendingentries[i].position, pendingentries[i].size, pendingentries[i].name, pendingentries[i].filename);
+    memfree(pointer(pendingentries), numpendingentries * SizeOf(pendingentry_t));
+  end;
+  pak_initialized := true;
 end;
 
 procedure PAK_ShutDown;
@@ -1523,6 +1552,22 @@ begin
     list.Free;
   end;
   entries.Free;
+end;
+
+procedure PAK_AddEntry(const aPos, aSize: integer; const aname: string; const Pakn: string);
+begin
+  if pak_initialized then
+  begin
+    pakmanager.AddEntry(aPos, aSize, aname, Pakn);
+    exit;
+  end;
+
+  realloc(pointer(pendingentries), numpendingentries * SizeOf(pendingentry_t), (1 + numpendingentries) * SizeOf(pendingentry_t));
+  pendingentries[numpendingentries].position := aSize;
+  pendingentries[numpendingentries].size := aSize;
+  pendingentries[numpendingentries].name := aname;
+  pendingentries[numpendingentries].filename := Pakn;
+  inc(numpendingentries);
 end;
 
 initialization
