@@ -1634,6 +1634,12 @@ begin
         tri_guy := @forcefield_guy;
         num_tri := NUMFORCEFIELDLINES;
       end
+      else if t.flags2_ex and MF2_EX_DONTDRAW <> 0 then
+      begin
+        color := approx_gray;
+        tri_guy := @triangle_guy;
+        num_tri := NUMTRIANGLEGUYLINES;
+      end
       else
       begin
         color := aprox_green;
