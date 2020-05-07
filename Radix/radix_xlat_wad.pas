@@ -55,6 +55,7 @@ uses
   radix_sounds,
   r_defs,
   v_video,
+  w_pak,
   w_wadwriter,
   w_wad;
 
@@ -77,6 +78,8 @@ type
     textures: TDStringList;
     markflats: PBooleanArray;
     numflats: integer;
+    ffilename: string;
+    function AddPAKFileSystemEntry(const lumpname: string; const aliasname: string): boolean;
   protected
     function ReadLump(const l: Pradixlump_tArray; const numl: integer;
       const lmp: string; var buf: pointer; var size: integer): boolean;
@@ -127,6 +130,7 @@ begin
   numflats := 0;
   texturewidths := nil;
   textureheights := nil;
+  ffilename := '';
   Inherited;
 end;
 
@@ -164,6 +168,22 @@ begin
     memfree(pointer(lumps), numlumps * SizeOf(radixlump_t));
     numlumps := 0;
   end;
+end;
+
+function TRadixToWADConverter.AddPAKFileSystemEntry(const lumpname: string; const aliasname: string): boolean;
+var
+  lump: integer;
+begin
+  lump := FindLump(lumps, numlumps, lumpname);
+  if lump < 0 then
+  begin
+    result := false;
+    exit;
+  end;
+
+  result := true;
+
+  PAK_AddEntry(lumps[lump].position, lumps[lump].length, aliasname, ffilename);
 end;
 
 function TRadixToWADConverter.ReadLump(const l: Pradixlump_tArray; const numl: integer;
@@ -795,6 +815,7 @@ begin
   rname := 'MainTitle';
   wname := 'TITLEPIC';
   GenerateGraphicWithPalette(rname, wname, true);
+  AddPAKFileSystemEntry(rname, wname + '.RADIX32');
   aliases.Add(wname + '=' + rname);
 
   rname := 'DemoDecal';
@@ -2371,6 +2392,7 @@ begin
 
   Clear;
 
+  ffilename := fname;
   f := TFile.Create(fname, fOpenReadOnly);
   wadwriter := TWadWriter.Create;
   aliases := TDStringList.Create;
@@ -2396,6 +2418,8 @@ begin
   GenerateMissionText;
   GenerateEndText;
   WritePK3Entry;
+
+  ffilename := '';
 end;
 
 procedure TRadixToWADConverter.SaveToFile(const fname: string);
