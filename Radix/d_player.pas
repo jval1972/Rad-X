@@ -98,6 +98,11 @@ const
     (level: 6; firelevel: 3; msg: 'Level 4 Neutron Cannons Acquired')
   );
 
+  epcupgrademessages: array[1..2] of string[32] = (
+    'Enchanced EPC aquired',
+    'Super EPC aquired'
+  );
+
 const
   PWF_NEURONCANNON = 1;
   PWF_NUKE = 2;

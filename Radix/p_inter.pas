@@ -486,6 +486,8 @@ var
   oldhealth: integer;
   didbonus: boolean;
   didneutronbonus: boolean;
+  didepcupgrade: integer;
+  giveweapon: weapontype_t;
 begin
   delta := special.z - toucher.z;
 
@@ -549,11 +551,29 @@ begin
           didbonus := true;
     end;
 
+    didepcupgrade := 0;
     for i := 0 to Ord(NUMWEAPONS) - 1 do
     begin
       if special.weapon_inc[i] then
-        if P_GiveWeapon(player, weapontype_t(i), special.flags and MF_DROPPED <> 0) then
+      begin
+        giveweapon := weapontype_t(i);
+        // JVAL: 20200507 - STANDARDEPC pickup upgrades to wp_enchancedepc or wp_superepc in registered
+        if (gamemode <> shareware) and (giveweapon = wp_standardepc) then
+        begin
+          if player.weaponowned[Ord(wp_enchancedepc)] <> 0 then
+            giveweapon := wp_superepc
+          else if player.weaponowned[Ord(wp_standardepc)] <> 0 then
+            giveweapon := wp_enchancedepc
+        end;
+        if P_GiveWeapon(player, giveweapon, special.flags and MF_DROPPED <> 0) then
+        begin
           didbonus := true;
+          if giveweapon = wp_superepc then
+            didepcupgrade := 2
+          else if giveweapon = wp_enchancedepc then
+            didepcupgrade := 1;
+        end;
+      end;
     end;
 
     if special.info.rapidshield > 0 then
@@ -586,12 +606,15 @@ begin
 
     if not didbonus then
       if not didneutronbonus then
-        exit;
+        if didepcupgrade = 0 then
+          exit;
 
     player.lastbonustime := leveltime;
 
     if didneutronbonus then
       player._message := neutroncannoninfo[player.neutroncannonlevel].msg
+    else if didepcupgrade in [1, 2] then
+      player._message := epcupgrademessages[didepcupgrade]
     else
       player._message := special.info.pickupmessage;
 
