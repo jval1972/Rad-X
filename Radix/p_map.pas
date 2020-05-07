@@ -266,9 +266,9 @@ begin
   P_SetThingPosition(thing);
 
   // JVAL: 20200507 - Do not report false velocity
-  thing.oldx := x;
-  thing.oldy := y;
-  thing.oldz := z;
+  thing.oldx := thing.x;
+  thing.oldy := thing.y;
+  thing.oldz := thing.z;
 
   if thing.player = viewplayer then
     R_SetInterpolateSkipTicks(1);
