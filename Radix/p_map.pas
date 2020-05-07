@@ -463,7 +463,6 @@ end;
 function PIT_CheckThing(thing: Pmobj_t): boolean;
 var
   blockdist: fixed_t;
-  solid: boolean;
   damage: integer;
   pushfactor: fixed_t;
 begin
@@ -671,17 +670,10 @@ begin
 
   // check for special pickup
   if thing.flags and MF_SPECIAL <> 0 then
-  begin
-    solid := (thing.flags and MF_SOLID) <> 0;
-    if tmflags and MF_PICKUP <> 0 then
-    begin
-      // can remove thing
-      P_TouchSpecialThing(thing, tmthing);
-    end;
-    result := not solid;
-  end
-  else
-    result := (thing.flags and MF_SOLID) = 0;
+    if (tmflags and MF_PICKUP <> 0) and (tmthing.health > 0) then
+      P_TouchSpecialThing(thing, tmthing); // can remove thing
+
+  result := thing.flags and MF_SOLID = 0;
 end;
 
 
