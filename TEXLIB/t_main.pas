@@ -232,6 +232,7 @@ uses
   t_material,
   t_patch,
   t_draw,
+  t_radix32,
   r_hires,
   w_folders,
   w_pak;
@@ -1449,6 +1450,7 @@ var
   tm_pngsprite: TPNGSpriteTextureManager;
   tm_mat: TMaterialTextureManager;
   tm_patch: TPatchTextureManager;
+  tm_radix32: TRadix32TextureManager;
 
 procedure T_Init;
 begin
@@ -1464,6 +1466,7 @@ begin
   tm_bitmap.Create;
   tm_mat.Create;
   tm_patch.Create;
+  tm_radix32.Create;
 
   T_InitDrawTextures;
 end;
@@ -1481,6 +1484,7 @@ begin
   tm_bitmap.Destroy;
   tm_mat.Destroy;
   tm_patch.Destroy;
+  tm_radix32.Destroy;
 
   T_ShutDownDrawTextures;
 end;

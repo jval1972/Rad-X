@@ -100,7 +100,7 @@ Conditionals=DOOM;
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
-RunParams=-nofullscreen -geom 1280x800 
+RunParams=-nofullscreen -geom 1280x800
 HostApplication=
 Launcher=
 UseLauncher=0
