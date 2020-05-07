@@ -84,8 +84,6 @@ procedure R_ResetDC32Cache;
 procedure R_InitDC32Cache;
 procedure R_ShutDownDC32Cache;
 
-function R_GetHash(const tex, col, dmod: integer): integer;
-
 function R_GetUID(const tex, col, dmod: integer): LongWord;
 
 var
@@ -119,7 +117,7 @@ uses
   v_video,
   z_zone;
 
-function R_GetHash(const tex, col, dmod: integer): integer;
+function R_GetHash(const tex, col, dmod: integer): LongWord;
 // JVAL
 // Get a hash value depending on tex, col and dc_mod.
 // Although the followng hash is elementary, simple
@@ -185,7 +183,7 @@ var
   r2, g2, b2: byte;
   r, g, b: LongWord;
   c: LongWord;
-{$IFDEF DOOM_OR_STRIFE}  
+{$IFDEF DOOM_OR_STRIFE}
   dihertable: Pdihertable_t;
 {$ENDIF}
   twidth: integer;
@@ -195,7 +193,7 @@ var
   mod_c, mod_d: integer;
   loops: integer;
   UID: LongWord;
-  hash: integer;
+  hash: LongWord;
   curgamma: PByteArray;
   pb: PByte;
   index: integer;
@@ -496,7 +494,7 @@ var
   tbl: Phiresmodtable_t;
   cachemiss: boolean;
   UID: LongWord;
-  hash: integer;
+  hash: LongWord;
   index: integer;
   dc_source2: PByteArray;
   count: integer;
