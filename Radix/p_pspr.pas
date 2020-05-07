@@ -125,6 +125,7 @@ uses
   doomdef,
   d_event,
   d_items,
+  g_game,
   m_rnd,
   p_local,
   p_tick,
@@ -249,21 +250,16 @@ end;
 function P_CheckAmmo(player: Pplayer_t): boolean;
 var
   ammo: ammotype_t;
-  count: integer;
 begin
   ammo := weaponinfo[Ord(player.readyweapon)].ammo;
 
-  // Minimal amount for one shot varies.
-  if player.readyweapon = wp_gravitywave then
-    count := p_bfgcells
-  else if player.readyweapon = wp_superepc then
-    count := 2 // Double barrel.
-  else
-    count := 1; // Regular.
-
+  // Gravity wave energy check
+  if (player.readyweapon = wp_gravitywave) and (player.energy < GRAVITYWAVEENERGY) then
+  // Seeking missiles fire 2 missiles
+  else if (player.readyweapon = wp_seekingmissiles) and (player.ammo[Ord(ammo)] < 2) then
   // Some do not need ammunition anyway.
   // Return if current ammunition sufficient.
-  if (ammo = am_noammo) or (player.ammo[Ord(ammo)] >= count) then
+  else if (ammo = am_noammo) or (player.ammo[Ord(ammo)] > 0) then
   begin
     result := true;
     exit;
@@ -274,33 +270,23 @@ begin
   repeat
     if (player.weaponowned[Ord(wp_phasetorpedoes)] <> 0) and
        (player.ammo[Ord(am_radixtorp)] <> 0) and
-      (gamemode <> shareware) then
+       (gamemode <> shareware) then
       player.pendingweapon := wp_phasetorpedoes
-    else if (player.weaponowned[Ord(wp_superepc)] <> 0) and
-            (player.ammo[Ord(am_radixmisl)] > 2) then
-      player.pendingweapon := wp_superepc
+    else if (player.weaponowned[Ord(wp_nuke)] <> 0) and
+            (player.ammo[Ord(am_radixnuke)] > 0) and
+            (gamemode <> shareware) then
+      player.pendingweapon := wp_nuke
     else if (player.weaponowned[Ord(wp_seekingmissiles)] <> 0) and
-            (player.ammo[Ord(am_radixshell)] <> 0) then
+            (player.ammo[Ord(am_radixmisl)] <> 0) then
       player.pendingweapon := wp_seekingmissiles
     else if (player.weaponowned[Ord(wp_plasmaspreader)] <> 0) and
-            (player.ammo[Ord(am_radixmisl)] <> 0) then
+            (player.neutroncannonlevel < 1) then
       player.pendingweapon := wp_plasmaspreader
-    else if (player.ammo[Ord(am_radixshell)] <> 0) then
-      player.pendingweapon := wp_standardepc
-    else if (player.weaponowned[Ord(wp_enchancedepc)] <> 0) then
-      player.pendingweapon := wp_enchancedepc
-    else if (player.weaponowned[Ord(wp_nuke)] <> 0) and
-            (player.ammo[Ord(am_radixnuke)] <> 0) then
-      player.pendingweapon := wp_nuke
-    else if (player.weaponowned[Ord(wp_gravitywave)] <> 0) and
-            (player.ammo[Ord(am_radixtorp)] > p_bfgcells) and
-            (gamemode <> shareware) then
-      player.pendingweapon := wp_gravitywave
     else
       // If everything fails.
       player.pendingweapon := wp_neutroncannons;
 
-  until not (player.pendingweapon = wp_nochange);
+  until player.pendingweapon <> wp_nochange;
 
   // Now set appropriate weapon overlay.
   P_SetPsprite(player, Ord(ps_weapon), statenum_t(weaponinfo[Ord(player.readyweapon)].downstate));

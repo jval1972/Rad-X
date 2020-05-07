@@ -717,23 +717,25 @@ begin
     //  (read: not in the middle of an attack).
     newweapon := weapontype_t(_SHR(cmd.buttons and BT_WEAPONMASK, BT_WEAPONSHIFT));
 
-    if (newweapon = wp_neutroncannons) and
-       (player.weaponowned[Ord(wp_enchancedepc)] <> 0) and (not (
-       (player.readyweapon = wp_enchancedepc) and (player.powers[Ord(pw_strength)] <> 0))) then
+    if (newweapon = wp_standardepc) and
+       (player.weaponowned[Ord(wp_enchancedepc)] <> 0) and
+       (player.readyweapon = wp_standardepc) then
     begin
       newweapon := wp_enchancedepc;
-      // JVAL: If readyweapon is already the chainsaw return to fist
-      // Only if we don't have old compatibility mode suspended
-      if not G_NeedsCompatibilityMode then
-        if player.readyweapon = wp_enchancedepc then
-          newweapon := wp_neutroncannons;
+    end
+    else if (newweapon = wp_standardepc) and
+       (player.weaponowned[Ord(wp_superepc)] <> 0) and
+       (player.readyweapon = wp_enchancedepc) then
+    begin
+      newweapon := wp_superepc
     end;
+
 
     if (player.weaponowned[Ord(newweapon)] <> 0) and
        (newweapon <> player.readyweapon) then
       // Do not go to plasma or BFG in shareware,
       //  even if cheated.
-      if ((newweapon <> wp_phasetorpedoes) and (newweapon <> wp_gravitywave)) or
+      if ((newweapon <> wp_phasetorpedoes) and (newweapon <> wp_gravitywave) and (newweapon <> wp_nuke) and (newweapon <> wp_enchancedepc) and (newweapon <> wp_superepc)) or
          (gamemode <> shareware) then
         player.pendingweapon := newweapon;
 

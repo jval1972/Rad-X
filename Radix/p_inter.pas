@@ -159,9 +159,7 @@ begin
       begin
         if player.readyweapon = wp_neutroncannons then
         begin
-          if player.weaponowned[Ord(wp_seekingmissiles)] <> 0 then
-            player.pendingweapon := wp_seekingmissiles
-          else
+          if player.weaponowned[Ord(wp_standardepc)] <> 0 then
             player.pendingweapon := wp_standardepc;
         end;
       end;
@@ -170,8 +168,8 @@ begin
         if (player.readyweapon = wp_neutroncannons) or
            (player.readyweapon = wp_standardepc) then
         begin
-          if player.weaponowned[Ord(wp_plasmaspreader)] <> 0 then
-            player.pendingweapon := wp_plasmaspreader;
+          if player.weaponowned[Ord(wp_seekingmissiles)] <> 0 then
+            player.pendingweapon := wp_seekingmissiles;
         end;
       end;
     am_radixtorp:
@@ -185,7 +183,8 @@ begin
       end;
     am_radixnuke:
       begin
-        if player.readyweapon = wp_neutroncannons then
+        if (player.readyweapon = wp_neutroncannons) or
+           (player.readyweapon = wp_standardepc) then
         begin
           if player.weaponowned[Ord(wp_nuke)] <> 0 then
             player.pendingweapon := wp_nuke;
