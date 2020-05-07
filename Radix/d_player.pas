@@ -274,6 +274,7 @@ type
     plasmabombdown: boolean;  // JVAL: 20200504 - Plasma bomb key pressed
 
     planehittics: integer; // JVAL: 20200505 - For plane hit (sound duration)
+    floorslidetics: integer; // JVAL: 20200507 - Slide to floors/ceilings
 
     plinetarget: Pmobj_t; // JVAL: 20200501 - Basically for the crosshair target
     pcrosstic: integer;

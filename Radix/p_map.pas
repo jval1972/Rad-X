@@ -1027,6 +1027,7 @@ var
   iters: integer;
   sec: Psector_t;
   newsec: Psector_t;
+  checkzheights: boolean; // JVAL: 20200507 - Slide to floors/ceilings
 begin
   floatok := false;
   tmfailfromptinair := false;
@@ -1087,7 +1088,14 @@ begin
     end;
   end;
 
-  if thing.flags and MF_NOCLIP = 0 then
+  // JVAL: 20200507 - Slide to floors/ceilings
+  checkzheights := true;
+  p := thing.player;
+  if p <> nil then
+    if p.floorslidetics > 0 then
+      checkzheights := false;
+
+  if (thing.flags and MF_NOCLIP = 0) and checkzheights then
   begin
     if tmceilingz - tmfloorz < thing.height then
     begin
@@ -1113,7 +1121,6 @@ begin
     end;
 
     // JVAL: Do not step up in ladder movement
-    p := thing.player;
     if p <> nil then
       if p.laddertics > 0 then
         if tmfloorz > thing.z then

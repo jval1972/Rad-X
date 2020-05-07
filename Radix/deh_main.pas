@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 309;
+  DEHNUMACTIONS = 310;
 
 type
   deh_action_t = record
@@ -2978,6 +2978,9 @@ begin
   deh_actions[308].action.acp1 := @A_PlayerPain;
   deh_actions[308].name := strupper('PlayerPain');
   {$IFDEF DLL}deh_actions[308].decl := 'A_PlayerPain()';{$ENDIF}
+  deh_actions[309].action.acp1 := @A_PlayerFloorSlide;
+  deh_actions[309].name := strupper('PlayerFloorSlide');
+  {$IFDEF DLL}deh_actions[309].decl := 'A_PlayerFloorSlide(dist: float)';{$ENDIF}
 
 
   deh_strings.numstrings := 0;

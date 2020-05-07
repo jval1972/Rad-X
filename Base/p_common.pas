@@ -383,6 +383,8 @@ procedure A_NoIdleExplode(actor: Pmobj_t);
 
 procedure A_PlayerPain(actor: Pmobj_t);
 
+procedure A_PlayerFloorSlide(actor: Pmobj_t);
+
 const
   FLOATBOBSIZE = 64;
   FLOATBOBMASK = FLOATBOBSIZE - 1;
@@ -4086,6 +4088,31 @@ procedure A_PlayerPain(actor: Pmobj_t);
 begin
   if actor.flags3_ex and MF3_EX_NOSOUND = 0 then
     S_StartSound(actor, 'radix/SndPlaneHit');
+end;
+
+procedure A_PlayerFloorSlide(actor: Pmobj_t);
+var
+  i: integer;
+  dist: integer;
+  x1, x2, y1, y2: integer;
+  pmo: Pmobj_t;
+begin
+  if not P_CheckStateParams(actor, 1, CSP_AT_LEAST) then
+    exit;
+
+  dist := (actor.state.params.FixedVal[0] div 2) + 1;
+  x1 := actor.x - dist;
+  x2 := actor.x + dist;
+  y1 := actor.y - dist;
+  y2 := actor.y + dist;
+  for i := 0 to MAXPLAYERS - 1 do
+    if playeringame[i] then
+    begin
+      pmo := players[i].mo;
+      if pmo <> nil then
+        if IsIntegerInRange(pmo.x, x1, x2) and IsIntegerInRange(pmo.y, y1, y2) then
+          players[i].floorslidetics := 2;
+    end;
 end;
 
 end.

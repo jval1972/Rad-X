@@ -151,6 +151,10 @@ begin
   if p.weaponchangetics > 0 then
     dec(p.weaponchangetics);
 
+  // JVAL: 20200507 - Slide to floors/ceilings
+  if p.floorslidetics > 0 then
+    dec(p.floorslidetics);
+
   // JVAL: 20200501 - Retrieve Linetarget
   P_AimLineAttack(p.mo, p.mo.angle, 16 * 64 * FRACUNIT);
   if (p.plinetarget = nil) and (linetarget <> nil) then
