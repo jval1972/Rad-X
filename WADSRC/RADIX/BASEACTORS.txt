@@ -73,3 +73,91 @@ ACTOR Unknown
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// PLAYERFLOORSLIDE16
+ACTOR PLAYERFLOORSLIDE16 1201
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 A_PlayerFloorSlide(16)
+        Loop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// PLAYERFLOORSLIDE32
+ACTOR PLAYERFLOORSLIDE32 1202
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 A_PlayerFloorSlide(32)
+        Loop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// PLAYERFLOORSLIDE48
+ACTOR PLAYERFLOORSLIDE48 1203
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 A_PlayerFloorSlide(48)
+        Loop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// PLAYERFLOORSLIDE64
+ACTOR PLAYERFLOORSLIDE64 1204
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 A_PlayerFloorSlide(64)
+        Loop
+    }
+}
+
