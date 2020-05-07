@@ -439,7 +439,7 @@ begin
         if not P_LadderMove(mo) then
         begin
           P_SlideMove(mo); // try to slide along it
-          inc(Pplayer_t(mo.player).wallhits); // JVAL: 20200428 - inc wall count to use in score
+          RX_PlaneHitWall(mo.player, ptryx, ptryy);
         end;
       end
       // JVAL: 20200308 - Bounce on walls
@@ -1067,9 +1067,14 @@ end;
 
 procedure P_MobjThinker(mobj: Pmobj_t);
 begin
+  // JVAL: 20200507 - Actual (real) velocity
+  mobj.velx := mobj.x - mobj.oldx;
+  mobj.vely := mobj.y - mobj.oldy;
+  mobj.velz := mobj.z - mobj.oldz;
+
   // JVAL: 20200503 - Caclulate velocity
-  mobj.velocityxy := P_AproxDistance(mobj.x - mobj.oldx, mobj.y - mobj.oldy);
-  mobj.velocity := P_AproxDistance(mobj.velocityxy, mobj.z - mobj.oldz);
+  mobj.velocityxy := P_AproxDistance(mobj.velx, mobj.vely);
+  mobj.velocity := P_AproxDistance(mobj.velocityxy, mobj.velz);
 
   if mobj.flags and MF_JUSTAPPEARED = 0 then
     P_VelocityHandler(mobj);

@@ -438,6 +438,11 @@ type
     oldy: fixed_t;
     oldz: fixed_t;
 
+    // JVAL: 20200507 - Actual (real) velocity
+    velx: fixed_t;
+    vely: fixed_t;
+    velz: fixed_t;
+
     velocityxy: fixed_t;  // JVAL: 20200503 - actual velocity in XY axis
     velocity: fixed_t;  // JVAL: 20200503 - actual velocity
     idleexplodespeed: fixed_t; 
