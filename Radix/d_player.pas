@@ -196,6 +196,7 @@ type
     maxammo: array[0..Ord(NUMAMMO) - 1] of integer;
     lastfire: array[0..Ord(NUMWEAPONS) - 1] of integer; // JVAL: 20200401 - Refire control
     gravitywave: integer; // JVAL: 20200403 - Number of gravity wave shots
+    weaponchangetics: integer; // JVAL: 20200507 - Avoid rapid repeating weapon changes 
 
     // True if button down last tic.
     attackdown: boolean;

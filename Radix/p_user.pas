@@ -710,7 +710,7 @@ begin
   if cmd.buttons and BT_SPECIAL <> 0 then
     cmd.buttons := 0;
 
-  if cmd.buttons and BT_CHANGE <> 0 then
+  if (cmd.buttons and BT_CHANGE <> 0) and (player.weaponchangetics <= 0) then
   begin
     // The actual changing of the weapon is done
     //  when the weapon psprite can do it
@@ -730,7 +730,6 @@ begin
       newweapon := wp_superepc
     end;
 
-
     if (player.weaponowned[Ord(newweapon)] <> 0) and
        (newweapon <> player.readyweapon) then
       // Do not go to plasma or BFG in shareware,
@@ -738,7 +737,9 @@ begin
       if ((newweapon <> wp_phasetorpedoes) and (newweapon <> wp_gravitywave) and (newweapon <> wp_nuke) and (newweapon <> wp_enchancedepc) and (newweapon <> wp_superepc)) or
          (gamemode <> shareware) then
         player.pendingweapon := newweapon;
-
+    // JVAL: 20200507 - Avoid rapid repeating weapon changes
+    if newweapon <> player.readyweapon then
+      player.weaponchangetics := TICRATE div 4;
   end;
 
   // check for use
