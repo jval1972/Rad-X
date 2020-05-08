@@ -1408,7 +1408,7 @@ const
      location: @snd_SfxVolume;
      setable: DFS_ALWAYS;
      defaultsvalue: '';
-     defaultivalue: 15;
+     defaultivalue: 14;
      defaultbvalue: false;
      _type: tInteger),
 

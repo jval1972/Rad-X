@@ -995,7 +995,7 @@ begin
   end;
 
   // TFB. Not found.
-  result := -1;
+  result := RX_FindAliasLump(name);
 end;
 
 function W_CheckFirstNumForName(const name: string): integer;

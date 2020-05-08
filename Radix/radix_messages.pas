@@ -78,10 +78,10 @@ initialization
   radixmessages[2].radix_snd := -1;
 
   radixmessages[3].radix_msg := S_RADIX_MESSAGE_3;
-  radixmessages[3].radix_snd := -1;
+  radixmessages[3].radix_snd := Ord(sfx_SndTargetsAhead);
 
   radixmessages[4].radix_msg := S_RADIX_MESSAGE_4;
-  radixmessages[4].radix_snd := -1;
+  radixmessages[4].radix_snd := Ord(sfx_SndEnemy);
 
   radixmessages[5].radix_msg := S_RADIX_MESSAGE_5;
   radixmessages[5].radix_snd := -1;

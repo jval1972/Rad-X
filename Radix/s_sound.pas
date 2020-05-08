@@ -91,7 +91,7 @@ var
 // These are not used, but should be (menu).
 // Maximum volume of a sound effect.
 // Internal default is max out of 0-15.
-  snd_SfxVolume: integer = 15;
+  snd_SfxVolume: integer = 14;
 
 // Maximum volume of music. Useless so far.
   snd_MusicVolume: integer = 15;
@@ -152,6 +152,7 @@ const
 // This should relate to movement clipping resolution
 // (see BLOCKMAP handling).
   S_CLOSE_DIST = 512 * $10000;   // JVAL: 20200306 - Changed to fit large outdoor areas
+  S_FULLVOLUME_DIST = 8 * $10000;   // JVAL: 202000805 - Full volume distance threshold
 
   S_ATTENUATOR = (S_CLIPPING_DIST - S_CLOSE_DIST) div FRACUNIT;
 
@@ -866,7 +867,7 @@ end;
 // If the sound is not audible, returns a 0.
 // Otherwise, modifies parameters and returns 1.
 //
-function S_AdjustSoundParams(listener: Pmobj_t; source:Pmobj_t;
+function S_AdjustSoundParams(listener: Pmobj_t; source: Pmobj_t;
   vol: Pinteger; sep: Pinteger; pitch:Pinteger): boolean;
 var
   approx_dist: fixed_t;
@@ -912,7 +913,23 @@ begin
   // volume calculation
   if approx_dist < S_CLOSE_DIST then
   begin
-    vol^ := snd_SfxVolume;
+    if approx_dist < S_FULLVOLUME_DIST then
+    begin
+      if source = players[consoleplayer].messagesoundtarget then
+      begin
+        vol^ := snd_SfxVolume + 1;
+        if vol^ > 15 then
+          vol^ := 15;
+      end
+      else
+        vol^ := snd_SfxVolume
+    end
+    else
+    begin
+      vol^ := snd_SfxVolume - 1;
+      if vol^ = 0 then
+        vol^ := 1;
+    end;
   end
   else if gamemap = 8 then
   begin
@@ -921,12 +938,19 @@ begin
 
     vol^ := 15 + ((snd_SfxVolume - 15) *
       ((S_CLIPPING_DIST - approx_dist) div FRACUNIT)) div S_ATTENUATOR;
+    if vol^ > snd_SfxVolume - 1 then
+      vol^ := snd_SfxVolume - 1;
   end
   else
   begin
     // distance effect
     vol^ := (snd_SfxVolume * ((S_CLIPPING_DIST - approx_dist) div FRACUNIT)) div
               S_ATTENUATOR;
+    vol^ := vol^ - 1;
+    if vol^ < 1 then
+      vol^ := 1
+    else if vol^ > snd_SfxVolume - 1 then
+      vol^ := snd_SfxVolume - 1;
   end;
 
   result := vol^ > 0;
