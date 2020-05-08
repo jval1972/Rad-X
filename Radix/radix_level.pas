@@ -938,7 +938,7 @@ var
     end;
   end;
 
-  procedure fix_slide_line(ln: integer); overload;
+  procedure fix_slide_line(const ln: integer); overload;
   var
     x1, y1, x2, y2: integer;
   begin
@@ -946,6 +946,36 @@ var
     y1 := doomvertexes[doomlinedefs[ln].v1].y;
     x2 := doomvertexes[doomlinedefs[ln].v2].x;
     y2 := doomvertexes[doomlinedefs[ln].v2].y;
+    fix_slide_line(x1, y1, x2, y2);
+  end;
+
+  procedure fix_slide_corridor(const ln1, ln2: integer);
+  var
+    v21, v22: integer;
+    dist1, dist2: integer;
+    dx, dy: integer;
+    x1, y1, x2, y2: integer;
+  begin
+    dx := doomvertexes[doomlinedefs[ln1].v1].x - doomvertexes[doomlinedefs[ln2].v1].x;
+    dy := doomvertexes[doomlinedefs[ln1].v1].y - doomvertexes[doomlinedefs[ln2].v1].y;
+    dist1 := dx * dx + dy * dy;
+    dx := doomvertexes[doomlinedefs[ln1].v1].x - doomvertexes[doomlinedefs[ln2].v2].x;
+    dy := doomvertexes[doomlinedefs[ln1].v1].y - doomvertexes[doomlinedefs[ln2].v2].y;
+    dist2 := dx * dx + dy * dy;
+    if dist1 < dist2 then
+    begin
+      v21 := doomlinedefs[ln2].v1;
+      v22 := doomlinedefs[ln2].v2;
+    end
+    else
+    begin
+      v21 := doomlinedefs[ln2].v2;
+      v22 := doomlinedefs[ln2].v1;
+    end;
+    x1 := (doomvertexes[doomlinedefs[ln1].v1].x + doomvertexes[v21].x) div 2;
+    y1 := (doomvertexes[doomlinedefs[ln1].v1].y + doomvertexes[v21].y) div 2;
+    x2 := (doomvertexes[doomlinedefs[ln1].v2].x + doomvertexes[v22].x) div 2;
+    y2 := (doomvertexes[doomlinedefs[ln1].v2].y + doomvertexes[v22].y) div 2;
     fix_slide_line(x1, y1, x2, y2);
   end;
 
@@ -1061,6 +1091,7 @@ var
       fix_movevertex(-27583, -2752, -27584, -2752);
       doomsidedefs[758].textureoffset := 42;
       doomsidedefs[1365].textureoffset := 0;
+      fix_slide_corridor(427, 431);
     end
     else if levelname = 'E1M9' then
     begin
