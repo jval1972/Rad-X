@@ -2779,6 +2779,12 @@ function P_FindMobjFromKey(const key: LongWord): Pmobj_t;
 var
   currentthinker: Pthinker_t;
 begin
+  if key = 0 then
+  begin
+    result := nil;
+    exit;
+  end;
+  
   currentthinker := thinkercap.next;
   while Pointer(currentthinker) <> Pointer(@thinkercap) do
   begin

@@ -185,9 +185,6 @@ begin
     for j := 0 to Ord(NUMPSPRITES) - 1 do
       if players[i].psprites[j].state <> nil then
         players[i].psprites[j].state := @states[integer(players[i].psprites[j].state)];
-
-    players[i].plinetarget := P_FindMobjFromKey(integer(players[i].plinetarget));
-    players[i].enginesoundtarget := P_FindMobjFromKey(integer(players[i].enginesoundtarget));
   end;
 end;
 
@@ -524,6 +521,7 @@ var
   next: Pthinker_t;
   mobj: Pmobj_t;
   parm: mobjcustomparam_t;
+  i: integer;
 begin
   // remove all the current thinkers
   currentthinker := thinkercap.next;
@@ -548,6 +546,7 @@ begin
     case tclass of
       Ord(tc_end):
         begin
+          // Retrieve target, tracer and master
           currentthinker := thinkercap.next;
           while currentthinker <> @thinkercap do
           begin
@@ -562,6 +561,15 @@ begin
 
             currentthinker := next;
           end;
+
+          // Retrieve player's plinetarget and enginesoundtarget
+          for i := 0 to MAXPLAYERS - 1 do
+            if playeringame[i] then
+            begin
+              players[i].plinetarget := P_FindMobjFromKey(integer(players[i].plinetarget));
+              players[i].enginesoundtarget := P_FindMobjFromKey(integer(players[i].enginesoundtarget));
+            end;
+
           exit; // end of list
         end;
 
