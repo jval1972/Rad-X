@@ -58,6 +58,7 @@ implementation
 uses
   d_delphi,
   d_englsh,
+  d_items,
   m_rnd,
   tables,
   d_ticcmd,
@@ -736,7 +737,10 @@ begin
       //  even if cheated.
       if ((newweapon <> wp_phasetorpedoes) and (newweapon <> wp_gravitywave) and (newweapon <> wp_nuke) and (newweapon <> wp_enchancedepc) and (newweapon <> wp_superepc)) or
          (gamemode <> shareware) then
+      begin
         player.pendingweapon := newweapon;
+        player._message := weaponinfo[Ord(player.pendingweapon)].selecttext;  // JVAL: 20200508 - Select weapon message
+      end;
     // JVAL: 20200507 - Avoid rapid repeating weapon changes
     if newweapon <> player.readyweapon then
       player.weaponchangetics := TICRATE div 4;
