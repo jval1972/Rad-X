@@ -280,6 +280,7 @@ type
     pcrosstic: integer;
 
     enginesoundtarget: Pmobj_t; // JVAL: 20200501 - Engine sound target
+    messagesoundtarget: Pmobj_t; // JVAL: 20200508 - Messages sound target
 
     last_grid_trigger: integer;
 

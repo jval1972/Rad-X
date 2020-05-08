@@ -1284,10 +1284,9 @@ begin
   begin
     parms.tics := S_RadixSoundDuration(Ord(sfx_SndEndOfLevel)) + 1;
 
-//    S_AmbientSoundFV(
     S_AmbientSound(
-      players[radixplayer].mo.x,
-      players[radixplayer].mo.y,
+      players[radixplayer].messagesoundtarget.x,
+      players[radixplayer].messagesoundtarget.y,
       radixsounds[Ord(sfx_SndEndOfLevel)].name
     );
 
@@ -1618,10 +1617,9 @@ begin
     begin
       snd := radixmessages[parms.message_id].radix_snd;
       if snd >= 0 then
-//        S_AmbientSoundFV(
         S_AmbientSound(
-          players[radixplayer].mo.x,
-          players[radixplayer].mo.y,
+          players[radixplayer].messagesoundtarget.x,
+          players[radixplayer].messagesoundtarget.y,
           radixsounds[snd].name
         );
       parms.nextsoundtime := leveltime + S_RadixSoundDuration(snd) + 1;
@@ -2053,9 +2051,9 @@ begin
   begin
     snd := radixmessages[MSG_SECONDARY].radix_snd;
     if snd >= 0 then
-      S_AmbientSoundFV(
-        players[radixplayer].mo.x,
-        players[radixplayer].mo.y,
+      S_AmbientSound(
+        players[radixplayer].messagesoundtarget.x,
+        players[radixplayer].messagesoundtarget.y,
         radixsounds[snd].name
       );
     parms.nextsoundtime := leveltime + S_RadixSoundDuration(snd) + 1;

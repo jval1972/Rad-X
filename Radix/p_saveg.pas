@@ -158,6 +158,8 @@ begin
       dest.plinetarget := Pmobj_t(dest.plinetarget.key);
     if dest.enginesoundtarget <> nil then
       dest.enginesoundtarget := Pmobj_t(dest.enginesoundtarget.key);
+    if dest.messagesoundtarget <> nil then
+      dest.messagesoundtarget := Pmobj_t(dest.messagesoundtarget.key);
   end;
 end;
 
@@ -562,12 +564,13 @@ begin
             currentthinker := next;
           end;
 
-          // Retrieve player's plinetarget and enginesoundtarget
+          // Retrieve player's plinetarget, enginesoundtarget & messagesoundtarget
           for i := 0 to MAXPLAYERS - 1 do
             if playeringame[i] then
             begin
               players[i].plinetarget := P_FindMobjFromKey(integer(players[i].plinetarget));
               players[i].enginesoundtarget := P_FindMobjFromKey(integer(players[i].enginesoundtarget));
+              players[i].messagesoundtarget := P_FindMobjFromKey(integer(players[i].messagesoundtarget));
             end;
 
           exit; // end of list

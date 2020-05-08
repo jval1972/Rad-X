@@ -110,6 +110,31 @@ begin
   dec(p.enginesoundtarget.reactiontime);
 end;
 
+const
+  STR_MESSAGESOUND = 'MESSAGESOUND';
+
+var
+  messagesound_id: integer = -1;
+
+procedure RX_PlayerMessageSound(p: Pplayer_t);
+var
+  sndid: integer;
+begin
+  if p.messagesoundtarget = nil then
+  begin
+    if messagesound_id = -1 then
+      messagesound_id := Info_GetMobjNumForName(STR_MESSAGESOUND);
+
+    p.messagesoundtarget := P_SpawnMobj(p.mo.x, p.mo.y, p.mo.z, messagesound_id);
+  end
+  else
+  begin
+    p.messagesoundtarget.x := p.mo.x;
+    p.messagesoundtarget.y := p.mo.y;
+    p.messagesoundtarget.z := p.mo.z;
+  end;
+end;
+
 procedure RX_PlayerThink(p: Pplayer_t);
 var
   new_health: integer;
@@ -119,6 +144,8 @@ var
   an: angle_t;
   mo: Pmobj_t;
 begin
+  RX_PlayerMessageSound(p);
+  
   if p.playerstate = PST_DEAD then
   begin
     // JVAL: 20200501 - Linetarget is null when dead

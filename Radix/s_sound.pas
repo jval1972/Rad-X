@@ -428,6 +428,9 @@ begin
         sep := NORM_SEP
       else if (origin.x = players[consoleplayer].enginesoundtarget.x) and
         (origin.y = players[consoleplayer].enginesoundtarget.y) then
+        sep := NORM_SEP
+      else if (origin.x = players[consoleplayer].messagesoundtarget.x) and
+        (origin.y = players[consoleplayer].messagesoundtarget.y) then
         sep := NORM_SEP;
 
       if not rc then
@@ -607,8 +610,13 @@ begin
           begin
             audible := S_AdjustSoundParams(listener, c.origin, @volume, @sep, @pitch);
 
-            if (listener_p = players[consoleplayer].mo) and (c.origin = players[consoleplayer].enginesoundtarget)  then
-              sep := NORM_SEP;
+            if (listener_p = players[consoleplayer].mo) then
+            begin
+              if c.origin = players[consoleplayer].enginesoundtarget then
+                sep := NORM_SEP
+              else if c.origin = players[consoleplayer].messagesoundtarget then
+                sep := NORM_SEP;
+            end;
 
             if not audible then
               S_StopChannel(cnum)
