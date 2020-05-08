@@ -403,14 +403,14 @@ begin
       if Pmobj_t(th).flags and MF_JUSTAPPEARED = 0 then
     {$ENDIF}
     // JVAL: 20200105 - Interpolate only mobjs that the renderer touched
-      if Pmobj_t(th).rendervalidcount = rendervalidcount then
+      if (Pmobj_t(th).rendervalidcount = rendervalidcount) or (Pmobj_t(th).player <> nil) then
         R_AddInterpolationItem(th, imobj);
     th := th.next;
   end;
 
   sec := R_PointInSubsector(viewx, viewy).sector;
   if sec.renderflags and SRF_NO_INTERPOLATE = 0 then
-    if player.mo.z = player.mo.floorz then
+//    if player.mo.z = player.mo.floorz then
       R_AddInterpolationItem(@player.viewz, iinteger);
 
   {$IFDEF DEBUG}
