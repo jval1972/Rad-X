@@ -56,6 +56,25 @@ ACTOR ENGINESOUND
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// MESSAGE SOUND
+ACTOR MESSAGESOUND
+{
+    HEALTH 10000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 100
+    SPEED 0
+    +NOBLOCKMAP +DONTDRAW +NOGRAVITY +SPAWNFLOAT +NOSECTOR
+    States
+    {
+    Spawn:
+        TNT1 A -1
+        Stop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // UNKNOWN EDITOR THING
 ACTOR Unknown
 {
@@ -86,7 +105,8 @@ ACTOR PLAYERFLOORSLIDE16 1201
     +NOBLOCKMAP
     +NOCLIP
     +DONTDRAW 
-    +NOGRAVITY 
+    +NOGRAVITY
+    +NOSECTOR
     States
     {
     Spawn:
@@ -109,6 +129,7 @@ ACTOR PLAYERFLOORSLIDE32 1202
     +NOCLIP
     +DONTDRAW 
     +NOGRAVITY 
+    +NOSECTOR
     States
     {
     Spawn:
@@ -131,6 +152,7 @@ ACTOR PLAYERFLOORSLIDE48 1203
     +NOCLIP
     +DONTDRAW 
     +NOGRAVITY 
+    +NOSECTOR
     States
     {
     Spawn:
@@ -153,6 +175,7 @@ ACTOR PLAYERFLOORSLIDE64 1204
     +NOCLIP
     +DONTDRAW 
     +NOGRAVITY 
+    +NOSECTOR
     States
     {
     Spawn:
