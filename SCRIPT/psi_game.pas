@@ -5384,7 +5384,10 @@ begin
   qtics := tics * FRACUNIT;
   for i := 0 to MAXPLAYERS - 1 do
     if playeringame[i] then
+    begin
       players[i].quaketics := qtics;
+      players[i].quakeintensity := FRACUNIT;
+    end;
 end;
 
 function PS_GameSkill: integer;

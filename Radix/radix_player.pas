@@ -117,8 +117,6 @@ var
   messagesound_id: integer = -1;
 
 procedure RX_PlayerMessageSound(p: Pplayer_t);
-var
-  sndid: integer;
 begin
   if p.messagesoundtarget = nil then
   begin

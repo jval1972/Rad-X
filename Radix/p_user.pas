@@ -667,7 +667,10 @@ begin
   begin
     Dec(player.quaketics, FRACUNIT);
     if player.quaketics < 0 then
+    begin
       player.quaketics := 0;
+      player.quakeintensity := 0;
+    end;
   end;
 
   if player.teleporttics > 0 then

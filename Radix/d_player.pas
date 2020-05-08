@@ -292,6 +292,7 @@ type
     oldviewz: fixed_t; // JVAL: Slopes
     teleporttics: integer;
     quaketics: integer;
+    quakeintensity: fixed_t;
     cmd: ticcmd_t;      // JVAL Smooth Look Up/Down
   end;
   Pplayer_t = ^player_t;

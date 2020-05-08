@@ -53,6 +53,7 @@ var
   vx1, vx2: integer;
   vy1, vy2: integer;
   frac1, frac2: integer;
+  intensity: fixed_t;
 begin
   seed1 := player.quaketics div FRACUNIT;
   seed2 := seed1 + 1;
@@ -62,10 +63,11 @@ begin
   rnd1b := C_Random(seed1);
   rnd2a := C_Random(seed2);
   rnd2b := C_Random(seed2);
-  vx1 := viewx + (4 - (rnd1a mod 8)) * FRACUNIT;
-  vy1 := viewy + (4 - (rnd1b mod 8)) * FRACUNIT;
-  vx2 := viewx + (4 - (rnd2a mod 8)) * FRACUNIT;
-  vy2 := viewy + (4 - (rnd2b mod 8)) * FRACUNIT;
+  intensity := player.quakeintensity;
+  vx1 := viewx + (4 - (rnd1a mod 8)) * intensity;
+  vy1 := viewy + (4 - (rnd1b mod 8)) * intensity;
+  vx2 := viewx + (4 - (rnd2a mod 8)) * intensity;
+  vy2 := viewy + (4 - (rnd2b mod 8)) * intensity;
   viewx := Round(vx1 / FRACUNIT * frac1 + vx2 / FRACUNIT * frac2);
   viewy := Round(vy1 / FRACUNIT * frac1 + vy2 / FRACUNIT * frac2);
 end;

@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 310;
+  DEHNUMACTIONS = 311;
 
 type
   deh_action_t = record
@@ -2627,7 +2627,7 @@ begin
   {$IFDEF DLL}deh_actions[191].decl := 'A_SetDefaultDropItem()';{$ENDIF}
   deh_actions[192].action.acp1 := @A_GlobalEarthQuake;
   deh_actions[192].name := strupper('GlobalEarthQuake');
-  {$IFDEF DLL}deh_actions[192].decl := 'A_GlobalEarthQuake(tics: integer)';{$ENDIF}
+  {$IFDEF DLL}deh_actions[192].decl := 'A_GlobalEarthQuake(tics: integer, [intensity: float = 1.0])';{$ENDIF}
   deh_actions[193].action.acp1 := @A_JumpIfMapStringEqual;
   deh_actions[193].name := strupper('JumpIfMapStringEqual');
   {$IFDEF DLL}deh_actions[193].decl := 'A_JumpIfMapStringEqual(parm: string, value: string, offset; integer)';{$ENDIF}
@@ -2981,6 +2981,9 @@ begin
   deh_actions[309].action.acp1 := @A_PlayerFloorSlide;
   deh_actions[309].name := strupper('PlayerFloorSlide');
   {$IFDEF DLL}deh_actions[309].decl := 'A_PlayerFloorSlide(dist: float)';{$ENDIF}
+  deh_actions[310].action.acp1 := @A_LocalEarthQuake;
+  deh_actions[310].name := strupper('LocalEarthQuake');
+  {$IFDEF DLL}deh_actions[310].decl := 'A_LocalEarthQuake(tics: integer; [intensity: float = 1.0]; [maxdist: float = MAXINT])';{$ENDIF}
 
 
   deh_strings.numstrings := 0;
