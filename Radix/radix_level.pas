@@ -930,11 +930,9 @@ var
     begin
       stepx := dx div (iters - j);
       stepy := dy div (iters - j);
-      xx := xx + stepx div 2;
-      yy := yy + stepy div 2;
-      AddDoomThingToWad(xx, yy, 0, MT_PLAYERFLOORSLIDE64, MTF_EASY or MTF_NORMAL or MTF_HARD);
-      xx := xx + stepx div 2;
-      yy := yy + stepy div 2;
+      AddDoomThingToWad(xx + stepx div 2, yy + stepy div 2, 0, MT_PLAYERFLOORSLIDE64, MTF_EASY or MTF_NORMAL or MTF_HARD);
+      xx := xx + stepx;
+      yy := yy + stepy;
       dx := dx - stepx;
       dy := dy - stepy;
     end;
@@ -1041,6 +1039,13 @@ var
       AddDoomThingToWad(-28735, -1312, 0, MT_PLAYERFLOORSLIDE64, MTF_EASY or MTF_NORMAL or MTF_HARD);
       AddDoomThingToWad(-28415, -1376, 0, MT_PLAYERFLOORSLIDE64, MTF_EASY or MTF_NORMAL or MTF_HARD);
       AddDoomThingToWad(-28415, -1312, 0, MT_PLAYERFLOORSLIDE64, MTF_EASY or MTF_NORMAL or MTF_HARD);
+      fix_slide_line(103);
+      fix_slide_line(108);
+      fix_slide_line(107);
+      fix_slide_line(113);
+      fix_slide_line(112);
+      fix_slide_line(116);
+      fix_slide_line(118);
     end
     else if levelname = 'E1M5' then
     begin

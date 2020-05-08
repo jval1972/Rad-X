@@ -434,9 +434,9 @@ begin
     // xlat radix data
     handle := TDMemoryStream.Create;
     Radix2Stream(filename, handle);
-    {$IFDEF DEBUG}
+    {.$IFDEF DEBUG}
     Radix2Wad(filename, 'radix.wad');
-    {$ENDIF}
+    {.$ENDIF}
     handle.Seek(0, sFromBeginning);
   end;
 
