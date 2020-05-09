@@ -786,8 +786,9 @@ begin
       begin
         // JVAL: 20200422 - Presice cheching
         if tmcheckline <> nil then
-          if RX_PointLineSqrDistance(x, y, tmcheckline) > sqdist then
-            Continue;
+          if tmcheckline.flags and ML_SLIDELINE = 0 then
+            if RX_PointLineSqrDistance(x, y, tmcheckline) > sqdist then
+              Continue;
         result := false;
         exit;
       end;

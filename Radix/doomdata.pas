@@ -161,6 +161,8 @@ const
   ML_TRIGGERSCRIPTS = 1024;
 // Stub line - ignoged in automap
   ML_AUTOMAPIGNOGE = 2048;
+// Line allows slide transitions
+  ML_SLIDELINE = 4096;
 
 type
 // Sector definition, from editing.

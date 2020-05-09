@@ -979,6 +979,16 @@ var
     fix_slide_line(x1, y1, x2, y2);
   end;
 
+  procedure make_slide_line(const ln: integer);
+  begin
+    doomlinedefs[ln].flags := doomlinedefs[ln].flags or ML_SLIDELINE;
+  end;
+
+  procedure make_blocking_line(const ln: integer);
+  begin
+    doomlinedefs[ln].flags := doomlinedefs[ln].flags or ML_BLOCKING;
+  end;
+
   function fix_radix_level_v10: boolean;
   begin
     result := false;
@@ -1061,6 +1071,26 @@ var
           doomsidedefs[j].sector := 0
         else if doomsidedefs[j].sector = 211 then
           doomsidedefs[j].sector := 212;
+      // E1M1 blocking lines
+      make_blocking_line(44);
+      make_blocking_line(45);
+      make_blocking_line(639);
+      // E1M1 slide lines
+      make_slide_line(1);
+      make_slide_line(3);
+      make_slide_line(4);
+      make_slide_line(5);
+      make_slide_line(6);
+      make_slide_line(41);
+      make_slide_line(44);
+      make_slide_line(45);
+      make_slide_line(48);
+      make_slide_line(47);
+      make_slide_line(49);
+      make_slide_line(379);
+      make_slide_line(632);
+      make_slide_line(636);
+      make_slide_line(639);
     end
     else if levelname = 'E1M2' then
     begin
