@@ -90,7 +90,7 @@ var
     'isn''t even remotely fair.';
 
   SWSTRING: string =
-    'this is the shareware version of doom.' + #13#10 +
+    'this is the shareware version.' + #13#10 +
     'you need to order the entire trilogy.';
 
   MSGOFF: string =
@@ -653,10 +653,7 @@ const
 var
   MSG_MODIFIEDGAME: string =
       '===========================================================================' + #13#10 +
-      'ATTENTION:  This version of DOOM has been modified.  If you would like to' + #13#10 +
-      'get a copy of the original game, call 1-800-IDGAMES or see the readme file.' + #13#10 +
-      '        You will not receive technical support for modified games.' + #13#10 +
-      '                      press enter to continue' + #13#10 +
+      '                ATTENTION:  This version has been modified.' + #13#10 +
       '===========================================================================' + #13#10;
 
   MSG_SHAREWARE: string =
@@ -667,7 +664,6 @@ var
   MSG_COMMERCIAL: string =
         '===========================================================================' + #13#10 +
         '                 Commercial product - do not distribute!' + #13#10 +
-        '         Please report software piracy to the SPA: 1-800-388-PIR8' + #13#10 +
         '===========================================================================' + #13#10;
 
   MSG_UNDETERMINED: string =
