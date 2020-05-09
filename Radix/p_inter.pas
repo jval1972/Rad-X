@@ -245,7 +245,7 @@ begin
   end
   else
   begin
-    if weapon = wp_gravitywave then
+    if (weapon = wp_gravitywave) and (player.gravitywave < MAXGRAVITYWAVE) then
     begin
       player.gravitywave := MAXGRAVITYWAVE;
       gaveammo := true;
