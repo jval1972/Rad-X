@@ -1106,6 +1106,15 @@ var
       fix_slide_line(112);
       fix_slide_line(116);
       fix_slide_line(118);
+      // E1M2 slide lines
+      make_slide_line(104);
+      make_slide_line(106);
+      make_slide_line(109);
+      make_slide_line(111);
+      make_slide_line(115);
+      make_slide_line(117);
+      make_slide_line(401);
+      make_slide_line(449);
     end
     else if levelname = 'E1M5' then
     begin
