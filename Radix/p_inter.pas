@@ -1004,6 +1004,7 @@ end;
 procedure P_KillMobj(source: Pmobj_t; target: Pmobj_t);
 var
   item: integer;
+  sp, tp: Pplayer_t;
 begin
   target.flags := target.flags and (not (MF_SHOOTABLE or MF_FLOAT or MF_SKULLFLY));
   target.flags3_ex := target.flags3_ex and not MF3_EX_BOUNCE;
@@ -1017,15 +1018,16 @@ begin
 
   if (source <> nil) and (source.player <> nil) then
   begin
+    sp := source.player;
     // count for intermission
     if target.flags and MF_COUNTKILL <> 0 then
-      Pplayer_t(source.player).killcount := Pplayer_t(source.player).killcount + 1;
+      sp.killcount := sp.killcount + 1;
 
     if target.player <> nil then
-      Pplayer_t(source.player).frags[pDiff(target.player, @players[0], SizeOf(players[0]))] :=
-        Pplayer_t(source.player).frags[pDiff(target.player, @players[0], SizeOf(players[0]))] + 1;
+      sp.frags[pDiff(target.player, @players[0], SizeOf(player_t))] :=
+        sp.frags[pDiff(target.player, @players[0], SizeOf(player_t))] + 1;
   end
-  else if (not netgame) and (target.flags and MF_COUNTKILL <> 0) then
+  else if not netgame and (target.flags and MF_COUNTKILL <> 0) then
   begin
     // count all monster deaths,
     // even those caused by other monsters
@@ -1034,25 +1036,26 @@ begin
 
   if target.player <> nil then
   begin
+    tp := target.player;
     // count environment kills against you
     if source = nil then
-      Pplayer_t(target.player).frags[pDiff(target.player, @players[0], SizeOf(players[0]))] :=
-        Pplayer_t(target.player).frags[pDiff(target.player, @players[0], SizeOf(players[0]))] + 1;
+      tp.frags[pDiff(target.player, @players[0], SizeOf(player_t))] :=
+        tp.frags[pDiff(target.player, @players[0], SizeOf(player_t))] + 1;
 
     target.flags := target.flags and not MF_SOLID;
-    Pplayer_t(target.player).playerstate := PST_DEAD;
+    tp.playerstate := PST_DEAD;
 
     // JVAL
     // Save the attacker coordinates
-    if Pplayer_t(target.player).attacker <> nil then
+    if tp.attacker <> nil then
     begin
-      Pplayer_t(target.player).attackerx := Pplayer_t(target.player).attacker.x;
-      Pplayer_t(target.player).attackery := Pplayer_t(target.player).attacker.y;
+      tp.attackerx := tp.attacker.x;
+      tp.attackery := tp.attacker.y;
     end;
 
-    P_DropWeapon(target.player);
+    P_DropWeapon(tp);
 
-    if (target.player = @players[consoleplayer]) and (amstate = am_only) then
+    if (tp = @players[consoleplayer]) and (amstate = am_only) then
     begin
       // don't die in auto map,
       // switch view prior to dying
