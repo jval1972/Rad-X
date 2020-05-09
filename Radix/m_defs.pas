@@ -253,8 +253,8 @@ const
      location: @fixstallhack;
      setable: DFS_ALWAYS;
      defaultsvalue: '';
-     defaultivalue: 1;
-     defaultbvalue: true;
+     defaultivalue: 0;
+     defaultbvalue: false;
      _type: tBoolean),
 
     (name: '32bittexturepaletteeffects';
