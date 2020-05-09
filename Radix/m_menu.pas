@@ -3724,7 +3724,6 @@ begin
   // Horiz. & Vertically center string and print it.
   if messageToPrint <> 0 then
   begin
-
     mheight := M_SmallStringHeight(messageString) + 2;
     y := (200 - mheight) div 2;
     mheight := y + mheight + 20;
@@ -3734,9 +3733,9 @@ begin
     for i := 1 to len do
     begin
       if messageString[i] = #13 then
-        y := y + hu_font[0].height + 2
       else if messageString[i] = #10 then
       begin
+        y := y + hu_font[0].height + 2;
         x := (320 - M_SmallStringWidth(str)) div 2;
         M_WriteSmallText(x, y, str, SCN_TMP);
         str := '';
@@ -3747,7 +3746,7 @@ begin
     if str <> '' then
     begin
       x := (320 - M_SmallStringWidth(str)) div 2;
-      y := y + hu_font[0].height;
+      y := y + hu_font[0].height + 2;
       M_WriteSmallText(x, y, str, SCN_TMP);
     end;
 
