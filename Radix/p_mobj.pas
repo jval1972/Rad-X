@@ -150,6 +150,7 @@ uses
   radix_map_extra,
   radix_sounds,
   radix_player,
+  radix_messages,
   r_defs,
   r_sky,
   r_main,
@@ -1597,7 +1598,41 @@ begin
     p.playername := pilotname;
 
   if p.playerstate = PST_REBORN then
-    G_PlayerReborn(plnum);
+    G_PlayerReborn(plnum)
+  else
+  begin
+    // JVAL: 20200509 - New map player clean-up
+    p.angletargetx := 0;
+    p.angletargety := 0;
+    p.angletargetticks := 0;
+    p.laddertics := 0;
+    p.slopetics := 0;
+    p.oldviewz := 0;
+    p.teleporttics := 0;
+    p.quaketics := 0;
+    p.quakeintensity := 0;
+    p.last_grid_trigger := 0;
+    p.planehittics := 0;
+    p.floorslidetics := 0;
+    p.plinetarget := nil;
+    p.pcrosstic := 0;
+    p.enginesoundtarget := nil;
+    p.messagesoundtarget := nil;
+    p.planetranspo_start_x := 0;
+    p.planetranspo_start_y := 0;
+    p.planetranspo_start_z := 0;
+    p.planetranspo_start_a := 0;
+    p.planetranspo_target_x := 0;
+    p.planetranspo_target_y := 0;
+    p.planetranspo_target_z := 0;
+    p.planetranspo_target_a := 0;
+    p.planetranspo_start_tics := 0;
+    p.planetranspo_tics := 0;
+    for i := 0 to NUMRADIXMESSAGES - 1 do
+      p.radixmessages[i] := 0;
+    for i := 0 to Ord(NUMWEAPONS) - 1 do
+      p.lastfire[i] := 0;
+  end;
 
   x := mthing.x * FRACUNIT;
   y := mthing.y * FRACUNIT;
