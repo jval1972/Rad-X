@@ -1604,7 +1604,13 @@ begin
       if allowautomaprotate then
         AM_rotate(@x, @y, plra, plrx, plry);
 
-      if t.flags and MF_COUNTKILL <> 0 then
+      if (t.flags2_ex and MF2_EX_FRIEND <> 0) or (t.player <> nil) then
+      begin
+        color := aprox_lightblue;
+        tri_guy := @triangle_guy;
+        num_tri := NUMTRIANGLEGUYLINES;
+      end
+      else if t.flags and MF_COUNTKILL <> 0 then
       begin
         color := aprox_yellow;
         tri_guy := @triangle_guy;
