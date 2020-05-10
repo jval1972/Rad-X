@@ -716,8 +716,10 @@ var
   newsubsec: Psubsector_t;
   r: fixed_t;
   sqdist: integer;
+  p: Pplayer_t;
 begin
   tmthing := thing;
+  p := tmthing.player;
   tmflags := thing.flags;
   tmline := nil;
   tmbounceline := nil;
@@ -787,8 +789,9 @@ begin
         // JVAL: 20200422 - Presice cheching
         if tmcheckline <> nil then
           if tmcheckline.flags and ML_SLIDELINE = 0 then
-            if RX_PointLineSqrDistance(x, y, tmcheckline) > sqdist then
-              Continue;
+            if p = nil then // JVAL: 20200510 - Leave player out of this for now
+              if RX_PointLineSqrDistance(x, y, tmcheckline) > sqdist then
+                Continue;
         result := false;
         exit;
       end;
