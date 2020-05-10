@@ -1887,27 +1887,27 @@ begin
 
   pl := @triangle_guy[0];
   pl.a.x := round(-0.867 * MAPUNIT);
-  pl.a.y := round(-0.5 * MAPUNIT);
-  pl.b.x := round(0.867 * MAPUNIT);
-  pl.b.y := round(-0.5 * MAPUNIT);
+  pl.a.y := round(-0.7 * MAPUNIT);
+  pl.b.x := MAPUNIT;
+  pl.b.y := 0;
 
   inc(pl);
-  pl.a.x := round(0.867 * MAPUNIT);
-  pl.a.y := round(-0.5 * MAPUNIT);
-  pl.b.x := 0;
-  pl.b.y := MAPUNIT;
+  pl.a.x := MAPUNIT;
+  pl.a.y := 0;
+  pl.b.x := round(-0.7 * MAPUNIT);
+  pl.b.y := round(0.867 * MAPUNIT);
 
   inc(pl);
-  pl.a.x := 0;
-  pl.a.y := MAPUNIT;
-  pl.b.x := round(-0.867 * MAPUNIT);
-  pl.b.y := round(-0.5 * MAPUNIT);
+  pl.a.x := round(-0.7 * MAPUNIT);
+  pl.a.y := round(0.867 * MAPUNIT);
+  pl.b.x := round(-0.7 * MAPUNIT);
+  pl.b.y := round(-0.867 * MAPUNIT);
 
 ////////////////////////////////////////////////////////////////////////////////
 
   pl := @thintriangle_guy[0];
-  pl.a.x := round(-0.5 * MAPUNIT);
-  pl.a.y := round(-0.7 * MAPUNIT);
+  pl.a.x := round(-0.7 * MAPUNIT);
+  pl.a.y := round(-0.5 * MAPUNIT);
   pl.b.x := MAPUNIT;
   pl.b.y := 0;
 
