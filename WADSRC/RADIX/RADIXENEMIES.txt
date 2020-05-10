@@ -2947,3 +2947,69 @@ ACTOR MT_SECONDCOOLAND3 1066
   }
 }
 
+///////////////////////////////
+// MT_HELPERDRONE
+///////////////////////////////
+ACTOR MT_HELPERDRONE 888
+{
+  Radius 24
+  Height 30
+  Health 500
+  Speed 14
+  Mass 100
+  Gravity 0
+  PainChance 255
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_NOGRAVITY
+  +MF_FLOAT
+  +MF_NOBLOOD
+  +MF2_EX_DONTBLOCKPLAYER
+  +MF3_EX_DONTBLOCKSPECIES
+  States
+  {
+    Spawn:
+      PLAY A 10 A_Look
+      PLAY A 10 A_Look
+      PLAY A 10 A_Look
+      PLAY A 10 A_Look
+      TNT1 A 0 A_Turn(RANDOMPICK(-45,0,45))
+      PLAY A 10 A_Look
+      Loop
+    See:
+    {
+      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,0.2)),64)
+      PLAY A 2 A_Chase
+      PLAY A 2 A_Chase
+      PLAY A 2 A_Chase
+      PLAY A 2 A_Chase
+      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,0.2)),64)
+      PLAY A 2 A_Chase
+      PLAY A 2 A_Chase
+      PLAY A 2 A_Chase
+      PLAY A 2 A_Chase
+      Loop
+    }
+    Missile:
+      TNT1 A 0 A_MatchTargetZ(IF(Abs(momz)>2,0,FRANDOM(0.1,0.2)),64)
+      PLAY A 10 A_FaceTarget
+      TNT1 A 0 A_MatchTargetZ(0.1,10)
+      PLAY A 10 BRIGHT A_CustomMissile("MT_ALDSLASER",11,20)
+      TNT1 A 0 A_FaceTarget
+      PLAY A 10 BRIGHT A_CustomMissile("MT_ALDSLASER",11,-20)
+      TNT1 A 0 A_DropFarTarget(1536,128)
+      PLAY A 10 A_CPosRefire
+      Goto Missile
+    Pain:
+      PLAY A 5 A_SpawnItemEx("MT_SPARKS",RANDOMPICK(-10,0,10),0,RANDOM(20,40))
+      GoTo Spawn
+    Death:
+      PLAY A 5 A_Fall
+      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGEXPLOSION",0,-30,RANDOM(10,20),0,0,0,0,0)
+      TNT1 A 0 A_AmbientSound(0,0,"radix/SndExplode")
+      PLAY AAAAA 1 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,20,0,0,RANDOM(1,2),0,0)
+    SmokingDeath:
+      PLAY A 10 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,20,0,0,RANDOM(1,2),0,0)
+      GoTo SmokingDeath
+  }
+}

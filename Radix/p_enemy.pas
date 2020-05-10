@@ -938,11 +938,13 @@ begin
   actor.threshold := 0; // any shot will wake up
   targ := Psubsector_t(actor.subsector).sector.soundtarget;
   seeyou := false;
-  if (targ <> nil) and ((targ.flags and MF_SHOOTABLE) <> 0) then
+  if (targ <> nil) and (targ.flags and MF_SHOOTABLE <> 0) then
   begin
     actor.target := targ;
 
-    if actor.flags and MF_AMBUSH <> 0 then
+    if (actor.flags2_ex and MF2_EX_FRIEND <> 0) and (targ.player <> nil) then
+      seeyou := true
+    else if actor.flags and MF_AMBUSH <> 0 then
     begin
       if P_CheckSight(actor, targ) then
         seeyou := true;
@@ -1006,9 +1008,15 @@ procedure P_DoChase(actor: Pmobj_t; const fast: boolean);
 var
   delta: integer;
   nomissile: boolean;
-  dist: fixed_t;
+  dist, dist2, dist3: fixed_t;
   ang: angle_t;
+  momx, momy: fixed_t;
+  ang3: angle_t;
+  bestang: angle_t;
+  maxdist: fixed_t;
   p: Pplayer_t;
+  i: integer;
+  try_ok: boolean;
 begin
   if actor.reactiontime <> 0 then
     actor.reactiontime := actor.reactiontime - 1;
@@ -1080,6 +1088,87 @@ begin
       P_SetMobjState(actor, statenum_t(actor.info.missilestate));
       actor.flags := actor.flags or MF_JUSTATTACKED;
       exit;
+    end;
+  end;
+
+  if (actor.flags2_ex and MF2_EX_FRIEND <> 0) and (p <> nil) then
+  begin
+    if P_Random < 8 then
+      if P_LookForTargets(actor, true) then
+        exit;
+    dist := P_AproxDistance(actor.x - actor.target.x, actor.y - actor.target.y);
+    if (dist > 2048 * FRACUNIT) or ((dist > 1024 * FRACUNIT) and (P_Random < 10)) then
+    begin
+      if leveltime >= actor.nextfriendfollowtime then
+      begin
+        ang := R_PointToAngle2(actor.x, actor.y, actor.target.x, actor.target.y);
+
+        if P_Random < 10 then
+        begin
+          if P_Random < 128 then
+            ang := ang + (P_Random and 3) * ANG1
+          else
+            ang := ang - (P_Random and 3) * ANG1;
+        end;
+
+        momx := actor.info.speed * finecosine[ang shr ANGLETOFINESHIFT];
+        momy := actor.info.speed * finesine[ang shr ANGLETOFINESHIFT];
+        try_ok := P_TryMove(actor, actor.x + momx, actor.y + momy);
+        if not try_ok then
+        begin
+          ang := R_PointToAngle2(actor.x, actor.y, actor.target.x, actor.target.y);
+          momx := actor.info.speed * finecosine[ang shr ANGLETOFINESHIFT];
+          momy := actor.info.speed * finesine[ang shr ANGLETOFINESHIFT];
+          try_ok := P_TryMove(actor, actor.x + momx, actor.y + momy);
+          if not try_ok then
+          begin
+            if actor.randseed and 1 <> 0 then
+              ang := ang - ANG90
+            else
+              ang := ang + ANG90;
+            momx := actor.info.speed * finecosine[ang shr ANGLETOFINESHIFT];
+            momy := actor.info.speed * finesine[ang shr ANGLETOFINESHIFT];
+          end;
+        end;
+        actor.angle := ang;
+        actor.momx := momx;
+        actor.momy := momy;
+        actor.momz := Isign(actor.target.z - actor.z) * (8192 + Sys_Random * 64);
+
+        // JVAL: If closing too much to player then try again soon
+        dist2 := P_AproxDistance(actor.x + actor.momx - actor.target.x, actor.y + actor.momy - actor.target.y);
+        if dist2 < dist then
+          actor.nextfriendfollowtime := leveltime + 1
+        else
+          actor.nextfriendfollowtime := leveltime + TICRATE;
+
+        exit;
+      end;
+    end
+    else if dist > 1024 * FRACUNIT then
+    begin
+      if leveltime >= actor.nextfriendfollowtime then
+      begin
+        ang := R_PointToAngle2(actor.x, actor.y, actor.target.x, actor.target.y);
+        if actor.randseed and 1 <> 0 then
+          ang := ang - ANG90
+        else
+          ang := ang + ANG90;
+        actor.angle := ang;
+        ang := ang shr ANGLETOFINESHIFT;
+        actor.momx := actor.info.speed * finecosine[ang] div 8;
+        actor.momy := actor.info.speed * finesine[ang] div 8;
+        actor.momz := actor.momz * 15 div 16;
+
+        // JVAL: If closing too much to player then try again soon
+        dist2 := P_AproxDistance(actor.x + actor.momx - actor.target.x, actor.y + actor.momy - actor.target.y);
+        if dist2 < dist then
+          actor.nextfriendfollowtime := leveltime + 1
+        else
+          actor.nextfriendfollowtime := leveltime + TICRATE;
+
+        exit;
+      end
     end;
   end;
 
@@ -1233,7 +1322,20 @@ begin
   if P_Random < prob then
     exit;
 
-  if (actor.target = nil) or (actor.target.health <= 0) or not P_CheckSight(actor, actor.target) then
+  if actor.target = nil then
+  begin
+    P_SetMobjState(actor, statenum_t(actor.info.seestate));
+    exit;
+  end;
+
+  if actor.target.health <= 0 then
+  begin
+    actor.target := nil;
+    P_SetMobjState(actor, statenum_t(actor.info.seestate));
+    exit;
+  end;
+
+  if not P_CheckSight(actor, actor.target) then
     P_SetMobjState(actor, statenum_t(actor.info.seestate));
 end;
 

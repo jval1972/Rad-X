@@ -932,8 +932,8 @@ const
      defaultbvalue: true;
      _type: tBoolean),
 
-    (name: 'dogs';
-     location: @dogs;
+    (name: 'helperdrones';
+     location: @helperdrones;
      setable: DFS_ALWAYS;
      defaultsvalue: '';
      defaultivalue: 0;

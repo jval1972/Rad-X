@@ -17441,7 +17441,7 @@ const // Doom Original mobjinfo
   (   // MT_DOGS
     name: 'Dog';                                                  // name
     inheritsfrom: -1;                                             // inheritsfrom
-    doomednum: 888;                                               // doomednum
+    doomednum: -1;                                                // doomednum (JVAL: 20200510 - disable dogs)
     spawnstate: Ord(S_DOGS_STND);                                 // spawnstate
     spawnhealth: 500;                                             // spawnhealth
     seestate: Ord(S_DOGS_RUN1);                                   // seestate

@@ -3826,12 +3826,14 @@ begin
   if actor.z + actor.momz < actor.target.z - threshold then
     actor.momz := actor.momz + speed
   else if actor.z + actor.momz > actor.target.z + threshold then
-    actor.momz := actor.momz - speed;
+    actor.momz := actor.momz - speed
+  else
+    actor.momz := actor.momz * 15 div 16;
 
   // JVAL: 20200421 - Do not slam to floor - ceiling
-  if actor.z + actor.momz + actor.height > actor.ceilingz then
+  if actor.z + actor.momz + actor.height >= actor.ceilingz then
     actor.momz := (actor.ceilingz - actor.z - actor.height) div 2
-  else if actor.z + actor.momz < actor.floorz then
+  else if actor.z + actor.momz <= actor.floorz then
     actor.momz := actor.floorz - actor.z;
 end;
 

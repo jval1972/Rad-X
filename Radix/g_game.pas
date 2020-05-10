@@ -259,7 +259,7 @@ var
   vanilla_demo_off: boolean = false;
 
 var
-  dogs, default_dogs: integer;                // killough 7/19/98: Marine's best friend :)
+  helperdrones, default_dogs: integer;                // killough 7/19/98: Marine's best friend :)
   dog_jumping, default_dog_jumping: integer;  // killough 10/98
 
 const
@@ -2278,8 +2278,8 @@ begin
   demo_p[0] := sysrndseed;
   demo_p := @demo_p[1];
 
-  // JVAL: Version 205 - Dogs
-  demo_p[0] := dogs;
+  // JVAL: 20200510 - Changed dogs to helperdrones
+  demo_p[0] := helperdrones;
   demo_p := @demo_p[1];
 
   demo_p[0] := dog_jumping;
@@ -2395,7 +2395,7 @@ var
   lump: integer;
   len: integer;
   oldspawnrandommonsters: boolean;
-  olddogs, olddog_jumping: integer;
+  oldhelperdrones, olddog_jumping: integer;
 begin
   gameaction := ga_nothing;
   if externaldemo then
@@ -2488,19 +2488,19 @@ begin
     spawnrandommonsters := false;
   end;
 
-  // JVAL: Version 205 - Dogs
-  olddogs := dogs;
+  // JVAL: Version 205 - Dogs (20200510 - now helperdrones)
+  oldhelperdrones := helperdrones;
   olddog_jumping := dog_jumping;
   if demoversion >= VERSION205 then
   begin
-    dogs := demo_p[0];
+    helperdrones := demo_p[0];
     demo_p := @demo_p[1];
     dog_jumping := demo_p[0];
     demo_p := @demo_p[1];
   end
   else
   begin
-    dogs := 0;
+    helperdrones := 0;
     dog_jumping := 0;
   end;
 
@@ -2525,7 +2525,7 @@ begin
   G_InitNew(skill, episode, map);
   preparingdemoplayback := false;
   spawnrandommonsters := oldspawnrandommonsters;  // Back to default
-  dogs := olddogs;
+  helperdrones := oldhelperdrones;
   dog_jumping := olddog_jumping;
   precache := true;
   demostarttic := gametic; // [crispy] fix revenant internal demo bug

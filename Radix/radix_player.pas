@@ -62,6 +62,8 @@ uses
   info,
   info_h,
   info_common,
+  p_local,
+  p_setup,
   p_map,
   p_maputl,
   p_tick,
@@ -133,6 +135,94 @@ begin
   end;
 end;
 
+const
+  MAXFRIENDRADIUS = 512 * FRACUNIT;
+
+var
+  radixplayermo: Pmobj_t;
+
+function RIT_HandleFriendsNearMe(mo: Pmobj_t): boolean;
+var
+  dist1: fixed_t;
+  dist2: fixed_t;
+  speed: fixed_t;
+  realangle: angle_t;
+  zlo, zhi: fixed_t;
+begin
+  result := true;
+
+  if mo.flags2_ex and MF2_EX_FRIEND = 0 then
+    exit;
+
+  if mo.health <= 0 then
+    exit;
+
+  dist1 := P_AproxDistance(mo.x - radixplayermo.x, mo.y - radixplayermo.y);
+  if dist1 > MAXFRIENDRADIUS then
+    exit;
+
+  if mo.health < mo.info.spawnhealth then
+    inc(mo.health);
+
+  dist2 := P_AproxDistance(mo.x + mo.velx - radixplayermo.x - radixplayermo.velx, mo.y + mo.vely - radixplayermo.y - radixplayermo.vely);
+  if dist2 > dist1 then // Going away
+  begin
+    mo.momx := mo.momx * 15 div 16;
+    mo.momy := mo.momy * 15 div 16;
+    mo.momz := mo.momz * 15 div 16;
+    exit;
+  end;
+
+  if dist1 < MAXFRIENDRADIUS div 2 then
+  begin
+    if mo.x < radixplayermo.x then
+      mo.momx := -mo.info.speed * FRACUNIT
+    else
+      mo.momx := mo.info.speed * FRACUNIT;
+    if mo.y < radixplayermo.y then
+      mo.momy := -mo.info.speed * FRACUNIT
+    else
+      mo.momy := mo.info.speed * FRACUNIT;
+    exit;
+  end;
+
+  speed := MaxI(radixplayermo.velocityxy + FRACUNIT, GetIntegerInRange(mo.velocityxy, mo.info.speed * FRACUNIT div 2, mo.info.speed * FRACUNIT));
+
+  realangle := R_PointToAngle2(mo.x, mo.y, radixplayermo.x, radixplayermo.y) - ANG180;
+
+  mo.momx := FixedMul(speed, finecosine[realangle shr ANGLETOFINESHIFT]);
+  mo.momy := FixedMul(speed, finesine[realangle shr ANGLETOFINESHIFT]);
+
+  // Adjust momz
+  zlo := radixplayermo.z - radixplayermo.floorz;
+  zhi := radixplayermo.ceilingz - radixplayermo.z;
+  if (mo.z < radixplayermo.z) and (zhi > zlo) then
+    if mo.momz < 2 * FRACUNIT then
+      mo.momz := mo.momz + FRACUNIT div 2;
+  if (mo.z > radixplayermo.z) and (zhi < zlo) then
+    if mo.momz > -2 * FRACUNIT then
+      mo.momz := mo.momz - FRACUNIT div 2;
+end;
+
+procedure RX_HandleFriendsNearMe;
+var
+  x: integer;
+  y: integer;
+  xl: integer;
+  xh: integer;
+  yl: integer;
+  yh: integer;
+begin
+  yh := MapBlockIntY(int64(viewy) + MAXFRIENDRADIUS - int64(bmaporgy));
+  yl := MapBlockIntY(int64(viewy) - MAXFRIENDRADIUS - int64(bmaporgy));
+  xh := MapBlockIntX(int64(viewx) + MAXFRIENDRADIUS - int64(bmaporgx));
+  xl := MapBlockIntX(int64(viewx) - MAXFRIENDRADIUS - int64(bmaporgx));
+
+  for y := yl to yh do
+    for x := xl to xh do
+      P_BlockThingsIterator(x, y, RIT_HandleFriendsNearMe);
+end;
+
 procedure RX_PlayerThink(p: Pplayer_t);
 var
   new_health: integer;
@@ -142,8 +232,12 @@ var
   an: angle_t;
   mo: Pmobj_t;
 begin
+  radixplayermo := p.mo;
+
+  RX_HandleFriendsNearMe;
+
   RX_PlayerMessageSound(p);
-  
+
   if p.playerstate = PST_DEAD then
   begin
     // JVAL: 20200501 - Linetarget is null when dead

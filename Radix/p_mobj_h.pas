@@ -540,7 +540,9 @@ type
     weapon_inc: array[0..Ord(NUMWEAPONS) - 1] of boolean; // JVAL 20200321 - Weapon pickable objects
     bouncecnt: integer; // JVAL: 20200402 - Bounce countdown
     wallbouncefactor: fixed_t; // JVAL: 20200402 - Speed modifier after wall bounce
-    master: Pmobj_t;  // JVAL: 20200420 - Master 
+    master: Pmobj_t;  // JVAL: 20200420 - Master
+    nextfriendfollowtime: integer; // JVAL: 20200510 - Time that friendly monsters will make next attempt to follow player
+    randseed: integer;  // JVAL: 20200510 - Random seed (set at spawn)
 
     // version 205
     lightvalidcount: integer;

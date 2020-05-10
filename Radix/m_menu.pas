@@ -848,7 +848,7 @@ type
     cmp_spawnrandommonsters,
     cmp_allowterrainsplashes,
     cmp_continueafterplayerdeath,
-    cmp_dogs,
+    cmp_drones,
     cmp_end
   );
 
@@ -1724,12 +1724,12 @@ begin
     SoundVolDef.x, SoundVolDef.y + SoundVolDef.itemheight * (Ord(music_vol) + 1), 16, snd_MusicVolume);
 end;
 
-procedure M_ChangeDogs(choice: integer);
+procedure M_ChangeDrones(choice: integer);
 begin
-  dogs := GetIntegerInRange(dogs, 0, MAXPLAYERS - 1);
-  inc(dogs);
-  if dogs >= MAXPLAYERS then
-    dogs := 0;
+  helperdrones := GetIntegerInRange(helperdrones, 0, MAXPLAYERS - 1);
+  inc(helperdrones);
+  if helperdrones >= MAXPLAYERS then
+    helperdrones := 0;
 end;
 
 procedure M_DrawCompatibility;
@@ -1739,10 +1739,10 @@ begin
   M_DrawHeadLine(15, 'Options');
   M_DrawSubHeadLine(40, 'Compatibility');
 
-  dogs := GetIntegerInRange(dogs, 0, MAXPLAYERS - 1);
-  ppos := M_WriteSmallText(CompatibilityDef.x, CompatibilityDef.y + CompatibilityDef.itemheight * Ord(cmp_dogs), 'Dogs (Marine Best Friend): ', SCN_TMP);
-  M_WriteSmallWhiteText(ppos.x, ppos.y, itoa(dogs), SCN_TMP);
-end; 
+  helperdrones := GetIntegerInRange(helperdrones, 0, MAXPLAYERS - 1);
+  ppos := M_WriteSmallText(CompatibilityDef.x, CompatibilityDef.y + CompatibilityDef.itemheight * Ord(cmp_drones), 'Helper drones: ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, itoa(helperdrones), SCN_TMP);
+end;
 
 const
   mkeyboardmodes: array[0..3] of string = ('ARROWS', 'WASD', 'ESDF', 'CUSTOM');
@@ -5515,9 +5515,9 @@ begin
 
   inc(pmi);
   pmi.status := 1;
-  pmi.name := '!Dogs (Marine Best Friend)';
+  pmi.name := '!Helper drones';
   pmi.cmd := '';
-  pmi.routine := @M_ChangeDogs;
+  pmi.routine := @M_ChangeDrones;
   pmi.pBoolVal := nil;
   pmi.alphaKey := 'd';
 

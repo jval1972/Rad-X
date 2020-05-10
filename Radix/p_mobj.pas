@@ -1124,6 +1124,7 @@ begin
   ZeroMemory(mobj, SizeOf(mobj_t));
 
   mobj.key := P_GenGlobalMobjKey;
+  mobj.randseed := Sys_Random; // JVAL: 20200510 - Random seed
 
   info := @mobjinfo[_type];
   mobj._type := _type;
@@ -1699,6 +1700,9 @@ end;
 // The fields of the mapthing should
 // already be in host byte order.
 //
+var
+  helperdrone_id: integer = -1;
+
 function P_SpawnMapThing(mthing: Pmapthing_t): Pmobj_t;
 var
   i: integer;
@@ -1738,11 +1742,13 @@ begin
   if mthing._type <= 4 then
   begin
     // save spots for respawning in network games
-    if not netgame and (mthing._type > 1) and (mthing._type <= dogs + 1) then
+    if not netgame and (mthing._type > 1) and (mthing._type <= helperdrones + 1) then
     begin
       // use secretcount to avoid multiple dogs in case of multiple starts
       players[mthing._type - 1].secretcount := 1;
-      mthing._type := mobjinfo[Ord(MT_DOGS)].doomednum;
+      if helperdrone_id < 0 then
+        helperdrone_id := Info_GetMobjNumForName('MT_HELPERDRONE');
+      mthing._type := mobjinfo[helperdrone_id].doomednum;
       if mthing._type <= 0 then
       begin
         result := nil;
