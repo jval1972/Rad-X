@@ -1008,6 +1008,7 @@ var
   nomissile: boolean;
   dist: fixed_t;
   ang: angle_t;
+  p: Pplayer_t;
 begin
   if actor.reactiontime <> 0 then
     actor.reactiontime := actor.reactiontime - 1;
@@ -1062,12 +1063,17 @@ begin
   end;
 
   nomissile := false;
+  p := nil;
+  if actor.target <> nil then
+    p := actor.target.player;
   // check for missile attack
   if actor.info.missilestate <> 0 then
   begin
     if (gameskill < sk_nightmare) and not fastparm and (actor.movecount <> 0) then
       nomissile := true
     else if not P_CheckMissileRange(actor) then
+      nomissile := true
+    else if (actor.flags2_ex and MF2_EX_FRIEND <> 0) and (p <> nil) then
       nomissile := true;
     if not nomissile then
     begin
