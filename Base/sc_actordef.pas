@@ -2871,6 +2871,7 @@ var
     A: TDNumberList;
     idx: integer;
     act: string;
+    stics: string;
   begin
     if st <= 0 then
       exit;
@@ -2902,13 +2903,23 @@ var
         if act = 'NULL' then
           act := ''
         else
+        begin
           act := ' ' + act;
+          if sst.params <> nil then
+            act := act + ' ' + sst.params.Declaration;  // Add the parameter list
+        end;
       end;
 
+      if sst.flags_ex and MF_EX_STATE_RANDOM_SELECT <> 0 then
+        stics := 'RANDOMSELECT(' + itoa(sst.tics) + ',' + itoa(sst.tics2) + ')'
+      else if sst.flags_ex and MF_EX_STATE_RANDOM_RANGE <> 0 then
+        stics := 'RANDOMRANGE(' + itoa(sst.tics) + ',' + itoa(sst.tics2) + ')'
+      else
+        stics := itoa(sst.tics);
       AddLn(
         spr + ' ' +
         Chr(Ord('A') + sst.frame and FF_FRAMEMASK) + ' ' +
-        itoa(sst.tics) +
+        stics +
         act +
         decide(sst.frame and FF_FULLBRIGHT <> 0, ' BRIGHT', '')
       );
