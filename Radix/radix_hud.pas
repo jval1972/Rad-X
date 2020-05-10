@@ -82,6 +82,7 @@ type
 var
   hud_speed_factor: float;
   radar_list: TDNumberList;
+  radar_friendlist: TDNumberList;
   cockpitspeed: speedindicatorcolumn_t;
   statusbarspeed: speedindicatorcolumn_t;
   cockpit: Ppatch_t;
@@ -107,6 +108,7 @@ var
 begin
   hud_speed_factor := 15 / sqrt(2 * sqr(MAXMOVETHRESHOLD / FRACUNIT));
   radar_list := TDNumberList.Create;
+  radar_friendlist := TDNumberList.Create;
   cockpitspeed[0] := aprox_black;
   cockpitspeed[1] := aprox_black;
   cockpitspeed[2] := aprox_black;
@@ -174,6 +176,7 @@ end;
 procedure RX_ShutDownRadixHud;
 begin
   radar_list.Free;
+  radar_friendlist.Free;
 end;
 
 procedure RX_HudDrawTime(const x, y: integer);
@@ -239,9 +242,13 @@ end;
 
 function PIT_AddRadarThing(thing: Pmobj_t): boolean;
 begin
-  if thing.flags and MF_COUNTKILL <> 0 then
-    if thing.health > 0 then
+  if thing.health > 0 then
+  begin
+    if thing.flags2_ex and MF2_EX_FRIEND <> 0 then
+      radar_friendlist.Add(integer(thing))
+    else if thing.flags and MF_COUNTKILL <> 0 then
       radar_list.Add(integer(thing));
+  end;
   result := true;
 end;
 
@@ -270,6 +277,38 @@ var
   tmp: fixed_t;
   an: angle_t;
   asin, acos: fixed_t;
+
+  procedure _draw_list(const lst: TDNumberList; const color: byte);
+  var
+    i: integer;
+  begin
+    for i := 0 to lst.Count - 1 do
+    begin
+      mo := Pmobj_t(lst.Numbers[i]);
+      xpos := (px - mo.x div RADAR_SHIFT_UNIT);
+      if xpos < 0 then
+        xpos := xpos - RADAR_RANGE_FACTOR div 2
+      else
+        xpos := xpos + RADAR_RANGE_FACTOR div 2;
+      xpos := xpos div RADAR_RANGE_FACTOR;
+      ypos := (py - mo.y div RADAR_SHIFT_UNIT);
+      if ypos < 0 then
+        ypos := ypos - RADAR_RANGE_FACTOR div 2
+      else
+        ypos := ypos + RADAR_RANGE_FACTOR div 2;
+      ypos := ypos div RADAR_RANGE_FACTOR;
+      sqdist := xpos * xpos + ypos * ypos;
+      if sqdist <= maxsqdist then
+      begin
+        tmp := FixedMul(ypos, asin) - FixedMul(xpos, acos);
+        ypos := FixedMul(xpos, asin) + FixedMul(ypos, acos);
+        xpos := x + tmp;
+        ypos := y + ypos;
+        screens[SCN_HUD][pitch * ypos + xpos] := color;
+      end;
+    end;
+  end;
+
 begin
   pitch := V_GetScreenWidth(SCN_HUD);
   if (hud_player.playerstate = PST_DEAD) or (hud_player.scannerjam and (leveltime and 16 <> 0)) then
@@ -307,6 +346,7 @@ begin
   yh := MapBlockIntY(int64(hud_player.mo.y) + r - int64(bmaporgy));
 
   radar_list.FastClear;
+  radar_friendlist.FastClear;
   for bx := xl to xh do
     for by := yl to yh do
       P_BlockThingsIterator(bx, by, PIT_AddRadarThing);
@@ -321,31 +361,8 @@ begin
   px := hud_player.mo.x div RADAR_SHIFT_UNIT;
   py := hud_player.mo.y div RADAR_SHIFT_UNIT;
   maxsqdist := range * range;
-  for i := 0 to radar_list.Count - 1 do
-  begin
-    mo := Pmobj_t(radar_list.Numbers[i]);
-    xpos := (px - mo.x div RADAR_SHIFT_UNIT);
-    if xpos < 0 then
-      xpos := xpos - RADAR_RANGE_FACTOR div 2
-    else
-      xpos := xpos + RADAR_RANGE_FACTOR div 2;
-    xpos := xpos div RADAR_RANGE_FACTOR;
-    ypos := (py - mo.y div RADAR_SHIFT_UNIT);
-    if ypos < 0 then
-      ypos := ypos - RADAR_RANGE_FACTOR div 2
-    else
-      ypos := ypos + RADAR_RANGE_FACTOR div 2;
-    ypos := ypos div RADAR_RANGE_FACTOR;
-    sqdist := xpos * xpos + ypos * ypos;
-    if sqdist <= maxsqdist then
-    begin
-      tmp := FixedMul(ypos, asin) - FixedMul(xpos, acos);
-      ypos := FixedMul(xpos, asin) + FixedMul(ypos, acos);
-      xpos := x + tmp;
-      ypos := y + ypos;
-      screens[SCN_HUD][pitch * ypos + xpos] := aprox_yellow;
-    end;
-  end;
+  _draw_list(radar_friendlist, aprox_lightblue);
+  _draw_list(radar_list, aprox_yellow);
 end;
 
 procedure RX_HudDrawBar(const x, y: integer; const bar: Ppatch_t; const pct: integer);
