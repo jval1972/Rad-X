@@ -263,7 +263,8 @@ begin
 end;
 
 var
-  id_radixburnersmoke: integer = -1;
+  id_radixdronehitwallsmoke1: integer = -1;
+  id_radixdronehitwallsmoke2: integer = -1;
 
 procedure RX_PlaneHitWall(const p: Pplayer_t; const tryx, tryy: fixed_t);
 var
@@ -278,15 +279,22 @@ begin
     p.planehittics := S_RadixSoundDuration(Ord(sfx_SndScrape));
   end;
 
-  if id_radixburnersmoke < 0 then
-    id_radixburnersmoke := Info_GetMobjNumForName('MT_RADIXBURNERSMOKE');
+  if id_radixdronehitwallsmoke1 < 0 then
+    id_radixdronehitwallsmoke1 := Info_GetMobjNumForName('MT_RADIXDRONEHITWALLSMOKE1');
+  if id_radixdronehitwallsmoke1 < 0 then
+    exit;
 
-  if id_radixburnersmoke < 0 then
+  if id_radixdronehitwallsmoke2 < 0 then
+    id_radixdronehitwallsmoke2 := Info_GetMobjNumForName('MT_RADIXDRONEHITWALLSMOKE2');
+  if id_radixdronehitwallsmoke2 < 0 then
     exit;
 
   if Sys_Random < 128 then
   begin
-    mo := P_SpawnMobj(pmo.x div 2 + tryx div 2, pmo.y div 2 + tryy div 2, pmo.z + (pmo.height div 256 * Sys_Random), id_radixburnersmoke);
+    if Sys_Random < 128 then
+      mo := P_SpawnMobj(pmo.x div 2 + tryx div 2, pmo.y div 2 + tryy div 2, pmo.z + (pmo.height div 256 * Sys_Random), id_radixdronehitwallsmoke1)
+    else
+      mo := P_SpawnMobj(pmo.x div 2 + tryx div 2, pmo.y div 2 + tryy div 2, pmo.z + (pmo.height div 256 * Sys_Random), id_radixdronehitwallsmoke2);
     mo.momx := pmo.velx + (Sys_Random - Sys_Random) * 64;
     mo.momy := pmo.vely + (Sys_Random - Sys_Random) * 64;
     mo.momz := pmo.velz + (Sys_Random - Sys_Random) * 64;
@@ -305,10 +313,14 @@ procedure RX_PlaneHitFloor(const p: Pplayer_t);
     psec, sec: Psector_t;
     mo: Pmobj_t;
   begin
-    if id_radixburnersmoke < 0 then
-      id_radixburnersmoke := Info_GetMobjNumForName('MT_RADIXBURNERSMOKE');
+    if id_radixdronehitwallsmoke1 < 0 then
+      id_radixdronehitwallsmoke1 := Info_GetMobjNumForName('MT_RADIXDRONEHITWALLSMOKE1');
+    if id_radixdronehitwallsmoke1 < 0 then
+      exit;
 
-    if id_radixburnersmoke < 0 then
+    if id_radixdronehitwallsmoke2 < 0 then
+      id_radixdronehitwallsmoke2 := Info_GetMobjNumForName('MT_RADIXDRONEHITWALLSMOKE2');
+    if id_radixdronehitwallsmoke2 < 0 then
       exit;
 
     an := p.mo.angle;
@@ -334,7 +346,10 @@ procedure RX_PlaneHitFloor(const p: Pplayer_t);
           z := P_CeilingHeight(sec, x, y) - 4 * FRACUNIT;
           momz := -FRACUNIT div 2 - Sys_Random * 64;
         end;
-        mo := P_SpawnMobj(x, y, z, id_radixburnersmoke);
+        if Sys_Random < 128 then
+          mo := P_SpawnMobj(x, y, z, id_radixdronehitwallsmoke1)
+        else
+          mo := P_SpawnMobj(x, y, z, id_radixdronehitwallsmoke2);
         dist := Sys_Random * 64;
         mo.momx := momx + FixedMul(dist, finecosine[an1 shr ANGLETOFINESHIFT]);
         mo.momy := momy + FixedMul(dist, finesine[an1 shr ANGLETOFINESHIFT]);
@@ -353,16 +368,16 @@ begin
     begin
       if P_GetThingFloorType(p.mo) = FLOOR_SOLID then
       begin
-        if p.mo.velz > 8 * FRACUNIT then
+        if abs(p.mo.velz) > 8 * FRACUNIT then
         begin
           if p.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
             S_AmbientSound(p.mo.x, p.mo.y, 'radix/SndScrape');
           p.planehittics := S_RadixSoundDuration(Ord(sfx_SndScrape));
-          inc(p.wallhits, 2 * TICRATE);  // JVAL: 20200506 - Penalty for bad pilot
+          inc(p.wallhits, 2 * TICRATE);  // JVAL: 20200506 - Big penalty for bad pilot
           _spawn_burner_smoke_floor(-1, 16);  // Spawn more smoke to floor
           exit;
         end
-        else if p.mo.velz > 4 * FRACUNIT then
+        else if abs(p.mo.velz) > 4 * FRACUNIT then
         begin
           if p.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
             S_AmbientSound(p.mo.x, p.mo.y, 'radix/SndScrape');
@@ -378,16 +393,16 @@ begin
     begin
       if P_GetThingCeilingType(p.mo) = FLOOR_SOLID then
       begin
-        if p.mo.velz > 8 * FRACUNIT then
+        if abs(p.mo.velz) > 8 * FRACUNIT then
         begin
           if p.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
             S_AmbientSound(p.mo.x, p.mo.y, 'radix/SndScrape');
           p.planehittics := S_RadixSoundDuration(Ord(sfx_SndScrape));
-          inc(p.wallhits, 2 * TICRATE);  // JVAL: 20200506 - Penalty for bad pilot
+          inc(p.wallhits, 2 * TICRATE);  // JVAL: 20200506 - Big penalty for bad pilot
           _spawn_burner_smoke_floor(1, 16); // Spawn more smoke to ceiling
           exit;
         end
-        else if p.mo.velz > 4 * FRACUNIT then
+        else if abs(p.mo.velz) > 4 * FRACUNIT then
         begin
           if p.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
             S_AmbientSound(p.mo.x, p.mo.y, 'radix/SndScrape');
