@@ -1713,6 +1713,7 @@ var
   ss: Psubsector_t; // JVAL: 3d floors
   msec: Psector_t;  // JVAL: 3d floors
   musinfoparam: integer;
+  doplayerz: boolean;
 begin
   mthing.options := mthing.options and spawnmask;
 
@@ -1739,6 +1740,7 @@ begin
   end;
 
   // check for players specially
+  doplayerz := false;
   if mthing._type <= 4 then
   begin
     // save spots for respawning in network games
@@ -1755,6 +1757,7 @@ begin
         exit;
       end;
       mthing.options := mthing.options or MTF_FRIEND;
+      doplayerz := true;
     end
     else
     begin
@@ -1870,8 +1873,14 @@ begin
 
   if mthing.options and MTF_RADIXTHING <> 0 then
   begin
-    ss := R_PointInSubsector(x, y);
-    result := P_SpawnMobj(x, y, ss.sector.floorheight + integer(mthing.z) * FRACUNIT, i, mthing);
+    if doplayerz then
+      z := mthing.z * FRACUNIT
+    else
+    begin
+      ss := R_PointInSubsector(x, y);
+      z := ss.sector.floorheight + integer(mthing.z) * FRACUNIT;
+    end;
+    result := P_SpawnMobj(x, y, z, i, mthing);
   end
   else
   begin
