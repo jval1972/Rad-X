@@ -800,6 +800,80 @@ begin
   result := false;
 end;
 
+function P_LookForFriendlyMonsters(actor: Pmobj_t): boolean;
+var
+  count: integer;
+  mo: Pmobj_t;
+  think: Pthinker_t;
+  inher: integer;
+  dist: fixed_t;
+begin
+  if actor.flags2_ex and MF2_EX_FRIEND <> 0 then  // Friendly monsters do no seek other friends
+  begin
+    result := false;
+    exit;
+  end;
+
+  count := 0;
+  think := thinkercap.next;
+  while think <> @thinkercap do
+  begin
+    if @think._function.acp1 <> @P_MobjThinker then
+    begin
+      think := think.next;
+      continue;
+    end;
+
+    mo := Pmobj_t(think);
+
+    if (mo.flags and MF_COUNTKILL = 0) or (mo = actor) or (mo.health <= 0) then
+    begin // Not a valid monster
+      think := think.next;
+      continue;
+    end;
+
+    if mo.flags2_ex and MF2_EX_FRIEND = 0 then // Not a friendly monster
+    begin
+      think := think.next;
+      continue;
+    end;
+
+    dist := P_AproxDistance(actor.x - mo.x, actor.y - mo.y);
+
+    if dist > MONS_LOOK_RANGE then
+    begin // Out of range
+      think := think.next;
+      continue;
+    end;
+
+    if P_Random < 16 then
+    begin // Skip
+      think := think.next;
+      continue;
+    end;
+
+    inc(count);
+    if count > MONS_LOOK_LIMIT then
+    begin // Stop searching
+      result := false;
+      exit;
+    end;
+
+    if not P_CheckSight(actor, mo) then
+    begin // Out of sight
+      think := think.next;
+      continue;
+    end;
+
+    // Found a target monster
+    actor.target := mo;
+    result := true;
+    exit;
+  end;
+
+  result := false;
+end;
+
 //
 // P_LookForPlayers
 // If allaround is false, only look 180 degrees in front.
@@ -886,7 +960,14 @@ begin
         result := P_LookForPlayers(actor, true);
   end
   else
-    result := P_LookForPlayers(actor, allaround);
+  begin
+    result := false;
+    // JVAL: 20200511 - Look for friendly monsters to kill
+    if P_Random < 20 then
+      result := P_LookForFriendlyMonsters(actor);
+    if not result then
+      result := P_LookForPlayers(actor, allaround);
+  end;
 end;
 
 //
