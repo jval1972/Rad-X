@@ -104,13 +104,16 @@ var
 // Moves the given origin along a given angle.
 //
 procedure P_Thrust(player: Pplayer_t; angle: angle_t; const mv: fixed_t);
+var
+  pmo: Pmobj_t;
 begin
   if mv = 0 then
     exit;
   angle := angle div FRACUNIT;
 
-  player.mo.momx := player.mo.momx + FixedMul(mv, fixedcosine[angle]);
-  player.mo.momy := player.mo.momy + FixedMul(mv, fixedsine[angle]);
+  pmo := player.mo;
+  pmo.momx := pmo.momx + FixedMul(mv, fixedcosine[angle]);
+  pmo.momy := pmo.momy + FixedMul(mv, fixedsine[angle]);
 end;
 
 // JVAL: Slopes
@@ -120,6 +123,7 @@ var
   oldviewz: fixed_t;
   oldviewz2: fixed_t;
   viewbob: fixed_t; // JVAL: Slopes
+  pmo: Pmobj_t;
 begin
   // Regular movement bobbing
   // (needs to be calculated for gun swing
@@ -127,8 +131,9 @@ begin
   // OPTIMIZE: tablify angle
   // Note: a LUT allows for effects
   //  like a ramp with low health.
-  player.bob := FixedMul(player.mo.momx, player.mo.momx) +
-                FixedMul(player.mo.momy, player.mo.momy);
+  pmo := player.mo;
+  player.bob := FixedMul(pmo.momx, pmo.momx) +
+                FixedMul(pmo.momy, pmo.momy);
   player.bob := player.bob div 4;
 
   if player.bob > MAXBOB then
@@ -138,13 +143,13 @@ begin
 
   if (player.cheats and CF_NOMOMENTUM <> 0) or not onground then
   begin
-    player.viewz := player.mo.z + PVIEWHEIGHT;
+    player.viewz := pmo.z + PVIEWHEIGHT;
 
     // JVAL: 20200427 - New field (interpolated)
     player.bobviewz := 2 * finesine[(leveltime * (FINEANGLES div 64)) and FINEMASK];
 
-    if player.viewz > player.mo.ceilingz - 4 * FRACUNIT then
-      player.viewz := player.mo.ceilingz - 4 * FRACUNIT;
+    if player.viewz > pmo.ceilingz - 4 * FRACUNIT then
+      player.viewz := pmo.ceilingz - 4 * FRACUNIT;
 
     player.oldviewz := oldviewz;
 
@@ -154,7 +159,7 @@ begin
   player.bobviewz := 0;
 
   angle := (FINEANGLES div 20 * leveltime) and FINEMASK;
-  if player.mo.flags3_ex and MF3_EX_DOOMBOB <> 0 then
+  if pmo.flags3_ex and MF3_EX_DOOMBOB <> 0 then
     viewbob := FixedMul(player.bob div 2, finesine[angle]) div (player.slopetics + 1)
   else
     viewbob := 0;
@@ -194,7 +199,7 @@ begin
 
     player.viewz :=
       (player.slopetics * player.viewz +
-       player.mo.z + player.viewheight + viewbob) div (player.slopetics + 1); // Extra smooth
+       pmo.z + player.viewheight + viewbob) div (player.slopetics + 1); // Extra smooth
 
     if oldviewz2 < oldviewz then
     begin
@@ -207,19 +212,19 @@ begin
         player.viewz := oldviewz;
     end;
 
-    if player.viewz < player.mo.floorz + PVIEWHEIGHT div 2 - 4 * FRACUNIT then
-      player.viewz := player.mo.floorz + PVIEWHEIGHT div 2 - 4 * FRACUNIT;
-    if player.viewz < player.mo.floorz + 4 * FRACUNIT then
-      player.viewz := player.mo.floorz + 4 * FRACUNIT;
+    if player.viewz < pmo.floorz + PVIEWHEIGHT div 2 - 4 * FRACUNIT then
+      player.viewz := pmo.floorz + PVIEWHEIGHT div 2 - 4 * FRACUNIT;
+    if player.viewz < pmo.floorz + 4 * FRACUNIT then
+      player.viewz := pmo.floorz + 4 * FRACUNIT;
   end
   else
-    player.viewz := player.mo.z + player.viewheight + viewbob;
+    player.viewz := pmo.z + player.viewheight + viewbob;
 
-  if player.viewz > player.mo.ceilingz - 4 * FRACUNIT then
-    player.viewz := player.mo.ceilingz - 4 * FRACUNIT;
+  if player.viewz > pmo.ceilingz - 4 * FRACUNIT then
+    player.viewz := pmo.ceilingz - 4 * FRACUNIT;
 
-  if player.viewz < player.mo.floorz + 4 * FRACUNIT then
-    player.viewz := player.mo.floorz + 4 * FRACUNIT;
+  if player.viewz < pmo.floorz + 4 * FRACUNIT then
+    player.viewz := pmo.floorz + 4 * FRACUNIT;
 
   player.oldviewz := oldviewz;
 end;
@@ -308,24 +313,26 @@ end;
 procedure P_PlaneTranspoMove(player: Pplayer_t);
 var
   dx, dy, dz: int64;
+  pmo: Pmobj_t;
 begin
   dec(player.planetranspo_tics);
+  pmo := player.mo;
   if player.planetranspo_tics <= 0 then
   begin
-    player.mo.momx := 0;
-    player.mo.momy := 0;
-    player.mo.momz := 0;
-    player.mo.angle := player.planetranspo_target_a;
+    pmo.momx := 0;
+    pmo.momy := 0;
+    pmo.momz := 0;
+    pmo.angle := player.planetranspo_target_a;
     exit;
   end;
 
   dx := (int64(player.planetranspo_target_x) - int64(player.planetranspo_start_x)) div player.planetranspo_start_tics;
   dy := (int64(player.planetranspo_target_y) - int64(player.planetranspo_start_y)) div player.planetranspo_start_tics;
   dz := (int64(player.planetranspo_target_z) - int64(player.planetranspo_start_z)) div player.planetranspo_start_tics;
-  player.mo.momx := dx * (player.planetranspo_start_tics - player.planetranspo_tics) div (player.planetranspo_start_tics div 2);
-  player.mo.momy := dy * (player.planetranspo_start_tics - player.planetranspo_tics) div (player.planetranspo_start_tics div 2);
-  player.mo.momz := dz * (player.planetranspo_start_tics - player.planetranspo_tics) div (player.planetranspo_start_tics div 2);
-  player.mo.angle := R_CalcPlaneTranspoAngle(player.planetranspo_start_a, player.planetranspo_target_a, player.planetranspo_tics, player.planetranspo_start_tics);
+  pmo.momx := dx * (player.planetranspo_start_tics - player.planetranspo_tics) div (player.planetranspo_start_tics div 2);
+  pmo.momy := dy * (player.planetranspo_start_tics - player.planetranspo_tics) div (player.planetranspo_start_tics div 2);
+  pmo.momz := dz * (player.planetranspo_start_tics - player.planetranspo_tics) div (player.planetranspo_start_tics div 2);
+  pmo.angle := R_CalcPlaneTranspoAngle(player.planetranspo_start_a, player.planetranspo_target_a, player.planetranspo_tics, player.planetranspo_start_tics);
 end;
 
 //
@@ -341,6 +348,7 @@ var
   an: angle_t;
   flyupdown: integer;
   has_mj: boolean; // JVAL: 20200322 - Maneuvering jets physics
+  pmo: Pmobj_t;
 begin
   cmd := @player.cmd;
 
@@ -350,47 +358,48 @@ begin
     exit;
   end;
 
-  player.mo.angle := player.mo.angle + _SHLW(cmd.angleturn, 16);
+  pmo := player.mo;
+  pmo.angle := pmo.angle + _SHLW(cmd.angleturn, 16);
 
   // JVAL: 20200322 - Maneuvering jets physics
   has_mj := player.radixpowers[Ord(rpu_maneuverjets)] > 0;
 
   // Do not let the player control movement
   //  if not onground.
-  onground := player.mo.z <= player.mo.floorz;
+  onground := pmo.z <= pmo.floorz;
 
   if not onground then
-    onground := player.mo.flags2_ex and MF2_EX_ONMOBJ <> 0;
+    onground := pmo.flags2_ex and MF2_EX_ONMOBJ <> 0;
 
   movefactor := ORIG_FRICTION_FACTOR;
 
-  if Psubsector_t(player.mo.subsector).sector.special and FRICTION_MASK <> 0 then
-    movefactor := P_GetMoveFactor(player.mo);
+  if Psubsector_t(pmo.subsector).sector.special and FRICTION_MASK <> 0 then
+    movefactor := P_GetMoveFactor(pmo);
 
   if has_mj then
     movefactor := FixedMul(movefactor, MJ_FACTOR);
 
   if cmd.forwardmove <> 0 then
-    P_Thrust(player, player.mo.angle, cmd.forwardmove * movefactor);
+    P_Thrust(player, pmo.angle, cmd.forwardmove * movefactor);
 
   if cmd.sidemove <> 0 then
-    P_Thrust(player, player.mo.angle - ANG90, cmd.sidemove * movefactor);
+    P_Thrust(player, pmo.angle - ANG90, cmd.sidemove * movefactor);
 
   // JVAL: 20200322 - Maneuvering jets physics - Faster slowdown
   if has_mj then
   begin
-    player.mo.momx := player.mo.momx * 7 div 8;
-    player.mo.momy := player.mo.momy * 7 div 8;
+    pmo.momx := pmo.momx * 7 div 8;
+    pmo.momy := pmo.momy * 7 div 8;
   end
   else
   begin
-    player.mo.momx := player.mo.momx * 15 div 16;
-    player.mo.momy := player.mo.momy * 15 div 16;
+    pmo.momx := pmo.momx * 15 div 16;
+    pmo.momy := pmo.momy * 15 div 16;
   end;
 
   if ((cmd.forwardmove <> 0) or (cmd.sidemove <> 0)) and
-     (player.mo.state = @states[Ord(S_PLAY)]) then
-    P_SetMobjState(player.mo, S_PLAY_RUN1);
+     (pmo.state = @states[Ord(S_PLAY)]) then
+    P_SetMobjState(pmo, S_PLAY_RUN1);
 
 // JVAL Look UP and DOWN
   if zaxisshift then
@@ -433,19 +442,19 @@ begin
     end;
   end;
 
-  player.mo.momz :=  player.mo.momz - player.thrustmomz;
+  pmo.momz :=  pmo.momz - player.thrustmomz;
   player.thrustmomz := 0;
 
-  player.mo.momz := player.mo.momz * 15 div 16;
+  pmo.momz := pmo.momz * 15 div 16;
 
   if player.lookdir16 <> 0 then
   begin
-    an := (R_PointToAngle2(0, 0, player.mo.momx, player.mo.momy) - player.mo.angle) shr FRACBITS;
-    xyspeed := FixedMul(FixedSqrt(FixedMul(player.mo.momx, player.mo.momx) + FixedMul(player.mo.momy, player.mo.momy)), fixedcosine[an]);
+    an := (R_PointToAngle2(0, 0, pmo.momx, pmo.momy) - pmo.angle) shr FRACBITS;
+    xyspeed := FixedMul(FixedSqrt(FixedMul(pmo.momx, pmo.momx) + FixedMul(pmo.momy, pmo.momy)), fixedcosine[an]);
     if xyspeed <> 0 then
     begin
       player.thrustmomz := ((xyspeed div 16) * player.lookdir16) div 256; //ORIG_FRICTION_FACTOR;
-      player.mo.momz :=  player.mo.momz + player.thrustmomz;
+      pmo.momz :=  pmo.momz + player.thrustmomz;
     end;
   end;
 
@@ -488,16 +497,16 @@ begin
         player.forwarding := false;
       end;
     end;
-    player.mo.viewangle := player.lookdir2 shl 24;
+    pmo.viewangle := player.lookdir2 shl 24;
 
     player.oldlook2 := look2;
 
     flyupdown := cmd.flyup;
     flyupdown := flyupdown - cmd.flydown;
     if flyupdown > 0 then
-      player.mo.momz := 8 * FRACUNIT
+      pmo.momz := 8 * FRACUNIT
     else if flyupdown < 0 then
-      player.mo.momz := -8 * FRACUNIT
+      pmo.momz := -8 * FRACUNIT
   end
   else
     player.lookdir2 := 0;
@@ -516,8 +525,10 @@ procedure P_DeathThink(player: Pplayer_t);
 var
   angle: angle_t;
   delta: angle_t;
+  pmo: Pmobj_t;
 begin
   P_MovePsprites(player);
+  pmo := player.mo;
 
   // fall to the ground
   if player.viewheight > 6 * FRACUNIT then
@@ -531,30 +542,30 @@ begin
       player.lookdir16 := player.lookdir16 + 5 * 16; // JVAL Smooth Look Up/Down
 
   player.deltaviewheight := 0;
-  onground := player.mo.z <= player.mo.floorz;
+  onground := pmo.z <= pmo.floorz;
   P_CalcHeight(player); // JVAL: Slopes
 
-  if (player.attacker <> nil) and (player.attacker <> player.mo) then
+  if (player.attacker <> nil) and (player.attacker <> pmo) then
   begin
 
     angle := R_PointToAngle2(
-      player.mo.x, player.mo.y, player.attackerx, player.attackery);
+      pmo.x, pmo.y, player.attackerx, player.attackery);
 
-    delta := angle - player.mo.angle;
+    delta := angle - pmo.angle;
 
     if (delta < ANG5) or (delta > ANG355) then
     begin
       // Looking at killer,
       //  so fade damage flash down.
-      player.mo.angle := angle;
+      pmo.angle := angle;
 
       if player.damagecount <> 0 then
         player.damagecount := player.damagecount - 1;
     end
     else if delta < ANG180 then
-      player.mo.angle := player.mo.angle + ANG5
+      pmo.angle := pmo.angle + ANG5
     else
-      player.mo.angle := player.mo.angle - ANG5;
+      pmo.angle := pmo.angle - ANG5;
 
   end
   else if player.damagecount <> 0 then
@@ -608,22 +619,24 @@ var
   ticks: LongWord;
   angle: angle_t;
   diff: angle_t;
+  pmo: Pmobj_t;
 begin
   if player.angletargetticks <= 0 then
     exit;
 
   player.cmd.angleturn := 0;
-  angle := R_PointToAngle2(player.mo.x, player.mo.y, player.angletargetx, player.angletargety);
-  diff := player.mo.angle - angle;
+  pmo := player.mo;
+  angle := R_PointToAngle2(pmo.x, pmo.y, player.angletargetx, player.angletargety);
+  diff := pmo.angle - angle;
 
   ticks := player.angletargetticks;
   if diff > ANG180 then
   begin
     diff := ANGLE_MAX - diff;
-    player.mo.angle := player.mo.angle + (diff div ticks);
+    pmo.angle := pmo.angle + (diff div ticks);
   end
   else
-    player.mo.angle := player.mo.angle - (diff div ticks);
+    pmo.angle := pmo.angle - (diff div ticks);
 
   dec(player.angletargetticks);
 end;
@@ -643,24 +656,26 @@ var
   cmd: Pticcmd_t;
   newweapon: weapontype_t;
   sec: Psector_t; // JVAL: 3d Floors
+  pmo: Pmobj_t;
 begin
   // fixme: do this in the cheat code
-  if player.mo = nil then
+  pmo := player.mo;
+  if pmo = nil then
     exit;
 
   if player.cheats and CF_NOCLIP <> 0 then
-    player.mo.flags := player.mo.flags or MF_NOCLIP
+    pmo.flags := pmo.flags or MF_NOCLIP
   else
-    player.mo.flags := player.mo.flags and not MF_NOCLIP;
+    pmo.flags := pmo.flags and not MF_NOCLIP;
 
   // chain saw run forward
   cmd := @player.cmd;
-  if player.mo.flags and MF_JUSTATTACKED <> 0 then
+  if pmo.flags and MF_JUSTATTACKED <> 0 then
   begin
     cmd.angleturn := 0;
     cmd.forwardmove := $c800 div 512;
     cmd.sidemove := 0;
-    player.mo.flags := player.mo.flags and not MF_JUSTATTACKED;
+    pmo.flags := pmo.flags and not MF_JUSTATTACKED;
   end;
 
   if player.quaketics > 0 then
@@ -693,17 +708,17 @@ begin
   // Move around.
   // Reactiontime is used to prevent movement
   //  for a bit after a teleport.
-  if player.mo.reactiontime <> 0 then
-    player.mo.reactiontime := player.mo.reactiontime - 1
+  if pmo.reactiontime <> 0 then
+    pmo.reactiontime := pmo.reactiontime - 1
   else
     P_MovePlayer(player);
 
   P_CalcHeight(player); // JVAL: Slopes
 
   // JVAL: 3d Floors
-  sec := Psubsector_t(player.mo.subsector).sector;
+  sec := Psubsector_t(pmo.subsector).sector;
   if sec.special <> 0 then
-    P_PlayerInSpecialSector(player, sec, P_FloorHeight(sec, player.mo.x, player.mo.y));    // JVAL: 3d Floors
+    P_PlayerInSpecialSector(player, sec, P_FloorHeight(sec, pmo.x, pmo.y));    // JVAL: 3d Floors
   if sec.midsec >= 0 then
     if sectors[sec.midsec].special <> 0 then
       P_PlayerInSpecialSector(player, @sectors[sec.midsec], sectors[sec.midsec].ceilingheight);  // JVAL: 3d Floors
@@ -788,7 +803,7 @@ begin
   begin
     player.powers[Ord(pw_invisibility)] := player.powers[Ord(pw_invisibility)] - 1;
     if player.powers[Ord(pw_invisibility)] = 0 then
-      player.mo.flags := player.mo.flags and not MF_SHADOW;
+      pmo.flags := pmo.flags and not MF_SHADOW;
   end;
 
   if player.powers[Ord(pw_infrared)] <> 0 then
