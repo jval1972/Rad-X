@@ -805,7 +805,6 @@ var
   count: integer;
   mo: Pmobj_t;
   think: Pthinker_t;
-  inher: integer;
   dist: fixed_t;
 begin
   if actor.flags2_ex and MF2_EX_FRIEND <> 0 then  // Friendly monsters do no seek other friends
@@ -1089,11 +1088,9 @@ procedure P_DoChase(actor: Pmobj_t; const fast: boolean);
 var
   delta: integer;
   nomissile: boolean;
-  dist, dist2, dist3: fixed_t;
+  dist, dist2: fixed_t;
   ang: angle_t;
   momx, momy: fixed_t;
-  ang3: angle_t;
-  bestang: angle_t;
   maxdist: fixed_t;
   p: Pplayer_t;
   i: integer;
