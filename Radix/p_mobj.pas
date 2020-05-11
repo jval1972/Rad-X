@@ -1869,7 +1869,7 @@ begin
 
   // JVAL
   // Random map enemies
-  if spawnrandommonsters and Info_IsMonster(i) then
+  if spawnrandommonsters and Info_IsMonster(i) and (mthing.options and MTF_FRIEND = 0) and (mobjinfo[i].flags2_ex and MF2_EX_FRIEND = 0) then
     i := Info_SelectRandomMonster(i);
 
   if mthing.options and MTF_RADIXTHING <> 0 then
