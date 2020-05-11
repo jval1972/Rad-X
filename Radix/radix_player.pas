@@ -35,8 +35,33 @@ unit radix_player;
 interface
 
 uses
+  doomdef,
   d_player,
   m_fixed;
+
+type
+  playertrace_t = record
+    x, y, z: fixed_t;
+    leveltime: integer;
+  end;
+  Pplayertrace_t = ^playertrace_t;
+
+const
+  NUMPLAYERTRACEHISTORY = 1024;
+  HISTORYIGNOREDISTANCE = 64 * FRACUNIT;
+
+type
+  playertracehistory_t = record
+    numitems: integer;
+    rover: integer;
+    data: array[0..NUMPLAYERTRACEHISTORY - 1] of playertrace_t;
+  end;
+  Pplayertracehistory_t = ^playertracehistory_t;
+
+var
+  playerhistory: array[0..MAXPLAYERS - 1] of playertracehistory_t;
+
+procedure RX_ClearPlayerHistory(const p: Pplayer_t);
 
 procedure RX_PlayerThink(p: Pplayer_t);
 
@@ -49,7 +74,6 @@ procedure RX_PlaneHitFloor(const p: Pplayer_t);
 implementation
 
 uses
-  doomdef,
   d_delphi,
   g_game,
   m_rnd,
@@ -73,6 +97,72 @@ uses
   p_slopes,
   s_sound,
   tables;
+
+function PlayerToId(const p: Pplayer_t): integer;
+var
+  i: integer;
+begin
+  for i := 0 to MAXPLAYERS - 1 do
+    if p = @players[i] then
+    begin
+      result := i;
+      exit;
+    end;
+
+  result := -1;
+end;
+
+procedure RX_PlayerHistoryNotify(const p: Pplayer_t);
+var
+  pid: integer;
+  history: Pplayertracehistory_t;
+  nrover: integer;
+  dist: fixed_t;
+  pmo: Pmobj_t;
+  item: Pplayertrace_t;
+begin
+  pid := PlayerToId(p);
+  if (pid < 0) or not playeringame[pid] then
+    exit;
+
+  history := @playerhistory[pid];
+
+  pmo := p.mo;
+  if history.numitems = 0 then
+    nrover := 0
+  else
+  begin
+    item := @history.data[history.rover];
+    dist := P_AproxDistance(pmo.x - item.x, pmo.y - item.y);
+    if dist < HISTORYIGNOREDISTANCE then
+      exit;
+    nrover := history.rover + 1;
+    if nrover >= NUMPLAYERTRACEHISTORY then
+      nrover := nrover - NUMPLAYERTRACEHISTORY;
+  end;
+
+  item := @history.data[nrover];
+  item.x := pmo.x;
+  item.y := pmo.y;
+  item.z := pmo.z;
+  item.leveltime := leveltime;
+  history.rover := nrover;
+  if history.numitems < NUMPLAYERTRACEHISTORY then
+    inc(history.numitems);
+end;
+
+procedure RX_ClearPlayerHistory(const p: Pplayer_t);
+var
+  pid: integer;
+  history: Pplayertracehistory_t;
+begin
+  pid := PlayerToId(p);
+  if (pid < 0) or not playeringame[pid] then
+    exit;
+
+  history := @playerhistory[pid];
+  ZeroMemory(history, SizeOf(playertracehistory_t));
+end;
 
 const
   STR_ENGINESOUND = 'ENGINESOUND';
@@ -233,6 +323,8 @@ var
   mo: Pmobj_t;
 begin
   radixplayermo := p.mo;
+
+  RX_PlayerHistoryNotify(p);
 
   RX_HandleFriendsNearMe;
 

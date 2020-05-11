@@ -126,6 +126,7 @@ uses
   radix_grid,
   radix_logic,
   radix_level,
+  radix_player,
   r_defs,
   r_data,
   r_colormaps,
@@ -149,7 +150,7 @@ begin
 
     dest := Pplayer_t(save_p);
     memcpy(dest, @players[i], SizeOf(player_t));
-    save_p := PByteArray(integer(save_p) + SizeOf(player_t));
+    incp(pointer(save_p), SizeOf(player_t));
     for j := 0 to Ord(NUMPSPRITES) - 1 do
       if dest.psprites[j].state <> nil then
         dest.psprites[j].state := Pstate_t(pDiff(dest.psprites[j].state, @states[0], SizeOf(dest.psprites[j].state^)));
@@ -160,6 +161,10 @@ begin
       dest.enginesoundtarget := Pmobj_t(dest.enginesoundtarget.key);
     if dest.messagesoundtarget <> nil then
       dest.messagesoundtarget := Pmobj_t(dest.messagesoundtarget.key);
+
+    // JVAL: 20200511 - Save player history
+    memcpy(save_p, @playerhistory[i], SizeOf(playertracehistory_t));
+    incp(pointer(save_p), SizeOf(playertracehistory_t));
   end;
 end;
 
@@ -187,6 +192,10 @@ begin
     for j := 0 to Ord(NUMPSPRITES) - 1 do
       if players[i].psprites[j].state <> nil then
         players[i].psprites[j].state := @states[integer(players[i].psprites[j].state)];
+
+    // JVAL: 20200511 - Load player history
+    memcpy(@playerhistory[i], save_p, SizeOf(playertracehistory_t));
+    incp(pointer(save_p), SizeOf(playertracehistory_t));
   end;
 end;
 

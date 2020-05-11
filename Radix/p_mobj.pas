@@ -1633,6 +1633,7 @@ begin
       p.radixmessages[i] := 0;
     for i := 0 to Ord(NUMWEAPONS) - 1 do
       p.lastfire[i] := 0;
+    RX_ClearPlayerHistory(p);
   end;
 
   x := mthing.x * FRACUNIT;

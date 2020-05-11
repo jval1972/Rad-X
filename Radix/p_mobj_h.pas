@@ -542,6 +542,7 @@ type
     wallbouncefactor: fixed_t; // JVAL: 20200402 - Speed modifier after wall bounce
     master: Pmobj_t;  // JVAL: 20200420 - Master
     nextfriendfollowtime: integer; // JVAL: 20200510 - Time that friendly monsters will make next attempt to follow player
+    playerfollowtime: integer;  // JVAL: 20200510 - Last time that followed the player's trace
     randseed: integer;  // JVAL: 20200510 - Random seed (set at spawn)
 
     // version 205
