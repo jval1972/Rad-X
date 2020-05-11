@@ -1091,9 +1091,7 @@ var
   dist, dist2: fixed_t;
   ang: angle_t;
   momx, momy: fixed_t;
-  maxdist: fixed_t;
   p: Pplayer_t;
-  i: integer;
   try_ok: boolean;
 begin
   if actor.reactiontime <> 0 then
