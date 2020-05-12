@@ -44,6 +44,7 @@ procedure Radix2CSV(const fin: string; const pathout: string);
 implementation
 
 uses
+  Math,
   i_system,
   radix_defs,
   radix_palette,
@@ -1129,14 +1130,90 @@ var
   ch: char;
   COLORS: array[0..NUM_BIG_FONT_COLORS - 1] of LongWord;
   cidx: integer;
+  pnoise: double;
   c: LongWord;
   r1, g1, b1: LongWord;
-  r, g, b: LongWord;
+  r, g, b: integer;
   x, y: integer;
   fnt: string;
   fidx: integer;
   widx: integer;
   w: integer;
+
+  function Interpolate(const a, b, frac: double): double;
+  begin
+    result := (1.0 - cos(pi * frac)) * 0.5;
+    result:= a * (1 - result) + b * result;
+  end;
+
+  function Noise(const x,y: double): double;
+  var
+    n: integer;
+  begin
+    n := trunc(x + y * 57);
+    n := (n shl 13) xor n;
+    result := (1.0 - ( (n * (n * n * $EC4D + $131071F) + $5208DD0D) and $7FFFFFFF) / $40000000);
+  end;
+
+  function SmoothedNoise(const x, y: double): double;
+  var
+    corners: double;
+    sides: double;
+    center: double;
+  begin
+    corners := (Noise(x - 1, y - 1) + Noise(x + 1, y - 1) + Noise(x - 1, y + 1) + Noise(x + 1, y + 1) ) / 16;
+    sides := (Noise(x - 1, y) + Noise(x + 1, y) + Noise(x, y - 1) + Noise(x, y + 1)) / 8;
+    center := Noise(x, y) / 4;
+    result := corners + sides + center
+  end;
+
+  function InterpolatedNoise(const x, y: double): double;
+  var
+    i1, i2: double;
+    v1, v2, v3, v4: double;
+    xInt: double;
+    yInt: double;
+    xFrac: double;
+    yFrac: double;
+  begin
+    xInt := Int(x);
+    xFrac := Frac(x);
+
+    yInt := Int(y);
+    yFrac := Frac(y);
+
+    v1 := SmoothedNoise(xInt, yInt);
+    v2 := SmoothedNoise(xInt + 1, yInt);
+    v3 := SmoothedNoise(xInt, yInt + 1);
+    v4 := SmoothedNoise(xInt + 1, yInt + 1);
+
+    i1 := Interpolate(v1, v2, xFrac);
+    i2 := Interpolate(v3, v4, xFrac);
+
+    result := Interpolate(i1, i2, yFrac);
+  end;
+
+  function PerlinNoise(const x, y: integer): double;
+  const
+    PERSISTENCE = 0.50;
+    LOOPCOUNT = 3;
+    VARIATION = 16;
+  var
+    amp: double;
+    ii: integer;
+    freq: integer;
+  begin
+    freq := 1;
+    result := 0.0;
+    for ii := 0 to LOOPCOUNT - 1 do
+    begin
+      amp := Power(PERSISTENCE, ii);
+      result := result + InterpolatedNoise(x * freq, y * freq) * amp;
+      freq := freq shl 1;
+    end;
+    result := result * VARIATION;
+  end;
+
 begin
   result := true;
 
@@ -1160,15 +1237,25 @@ begin
         imginp[i] := 254
       else
       begin
-        r := round(r1 * BIG_FONT_BUFFER[i] / 256);
+        if BIG_FONT_BUFFER[i] = 255 then
+          pnoise := PerlinNoise(i mod 1984, i div 1984)
+        else
+          pnoise := 0.0;
+        r := round(r1 * BIG_FONT_BUFFER[i] / 256 + pnoise);
         if r > 255 then
-          r := 255;
-        g := round(g1 * BIG_FONT_BUFFER[i] / 256);
+          r := 255
+        else if r < 0 then
+          r := 0;
+        g := round(g1 * BIG_FONT_BUFFER[i] / 256 + pnoise);
         if g > 255 then
-          g := 255;
-        b := round(b1 * BIG_FONT_BUFFER[i] / 256);
+          g := 255
+        else if g < 0 then
+          g := 0;
+        b := round(b1 * BIG_FONT_BUFFER[i] / 256 + pnoise);
         if b > 255 then
-          b := 255;
+          b := 255
+        else if b < 0 then
+          b := 0;
         c := r shl 16 + g shl 8 + b;
         imginp[i] := V_FindAproxColorIndex(@def_palL, c, 0, 253);
         if def_palL[imginp[i]] = 0 then
