@@ -543,6 +543,7 @@ type
     master: Pmobj_t;  // JVAL: 20200420 - Master
     nextfriendfollowtime: integer; // JVAL: 20200510 - Time that friendly monsters will make next attempt to follow player
     playerfollowtime: integer;  // JVAL: 20200510 - Last time that followed the player's trace
+    tracefollowtimestamp: integer; // JVAL: 20200512 - The timestamp of the last followed trace
     randseed: integer;  // JVAL: 20200510 - Random seed (set at spawn)
 
     // version 205

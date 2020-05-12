@@ -37,6 +37,7 @@ interface
 uses
   doomdef,
   d_player,
+  p_mobj_h,
   m_fixed;
 
 type
@@ -61,7 +62,12 @@ type
 var
   playerhistory: array[0..MAXPLAYERS - 1] of playertracehistory_t;
 
+const
+  PLAYERFOLLOWDISTANCE = 2048 * FRACUNIT;
+
 procedure RX_ClearPlayerHistory(const p: Pplayer_t);
+
+function RX_FollowPlayer(const mo: Pmobj_t; const p: Pplayer_t): boolean;
 
 procedure RX_PlayerThink(p: Pplayer_t);
 
@@ -71,6 +77,8 @@ procedure RX_PlaneHitWall(const p: Pplayer_t; const tryx, tryy: fixed_t);
 
 procedure RX_PlaneHitFloor(const p: Pplayer_t);
 
+function RX_NearestPlayer(const mo: Pmobj_t): Pplayer_t;
+
 implementation
 
 uses
@@ -79,6 +87,7 @@ uses
   m_rnd,
   r_defs,
   r_main,
+  radix_map_extra,
   radix_messages,
   radix_objects,
   radix_sounds,
@@ -92,9 +101,9 @@ uses
   p_maputl,
   p_tick,
   p_mobj,
-  p_mobj_h,
   p_terrain,
   p_slopes,
+  p_sight,
   s_sound,
   tables;
 
@@ -162,6 +171,130 @@ begin
 
   history := @playerhistory[pid];
   ZeroMemory(history, SizeOf(playertracehistory_t));
+end;
+
+function RX_FollowPlayer(const mo: Pmobj_t; const p: Pplayer_t): boolean;
+var
+  pid: integer;
+  history: Pplayertracehistory_t;
+  i: integer;
+  hpos: integer;
+  item: Pplayertrace_t;
+  bestitem: Pplayertrace_t;
+  bestitem2: Pplayertrace_t;
+  bestleveltime: fixed_t;
+  bestleveltime2: fixed_t;
+  dist: fixed_t;
+  distfromplayer: fixed_t;
+  tracefromplayer: fixed_t;
+  tics: integer;
+  ang: angle_t;
+  speed: integer;
+  newx, newy, newz: fixed_t;
+
+  procedure _follow_item;
+  begin
+    mo.target := p.mo;
+    ang := R_PointToAngle2(mo.x, mo.y, item.x, item.y);
+    mo.angle := ang;
+    speed := mo.info.speed;
+    if speed > FRACUNIT then
+      speed := speed div FRACUNIT;
+    mo.momx := speed * finecosine[ang shr ANGLETOFINESHIFT];
+    mo.momy := speed * finesine[ang shr ANGLETOFINESHIFT];
+    dist := P_AproxDistance(item.x - mo.x, item.y - mo.y);
+    tics := (dist - PLAYERFOLLOWDISTANCE) div (speed * FRACUNIT);
+    if tics < TICRATE div 5 then
+      tics := TICRATE div 5;
+    mo.momz := (item.z - mo.z) div tics;
+    mo.playerfollowtime := leveltime + tics;
+    mo.tracefollowtimestamp := item.leveltime;
+  end;
+
+begin
+  result := false;
+  if p = nil then
+    exit;
+
+  if P_CheckSight(mo, p.mo) then
+    if mo.target <> nil then
+      if mo.target <> p.mo then
+        exit;
+
+  distfromplayer := P_AproxDistance(mo.x - p.mo.x, mo.y - p.mo.y);
+  if distfromplayer < PLAYERFOLLOWDISTANCE then
+    exit;
+
+  pid := PlayerToId(p);
+  if (pid < 0) or not playeringame[pid] then
+    exit;
+
+  history := @playerhistory[pid];
+  bestitem := nil;
+  bestitem2 := nil;
+  bestleveltime := -1;
+  bestleveltime2 := -1;
+  for i := history.rover downto history.rover - history.numitems + 1 do
+  begin
+    if i < 0 then
+      hpos := NUMPLAYERTRACEHISTORY + i
+    else
+      hpos := i;
+    item := @history.data[hpos];
+    if item.leveltime > mo.tracefollowtimestamp then
+    begin
+      if P_CheckSightXYZ(item.x, item.y, item.z, mo) then
+      begin
+        if item.leveltime > bestleveltime then
+        begin
+          bestleveltime := item.leveltime;
+          bestitem := item;
+        end;
+        tracefromplayer := P_AproxDistance(item.x - p.mo.x, item.y - p.mo.y);
+        if tracefromplayer < distfromplayer then
+        begin
+          _follow_item;
+          result := true;
+          exit;
+        end;
+      end
+      else if Sys_Random < 32 then
+      begin
+        RX_LineTrace(mo.x, mo.y, mo.z, item.x, item.y, item.z, newx, newy, newz);
+        if (newx = item.x) and (newy = item.y) then
+        begin
+          if item.leveltime > bestleveltime2 then
+          begin
+            bestleveltime2 := item.leveltime;
+            bestitem2 := item;
+          end;
+          tracefromplayer := P_AproxDistance(item.x - p.mo.x, item.y - p.mo.y);
+          if tracefromplayer < distfromplayer then
+          begin
+            _follow_item;
+            result := true;
+            exit;
+          end;
+        end;
+      end;
+    end;
+  end;
+
+  if bestitem <> nil then
+  begin
+    item := bestitem;
+    _follow_item;
+    result := true;
+    exit;
+  end;
+
+  if bestitem2 <> nil then
+  begin
+    item := bestitem2;
+    _follow_item;
+    result := true;
+    exit;
+  end;
 end;
 
 const
@@ -600,6 +733,29 @@ begin
       end
     end;
   end;
+end;
+
+function RX_NearestPlayer(const mo: Pmobj_t): Pplayer_t;
+var
+  i: integer;
+  nearest: fixed_t;
+  dist: fixed_t;
+begin
+  result := nil;
+  nearest := MAXINT;
+
+  for i := 0 to MAXPLAYERS - 1 do
+    if playeringame[i] then
+      if (players[i].mo <> nil) and (players[i].mo <> mo) then
+        if players[i].mo.health >= 0 then
+        begin
+          dist := P_AproxDistance(players[i].mo.x - mo.x, players[i].mo.y - mo.y);
+          if dist < nearest then
+          begin
+            nearest := dist;
+            result := @players[i];
+          end;
+        end;
 end;
 
 end.

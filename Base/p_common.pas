@@ -2113,6 +2113,13 @@ begin
   if not P_CheckStateParams(actor) then
     exit;
 
+  if actor.target <> nil then
+    if actor.target.flags and MF_SHOOTABLE = 0 then
+    begin
+      P_SetMobjState(actor, statenum_t(actor.info.seestate));
+      exit;
+    end;
+
   if actor.state.params.IsComputed[0] then
     mobj_no := actor.state.params.IntVal[0]
   else

@@ -219,6 +219,7 @@ uses
   ps_main,
   r_defs,
   r_main,
+  radix_player,
   sound_data;
 
 const
@@ -737,7 +738,7 @@ begin
 
     mo := Pmobj_t(think);
 
-    if (mo.flags and MF_COUNTKILL = 0) or (mo = actor) or (mo.health <= 0) then
+    if (mo.flags and MF_COUNTKILL = 0) or (mo.flags and MF_SHOOTABLE = 0) or (mo = actor) or (mo.health <= 0) then
     begin // Not a valid monster
       think := think.next;
       continue;
@@ -1004,7 +1005,28 @@ end;
 //
 // ACTION ROUTINES
 //
-
+function P_DroneFollowPlayerHandler(actor: Pmobj_t): boolean;
+begin
+  // JVAL: 20200512 - Drones follow player 's trace
+  if actor.spawnpoint._type = 888 then
+    if leveltime > actor.playerfollowtime then
+      if actor.flags2_ex and MF2_EX_FRIEND <> 0 then
+      begin
+        if RX_FollowPlayer(actor, RX_NearestPlayer(actor)) then
+        begin
+          result := true;
+          exit;
+        end;
+        if P_Random < 24 then
+        begin
+          actor.target := nil;
+          A_Wander(actor);
+          result := true;
+          exit;
+        end;
+      end;
+  result := false;
+end;
 //
 // A_Look
 // Stay in state until a player is sighted.
@@ -1015,6 +1037,9 @@ var
   seeyou: boolean;
   sound: integer;
 begin
+  if P_DroneFollowPlayerHandler(actor) then
+    exit;
+
   actor.threshold := 0; // any shot will wake up
   targ := Psubsector_t(actor.subsector).sector.soundtarget;
   seeyou := false;
@@ -1097,27 +1122,33 @@ begin
   if actor.reactiontime <> 0 then
     actor.reactiontime := actor.reactiontime - 1;
 
+  if P_DroneFollowPlayerHandler(actor) then
+    exit;
+
   // modify target threshold
-  if actor.threshold <> 0 then
+  if leveltime >= actor.playerfollowtime then
   begin
-    if (actor.target = nil) or (actor.target.health <= 0) then
-      actor.threshold := 0
-    else
-      actor.threshold := actor.threshold - 1;
+    if actor.threshold <> 0 then
+    begin
+      if (actor.target = nil) or (actor.target.health <= 0) then
+        actor.threshold := 0
+      else
+        actor.threshold := actor.threshold - 1;
+    end;
+
+    // turn towards movement direction if not there yet
+    if actor.movedir < 8 then
+    begin
+      actor.angle := actor.angle and $E0000000;
+      delta := actor.angle - _SHLW(actor.movedir, 29);
+
+      if delta > 0 then
+        actor.angle := actor.angle - ANG90 div 2
+      else if delta < 0 then
+        actor.angle := actor.angle + ANG90 div 2;
+    end;
   end;
-
-  // turn towards movement direction if not there yet
-  if actor.movedir < 8 then
-  begin
-    actor.angle := actor.angle and $E0000000;
-    delta := actor.angle - _SHLW(actor.movedir, 29);
-
-    if delta > 0 then
-      actor.angle := actor.angle - ANG90 div 2
-    else if delta < 0 then
-      actor.angle := actor.angle + ANG90 div 2;
-  end;
-
+  
   if (actor.target = nil) or
      (actor.target.flags and MF_SHOOTABLE = 0) then
   begin
@@ -1173,7 +1204,7 @@ begin
       if P_LookForTargets(actor, true) then
         exit;
     dist := P_AproxDistance(actor.x - actor.target.x, actor.y - actor.target.y);
-    if (dist > 2048 * FRACUNIT) or ((dist > 1024 * FRACUNIT) and (P_Random < 10)) then
+    if (dist > PLAYERFOLLOWDISTANCE) or ((dist > PLAYERFOLLOWDISTANCE div 2) and (P_Random < 10)) then
     begin
       if leveltime >= actor.nextfriendfollowtime then
       begin
