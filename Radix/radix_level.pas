@@ -1156,6 +1156,9 @@ var
     begin
       result := true;
       doomsectors[37].ceilingpic := stringtochar8('F_SKY1');
+      fix_movevertex(-31103, -2496, -31040, -2528);
+      fix_movevertex(-31103, -640, -31040, -640);
+      doomsidedefs[1800].textureoffset := -32;
     end
     else if levelname = 'E1M9' then
     begin
