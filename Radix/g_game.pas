@@ -1412,22 +1412,13 @@ begin
 
   // JVAL: 20200311 - Radix Exit Level Action
   if radixexit = -1 then
+    gameaction := ga_victory
+  else if gamemap = 8 then
+    gameaction := ga_victory
+  else if gamemap = 9 then
   begin
-    gameaction := ga_victory;
-    exit;
-  end;
-
-  case gamemap of
-    8:
-      begin
-        gameaction := ga_victory;
-        exit;
-      end;
-    9:
-      begin
-        for i := 0 to MAXPLAYERS - 1 do
-          players[i].didsecret := true;
-      end;
+    for i := 0 to MAXPLAYERS - 1 do
+      players[i].didsecret := true;
   end;
 
   wminfo.didsecret := players[consoleplayer].didsecret;
@@ -1474,9 +1465,12 @@ begin
     memcpy(@wminfo.plyr[i].frags, @players[i].frags, SizeOf(wminfo.plyr[i].frags));
   end;
 
-  gamestate := GS_INTERMISSION;
-  viewactive := false;
-  amstate := am_inactive;
+  if gameaction = ga_nothing then
+  begin
+    gamestate := GS_INTERMISSION;
+    viewactive := false;
+    amstate := am_inactive;
+  end;
 
   if statcopy <> nil then
     memcpy(statcopy, @wminfo, SizeOf(wminfo));
