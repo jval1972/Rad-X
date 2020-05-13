@@ -1152,6 +1152,11 @@ var
       doomsidedefs[1365].textureoffset := 0;
       fix_slide_corridor(427, 431);
     end
+    else if levelname = 'E1M7' then
+    begin
+      result := true;
+      doomsectors[37].ceilingpic := stringtochar8('F_SKY1');
+    end
     else if levelname = 'E1M9' then
     begin
       result := true;
