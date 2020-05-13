@@ -1594,6 +1594,7 @@ type
     // RTL
     nextsoundtime: integer;
     initialized: boolean;
+    playcount: integer;
   end;
   radixprintmessage_p = ^radixprintmessage_t;
 
@@ -1608,19 +1609,22 @@ begin
   begin
     parms.nextsoundtime := -1;
     parms.initialized := true;
+    parms.playcount := 0;
   end;
 
   if IsIntegerInRange(parms.message_id, 0, NUMRADIXMESSAGES - 1) then
-  begin
-    if RX_PlayerMessage(@players[radixplayer], parms.message_id) then
-      if leveltime >= parms.nextsoundtime then
+    if not radixmessages[parms.message_id].autodisable or (parms.playcount = 0) then  // Avoid repeating some messages
+      if RX_PlayerMessage(@players[radixplayer], parms.message_id) then
       begin
-        snd := radixmessages[parms.message_id].radix_snd;
-        if snd >= 0 then
-          S_StartSound(players[radixplayer].messagesoundtarget, radixsounds[snd].name, true);
-        parms.nextsoundtime := leveltime + S_RadixSoundDuration(snd) + 1;
+        inc(parms.playcount);
+        if leveltime >= parms.nextsoundtime then
+        begin
+          snd := radixmessages[parms.message_id].radix_snd;
+          if snd >= 0 then
+            S_StartSound(players[radixplayer].messagesoundtarget, radixsounds[snd].name, true);
+          parms.nextsoundtime := leveltime + S_RadixSoundDuration(snd) + 1;
+        end;
       end;
-  end;
 
   action.suspend := 1;  // JVAL: 20200306 - Disable action
 end;

@@ -56,6 +56,7 @@ type
   radixmessage_t = record
     radix_msg: string;
     radix_snd: integer;
+    autodisable: boolean;
   end;
   Pradixmessage_t = ^radixmessage_t;
 
@@ -70,41 +71,54 @@ uses
 initialization
   radixmessages[0].radix_msg := S_RADIX_MESSAGE_0;
   radixmessages[0].radix_snd := Ord(sfx_SndPrimAhead);
+  radixmessages[0].autodisable := false;
 
   radixmessages[1].radix_msg := S_RADIX_MESSAGE_1;
   radixmessages[1].radix_snd := Ord(sfx_SndSecAhead);
+  radixmessages[1].autodisable := false;
 
   radixmessages[2].radix_msg := S_RADIX_MESSAGE_2;
   radixmessages[2].radix_snd := -1;
+  radixmessages[2].autodisable := false;
 
   radixmessages[3].radix_msg := S_RADIX_MESSAGE_3;
   radixmessages[3].radix_snd := Ord(sfx_SndTargetsAhead);
+  radixmessages[3].autodisable := false;
 
   radixmessages[4].radix_msg := S_RADIX_MESSAGE_4;
   radixmessages[4].radix_snd := Ord(sfx_SndEnemy);
+  radixmessages[4].autodisable := false;
 
   radixmessages[5].radix_msg := S_RADIX_MESSAGE_5;
   radixmessages[5].radix_snd := -1;
+  radixmessages[5].autodisable := false;
 
   radixmessages[6].radix_msg := S_RADIX_MESSAGE_6;
   radixmessages[6].radix_snd := -1;
+  radixmessages[6].autodisable := false;
 
   radixmessages[7].radix_msg := S_RADIX_MESSAGE_7;
   radixmessages[7].radix_snd := -1;
+  radixmessages[7].autodisable := false;
 
   radixmessages[8].radix_msg := S_RADIX_MESSAGE_8;
   radixmessages[8].radix_snd := -1;
+  radixmessages[8].autodisable := false;
 
   radixmessages[9].radix_msg := S_RADIX_MESSAGE_9;
   radixmessages[9].radix_snd := Ord(sfx_SndPrimComplete);
+  radixmessages[9].autodisable := true;
 
   radixmessages[10].radix_msg := S_RADIX_MESSAGE_10;
   radixmessages[10].radix_snd := Ord(sfx_SndPrimInComplete);
+  radixmessages[10].autodisable := false;
 
   radixmessages[11].radix_msg := S_RADIX_MESSAGE_11;
   radixmessages[11].radix_snd := -1;
+  radixmessages[11].autodisable := false;
 
   radixmessages[12].radix_msg := S_RADIX_MESSAGE_12;
   radixmessages[12].radix_snd := Ord(sfx_SndSecComplete);
+  radixmessages[12].autodisable := true;
 
 end.
