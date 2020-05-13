@@ -161,6 +161,9 @@ begin
   actor.flags := actor.flags and not MF_NOGRAVITY;
   actor.flags_ex := actor.flags_ex and not MF_EX_LOWGRAVITY;
   actor.flags2_ex := actor.flags2_ex and not MF2_EX_MEDIUMGRAVITY;
+  if actor.state.params <> nil then
+    if actor.state.params.Count > 0 then
+      actor.gravity := actor.state.params.FixedVal[0];
 end;
 
 //
