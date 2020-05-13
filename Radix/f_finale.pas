@@ -141,7 +141,7 @@ begin
   // Okay - IWAD dependend stuff.
   // This has been changed severly, and
   //  some stuff might have changed in the process.
-  S_ChangeMusic(Ord(mus_victor), true);
+  S_ChangeMusic(Ord(mus_intro), true);
   case gameepisode of
     1:
       begin
@@ -159,7 +159,6 @@ begin
         finaletext := W_TextLumpName('EndEpisode3Text');
       end;
   end;
-  S_StartMusic(Ord(mus_intro));
   finalestage := 0;
   finalecount := 0;
 end;
