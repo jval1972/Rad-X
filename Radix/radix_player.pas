@@ -457,6 +457,11 @@ var
 begin
   radixplayermo := p.mo;
 
+(*  {.$IFDEF DEBUG}
+  if radixplayermo.target <> nil then
+  {.ENDIF}
+    radixplayermo.target := nil;*)
+
   RX_PlayerHistoryNotify(p);
 
   RX_HandleFriendsNearMe;

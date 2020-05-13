@@ -1454,9 +1454,9 @@ begin
   slidemo := mo;
   hitcount := 0;
 
-  if slidemo.player <> nil then
+{  if slidemo.player <> nil then
     if Pplayer_t(slidemo.player).floorslidetics <= 0 then
-      Pplayer_t(slidemo.player).floorslidetics := 1;
+      Pplayer_t(slidemo.player).floorslidetics := 1;}
       
   repeat
     inc(hitcount);
