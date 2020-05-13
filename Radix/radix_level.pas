@@ -329,6 +329,24 @@ begin
   else if lname ='E1M7' then result := 'D30FD83B'
   else if lname ='E1M8' then result := '66256496'
   else if lname ='E1M9' then result := 'CB48D934'
+  else if lname ='E2M1' then result := '5351174c'
+  else if lname ='E2M2' then result := 'a89aa971'
+  else if lname ='E2M3' then result := '5677AFB0'
+  else if lname ='E2M4' then result := '469F7BB3'
+  else if lname ='E2M5' then result := '39d60ba5'
+  else if lname ='E2M6' then result := 'a01810c0'
+  else if lname ='E2M7' then result := '3bd5e170'
+  else if lname ='E2M8' then result := '91ff1a54'
+  else if lname ='E2M9' then result := '0A65F0FA'
+  else if lname ='E3M1' then result := '0f790fdc'
+  else if lname ='E3M2' then result := '51b675e4'
+  else if lname ='E3M3' then result := '0d288e2b'
+  else if lname ='E3M4' then result := '86b0e033'
+  else if lname ='E3M5' then result := 'F948451E'
+  else if lname ='E3M6' then result := '3020CCF0'
+  else if lname ='E3M7' then result := '18f8424c'
+  else if lname ='E3M8' then result := '100FEEFD'
+  else if lname ='E3M9' then result := '6EDAD08A'
   else result := '';
   result := strupper(result);
 end;
@@ -409,7 +427,9 @@ var
   tmpwall: radixwall_t;
   rplayerstarts: packed array[0..RADIXNUMPLAYERSTARTS - 1] of radixplayerstart_t;
   lcrc32: string;
-  islevel_v: integer;
+  islevel_v10: boolean;
+  islevel_v11: boolean;
+  islevel_v2: boolean;
   e3m2special: boolean;
   v1x, v1y, v2x, v2y: integer;
   stubx, stuby: integer;
@@ -1475,16 +1495,11 @@ begin
   ms := TAttachableMemoryStream.Create;
   ms.Attach(rlevel, rsize);
   lcrc32 := strupper(GetBufCRC32(ms.memory, ms.Size));
-  if Radix_v2_levelCRC(levelname) = lcrc32 then
-    islevel_v := 2
-  else if Radix_v10_levelCRC(levelname) = lcrc32 then
-    islevel_v := 10
-  else if Radix_v11_levelCRC(levelname) = lcrc32 then
-    islevel_v := 11
-  else
-    islevel_v := 0;
+  islevel_v10 := Radix_v10_levelCRC(levelname) = lcrc32;
+  islevel_v11 := Radix_v11_levelCRC(levelname) = lcrc32;
+  islevel_v2 := Radix_v2_levelCRC(levelname) = lcrc32;
 
-  e3m2special := (levelname = 'E3M2') and (islevel_v = 2);
+  e3m2special := islevel_v2 and (levelname = 'E3M2');
 
   // Read Radix level header
   ms.Read(header, SizeOf(radixlevelheader_t));
@@ -1601,13 +1616,12 @@ begin
   ms.Seek(header.playerstartoffsets, sFromBeginning);
   ms.Read(rplayerstarts, SizeOf(rplayerstarts));
 
-  if islevel_v = 2 then
+  if islevel_v2 then
     fix_radix_level_v2
-  else if islevel_v = 11 then
+  else if islevel_v11 then
     fix_radix_level_v11
-  else if islevel_v = 10 then
+  else if islevel_v10 then
     fix_radix_level_v10;
-  fix_radix_level_v10;
 
   doomthings := nil;
   doomthingsextra := nil;
@@ -1661,11 +1675,11 @@ begin
       miny := doomvertexes[i].y;
   end;
 
-  if islevel_v = 2 then
+  if islevel_v2 then
     fix_doom_level_v2
-  else if islevel_v = 11 then
+  else if islevel_v11 then
     fix_doom_level_v11
-  else if islevel_v = 10 then
+  else if islevel_v10 then
     fix_doom_level_v10;
 
   // Find mapped sectors
