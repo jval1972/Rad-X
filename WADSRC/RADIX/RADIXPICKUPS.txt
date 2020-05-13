@@ -523,7 +523,7 @@ ACTOR MT_TORPEDOCAPABILITY 1016
     XR16 A 10
     XR16 B 10
     XR16 C 10
-    XR16 D 10
+    XR16 B 10
     Loop
   }
 }
