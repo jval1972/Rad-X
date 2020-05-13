@@ -1610,7 +1610,7 @@ begin
         tri_guy := @triangle_guy;
         num_tri := NUMTRIANGLEGUYLINES;
       end
-      else if t.flags and MF_COUNTKILL <> 0 then
+      else if (t.flags and MF_COUNTKILL <> 0) and (t.health > 0) then
       begin
         color := aprox_yellow;
         tri_guy := @triangle_guy;
