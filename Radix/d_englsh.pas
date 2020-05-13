@@ -200,45 +200,45 @@ const
 //  HU_stuff.C
 //
 
-  HUSTR_E1M1 = 'E1M1: Hangar';
-  HUSTR_E1M2 = 'E1M2: Nuclear Plant';
-  HUSTR_E1M3 = 'E1M3: Toxin Refinery';
-  HUSTR_E1M4 = 'E1M4: Command Control';
-  HUSTR_E1M5 = 'E1M5: Phobos Lab';
-  HUSTR_E1M6 = 'E1M6: Central Processing';
-  HUSTR_E1M7 = 'E1M7: Computer Station';
-  HUSTR_E1M8 = 'E1M8: Phobos Anomaly';
-  HUSTR_E1M9 = 'E1M9: Military Base';
+  HUSTR_E1M1 = 'THETA 2: Mission 1';
+  HUSTR_E1M2 = 'THETA 2: Mission 2';
+  HUSTR_E1M3 = 'THETA 2: Mission 3';
+  HUSTR_E1M4 = 'THETA 2: Mission 4';
+  HUSTR_E1M5 = 'THETA 2: Mission 5';
+  HUSTR_E1M6 = 'THETA 2: Mission 6';
+  HUSTR_E1M7 = 'THETA 2: Mission 7';
+  HUSTR_E1M8 = 'THETA 2: Mission 8';
+  HUSTR_E1M9 = 'THETA 2: Secret Mission';
 
-  HUSTR_E2M1 = 'E2M1: Deimos Anomaly';
-  HUSTR_E2M2 = 'E2M2: Containment Area';
-  HUSTR_E2M3 = 'E2M3: Refinery';
-  HUSTR_E2M4 = 'E2M4: Deimos Lab';
-  HUSTR_E2M5 = 'E2M5: Command Center';
-  HUSTR_E2M6 = 'E2M6: Halls of the Damned';
-  HUSTR_E2M7 = 'E2M7: Spawning Vats';
-  HUSTR_E2M8 = 'E2M8: Tower of Babel';
-  HUSTR_E2M9 = 'E2M9: Fortress of Mystery';
+  HUSTR_E2M1 = 'VENGEANCE: Mission 1';
+  HUSTR_E2M2 = 'VENGEANCE: Mission 2';
+  HUSTR_E2M3 = 'VENGEANCE: Mission 3';
+  HUSTR_E2M4 = 'VENGEANCE: Mission 4';
+  HUSTR_E2M5 = 'VENGEANCE: Mission 5';
+  HUSTR_E2M6 = 'VENGEANCE: Mission 6';
+  HUSTR_E2M7 = 'VENGEANCE: Mission 7';
+  HUSTR_E2M8 = 'VENGEANCE: Mission 8';
+  HUSTR_E2M9 = 'VENGEANCE: Secret Mission';
 
-  HUSTR_E3M1 = 'E3M1: Hell Keep';
-  HUSTR_E3M2 = 'E3M2: Slough of Despair';
-  HUSTR_E3M3 = 'E3M3: Pandemonium';
-  HUSTR_E3M4 = 'E3M4: House of Pain';
-  HUSTR_E3M5 = 'E3M5: Unholy Cathedral';
-  HUSTR_E3M6 = 'E3M6: Mt. Erebus';
-  HUSTR_E3M7 = 'E3M7: Limbo';
-  HUSTR_E3M8 = 'E3M8: Dis';
-  HUSTR_E3M9 = 'E3M9: Warrens';
+  HUSTR_E3M1 = 'THE VOID: Mission 1';
+  HUSTR_E3M2 = 'THE VOID: Mission 2';
+  HUSTR_E3M3 = 'THE VOID: Mission 3';
+  HUSTR_E3M4 = 'THE VOID: Mission 4';
+  HUSTR_E3M5 = 'THE VOID: Mission 5';
+  HUSTR_E3M6 = 'THE VOID: Mission 6';
+  HUSTR_E3M7 = 'THE VOID: Mission 7';
+  HUSTR_E3M8 = 'THE VOID: Mission 8';
+  HUSTR_E3M9 = 'THE VOID: Secret Mission';
 
-  HUSTR_E4M1 = 'E4M1: Hell Beneath';
-  HUSTR_E4M2 = 'E4M2: Perfect Hatred';
-  HUSTR_E4M3 = 'E4M3: Sever The Wicked';
-  HUSTR_E4M4 = 'E4M4: Unruly Evil';
-  HUSTR_E4M5 = 'E4M5: They Will Repent';
-  HUSTR_E4M6 = 'E4M6: Against Thee Wickedly';
-  HUSTR_E4M7 = 'E4M7: And Hell Followed';
-  HUSTR_E4M8 = 'E4M8: Unto The Cruel';
-  HUSTR_E4M9 = 'E4M9: Fear';
+  HUSTR_E4M1 = 'Episode 4: Mission 1';
+  HUSTR_E4M2 = 'Episode 4: Mission 2';
+  HUSTR_E4M3 = 'Episode 4: Mission 3';
+  HUSTR_E4M4 = 'Episode 4: Mission 4';
+  HUSTR_E4M5 = 'Episode 4: Mission 5';
+  HUSTR_E4M6 = 'Episode 4: Mission 6';
+  HUSTR_E4M7 = 'Episode 4: Mission 7';
+  HUSTR_E4M8 = 'Episode 4: Mission 8';
+  HUSTR_E4M9 = 'Episode 4: Secret Mission';
 
   HUSTR_CHATMACRO1 = 'I''m ready to kick butt!';
   HUSTR_CHATMACRO2 = 'I''m OK.';
