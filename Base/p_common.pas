@@ -3799,11 +3799,12 @@ begin
 end;
 
 //
-//  A_MatchTargetZ(const zspeed, threshold)
+//  A_MatchTargetZ(const zspeed, threshold, [maxmomz])
 procedure A_MatchTargetZ(actor: Pmobj_t);
 var
   speed: fixed_t;
   threshold: fixed_t;
+  maxmomz: fixed_t;
 begin
   if actor.target = nil then
     exit;
@@ -3812,6 +3813,7 @@ begin
   begin
     speed := FRACUNIT;
     threshold := FRACUNIT;
+    maxmomz := actor.info.speed;
   end
   else
   begin
@@ -3828,14 +3830,36 @@ begin
       threshold := actor.state.params.FixedVal[1]
     else
       threshold := FRACUNIT;
+
+    if actor.state.params.Count > 2 then
+      maxmomz := actor.state.params.FixedVal[2]
+    else
+      maxmomz := actor.info.speed;
   end;
 
+  if maxmomz < 256 then
+    maxmomz := maxmomz * FRACUNIT;
+
   if actor.z + actor.momz < actor.target.z - threshold then
-    actor.momz := actor.momz + speed
+  begin
+    actor.momz := actor.momz + speed;
+    if actor.momz > maxmomz then
+      actor.momz := maxmomz;
+  end
   else if actor.z + actor.momz > actor.target.z + threshold then
-    actor.momz := actor.momz - speed
+  begin
+    actor.momz := actor.momz - speed;
+    if actor.momz < -maxmomz then
+      actor.momz := -maxmomz;
+  end
   else
+  begin
     actor.momz := actor.momz * 15 div 16;
+    if actor.momz > maxmomz then
+      actor.momz := maxmomz
+    else if actor.momz < -maxmomz then
+      actor.momz := -maxmomz;
+  end;
 
   // JVAL: 20200421 - Do not slam to floor - ceiling
   if actor.z + actor.momz + actor.height >= actor.ceilingz then
