@@ -150,6 +150,9 @@ var
   scorepos: integer;
   x: integer;
 begin
+  if not IsIntegerInRange(epi, 1, 3) or not IsIntegerInRange(map, 1, 9) then
+    exit;
+
   totalscore := 0;
   for x := 1 to 9 do
     totalscore := totalscore + RX_CalculatePlayerSingleScore(@p.scores[epi, x]);
