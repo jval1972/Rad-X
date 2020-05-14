@@ -470,6 +470,17 @@ begin
     result := false;
 end;
 
+function P_UpgradeNeutronSpreader(const p: Pplayer_t): boolean;
+begin
+  if p.neutronspreaderlevel < MAXNEUTRONCANNONLEVEL - 1 then
+  begin
+    inc(p.neutronspreaderlevel);
+    result := true;
+  end
+  else
+    result := false;
+end;
+
 //
 // P_TouchSpecialThing
 //
@@ -486,8 +497,10 @@ var
   oldhealth: integer;
   didbonus: boolean;
   didneutronbonus: boolean;
+  didspreaderbonus: boolean;
   didepcupgrade: integer;
   giveweapon: weapontype_t;
+  hadspreader: boolean;
 begin
   delta := special.z - toucher.z;
 
@@ -552,6 +565,7 @@ begin
     end;
 
     didepcupgrade := 0;
+    hadspreader := player.weaponowned[Ord(wp_plasmaspreader)] <> 0;
     for i := 0 to Ord(NUMWEAPONS) - 1 do
     begin
       if special.weapon_inc[i] then
@@ -604,15 +618,23 @@ begin
     if special.info.doomednum = MT_LEVEL2NEUTRONCANNONS then
       didneutronbonus := P_UpgradeNeutronCannons(player);
 
+    didspreaderbonus := false;
+    if special.info.doomednum = MT_LEVEL1PLASMASPREADER then
+      if hadspreader then // Alreader had plasma spreader
+        didspreaderbonus := P_UpgradeNeutronSpreader(player);
+
     if not didbonus then
       if not didneutronbonus then
-        if didepcupgrade = 0 then
-          exit;
+        if not didspreaderbonus then
+          if didepcupgrade = 0 then
+            exit;
 
     player.lastbonustime := leveltime;
 
     if didneutronbonus then
       player._message := neutroncannoninfo[player.neutroncannonlevel].msg
+    else if didspreaderbonus then
+      player._message := neutronspreaderinfo[player.neutronspreaderlevel].msg
     else if didepcupgrade in [1, 2] then
       player._message := epcupgrademessages[didepcupgrade]
     else

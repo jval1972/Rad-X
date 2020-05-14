@@ -98,6 +98,16 @@ const
     (level: 6; firelevel: 3; msg: 'Level 4 Neutron Cannons Acquired')
   );
 
+  neutronspreaderinfo: array[0..MAXNEUTRONCANNONLEVEL - 1] of neutroncannoninfo_t = (
+    (level: 0; firelevel: 0; msg: ''),
+    (level: 1; firelevel: 1; msg: 'Level 2 Neutron Spreader Acquired'),
+    (level: 2; firelevel: 1; msg: '1 Powerup required for next level'),
+    (level: 3; firelevel: 2; msg: 'Level 3 Neutron Spreader Acquired'),
+    (level: 4; firelevel: 2; msg: '2 Powerups required for next level'),
+    (level: 5; firelevel: 2; msg: '1 Powerup required for next level'),
+    (level: 6; firelevel: 3; msg: 'Level 4 Neutron Spreader Acquired')
+  );
+
   epcupgrademessages: array[1..2] of string[32] = (
     'Enchanced EPC aquired',
     'Super EPC aquired'
@@ -107,6 +117,7 @@ const
   PWF_NEURONCANNON = 1;
   PWF_NUKE = 2;
   PWF_PHASETORPEDO = 4;
+  PWF_NEURONSPREADER = 8;
 
 type
   playerscore_t = record
@@ -180,6 +191,7 @@ type
     radixpowers: array[0..Ord(NUMRADIXPOWERUPS) - 1] of integer;  // JVAL: 20200322 - Radix power ups
     plasmabombs: integer; // JVAL: 20200322 - Number of plasma bombs
     neutroncannonlevel: integer;  // JVAL: 20200324 - Neutro Cannons Level
+    neutronspreaderlevel: integer;  // JVAL: 20200514 - Neutro Spreader Level
     weaponflags: LongWord;  // JVAL: 20200328 - Weapon firing sequence information
     scannerjam: boolean;  // JVAL: 20200324 - When true can not see the radar in hud
     lastbonustime: integer; // JVAL: 20200407 - Last level time the player did bonus

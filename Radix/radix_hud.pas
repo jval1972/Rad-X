@@ -504,7 +504,10 @@ begin
 
   // Draw Neutron Cannons Level
   if hud_player.readyweapon = wp_neutroncannons then
-    V_DrawPatch(60, 200 - STATUSBAR_HEIGHT + 4, SCN_HUD, WeaponNumUse[neutroncannoninfo[hud_player.neutroncannonlevel].firelevel], false);
+    V_DrawPatch(60, 200 - STATUSBAR_HEIGHT + 4, SCN_HUD, WeaponNumUse[neutroncannoninfo[hud_player.neutroncannonlevel].firelevel], false)
+  // Draw Neutron Spreader Level
+  else if hud_player.readyweapon = wp_plasmaspreader then
+    V_DrawPatch(60, 200 - STATUSBAR_HEIGHT + 4, SCN_HUD, WeaponNumUse[neutronspreaderinfo[hud_player.neutronspreaderlevel].firelevel], false);
 
   // Draw weapon indicators
   for i := 0 to 8 do
@@ -625,7 +628,10 @@ begin
 
   // Draw Neutron Cannons Level
   if hud_player.readyweapon = wp_neutroncannons then
-    V_DrawPatch(78, 142, SCN_HUD, WeaponNumUse[neutroncannoninfo[hud_player.neutroncannonlevel].firelevel], false);
+    V_DrawPatch(78, 142, SCN_HUD, WeaponNumUse[neutroncannoninfo[hud_player.neutroncannonlevel].firelevel], false)
+  // Draw Neutron Spreader Level
+  else if hud_player.readyweapon = wp_plasmaspreader then
+    V_DrawPatch(78, 142, SCN_HUD, WeaponNumUse[neutronspreaderinfo[hud_player.neutronspreaderlevel].firelevel], false);
 
   // Draw weapon indicators
   for i := 0 to 8 do

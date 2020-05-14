@@ -584,6 +584,17 @@ var
   radixplasmaspreadright_id: integer = -1;
 
 procedure A_FireRadixPlasmaSpread(player: Pplayer_t; psp: Ppspdef_t);
+
+  procedure spawn_spreader(id: integer; offs, z: fixed_t);
+  begin
+    P_SpawnPlayerMissileOffsZ(
+      player.mo, id,
+      offs, z
+    );
+  end;
+
+var
+  slevel: integer;
 begin
   if not RX_CheckNextRefire(player) then
     exit;
@@ -601,18 +612,55 @@ begin
   if radixplasmaspreadright_id < 0 then
     radixplasmaspreadright_id := Info_GetMobjNumForName('MT_RADIXPLASMASPREADRIGHT');
 
-  RX_DrainPlasmaEnergy(player, 2);
+  // JVAL: Decide the neutron cannon level
+  slevel := neutronspreaderinfo[player.neutronspreaderlevel].firelevel;
+  if slevel > 0 then
+    if player.energy < 2 * PLASMAENERGYMIN then
+      slevel := 0;  // JVAL: 20200514 -> When low energy only fire the base level
 
-  P_SpawnPlayerMissileOffsZ(
-    player.mo, radixplasmaspreadleft_id,
-      -WEAPON_SIDE_OFFSET, -8 * FRACUNIT + WEAPON_Z_OFFSET
-  );
+  RX_DrainPlasmaEnergy(player, slevel);
 
-  P_SpawnPlayerMissileOffsZ(
-    player.mo, radixplasmaspreadright_id,
-      WEAPON_SIDE_OFFSET, -8 * FRACUNIT + WEAPON_Z_OFFSET
-  );
+  case slevel of
+    0:
+      begin
+        if player.weaponflags and PWF_NEURONSPREADER <> 0 then
+        begin
+          spawn_spreader(radixplasmaspreadleft_id, -WEAPON_SIDE_OFFSET, -8 * FRACUNIT + WEAPON_Z_OFFSET);
+          player.weaponflags := player.weaponflags and not PWF_NEURONSPREADER;
+        end
+        else
+        begin
+          spawn_spreader(radixplasmaspreadright_id, WEAPON_SIDE_OFFSET, -8 * FRACUNIT + WEAPON_Z_OFFSET);
+          player.weaponflags := player.weaponflags or PWF_NEURONSPREADER;
+        end;
+      end;
+    1:
+      begin
+        spawn_spreader(radixplasmaspreadleft_id, -WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
+        spawn_spreader(radixplasmaspreadright_id, WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
+      end;
+    2:
+      begin
+        spawn_spreader(radixplasmaspreadleft_id, -WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
+        spawn_spreader(radixplasmaspreadright_id, WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
 
+        if player.weaponflags and PWF_NEURONSPREADER <> 0 then
+        begin
+          spawn_spreader(radixplasmaspreadright_id, -WEAPON_SIDE_OFFSET, 32 * FRACUNIT + WEAPON_Z_OFFSET);
+          player.weaponflags := player.weaponflags and not PWF_NEURONSPREADER;
+        end
+        else
+        begin
+          spawn_spreader(radixplasmaspreadleft_id, WEAPON_SIDE_OFFSET, 32 * FRACUNIT + WEAPON_Z_OFFSET);
+          player.weaponflags := player.weaponflags or PWF_NEURONSPREADER;
+        end;
+      end;
+  else
+    spawn_spreader(radixplasmaspreadleft_id, WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
+    spawn_spreader(radixplasmaspreadright_id, WEAPON_SIDE_OFFSET, 32 * FRACUNIT + WEAPON_Z_OFFSET);
+    spawn_spreader(radixplasmaspreadright_id, -WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
+    spawn_spreader(radixplasmaspreadleft_id, -WEAPON_SIDE_OFFSET, 32 * FRACUNIT + WEAPON_Z_OFFSET);
+  end;
 end;
 
 
