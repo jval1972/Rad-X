@@ -59,6 +59,7 @@ const
   RSF_CEILINGSKY = 16;
   RSF_HIDDEN = 32;
   RSF_FLOORSKY = 64;
+  RSF_RADIXSECTOR = $20000000;  // JVAL: 20200514 - Mark Radix Sector
 
 // Wall Flags
 const
@@ -616,6 +617,7 @@ var
   procedure AddSectorToWAD(const ss: Pradixsector_t);
   var
     dsec: Pmapsector_t;
+    flags: integer;
   begin
     realloc(pointer(doomsectors), numdoomsectors * SizeOf(mapsector_t), (numdoomsectors  + 1) * SizeOf(mapsector_t));
     //Create classic map
@@ -641,7 +643,8 @@ var
     doommapscript.Add('xadd ' + itoa(doomsectorsextra[numdoomsectors].xadd));
     doommapscript.Add('ymul ' + itoa(doomsectorsextra[numdoomsectors].ymul));
     doommapscript.Add('yadd ' + itoa(doomsectorsextra[numdoomsectors].yadd));
-    doommapscript.Add('sectorflags ' + itoa(ss.flags));
+    flags := ss.flags;
+    doommapscript.Add('sectorflags ' + itoa(flags or RSF_RADIXSECTOR));
 
     if ss.flags and RSF_FLOORSLOPE <> 0 then
       doommapscript.Add('floorslope ' + itoa(ss.fa) + ' ' + itoa(ss.fb) + ' ' + itoa(ss.fc) + ' ' + itoa(ss.fd));

@@ -261,7 +261,10 @@ begin
 
   // Keep def_pal AFTER RX_CreateDoomPalette call
   for i := 0 to 767 do
+  begin
     def_pal[i] := pal[i];
+    def_radix_palette[i] := pal[i];
+  end;
   for i := 0 to 255 do
   begin
     r := def_pal[3 * i];
@@ -1493,6 +1496,7 @@ var
   x, y, z: integer;
   p: pointer;
   size: integer;
+  ch: char;
 
   function remove_underline(const s: string): string;
   var
@@ -2170,6 +2174,8 @@ begin
 
   // 'PLAY' sprite
   MakeRotatingSprite8('NetRadixPlane', _DOOM_THING_2_RADIX_ + 5, 1);
+  for ch := 'B' to 'W' do
+    MakeRotatingSprite8('NetRadixPlane', _DOOM_THING_2_RADIX_ + 5, 1, nil, -255, -255, true, true, ch);
 
   bmp := TRadixBitmap.Create;
 

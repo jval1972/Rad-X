@@ -87,6 +87,7 @@ uses
   m_rnd,
   r_defs,
   r_main,
+  radix_level,
   radix_map_extra,
   radix_messages,
   radix_objects,
@@ -496,6 +497,9 @@ begin
     end;
 end;
 
+const
+  DOOMLEVELRADIUS = 16 * FRACUNIT;
+
 procedure RX_PlayerThink(p: Pplayer_t);
 var
   new_health: integer;
@@ -506,6 +510,11 @@ var
   mo: Pmobj_t;
 begin
   radixplayermo := p.mo;
+
+  if Psubsector_t(radixplayermo).sector.radixflags and RSF_RADIXSECTOR = 0 then
+    radixplayermo.radius := DOOMLEVELRADIUS
+  else
+    radixplayermo.radius := mobjinfo[Ord(MT_PLAYER)].radius;
 
   RX_PlayerHistoryNotify(p);
 
@@ -657,8 +666,9 @@ begin
   pmo := p.mo;
   if p.planehittics <= 0 then
   begin
-    if pmo.flags3_ex and MF3_EX_NOSOUND = 0 then
-      S_AmbientSound(pmo.x, pmo.y, 'radix/SndScrape');
+    if Psubsector_t(pmo.subsector).sector.radixflags and RSF_RADIXSECTOR <> 0 then
+      if pmo.flags3_ex and MF3_EX_NOSOUND = 0 then
+        S_AmbientSound(pmo.x, pmo.y, 'radix/SndScrape');
     p.planehittics := S_RadixSoundDuration(Ord(sfx_SndScrape));
   end;
 

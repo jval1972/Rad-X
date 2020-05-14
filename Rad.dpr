@@ -391,7 +391,9 @@ uses
   radix_score in 'Radix\radix_score.pas',
   radix_forcefield in 'Radix\radix_forcefield.pas',
   radix_teleport in 'Radix\radix_teleport.pas',
-  t_radix32 in 'TEXLIB\t_radix32.pas';
+  t_radix32 in 'TEXLIB\t_radix32.pas',
+  w_wadreader in 'Base\w_wadreader.pas',
+  radix_doom_wad in 'Radix\radix_doom_wad.pas';
 
 var
   Saved8087CW: Word;

@@ -220,6 +220,7 @@ uses
   i_system,
   radix_alias,
   radix_defs,
+  radix_doom_wad,
   radix_xlat_wad,
   w_pak,
   z_zone;
@@ -386,6 +387,7 @@ var
   iswad: boolean;
   c: char;
   isradixdat: boolean;
+  ispalettedat: boolean;
   radixheader: radixheader_t;
   s: string;
 begin
@@ -418,6 +420,7 @@ begin
   ext := strupper(fext(filename));
 
   isradixdat := false;
+  ispalettedat := false;
   if ext = '.DAT' then
   begin
     // Check RADIX.DAT header
@@ -438,6 +441,21 @@ begin
     Radix2Wad(filename, 'radix.wad');
     {$ENDIF}
     handle.Seek(0, sFromBeginning);
+  end
+  else if ext = '.WAD' then
+  begin
+    ispalettedat := RX_IsPaletteWAD(filename);
+    if ispalettedat then
+    begin
+      handle.Free;
+      handle := TDMemoryStream.Create;
+      // xlat WAD with palette
+      Wad2RadixPaletteStream(filename, handle);
+      {$IFDEF DEBUG}
+      Wad2RadixPaletteWAD(filename, filename + '_palette.wad');
+      {$ENDIF}
+      handle.Seek(0, sFromBeginning);
+    end;
   end;
 
   result := handle;
@@ -458,7 +476,7 @@ begin
     handle.Seek(0, sFromBeginning);
   end;
 
-  if not iswad and not isradixdat and (ext <> '.WAD') and (ext <> '.SWD') {$IFDEF OPENGL} and (ext <> '.GWA'){$ENDIF} then
+  if not iswad and not isradixdat and not ispalettedat and (ext <> '.WAD') and (ext <> '.SWD') {$IFDEF OPENGL} and (ext <> '.GWA'){$ENDIF} then
   begin
     // single lump file
     len := 0;
@@ -533,7 +551,7 @@ var
   lumphit: integer;
   ind_A: array[0..IND_MAX - 1] of integer;
 
-  procedure _check_indicator;
+  procedure _check_indicator_desc;
   var
     x: integer;
   begin
@@ -564,7 +582,7 @@ begin
   lumphit := 0;
   for i := numlumps - 1 downto 0 do
   begin
-    _check_indicator;
+    _check_indicator_desc;
     lumpinfo[i].flags := 0;
     for j := 0 to IND_MAX - 1 do
       if ind_A[j] > 0 then
@@ -960,22 +978,27 @@ begin
 
   // JVAL
   // Hash hit factor is at about 80% for standard WADs, good
-  hash := djb2Hash(name8.s);
-  if (lumphash[hash].name.x[0] = v1) and
-     (lumphash[hash].name.x[1] = v2) then
-    if (flags = 0) or (lumpinfo[lumphash[hash].position].flags and flags <> 0) then
+  if lumphash <> nil then
+  begin
+    hash := djb2Hash(name8.s);
+    if (lumphash[hash].name.x[0] = v1) and
+       (lumphash[hash].name.x[1] = v2) then
+      if (flags = 0) or (lumpinfo[lumphash[hash].position].flags and flags <> 0) then
+      begin
+        result := lumphash[hash].position;
+        exit;
+      end;
+
+    // JVAL: If hash position is -1 then the lump does not exist!
+    result := lumphash[hash].position;
+    if result = -1 then
     begin
-      result := lumphash[hash].position;
+      result := RX_FindAliasLump(name);
       exit;
     end;
-
-  // JVAL: If hash position is -1 then the lump does not exist!
-  result := lumphash[hash].position;
-  if result = -1 then
-  begin
-    result := RX_FindAliasLump(name);
-    exit;
-  end;
+  end
+  else
+    result := numlumps;
 
   // scan backwards so patch lump files take precedence
   lfirst := @lumpinfo[0];
