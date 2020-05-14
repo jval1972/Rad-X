@@ -571,10 +571,10 @@ begin
       if special.weapon_inc[i] then
       begin
         giveweapon := weapontype_t(i);
-        // JVAL: 20200507 - STANDARDEPC pickup upgrades to wp_enchancedepc or wp_superepc in registered
-        if (gamemode <> shareware) and (giveweapon = wp_standardepc) then
+        // JVAL: 20200514 - STANDARDEPC pickup upgrades to wp_superepc in 2nd and third episodes
+        if giveweapon = wp_standardepc then
         begin
-          if player.weaponowned[Ord(wp_enchancedepc)] <> 0 then
+          if (player.weaponowned[Ord(wp_enchancedepc)] <> 0) and (gameepisode <> 1) then
             giveweapon := wp_superepc
           else if player.weaponowned[Ord(wp_standardepc)] <> 0 then
             giveweapon := wp_enchancedepc
