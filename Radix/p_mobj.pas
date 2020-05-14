@@ -1670,7 +1670,7 @@ begin
   p.mo := result;
   p.playerstate := PST_LIVE;
   p.refire := 0;
-  p._message := '';
+  p._message := RX_StartUpMessage(gameepisode, gamemap); // JVAL: 20200514 - Startup player messages
   p.damagecount := 0;
   p.bonuscount := 0;
   p.extralight := 0;

@@ -49,6 +49,9 @@ const
   S_RADIX_MESSAGE_11 = 'Kill all Skyfires to continue';
   S_RADIX_MESSAGE_12 = 'Secondary Objective Completed';
 
+  S_RADIX_STARTUP_MESSAGE_1 = 'PRESS F1 FOR HELP. F12 FOR MISSION OBJECTIVES';
+  S_RADIX_STARTUP_MESSAGE_2 = 'PRESS F12 FOR MISSION OBJECTIVES';
+
 const
   NUMRADIXMESSAGES = 13;
 
@@ -63,10 +66,39 @@ type
 var
   radixmessages: array[0..NUMRADIXMESSAGES - 1] of radixmessage_t;
 
+function RX_StartUpMessage(const episode, map: integer): string;
+
 implementation
 
 uses
   radix_sounds;
+
+function RX_StartUpMessage(const episode, map: integer): string;
+begin
+  if episode = 1 then
+  begin
+    if map < 5 then
+      result := S_RADIX_STARTUP_MESSAGE_1
+    else
+      result := S_RADIX_STARTUP_MESSAGE_2;
+  end
+  else if episode = 2 then
+  begin
+    if map < 4 then
+      result := S_RADIX_STARTUP_MESSAGE_1
+    else
+      result := S_RADIX_STARTUP_MESSAGE_2;
+  end
+  else if episode = 3 then
+  begin
+    if map = 1 then
+      result := S_RADIX_STARTUP_MESSAGE_1
+    else
+      result := S_RADIX_STARTUP_MESSAGE_2;
+  end
+  else
+    result := S_RADIX_STARTUP_MESSAGE_2;
+end;
 
 initialization
   radixmessages[0].radix_msg := S_RADIX_MESSAGE_0;
