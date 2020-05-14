@@ -28,6 +28,8 @@
 //  Site: https://sourceforge.net/projects/rad-x/
 //------------------------------------------------------------------------------
 
+{$I RAD.inc}
+
 unit w_wadwriter;
 
 interface

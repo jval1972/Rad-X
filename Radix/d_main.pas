@@ -1847,7 +1847,7 @@ begin
     end;
 
   printf('W_Init: Init WADfiles.'#13#10);
-  if (W_InitMultipleFiles(wadfiles) = 0) or (W_CheckNumForName('playpal') = -1) then
+  if (W_InitMultipleFiles(wadfiles) = 0) or (W_CheckNumForName(PALETTE_LUMP_NAME) = -1) then
   begin
     if fexists(D_FileInDoomPath('CHEX.WAD')) then
       D_AddFile(D_FileInDoomPath('CHEX.WAD'))
@@ -1862,7 +1862,7 @@ begin
     else if fexists(D_FileInDoomPath('FREEDOOM.WAD')) then
       D_AddFile(D_FileInDoomPath('FREEDOOM.WAD'));
 
-    if (W_InitMultipleFiles(wadfiles) = 0) or (W_CheckNumForName('playpal') = -1) then
+    if (W_InitMultipleFiles(wadfiles) = 0) or (W_CheckNumForName(PALETTE_LUMP_NAME) = -1) then
     begin
     // JVAL
     //  If none wadfile has found as far,

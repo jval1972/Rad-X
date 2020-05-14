@@ -96,7 +96,7 @@ var
   screendimentions: array[SCN_FG..SCN_ST] of screendimention_t;
 
 const
-  PLAYPAL = 'PLAYPAL';
+  PALETTE_LUMP_NAME = 'PALETTE';
 
 function V_ReadPalette(tag: integer): PByteArray;
 
@@ -116,7 +116,7 @@ const
 function V_ReadPalette(tag: integer): PByteArray;
 begin
   if playpalnum < 0 then
-    playpalnum := W_GetNumForName(PLAYPAL);
+    playpalnum := W_GetNumForName(PALETTE_LUMP_NAME);
   result := PByteArray(W_CacheLumpNum(playpalnum, tag));
 end;
 

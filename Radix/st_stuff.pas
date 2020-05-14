@@ -1007,7 +1007,7 @@ end;
 
 procedure ST_LoadData;
 begin
-  lu_palette := W_GetNumForName(PLAYPAL);
+  lu_palette := W_GetNumForName(PALETTE_LUMP_NAME);
   ST_LoadGraphics;
 end;
 

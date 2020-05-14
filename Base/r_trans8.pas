@@ -89,6 +89,7 @@ implementation
 uses
   r_hires,
   v_video,
+  v_data,
   w_wad,
   z_zone;
 
@@ -148,7 +149,7 @@ begin
     exit;
 
 // Expand WAD palette to longword values
-  lump := W_GetNumForName('PLAYPAL');
+  lump := W_GetNumForName(PALETTE_LUMP_NAME);
   numapproxcolorstructitem := W_LumpLength(lump) div 768;
   approxcolorstruct := mallocz(numapproxcolorstructitem * SizeOf(approxcolorstructitem_t));
 

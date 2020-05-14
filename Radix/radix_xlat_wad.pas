@@ -28,6 +28,8 @@
 //  Site: https://sourceforge.net/projects/rad-x/
 //------------------------------------------------------------------------------
 
+{$I RAD.inc}
+
 unit radix_xlat_wad;
 
 interface
@@ -56,6 +58,7 @@ uses
   radix_sounds,
   r_defs,
   v_video,
+  v_data,
   w_pak,
   w_wadwriter,
   w_wad;
@@ -270,7 +273,7 @@ begin
     def_palL[i] := (r shl 16) + (g shl 8) + (b);
   end;
 
-  wadwriter.AddData('PLAYPAL', @playpal, SizeOf(playpal));
+  wadwriter.AddData(PALETTE_LUMP_NAME, @playpal, SizeOf(playpal));
   wadwriter.AddData('COLORMAP', @colormap, SizeOf(colormap));
   memfree(p, size);
 end;
