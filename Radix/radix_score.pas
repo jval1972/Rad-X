@@ -97,7 +97,7 @@ var
   i, j: integer;
   item: scrotetableitem_t;
 begin
-  for i := NUMSCORES - 1 downto 0 do
+  for i := 0 to NUMSCORES - 1 do
     for j := 0 to NUMSCORES - 1 - i do
       if scoretable[j].rating < scoretable[j + 1].rating then
       begin
