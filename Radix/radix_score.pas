@@ -238,7 +238,7 @@ begin
       RX_CalcScoreSha1(x);
     BlockWrite(handle, scoretable, size, count);
     if count <> size then
-      I_Warning('RX_LoadScoreTable(): Wrote %d bytes instead of %d bytes'#13#10, [count, size]);
+      I_Warning('RX_SaveScoreTable(): Wrote %d bytes instead of %d bytes'#13#10, [count, size]);
     close(handle);
   end;
 end;
