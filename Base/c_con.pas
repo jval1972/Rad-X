@@ -762,8 +762,7 @@ begin
     CST_UP,
     CST_RAISE:
       begin
-        // JVAL: 20200514 - Default console key for English (UK) keyboards
-        if (c = Ord('~')) or (c = Ord('¬')) then
+        if c = Ord('~') then
         begin
           if ev._type = ev_keydown then
           begin
