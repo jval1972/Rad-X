@@ -446,6 +446,56 @@ begin
       P_BlockThingsIterator(x, y, RIT_HandleFriendsNearMe);
 end;
 
+var
+  attackingenemynear: boolean;
+
+function RIT_AttackingEnemyNearMe(mo: Pmobj_t): boolean;
+begin
+  result := true;
+
+  if mo.flags2_ex and MF2_EX_FRIEND <> 0 then
+    exit;
+
+  if mo.health <= 0 then
+    exit;
+
+  if mo.flags and MF_COUNTKILL = 0 then
+    exit;
+
+  if (mo.info.missilestate > 0) or (mo.info.meleestate > 0) then
+    if P_CheckSight(mo, radixplayermo) then
+    begin
+      result := false;
+      attackingenemynear := true;
+    end;
+end;
+
+procedure RX_AttackingEnemiesNearMe;
+const
+  ATTACHINGWARNRANGE = 2048 * FRACUNIT;
+var
+  x: integer;
+  y: integer;
+  xl: integer;
+  xh: integer;
+  yl: integer;
+  yh: integer;
+begin
+  yh := MapBlockIntY(int64(viewy) + ATTACHINGWARNRANGE - int64(bmaporgy));
+  yl := MapBlockIntY(int64(viewy) - ATTACHINGWARNRANGE - int64(bmaporgy));
+  xh := MapBlockIntX(int64(viewx) + ATTACHINGWARNRANGE - int64(bmaporgx));
+  xl := MapBlockIntX(int64(viewx) - ATTACHINGWARNRANGE - int64(bmaporgx));
+
+  attackingenemynear := false;
+  for y := yl to yh do
+    for x := xl to xh do
+    begin
+      P_BlockThingsIterator(x, y, RIT_AttackingEnemyNearMe);
+      if attackingenemynear then
+        exit;
+    end;
+end;
+
 procedure RX_PlayerThink(p: Pplayer_t);
 var
   new_health: integer;
@@ -456,11 +506,6 @@ var
   mo: Pmobj_t;
 begin
   radixplayermo := p.mo;
-
-(*  {.$IFDEF DEBUG}
-  if radixplayermo.target <> nil then
-  {.ENDIF}
-    radixplayermo.target := nil;*)
 
   RX_PlayerHistoryNotify(p);
 
@@ -524,6 +569,20 @@ begin
   end;
 
   p.threat := p.health < p.mo.info.spawnhealth div 4;
+  // JVAL: 20200514 - Siren when on low health and enemies near
+  if p.threat then
+  begin
+    if leveltime mod (S_RadixSoundDuration(Ord(sfx_SndSiren)) + 1) = 0 then
+    begin
+      RX_AttackingEnemiesNearMe;
+      if attackingenemynear then
+        S_AmbientSound(
+          radixplayermo.x,
+          radixplayermo.y,
+          radixsounds[Ord(sfx_SndSiren)].name
+        );
+    end;
+  end;
 
   if p.energyweaponfiretics > 0 then
     dec(p.energyweaponfiretics);  // JVAL: 20201204
