@@ -274,7 +274,7 @@ begin
   end;
 
   wadwriter.AddData(PALETTE_LUMP_NAME, @playpal, SizeOf(playpal));
-  wadwriter.AddData('COLORMAP', @colormap, SizeOf(colormap));
+  wadwriter.AddData(COLOMAP_LUMP_NAME, @colormap, SizeOf(colormap));
   memfree(p, size);
 end;
 

@@ -1081,7 +1081,7 @@ begin
 
   // Load in the light tables,
   //  256 byte align tables.
-  lump := W_GetNumForName('COLORMAP');
+  lump := W_GetNumForName(COLOMAP_LUMP_NAME);
   length := W_LumpLength(lump);
   def_colormaps := Z_Malloc(length, PU_STATIC, nil);
   colormaps32 := Z_Malloc(length * SizeOf(LongWord), PU_STATIC, nil);

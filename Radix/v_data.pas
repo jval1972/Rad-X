@@ -97,6 +97,7 @@ var
 
 const
   PALETTE_LUMP_NAME = 'PALETTE';
+  COLOMAP_LUMP_NAME = 'SHADES';
 
 function V_ReadPalette(tag: integer): PByteArray;
 
