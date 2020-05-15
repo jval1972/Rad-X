@@ -96,6 +96,7 @@ uses
   i_io,
   i_system,
   p_tick,
+  radix_xlat_wad,
   r_defs,
   r_main,
   v_data,
@@ -331,6 +332,29 @@ begin
 end;
 
 
+procedure Cmd_CreateEditingWAD(const parm1, parm2: string);
+begin
+  if parm1 = '' then
+  begin
+    printf('Please specify the input DAT file'#13#10);
+    exit;
+  end;
+
+  if not fexists(parm1) then
+  begin
+    I_Warning('Cmd_CreateEditingWAD(): Input file "%s" not found!'#13#10, [parm1]);
+    exit;
+  end;
+
+  if parm2 = '' then
+  begin
+    printf('Please specify the output WAD file'#13#10);
+    exit;
+  end;
+
+  Radix2WAD_Edit(parm1, parm2);
+end;
+
 //
 // C_Init
 //
@@ -386,6 +410,7 @@ begin
   C_AddCmd('cmdline', @M_CmdShowCmdline);
   C_AddCmd('use', @Cmd_Use);
   C_AddCmd('freeze', @Cmd_Freeze);
+  C_AddCmd('createeditingwad', @Cmd_CreateEditingWAD);
   C_RegisterUtilityCommands;
   W_RegisterUtilityCommands;
 end;

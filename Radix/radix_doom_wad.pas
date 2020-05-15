@@ -58,8 +58,7 @@ uses
   w_wadreader,
   z_zone;
 
-const
-  DOOM_PALETTE_NAME = 'PLAYPAL';
+const  
   DOOM_END_NAME = 'ENDOOM';
 
 type

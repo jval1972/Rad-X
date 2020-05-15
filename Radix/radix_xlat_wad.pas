@@ -37,9 +37,13 @@ interface
 uses
   d_delphi;
 
-procedure Radix2WAD(const fin, fout: string);
+procedure Radix2WAD_Game(const fin, fout: string);
 
-procedure Radix2Stream(const fin: string; const strm: TDStream);
+procedure Radix2Stream_Game(const fin: string; const strm: TDStream);
+
+procedure Radix2WAD_Edit(const fin, fout: string);
+
+procedure Radix2Stream_Edit(const fin: string; const strm: TDStream);
 
 procedure Radix2CSV(const fin: string; const pathout: string);
 
@@ -92,7 +96,7 @@ type
     procedure Clear;
     function ReadHeader: boolean;
     function ReadDirectory: boolean;
-    function GeneratePalette: boolean;
+    function GeneratePalette(const pname, cname: string): boolean;
     function GenerateTranslationTables: boolean;
     function GenerateTextures(const pnames, texture1: string): boolean;
     function GenerateLevels: boolean;
@@ -117,7 +121,8 @@ type
   public
     constructor Create; virtual;
     destructor Destroy; override;
-    procedure Convert(const fname: string);
+    procedure Convert_Game(const fname: string);
+    procedure Convert_Edit(const fname: string);
     procedure SaveToFile(const fname: string);
     procedure SaveToSream(const strm: TDStream);
   end;
@@ -243,7 +248,7 @@ begin
   result := f.Read(lumps^, numlumps * SizeOf(radixlump_t)) = numlumps * SizeOf(radixlump_t);
 end;
 
-function TRadixToWADConverter.GeneratePalette: boolean;
+function TRadixToWADConverter.GeneratePalette(const pname, cname: string): boolean;
 var
   p: pointer;
   pal: PByteArray;
@@ -276,8 +281,8 @@ begin
     def_palL[i] := (r shl 16) + (g shl 8) + (b);
   end;
 
-  wadwriter.AddData(PALETTE_LUMP_NAME, @playpal, SizeOf(playpal));
-  wadwriter.AddData(COLOMAP_LUMP_NAME, @colormap, SizeOf(colormap));
+  wadwriter.AddData(pname, @playpal, SizeOf(playpal));
+  wadwriter.AddData(cname, @colormap, SizeOf(colormap));
   memfree(p, size);
 end;
 
@@ -2478,7 +2483,7 @@ begin
   wadwriter.AddString(S_RADIXINF, aliases.Text);
 end;
 
-procedure TRadixToWADConverter.Convert(const fname: string);
+procedure TRadixToWADConverter.Convert_Game(const fname: string);
 begin
   if not fexists(fname) then
     exit;
@@ -2493,7 +2498,7 @@ begin
 
   ReadHeader;
   ReadDirectory;
-  GeneratePalette;
+  GeneratePalette(PALETTE_LUMP_NAME, COLOMAP_LUMP_NAME);
   GenerateTranslationTables;
   GenerateTextures('PNAMES0', 'TEXTURE0');
   GenerateLevels;
@@ -2515,6 +2520,33 @@ begin
   ffilename := '';
 end;
 
+procedure TRadixToWADConverter.Convert_Edit(const fname: string);
+begin
+  if not fexists(fname) then
+    exit;
+
+  Clear;
+
+  ffilename := fname;
+  f := TFile.Create(fname, fOpenReadOnly);
+  wadwriter := TWadWriter.Create;
+  aliases := TDStringList.Create;
+  textures := TDStringList.Create;
+
+  ReadHeader;
+  ReadDirectory;
+  GeneratePalette(DOOM_PALETTE_NAME, DOOM_COLORMAP_NAME);
+  GenerateTextures('PNAMES', 'TEXTURE1');
+  GenerateFlats;
+  GenerateSprites;
+  GenerateMusic;
+  GenerateSounds;
+  GenerateMissionText;
+  GenerateEndText;
+
+  ffilename := '';
+end;
+
 procedure TRadixToWADConverter.SaveToFile(const fname: string);
 begin
   wadwriter.SaveToFile(fname);
@@ -2525,26 +2557,52 @@ begin
   wadwriter.SaveToStream(strm);
 end;
 
-procedure Radix2WAD(const fin, fout: string);
+procedure Radix2WAD_Game(const fin, fout: string);
 var
   cnv: TRadixToWADConverter;
 begin
   cnv := TRadixToWADConverter.Create;
   try
-    cnv.Convert(fin);
+    cnv.Convert_Game(fin);
     cnv.SaveToFile(fout);
   finally
     cnv.Free;
   end;
 end;
 
-procedure Radix2Stream(const fin: string; const strm: TDStream);
+procedure Radix2Stream_Game(const fin: string; const strm: TDStream);
 var
   cnv: TRadixToWADConverter;
 begin
   cnv := TRadixToWADConverter.Create;
   try
-    cnv.Convert(fin);
+    cnv.Convert_Game(fin);
+    cnv.SaveToSream(strm);
+  finally
+    cnv.Free;
+  end;
+end;
+
+procedure Radix2WAD_Edit(const fin, fout: string);
+var
+  cnv: TRadixToWADConverter;
+begin
+  cnv := TRadixToWADConverter.Create;
+  try
+    cnv.Convert_Edit(fin);
+    cnv.SaveToFile(fout);
+  finally
+    cnv.Free;
+  end;
+end;
+
+procedure Radix2Stream_Edit(const fin: string; const strm: TDStream);
+var
+  cnv: TRadixToWADConverter;
+begin
+  cnv := TRadixToWADConverter.Create;
+  try
+    cnv.Convert_Edit(fin);
     cnv.SaveToSream(strm);
   finally
     cnv.Free;
@@ -2557,7 +2615,7 @@ var
 begin
   cnv := TRadixToWADConverter.Create;
   try
-    cnv.Convert(fin);
+    cnv.Convert_Game(fin);
     cnv.GenerateCSVs(pathout);
   finally
     cnv.Free;

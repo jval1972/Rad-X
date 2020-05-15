@@ -99,6 +99,10 @@ const
   PALETTE_LUMP_NAME = 'PALETTE';
   COLOMAP_LUMP_NAME = 'SHADES';
 
+const
+  DOOM_PALETTE_NAME = 'PLAYPAL';
+  DOOM_COLORMAP_NAME = 'COLORMAP';
+
 function V_ReadPalette(tag: integer): PByteArray;
 
 var

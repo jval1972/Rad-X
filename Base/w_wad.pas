@@ -436,9 +436,9 @@ begin
     handle.Free;
     // xlat radix data
     handle := TDMemoryStream.Create;
-    Radix2Stream(filename, handle);
+    Radix2Stream_Game(filename, handle);
     {$IFDEF DEBUG}
-    Radix2Wad(filename, 'radix.wad');
+    Radix2Wad_Game(filename, 'radix.wad');
     {$ENDIF}
     handle.Seek(0, sFromBeginning);
   end
