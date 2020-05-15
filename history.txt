@@ -1,3 +1,7 @@
+20200515
+--------
+Can load levels from doom.wad
+
 20200417
 --------
 Assets in RAD.pk3
