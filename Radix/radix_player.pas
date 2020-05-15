@@ -668,7 +668,9 @@ begin
   begin
     if pmo.flags3_ex and MF3_EX_NOSOUND = 0 then
       if Psubsector_t(pmo.subsector).sector.radixflags and RSF_RADIXSECTOR <> 0 then
-        S_AmbientSound(pmo.x, pmo.y, 'radix/SndScrape');
+        S_AmbientSound(pmo.x, pmo.y, 'radix/SndScrape')
+      else
+        S_AmbientSound(pmo.x, pmo.y, 'radix/SndPlaneHit');
     p.planehittics := S_RadixSoundDuration(Ord(sfx_SndScrape));
   end;
 
@@ -765,7 +767,9 @@ begin
         begin
           if p.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
             if Psubsector_t(p.mo.subsector).sector.radixflags and RSF_RADIXSECTOR <> 0 then
-              S_AmbientSound(p.mo.x, p.mo.y, 'radix/SndScrape');
+              S_AmbientSound(p.mo.x, p.mo.y, 'radix/SndScrape')
+            else
+              S_AmbientSound(p.mo.x, p.mo.y, 'radix/SndPlaneHit');
           p.planehittics := S_RadixSoundDuration(Ord(sfx_SndScrape));
           inc(p.wallhits, 2 * TICRATE);  // JVAL: 20200506 - Big penalty for bad pilot
           _spawn_burner_smoke_floor(-1, 16);  // Spawn more smoke to floor
@@ -775,7 +779,9 @@ begin
         begin
           if p.mo.flags3_ex and MF3_EX_NOSOUND = 0 then
             if Psubsector_t(p.mo.subsector).sector.radixflags and RSF_RADIXSECTOR <> 0 then
-              S_AmbientSound(p.mo.x, p.mo.y, 'radix/SndScrape');
+              S_AmbientSound(p.mo.x, p.mo.y, 'radix/SndScrape')
+            else
+              S_AmbientSound(p.mo.x, p.mo.y, 'radix/SndPlaneHit');
           p.planehittics := S_RadixSoundDuration(Ord(sfx_SndScrape));
           inc(p.wallhits, TICRATE);  // JVAL: 20200506 - Small penalty for bad pilot
           _spawn_burner_smoke_floor(-1, 8);  // Spawn less smoke to floor
