@@ -508,6 +508,7 @@ var
   dist: integer;
   an: angle_t;
   mo: Pmobj_t;
+  sec: Psector_t;
 begin
   radixplayermo := p.mo;
 
@@ -596,45 +597,47 @@ begin
   if p.energyweaponfiretics > 0 then
     dec(p.energyweaponfiretics);  // JVAL: 20201204
 
-  if leveltime and 31 = 0 then
-    if p.damagecount = 0 then
-    begin
-      // Regenerate shield / health
-      if p.radixpowers[Ord(rpu_rapidshield)] > 0 then
-        new_health := p.health + 2
-      else
-        new_health := p.health + 1;
-      if new_health <= mobjinfo[Ord(MT_PLAYER)].spawnhealth then
+  sec := Psubsector_t(radixplayermo.subsector).sector;
+  if sec.special <> 11 then  // JVAL: 20200515 - E1M8 exit sector super damage
+    if leveltime and 31 = 0 then
+      if p.damagecount = 0 then
       begin
-        p.health := new_health;
-        p.mo.health := new_health;
-      end;
-
-      // Regenerate energy
-      new_energy := p.energy;
-      if p.energyweaponfiretics = 0 then
-      begin // JVAL: 20200412 - If we do not refire energy weapon faster regeneration
-        if p.radixpowers[Ord(rpu_rapidenergy)] > 0 then
-          new_energy := p.energy + 2
+        // Regenerate shield / health
+        if p.radixpowers[Ord(rpu_rapidshield)] > 0 then
+          new_health := p.health + 2
         else
-          new_energy := p.energy + 1;
-      end
-      else
-      begin  // JVAL: 20200412 - If we refire energy weapon regenerate only if rapid energy 
-        if p.radixpowers[Ord(rpu_rapidenergy)] > 0 then
+          new_health := p.health + 1;
+        if new_health <= mobjinfo[Ord(MT_PLAYER)].spawnhealth then
         begin
-          // JVAL: 20200423 - Added energy when refiring
-          if p.energy_reserve < PLAYERRESERVEENERGY then
-            p.energy_reserve := p.energy_reserve + 1;
-          new_energy := p.energy;
+          p.health := new_health;
+          p.mo.health := new_health;
+        end;
+
+        // Regenerate energy
+        new_energy := p.energy;
+        if p.energyweaponfiretics = 0 then
+        begin // JVAL: 20200412 - If we do not refire energy weapon faster regeneration
+          if p.radixpowers[Ord(rpu_rapidenergy)] > 0 then
+            new_energy := p.energy + 2
+          else
+            new_energy := p.energy + 1;
+        end
+        else
+        begin  // JVAL: 20200412 - If we refire energy weapon regenerate only if rapid energy
+          if p.radixpowers[Ord(rpu_rapidenergy)] > 0 then
+          begin
+            // JVAL: 20200423 - Added energy when refiring
+            if p.energy_reserve < PLAYERRESERVEENERGY then
+              p.energy_reserve := p.energy_reserve + 1;
+            new_energy := p.energy;
+          end;
+        end;
+
+        if new_energy <= PLAYERSPAWNENERGY then
+        begin
+          p.energy := new_energy;
         end;
       end;
-
-      if new_energy <= PLAYERSPAWNENERGY then
-      begin
-        p.energy := new_energy;
-      end;
-    end;
 
 end;
 
@@ -670,7 +673,7 @@ begin
     begin
       if Psubsector_t(pmo.subsector).sector.radixflags and RSF_RADIXSECTOR <> 0 then
       begin
-        S_AmbientSound(pmo.x, pmo.y, 'radix/SndScrape')
+        S_AmbientSound(pmo.x, pmo.y, 'radix/SndScrape');
         p.planehittics := S_RadixSoundDuration(Ord(sfx_SndScrape));
       end
       else
