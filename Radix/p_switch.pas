@@ -213,10 +213,10 @@ begin
     begin
       tex1 := R_CheckTextureNumForName(alphSwitchList[i].name1);
       if tex1 < 0 then
-        I_Warning('P_InitSwitchList(): Unknown texture "%s"'#13#10, [alphSwitchList[i].name1]);
+        I_DevWarning('P_InitSwitchList(): Unknown texture "%s"'#13#10, [alphSwitchList[i].name1]);
       tex2 := R_CheckTextureNumForName(alphSwitchList[i].name2);
       if tex2 < 0 then
-        I_Warning('P_InitSwitchList(): Unknown texture "%s"'#13#10, [alphSwitchList[i].name2]);
+        I_DevWarning('P_InitSwitchList(): Unknown texture "%s"'#13#10, [alphSwitchList[i].name2]);
       if (tex1 >= 0) and (tex2 >= 0) then
       begin
         switchlist[index] := tex1;
