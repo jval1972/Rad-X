@@ -398,11 +398,11 @@ begin
   wadwriter.AddData(stmp, p, size);
   memfree(p, size);
 
-  // Save PNAMES entry
+  // Save PNAMESx entry
   c8 := stringtochar8(stmp);
   mp.Write(c8, 8);
 
-  // Save TEXTURE1 entry
+  // Save TEXTUREx entry
   ZeroMemory(@tex, SizeOf(maptexture_t));
   tex.name := c8;
   tex.width := 32;
@@ -430,11 +430,11 @@ begin
     wadwriter.AddData(stmp, p, size);
     memfree(p, size);
 
-    // Save PNAMES entry
+    // Save PNAMESx entry
     c8 := stringtochar8(stmp);
     mp.Write(c8, 8);
 
-    // Save TEXTURE1 entry
+    // Save TEXTUREx entry
     ZeroMemory(@tex, SizeOf(maptexture_t));
     tex.name := c8;
     tex.width := blumps[i].width;
@@ -469,11 +469,11 @@ begin
       stmp := 'RSKY' + itoa(i);
       wadwriter.AddData(stmp, p, size);
 
-      // Save PNAMES entry
+      // Save PNAMESx entry
       c8 := stringtochar8(stmp);
       mp.Write(c8, 8);
 
-      // Save TEXTURE1 entry
+      // Save TEXTUREx entry
       ZeroMemory(@tex, SizeOf(maptexture_t));
       tex.name := stringtochar8('SKY' + itoa(i));
       tex.width := PSmallIntArray(p)[0] * 2;
@@ -504,11 +504,11 @@ begin
       stmp := 'RSKY' + itoa(i) + 'B';
       wadwriter.AddData(stmp, p, size);
 
-      // Save PNAMES entry
+      // Save PNAMESx entry
       c8 := stringtochar8(stmp);
       mp.Write(c8, 8);
 
-      // Save TEXTURE1 entry - extra patch
+      // Save TEXTUREx entry - extra patch
       memfree(p, size);
       extraskypatch.patch := bnumlumps + 2 * i;
       mt.Write(extraskypatch, SizeOf(mappatch_t));
@@ -525,9 +525,6 @@ begin
 
   wadwriter.AddData(texture1, mt.Memory, mt.Size);
   wadwriter.AddData(pnames, mp.Memory, mp.Size);
-
-  psize := 0;
-  wadwriter.AddData('TEXTURE2', @psize, 4);
 
   mp.Free;
   mt.Free;
@@ -2498,7 +2495,7 @@ begin
   ReadDirectory;
   GeneratePalette;
   GenerateTranslationTables;
-  GenerateTextures('PNAMES', 'TEXTURE1');
+  GenerateTextures('PNAMES0', 'TEXTURE0');
   GenerateLevels;
   GenerateFlats;
   GenerateMainGraphics;

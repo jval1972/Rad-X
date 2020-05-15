@@ -644,10 +644,18 @@ var
   maptex2: PIntegerArray;
   maptex3: PIntegerArray;
   name: char8_t;
+  lump: integer;
+  names0: PByteArray;
+  names1: PByteArray;
   names: PByteArray;
   name_p: PByteArray;
   patchlookup: PIntegerArray;
+  nummappatches0: integer;
+  nummappatches1: integer;
   nummappatches: integer;
+  patcheslen0: integer;
+  patcheslen1: integer;
+  patcheslen: integer;
   offset: integer;
   maxoff: integer;
   maxoff2: integer;
@@ -657,14 +665,61 @@ var
   numtextures3: integer;
   directory: PIntegerArray;
   pname: string;
+  mpatchoffs: integer;
 begin
   {$IFNDEF OPENGL}
   R_InitFixedColumn;
   {$ENDIF}
   // Load the patch names from pnames.lmp.
   ZeroMemory(@name, SizeOf(char8_t));
-  names := W_CacheLumpName('PNAMES', PU_STATIC);
-  nummappatches := PInteger(names)^;
+
+  lump := W_CheckNumForName('PNAMES0');
+  if lump >= 0 then
+  begin
+    names0 := W_CacheLumpNum(lump, PU_STATIC);
+    nummappatches0 := PInteger(names0)^;
+    patcheslen0 := nummappatches0 * SizeOf(char8_t) + SizeOf(integer);
+  end
+  else
+  begin
+    names0 := nil;
+    nummappatches0 := 0;
+    patcheslen0 := 0;
+  end;
+
+  lump := W_CheckNumForName('PNAMES');
+  if lump >= 0 then
+  begin
+    names1 := W_CacheLumpNum(lump, PU_STATIC);
+    nummappatches1 := PInteger(names1)^;
+    patcheslen1 := nummappatches1 * SizeOf(char8_t) + SizeOf(integer);
+  end
+  else
+  begin
+    names1 := nil;
+    nummappatches1 := 0;
+    patcheslen1 := 0;
+  end;
+
+  if (names0 = nil) and (names1 = nil) then
+    I_Error('R_InitTextures(): No patches found');
+
+  // JVAL: 20200515 - Merge PNAMES0 & PNAMES
+  nummappatches := nummappatches0 + nummappatches1;
+  patcheslen := patcheslen0 + patcheslen1 - SizeOf(integer);
+  names := Z_Malloc(patcheslen, PU_STATIC, nil);
+  PInteger(names)^ := nummappatches;
+  for i := SizeOf(Integer) to patcheslen0 - 1 do
+    names[i] := names0[i];
+  for i := SizeOf(Integer) to patcheslen1 - 1 do
+    names[patcheslen0 + i - SizeOf(Integer)] := names1[i];
+
+  // Free PNAMESx memory
+  if names0 <> nil then
+    Z_ChangeTag(names0, PU_CACHE);
+  if names1 <> nil then
+    Z_ChangeTag(names1, PU_CACHE);
+
   name_p := PByteArray(integer(names) + 4);
 
   patchlookup := malloc(nummappatches * SizeOf(integer));
@@ -705,17 +760,17 @@ begin
   // Load the map texture definitions from textures.lmp.
   // The data is contained in one or two lumps,
   //  TEXTURE1 for shareware, plus TEXTURE2 for commercial.
-  maptex1 := W_CacheLumpName('TEXTURE1', PU_STATIC);
+  maptex1 := W_CacheLumpName('TEXTURE0', PU_STATIC);
   maptex := maptex1;
   numtextures1 := maptex[0];
-  maxoff := W_LumpLength(W_GetNumForName('TEXTURE1'));
+  maxoff := W_LumpLength(W_GetNumForName('TEXTURE0'));
   directory := PintegerArray(integer(maptex) + SizeOf(integer));
 
-  if W_CheckNumForName('TEXTURE2') <> -1 then
+  if W_CheckNumForName('TEXTURE1') <> -1 then
   begin
-    maptex2 := W_CacheLumpName('TEXTURE2', PU_STATIC);
+    maptex2 := W_CacheLumpName('TEXTURE1', PU_STATIC);
     numtextures2 := maptex2[0];
-    maxoff2 := W_LumpLength(W_GetNumForName('TEXTURE2'));
+    maxoff2 := W_LumpLength(W_GetNumForName('TEXTURE1'));
   end
   else
   begin
@@ -724,11 +779,11 @@ begin
     maxoff2 := 0;
   end;
 
-  if W_CheckNumForName('TEXTURE3') <> -1 then
+  if W_CheckNumForName('TEXTURE2') <> -1 then
   begin
-    maptex3 := W_CacheLumpName('TEXTURE3', PU_STATIC);
+    maptex3 := W_CacheLumpName('TEXTURE2', PU_STATIC);
     numtextures3 := maptex3[0];
-    maxoff3 := W_LumpLength(W_GetNumForName('TEXTURE3'));
+    maxoff3 := W_LumpLength(W_GetNumForName('TEXTURE2'));
   end
   else
   begin
@@ -750,6 +805,7 @@ begin
   texturecolumnheight := mallocz(numtextures * SizeOf(integer));
   texturecolumnheightfrac := mallocz(numtextures * SizeOf(integer));
 
+  mpatchoffs := 0;
   for i := 0 to numtextures - 1 do
   begin
     if i = numtextures1 then
@@ -758,6 +814,7 @@ begin
       maptex := maptex2;
       maxoff := maxoff2;
       directory := PIntegerArray(integer(maptex) + SizeOf(integer));
+      mpatchoffs := nummappatches0;
     end;
     if i = numtextures1 + numtextures2 then
     begin
@@ -805,7 +862,7 @@ begin
     begin
       patch.originx := mpatch.originx;
       patch.originy := mpatch.originy;
-      patch.patch := patchlookup[mpatch.patch];
+      patch.patch := patchlookup[mpatch.patch + mpatchoffs];
       if patch.patch = -1 then
         I_Error('R_InitTextures(): Missing patch in texture %s', [char8tostring(texture.name)]);
       inc(mpatch);
