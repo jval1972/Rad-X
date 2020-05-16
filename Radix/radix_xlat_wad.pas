@@ -37,6 +37,28 @@ interface
 uses
   d_delphi;
 
+const
+  R2W_PALETTE = 1;
+  R2W_TRANSLATION = 2;
+  R2W_TEXTURES = 4;
+  R2W_LEVELS = 8;
+  R2W_FLATS = 16;
+  R2W_MAINGRAPHICS = 32;
+  R2W_ADDITIONALGRAPHICS = 64;
+  R2W_SMALLMENUFONT = 128;
+  R2W_BIGMENUFONT = 256;
+  R2W_CONSOLEFONT = 512;
+  R2W_MENUTRANSLATION = 1024;
+  R2W_SPRITES = 2048;
+  R2W_MUSIC = 4096;
+  R2W_COCKPIT = 8192;
+  R2W_SOUNDS = 16384;
+  R2W_OBJECTIVES = 32768;
+  R2W_ENDTEXT = 65536;
+  R2W_DOOMPALETTE = $20000;
+  R2W_DOOMTEXTURES = $40000;
+  R2W_DOOMLEVELS = $80000;
+
 procedure Radix2WAD_Game(const fin, fout: string);
 
 procedure Radix2Stream_Game(const fin: string; const strm: TDStream);
@@ -44,6 +66,10 @@ procedure Radix2Stream_Game(const fin: string; const strm: TDStream);
 procedure Radix2WAD_Edit(const fin, fout: string);
 
 procedure Radix2Stream_Edit(const fin: string; const strm: TDStream);
+
+procedure Radix2WAD(const fin, fout: string; const flags: LongWord);
+
+procedure Radix2Stream(const fin: string; const strm: TDStream; const flags: LongWord);
 
 procedure Radix2CSV(const fin: string; const pathout: string);
 
@@ -100,6 +126,7 @@ type
     function GenerateTranslationTables: boolean;
     function GenerateTextures(const pnames, texture1: string): boolean;
     function GenerateLevels: boolean;
+    function GenerateSimpleLevels: boolean;
     function GenerateCSVs(const path: string): boolean;
     function GenerateFlats: boolean;
     function GenerateGraphicWithOutPalette(const rname, wname: string; const solid: boolean; const opaqueindex: integer = -1): boolean;
@@ -123,6 +150,7 @@ type
     destructor Destroy; override;
     procedure Convert_Game(const fname: string);
     procedure Convert_Edit(const fname: string);
+    procedure Convert(const fname: string; const flags: LongWord);
     procedure SaveToFile(const fname: string);
     procedure SaveToSream(const strm: TDStream);
   end;
@@ -552,7 +580,28 @@ begin
     begin
       if ReadLump(lumps, numlumps, 'WorldData[' + itoa(i) +'][' + itoa(j) + ']', rlevel, rsize) then
       begin
-        ret := RX_CreateDoomLevel('E' + itoa(i) + 'M' + itoa(j), rlevel, rsize, markflats, texturewidths, textureheights, wadwriter);
+        ret := RX_CreateDoomLevel('E' + itoa(i) + 'M' + itoa(j), rlevel, rsize, markflats, texturewidths, textureheights, true, wadwriter);
+        result := result or ret;
+        memfree(rlevel, rsize);
+      end;
+    end;
+end;
+
+function TRadixToWADConverter.GenerateSimpleLevels: boolean;
+var
+  i, j: integer;
+  rlevel: pointer;
+  rsize: integer;
+  ret: boolean;
+begin
+  result := false;
+
+  for i := 1 to 3 do
+    for j := 1 to 9 do
+    begin
+      if ReadLump(lumps, numlumps, 'WorldData[' + itoa(i) +'][' + itoa(j) + ']', rlevel, rsize) then
+      begin
+        ret := RX_CreateDoomLevel('E' + itoa(i) + 'M' + itoa(j), rlevel, rsize, markflats, texturewidths, textureheights, false, wadwriter);
         result := result or ret;
         memfree(rlevel, rsize);
       end;
@@ -2547,6 +2596,66 @@ begin
   ffilename := '';
 end;
 
+procedure TRadixToWADConverter.Convert(const fname: string; const flags: LongWord);
+begin
+  if not fexists(fname) then
+    exit;
+
+  Clear;
+
+  ffilename := fname;
+  f := TFile.Create(fname, fOpenReadOnly);
+  wadwriter := TWadWriter.Create;
+  aliases := TDStringList.Create;
+  textures := TDStringList.Create;
+
+  ReadHeader;
+  ReadDirectory;
+  if flags and R2W_PALETTE <> 0 then
+    GeneratePalette(PALETTE_LUMP_NAME, COLOMAP_LUMP_NAME);
+  if flags and R2W_DOOMPALETTE <> 0 then
+    GeneratePalette(DOOM_PALETTE_NAME, DOOM_COLORMAP_NAME);
+  if flags and R2W_TRANSLATION <> 0 then
+    GenerateTranslationTables;
+  if flags and R2W_TEXTURES <> 0 then
+    GenerateTextures('PNAMES0', 'TEXTURE0');
+  if flags and R2W_DOOMTEXTURES <> 0 then
+    GenerateTextures('PNAMES', 'TEXTURE1');
+  if flags and R2W_LEVELS <> 0 then
+    GenerateLevels;
+  if flags and R2W_DOOMLEVELS <> 0 then
+    GenerateSimpleLevels;
+  if flags and R2W_FLATS <> 0 then
+    GenerateFlats;
+  if flags and R2W_MAINGRAPHICS <> 0 then
+    GenerateMainGraphics;
+  if flags and R2W_ADDITIONALGRAPHICS <> 0 then
+    GenerateAdditionalGraphics;
+  if flags and R2W_SMALLMENUFONT <> 0 then
+    GenerateSmallFont;
+  if flags and R2W_BIGMENUFONT <> 0 then
+    GenerateBigFonts;
+  if flags and R2W_CONSOLEFONT <> 0 then
+    GenerateDosFonts;
+  if flags and R2W_MENUTRANSLATION <> 0 then
+    GenerateMenuTranslation;
+  if flags and R2W_SPRITES <> 0 then
+    GenerateSprites;
+  if flags and R2W_MUSIC <> 0 then
+    GenerateMusic;
+  if flags and R2W_COCKPIT <> 0 then
+    GenerateCockpitOverlay;
+  if flags and R2W_SOUNDS <> 0 then
+    GenerateSounds;
+  if flags and R2W_OBJECTIVES <> 0 then
+    GenerateMissionText;
+  if flags and R2W_ENDTEXT <> 0 then
+    GenerateEndText;
+  WritePK3Entry;
+
+  ffilename := '';
+end;
+
 procedure TRadixToWADConverter.SaveToFile(const fname: string);
 begin
   wadwriter.SaveToFile(fname);
@@ -2603,6 +2712,32 @@ begin
   cnv := TRadixToWADConverter.Create;
   try
     cnv.Convert_Edit(fin);
+    cnv.SaveToSream(strm);
+  finally
+    cnv.Free;
+  end;
+end;
+
+procedure Radix2WAD(const fin, fout: string; const flags: LongWord);
+var
+  cnv: TRadixToWADConverter;
+begin
+  cnv := TRadixToWADConverter.Create;
+  try
+    cnv.Convert(fin, flags);
+    cnv.SaveToFile(fout);
+  finally
+    cnv.Free;
+  end;
+end;
+
+procedure Radix2Stream(const fin: string; const strm: TDStream; const flags: LongWord);
+var
+  cnv: TRadixToWADConverter;
+begin
+  cnv := TRadixToWADConverter.Create;
+  try
+    cnv.Convert(fin, flags);
     cnv.SaveToSream(strm);
   finally
     cnv.Free;

@@ -22,7 +22,7 @@
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
-//   Tool to create an Editing WAD 
+//   Tool to create an Editing WAD - Main form
 //
 //------------------------------------------------------------------------------
 //  Site: https://sourceforge.net/projects/rad-x/
@@ -52,13 +52,16 @@ type
     Edit2: TEdit;
     Panel3: TPanel;
     Memo1: TMemo;
+    BitBtn3: TBitBtn;
     procedure FormCreate(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
     procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
   private
     { Private declarations }
     finpfilename: string;
     foutfilename: string;
+    flags: LongWord;
   public
     { Public declarations }
   end;
@@ -72,7 +75,9 @@ implementation
 
 uses
   d_delphi,
-  radix_xlat_wad;
+  w_pak,
+  radix_xlat_wad,
+  frm_rad2wadoptions;
 
 procedure println(const s: string);
 begin
@@ -86,15 +91,18 @@ begin
   finpfilename := '';
   foutfilename := '';
   BitBtn2.Enabled := false;
+  BitBtn3.Enabled := false;
   Edit1.Text := '';
   Edit2.Text := '';
   Memo1.Lines.Clear;
   println('RAD2WAD v1.0, (c) 2020 by Jim Valavanis');
   println('Use this tool to create an editing WAD from RADIX.DAT');
-  println('The editing WAD can be used to create custom levels for RAD');
+  println('The output WAD can be used by editors to create custom levels for RAD');
+  println('IMPORTANT: The output WAD is not required to be loaded from RAD');
   println('');
   println('For updates please visit https://sourceforge.net/projects/rad-x/');
   println('');
+  flags := R2W_DOOMPALETTE or R2W_DOOMTEXTURES or R2W_FLATS or R2W_SPRITES;
 end;
 
 procedure TForm1.BitBtn1Click(Sender: TObject);
@@ -103,6 +111,7 @@ begin
   begin
     Edit1.Text := OpenDialog1.FileName;
     finpfilename := OpenDialog1.FileName;
+    println('Input file: ' + finpfilename);
     BitBtn2.Enabled := true;
   end;
 end;
@@ -113,13 +122,55 @@ begin
   begin
     Edit2.Text := SaveDialog1.FileName;
     foutfilename := SaveDialog1.FileName;
+    println('Output file: ' + foutfilename);
+    BitBtn3.Enabled := true;
+    BitBtn3Click(Sender);
+  end;
+end;
+
+procedure TForm1.BitBtn3Click(Sender: TObject);
+begin
+  finpfilename := Trim(finpfilename);
+  if finpfilename = '' then
+  begin
+    println('Please select input file!');
+    exit;
+  end;
+
+  if not fexists(finpfilename) then
+  begin
+    println('Input file "' + finpfilename + '" does not exist!');
+    exit;
+  end;
+
+  foutfilename := Trim(foutfilename);
+  if finpfilename = '' then
+  begin
+    println('Please select output file!');
+    exit;
+  end;
+
+  if UpperCase(ExpandFileName(foutfilename)) = UpperCase(ExpandFileName(finpfilename)) then
+  if finpfilename = '' then
+  begin
+    println('Input and output file must be different!');
+    exit;
+  end;
+
+  if GetConvertionOptions(flags) then
+  begin
+    flags := flags or R2W_DOOMPALETTE;
+
     println('Converting ' + fname(finpfilename) + ' to ' + fname(foutfilename));
     Screen.Cursor := crHourglass;
     try
-      Radix2WAD_Edit(finpfilename, foutfilename);
+      PAK_InitFileSystem;
+      Radix2WAD(finpfilename, foutfilename, flags);
+      PAK_ShutDown;
     finally
       Screen.Cursor := crDefault;
     end;
+    MessageBeep(0);
     if fexists(foutfilename) then
       println('Conversion finished!')
     else

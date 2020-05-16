@@ -40,7 +40,8 @@ uses
 
 function RX_CreateDoomLevel(const levelname: string;
   const rlevel: pointer; const rsize: integer; const markflats: PBooleanArray;
-  const texturewidths, textureheights: PIntegerArray; const wadwriter: TWadWriter): boolean;
+  const texturewidths, textureheights: PIntegerArray; const doextrainfo: boolean;
+  const wadwriter: TWadWriter): boolean;
 
 function RX_CreateRadixMapCSV(const levelname: string; const apath: string;
   const rlevel: pointer; const rsize: integer): boolean;
@@ -396,7 +397,8 @@ type
 
 function RX_CreateDoomLevel(const levelname: string;
   const rlevel: pointer; const rsize: integer; const markflats: PBooleanArray;
-  const texturewidths, textureheights: PIntegerArray; const wadwriter: TWadWriter): boolean;
+  const texturewidths, textureheights: PIntegerArray; const doextrainfo: boolean;
+  const wadwriter: TWadWriter): boolean;
 var
   ms: TAttachableMemoryStream;
   header: radixlevelheader_t;
@@ -1769,19 +1771,22 @@ begin
   wadwriter.AddData('SECTORS', doomsectors, numdoomsectors * SizeOf(mapsector_t));
   wadwriter.AddSeparator('REJECT');
   wadwriter.AddSeparator('BLOCKMAP');
-  // Radix extra lumps
-  // Sectors & walls extra data (scripted)
-  wadwriter.AddString('RMAP', doommapscript.Text);
-  // THINGS extra stuff (binary)
-  wadwriter.AddData('RTHINGS', doomthingsextra, numdoomthings * SizeOf(radixmapthingextra_t));
-  // Trigger grid (binary)
-  wadwriter.AddData('RGRID', gridinfoextra, SizeOf(radixgridinfo_t));
-  // Grid to map convertion matrix
-  wadwriter.AddData('RMAPGRID', mappointsgridextra, SizeOf(radixmappointsgrid_t));
-  // Sprites/Actions (binary)
-  wadwriter.AddData('RACTION', ractions, header.numactions * SizeOf(radixaction_t));
-  // Triggers (binary)
-  wadwriter.AddData('RTRIGGER', rtriggers, header.numtriggers * SizeOf(radixtrigger_t));
+  if doextrainfo then
+  begin
+    // Radix extra lumps
+    // Sectors & walls extra data (scripted)
+    wadwriter.AddString('RMAP', doommapscript.Text);
+    // THINGS extra stuff (binary)
+    wadwriter.AddData('RTHINGS', doomthingsextra, numdoomthings * SizeOf(radixmapthingextra_t));
+    // Trigger grid (binary)
+    wadwriter.AddData('RGRID', gridinfoextra, SizeOf(radixgridinfo_t));
+    // Grid to map convertion matrix
+    wadwriter.AddData('RMAPGRID', mappointsgridextra, SizeOf(radixmappointsgrid_t));
+    // Sprites/Actions (binary)
+    wadwriter.AddData('RACTION', ractions, header.numactions * SizeOf(radixaction_t));
+    // Triggers (binary)
+    wadwriter.AddData('RTRIGGER', rtriggers, header.numtriggers * SizeOf(radixtrigger_t));
+  end;
 
   // Free Radix data
   memfree(pointer(rsectors), header.numsectors * SizeOf(radixsector_t));
