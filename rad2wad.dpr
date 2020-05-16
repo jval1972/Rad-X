@@ -1,60 +1,10 @@
-//
-//  RAD: Recreation of the game "Radix - beyond the void"
-//       powered by the DelphiDoom engine
-//
-//  Copyright (C) 1995 by Epic MegaGames, Inc.
-//  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
-//
-//  This program is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU General Public License
-//  as published by the Free Software Foundation; either version 2
-//  of the License, or (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
-//  02111-1307, USA.
-//
-//------------------------------------------------------------------------------
-//  Site: https://sourceforge.net/projects/rad-x/
-//------------------------------------------------------------------------------
-
-{$IFDEF FPC}
-{$Error: Use you must use Delphi to compile this project. Use Doom32f.dpr with FPC}
-{$ENDIF}
-
-{$IFDEF OPENGL}
-{$Error: This project uses software renderer, please undef "OPENGL"}
-{$ENDIF}
-
-{$IFNDEF DOOM}
-{$Error: To compile this project you must define "DOOM"}
-{$ENDIF}
-
-{$IFNDEF DLL}
-{$Error: To compile this project you must define "DLL"}
-{$ENDIF}
-
-{$IFNDEF ShareMM}
-{$Error: To compile this project you must define "ShareMM"}
-{$ENDIF}
-
-{$I RAD.inc}
-{$D Doom to Delphi Total Conversion}
-
-library RAD_LIB;
-
-{$R *.RES}
+program rad2wad;
 
 uses
   FastMM4 in 'FASTMM4\FastMM4.pas',
   FastMM4Messages in 'FASTMM4\FastMM4Messages.pas',
+  Forms,
+  main in 'RAD2WAD\main.pas' {Form1},
   FastCode in 'FASTCODE\FastCode.pas',
   FastMove in 'FASTCODE\FastMove.pas',
   AnsiStringReplaceJOHIA32Unit12 in 'FASTCODE\AnsiStringReplaceJOHIA32Unit12.pas',
@@ -402,24 +352,11 @@ uses
   w_wadreader in 'Base\w_wadreader.pas',
   radix_vertical_fight in 'Radix\radix_vertical_fight.pas';
 
-exports
-  dd_compile_radix,
-  dd_getavailableunits_radix,
-  dd_getunitfunctions_radix,
-  dd_getconstants_radix,
-  dd_getvariables_radix,
-  dd_getclasses_radix,
-  dd_getdisassembly_radix,
-  dd_gettypes_radix,
-  dd_getevents_radix,
-  dd_getactordeffunctions_radix,
-  dd_getmobjinfocsv_radix,
-  dd_getstatescsv_radix,
-  dd_getspritescsv_radix,
-  dd_convert_edit_wad,
-  dd_convert_full_wad;
+{$R *.res}
 
 begin
-
+  Application.Initialize;
+  Application.Title := 'RAD WAD EDIT TOOL';
+  Application.CreateForm(TForm1, Form1);
+  Application.Run;
 end.
-
