@@ -393,7 +393,14 @@ uses
   radix_weapons in 'Radix\radix_weapons.pas',
   radix_player in 'Radix\radix_player.pas',
   radix_objects in 'Radix\radix_objects.pas',
-  m_compress in 'Base\m_compress.pas';
+  m_compress in 'Base\m_compress.pas',
+  radix_doom_wad in 'Radix\radix_doom_wad.pas',
+  radix_teleport in 'Radix\radix_teleport.pas',
+  radix_forcefield in 'Radix\radix_forcefield.pas',
+  radix_score in 'Radix\radix_score.pas',
+  t_radix32 in 'TEXLIB\t_radix32.pas',
+  w_wadreader in 'Base\w_wadreader.pas',
+  radix_vertical_fight in 'Radix\radix_vertical_fight.pas';
 
 exports
   dd_compile_radix,
@@ -408,7 +415,8 @@ exports
   dd_getactordeffunctions_radix,
   dd_getmobjinfocsv_radix,
   dd_getstatescsv_radix,
-  dd_getspritescsv_radix;
+  dd_getspritescsv_radix,
+  dd_convert_edit_wad;
 
 begin
 

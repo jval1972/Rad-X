@@ -100,7 +100,7 @@ Conditionals=DOOM;
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
-RunParams=-nofullscreen -geom 1920x1080 -file doom.wad foo1.wad
+RunParams=-nofullscreen -geom 1920x1080
 HostApplication=
 Launcher=
 UseLauncher=0

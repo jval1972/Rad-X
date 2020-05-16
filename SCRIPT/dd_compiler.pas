@@ -75,6 +75,10 @@ procedure dd_getstatescsv_radix(
 procedure dd_getspritescsv_radix(
   var _out: PChar; var _outsize: Integer); stdcall;
 
+function dd_convert_edit_wad(
+  const _inp: PChar; const _inpsize: Integer;
+  var _out: PChar; var _outsize: Integer): Boolean; stdcall;
+
 implementation
 
 uses
@@ -92,6 +96,7 @@ uses
   ps_main,
   ps_proclist,
   ps_compiler,
+  radix_xlat_wad,
   uPSDisassembly,
   ps_utils,
   ps_defs,
@@ -683,6 +688,34 @@ begin
     DD_ShutDownDoomEngine;
   end;
   Info_ShutDown;
+end;
+
+function dd_convert_edit_wad(
+  const _inp: PChar; const _inpsize: Integer;
+  var _out: PChar; var _outsize: Integer): Boolean; stdcall;
+var
+  sinp, sout: string;
+  i: integer;
+begin
+  result := false;
+  sinp := '';
+  for i := 0 to _inpsize - 1 do
+    sinp := sinp + _inp[i];
+  sout := '';
+  for i := 0 to _outsize - 1 do
+    sout := sout + _out[i];
+
+  if (sinp = '') or (sout = '') then
+    exit;
+
+  DD_InitDoomEngine;
+  try
+    Radix2WAD_Edit(sinp, sout);
+    result := fexists(sout);
+  finally
+    DD_ShutDownDoomEngine;
+  end;
+
 end;
 
 end.
