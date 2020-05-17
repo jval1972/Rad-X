@@ -2022,7 +2022,7 @@ begin
   MakeRotatingSprite8('DroneA', _MTRX_BATTLEDRONE2, 1, nil, 91, 50, false, false);
 
   // MT_MISSILEBOAT2
-  MakeRotatingSprite8('LightAssault', _MTRX_MISSILEBOAT2, 1, nil, 62, 51, false, false);
+  MakeRotatingSprite8('DroneC', _MTRX_MISSILEBOAT2, 1, nil, 83, 68, false, false);
 
   // MT_SKYFIREASSULTFIGHTER2
   MakeRotatingSprite8('LightAssault', _MTRX_SKYFIREASSULTFIGHTER2, 1, nil, 62, 51, false, false);
