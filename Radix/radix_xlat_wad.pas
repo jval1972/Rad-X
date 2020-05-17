@@ -682,13 +682,28 @@ end;
 
 
 function TRadixToWADConverter.GenerateFlats: boolean;
+type
+  flat64x64_t = packed array[0..63, 0..63] of byte;
+  flat64x64_p = ^flat64x64_t;
+  flat64x128_t = packed array[0..63, 0..127] of byte;
+  flat64x128_p = ^flat64x128_t;
+  flat128x64_t = packed array[0..127, 0..63] of byte;
+  flat128x64_p = ^flat128x64_t;
+  flat128x128_t = packed array[0..127, 0..127] of byte;
+  flat128x128_p = ^flat128x128_t;
 var
   position: integer;
   bstart: integer;
   bnumlumps: word;
   blumps: Pradixbitmaplump_tArray;
-  i: integer;
+  i, j, k: integer;
   buf: PByteArray;
+  f64x64: flat64x64_p;
+  buf64x64: flat64x64_p;
+  f64x128: flat64x128_p;
+  f128x64: flat128x64_p;
+  f128x128: flat128x128_p;
+  buf128x128: flat128x128_p;
   stmp: string;
   c: byte;
   t: integer;
@@ -741,7 +756,55 @@ begin
       f.Read(buf^, blumps[i].width * blumps[i].height);
 
       stmp := RX_FLAT_PREFIX + IntToStrZFill(4, i + 1);
-      wadwriter.AddData(stmp, buf, blumps[i].width * blumps[i].height);
+
+      if (blumps[i].width = 64) and (blumps[i].height = 128) then
+      begin
+        f64x128 := flat64x128_p(buf);
+        f128x128 := malloc(SizeOf(flat128x128_t));
+        for j := 0 to 63 do
+          for k := 0 to 127 do
+          begin
+            f128x128[k, j] := f64x128[j, k];
+            f128x128[k, j + 64] := f64x128[j, k];
+          end;
+        wadwriter.AddData(stmp, f128x128, 128 * 128);
+        memfree(pointer(f128x128), SizeOf(flat128x128_t));
+      end
+      else if (blumps[i].width = 128) and (blumps[i].height = 64) then
+      begin
+        f128x64 := flat128x64_p(buf);
+        f128x128 := malloc(SizeOf(flat128x128_t));
+        for j := 0 to 127 do
+          for k := 0 to 63 do
+          begin
+            f128x128[k, j] := f128x64[j, k];
+            f128x128[k + 64, j] := f128x64[j, k];
+          end;
+        wadwriter.AddData(stmp, f128x128, 128 * 128);
+        memfree(pointer(f128x128), SizeOf(flat128x128_t));
+      end
+      else if (blumps[i].width = 64) and (blumps[i].height = 64) then
+      begin
+        buf64x64 := flat64x64_p(buf);
+        f64x64 := malloc(SizeOf(flat64x64_t));
+        for j := 0 to 63 do
+          for k := 0 to 63 do
+            f64x64[k, j] := buf64x64[j, k];
+        wadwriter.AddData(stmp, f64x64, 64 * 64);
+        memfree(pointer(f64x64), SizeOf(flat64x64_t));
+      end
+      else if (blumps[i].width = 128) and (blumps[i].height = 128) then
+      begin
+        buf128x128 := flat128x128_p(buf);
+        f128x128 := malloc(SizeOf(flat128x128_t));
+        for j := 0 to 127 do
+          for k := 0 to 127 do
+            f128x128[k, j] := buf128x128[j, k];
+        wadwriter.AddData(stmp, f128x128, 128 * 128);
+        memfree(pointer(f128x128), SizeOf(flat128x128_t));
+      end
+      else
+        wadwriter.AddData(stmp, buf, blumps[i].width * blumps[i].height);
 
       memfree(pointer(buf), blumps[i].width * blumps[i].height);
     end;
