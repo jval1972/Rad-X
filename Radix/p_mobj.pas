@@ -1588,6 +1588,7 @@ var
   i: integer;
   plnum: integer;
   ss: Psubsector_t;
+  rnd: integer;
 begin
   // not playing?
   if not playeringame[mthing._type - 1] then
@@ -1642,21 +1643,38 @@ begin
 
   x := mthing.x * FRACUNIT;
   y := mthing.y * FRACUNIT;
-  z := mthing.z * FRACUNIT;
 
   ss := R_PointInSubsector(x, y);
 
-  // JVAL: 20200428 - Spawn Player Position
-  if z < ss.sector.floorheight then
-    z := ss.sector.floorheight
-  else if z > ss.sector.ceilingheight - mobjinfo[Ord(MT_PLAYER)].height then
-    z := ss.sector.ceilingheight - mobjinfo[Ord(MT_PLAYER)].height;
+  if mthing.options and MTF_RADIXTHING <> 0 then
+  begin
+    z := mthing.z * FRACUNIT;
 
-  // JVAL: 20191209 - 3d floors - Fixed Player spawned in 3d floor
-  if ss.sector.midsec >= 0 then
-    if mthing.options and MTF_ONMIDSECTOR <> 0 then
-      z := sectors[ss.sector.midsec].ceilingheight;
-
+    // JVAL: 20200428 - Spawn Player Position
+    if z < ss.sector.floorheight then
+      z := ss.sector.floorheight
+    else if z > ss.sector.ceilingheight - mobjinfo[Ord(MT_PLAYER)].height then
+      z := ss.sector.ceilingheight - mobjinfo[Ord(MT_PLAYER)].height;
+  end
+  else
+  begin
+    if mthing.options and MTF_SPAWNMIDFLOAT <> 0 then
+    // JVAL: 20200517 - Spawn float (for no gravity enemies and player)
+    //       Do not leave FLOATZ since P_SpawnMobj will set z to random
+      z := P_FloorHeight(ss.sector, x, y) div 2 + P_CeilingHeight(ss.sector, x, y) div 2
+    else if mthing.options and MTF_SPAWNRANDOMFLOAT <> 0 then
+    begin
+      rnd := P_Random;
+      z := (P_FloorHeight(ss.sector, x, y) div 256) * rnd + (P_CeilingHeight(ss.sector, x, y) div 256 * (256 - rnd));
+    end
+    else
+      z := P_FloorHeight(ss.sector, x, y);
+    // JVAL: 20191209 - 3d floors - Fixed Player spawned in 3d floor
+    if ss.sector.midsec >= 0 then
+      if mthing.options and MTF_ONMIDSECTOR <> 0 then
+        z := sectors[ss.sector.midsec].ceilingheight;
+  end;
+  
   result := P_SpawnMobj(x, y, z, Ord(MT_PLAYER), @mthing);
 
   // set color translations for player sprites
@@ -1889,14 +1907,17 @@ begin
   end
   else
   begin
-    if mobjinfo[i].flags and MF_SPAWNCEILING <> 0 then
+    // JVAL: 20200517 - Spawn float (for no gravity enemies and player)
+    if mthing.options and (MTF_SPAWNMIDFLOAT or MTF_SPAWNRANDOMFLOAT) <> 0 then
+      z := ONFLOATZ
+    else if mobjinfo[i].flags and MF_SPAWNCEILING <> 0 then
       z := ONCEILINGZ
     else if mobjinfo[i].flags_ex and MF_EX_SPAWNFLOAT <> 0 then
       z := ONFLOATZ
     else
       z := ONFLOORZ;
 
-  // JVAL: 3d floors
+    // JVAL: 3d floors
     ss := R_PointInSubsector(x, y);
     if ss.sector.midsec >= 0 then
     begin
@@ -1915,7 +1936,11 @@ begin
         else if z = ONCEILINGZ then
           z := msec.floorheight;
       end;
-    end;
+    end
+    else if mthing.options and MTF_SPAWNMIDFLOAT <> 0 then
+    // JVAL: 20200517 - Spawn float (for no gravity enemies and player)
+    //       Do not leave FLOATZ since P_SpawnMobj will set z to random
+      z := P_FloorHeight(ss.sector, x, y) div 2 + P_CeilingHeight(ss.sector, x, y) div 2;
     result := P_SpawnMobj(x, y, z, i, mthing);
   end;
 
