@@ -771,7 +771,7 @@ begin
 
   // DOOM determines the sky texture to be used
   // depending on the current episode, and the game version.
-  if gameepisode < 5 then
+  if gameepisode < 4 then
     skytexture := R_TextureNumForName('SKY' + Chr(Ord('0') + gameepisode))
   else
     skytexture := R_TextureNumForName('SKY1');
