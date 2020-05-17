@@ -1,12 +1,12 @@
 object Form1: TForm1
   Left = 281
   Top = 155
-  Width = 622
+  Width = 640
   Height = 501
   Caption = 'RAD2WAD'
   Color = 4210752
-  Constraints.MinHeight = 420
-  Constraints.MinWidth = 620
+  Constraints.MinHeight = 460
+  Constraints.MinWidth = 640
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -1051,7 +1051,7 @@ object Form1: TForm1
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 606
+    Width = 624
     Height = 113
     Align = alTop
     Caption = ' '
@@ -3040,7 +3040,7 @@ object Form1: TForm1
   object Panel2: TPanel
     Left = 0
     Top = 113
-    Width = 606
+    Width = 624
     Height = 144
     Align = alTop
     Caption = ' '
@@ -3112,7 +3112,7 @@ object Form1: TForm1
   object Panel3: TPanel
     Left = 0
     Top = 257
-    Width = 606
+    Width = 624
     Height = 205
     Align = alClient
     BorderWidth = 8
@@ -3122,7 +3122,7 @@ object Form1: TForm1
     object Memo1: TMemo
       Left = 9
       Top = 9
-      Width = 588
+      Width = 606
       Height = 187
       Align = alClient
       Color = 4210752

@@ -96,9 +96,11 @@ begin
   Edit2.Text := '';
   Memo1.Lines.Clear;
   println('RAD2WAD v1.0, (c) 2020 by Jim Valavanis');
-  println('Use this tool to create an editing WAD from RADIX.DAT');
-  println('The output WAD can be used by editors to create custom levels for RAD');
-  println('IMPORTANT: The output WAD is not required to be loaded from RAD');
+  println('Use this tool to create an editing WAD from RADIX.DAT.');
+  println('The output WAD can be used by editors to create custom levels for RAD.');
+  println('IMPORTANT: ');
+  println('    The output WAD is not required to be loaded from RAD.');
+  println('    RAD loads all the resources it needs from RADIX.DAT.');
   println('');
   println('For updates please visit https://sourceforge.net/projects/rad-x/');
   println('');
