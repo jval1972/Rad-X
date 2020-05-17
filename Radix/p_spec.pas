@@ -3028,10 +3028,6 @@ var
   time: integer;
   s, sec: integer;
 begin
-  if W_CheckNumForName('texture2') < 0 then
-    gameepisode := 1; // ???
-
-
   // See if -TIMER needs to be used.
   levelTimer := false;
 
