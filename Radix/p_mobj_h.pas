@@ -390,6 +390,8 @@ const
   MF3_EX_AMTELEPORTFOG = $1000000;
   // Don't block same species
   MF3_EX_DONTBLOCKSPECIES = $2000000;
+  // Inactive (stub) objects
+  MF3_EX_INACTIVE = $4000000;
 
 type
 // Map Object definition.

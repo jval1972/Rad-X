@@ -3042,6 +3042,10 @@ procedure A_Wander(actor: Pmobj_t);
 var
   delta: integer;
 begin
+  // JVAL: 20200517 - Inactive (stub) enemies
+  if actor.flags3_ex and MF3_EX_INACTIVE <> 0 then
+    exit;
+
   // modify target threshold
   if actor.threshold <> 0 then
     actor.threshold := actor.threshold - 1;

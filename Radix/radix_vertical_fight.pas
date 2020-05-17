@@ -193,6 +193,10 @@ begin
   if not P_CheckStateParams(actor, 2, CSP_AT_LEAST) then
     exit;
 
+  // JVAL: 20200517 - Inactive (stub) enemies
+  if actor.flags3_ex and MF3_EX_INACTIVE <> 0 then
+    exit;
+
   z1 := actor.state.params.FixedVal[0];
   z2 := actor.state.params.FixedVal[1];
   if actor.state.params.Count > 2 then

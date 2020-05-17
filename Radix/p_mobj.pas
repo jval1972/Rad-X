@@ -887,6 +887,10 @@ begin
   if mthing.options and MTF_AMBUSH <> 0 then
     mo.flags := mo.flags or MF_AMBUSH;
 
+  // JVAL: 20200517 - Inactive (stub) enemies
+  if mthing.options and MTF_INACTIVE <> 0 then
+    mo.flags3_ex := mo.flags3_ex or MF3_EX_INACTIVE;
+
   // killough 11/98: transfer friendliness from deceased
   if mobj.flags2_ex and MF2_EX_FRIEND = 0 then
     mo.flags2_ex := mo.flags2_ex and not MF2_EX_FRIEND
@@ -1941,6 +1945,9 @@ begin
     result.angle := ANG45 * (mthing.angle div 45);
   if mthing.options and MTF_AMBUSH <> 0 then
     result.flags := result.flags or MF_AMBUSH;
+  // JVAL: 20200517 - Inactive (stub) enemies
+  if mthing.options and MTF_INACTIVE <> 0 then
+    result.flags3_ex := result.flags3_ex or MF3_EX_INACTIVE;
 end;
 
 //

@@ -488,7 +488,11 @@ var
 
     mthing.angle := round((angle / 256) * 360);
     mthing._type := mtype;
-    mthing.options := options;
+    if (mtype = MT_DEFENCEDRONE_STUB1) or (mtype = MT_DEFENCEDRONE_STUB2) or
+       (mtype = MT_DEFENCEDRONE_STUB3) then
+      mthing.options := options or MTF_INACTIVE
+    else
+      mthing.options := options;
 
     realloc(pointer(doomthingsextra), numdoomthings * SizeOf(radixmapthingextra_t), (numdoomthings + 1) * SizeOf(radixmapthingextra_t));
     doomthingsextra[numdoomthings].z := z;

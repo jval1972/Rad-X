@@ -671,7 +671,8 @@ begin
   // check for special pickup
   if thing.flags and MF_SPECIAL <> 0 then
     if (tmflags and MF_PICKUP <> 0) and (tmthing.health > 0) then
-      P_TouchSpecialThing(thing, tmthing); // can remove thing
+      if thing.flags3_ex and MF3_EX_INACTIVE = 0 then  // JVAL: 20200517 - Inactive (stub) pickups
+        P_TouchSpecialThing(thing, tmthing); // can remove thing
 
   result := thing.flags and MF_SOLID = 0;
 end;

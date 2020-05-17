@@ -1037,6 +1037,10 @@ var
   seeyou: boolean;
   sound: integer;
 begin
+  // JVAL: 20200517 - Inactive (stub) enemies
+  if actor.flags3_ex and MF3_EX_INACTIVE <> 0 then
+    exit;
+
   if P_DroneFollowPlayerHandler(actor) then
     exit;
 
@@ -1119,6 +1123,10 @@ var
   p: Pplayer_t;
   try_ok: boolean;
 begin
+  // JVAL: 20200517 - Inactive (stub) enemies
+  if actor.flags3_ex and MF3_EX_INACTIVE <> 0 then
+    exit;
+
   if actor.reactiontime <> 0 then
     actor.reactiontime := actor.reactiontime - 1;
 
@@ -1755,6 +1763,10 @@ var
   info: Pmobjinfo_t;
   temp: Pmobj_t;
 begin
+  // JVAL: 20200517 - Inactive (stub) enemies
+  if actor.flags3_ex and MF3_EX_INACTIVE <> 0 then
+    exit;
+
   if actor.movedir <> Ord(DI_NODIR) then
   begin
     // check for corpses to raise
