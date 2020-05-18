@@ -57,8 +57,6 @@ type
     SoundCheckBox: TCheckBox;
     Panel9: TPanel;
     TextCheckBox: TCheckBox;
-    Panel10: TPanel;
-    LevelsCheckBox: TCheckBox;
     Panel11: TPanel;
     Button1: TButton;
     Button2: TButton;
@@ -93,7 +91,6 @@ begin
     f.MusicCheckBox.Checked := flags and R2W_MUSIC <> 0;
     f.SoundCheckBox.Checked := flags and R2W_SOUNDS <> 0;
     f.TextCheckBox.Checked := flags and (R2W_OBJECTIVES or R2W_ENDTEXT) <> 0;
-    f.LevelsCheckBox.Checked := flags and R2W_DOOMLEVELS <> 0;
     f.ShowModal;
     if f.ModalResult = mrOK then
     begin
@@ -106,7 +103,6 @@ begin
       if f.MusicCheckBox.Checked then flags := flags or R2W_MUSIC;
       if f.SoundCheckBox.Checked then flags := flags or R2W_SOUNDS;
       if f.TextCheckBox.Checked then flags := flags or (R2W_OBJECTIVES or R2W_ENDTEXT);
-      if f.LevelsCheckBox.Checked then flags := flags or R2W_DOOMLEVELS;
       result := true;
     end;
   finally
