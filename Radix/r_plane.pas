@@ -68,7 +68,7 @@ procedure R_DoDrawPlane(const pl: Pvisplane_t); // JVAL: 3d Floors
 
 function R_FindPlane(height: fixed_t; picnum: integer; lightlevel: integer;
   xoffs, yoffs: fixed_t; flags: LongWord; const floor_or_ceiling: boolean;
-  angle: angle_t;
+  angle: angle_t; angle_x, angle_y: fixed_t;
   {$IFNDEF OPENGL}slope: Pvisslope_t; {$ENDIF} slopeSID: integer = -1): Pvisplane_t;
 
 {$IFNDEF OPENGL}
@@ -347,8 +347,11 @@ begin
   tsin := ds_sine;
   tcos := ds_cosine;
 
-  tviewx := Round(viewx * tcos - viewy * tsin);
-  tviewy := Round(viewx * tsin + viewy * tcos);
+{  tviewx := Round(viewx * tcos - viewy * tsin);
+  tviewy := Round(viewx * tsin + viewy * tcos);}
+
+  tviewx := Round((viewx + ds_angle_x) * tcos - (viewy + ds_angle_y) * tsin);
+  tviewy := Round((viewx + ds_angle_x) * tsin + (viewy + ds_angle_y) * tcos);
 
   ds_xfrac :=  tviewx + xoffs + round(pviewcos * distance) + (x1 - centerx) * ds_xstep;
   ds_yfrac := -tviewy + yoffs - round(pviewsin * distance) + (x1 - centerx) * ds_ystep;
@@ -523,7 +526,7 @@ end;
 // R_VisplaneHash
 //
 function R_VisplaneHash(height: fixed_t; picnum: integer; lightlevel: integer;
-  xoffs, yoffs: fixed_t; angle: angle_t; flags: LongWord; slopeSID: integer): LongWord;
+  xoffs, yoffs: fixed_t; angle: angle_t; angle_x, angle_y: fixed_t; flags: LongWord; slopeSID: integer): LongWord;
 begin
   result := (((((LongWord(flags) * 3 +
                  LongWord(xoffs)) * 1296727 +
@@ -535,6 +538,7 @@ begin
                  LongWord(height and (FRACUNIT - 1));
   result := result + LongWord(slopeSID + 1) * 7;  // JVAL: Slopes
   result := result + angle; // JVAL: 20200221 - Texture angle
+  result := result + angle_x * 9281 + angle_y * 9283; // JVAL: 20200518 - Angle pivot
   result := result and (VISPLANEHASHSIZE - 1);
 end;
 
@@ -543,7 +547,7 @@ end;
 //
 function R_FindPlane(height: fixed_t; picnum: integer; lightlevel: integer;
   xoffs, yoffs: fixed_t; flags: LongWord; const floor_or_ceiling: boolean;
-  angle: angle_t;
+  angle: angle_t; angle_x, angle_y: fixed_t;
   {$IFNDEF OPENGL}slope: Pvisslope_t; {$ENDIF} slopeSID: integer = -1): Pvisplane_t;
 var
   check: integer;
@@ -562,9 +566,11 @@ begin
     flags := flags and not SRF_SLOPED; // JVAL: Sloped surface do not have sky
     slopeSID := -1; // JVAL: Slopes
     angle := 0; // JVAL: 20200221 - Texture angle
+    angle_x := 0; // JVAL: 20200518 - Angle pivot
+    angle_y := 0; // JVAL: 20200518 - Angle pivot
   end;
 
-  hash := R_VisplaneHash(height, picnum, lightlevel, xoffs, yoffs, angle, flags, slopeSID);
+  hash := R_VisplaneHash(height, picnum, lightlevel, xoffs, yoffs, angle, angle_x, angle_y, flags, slopeSID);
   check := hash;
   while check < hash + VISPLANEHASHOVER do
   begin
@@ -585,6 +591,8 @@ begin
       result.renderflags := flags;
       result.slopeSID := slopeSID;  // JVAL: Slopes
       result.angle := angle;  // JVAL: 20200221 - Texture angle
+      result.angle_x := angle_x;  // JVAL: 20200518 - Angle pivot
+      result.angle_y := angle_y;  // JVAL: 20200518 - Angle pivot
       {$IFNDEF OPENGL}
       result.slope := slope;  // JVAL: Slopes
       {$ENDIF}
@@ -604,6 +612,8 @@ begin
        (lightlevel = result.lightlevel) and
        (slopeSID = result.slopeSID) and // JVAL: Slopes
        (angle = result.angle) and // JVAL: 20200225 - Texture angle
+       (angle_x = result.angle_x) and // JVAL: 20200518 - Angle pivot
+       (angle_y = result.angle_y) and // JVAL: 20200518 - Angle pivot
        (flags = result.renderflags) then
       exit;
     Inc(check);
@@ -620,6 +630,8 @@ begin
        (lightlevel = result.lightlevel) and
        (slopeSID = result.slopeSID) and // JVAL: Slopes
        (angle = result.angle) and // JVAL: 20200221 - Texture angle
+       (angle_x = result.angle_x) and // JVAL: 20200518 - Angle pivot
+       (angle_y = result.angle_y) and // JVAL: 20200518 - Angle pivot
        (flags = result.renderflags) then
       break;
     inc(check);
@@ -648,6 +660,8 @@ begin
   result.renderflags := flags;
   result.slopeSID := slopeSID;  // JVAL: Slopes
   result.angle := angle;  // JVAL: 20200221 - Texture angle
+  result.angle_x := angle_x;  // JVAL: 20200518 - Angle pivot
+  result.angle_y := angle_y;  // JVAL: 20200518 - Angle pivot
   {$IFNDEF OPENGL}
   result.slope := slope;  // JVAL: Slopes
   {$ENDIF}
@@ -686,6 +700,8 @@ begin
   pll.renderflags := pl.renderflags;
   pll.slopeSID := pl.slopeSID;  // JVAL: Slopes
   pll.angle := pl.angle; // JVAL: 20200221 - Texture angle
+  pll.angle_x := pl.angle_x;  // JVAL: 20200518 - Angle pivot
+  pll.angle_y := pl.angle_y;  // JVAL: 20200518 - Angle pivot
   {$IFNDEF OPENGL}
   pll.slope := pl.slope;        // JVAL: Slopes
   {$ENDIF}
@@ -694,7 +710,7 @@ begin
 
   R_NewVisPlane;
   visplanehash[R_VisplaneHash(pl.height, pl.picnum, pl.lightlevel,
-    pl.xoffs, pl.yoffs, pl.angle, pl.renderflags, pl.slopeSID)] := lastvisplane;
+    pl.xoffs, pl.yoffs, pl.angle, pl.angle_x, pl.angle_y, pl.renderflags, pl.slopeSID)] := lastvisplane;
 
   pl.minx := start;
   pl.maxx := stop;
@@ -796,7 +812,7 @@ begin
   while (b2 > b1) and (b2 >= t2) do
   begin
   // JVAL 9/7/05
-    if (b2 >= 0) and (b2 < viewwidth) then 
+    if (b2 >= 0) and (b2 < viewwidth) then
       spanstart[b2] := x;
     dec(b2);
   end;
@@ -820,7 +836,7 @@ begin
       R_DoDrawPlane(pl)
     else
       R_DoDrawSlope(pl);  //JVAL: Slopes
-  end;  
+  end;
 end;
 
 procedure R_DoDrawPlane(const pl: Pvisplane_t); // JVAL: 3d Floors
@@ -1055,7 +1071,9 @@ begin
   end;
 
   ds_angle := pl.angle;
-  if ds_angle <> 0 then
+  ds_angle_x := pl.angle_x;
+  ds_angle_y := pl.angle_y;
+  if (ds_angle <> 0) or (ds_angle_x <> 0) or (ds_angle_y <> 0) then
   begin
     ds_sine := sin(ds_angle / ANGLE_MAX * 2 * pi);    // JVAL: 20200225 - Texture angle
     ds_cosine := cos(ds_angle / ANGLE_MAX * 2 * pi);  // JVAL: 20200225 - Texture angle

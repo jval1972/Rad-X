@@ -973,6 +973,8 @@ begin
                                 frontsector.renderflags and not (SRF_RIPPLE_CEILING or SRF_SLOPECEILING),
                                 true,
                                 frontsector.floorangle, // JVAL: 20200221 - Texture angle
+                                frontsector.radixfloorslope.x,  // JVAL: 20200518 - Angle pivot
+                                frontsector.radixfloorslope.y,  // JVAL: 20200518 - Angle pivot
                                 {$IFNDEF OPENGL}
                                 floorslope,
                                 {$ENDIF}
@@ -986,6 +988,8 @@ begin
                                 frontsector.renderflags and not (SRF_RIPPLE_CEILING or SRF_SLOPECEILING),
                                 true,
                                 frontsector.floorangle, // JVAL: 20200221 - Texture angle
+                                frontsector.radixfloorslope.x,  // JVAL: 20200518 - Angle pivot
+                                frontsector.radixfloorslope.y,  // JVAL: 20200518 - Angle pivot
                                 {$IFNDEF OPENGL}
                                 nil,
                                 {$ENDIF}
@@ -1007,6 +1011,8 @@ begin
                                   frontsector.renderflags and not (SRF_RIPPLE_FLOOR or SRF_SLOPEFLOOR),
                                   false,
                                   frontsector.ceilingangle, // JVAL: 20200221 - Texture angle
+                                  frontsector.radixceilingslope.x,  // JVAL: 20200518 - Angle pivot
+                                  frontsector.radixceilingslope.y,  // JVAL: 20200518 - Angle pivot
                                   {$IFNDEF OPENGL}
                                   ceilingslope,
                                   {$ENDIF}
@@ -1020,6 +1026,8 @@ begin
                                   frontsector.renderflags and not (SRF_RIPPLE_FLOOR or SRF_SLOPEFLOOR),
                                   false,
                                   frontsector.ceilingangle, // JVAL: 20200221 - Texture angle
+                                  frontsector.radixceilingslope.x,  // JVAL: 20200518 - Angle pivot
+                                  frontsector.radixceilingslope.y,  // JVAL: 20200518 - Angle pivot
                                   {$IFNDEF OPENGL}
                                   nil,
                                   {$ENDIF}

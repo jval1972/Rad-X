@@ -340,13 +340,13 @@ begin
         end;
       8: // floorangle_x
         begin
-          sc.MustGetLongWord;
-          sectors[cursector].radixfloorslope.x := sc._LongWord;
+          sc.MustGetInteger;
+          sectors[cursector].radixfloorslope.x := sc._Integer * FRACUNIT;
         end;
       9: // floorangle_y
         begin
-          sc.MustGetLongWord;
-          sectors[cursector].radixfloorslope.y := sc._LongWord;
+          sc.MustGetInteger;
+          sectors[cursector].radixfloorslope.y := sc._Integer * FRACUNIT;
         end;
      10: // ceilingangle
         begin

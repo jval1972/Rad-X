@@ -624,6 +624,7 @@ var
   var
     dsec: Pmapsector_t;
     flags: integer;
+    xx, yy: integer;
   begin
     realloc(pointer(doomsectors), numdoomsectors * SizeOf(mapsector_t), (numdoomsectors  + 1) * SizeOf(mapsector_t));
     //Create classic map
@@ -671,14 +672,20 @@ var
     if ss.floorangle <> 0 then
     begin
       doommapscript.Add('floorangle ' + itoa(ss.floorangle));
-      doommapscript.Add('floorangle_x ' + itoa(ss.floorangle_x));
-      doommapscript.Add('floorangle_y ' + itoa(ss.floorangle_y));
+      xx := ss.floorangle_x;
+      yy := ss.floorangle_y;
+      fix_wall_coordXY(xx, yy);
+      doommapscript.Add('floorangle_x ' + itoa(xx));
+      doommapscript.Add('floorangle_y ' + itoa(yy));
     end;
     if ss.ceilingangle <> 0 then
     begin
       doommapscript.Add('ceilingangle ' + itoa(ss.ceilingangle));
-      doommapscript.Add('ceilingangle_x ' + itoa(ss.ceilingangle_x));
-      doommapscript.Add('ceilingangle_y ' + itoa(ss.ceilingangle_y));
+      xx := ss.ceilingangle_x;
+      yy := ss.ceilingangle_y;
+      fix_wall_coordXY(xx, yy);
+      doommapscript.Add('ceilingangle_x ' + itoa(xx));
+      doommapscript.Add('ceilingangle_y ' + itoa(xx));
     end;
     doommapscript.Add('');
 

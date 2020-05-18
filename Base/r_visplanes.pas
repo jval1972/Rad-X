@@ -106,6 +106,7 @@ type
     renderflags: LongWord;
     slopeSID: integer;  // JVAL: Slopes
     angle: angle_t;     // JVAL: 20200221 - Texture angle
+    angle_x, angle_y: fixed_t;  // JVAL: 20200518 - Angle pivot
     {$IFNDEF OPENGL}
     slope: Pvisslope_t; // JVAL: Slopes
     // leave pads for [minx-1] and [maxx+1]

@@ -550,6 +550,7 @@ var
   tcos, tsin: float;
   txoffs, tyoffs: fixed_t;
   tviewx, tviewy: fixed_t;
+  tscale: float;
 begin
   if y >= viewheight then
     exit;
@@ -598,9 +599,14 @@ begin
 
   tsin := sin(-ds_angle / ANGLE_MAX * 2 * pi);
   tcos := cos(-ds_angle / ANGLE_MAX * 2 * pi);
+  tscale := fabs(tsin);
+  if fabs(tcos) > tscale then
+    tscale := fabs(tcos);
 
-  tviewx := Round(viewx * tcos - viewy * tsin);
-  tviewy := Round(viewx * tsin + viewy * tcos);
+{  tviewx := Round(viewx * tcos - viewy * tsin);
+  tviewy := Round(viewx * tsin + viewy * tcos);}
+  tviewx := Round((viewx - ds_angle_x) * tcos - (viewy - ds_angle_y) * tsin);
+  tviewy := Round((viewx - ds_angle_x) * tsin + (viewy - ds_angle_y) * tcos);
 
   // JVAL: 20200430 - For slope lightmap
   yslopey := slyslope[y];
@@ -625,9 +631,9 @@ begin
       length := FixedMul(distance, distscale[x]);
       angle := (viewangle + xtoviewangle[x] - ds_angle) shr FRACBITS;
 
-      xfrac1 := tviewx + FixedMul(fixedcosine[angle], length)
+      xfrac1 := tviewx + FixedMul(fixedcosine[angle], length) {- ds_angle_x}
       {$IFDEF DOOM_OR_STRIFE} + xoffs{$ENDIF} {$IFDEF HEXEN} + ds_xoffset{$ENDIF};
-      yfrac1 := -tviewy - FixedMul(fixedsine[angle], length)
+      yfrac1 := -tviewy - FixedMul(fixedsine[angle], length) {- ds_angle_y}
       {$IFDEF DOOM_OR_STRIFE} + yoffs{$ENDIF} {$IFDEF HEXEN} + ds_yoffset{$ENDIF};
 
       if x = x1 then
@@ -638,6 +644,10 @@ begin
 
       ds_xstep := (xfrac1 - xfrac2) div cnt;
       ds_ystep := (yfrac1 - yfrac2) div cnt;
+
+      ds_xstep := round((xfrac1 - xfrac2) / cnt * tscale);
+      ds_ystep := round((yfrac1 - yfrac2) / cnt * tscale);
+
 
       if fixedcolormap = nil then
       begin
@@ -747,7 +757,9 @@ begin
   pl.top[pl.minx - 1] := VISEND;
 
   ds_angle := pl.angle;
-  if ds_angle <> 0 then
+  ds_angle_x := pl.angle_x;
+  ds_angle_y := pl.angle_y;
+  if (ds_angle <> 0) or (ds_angle_x <> 0) or (ds_angle_y <> 0) then
   begin
     // Slope with angle
     for x := pl.minx to stop do
