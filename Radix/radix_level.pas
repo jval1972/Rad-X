@@ -672,7 +672,7 @@ var
     begin
       doommapscript.Add('floorangle ' + itoa(ss.floorangle));
       doommapscript.Add('floorangle_x ' + itoa(ss.floorangle_x));
-      doommapscript.Add('floorangle_y ' + itoa(ss.floorangle_x));
+      doommapscript.Add('floorangle_y ' + itoa(ss.floorangle_y));
     end;
     if ss.ceilingangle <> 0 then
     begin
