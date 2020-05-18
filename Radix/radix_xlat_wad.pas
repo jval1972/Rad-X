@@ -113,6 +113,7 @@ type
     markflats: PBooleanArray;
     numflats: integer;
     ffilename: string;
+    fmakeallflats: boolean;
     function AddPAKFileSystemEntry(const lumpname: string; const aliasname: string): boolean;
   protected
     function ReadLump(const l: Pradixlump_tArray; const numl: integer;
@@ -153,6 +154,7 @@ type
     procedure Convert(const fname: string; const flags: LongWord);
     procedure SaveToFile(const fname: string);
     procedure SaveToSream(const strm: TDStream);
+    property makeallflats: boolean read fmakeallflats write fmakeallflats;
   end;
 
 constructor TRadixToWADConverter.Create;
@@ -168,6 +170,7 @@ begin
   texturewidths := nil;
   textureheights := nil;
   ffilename := '';
+  fmakeallflats := false;
   Inherited;
 end;
 
@@ -748,7 +751,7 @@ begin
     end;
 
   for i := 0 to bnumlumps - 1 do
-    if markflats[i + 1] then
+    if fmakeallflats or markflats[i + 1] then
     begin
       buf := malloc(blumps[i].width * blumps[i].height);
 
@@ -2735,6 +2738,7 @@ var
 begin
   cnv := TRadixToWADConverter.Create;
   try
+    cnv.makeallflats := true;
     cnv.Convert_Game(fin);
     cnv.SaveToFile(fout);
   finally
@@ -2748,6 +2752,7 @@ var
 begin
   cnv := TRadixToWADConverter.Create;
   try
+    cnv.makeallflats := true;
     cnv.Convert_Game(fin);
     cnv.SaveToSream(strm);
   finally
@@ -2761,6 +2766,7 @@ var
 begin
   cnv := TRadixToWADConverter.Create;
   try
+    cnv.makeallflats := true;
     cnv.Convert_Edit(fin);
     cnv.SaveToFile(fout);
   finally
@@ -2774,6 +2780,7 @@ var
 begin
   cnv := TRadixToWADConverter.Create;
   try
+    cnv.makeallflats := true;
     cnv.Convert_Edit(fin);
     cnv.SaveToSream(strm);
   finally
@@ -2787,6 +2794,7 @@ var
 begin
   cnv := TRadixToWADConverter.Create;
   try
+    cnv.makeallflats := true;
     cnv.Convert(fin, flags);
     cnv.SaveToFile(fout);
   finally
@@ -2800,6 +2808,7 @@ var
 begin
   cnv := TRadixToWADConverter.Create;
   try
+    cnv.makeallflats := true;
     cnv.Convert(fin, flags);
     cnv.SaveToSream(strm);
   finally
@@ -2813,6 +2822,7 @@ var
 begin
   cnv := TRadixToWADConverter.Create;
   try
+    cnv.makeallflats := true;
     cnv.Convert_Game(fin);
     cnv.GenerateCSVs(pathout);
   finally

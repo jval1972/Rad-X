@@ -156,7 +156,7 @@ const
   MTF_INACTIVE = 1024; // JVAL: 20200517 - Inactive (stub) enemies
   MTF_SPAWNMIDFLOAT = 2048; // JVAL: 20200517 - Spawn float in middle (for no gravity enemies and player)
   MTF_SPAWNRANDOMFLOAT = 4096; // JVAL: 20200517 - Spawn float random (for no gravity enemies and player)
-  MTF_RADIXTHING = 8192; // JVAL: 20201103 - Spawned from Radix map
+  MTF_RADIXTHING = 8192; // JVAL: 20200311 - Spawned from Radix map
 
 type
   skill_t = (
