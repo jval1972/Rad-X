@@ -1181,6 +1181,10 @@ var
       for j := 0 to numdoomsidedefs - 1 do
         if doomsidedefs[j].sector = 64 then
           doomsidedefs[j].sector := 65;
+      doomsidedefs[247].textureoffset := 0;
+      doomsidedefs[248].textureoffset := 0;
+      doomsidedefs[268].textureoffset := 0;
+      doomsidedefs[269].textureoffset := 0;
     end
     else if levelname = 'E2M3' then
     begin
