@@ -436,6 +436,7 @@ var
   e3m2special: boolean;
   v1x, v1y, v2x, v2y: integer;
   stubx, stuby: integer;
+  lepisode, lmap: integer;
 
   procedure fix_wall_coordXYdef(var xx: integer; var yy: integer);
   begin
@@ -488,11 +489,12 @@ var
 
     mthing.angle := round((angle / 256) * 360);
     mthing._type := mtype;
-    if (mtype = MT_DEFENCEDRONE_STUB1) or (mtype = MT_DEFENCEDRONE_STUB2) or
-       (mtype = MT_DEFENCEDRONE_STUB3) then
-      mthing.options := options or MTF_INACTIVE
-    else
-      mthing.options := options;
+
+    mthing.options := options;
+    if lepisode = 1 then
+      if (mtype = MT_DEFENCEDRONE_STUB1) or (mtype = MT_DEFENCEDRONE_STUB2) or
+         (mtype = MT_DEFENCEDRONE_STUB3) then
+        mthing.options := mthing.options or MTF_INACTIVE;
 
     realloc(pointer(doomthingsextra), numdoomthings * SizeOf(radixmapthingextra_t), (numdoomthings + 1) * SizeOf(radixmapthingextra_t));
     doomthingsextra[numdoomthings].z := z;
@@ -1513,6 +1515,15 @@ var
   end;
 
 begin
+  lepisode := 0;
+  lmap := 0;
+  if length(levelname) = 4 then
+    if (levelname[1] = 'E') and (levelname[3] = 'M') then
+    begin
+      lepisode := atoi(levelname[2]);
+      lmap := atoi(levelname[4]);
+    end;
+
   ms := TAttachableMemoryStream.Create;
   ms.Attach(rlevel, rsize);
   lcrc32 := strupper(GetBufCRC32(ms.memory, ms.Size));
