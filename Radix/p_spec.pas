@@ -519,6 +519,7 @@ uses
   m_bbox,
   w_wad,
   radix_sounds,
+  radix_level,
   r_data,
   r_main,
   r_plane,
@@ -3024,7 +3025,7 @@ end;
 procedure P_SpawnSpecials;
 var
   sector: Psector_t;
-  i: integer;
+  i, j: integer;
   time: integer;
   s, sec: integer;
   ang: angle_t;
@@ -3250,7 +3251,30 @@ begin
           while P_FindSectorFromLineTag2(@lines[i], s) >= 0 do
             sectors[s].ceilingangle := ang;
         end;
-
+      // JVAL: 20200519
+      //        286: Shootable - on death instand lower tagged sector floor
+      //        287: Shootable - on death instand raise tagged sector ceiling
+      //        288: Shootable
+      286, 287, 288:
+        begin
+          if lines[i].radixflags and RWF_SHOOTABLE = 0 then
+          begin
+            lines[i].radixflags := lines[i].radixflags or RWF_SHOOTABLE;
+            lines[i].radixhitpoints := 100;
+          end;
+        end;
+      // JVAL: 20200519
+      //        289: Transfer textures and health to shootable line
+      289:
+        begin
+          for j := 0 to numlines - 1 do
+            if i <> j then
+              if lines[j].tag = lines[i].tag then
+              begin
+                lines[j].radixflags := lines[j].radixflags or RWF_SHOOTABLE;
+                lines[j].radixhitpoints := P_AproxDistance(lines[i].dx, lines[i].dy) div FRACUNIT;
+              end;
+        end;
     end;
 end;
 

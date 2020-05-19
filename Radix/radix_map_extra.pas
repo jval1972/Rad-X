@@ -94,6 +94,7 @@ uses
   p_local,
   p_mobj_h,
   p_maputl,
+  p_spec,
   r_data,
   r_main,
   r_segs,
@@ -521,7 +522,12 @@ end;
 const
   WALLEXPLOSIONOFFSET = 24;
 
-procedure RX_ExplosionParade(const x1, x2, y1, y2, z1, z2: integer; const side: integer; const fracdensity: integer);
+const
+  LEF_DELAY = 0;
+  LEF_NODELAY = 1;
+
+procedure RX_ExplosionParade(const x1, x2, y1, y2, z1, z2: integer; const side: integer;
+  const fracdensity: integer; const flags: LongWord);
 var
   i: integer;
   area, cnt: integer;
@@ -561,13 +567,20 @@ begin
 
     mo := RX_SpawnRadixBigExplosion(x, y, z);
     mo.flags3_ex := mo.flags3_ex or MF3_EX_NOSOUND;
-    mo.tics := mo.tics + (P_Random and 63); // Some delay
+    if flags and LEF_NODELAY <> 0 then
+    begin
+      mo.tics := P_Random mod mo.tics;
+      if mo.tics = 0 then
+        mo.tics := 1;
+    end
+    else
+      mo.tics := mo.tics + (P_Random and 63); // Some delay
   end;
 
   S_AmbientSound(x1 div 2 + x2 div 2, y1 div 2 + y2 div 2, 'radix/SndExplode');
 end;
 
-procedure RX_LineExplosion(const l: Pline_t);
+procedure RX_LineExplosion(const l: Pline_t; const flags: LongWord);
 var
   x1, x2, y1, y2: integer;
   z1, z2: integer;
@@ -580,7 +593,7 @@ begin
   begin
     z1 := l.frontsector.floorheight;
     z2 := l.frontsector.ceilingheight;
-    RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 0, 2 * FRACUNIT);
+    RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 0, 2 * FRACUNIT, flags);
   end
   else
   begin
@@ -589,35 +602,50 @@ begin
     begin
       z1 := l.frontsector.ceilingheight;
       z2 := l.backsector.ceilingheight;
-      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 1, 2 * FRACUNIT);
+      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 1, 2 * FRACUNIT, flags);
     end;
     if (l.frontsector.ceilingheight > l.backsector.ceilingheight) and
        (l.frontsector.renderflags or SRF_SLOPECEILING <> 0) then
     begin
       z1 := l.backsector.ceilingheight;
       z2 := l.frontsector.ceilingheight;
-      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 0, 2 * FRACUNIT);
+      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 0, 2 * FRACUNIT, flags);
     end;
     if (l.frontsector.floorheight < l.backsector.floorheight) and
        (l.frontsector.renderflags or SRF_SLOPEFLOOR <> 0) then
     begin
       z1 := l.frontsector.floorheight;
       z2 := l.backsector.floorheight;
-      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 0, 2 * FRACUNIT);
+      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 0, 2 * FRACUNIT, flags);
     end;
     if (l.frontsector.floorheight > l.backsector.floorheight) and
        (l.backsector.renderflags or SRF_SLOPEFLOOR <> 0) then
     begin
       z1 := l.backsector.floorheight;
       z2 := l.frontsector.floorheight;
-      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 1, 2 * FRACUNIT);
+      RX_ExplosionParade(x1, x2, y1, y2, z1, z2, 1, 2 * FRACUNIT, flags);
     end;
   end;
 end;
 
-procedure RX_DamageLine(const l: Pline_t; const damage: integer);
+procedure RX_LowerSectorToLowestFloor(const sec: Psector_t);
 begin
-  if l.radixflags and (RWF_ACTIVATETRIGGER or RWF_MISSILEWALL) = 0 then
+  sec.floorheight := P_FindLowestFloorSurrounding(sec);
+end;
+
+procedure RX_RaiseSectorToHighestCeiling(const sec: Psector_t);
+begin
+  sec.ceilingheight := P_FindHighestCeilingSurrounding(sec);
+end;
+
+procedure RX_DamageLine(const l: Pline_t; const damage: integer);
+var
+  s: integer;
+  flags: LongWord;
+  i: integer;
+  s1, s2: Pside_t;
+begin
+  if l.radixflags and (RWF_ACTIVATETRIGGER or RWF_MISSILEWALL or RWF_SHOOTABLE) = 0 then
     exit;
 
   l.radixhitpoints := l.radixhitpoints - damage - (damage * P_Random) div 128;
@@ -629,8 +657,65 @@ begin
       radixtriggers[l.radixtrigger].suspended := 0;
       RX_RunTrigger(l.radixtrigger);
     end;
-    RX_LineExplosion(l);
-    l.radixflags := l.radixflags and not RWF_MISSILEWALL;
+
+    flags := LEF_DELAY;
+
+    // JVAL: 20200519 - Shootable specials
+    if l.radixflags and RWF_SHOOTABLE <> 0 then
+    begin
+      case l.special of
+        286:
+          begin
+            flags := flags or LEF_NODELAY;
+            RX_LineExplosion(l, flags);
+            s := -1;
+            while P_FindSectorFromLineTag2(l, s) >= 0 do
+              RX_LowerSectorToLowestFloor(@sectors[s]);
+          end;
+        287:
+          begin
+            flags := flags or LEF_NODELAY;
+            RX_LineExplosion(l, flags);
+            s := -1;
+            while P_FindSectorFromLineTag2(l, s) >= 0 do
+              RX_RaiseSectorToHighestCeiling(@sectors[s]);
+          end;
+        288:
+          begin
+            RX_LineExplosion(l, flags);
+            for i := 0 to numlines - 1 do
+              if lines[i].special = 289 then
+                if l.tag = lines[i].tag then
+                begin
+                  if l.sidenum[0] >= 0 then
+                    if lines[i].sidenum[0] > 0 then
+                    begin
+                      s1 := @sides[l.sidenum[0]];
+                      s2 := @sides[lines[i].sidenum[0]];
+                      s1.toptexture := s2.toptexture;
+                      s1.bottomtexture := s2.bottomtexture;
+                      s1.midtexture := s2.midtexture;
+                    end;
+
+                  if l.sidenum[1] >= 0 then
+                    if lines[i].sidenum[1] > 0 then
+                    begin
+                      s1 := @sides[l.sidenum[1]];
+                      s2 := @sides[lines[i].sidenum[1]];
+                      s1.toptexture := s2.toptexture;
+                      s1.bottomtexture := s2.bottomtexture;
+                      s1.midtexture := s2.midtexture;
+                    end;
+
+                  break;
+                end;
+          end;
+      end;
+    end
+    else
+      RX_LineExplosion(l, flags);
+
+    l.radixflags := l.radixflags and not (RWF_MISSILEWALL or RWF_SHOOTABLE);
   end;
 end;
 
