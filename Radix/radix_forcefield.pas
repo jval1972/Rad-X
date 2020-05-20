@@ -34,9 +34,15 @@ unit radix_forcefield;
 
 interface
 
+uses
+  d_player,
+  r_defs;
+
 procedure RX_InitForceFields;
 
 procedure RX_RunForceFields;
+
+procedure RX_ForceFieldThrust(const p: Pplayer_t; const ln: Pline_t);
 
 implementation
 
@@ -44,15 +50,22 @@ uses
   d_delphi,
   m_fixed,
   m_rnd,
+  tables,
   info_common,
   p_mobj_h,
   p_mobj,
-  r_defs,
+  p_setup,
+  p_genlin,
   r_main,
   radix_grid,
   radix_level,
   radix_logic,
+  radix_sounds,
   z_zone;
+
+const
+  FFIF_TRIGGER = 1;
+  FFIF_SECTOR = 2;
 
 type
   forcefielditem_t = record
@@ -60,6 +73,7 @@ type
     ypos: fixed_t;
     sector: Psector_t;
     triggersuspended: PByte;
+    flags: LongWord;
   end;
   Pforcefielditem_t = ^forcefielditem_t;
   forcefielditem_tArray = array[0..$FFF] of forcefielditem_t;
@@ -69,7 +83,7 @@ var
   numforcefielditems: integer;
   forcefield: Pforcefielditem_tArray;
 
-procedure RX_AddForceFieldItem(const xpos, ypos: integer; const trigger: Pradixtrigger_t);
+procedure RX_AddForceFieldItemGrid(const xpos, ypos: integer; const trigger: Pradixtrigger_t);
 var
   i: integer;
   has_ff: boolean;
@@ -103,7 +117,68 @@ begin
   forcefield[numforcefielditems].ypos := yy;
   forcefield[numforcefielditems].sector := R_PointInSubSector(xx, yy).sector;
   forcefield[numforcefielditems].triggersuspended := @trigger.suspended;
+  forcefield[numforcefielditems].flags := FFIF_TRIGGER;
   inc(numforcefielditems);
+end;
+
+procedure RX_AddForceFieldItemSector(const sec: Psector_t);
+var
+  i: integer;
+  maxx, minx, maxy, miny: fixed_t;
+  l: Pline_t;
+  v: Pvertex_t;
+  x, y: fixed_t;
+
+  function trunc_div(const xx: fixed_t): integer;
+  begin
+    if xx < 0 then
+      result := xx div (FRACUNIT * RADIXGRIDCELLSIZE) - 1
+    else
+      result := xx div (FRACUNIT * RADIXGRIDCELLSIZE);
+  end;
+
+begin
+  maxx := -MAXINT;
+  minx := MAXINT;
+  maxy := -MAXINT;
+  miny := MAXINT;
+  for i := 0 to sec.linecount - 1 do
+  begin
+    l := sec.lines[i];
+    v := l.v1;
+    if v.x > maxx then
+      maxx := v.x;
+    if v.x < minx then
+      minx := v.x;
+    if v.y > maxy then
+      maxy := v.y;
+    if v.y < miny then
+      miny := v.y;
+    v := l.v2;
+    if v.x > maxx then
+      maxx := v.x;
+    if v.x < minx then
+      minx := v.x;
+    if v.y > maxy then
+      maxy := v.y;
+    if v.y < miny then
+      miny := v.y;
+  end;
+
+  for x := trunc_div(minx) to trunc_div(maxx) do
+    for y := trunc_div(miny) to trunc_div(maxy) do
+    begin
+      if numforcefielditems = 0 then
+        forcefield := Z_Malloc(SizeOf(forcefielditem_t), PU_LEVEL, nil)
+      else
+        forcefield := Z_Realloc(forcefield, (numforcefielditems + 1) * SizeOf(forcefielditem_t), PU_LEVEL, nil);
+      forcefield[numforcefielditems].xpos := x * FRACUNIT * RADIXGRIDCELLSIZE;
+      forcefield[numforcefielditems].ypos := y * FRACUNIT * RADIXGRIDCELLSIZE;
+      forcefield[numforcefielditems].sector := sec;
+      forcefield[numforcefielditems].triggersuspended := nil;
+      forcefield[numforcefielditems].flags := FFIF_SECTOR;
+      inc(numforcefielditems);
+    end;
 end;
 
 procedure RX_InitForceFields;
@@ -121,8 +196,12 @@ begin
     trig_id := radixgrid[i];
     if trig_id >= 0 then
       if RX_GridToMap(i, x, y) then
-        RX_AddForceFieldItem(x, y, @radixtriggers[trig_id]);
+        RX_AddForceFieldItemGrid(x, y, @radixtriggers[trig_id]);
   end;
+
+  for i := 0 to numsectors - 1 do
+    if sectors[i].special and FORCEFIELD_MASK <> 0 then
+      RX_AddForceFieldItemSector(@sectors[i]);
 end;
 
 var
@@ -142,22 +221,49 @@ var
 begin
   item := @forcefield[idx];
 
-  if item.triggersuspended^ <> 0 then
-    exit;
-    
+  if item.flags and FFIF_TRIGGER <> 0 then
+  begin
+    if item.triggersuspended^ <> 0 then
+      exit;
+  end
+  else if item.flags and FFIF_SECTOR <> 0 then
+  begin
+    if item.sector.special and FORCEFIELD_MASK = 0 then
+      exit;
+  end;
+
   zstep := ((RADIXGRIDCELLSIZE * FRACUNIT) div FF_DENSITY);
   numff := (item.sector.ceilingheight - item.sector.floorheight) div zstep;
 
   z := item.sector.floorheight + zstep div 2;
-  for i := 0 to numff - 1 do
-    if Sys_Random < 128 then
-    begin
-      x := item.xpos + Sys_Random * 256 * RADIXGRIDCELLSIZE;
-      y := item.ypos - Sys_Random * 256 * RADIXGRIDCELLSIZE;
-      th := P_SpawnMobj(x, y, z, radixforcefield_id);
-      th.momz := Isign(Sys_Random - 128) * Sys_Random * 1024;
-      z := z + zstep;
-    end;
+
+  if item.flags and FFIF_TRIGGER <> 0 then
+  begin
+    for i := 0 to numff - 1 do
+      if Sys_Random < 128 then
+      begin
+        x := item.xpos + Sys_Random * 256 * RADIXGRIDCELLSIZE;
+        y := item.ypos - Sys_Random * 256 * RADIXGRIDCELLSIZE;
+        th := P_SpawnMobj(x, y, z, radixforcefield_id);
+        th.momz := Isign(Sys_Random - 128) * Sys_Random * 1024;
+        z := z + zstep;
+      end;
+  end
+  else if item.flags and FFIF_SECTOR <> 0 then
+  begin
+    for i := 0 to numff - 1 do
+      if Sys_Random < 128 then
+      begin
+        x := item.xpos + Sys_Random * 256 * RADIXGRIDCELLSIZE;
+        y := item.ypos - Sys_Random * 256 * RADIXGRIDCELLSIZE;
+        if R_PointInSubSector(x, y).sector = item.sector then
+        begin
+          th := P_SpawnMobj(x, y, z, radixforcefield_id);
+          th.momz := Isign(Sys_Random - 128) * Sys_Random * 1024;
+        end;
+        z := z + zstep;
+      end;
+  end
 end;
 
 procedure RX_RunForceFields;
@@ -171,4 +277,28 @@ begin
     RX_SpawnForceFields(i);
 end;
 
+const
+  FORCEFIELDTHRUST = 30;
+
+procedure RX_ForceFieldThrust(const p: Pplayer_t; const ln: Pline_t);
+var
+  ang: angle_t;
+begin
+  if (ln.backsector = nil) or (ln.frontsector = nil) then
+    exit;
+
+  if ln.backsector.special and FORCEFIELD_MASK <> 0 then
+    ang := R_PointToAngle2(ln.v1.x, ln.v1.y, ln.v2.x, ln.v2.y)
+  else
+    ang := R_PointToAngle2(ln.v2.x, ln.v2.y, ln.v1.x, ln.v1.y);
+
+  ang := (ang - ANG90) shr ANGLETOFINESHIFT;
+
+  S_AmbientSound(p.mo.x, p.mo.y, 'radix/SndGenAlarm');
+  p.mo.momx := FORCEFIELDTHRUST * finecosine[ang];
+  p.mo.momy := FORCEFIELDTHRUST * finesine[ang];
+  p.mo.momz := 0;
+end;
+
 end.
+

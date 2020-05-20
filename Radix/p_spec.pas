@@ -3252,10 +3252,11 @@ begin
             sectors[s].ceilingangle := ang;
         end;
       // JVAL: 20200519
-      //        286: Shootable - on death instand lower tagged sector floor
-      //        287: Shootable - on death instand raise tagged sector ceiling
-      //        288: Shootable
-      286, 287, 288:
+      //        286: Destructible line - on death instand lower tagged sector floor
+      //        287: Destructible line - on death instand raise tagged sector ceiling
+      //        288: Destructible line
+      //        290: Destructible line - on death remove forcefield from tagged sector
+      286, 287, 288, 290:
         begin
           if lines[i].radixflags and RWF_SHOOTABLE = 0 then
           begin

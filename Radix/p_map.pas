@@ -117,6 +117,7 @@ var
   tmthing: Pmobj_t;
   tmline: Pline_t;
   tmbounceline: Pline_t;
+  tmforcefieldline: Pline_t; // JVAL: 20200520 - Forcefield in Doom format
   tmfailfromptinair: boolean;
   tmx: fixed_t; // JVAL: Slopes - move from implementation section to interface
   tmy: fixed_t; // JVAL: Slopes - move from implementation section to interface
@@ -141,6 +142,7 @@ uses
   p_switch,
   p_tick,
   p_terrain,
+  p_genlin,
   ps_main,  // JVAL: Script Events
   radix_map_extra, // JVAL: 20200307 - Wall Damage
   radix_objects,  // JVAL: 20200426 - Alien blood
@@ -343,6 +345,16 @@ begin
     tmbounceline := ld;
     exit;
   end;
+
+  // JVAL: 20200520 - Forcefield in Doom format
+  if tmthing.player <> nil then
+    if ld.frontsector <> nil then
+      if (ld.backsector.special and FORCEFIELD_MASK) <> (ld.frontsector.special and FORCEFIELD_MASK) then
+      begin
+        result := false;
+        tmforcefieldline := ld;
+        exit;
+      end;
 
   // JVAL: 20200504 - Closed backsector
   if ld.backsector.renderflags and SRF_SLOPED = 0 then
@@ -724,6 +736,7 @@ begin
   tmflags := thing.flags;
   tmline := nil;
   tmbounceline := nil;
+  tmforcefieldline := nil;  // JVAL: 20200520 - Forcefield in Doom format
 
   tmx := x;
   tmy := y;

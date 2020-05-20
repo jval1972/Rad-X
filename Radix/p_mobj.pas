@@ -151,6 +151,7 @@ uses
   radix_sounds,
   radix_player,
   radix_messages,
+  radix_forcefield,
   r_defs,
   r_sky,
   r_main,
@@ -437,7 +438,9 @@ begin
       // blocked move
       if mo.player <> nil then
       begin
-        if not P_LadderMove(mo) then
+        if tmforcefieldline <> nil then
+          RX_ForceFieldThrust(mo.player, tmforcefieldline)
+        else if not P_LadderMove(mo) then
         begin
           P_SlideMove(mo); // try to slide along it
           RX_PlaneHitWall(mo.player, ptryx, ptryy);

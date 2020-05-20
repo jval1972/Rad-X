@@ -95,6 +95,7 @@ uses
   p_mobj_h,
   p_maputl,
   p_spec,
+  p_genlin,
   r_data,
   r_main,
   r_segs,
@@ -642,8 +643,40 @@ procedure RX_DamageLine(const l: Pline_t; const damage: integer);
 var
   s: integer;
   flags: LongWord;
-  i: integer;
-  s1, s2: Pside_t;
+
+  procedure search_texture_change;
+  var
+    i: integer;
+    s1, s2: Pside_t;
+  begin
+    for i := 0 to numlines - 1 do
+      if lines[i].special = 289 then
+        if l.tag = lines[i].tag then
+        begin
+          if l.sidenum[0] >= 0 then
+            if lines[i].sidenum[0] > 0 then
+            begin
+              s1 := @sides[l.sidenum[0]];
+              s2 := @sides[lines[i].sidenum[0]];
+              s1.toptexture := s2.toptexture;
+              s1.bottomtexture := s2.bottomtexture;
+              s1.midtexture := s2.midtexture;
+            end;
+
+          if l.sidenum[1] >= 0 then
+            if lines[i].sidenum[1] > 0 then
+            begin
+              s1 := @sides[l.sidenum[1]];
+              s2 := @sides[lines[i].sidenum[1]];
+              s1.toptexture := s2.toptexture;
+              s1.bottomtexture := s2.bottomtexture;
+              s1.midtexture := s2.midtexture;
+            end;
+
+          break;
+        end;
+  end;
+
 begin
   if l.radixflags and (RWF_ACTIVATETRIGGER or RWF_MISSILEWALL or RWF_SHOOTABLE) = 0 then
     exit;
@@ -664,51 +697,36 @@ begin
     if l.radixflags and RWF_SHOOTABLE <> 0 then
     begin
       case l.special of
-        286:
+        286:  // Lower tagged sector floor
           begin
             flags := flags or LEF_NODELAY;
             RX_LineExplosion(l, flags);
             s := -1;
             while P_FindSectorFromLineTag2(l, s) >= 0 do
               RX_LowerSectorToLowestFloor(@sectors[s]);
+            search_texture_change;
           end;
-        287:
+        287:  // raise tagged sector ceiling
           begin
             flags := flags or LEF_NODELAY;
             RX_LineExplosion(l, flags);
             s := -1;
             while P_FindSectorFromLineTag2(l, s) >= 0 do
               RX_RaiseSectorToHighestCeiling(@sectors[s]);
+            search_texture_change;
           end;
-        288:
+        288:  // just explode
           begin
             RX_LineExplosion(l, flags);
-            for i := 0 to numlines - 1 do
-              if lines[i].special = 289 then
-                if l.tag = lines[i].tag then
-                begin
-                  if l.sidenum[0] >= 0 then
-                    if lines[i].sidenum[0] > 0 then
-                    begin
-                      s1 := @sides[l.sidenum[0]];
-                      s2 := @sides[lines[i].sidenum[0]];
-                      s1.toptexture := s2.toptexture;
-                      s1.bottomtexture := s2.bottomtexture;
-                      s1.midtexture := s2.midtexture;
-                    end;
-
-                  if l.sidenum[1] >= 0 then
-                    if lines[i].sidenum[1] > 0 then
-                    begin
-                      s1 := @sides[l.sidenum[1]];
-                      s2 := @sides[lines[i].sidenum[1]];
-                      s1.toptexture := s2.toptexture;
-                      s1.bottomtexture := s2.bottomtexture;
-                      s1.midtexture := s2.midtexture;
-                    end;
-
-                  break;
-                end;
+            search_texture_change;
+          end;
+        290:  // disable forcefield
+          begin
+            RX_LineExplosion(l, flags);
+            s := -1;
+            while P_FindSectorFromLineTag2(l, s) >= 0 do
+              sectors[s].special := sectors[s].special and not FORCEFIELD_MASK;
+            search_texture_change;
           end;
       end;
     end

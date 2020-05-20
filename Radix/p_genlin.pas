@@ -41,14 +41,16 @@ uses
 //jff 3/14/98 add bits and shifts for generalized sector types
 
 const
-  DAMAGE_MASK    = $60;
-  DAMAGE_SHIFT   = 5;
-  SECRET_MASK    = $80;
-  SECRET_SHIFT   = 7;
-  FRICTION_MASK  = $100;
-  FRICTION_SHIFT = 8;
-  PUSH_MASK      = $200;
-  PUSH_SHIFT     = 9;
+  DAMAGE_MASK       = $60;
+  DAMAGE_SHIFT      = 5;
+  SECRET_MASK       = $80;
+  SECRET_SHIFT      = 7;
+  FRICTION_MASK     = $100;
+  FRICTION_SHIFT    = 8;
+  PUSH_MASK         = $200;
+  PUSH_SHIFT        = 9;
+  FORCEFIELD_MASK   = $400;
+  FORCEFIELD_SHIFT  = 10;
 
 //jff 02/04/98 Define masks, shifts, for fields in
 // generalized linedef types
