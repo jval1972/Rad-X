@@ -340,6 +340,8 @@ begin
   baseproclist.Add('function GetSectorSpecial(const sec: Integer): Integer;', @PS_GetSectorSpecial);
   baseproclist.Add('function GetSectorTag(const sec: Integer): Integer;', @PS_GetSectorTag);
   baseproclist.Add('procedure SetSectorTag(const sec: Integer; const x: Integer);', @PS_SetSectorTag);
+  baseproclist.Add('function GetSectorForcefield(const sec: Integer): Boolean;', @PS_GetSectorForcefield);
+  baseproclist.Add('procedure SetSectorForcefield(const sec: Integer; const x: Boolean);', @PS_SetSectorForcefield);
   baseproclist.Add('function GetSectorActors(const sec: Integer): TActorArray;', @PS_GetSectorActors);
   baseproclist.Add('function GetSectorNumActors(const sec: Integer): Integer;', @PS_GetSectorNumActors);
   baseproclist.Add('function GetSectorLines(const sec: Integer): TIntegerArray;', @PS_GetSectorLines);

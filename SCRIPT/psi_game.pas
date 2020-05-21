@@ -3755,6 +3755,25 @@ begin
     sectors[sec].tag := x;
 end;
 
+function PS_GetSectorForcefield(const sec: Integer): Boolean;
+begin
+  if (sec >= 0) and (sec < numsectors) then
+    Result := sectors[sec].special and FORCEFIELD_MASK <> 0
+  else
+    Result := Flase;
+end;
+
+procedure PS_SetSectorForcefield(const sec: Integer; const x: Boolean);
+begin
+  if (sec >= 0) and (sec < numsectors) then
+  begin
+    if x then
+      sectors[sec].special := sectors[sec].special or FORCEFIELD_MASK
+    else
+      sectors[sec].special := sectors[sec].special and not FORCEFIELD_MASK;
+  end;
+end;
+
 function PS_GetSectorActors(const sec: Integer): TActorArray;
 var
   akl: TActorKeyList;
