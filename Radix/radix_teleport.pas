@@ -35,20 +35,28 @@ unit radix_teleport;
 interface
 
 uses
+  m_fixed,
   p_mobj_h;
 
 procedure RX_SpawnTeleportForceField(const mo: Pmobj_t);
+
+procedure RX_SpawnTeleportForceFieldXYZ(const x, y, z: fixed_t);
+
+function RX_DoomFogPresent: boolean;
 
 implementation
 
 uses
   d_delphi,
-  m_fixed,
   m_rnd,
   tables,
+  info,
+  info_h,
   info_common,
   p_mobj,
-  radix_sounds;
+  p_pspr,
+  radix_sounds,
+  w_wad;
 
 const
   TELEPORTDENSITY = 1000;
@@ -79,6 +87,63 @@ begin
   end;
 
   S_AmbientSound(mo.x, mo.y, 'radix/SndTelePort');
+end;
+
+procedure RX_SpawnTeleportForceFieldXYZ(const x, y, z: fixed_t);
+var
+  i: integer;
+  tt: Pmobj_t;
+  an: angle_t;
+  dist: integer;
+begin
+  if radixteleportforcefield_id < 0 then
+    radixteleportforcefield_id := Info_GetMobjNumForName('MT_TELEPORTFORCEFIELD');
+
+  for i := 0 to TELEPORTDENSITY - 1 do
+  begin
+    an := Sys_Random * (FINEANGLES div 256);
+    dist := 32 + P_Random and 63;
+    tt := P_SpawnMobj(x + dist * finecosine[an],
+                      y + dist * finesine[an],
+                      z + (P_Random - 128) * FRACUNIT, radixteleportforcefield_id);
+    tt.momx := finecosine[an] * (256 + Sys_Random) div 256;
+    tt.momy := finesine[an] * (256 + Sys_Random) div 256;
+  end;
+
+  S_AmbientSound(x, y, 'radix/SndTelePort');
+end;
+
+var
+  doomfogpresent: boolean;
+  doomfogpresent_checked: boolean = false;
+
+function RX_DoomFogPresent: boolean;
+var
+  st: integer;
+  spr: string;
+begin
+  if doomfogpresent_checked then
+  begin
+    result := doomfogpresent;
+    exit;
+  end;
+
+  doomfogpresent_checked := true;
+  result := false;
+  doomfogpresent := result;
+  st := mobjinfo[Ord(MT_TFOG)].spawnstate;
+  if st < 0 then
+    exit;
+
+  spr :=
+    Chr(sprnames[states[st].sprite] and $FF) +
+    Chr((sprnames[states[st].sprite] shr 8) and $FF) +
+    Chr((sprnames[states[st].sprite] shr 16) and $FF) +
+    Chr((sprnames[states[st].sprite] shr 24) and $FF) +
+    Chr(Ord('A') + states[st].frame and FF_FRAMEMASK);
+
+  result := (W_CheckNumForName(spr + '0') >= 0) or (W_CheckNumForName(spr + '1') >= 0);
+  doomfogpresent := result;
 end;
 
 end.

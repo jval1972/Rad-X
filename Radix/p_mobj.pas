@@ -152,6 +152,7 @@ uses
   radix_player,
   radix_messages,
   radix_forcefield,
+  radix_teleport,
   r_defs,
   r_sky,
   r_main,
@@ -850,7 +851,6 @@ begin
   // initiate teleport sound
   if mo.flags3_ex and MF3_EX_NOSOUND = 0 then
     S_StartSound(mo, Ord(sfx_telept));
-
   // spawn a teleport fog at the new spot
   ss := R_PointInSubsector(x, y);
 
