@@ -358,6 +358,9 @@ function PS_GetSectorSpecial(const sec: Integer): Integer;
 function PS_GetSectorTag(const sec: Integer): Integer;
 procedure PS_SetSectorTag(const sec: Integer; const x: Integer);
 
+function PS_GetSectorForcefield(const sec: Integer): Boolean;
+procedure PS_SetSectorForcefield(const sec: Integer; const x: Boolean);
+
 function PS_GetSectorActors(const sec: Integer): TActorArray;
 
 function PS_GetSectorNumActors(const sec: Integer): Integer;
@@ -4133,6 +4136,16 @@ begin
   T := PS_GetSectorTag(Integer(Self) - 1);
 end;
 
+procedure TRTLSectorForcefield_W(Self: TRTLSector; const T: Boolean);
+begin
+  PS_SetSectorForcefield(Integer(Self) - 1, T);
+end;
+
+procedure TRTLSectorForcefield_R(Self: TRTLSector; var T: Boolean);
+begin
+  T := PS_GetSectorForcefield(Integer(Self) - 1);
+end;
+
 procedure TRTLSectorSpecial_R(Self: TRTLSector; var T: Integer);
 begin
   T := PS_GetSectorSpecial(Integer(Self) - 1);
@@ -5583,6 +5596,7 @@ begin
   csector.RegisterProperty('LightLevel', 'Integer', iptRW);
   csector.RegisterProperty('Special', 'Integer', iptR);
   csector.RegisterProperty('Tag', 'Integer', iptRW);
+  csector.RegisterProperty('Forcefield', 'Boolean', iptRW);
   csector.RegisterProperty('Actors', 'TActorArray', iptR);
   csector.RegisterProperty('NumActors', 'Integer', iptR);
   csector.RegisterProperty('Lines', 'TIntegerArray', iptR);
@@ -5803,6 +5817,7 @@ begin
   rsector.RegisterPropertyHelper(@TRTLSectorLightLevel_R, @TRTLSectorLightLevel_W, 'LightLevel');
   rsector.RegisterPropertyHelper(@TRTLSectorSpecial_R, nil, 'Special');
   rsector.RegisterPropertyHelper(@TRTLSectorTag_R, @TRTLSectorTag_W, 'Tag');
+  rsector.RegisterPropertyHelper(@TRTLSectorForcefield_R, @TRTLSectorForcefield_W, 'Forcefield');
   rsector.RegisterPropertyHelper(@TRTLSectorActors_R, nil, 'Actors');
   rsector.RegisterPropertyHelper(@TRTLSectorNumActors_R, nil, 'NumActors');
   rsector.RegisterPropertyHelper(@TRTLSectorLines_R, nil, 'Lines');
