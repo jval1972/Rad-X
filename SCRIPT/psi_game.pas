@@ -315,6 +315,9 @@ procedure PS_SetLineIsBlockingMonsters(const ld: Integer; const x: Boolean);
 function PS_GetLineTriggerScripts(const ld: Integer): Boolean;
 procedure PS_SetLineTriggerScripts(const ld: Integer; const x: Boolean);
 
+function PS_GetLineHealth(const ld: Integer): Integer;
+procedure PS_SetLineHealth(const ld: Integer; const h: integer);
+
 function PS_GetLineFrontSide(const ld: Integer): Integer;
 
 function PS_GetLineBackSide(const ld: Integer): Integer;
@@ -3338,6 +3341,20 @@ begin
   end;
 end;
 
+function PS_GetLineHealth(const ld: Integer): Integer;
+begin
+  if (ld >= 0) and (ld < numlines) then
+    Result := lines[ld].radixhitpoints
+  else
+    Result := 0;
+end;
+
+procedure PS_SetLineHealth(const ld: Integer; const h: integer);
+begin
+  if (ld >= 0) and (ld < numlines) then
+    lines[ld].radixhitpoints := h;
+end;
+
 function PS_GetLineFrontSide(const ld: Integer): Integer;
 begin
   if (ld >= 0) and (ld < numlines) then
@@ -3544,6 +3561,16 @@ end;
 procedure TRTLLineTriggerScripts_R(Self: TRTLLine; var T: Boolean);
 begin
   T := PS_GetLineTriggerScripts(Integer(Self) - 1);
+end;
+
+procedure TRTLLineHealth_W(Self: TRTLLine; const T: Integer);
+begin
+  PS_SetLineHealth(Integer(Self) - 1, T);
+end;
+
+procedure TRTLLineHealth_R(Self: TRTLLine; var T: Integer);
+begin
+  T := PS_GetLineHealth(Integer(Self) - 1);
 end;
 
 procedure TRTLLineSpecial_W(Self: TRTLLine; const T: Integer);
@@ -5519,6 +5546,7 @@ begin
   cline.RegisterProperty('IsBlocking', 'Boolean', iptRW);
   cline.RegisterProperty('IsBlockingMonsters', 'Boolean', iptRW);
   cline.RegisterProperty('TriggerScripts', 'Boolean', iptRW);
+  cline.RegisterProperty('Health', 'Integer', iptRW);
   cline.RegisterProperty('FrontSide', '!TSide', iptR);
   cline.RegisterProperty('BackSide', '!TSide', iptR);
   cline.RegisterProperty('FrontSector', '!TSector', iptR);
@@ -5739,6 +5767,7 @@ begin
   rline.RegisterPropertyHelper(@TRTLLineIsBlocking_R, @TRTLLineIsBlocking_W, 'IsBlocking');
   rline.RegisterPropertyHelper(@TRTLLineIsBlockingMonsters_R, @TRTLLineIsBlockingMonsters_W, 'IsBlockingMonsters');
   rline.RegisterPropertyHelper(@TRTLLineTriggerScripts_R, @TRTLLineTriggerScripts_W, 'TriggerScripts');
+  rline.RegisterPropertyHelper(@TRTLLineHealth_R, @TRTLLineHealth_W, 'Health');
   rline.RegisterPropertyHelper(@TRTLLineFrontSide_R, nil, 'FrontSide');
   rline.RegisterPropertyHelper(@TRTLLineBackSide_R, nil, 'BackSide');
   rline.RegisterPropertyHelper(@TRTLLineFrontSector_R, nil, 'FrontSector');

@@ -314,6 +314,8 @@ begin
   baseproclist.Add('procedure SetLineIsBlockingMonsters(const ld: Integer; const x: Boolean);', @PS_SetLineIsBlockingMonsters);
   baseproclist.Add('function GetLineTriggerScripts(const ld: Integer): Boolean;', @PS_GetLineTriggerScripts);
   baseproclist.Add('procedure SetLineTriggerScripts(const ld: Integer; const x: Boolean);', @PS_SetLineTriggerScripts);
+  baseproclist.Add('function PS_GetLineHealth(const ld: Integer): Integer;', @PS_GetLineHealth);
+  baseproclist.Add('procedure PS_SetLineHealth(const ld: Integer; const h: integer);', @PS_SetLineHealth);
   baseproclist.Add('function GetLineFrontSide(const ld: Integer): integer;', @PS_GetLineFrontSide);
   baseproclist.Add('function GetLineBackSide(const ld: Integer): integer;', @PS_GetLineBackSide);
   baseproclist.Add('function GetLineFrontSector(const ld: Integer): integer;', @PS_GetLineFrontSector);
