@@ -163,6 +163,8 @@ const
   ML_AUTOMAPIGNOGE = 2048;
 // Line allows slide transitions
   ML_SLIDELINE = 4096;
+// Front side is "complete"
+  ML_TWOSIDEDCOMPLETE = 8192;
 
 type
 // Sector definition, from editing.
