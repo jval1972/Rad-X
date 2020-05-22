@@ -1148,6 +1148,8 @@ var
       make_slide_line(117);
       make_slide_line(401);
       make_slide_line(449);
+      // Fix F_TranspotoSecondary
+      ractions[273].params[4] := 528;
     end
     else if levelname = 'E1M5' then
     begin
