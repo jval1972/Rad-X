@@ -1083,7 +1083,9 @@ begin
   pds.bsilheight := MAXINT;
   pds.tsilheight := MININT;
 
-  if backsector = nil then
+  completewall := R_CompleteWall(curline.linedef);
+  completewallactive := completewallactive or completewall;
+  if (backsector = nil) or completewall then
   begin
     // single sided line
     midtexture := texturetranslation[sidedef.midtexture];
@@ -1099,13 +1101,22 @@ begin
 
     pds.sprtopclip := @screenheightarray;
     pds.sprbottomclip := @negonearray;
-  end
-  else
+  end;
+
+  if backsector <> nil then
   begin
     // two sided line
-    pds.sprtopclip := nil;
-    pds.sprbottomclip := nil;
-
+    if completewall then
+    begin
+      pds.sprtopclip := @screenheightarray;
+      pds.sprbottomclip := @negonearray;
+    end
+    else
+    begin
+      // two sided line
+      pds.sprtopclip := nil;
+      pds.sprbottomclip := nil;
+    end;
 
     if (sc11 > sc1) or (sc22 > sc2) then
     begin
