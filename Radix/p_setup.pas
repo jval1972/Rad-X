@@ -989,7 +989,7 @@ begin
 
     ld.renderflags := 0;
 
-    // JVAL: 20200522 - "Two Sided Complete' Radix Special
+    // JVAL: 20200522 - "Two Sided Complete" Radix Special
     if mld.flags and ML_TWOSIDEDCOMPLETE <> 0 then
       ld.radixflags := ld.radixflags or RWF_TWOSIDEDCOMPLETE;
 

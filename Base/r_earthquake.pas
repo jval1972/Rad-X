@@ -55,6 +55,8 @@ var
   frac1, frac2: integer;
   intensity: fixed_t;
 begin
+  if player.quaketics = 0 then
+    exit;
   seed1 := player.quaketics div FRACUNIT;
   seed2 := seed1 + 1;
   frac1 := player.quaketics mod FRACUNIT;
