@@ -123,18 +123,7 @@ begin
 end;
 
 const
-{$IFDEF DOOM}
-  basename = 'Doom';
-{$ENDIF}
-{$IFDEF HERETIC}
-  basename = 'Heretic';
-{$ENDIF}
-{$IFDEF HEXEN}
-  basename = 'Hexen';
-{$ENDIF}
-{$IFDEF STRIFE}
-  basename = 'Strife';
-{$ENDIF}
+  basename = 'Rad';
 
 procedure I_InitializeIO;
 var
@@ -144,17 +133,17 @@ var
 begin
   if M_CheckParm('-debugfile') <> 0 then
 {$IFDEF OPENGL}
-    sprintf(dfilename, 'DATA\LOGS\GL%s32_debug%d.txt', [basename, consoleplayer])
+    sprintf(dfilename, 'DATA\LOGS\GL%s_debug%d.txt', [basename, consoleplayer])
   else
-    sprintf(dfilename, 'DATA\LOGS\GL%s32_debug.txt', [basename]);
-  sprintf(efilename, 'DATA\LOGS\GL%s32_stderr.txt', [basename]);
-  sprintf(sfilename, 'DATA\LOGS\GL%s32_stdout.txt', [basename]);
+    sprintf(dfilename, 'DATA\LOGS\GL%s_debug.txt', [basename]);
+  sprintf(efilename, 'DATA\LOGS\GL%s_stderr.txt', [basename]);
+  sprintf(sfilename, 'DATA\LOGS\GL%s_stdout.txt', [basename]);
 {$ELSE}
-    sprintf(dfilename, 'DATA\LOGS\%s32_debug%d.txt', [basename, consoleplayer])
+    sprintf(dfilename, 'DATA\LOGS\%s_debug%d.txt', [basename, consoleplayer])
   else
-    sprintf(dfilename, 'DATA\LOGS\%s32_debug.txt', [basename]);
-  sprintf(efilename, 'DATA\LOGS\%s32_stderr.txt', [basename]);
-  sprintf(sfilename, 'DATA\LOGS\%s32_stdout.txt', [basename]);
+    sprintf(dfilename, 'DATA\LOGS\%s_debug.txt', [basename]);
+  sprintf(efilename, 'DATA\LOGS\%s_stderr.txt', [basename]);
+  sprintf(sfilename, 'DATA\LOGS\%s_stdout.txt', [basename]);
 {$ENDIF}
 
   MkDir(M_SaveFileName('DATA'));
