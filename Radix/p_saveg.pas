@@ -269,6 +269,24 @@ begin
     PLongWord(put)^ := sec.ceilingangle;
     put := @put[2];
 
+    // JVAL: 20200522 - Slope values
+    Pfloat(put)^ := sec.fa;
+    put := @put[SizeOf(float) div 2];
+    Pfloat(put)^ := sec.fb;
+    put := @put[SizeOf(float) div 2];
+    Pfloat(put)^ := sec.fd;
+    put := @put[SizeOf(float) div 2];
+    Pfloat(put)^ := sec.fic;
+    put := @put[SizeOf(float) div 2];
+    Pfloat(put)^ := sec.ca;
+    put := @put[SizeOf(float) div 2];
+    Pfloat(put)^ := sec.cb;
+    put := @put[SizeOf(float) div 2];
+    Pfloat(put)^ := sec.cd;
+    put := @put[SizeOf(float) div 2];
+    Pfloat(put)^ := sec.cic;
+    put := @put[SizeOf(float) div 2];
+
     PInteger(put)^ := sec.num_saffectees;
     put := @put[2];
     for j := 0 to sec.num_saffectees - 1 do
@@ -398,6 +416,24 @@ begin
     get := @get[2];
     sec.ceilingangle := PLongWord(get)^;
     get := @get[2];
+
+    // JVAL: 20200522 - Slope values
+    sec.fa := Pfloat(get)^;
+    get := @get[SizeOf(float) div 2];
+    sec.fb := Pfloat(get)^;
+    get := @get[SizeOf(float) div 2];
+    sec.fd := Pfloat(get)^;
+    get := @get[SizeOf(float) div 2];
+    sec.fic := Pfloat(get)^;
+    get := @get[SizeOf(float) div 2];
+    sec.ca := Pfloat(get)^;
+    get := @get[SizeOf(float) div 2];
+    sec.cb := Pfloat(get)^;
+    get := @get[SizeOf(float) div 2];
+    sec.cd := Pfloat(get)^;
+    get := @get[SizeOf(float) div 2];
+    sec.cic := Pfloat(get)^;
+    get := @get[SizeOf(float) div 2];
 
     sec.num_saffectees := PInteger(get)^;
     get := @get[2];

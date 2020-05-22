@@ -48,7 +48,12 @@ function P_CeilingHeight(const x, y: fixed_t): fixed_t; overload;
 
 procedure P_SlopesSetup;
 
+procedure P_FixSlopedMobjs(const s: Psector_t);
+
 procedure P_DynamicSlope(const sec: Psector_t);
+
+procedure P_SlopesAlignPlane(const sec: Psector_t; const line: Pline_t; const flag: LongWord;
+  const calcpivotline: boolean = true);
 
 const
   SLOPECOUNTDOWN = 4;
@@ -242,8 +247,8 @@ begin
     v1[0] := line.dx / FRACUNIT;
     v1[1] := line.dy / FRACUNIT;
     v1[2] := 0.0;
-    v2[0] := (refvert.x - line.v1.x) / FRACUNIT;;
-    v2[1] := (refvert.y - line.v1.y) / FRACUNIT;;
+    v2[0] := (refvert.x - line.v1.x) / FRACUNIT;
+    v2[1] := (refvert.y - line.v1.y) / FRACUNIT;
     v2[2] := (srcheight - destheight) / FRACUNIT;
 
     CrossProduct(@v1, @v2, @cross);
@@ -310,7 +315,7 @@ end;
 
 procedure P_FixSlopedMobjs(const s: Psector_t);
 var
- mo: Pmobj_t;
+  mo: Pmobj_t;
 begin
   mo := s.thinglist;
   // JVAL: 20200429 - Sector thinglist consistency
@@ -321,7 +326,7 @@ begin
     mo.floorz := P_FloorHeight(s, mo.x, mo.y);
     if  mo.z < mo.floorz then
       mo.z := mo.floorz;
-    mo := mo.snext; 
+    mo := mo.snext;
   end;
 end;
 
@@ -434,7 +439,7 @@ begin
           P_SlopesAlignPlane(lines[i].backsector, @lines[i], SRF_SLOPECEILING);
         end;
     end
-  end;;
+  end;
 end;
 
 end.

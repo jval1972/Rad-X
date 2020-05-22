@@ -51,6 +51,12 @@ procedure RX_CalcFloorSlope(const sec: Psector_t);
 
 procedure RX_CalcCeilingSlope(const sec: Psector_t);
 
+procedure PS_SetFloorSlope(const secid: integer; const x1, y1, z1: fixed_t;
+  const x2, y2, z2: fixed_t; const x3, y3, z3: fixed_t);
+
+procedure PS_SetCeilingSlope(const secid: integer; const x1, y1, z1: fixed_t;
+  const x2, y2, z2: fixed_t; const x3, y3, z3: fixed_t);
+
 // Parse map lump for extra information about radix level
 procedure RX_LoadRadixMapInfo(const lumpnum: integer);
 
@@ -96,6 +102,7 @@ uses
   p_maputl,
   p_spec,
   p_genlin,
+  p_slopes,
   r_data,
   r_main,
   r_segs,
@@ -206,6 +213,97 @@ begin
   sec.cd := cd;
 end;
 
+procedure PS_SetFloorSlope(const secid: integer; const x1, y1, z1: fixed_t;
+  const x2, y2, z2: fixed_t; const x3, y3, z3: fixed_t);
+var
+  fx1, fy1, fz1: float;
+  fx2, fy2, fz2: float;
+  fx3, fy3, fz3: float;
+  fa, fb, fc, fd: float;
+  sec: Psector_t;
+begin
+  if (secid < 0) or (secid >= numsectors) then
+    exit;
+
+  sec := @sectors[secid];
+  if (z1 = z2) and (z2 = z3) then
+  begin
+    sec.renderflags := sec.renderflags and not SRF_SLOPEFLOOR;
+    sec.floorheight := z1;
+  end
+  else
+  begin
+    fx1 := x1 / FRACUNIT;
+    fy1 := y1 / FRACUNIT;
+    fz1 := z1 / FRACUNIT;
+    fx2 := x2 / FRACUNIT;
+    fy2 := y2 / FRACUNIT;
+    fz2 := z2 / FRACUNIT;
+    fx3 := x3 / FRACUNIT;
+    fy3 := y3 / FRACUNIT;
+    fz3 := z3 / FRACUNIT;
+    calc_radix_plane(
+      fx1, fy1, fz1,
+      fx2, fy2, fz2,
+      fx3, fy3, fz3,
+      fa, fb, fc, fd);
+    sec.fa := fa;
+    sec.fb := fb;
+    sec.fic := 1 / fc;
+    sec.fd := fd;
+    sec.renderflags := sec.renderflags or SRF_SLOPEFLOOR;
+    P_SlopesAlignPlane(sec, nil, SRF_SLOPEFLOOR, false);
+    sec.slopeline := sec.lines[0];
+    sec.slopeline.renderflags := sec.slopeline.renderflags or LRF_SLOPED;
+    P_FixSlopedMobjs(sec);
+  end;
+end;
+
+procedure PS_SetCeilingSlope(const secid: integer; const x1, y1, z1: fixed_t;
+  const x2, y2, z2: fixed_t; const x3, y3, z3: fixed_t);
+var
+  fx1, fy1, fz1: float;
+  fx2, fy2, fz2: float;
+  fx3, fy3, fz3: float;
+  ca, cb, cc, cd: float;
+  sec: Psector_t;
+begin
+  if (secid < 0) or (secid >= numsectors) then
+    exit;
+
+  sec := @sectors[secid];
+  if (z1 = z2) and (z2 = z3) then
+  begin
+    sec.renderflags := sec.renderflags and not SRF_SLOPECEILING;
+    sec.ceilingheight := z1;
+  end
+  else
+  begin
+    fx1 := x1 / FRACUNIT;
+    fy1 := y1 / FRACUNIT;
+    fz1 := z1 / FRACUNIT;
+    fx2 := x2 / FRACUNIT;
+    fy2 := y2 / FRACUNIT;
+    fz2 := z2 / FRACUNIT;
+    fx3 := x3 / FRACUNIT;
+    fy3 := y3 / FRACUNIT;
+    fz3 := z3 / FRACUNIT;
+    calc_radix_plane(
+      fx1, fy1, fz1,
+      fx2, fy2, fz2,
+      fx3, fy3, fz3,
+      ca, cb, cc, cd);
+    sec.ca := ca;
+    sec.cb := cb;
+    sec.cic := 1 / cc;
+    sec.cd := cd;
+    sec.renderflags := sec.renderflags or SRF_SLOPECEILING;
+    P_SlopesAlignPlane(sec, nil, SRF_SLOPECEILING, false);
+    sec.slopeline := sec.lines[0];
+    sec.slopeline.renderflags := sec.slopeline.renderflags or LRF_SLOPED;
+    P_FixSlopedMobjs(sec);
+  end;
+end;
 
 procedure RX_LoadRadixMapInfo(const lumpnum: integer);
 var

@@ -102,6 +102,7 @@ uses
   m_rnd,
   p_local,
   p_maputl,
+  radix_map_extra,
   {$IFDEF HEXEN}
   p_setup,
   {$ENDIF}
@@ -370,6 +371,8 @@ begin
   baseproclist.Add('function FindSectorsFromTag(const tag: integer): TIntegerArray;', @PS_FindSectorsFromTag);
   baseproclist.Add('procedure SectorPlaySound(const secid: integer; const snd: string);', @PS_SectorPlaySound);
   baseproclist.Add('procedure SectorMoveZ(const secid: integer; const dz: fixed_t);', @PS_SectorMoveZ);
+  baseproclist.Add('procedure SetSectorFloorSlope(const secid: integer; const x1, y1, z1: fixed_t; const x2, y2, z2: fixed_t; const x3, y3, z3: fixed_t);', @PS_SetFloorSlope);
+  baseproclist.Add('procedure SetSectorCeilingSlope(const secid: integer; const x1, y1, z1: fixed_t; const x2, y2, z2: fixed_t; const x3, y3, z3: fixed_t);', @PS_SetCeilingSlope);
 // --------------------------- PLAYERS -----------------------------------------
   baseproclist.Add('function PlayerInGame(const plnum: integer): boolean;', @PS_PlayerInGame);
   {$IFDEF DOOM_OR_STRIFE}
