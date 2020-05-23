@@ -393,7 +393,8 @@ uses
   radix_teleport in 'Radix\radix_teleport.pas',
   t_radix32 in 'TEXLIB\t_radix32.pas',
   w_wadreader in 'Base\w_wadreader.pas',
-  radix_doom_wad in 'Radix\radix_doom_wad.pas';
+  radix_doom_wad in 'Radix\radix_doom_wad.pas',
+  radix_extra_sprites in 'Radix\radix_extra_sprites.pas';
 
 var
   Saved8087CW: Word;

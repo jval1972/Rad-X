@@ -351,7 +351,8 @@ uses
   t_radix32 in 'TEXLIB\t_radix32.pas',
   w_wadreader in 'Base\w_wadreader.pas',
   radix_vertical_fight in 'Radix\radix_vertical_fight.pas',
-  frm_rad2wadoptions in 'RAD2WAD\frm_rad2wadoptions.pas' {OptionsForm};
+  frm_rad2wadoptions in 'RAD2WAD\frm_rad2wadoptions.pas' {OptionsForm},
+  radix_extra_sprites in 'Radix\radix_extra_sprites.pas';
 
 {$R *.res}
 

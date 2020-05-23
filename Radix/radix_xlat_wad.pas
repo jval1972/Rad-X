@@ -58,6 +58,7 @@ const
   R2W_DOOMPALETTE = $20000;
   R2W_DOOMTEXTURES = $40000;
   R2W_DOOMLEVELS = $80000;
+  R2W_EXTRASPRITES = $100000;
 
 procedure Radix2WAD_Game(const fin, fout: string);
 
@@ -86,12 +87,14 @@ uses
   radix_bitmap,
   radix_font,
   radix_sounds,
+  radix_extra_sprites,
   r_defs,
   v_video,
   v_data,
   w_pak,
   w_wadwriter,
-  w_wad;
+  w_wad,
+  z_zone;
 
 type
   TRadixToWADConverter = class(TObject)
@@ -133,6 +136,8 @@ type
     function GenerateGraphicWithOutPalette(const rname, wname: string; const solid: boolean; const opaqueindex: integer = -1): boolean;
     function GenerateGraphicWithPalette(const rname, wname: string; const solid: boolean): boolean;
     function GenerateOpaqueGraphicWithPalette(const rname, wname: string; const bgcolor: byte): boolean;
+    function AddEntryFromWAD(const wname: string): boolean;
+    function AddEntryDirect(const wname: string; const buf: pointer; const size: integer): boolean;
     function GenerateMainGraphics: boolean;
     function GenerateAdditionalGraphics: boolean;
     function GenerateSmallFont: boolean;
@@ -140,6 +145,7 @@ type
     function GenerateDosFonts: boolean;
     function GenerateMenuTranslation: boolean;
     function GenerateSprites: boolean;
+    function GenerateExtraSprites: boolean;
     function GenerateMusic: boolean;
     function GenerateCockpitOverlay: boolean;
     function GenerateSounds: boolean;
@@ -972,6 +978,30 @@ begin
   wadwriter.AddData(wname, p, size);
   memfree(p, size);
   memfree(buf, bufsize);
+end;
+
+function TRadixToWADConverter.AddEntryFromWAD(const wname: string): boolean;
+var
+  lump: integer;
+  buf: pointer;
+begin
+  lump := W_CheckNumForName(wname);
+  if lump < 0 then
+  begin
+    result := false;
+    exit;
+  end;
+  result := true;
+
+  buf := W_CacheLumpName(wname, PU_STATIC);
+  wadwriter.AddData(wname, buf, W_LumpLength(lump));
+  Z_ChangeTag(buf, PU_CACHE);
+end;
+
+function TRadixToWADConverter.AddEntryDirect(const wname: string; const buf: pointer; const size: integer): boolean;
+begin
+  wadwriter.AddData(wname, buf, size);
+  result := true;
 end;
 
 function TRadixToWADConverter.GenerateMainGraphics: boolean;
@@ -2451,6 +2481,40 @@ begin
   memfree(pointer(blumps), bnumlumps * SizeOf(radixbitmaplump_t));
 end;
 
+function TRadixToWADConverter.GenerateExtraSprites: boolean;
+begin
+  result := true;
+  wadwriter.AddSeparator('S_START');
+  AddEntryDirect('IFOGA0', @IFOGA0_RawData, SizeOf(IFOGA0_RawData));
+  AddEntryDirect('IFOGB0', @IFOGB0_RawData, SizeOf(IFOGB0_RawData));
+  AddEntryDirect('IFOGC0', @IFOGC0_RawData, SizeOf(IFOGC0_RawData));
+  AddEntryDirect('IFOGD0', @IFOGD0_RawData, SizeOf(IFOGD0_RawData));
+  AddEntryDirect('IFOGE0', @IFOGE0_RawData, SizeOf(IFOGE0_RawData));
+  AddEntryDirect('TFOGA0', @TFOGA0_RawData, SizeOf(TFOGA0_RawData));
+  AddEntryDirect('TFOGB0', @TFOGB0_RawData, SizeOf(TFOGB0_RawData));
+  AddEntryDirect('TFOGC0', @TFOGC0_RawData, SizeOf(TFOGC0_RawData));
+  AddEntryDirect('TFOGD0', @TFOGD0_RawData, SizeOf(TFOGD0_RawData));
+  AddEntryDirect('TFOGE0', @TFOGE0_RawData, SizeOf(TFOGE0_RawData));
+  AddEntryDirect('TFOGF0', @TFOGF0_RawData, SizeOf(TFOGF0_RawData));
+  AddEntryDirect('TFOGG0', @TFOGG0_RawData, SizeOf(TFOGG0_RawData));
+  AddEntryDirect('TFOGH0', @TFOGH0_RawData, SizeOf(TFOGH0_RawData));
+  AddEntryDirect('TFOGI0', @TFOGI0_RawData, SizeOf(TFOGI0_RawData));
+  AddEntryDirect('TFOGJ0', @TFOGJ0_RawData, SizeOf(TFOGJ0_RawData));
+  AddEntryDirect('BKEYA0', @BKEYA0_RawData, SizeOf(BKEYA0_RawData));
+  AddEntryDirect('BKEYB0', @BKEYB0_RawData, SizeOf(BKEYB0_RawData));
+  AddEntryDirect('BSKUA0', @BSKUA0_RawData, SizeOf(BSKUA0_RawData));
+  AddEntryDirect('BSKUB0', @BSKUB0_RawData, SizeOf(BSKUB0_RawData));
+  AddEntryDirect('RKEYA0', @RKEYA0_RawData, SizeOf(RKEYA0_RawData));
+  AddEntryDirect('RKEYB0', @RKEYB0_RawData, SizeOf(RKEYB0_RawData));
+  AddEntryDirect('RSKUA0', @RSKUA0_RawData, SizeOf(RSKUA0_RawData));
+  AddEntryDirect('RSKUB0', @RSKUB0_RawData, SizeOf(RSKUB0_RawData));
+  AddEntryDirect('YKEYA0', @YKEYA0_RawData, SizeOf(YKEYA0_RawData));
+  AddEntryDirect('YKEYB0', @YKEYB0_RawData, SizeOf(YKEYB0_RawData));
+  AddEntryDirect('YSKUA0', @YSKUA0_RawData, SizeOf(YSKUA0_RawData));
+  AddEntryDirect('YSKUB0', @YSKUB0_RawData, SizeOf(YSKUB0_RawData));
+  wadwriter.AddSeparator('S_END');
+end;
+
 function TRadixToWADConverter.GenerateMusic: boolean;
 var
   i, j: integer;
@@ -2759,6 +2823,8 @@ begin
     GenerateMenuTranslation;
   if flags and R2W_SPRITES <> 0 then
     GenerateSprites;
+  if flags and R2W_EXTRASPRITES <> 0 then
+    GenerateExtraSprites;
   if flags and R2W_MUSIC <> 0 then
     GenerateMusic;
   if flags and R2W_COCKPIT <> 0 then

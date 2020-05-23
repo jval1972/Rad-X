@@ -97,7 +97,7 @@ begin
       flags := 0;
       if f.TexturesCheckBox.Checked then flags := flags or R2W_DOOMTEXTURES;
       if f.FlatsCheckBox.Checked then flags := flags or R2W_FLATS;
-      if f.SpritesCheckBox.Checked then flags := flags or R2W_SPRITES;
+      if f.SpritesCheckBox.Checked then flags := flags or R2W_SPRITES or R2W_EXTRASPRITES;
       if f.HUDCheckBox.Checked then flags := flags or (R2W_MAINGRAPHICS or R2W_ADDITIONALGRAPHICS or R2W_COCKPIT);
       if f.FontsCheckBox.Checked then flags := flags or (R2W_SMALLMENUFONT or R2W_BIGMENUFONT or R2W_CONSOLEFONT or R2W_MENUTRANSLATION);
       if f.MusicCheckBox.Checked then flags := flags or R2W_MUSIC;
