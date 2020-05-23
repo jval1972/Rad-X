@@ -42,6 +42,7 @@ procedure RX_HudDrawer;
 
 var
   drawcrosshair: boolean = true;
+  drawkeybar: boolean = true;
 
 implementation
 
@@ -100,6 +101,9 @@ var
   PowerUpIcons: array[0..4] of Ppatch_t;
   PlasmaIcon: Ppatch_t;
   crosshairs: array[0..6] of Ppatch_t;
+  ckeybar: Ppatch_t;
+  skeybar: Ppatch_t;
+  stkeys: array[0..Ord(NUMCARDS) - 1] of Ppatch_t;
 
 procedure RX_InitRadixHud;
 var
@@ -170,6 +174,14 @@ begin
   begin
     sprintf(stmp, 'CrossLock%d', [i]);
     crosshairs[i] := W_CacheLumpName(stmp, PU_STATIC);
+  end;
+
+  ckeybar := W_CacheLumpName('CKEYBAR', PU_STATIC);
+  skeybar := W_CacheLumpName('SKEYBAR', PU_STATIC);
+  for i := 0 to Ord(NUMCARDS) - 1 do
+  begin
+    sprintf(stmp, 'STKEYS%d', [i]);
+    stkeys[i] := W_CacheLumpName(stmp, PU_STATIC);
   end;
 end;
 
@@ -470,6 +482,19 @@ begin
     V_DrawPatch(160 - p.width div 2, 100 - (STATUSBAR_HEIGHT + p.height) div 2, SCN_HUD, p, false);
 end;
 
+// JVAL: 20200523 - Draw keys
+procedure RX_HudDrawKeys(const x, y: integer; const kbar: Ppatch_t);
+var
+  i: integer;
+begin
+  if not drawkeybar then
+    exit;
+
+  V_DrawPatch(x, y, SCN_HUD, kbar, false);
+  for i := 0 to Ord(NUMCARDS) - 1 do
+    if hud_player.cards[i] then
+      V_DrawPatch(x + i * 8 + 2, y + 2, SCN_HUD, stkeys[i], false);
+end;
 ////////////////////////////////////////////////////////////////////////////////
 // Draw Status Bar
 ////////////////////////////////////////////////////////////////////////////////
@@ -587,6 +612,9 @@ begin
 
   // Draw crosshair
   RX_HudDrawCrossHair;
+
+  // Draw keycards
+  RX_HudDrawKeys(11, 151, skeybar);
 end;
 
 type
@@ -705,9 +733,12 @@ begin
 
   // Draw restart message if the player is dead
   RX_HudDrawRestartMessage;
-  
+
   // Draw crosshair
   RX_HudDrawCrossHair;
+
+  // Draw keycards
+  RX_HudDrawKeys(204, 134, ckeybar);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
