@@ -565,6 +565,7 @@ type
     od_displayendscreen,
     od_showdemoplaybackprogress,
     od_drawcrosshair,
+    od_drawkeybar,
     optdispappearance_end
   );
 
@@ -4568,6 +4569,14 @@ begin
   pmi.routine := @M_BoolCmd;
   pmi.pBoolVal := @drawcrosshair;
   pmi.alphaKey := 'c';
+
+  inc(pmi);
+  pmi.status := 1;
+  pmi.name := '!Draw keybar';
+  pmi.cmd := 'drawkeybar';
+  pmi.routine := @M_BoolCmd;
+  pmi.pBoolVal := @drawkeybar;
+  pmi.alphaKey := 'k';
 
 ////////////////////////////////////////////////////////////////////////////////
 //OptionsDisplayAppearanceDef

@@ -164,7 +164,7 @@ type
   Pdefault_t = ^default_t;
 
 const
-  NUMDEFAULTS = 199;
+  NUMDEFAULTS = 200;
 
 // JVAL
 // Note: All setable defaults must be in lowercase, don't ask why. Just do it. :)
@@ -355,6 +355,14 @@ const
 
     (name: 'drawcrosshair';
      location: @drawcrosshair;
+     setable: DFS_ALWAYS;
+     defaultsvalue: '';
+     defaultivalue: 0;
+     defaultbvalue: true;
+     _type: tBoolean),
+
+    (name: 'drawkeybar';
+     location: @drawkeybar;
      setable: DFS_ALWAYS;
      defaultsvalue: '';
      defaultivalue: 0;
