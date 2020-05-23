@@ -1213,9 +1213,9 @@ begin
     else
       yfrac := FixedDivEx(p1.y - p2.y, p1.x - p2.x);
 
-    ypos := p1.y * FRACUNIT + yfrac * (x1 - p1.x);
+    ypos := int64(p1.y) * FRACUNIT + yfrac * (x1 - p1.x);
     repeat
-      y := ypos div FRACUNIT;
+      y := GetInt64InRange(ypos div FRACUNIT, -32000, 32000);
       if y < plane.realtop[x1] then
         plane.realtop[x1] := y;
       if y > plane.realbottom[x1] then
@@ -1298,9 +1298,10 @@ begin
     else
       yfrac := FixedDivEx(p1.y - p2.y, p1.x - p2.x);
 
-    ypos := p1.y * FRACUNIT + yfrac * (x1 - p1.x);
+    ypos := int64(p1.y) * FRACUNIT + yfrac * (x1 - p1.x);
     repeat
-      y := ypos div FRACUNIT;
+      y := GetInt64InRange(ypos div FRACUNIT, -32000, 32000);
+//      y := ypos div FRACUNIT;
       if y < plane.realtop[x1] then
         plane.realtop[x1] := y;
       if y > plane.realbottom[x1] then
@@ -1324,7 +1325,7 @@ begin
       if vis.bottom[x1] < viewheight - 1 then
         Inc(vis.bottom[x1]);
     end;
-    
+
     top := ceilingclip[x1] + 1;
     bottom := floorclip[x1] - 1;
 

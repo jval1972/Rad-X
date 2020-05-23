@@ -698,6 +698,8 @@ function IsExtendedInRange(const test, f1, f2: Extended): boolean;
 
 function GetIntegerInRange(const val, f1, f2: integer): integer;
 
+function GetInt64InRange(const val, f1, f2: int64): integer;
+
 var
   mmxMachine: byte = 0;
   AMD3DNowMachine: byte = 0;
@@ -4274,6 +4276,16 @@ begin
 end;
 
 function GetIntegerInRange(const val, f1, f2: integer): integer;
+begin
+  if val < f1 then
+    result := f1
+  else if val > f2 then
+    result := f2
+  else
+    result := val;
+end;
+
+function GetInt64InRange(const val, f1, f2: int64): integer;
 begin
   if val < f1 then
     result := f1
