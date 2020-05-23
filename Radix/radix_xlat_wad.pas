@@ -1053,11 +1053,14 @@ var
     end;
   end;
 
-  procedure AddGraphicWithOutPalette(const rname: string; const opaqueindex: integer = -1);
+  procedure AddGraphicWithOutPalette(const rname: string; const opaqueindex: integer = -1; const wnameset: string = '');
   var
     wname: string;
   begin
-    wname := 'RADIX' + IntToStrzFill(3, patchid);
+    if wnameset = '' then
+      wname := 'RADIX' + IntToStrzFill(3, patchid)
+    else
+      wname := wnameset;
     if GenerateGraphicWithOutPalette(rname, wname, false, opaqueindex) then
     begin
       aliases.Add(wname + '=' + rname);
@@ -1233,8 +1236,8 @@ begin
   for i := 1 to 3 do
     for j := 1 to 9 do
     begin
-      AddGraphicWithOutPalette('MissionPrimary[' + itoa(i) + '][' + itoa(j) + ']');
-      AddGraphicWithOutPalette('MissionSecondary[' + itoa(i) + '][' + itoa(j) + ']');
+      AddGraphicWithOutPalette('MissionPrimary[' + itoa(i) + '][' + itoa(j) + ']', -1, 'OBJ' + itoa(i) + itoa(j) + 'PRI');
+      AddGraphicWithOutPalette('MissionSecondary[' + itoa(i) + '][' + itoa(j) + ']', -1, 'OBJ' + itoa(i) + itoa(j) + 'SEC');
     end;
 
   AddWeaponNums('WeaponNumOn');
