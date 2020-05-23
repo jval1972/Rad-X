@@ -91,6 +91,7 @@ uses
   psi_overlay,
   psi_system,
   psi_globals,
+  psi_radix,
   doomdef,
   deh_main,
   d_main,
@@ -414,6 +415,11 @@ begin
   baseproclist.Add('function GetPlayerViewZ(const plnum: integer): fixed_t;', @PS_GetPlayerViewZ);
   baseproclist.Add('function GetPlayerViewHeight(const plnum: integer): fixed_t;', @PS_GetPlayerViewHeight);
   baseproclist.Add('function ConsolePlayer: Integer;', @PS_ConsolePlayer);
+// ---------------------------- RADIX ------------------------------------------
+  baseproclist.Add('procedure SetHasSecondaryObjective(const value: boolean);', @PS_SetHasSecondaryObjective);
+  baseproclist.Add('function GetHasSecondaryObjective: boolean;', @PS_GetHasSecondaryObjective);
+  baseproclist.Add('procedure SetSecondaryObjective(const value: boolean);', @PS_SetSecondaryObjective);
+  baseproclist.Add('function GetSecondaryObjective: boolean;', @PS_GetSecondaryObjective);
 // -------------------------- TEXTURES -----------------------------------------
   baseproclist.Add('function GetTextureWidth(const tex: string): Integer;', @PS_GetTextureWidth);
   baseproclist.Add('function GetTextureHeight(const tex: string): Integer;', @PS_GetTextureHeight);
