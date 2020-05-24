@@ -184,3 +184,402 @@ ACTOR PLAYERFLOORSLIDE64 1204
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// SMOKESPAWNER_UP_1
+// Spawns smoke upwards every 1 second (randomly)
+ACTOR SMOKESPAWNER_UP_1 1210
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+    SpawnLoop:
+        TNT1 A RANDOMRANGE(19,51) A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,FRANDOM(1,2),0,0)
+        GoTo SpawnLoop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// SMOKESPAWNER_UP_2
+// Spawns smoke upwards every 2 second (randomly)
+ACTOR SMOKESPAWNER_UP_2 1211
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+    SpawnLoop:
+        TNT1 A RANDOMRANGE(56,84) A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,FRANDOM(1,2),0,0)
+        GoTo SpawnLoop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// SMOKESPAWNER_UP_5
+// Spawns smoke upwards every 5 second (randomly)
+ACTOR SMOKESPAWNER_UP_5 1212
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+    SpawnLoop:
+        TNT1 A RANDOMRANGE(135,205) A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,FRANDOM(1,2),0,0)
+        GoTo SpawnLoop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// SMOKESPAWNER_UP_10
+// Spawns smoke upwards every 10 second (randomly)
+ACTOR SMOKESPAWNER_UP_10 1213
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+    SpawnLoop:
+        TNT1 A RANDOMRANGE(270,420) A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,FRANDOM(1,2),0,0)
+        GoTo SpawnLoop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// SMOKESPAWNER_HORZ_1
+// Spawns smoke upwards every 1 second (randomly)
+ACTOR SMOKESPAWNER_HORZ_1 1220
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+    SpawnLoop:
+        TNT1 A RANDOMRANGE(19,51) A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,FRANDOM(4,8),0,0,0,0)
+        GoTo SpawnLoop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// SMOKESPAWNER_HORZ_2
+// Spawns smoke upwards every 2 second (randomly)
+ACTOR SMOKESPAWNER_HORZ_2 1221
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+    SpawnLoop:
+        TNT1 A RANDOMRANGE(56,84) A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,FRANDOM(4,8),0,0,0,0)
+        GoTo SpawnLoop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// SMOKESPAWNER_HORZ_5
+// Spawns smoke upwards every 5 second (randomly)
+ACTOR SMOKESPAWNER_HORZ_5 1222
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+    SpawnLoop:
+        TNT1 A RANDOMRANGE(135,205) A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,FRANDOM(4,8),0,0,0,0)
+        GoTo SpawnLoop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// SMOKESPAWNER_HORZ_10
+// Spawns smoke upwards every 10 second (randomly)
+ACTOR SMOKESPAWNER_HORZ_10 1223
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+    SpawnLoop:
+        TNT1 A RANDOMRANGE(270,420) A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,FRANDOM(4,8),0,0,0,0)
+        GoTo SpawnLoop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// BIGSMOKESPAWNER_UP_1
+// Spawns big smoke upwards every 1 second (randomly)
+ACTOR BIGSMOKESPAWNER_UP_1 1230
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+    SpawnLoop:
+        TNT1 A RANDOMRANGE(19,51) A_SpawnItemEx("MT_RADIXVERYBIGSMOKE",0,0,0,0,0,FRANDOM(1,2),0,0)
+        GoTo SpawnLoop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// BIGSMOKESPAWNER_UP_2
+// Spawns big smoke upwards every 2 second (randomly)
+ACTOR BIGSMOKESPAWNER_UP_2 1231
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+    SpawnLoop:
+        TNT1 A RANDOMRANGE(56,84) A_SpawnItemEx("MT_RADIXVERYBIGSMOKE",0,0,0,0,0,FRANDOM(1,2),0,0)
+        GoTo SpawnLoop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// BIGSMOKESPAWNER_UP_5
+// Spawns big smoke upwards every 5 second (randomly)
+ACTOR BIGSMOKESPAWNER_UP_5 1232
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+    SpawnLoop:
+        TNT1 A RANDOMRANGE(135,205) A_SpawnItemEx("MT_RADIXVERYBIGSMOKE",0,0,0,0,0,FRANDOM(1,2),0,0)
+        GoTo SpawnLoop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// BIGSMOKESPAWNER_UP_10
+// Spawns big smoke upwards every 10 second (randomly)
+ACTOR BIGSMOKESPAWNER_UP_10 1233
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+    SpawnLoop:
+        TNT1 A RANDOMRANGE(270,420) A_SpawnItemEx("MT_RADIXVERYBIGSMOKE",0,0,0,0,0,FRANDOM(1,2),0,0)
+        GoTo SpawnLoop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// BIGSMOKESPAWNER_HORZ_1
+// Spawns big smoke upwards every 1 second (randomly)
+ACTOR BIGSMOKESPAWNER_HORZ_1 1240
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+    SpawnLoop:
+        TNT1 A RANDOMRANGE(19,51) A_SpawnItemEx("MT_RADIXVERYBIGSMOKE",0,0,0,FRANDOM(4,8),0,0,0,0)
+        GoTo SpawnLoop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// BIGSMOKESPAWNER_HORZ_2
+// Spawns big smoke upwards every 2 second (randomly)
+ACTOR BIGSMOKESPAWNER_HORZ_2 1241
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+    SpawnLoop:
+        TNT1 A RANDOMRANGE(56,84) A_SpawnItemEx("MT_RADIXVERYBIGSMOKE",0,0,0,FRANDOM(4,8),0,0,0,0)
+        GoTo SpawnLoop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// BIGSMOKESPAWNER_HORZ_5
+// Spawns big smoke upwards every 5 second (randomly)
+ACTOR BIGSMOKESPAWNER_HORZ_5 1242
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+    SpawnLoop:
+        TNT1 A RANDOMRANGE(135,205) A_SpawnItemEx("MT_RADIXVERYBIGSMOKE",0,0,0,FRANDOM(4,8),0,0,0,0)
+        GoTo SpawnLoop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// BIGSMOKESPAWNER_HORZ_10
+// Spawns big smoke upwards every 10 second (randomly)
+ACTOR BIGSMOKESPAWNER_HORZ_10 1243
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+    SpawnLoop:
+        TNT1 A RANDOMRANGE(270,420) A_SpawnItemEx("MT_RADIXVERYBIGSMOKE",0,0,0,FRANDOM(4,8),0,0,0,0)
+        GoTo SpawnLoop
+    }
+}
