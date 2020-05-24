@@ -2421,12 +2421,12 @@ begin
   ang1 := actor.state.params.IntVal[7];
   flags := actor.state.params.IntVal[8];
 
-  if (flags and SIXF_ABSOLUTEANGLE) = 0 then
+  if flags and SIXF_ABSOLUTEANGLE = 0 then
     ang1 := ang1 + Actor.angle;
 
   ang := ang1 shr ANGLETOFINESHIFT;
 
-  if (flags and SIXF_ABSOLUTEPOSITION) <> 0 then
+  if flags and SIXF_ABSOLUTEPOSITION <> 0 then
   begin
     x := actor.x + xofs;
     y := actor.y + yofs;
@@ -2439,7 +2439,7 @@ begin
     y := actor.y + FixedMul(xofs, finesine[ang]) - FixedMul(yofs, finecosine[ang]);
   end;
 
-  if (flags and SIXF_ABSOLUTEMOMENTUM) = 0 then
+  if flags and SIXF_ABSOLUTEMOMENTUM = 0 then
   begin
     // Same orientation issue here!
     newxmom := FixedMul(momx, finecosine[ang]) + FixedMul(momy, finesine[ang]);
@@ -2447,7 +2447,7 @@ begin
     momx := newxmom;
   end;
 
-  mo := P_SpawnMobj(x, y, actor.z{ - actor.floorz} + zofs, mobj_no);
+  mo := P_SpawnMobj(x, y, actor.z + zofs, mobj_no);
 
   if mo <> nil then
   begin
@@ -2455,7 +2455,7 @@ begin
     mo.momy := momy;
     mo.momz := momz;
     mo.angle := ang1;
-    if (flags and SIXF_TRANSFERAMBUSHFLAG) <> 0 then
+    if flags and SIXF_TRANSFERAMBUSHFLAG <> 0 then
       mo.flags := (mo.flags and not MF_AMBUSH) or (actor.flags and MF_AMBUSH);
     result := mo;
   end;
