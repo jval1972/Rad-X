@@ -295,7 +295,7 @@ begin
 	{$ELSE}
         mid := pixhigh shr HEIGHTBITS;
         pixhigh := pixhigh + pixhighstep;
-	{$ENDIF}
+        {$ENDIF}
 
         if mid >= pfloorclip^ then
           mid := pfloorclip^ - 1;
@@ -429,7 +429,7 @@ begin
 	{$ELSE}
         mid := (pixlow + HEIGHTUNIT - 1) shr HEIGHTBITS;
         pixlow := pixlow + pixlowstep;
-	{$ENDIF}
+        {$ENDIF}
 
         // no space above wall?
         if mid <= pceilingclip^ then

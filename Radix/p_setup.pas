@@ -179,6 +179,7 @@ uses
   ps_main,    // JVAL: Script Events
   r_data,
   r_things,
+  r_3dfloors,
   info_rnd,
   m_rnd,
   mt_utils,
@@ -1942,7 +1943,8 @@ begin
   rejectmatrixsize := W_LumpLength(lumpnum + Ord(ML_REJECT));
   P_GroupLines;
 
-  P_3dFloorSetupSegs; // JVAL: 3d Floors
+
+  levelhas3dfloors := P_3dFloorSetupSegs > 0; // JVAL: 3d Floors
 
   P_RemoveSlimeTrails;    // killough 10/98: remove slime trails from wad
 

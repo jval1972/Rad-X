@@ -386,9 +386,12 @@ uses
   r_wall8,
   r_wall32,
   r_flat8,
+  r_flat8_ripple,
   r_flat32,
+  r_flat32_ripple,
   r_span,
   r_span32,
+  r_span32_ripple,
   r_column,
   r_tallcolumn,
   r_batchcolumn,
@@ -2170,7 +2173,7 @@ begin
 
 {$IFNDEF OPENGL}
   MT_WaitTask(task_clearplanes);
-  zbufferactive := r_uselightmaps;
+  zbufferactive := levelhas3dfloors or r_uselightmaps;
   R_SetDrawSegFunctions;  // version 205
   if usemultithread then
   begin

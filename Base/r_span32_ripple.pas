@@ -27,7 +27,7 @@
 
 {$I RAD.inc}
 
-unit r_span32;
+unit r_span32_ripple;
 
 interface
 
@@ -36,19 +36,14 @@ uses
   m_fixed,
   r_main;
 
-var
-  ds_lightlevel: fixed_t;
-  ds_llzindex: fixed_t; // Lightlevel index for z axis
-
-// start of a WxW tile image
-  ds_source32: PLongWordArray;
-
-procedure R_DrawSpanNormal;
+procedure R_DrawSpanNormal_Ripple;
 
 implementation
 
 uses
+  r_span32,
   r_precalc,
+  r_ripple,
   r_span,
   r_draw,
   r_hires,
@@ -58,10 +53,7 @@ uses
   r_zbuffer,
   v_video;
 
-//
-// Draws the actual span (Normal resolution).
-//
-procedure R_DrawSpanNormal;
+procedure R_DrawSpanNormal_Ripple;
 var
   xfrac: fixed_t;
   yfrac: fixed_t;
@@ -78,15 +70,18 @@ var
   bf_r: PIntegerArray;
   bf_g: PIntegerArray;
   bf_b: PIntegerArray;
+  rpl: PIntegerArray;
   x: integer;
 begin
   destl := @((ylookupl[ds_y]^)[columnofs[ds_x1]]);
 
+  // We do not check for zero spans here?
   x := ds_x1;
   count := ds_x2 - x;
   if count < 0 then
     exit;
 
+  rpl := ds_ripple;
   lfactor := ds_lightlevel;
 
   if checkzbuffer3dfloors then
@@ -94,7 +89,7 @@ begin
     if lfactor >= 0 then // Use hi detail lightlevel
     begin
       R_GetPrecalc32Tables(lfactor, bf_r, bf_g, bf_b);
-      {$UNDEF RIPPLE}
+      {$DEFINE RIPPLE}
       {$UNDEF INVERSECOLORMAPS}
       {$UNDEF TRANSPARENTFLAT}
       {$DEFINE CHECK3DFLOORSZ}
@@ -102,7 +97,7 @@ begin
     end
     else // Use inversecolormap
     begin
-      {$UNDEF RIPPLE}
+      {$DEFINE RIPPLE}
       {$DEFINE INVERSECOLORMAPS}
       {$UNDEF TRANSPARENTFLAT}
       {$DEFINE CHECK3DFLOORSZ}
@@ -114,7 +109,7 @@ begin
     if lfactor >= 0 then // Use hi detail lightlevel
     begin
       R_GetPrecalc32Tables(lfactor, bf_r, bf_g, bf_b);
-      {$UNDEF RIPPLE}
+      {$DEFINE RIPPLE}
       {$UNDEF INVERSECOLORMAPS}
       {$UNDEF TRANSPARENTFLAT}
       {$UNDEF CHECK3DFLOORSZ}
@@ -122,7 +117,7 @@ begin
     end
     else // Use inversecolormap
     begin
-      {$UNDEF RIPPLE}
+      {$DEFINE RIPPLE}
       {$DEFINE INVERSECOLORMAPS}
       {$UNDEF TRANSPARENTFLAT}
       {$UNDEF CHECK3DFLOORSZ}

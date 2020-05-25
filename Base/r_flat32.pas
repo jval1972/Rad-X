@@ -50,6 +50,8 @@ type
     ds_ystep: fixed_t;
     ds_ripple: PIntegerArray;
     ds_scale: dsscale_t;
+    ds_checkzbuffer3dfloors: boolean;
+    db_distance: LongWord;
     func: PPointerParmProcedure;
   end;
   Pflatrenderinfo32_t = ^flatrenderinfo32_t;
@@ -75,8 +77,6 @@ var
 
 procedure R_DrawSpanNormalMT(const fi: pointer);
 
-procedure R_DrawSpanNormal_RippleMT(const fi: pointer);
-
 implementation
 
 uses
@@ -84,9 +84,13 @@ uses
   mt_utils,
   r_draw,
   r_main,
-  r_precalc,
   r_ripple,
-  r_span32;
+  r_precalc,
+  r_span32,
+  r_3dfloors,
+  r_zbuffer,
+  r_depthbuffer,
+  r_flat32_ripple;
 
 var
   flatcache32: Pflatrenderinfo32_tArray;
@@ -122,6 +126,9 @@ begin
   flat.ds_ystep := ds_ystep;
   flat.ds_ripple := ds_ripple;
   flat.ds_scale := ds_scale;
+  flat.ds_checkzbuffer3dfloors := checkzbuffer3dfloors;
+  flat.db_distance := db_distance;
+
   flat.func := spanfuncMT;
   inc(flatcachesize32);
 end;
@@ -689,6 +696,9 @@ var
   bf_r: PIntegerArray;
   bf_g: PIntegerArray;
   bf_b: PIntegerArray;
+  docheckzbuffer3dfloors: boolean;
+  db_distance: LongWord;
+  x: integer;
 begin
   ds_source32 := Pflatrenderinfo32_t(fi).ds_source32;
   ds_y := Pflatrenderinfo32_t(fi).ds_y;
@@ -699,87 +709,55 @@ begin
   ds_xstep := Pflatrenderinfo32_t(fi).ds_xstep;
   ds_ystep := Pflatrenderinfo32_t(fi).ds_ystep;
   ds_scale := Pflatrenderinfo32_t(fi).ds_scale;
+  docheckzbuffer3dfloors := Pflatrenderinfo32_t(fi).ds_checkzbuffer3dfloors;
 
   destl := @((ylookupl[ds_y]^)[columnofs[ds_x1]]);
 
-  count := ds_x2 - ds_x1;
+  x := ds_x1;
+  count := ds_x2 - x;
 
   lfactor := Pflatrenderinfo32_t(fi).ds_lightlevel;
 
-  if lfactor >= 0 then // Use hi detail lightlevel
+  if docheckzbuffer3dfloors then
   begin
-    R_GetPrecalc32Tables(lfactor, bf_r, bf_g, bf_b);
-    {$UNDEF RIPPLE}
-    {$UNDEF INVERSECOLORMAPS}
-    {$UNDEF TRANSPARENTFLAT}
-    {$I R_DrawSpanNormal.inc}
+    db_distance := Pflatrenderinfo32_t(fi).db_distance;
+    if lfactor >= 0 then // Use hi detail lightlevel
+    begin
+      R_GetPrecalc32Tables(lfactor, bf_r, bf_g, bf_b);
+      {$UNDEF RIPPLE}
+      {$UNDEF INVERSECOLORMAPS}
+      {$UNDEF TRANSPARENTFLAT}
+      {$DEFINE CHECK3DFLOORSZ}
+      {$I R_DrawSpanNormal.inc}
+    end
+    else // Use inversecolormap
+    begin
+      {$UNDEF RIPPLE}
+      {$DEFINE INVERSECOLORMAPS}
+      {$UNDEF TRANSPARENTFLAT}
+      {$DEFINE CHECK3DFLOORSZ}
+      {$I R_DrawSpanNormal.inc}
+    end;
   end
-  else // Use inversecolormap
+  else
   begin
-    {$UNDEF RIPPLE}
-    {$DEFINE INVERSECOLORMAPS}
-    {$UNDEF TRANSPARENTFLAT}
-    {$I R_DrawSpanNormal.inc}
-  end
-end;
-
-procedure R_DrawSpanNormal_RippleMT(const fi: pointer);
-var
-  ds_source32: PLongWordArray;
-  ds_y, ds_x1, ds_x2: integer;
-  ds_xfrac: fixed_t;
-  ds_yfrac: fixed_t;
-  ds_xstep: fixed_t;
-  ds_ystep: fixed_t;
-  ds_scale: dsscale_t;
-  xfrac: fixed_t;
-  yfrac: fixed_t;
-  xstep: fixed_t;
-  ystep: fixed_t;
-  destl: PLongWord;
-  count: integer;
-  i: integer;
-  spot: integer;
-
-  r1, g1, b1: byte;
-  c: LongWord;
-  lfactor: integer;
-  bf_r: PIntegerArray;
-  bf_g: PIntegerArray;
-  bf_b: PIntegerArray;
-  rpl: PIntegerArray;
-begin
-  ds_source32 := Pflatrenderinfo32_t(fi).ds_source32;
-  ds_y := Pflatrenderinfo32_t(fi).ds_y;
-  ds_x1 := Pflatrenderinfo32_t(fi).ds_x1;
-  ds_x2 := Pflatrenderinfo32_t(fi).ds_x2;
-  ds_xfrac := Pflatrenderinfo32_t(fi).ds_xfrac;
-  ds_yfrac := Pflatrenderinfo32_t(fi).ds_yfrac;
-  ds_xstep := Pflatrenderinfo32_t(fi).ds_xstep;
-  ds_ystep := Pflatrenderinfo32_t(fi).ds_ystep;
-  ds_scale := Pflatrenderinfo32_t(fi).ds_scale;
-
-  destl := @((ylookupl[ds_y]^)[columnofs[ds_x1]]);
-
-  // We do not check for zero spans here?
-  count := ds_x2 - ds_x1;
-
-  rpl := Pflatrenderinfo32_t(fi).ds_ripple;
-  lfactor := Pflatrenderinfo32_t(fi).ds_lightlevel;
-  if lfactor >= 0 then // Use hi detail lightlevel
-  begin
-    R_GetPrecalc32Tables(lfactor, bf_r, bf_g, bf_b);
-    {$DEFINE RIPPLE}
-    {$UNDEF INVERSECOLORMAPS}
-    {$UNDEF TRANSPARENTFLAT}
-    {$I R_DrawSpanNormal.inc}
-  end
-  else // Use inversecolormap
-  begin
-    {$DEFINE RIPPLE}
-    {$DEFINE INVERSECOLORMAPS}
-    {$UNDEF TRANSPARENTFLAT}
-    {$I R_DrawSpanNormal.inc}
+    if lfactor >= 0 then // Use hi detail lightlevel
+    begin
+      R_GetPrecalc32Tables(lfactor, bf_r, bf_g, bf_b);
+      {$UNDEF RIPPLE}
+      {$UNDEF INVERSECOLORMAPS}
+      {$UNDEF TRANSPARENTFLAT}
+      {$UNDEF CHECK3DFLOORSZ}
+      {$I R_DrawSpanNormal.inc}
+    end
+    else // Use inversecolormap
+    begin
+      {$UNDEF RIPPLE}
+      {$DEFINE INVERSECOLORMAPS}
+      {$UNDEF TRANSPARENTFLAT}
+      {$UNDEF CHECK3DFLOORSZ}
+      {$I R_DrawSpanNormal.inc}
+    end;
   end;
 end;
 

@@ -395,7 +395,10 @@ uses
   w_wadreader in 'Base\w_wadreader.pas',
   radix_doom_wad in 'Radix\radix_doom_wad.pas',
   radix_extra_sprites in 'Radix\radix_extra_sprites.pas',
-  psi_radix in 'SCRIPT\psi_radix.pas';
+  psi_radix in 'SCRIPT\psi_radix.pas',
+  r_span32_ripple in 'Base\r_span32_ripple.pas',
+  r_flat32_ripple in 'Base\r_flat32_ripple.pas',
+  r_flat8_ripple in 'Base\r_flat8_ripple.pas';
 
 var
   Saved8087CW: Word;

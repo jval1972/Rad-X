@@ -288,15 +288,15 @@ begin
   ds_x1 := x1;
   ds_x2 := x2;
 
-  // high or low detail
-  spanfunc;
-
   // JVAL: 3d Floors
-  if depthbufferactive then
+  if depthbufferactive or checkzbuffer3dfloors then
   begin
-    db_distance := Round(FRACUNIT / (planeheight / abs(centery - y)) * FRACUNIT);
+    db_distance := Round(FRACUNIT / (planeheight / abs(centery - y)) * FRACUNIT); // JVAL: 20200525 - Move before spanfunc
     spandepthbufferproc;
   end;
+
+  // high or low detail
+  spanfunc;
 
   // JVAL: version 205
   if zbufferactive then

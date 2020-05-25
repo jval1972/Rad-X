@@ -68,7 +68,7 @@ function P_PtInAir(const x, y, z: fixed_t; const radius: fixed_t): boolean;
 
 function P_SubSectorCentroid(const s: Psubsector_t): Psubsector_t;
 
-procedure P_3dFloorSetupSegs;
+function P_3dFloorSetupSegs: integer;
 
 implementation
 
@@ -372,11 +372,12 @@ begin
   result.flags := result.flags or SSF_CENTROIDCALCED;
 end;
 
-procedure P_3dFloorSetupSegs;
+function P_3dFloorSetupSegs: integer;
 var
   i: integer;
   s, sec: integer;
 begin
+  result := 0;
   for i := 0 to numlines - 1 do
   begin
     case lines[i].special of
@@ -393,6 +394,7 @@ begin
           begin
             sectors[s].midsec := sec;
             sectors[s].midline := i;
+            inc(result);
           end;
         end;
     end;

@@ -34,7 +34,7 @@
     {$UNDEF SCALE1024x1024}
     {$I R_DrawSlopeMedium_Main.inc}
     end
-    else if ds_scale = ds1024x1024 then
+    else
     begin
     {$UNDEF SCALE64x64}
     {$UNDEF SCALE128x128}

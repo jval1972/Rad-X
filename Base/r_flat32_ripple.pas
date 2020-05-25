@@ -21,48 +21,46 @@
 //  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
+// DESCRIPTION:
+//  Multithreading flat rendering - 32 bit color (ripple)
+//
 //------------------------------------------------------------------------------
 //  Site: https://sourceforge.net/projects/rad-x/
 //------------------------------------------------------------------------------
 
 {$I RAD.inc}
 
-unit r_span32;
+unit r_flat32_ripple;
 
 interface
 
-uses
-  d_delphi,
-  m_fixed,
-  r_main;
-
-var
-  ds_lightlevel: fixed_t;
-  ds_llzindex: fixed_t; // Lightlevel index for z axis
-
-// start of a WxW tile image
-  ds_source32: PLongWordArray;
-
-procedure R_DrawSpanNormal;
+procedure R_DrawSpanNormal_RippleMT(const fi: pointer);
 
 implementation
 
 uses
-  r_precalc,
-  r_span,
+  d_delphi,
+  m_fixed,
   r_draw,
-  r_hires,
-  r_grow,
+  r_main,
+  r_precalc,
+  r_ripple,
+  r_span,
+  r_span32,
+  r_flat32,
   r_3dfloors,
-  r_depthbuffer,
   r_zbuffer,
-  v_video;
+  r_depthbuffer;
 
-//
-// Draws the actual span (Normal resolution).
-//
-procedure R_DrawSpanNormal;
+procedure R_DrawSpanNormal_RippleMT(const fi: pointer);
 var
+  ds_source32: PLongWordArray;
+  ds_y, ds_x1, ds_x2: integer;
+  ds_xfrac: fixed_t;
+  ds_yfrac: fixed_t;
+  ds_xstep: fixed_t;
+  ds_ystep: fixed_t;
+  ds_scale: dsscale_t;
   xfrac: fixed_t;
   yfrac: fixed_t;
   xstep: fixed_t;
@@ -78,23 +76,38 @@ var
   bf_r: PIntegerArray;
   bf_g: PIntegerArray;
   bf_b: PIntegerArray;
+  rpl: PIntegerArray;
+  docheckzbuffer3dfloors: boolean;
+  db_distance: LongWord;
   x: integer;
 begin
+  ds_source32 := Pflatrenderinfo32_t(fi).ds_source32;
+  ds_y := Pflatrenderinfo32_t(fi).ds_y;
+  ds_x1 := Pflatrenderinfo32_t(fi).ds_x1;
+  ds_x2 := Pflatrenderinfo32_t(fi).ds_x2;
+  ds_xfrac := Pflatrenderinfo32_t(fi).ds_xfrac;
+  ds_yfrac := Pflatrenderinfo32_t(fi).ds_yfrac;
+  ds_xstep := Pflatrenderinfo32_t(fi).ds_xstep;
+  ds_ystep := Pflatrenderinfo32_t(fi).ds_ystep;
+  ds_scale := Pflatrenderinfo32_t(fi).ds_scale;
+  docheckzbuffer3dfloors := Pflatrenderinfo32_t(fi).ds_checkzbuffer3dfloors;
+
   destl := @((ylookupl[ds_y]^)[columnofs[ds_x1]]);
 
+  // We do not check for zero spans here?
   x := ds_x1;
   count := ds_x2 - x;
-  if count < 0 then
-    exit;
 
-  lfactor := ds_lightlevel;
+  rpl := Pflatrenderinfo32_t(fi).ds_ripple;
+  lfactor := Pflatrenderinfo32_t(fi).ds_lightlevel;
 
-  if checkzbuffer3dfloors then
+  if docheckzbuffer3dfloors then
   begin
+    db_distance := Pflatrenderinfo32_t(fi).db_distance;
     if lfactor >= 0 then // Use hi detail lightlevel
     begin
       R_GetPrecalc32Tables(lfactor, bf_r, bf_g, bf_b);
-      {$UNDEF RIPPLE}
+      {$DEFINE RIPPLE}
       {$UNDEF INVERSECOLORMAPS}
       {$UNDEF TRANSPARENTFLAT}
       {$DEFINE CHECK3DFLOORSZ}
@@ -102,7 +115,7 @@ begin
     end
     else // Use inversecolormap
     begin
-      {$UNDEF RIPPLE}
+      {$DEFINE RIPPLE}
       {$DEFINE INVERSECOLORMAPS}
       {$UNDEF TRANSPARENTFLAT}
       {$DEFINE CHECK3DFLOORSZ}
@@ -114,7 +127,7 @@ begin
     if lfactor >= 0 then // Use hi detail lightlevel
     begin
       R_GetPrecalc32Tables(lfactor, bf_r, bf_g, bf_b);
-      {$UNDEF RIPPLE}
+      {$DEFINE RIPPLE}
       {$UNDEF INVERSECOLORMAPS}
       {$UNDEF TRANSPARENTFLAT}
       {$UNDEF CHECK3DFLOORSZ}
@@ -122,7 +135,7 @@ begin
     end
     else // Use inversecolormap
     begin
-      {$UNDEF RIPPLE}
+      {$DEFINE RIPPLE}
       {$DEFINE INVERSECOLORMAPS}
       {$UNDEF TRANSPARENTFLAT}
       {$UNDEF CHECK3DFLOORSZ}
@@ -132,4 +145,4 @@ begin
 end;
 
 end.
-
+ 

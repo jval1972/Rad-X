@@ -353,7 +353,7 @@ begin
     else if yl < 1 then
       pceilingclip^ := -1
     else
-{$ENDIF}    
+{$ENDIF}
           pceilingclip^ := yl - 1;
           {$IFDEF DEBUG}
           R_CheckClipItem(pceilingclip);

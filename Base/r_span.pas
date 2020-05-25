@@ -82,7 +82,10 @@ implementation
 
 uses
   r_draw,
-  r_ripple;
+  r_ripple,
+  r_3dfloors,
+  r_depthbuffer,
+  r_zbuffer;
 //
 // R_DrawSpan
 // With DOOM style restrictions on view orientation,
@@ -113,16 +116,28 @@ var
   i: integer;
   spot: integer;
   fb: fourbytes_t;
+  x: integer;
 begin
   dest := @((ylookup[ds_y]^)[columnofs[ds_x1]]);
 
   // We do not check for zero spans here?
-  count := ds_x2 - ds_x1;
+  x := ds_x1;
+  count := ds_x2 - x;
   if count < 0 then
     exit;
 
-  {$UNDEF RIPPLE}
-  {$I R_DrawSpanMedium.inc}
+  if checkzbuffer3dfloors then
+  begin
+    {$UNDEF RIPPLE}
+    {$DEFINE CHECK3DFLOORSZ}
+    {$I R_DrawSpanMedium.inc}
+  end
+  else
+  begin
+    {$UNDEF RIPPLE}
+    {$UNDEF CHECK3DFLOORSZ}
+    {$I R_DrawSpanMedium.inc}
+  end;
 end;
 
 procedure R_DrawSpanMedium_Ripple;
@@ -137,17 +152,30 @@ var
   spot: integer;
   rpl: PIntegerArray;
   fb: fourbytes_t;
+  x: integer;
 begin
   dest := @((ylookup[ds_y]^)[columnofs[ds_x1]]);
 
   // We do not check for zero spans here?
-  count := ds_x2 - ds_x1;
+  x := ds_x1;
+  count := ds_x2 - x;
   if count < 0 then
     exit;
 
   rpl := ds_ripple;
-  {$DEFINE RIPPLE}
-  {$I R_DrawSpanMedium.inc}
+
+  if checkzbuffer3dfloors then
+  begin
+    {$DEFINE RIPPLE}
+    {$DEFINE CHECK3DFLOORSZ}
+    {$I R_DrawSpanMedium.inc}
+  end
+  else
+  begin
+    {$DEFINE RIPPLE}
+    {$UNDEF CHECK3DFLOORSZ}
+    {$I R_DrawSpanMedium.inc}
+  end;
 end;
 
 end.

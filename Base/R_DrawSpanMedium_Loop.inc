@@ -1,3 +1,7 @@
+{$IFDEF CHECK3DFLOORSZ}
+  if R_ZBufferAtSeg(x, ds_y).depth < db_distance then
+  begin
+{$ENDIF}
     // Current texture index in u,v.
 {$IFDEF FPC}
 {$IFDEF SCALE64x64}
@@ -85,6 +89,10 @@
     // Lookup pixel from flat texture tile,
     //  re-index using light/colormap.
     dest^ := ds_colormap[ds_source[spot]];
+{$IFDEF CHECK3DFLOORSZ}
+  end;
+  inc(x);
+{$ENDIF}
     inc(dest);
 
     // Next step in u,v.

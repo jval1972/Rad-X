@@ -72,6 +72,8 @@ procedure R_DrawColumnToZBuffer;
 // no z-buffer is sky (or render glitch) - we do not write o zbuffer in skycolfunc
 function R_ZBufferAt(const x, y: integer): Pzbufferitem_t;
 
+function R_ZBufferAtSeg(const x, y: integer): Pzbufferitem_t;
+
 procedure R_InitZBuffer;
 
 procedure R_ShutDownZBuffer;
@@ -231,6 +233,33 @@ begin
   while pi <> pistop do
   begin
     if (x >= pi.start) and (x <= pi.stop) then
+    begin
+      depth := pi.depth;
+      if depth > maxdepth then
+      begin
+        result := pi;
+        maxdepth := depth;
+      end;
+    end;
+    inc(pi);
+  end;
+end;
+
+function R_ZBufferAtSeg(const x, y: integer): Pzbufferitem_t;
+var
+  Z: Pzbuffer_t;
+  pi, pistop: Pzbufferitem_t;
+  maxdepth, depth: LongWord;
+begin
+  result := @stubzitem;
+  maxdepth := 0;
+
+  Z := @Zcolumns[x];
+  pi := @Z.items[0];
+  pistop := @Z.items[Z.numitems];
+  while pi <> pistop do
+  begin
+    if (y >= pi.start) and (y <= pi.stop) then
     begin
       depth := pi.depth;
       if depth > maxdepth then

@@ -1,3 +1,11 @@
+{$IFDEF CHECK3DFLOORSZ}
+    PLongWord(@fb)^ := PLongWord(dest)^;
+{$ENDIF}
+
+{$IFDEF CHECK3DFLOORSZ}
+  if R_ZBufferAtSeg(x, ds_y).depth < db_distance then
+  begin
+{$ENDIF}
     // Current texture index in u,v.
 {$IFDEF FPC}
 {$IFDEF SCALE64x64}
@@ -85,11 +93,19 @@
     // Lookup pixel from flat texture tile,
     //  re-index using light/colormap.
     fb.byte1 := ds_colormap[ds_source[spot]];
+{$IFDEF CHECK3DFLOORSZ}
+  end;
+  inc(x);
+{$ENDIF}
 
     // Next step in u,v.
     xfrac := xfrac + xstep;
     yfrac := yfrac + ystep;
 
+{$IFDEF CHECK3DFLOORSZ}
+  if R_ZBufferAtSeg(x, ds_y).depth < db_distance then
+  begin
+{$ENDIF}
     // Current texture index in u,v.
 {$IFDEF FPC}
 {$IFDEF SCALE64x64}
@@ -177,11 +193,19 @@
     // Lookup pixel from flat texture tile,
     //  re-index using light/colormap.
     fb.byte2 := ds_colormap[ds_source[spot]];
+{$IFDEF CHECK3DFLOORSZ}
+  end;
+  inc(x);
+{$ENDIF}
 
     // Next step in u,v.
     xfrac := xfrac + xstep;
     yfrac := yfrac + ystep;
 
+{$IFDEF CHECK3DFLOORSZ}
+  if R_ZBufferAtSeg(x, ds_y).depth < db_distance then
+  begin
+{$ENDIF}
     // Current texture index in u,v.
 {$IFDEF FPC}
 {$IFDEF SCALE64x64}
@@ -269,11 +293,19 @@
     // Lookup pixel from flat texture tile,
     //  re-index using light/colormap.
     fb.byte3 := ds_colormap[ds_source[spot]];
+{$IFDEF CHECK3DFLOORSZ}
+  end;
+  inc(x);
+{$ENDIF}
 
     // Next step in u,v.
     xfrac := xfrac + xstep;
     yfrac := yfrac + ystep;
 
+{$IFDEF CHECK3DFLOORSZ}
+  if R_ZBufferAtSeg(x, ds_y).depth < db_distance then
+  begin
+{$ENDIF}
     // Current texture index in u,v.
 {$IFDEF FPC}
 {$IFDEF SCALE64x64}
@@ -361,6 +393,10 @@
     // Lookup pixel from flat texture tile,
     //  re-index using light/colormap.
     fb.byte4 := ds_colormap[ds_source[spot]];
+{$IFDEF CHECK3DFLOORSZ}
+  end;
+  inc(x);
+{$ENDIF}
 
     PLongWord(dest)^ := PLongWord(@fb)^;
     inc(dest, 4);

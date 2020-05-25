@@ -1,3 +1,7 @@
+{$IFDEF CHECK3DFLOORSZ}
+  if R_ZBufferAtSeg(x, ds_y).depth < db_distance then
+  begin
+{$ENDIF}
       // Current texture index in u,v.
 {$IFDEF FPC}
 {$IFDEF SCALE64x64}
@@ -97,6 +101,11 @@
 {$ELSE}
       destl^ := bf_r[c and $FF] + bf_g[(c shr 8) and $FF] + bf_b[(c shr 16) and $FF];
 {$ENDIF}
+{$ENDIF}
+
+{$IFDEF CHECK3DFLOORSZ}
+  end;
+  inc(x);
 {$ENDIF}
       inc(destl);
 

@@ -75,6 +75,10 @@ procedure R_DrawFFloorsMultiThread;  // JVAL: 3d Floors
 
 procedure R_ClearVisPlanes3d;
 
+var
+  levelhas3dfloors: boolean = false;
+  checkzbuffer3dfloors: boolean = false;
+
 implementation
 
 uses
@@ -1301,7 +1305,6 @@ begin
     ypos := int64(p1.y) * FRACUNIT + yfrac * (x1 - p1.x);
     repeat
       y := GetInt64InRange(ypos div FRACUNIT, -32000, 32000);
-//      y := ypos div FRACUNIT;
       if y < plane.realtop[x1] then
         plane.realtop[x1] := y;
       if y > plane.realbottom[x1] then
@@ -1369,6 +1372,8 @@ begin
   if lastvisplane3d = 0 then
     exit;
 
+  checkzbuffer3dfloors := true;
+
   R_StartDepthBuffer;
   for i := lastvisplane3d - 1 downto 0 do
   begin
@@ -1376,6 +1381,8 @@ begin
     if pl.renderflags and SRF_DONOTDRAW = 0 then
       R_DoDrawPlane(pl);
   end;
+
+  checkzbuffer3dfloors := false;
 end;
 
 procedure R_DrawFFloorsMultiThread;  // JVAL: 3d Floors
@@ -1386,6 +1393,8 @@ begin
   if lastvisplane3d = 0 then
     exit;
 
+  checkzbuffer3dfloors := true;
+
   R_StartDepthBuffer;
   for i := lastvisplane3d - 1 downto 0 do
   begin
@@ -1394,6 +1403,8 @@ begin
       R_DoDrawPlane(pl);
   end;
   R_FlashSpansToDepthBufferMT;
+
+  checkzbuffer3dfloors := false;
 end;
 
 end.
