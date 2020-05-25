@@ -170,7 +170,9 @@ begin
     if useexternaltextures and (integer(t) > $1) then // if we have a hi resolution flat
     begin
       fsize := t.GetWidth;
-      if fsize = 512 then
+      if fsize = 1024 then
+        pds.scale := ds1024x1024
+      else if fsize = 512 then
         pds.scale := ds512x512
       else if fsize = 256 then
         pds.scale := ds256x256

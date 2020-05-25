@@ -32,6 +32,14 @@
       spot := _SHR(yfrac, 7) and (261632) + _SHR(xfrac, FRACBITS) and 511;
 {$ENDIF}
 {$ENDIF}
+{$IFDEF SCALE1024x1024}
+{$IFDEF RIPPLE}
+      spot := (LongWord(yfrac + 16 * rpl[(LongWord(xfrac) shr 20) and 127]) shr 6) and (1047552) or
+              (LongWord(xfrac + 16 * rpl[(LongWord(yfrac) shr 20) and 127]) shr FRACBITS) and 1023;
+{$ELSE}
+      spot := _SHR(yfrac, 6) and (1047552) + _SHR(xfrac, FRACBITS) and 1023;
+{$ENDIF}
+{$ENDIF}
 {$ELSE}
 {$IFDEF SCALE64x64}
 {$IFDEF RIPPLE}
@@ -65,6 +73,14 @@
       spot := (LongWord(yfrac) shr 7) and (261632) or (LongWord(xfrac) shr FRACBITS) and 511;
 {$ENDIF}
 {$ENDIF}
+{$IFDEF SCALE1024x1024}
+{$IFDEF RIPPLE}
+      spot := (LongWord(yfrac + 16 * rpl[(LongWord(xfrac) shr 20) and 127]) shr 6) and (1047552) or
+              (LongWord(xfrac + 16 * rpl[(LongWord(yfrac) shr 20) and 127]) shr FRACBITS) and 1023;
+{$ELSE}
+      spot := (LongWord(yfrac) shr 6) and (1047552) or (LongWord(xfrac) shr FRACBITS) and 1023;
+{$ENDIF}
+{$ENDIF}
 {$ENDIF}
     // Lookup pixel from flat texture tile,
     //  re-index using light/colormap.
@@ -73,8 +89,6 @@
     // Next step in u,v.
     xfrac := xfrac + xstep;
     yfrac := yfrac + ystep;
-
-
 
     // Current texture index in u,v.
 {$IFDEF FPC}
@@ -110,6 +124,14 @@
       spot := _SHR(yfrac, 7) and (261632) + _SHR(xfrac, FRACBITS) and 511;
 {$ENDIF}
 {$ENDIF}
+{$IFDEF SCALE1024x1024}
+{$IFDEF RIPPLE}
+      spot := (LongWord(yfrac + 16 * rpl[(LongWord(xfrac) shr 20) and 127]) shr 6) and (1047552) or
+              (LongWord(xfrac + 16 * rpl[(LongWord(yfrac) shr 20) and 127]) shr FRACBITS) and 1023;
+{$ELSE}
+      spot := _SHR(yfrac, 6) and (1047552) + _SHR(xfrac, FRACBITS) and 1023;
+{$ENDIF}
+{$ENDIF}
 {$ELSE}
 {$IFDEF SCALE64x64}
 {$IFDEF RIPPLE}
@@ -141,6 +163,14 @@
               (LongWord(xfrac + 8 * rpl[(LongWord(yfrac) shr 19) and 127]) shr FRACBITS) and 511;
 {$ELSE}
       spot := (LongWord(yfrac) shr 7) and (261632) or (LongWord(xfrac) shr FRACBITS) and 511;
+{$ENDIF}
+{$ENDIF}
+{$IFDEF SCALE1024x1024}
+{$IFDEF RIPPLE}
+      spot := (LongWord(yfrac + 16 * rpl[(LongWord(xfrac) shr 20) and 127]) shr 6) and (1047552) or
+              (LongWord(xfrac + 16 * rpl[(LongWord(yfrac) shr 20) and 127]) shr FRACBITS) and 1023;
+{$ELSE}
+      spot := (LongWord(yfrac) shr 6) and (1047552) or (LongWord(xfrac) shr FRACBITS) and 1023;
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
@@ -186,6 +216,14 @@
       spot := _SHR(yfrac, 7) and (261632) + _SHR(xfrac, FRACBITS) and 511;
 {$ENDIF}
 {$ENDIF}
+{$IFDEF SCALE1024x1024}
+{$IFDEF RIPPLE}
+      spot := (LongWord(yfrac + 16 * rpl[(LongWord(xfrac) shr 20) and 127]) shr 6) and (1047552) or
+              (LongWord(xfrac + 16 * rpl[(LongWord(yfrac) shr 20) and 127]) shr FRACBITS) and 1023;
+{$ELSE}
+      spot := _SHR(yfrac, 6) and (1047552) + _SHR(xfrac, FRACBITS) and 1023;
+{$ENDIF}
+{$ENDIF}
 {$ELSE}
 {$IFDEF SCALE64x64}
 {$IFDEF RIPPLE}
@@ -217,6 +255,14 @@
               (LongWord(xfrac + 8 * rpl[(LongWord(yfrac) shr 19) and 127]) shr FRACBITS) and 511;
 {$ELSE}
       spot := (LongWord(yfrac) shr 7) and (261632) or (LongWord(xfrac) shr FRACBITS) and 511;
+{$ENDIF}
+{$ENDIF}
+{$IFDEF SCALE1024x1024}
+{$IFDEF RIPPLE}
+      spot := (LongWord(yfrac + 16 * rpl[(LongWord(xfrac) shr 20) and 127]) shr 6) and (1047552) or
+              (LongWord(xfrac + 16 * rpl[(LongWord(yfrac) shr 20) and 127]) shr FRACBITS) and 1023;
+{$ELSE}
+      spot := (LongWord(yfrac) shr 6) and (1047552) or (LongWord(xfrac) shr FRACBITS) and 1023;
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
@@ -262,6 +308,14 @@
       spot := _SHR(yfrac, 7) and (261632) + _SHR(xfrac, FRACBITS) and 511;
 {$ENDIF}
 {$ENDIF}
+{$IFDEF SCALE1024x1024}
+{$IFDEF RIPPLE}
+      spot := (LongWord(yfrac + 16 * rpl[(LongWord(xfrac) shr 20) and 127]) shr 6) and (1047552) or
+              (LongWord(xfrac + 16 * rpl[(LongWord(yfrac) shr 20) and 127]) shr FRACBITS) and 1023;
+{$ELSE}
+      spot := _SHR(yfrac, 6) and (1047552) + _SHR(xfrac, FRACBITS) and 1023;
+{$ENDIF}
+{$ENDIF}
 {$ELSE}
 {$IFDEF SCALE64x64}
 {$IFDEF RIPPLE}
@@ -295,14 +349,24 @@
       spot := (LongWord(yfrac) shr 7) and (261632) or (LongWord(xfrac) shr FRACBITS) and 511;
 {$ENDIF}
 {$ENDIF}
+{$IFDEF SCALE1024x1024}
+{$IFDEF RIPPLE}
+      spot := (LongWord(yfrac + 16 * rpl[(LongWord(xfrac) shr 20) and 127]) shr 6) and (1047552) or
+              (LongWord(xfrac + 16 * rpl[(LongWord(yfrac) shr 20) and 127]) shr FRACBITS) and 1023;
+{$ELSE}
+      spot := (LongWord(yfrac) shr 6) and (1047552) or (LongWord(xfrac) shr FRACBITS) and 1023;
+{$ENDIF}
+{$ENDIF}
 {$ENDIF}
     // Lookup pixel from flat texture tile,
     //  re-index using light/colormap.
     fb.byte4 := ds_colormap[ds_source[spot]];
+
     PLongWord(dest)^ := PLongWord(@fb)^;
     inc(dest, 4);
 
     // Next step in u,v.
     xfrac := xfrac + xstep;
     yfrac := yfrac + ystep;
+
 

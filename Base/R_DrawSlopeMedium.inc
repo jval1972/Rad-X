@@ -4,6 +4,7 @@
     {$UNDEF SCALE128x128}
     {$UNDEF SCALE256x256}
     {$UNDEF SCALE512x512}
+    {$UNDEF SCALE1024x1024}
     {$I R_DrawSlopeMedium_Main.inc}
     end
     else if ds_scale = ds128x128 then
@@ -12,6 +13,7 @@
     {$DEFINE SCALE128x128}
     {$UNDEF SCALE256x256}
     {$UNDEF SCALE512x512}
+    {$UNDEF SCALE1024x1024}
     {$I R_DrawSlopeMedium_Main.inc}
     end
     else if ds_scale = ds256x256 then
@@ -20,13 +22,25 @@
     {$UNDEF SCALE128x128}
     {$DEFINE SCALE256x256}
     {$UNDEF SCALE512x512}
+    {$UNDEF SCALE1024x1024}
     {$I R_DrawSlopeMedium_Main.inc}
     end
-    else
+    else if ds_scale = ds512x512 then
     begin
     {$UNDEF SCALE64x64}
     {$UNDEF SCALE128x128}
     {$UNDEF SCALE256x256}
     {$DEFINE SCALE512x512}
+    {$UNDEF SCALE1024x1024}
     {$I R_DrawSlopeMedium_Main.inc}
-    end;
+    end
+    else if ds_scale = ds1024x1024 then
+    begin
+    {$UNDEF SCALE64x64}
+    {$UNDEF SCALE128x128}
+    {$UNDEF SCALE256x256}
+    {$UNDEF SCALE512x512}
+    {$DEFINE SCALE1024x1024}
+    {$I R_DrawSlopeMedium_Main.inc}
+    end
+
