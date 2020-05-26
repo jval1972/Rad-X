@@ -350,20 +350,25 @@ begin
       if dc_yl <= mceilingclip[dc_x] then
         dc_yl := mceilingclip[dc_x] + 1;
 
-      if videomode = vm32bit then
+      if dc_yh < 0 then
+        dc_yh := 0;
+      if dc_yl <= dc_yh then
       begin
-        dc_mod := 0;
-        dc_texturemod := maskedtexturecol[dc_x] and (DC_HIRESFACTOR - 1);
-        R_GetDCs(texnum, texturecolumn);
-      end
-      else
-      begin
-        dc_source := R_GetColumn(texnum, texturecolumn);
+        if videomode = vm32bit then
+        begin
+          dc_mod := 0;
+          dc_texturemod := maskedtexturecol[dc_x] and (DC_HIRESFACTOR - 1);
+          R_GetDCs(texnum, texturecolumn);
+        end
+        else
+        begin
+          dc_source := R_GetColumn(texnum, texturecolumn);
+        end;
+        if depthbufferactive then
+          R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc)
+        else
+          wallcolfunc;
       end;
-      if depthbufferactive then
-        R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc)
-      else
-        wallcolfunc;
 
       maskedtexturecol[dc_x] := MAXSHORT;
     end;
@@ -550,10 +555,16 @@ begin
         dc_source := R_GetColumn(texnum, texturecolumn);
       end;
       dc_texturemid := texturemid[0];
-      if depthbufferactive then
-        R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc)
-      else
-        wallcolfunc;
+
+      if dc_yh < 0 then
+        dc_yh := 0;
+      if dc_yl <= dc_yh then
+      begin
+        if depthbufferactive then
+          R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc)
+        else
+          wallcolfunc;
+      end;
 
       if fixedcolormap = nil then
       begin
@@ -569,12 +580,16 @@ begin
       if dc_yl <= mceilingclip[dc_x] then
         dc_yl := mceilingclip[dc_x] + 1;
 
-      dc_texturemid := texturemid[1];
-      if depthbufferactive then
-        R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc)
-      else
-        wallcolfunc;
-
+      if dc_yh < 0 then
+        dc_yh := 0;
+      if dc_yl <= dc_yh then
+      begin
+        dc_texturemid := texturemid[1];
+        if depthbufferactive then
+          R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc)
+        else
+          wallcolfunc;
+      end;
 
       maskedtexturecol[dc_x] := MAXSHORT;
     end;
@@ -713,20 +728,25 @@ begin
       if dc_yl <= mceilingclip[dc_x] then
         dc_yl := mceilingclip[dc_x] + 1;
 
-      if videomode = vm32bit then
+      if dc_yh < 0 then
+        dc_yh := 0;
+      if dc_yl <= dc_yh then
       begin
-        dc_mod := 0;
-        dc_texturemod := maskedtexturecol[dc_x] and (DC_HIRESFACTOR - 1);
-        R_GetDCs(texnum, texturecolumn);
-      end
-      else
-      begin
-        dc_source := R_GetColumn(texnum, texturecolumn);
+        if videomode = vm32bit then
+        begin
+          dc_mod := 0;
+          dc_texturemod := maskedtexturecol[dc_x] and (DC_HIRESFACTOR - 1);
+          R_GetDCs(texnum, texturecolumn);
+        end
+        else
+        begin
+          dc_source := R_GetColumn(texnum, texturecolumn);
+        end;
+        if depthbufferactive then
+          R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc)
+        else
+          wallcolfunc;
       end;
-      if depthbufferactive then
-        R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc)
-      else
-        wallcolfunc;
 
       maskedtexturecol[dc_x] := MAXSHORT;
     end;
@@ -897,10 +917,16 @@ begin
         dc_source := R_GetColumn(texnum, texturecolumn);
       end;
       dc_texturemid := texturemid[0];
-      if depthbufferactive then
-        R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc)
-      else
-        wallcolfunc;
+
+      if dc_yh < 0 then
+        dc_yh := 0;
+      if dc_yl <= dc_yh then
+      begin
+        if depthbufferactive then
+          R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc)
+        else
+          wallcolfunc;
+      end;
 
       sprtopscreen := centeryfrac - texscale[1];
 
@@ -916,11 +942,17 @@ begin
         dc_yh := mfloorclip[dc_x] - 1;
       if dc_yl <= mceilingclip[dc_x] then
         dc_yl := mceilingclip[dc_x] + 1;
-      dc_texturemid := texturemid[1];
-      if depthbufferactive then
-        R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc)
-      else
-        wallcolfunc;
+
+      if dc_yh < 0 then
+        dc_yh := 0;
+      if dc_yl <= dc_yh then
+      begin
+        dc_texturemid := texturemid[1];
+        if depthbufferactive then
+          R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc)
+        else
+          wallcolfunc;
+      end;
 
       maskedtexturecol[dc_x] := MAXSHORT;
     end;
