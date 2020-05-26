@@ -76,6 +76,7 @@ uses
   p_mobj,
   p_mobj_h,
   p_mobjlist,
+  p_animdefs,
   radix_logic,
   radix_forcefield, // JVAL: 20200429 - Forcefields
   ps_main,  // JVAL: Script Events
@@ -217,6 +218,7 @@ begin
     RX_RunTriggers; // JVAL: 20200305 - Run radix triggers
     RX_RunActions;  // JVAL: 20200305 - Run radix actions
     P_UpdateSpecials;
+    P_AnimateSurfaces;
     P_RespawnSpecials;
 
     // JVAL: Script Events
