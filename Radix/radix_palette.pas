@@ -103,29 +103,29 @@ var
 
 implementation
 
-procedure	RX_ColorShiftPalette(const inpal: PByteArray; const outpal: PByteArray;
+procedure RX_ColorShiftPalette(const inpal: PByteArray; const outpal: PByteArray;
   const r, g, b: integer; const shift: integer; const steps: integer);
 var
-	i: integer;
-	dr, dg, db: integer;
-	in_p, out_p: PByteArray;
+  i: integer;
+  dr, dg, db: integer;
+  in_p, out_p: PByteArray;
 begin
-	in_p := inpal;
-	out_p := outpal;
+  in_p := inpal;
+  out_p := outpal;
 
-	for i := 0 to 255 do
-	begin
-		dr := r - in_p[0];
-		dg := g - in_p[1];
-		db := b - in_p[2];
+  for i := 0 to 255 do
+  begin
+    dr := r - in_p[0];
+    dg := g - in_p[1];
+    db := b - in_p[2];
 
-		out_p[0] := in_p[0] + (dr * shift) div steps;
-		out_p[1] := in_p[1] + (dg * shift) div steps;
-		out_p[2] := in_p[2] + (db * shift) div steps;
+    out_p[0] := in_p[0] + (dr * shift) div steps;
+    out_p[1] := in_p[1] + (dg * shift) div steps;
+    out_p[2] := in_p[2] + (db * shift) div steps;
 
-		in_p := @in_p[3];
-		out_p := @out_p[3];
-	end;
+    in_p := @in_p[3];
+    out_p := @out_p[3];
+  end;
 end;
 
 procedure RX_CopyPalette(const inppal, outpal: PByteArray);
@@ -138,21 +138,21 @@ end;
 
 function RX_BestColor(const r, g, b: byte; const palette: PByteArray; const rangel, rangeh: integer): byte;
 var
-	i: integer;
-	dr, dg, db: integer;
-	bestdistortion, distortion: integer;
-	bestcolor: integer;
-	pal: PByteArray;
+  i: integer;
+  dr, dg, db: integer;
+  bestdistortion, distortion: integer;
+  bestcolor: integer;
+  pal: PByteArray;
 begin
 //
 // let any color go to 0 as a last resort
 //
-	bestdistortion := (r * r + g * g + b * b ) * 2;
-	bestcolor := 0;
+  bestdistortion := (r * r + g * g + b * b ) * 2;
+  bestcolor := 0;
 
-	pal := @palette[rangel * 3];
-	for i := rangel to rangeh do
-	begin
+  pal := @palette[rangel * 3];
+  for i := rangel to rangeh do
+  begin
     dr := r - pal[0];
     dg := g - pal[1];
     db := b - pal[2];
@@ -168,8 +168,8 @@ begin
 
       bestdistortion := distortion;
       bestcolor := i;
-		end;
-	end;
+    end;
+  end;
 
   result := bestcolor;
 end;
@@ -199,7 +199,7 @@ const
   NUMLIGHTS = 32;
 var
   lightpalette: packed array[0..NUMLIGHTS + 1, 0..255] of byte;
-	i, l, c: integer;
+  i, l, c: integer;
   red, green, blue: integer;
   palsrc: PByte;
   gray: double;
@@ -209,18 +209,18 @@ begin
   RX_CopyPalette(inppal, outpal);
 
   for i := 1 to 8 do
-		RX_ColorShiftPalette(inppal, @outpal[768 * i], 255, 0, 0, i, 9);
+    RX_ColorShiftPalette(inppal, @outpal[768 * i], 255, 0, 0, i, 9);
 
   for i := 1 to 4 do
     RX_ColorShiftPalette(inppal, @outpal[768 * (i + 8)], 215, 186, 69, i, 8);
 
-	RX_ColorShiftPalette(inppal, @outpal[768 * 13], 0, 256, 0, 1, 8);
+  RX_ColorShiftPalette(inppal, @outpal[768 * 13], 0, 256, 0, 1, 8);
 
   for i := 1 to 8 do
-		RX_ColorShiftPalette(inppal, @outpal[768 * (i + 13)], 255, 255, 255, i, 9);
+    RX_ColorShiftPalette(inppal, @outpal[768 * (i + 13)], 255, 255, 255, i, 9);
 
   for l := 0 to NUMLIGHTS - 1 do
-	begin
+  begin
     palsrc := @inppal[0];
     for c := 0 to 255 do
     begin

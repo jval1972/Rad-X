@@ -503,7 +503,9 @@ _XMM0: Double;
               StoreReg(IPointer(POpenArray(p)^.ItemCount -1));
               Result := True;
               Exit;
-            end else begin
+            end
+            else
+            begin
               varptr := fvar.Dta;
 //              Exit;
             end;
@@ -526,7 +528,9 @@ _XMM0: Double;
       end; {case}
 
       StoreReg(IPointer(VarPtr));
-    end else begin
+    end
+    else
+    begin
 //      UseReg := True;
       case fVar^.aType.BaseType of
         btSet:
@@ -604,10 +608,12 @@ _XMM0: Double;
           begin
             StoreReg(IPointer(fvar^.dta^));
           end;
-        btWideString: begin
+        btWideString:
+          begin
             StoreReg(IPointer(fvar^.dta^));
           end;
-        btUnicodeString: begin
+        btUnicodeString:
+          begin
             StoreReg(IPointer(fvar^.dta^));
           end;
 
@@ -622,7 +628,7 @@ _XMM0: Double;
         bts64:
           begin
             StoreReg(IPointer(int64(fvar^.dta^)));
-        end;
+          end;
       end; {case}
     end;
     Result := True;
@@ -712,49 +718,55 @@ begin
               2: word(res.Dta^) := _RAX;
               3,
               4: Longint(res.Dta^) := _RAX;
-              5,6,7,8: IPointer(res.dta^) := _RAX;
+              5, 6, 7, 8: IPointer(res.dta^) := _RAX;
             end;
           end;
-        btSingle:      tbtsingle(res.Dta^) := _XMM0;
-        btDouble:      tbtdouble(res.Dta^) := _XMM0;
-        btExtended:    tbtextended(res.Dta^) := _XMM0;
-        btchar,btU8, btS8:    tbtu8(res.dta^) := _RAX;
+        btSingle: tbtsingle(res.Dta^) := _XMM0;
+        btDouble: tbtdouble(res.Dta^) := _XMM0;
+        btExtended: tbtextended(res.Dta^) := _XMM0;
+        btchar, btU8, btS8: tbtu8(res.dta^) := _RAX;
         btWideChar, btu16, bts16:  tbtu16(res.dta^) := _RAX;
-        btClass : IPointer(res.dta^) := _RAX;
-        btu32,bts32:   tbtu32(res.dta^) := _RAX;
-        btPChar:       pansichar(res.dta^) := Pansichar(_RAX);
+        btClass: IPointer(res.dta^) := _RAX;
+        btu32, bts32: tbtu32(res.dta^) := _RAX;
+        btPChar: pansichar(res.dta^) := Pansichar(_RAX);
         bts64: tbts64(res.dta^) := Int64(_RAX);
-        btCurrency:    tbts64(res.Dta^) := Int64(_RAX);
+        btCurrency: tbts64(res.Dta^) := Int64(_RAX);
         btInterface,
         btVariant,
         {$IFDEF x64_string_result_as_varparameter}
-        btWidestring,btUnicodestring, btstring ,
+        btWidestring, btUnicodestring, btstring,
         {$ENDIF}
         btStaticArray, btArray:;
         {$IFNDEF x64_string_result_as_varparameter}
-        btUnicodeString, btWideString, btstring:  Int64(res.dta^) := _RAX;
+        btUnicodeString, btWideString, btstring: Int64(res.dta^) := _RAX;
         {$ENDIF}
       else
         exit;
       end;
-    end else begin
+    end
+    else
+    begin
       {$IFDEF WINDOWS}
-      if (length(Stack) mod 16) <> 0 then begin
-        SetLength(Stack, Length(Stack)+16 - (Length(Stack) mod 16));
+      if (length(Stack) mod 16) <> 0 then
+      begin
+        SetLength(Stack, Length(Stack) + 16 - (Length(Stack) mod 16));
       end;
-      {$ENDIF} 
-	if Stack = nil then pp := nil else pp := @Stack[Length(Stack) -8];
+      {$ENDIF}
+      if Stack = nil then
+        pp := nil
+      else
+        pp := @Stack[Length(Stack) -8];
 {$IFDEF WINDOWS}
-        Registers.Stack := pp;
-        Registers.Items := Length(Stack) div 8;
-        x64call(Address, _RAX, _XMM0, Registers);
+      Registers.Stack := pp;
+      Registers.Items := Length(Stack) div 8;
+      x64call(Address, _RAX, _XMM0, Registers);
 {$ELSE}
-       x64call(Address, _RAX, Registers, pp, Length(Stack) div 8, _XMM0);
+      x64call(Address, _RAX, Registers, pp, Length(Stack) div 8, _XMM0);
 {$ENDIF}
     end;
     Result := True;
   finally
-    for i := CallData.Count -1 downto 0 do
+    for i := CallData.Count - 1 downto 0 do
     begin
       pp := CallData[i];
       case pp^ of

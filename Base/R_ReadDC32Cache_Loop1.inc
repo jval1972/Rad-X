@@ -2,7 +2,7 @@
         plw^ := cvideopal[src1^];
 {$ELSE}
         plw^ := videopal[src1^];
-{$ENDIF}	
+{$ENDIF}
         inc(plw);
 {$IFNDEF LASTLOOP}
         inc(src1);
