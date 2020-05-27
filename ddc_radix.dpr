@@ -48,7 +48,7 @@
 {$I RAD.inc}
 {$D Doom to Delphi Total Conversion}
 
-library RAD_LIB;
+library ddc_radix;
 
 {$R *.RES}
 
@@ -400,7 +400,13 @@ uses
   radix_score in 'Radix\radix_score.pas',
   t_radix32 in 'TEXLIB\t_radix32.pas',
   w_wadreader in 'Base\w_wadreader.pas',
-  radix_vertical_fight in 'Radix\radix_vertical_fight.pas';
+  radix_vertical_fight in 'Radix\radix_vertical_fight.pas',
+  p_animdefs in 'Base\p_animdefs.pas',
+  r_flat8_ripple in 'Base\r_flat8_ripple.pas',
+  r_flat32_ripple in 'Base\r_flat32_ripple.pas',
+  r_span32_ripple in 'Base\r_span32_ripple.pas',
+  radix_extra_sprites in 'Radix\radix_extra_sprites.pas',
+  psi_radix in 'SCRIPT\psi_radix.pas';
 
 exports
   dd_compile_radix,

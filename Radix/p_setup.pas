@@ -2025,8 +2025,8 @@ begin
   end;
 
 {$IFDEF OPENGL}
-    if devparm then
-      printf('gld_PreprocessLevel()'#13#10);
+  if devparm then
+    printf('gld_PreprocessLevel()'#13#10);
   gld_PreprocessLevel; // JVAL OPENGL
 {$ENDIF}
 

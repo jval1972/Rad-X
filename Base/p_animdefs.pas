@@ -106,7 +106,6 @@ procedure P_AnimateSurfaces;
 var
   i: integer;
   ad: PanimDef_t;
-  line: Pline_t;
 begin
   // Animate flats and textures
   for i := 0 to AnimDefCount - 1 do

@@ -1,4 +1,4 @@
-#INCLUDE "DOOM\DOOMALIAS.txt"
+#include "DOOM\DOOMALIAS.txt"
 #include "RADIX\BASEACTORS.txt"
 #include "RADIX\RADIXPICKUPS.txt"
 #include "RADIX\RADIXENEMIES.txt"
