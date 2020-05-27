@@ -106,13 +106,21 @@ uses
   ps_defs,
   radix_weapons;
 
+const
+  RADIX_ACTORDEF =
+  {$I radixdef.inc}
+
 procedure DD_InitDoomEngine;
 begin
-  PS_InitProcLists;
+  Info_Init(true);
   RX_InitWeaponStates;
   DEH_Init;
   SC_Init;
   SC_ParseStatedefLump;
+  PS_Init;
+  SC_ParseActordefLump(RADIX_ACTORDEF);
+  PS_ShutDown;
+  PS_InitProcLists;
 end;
 
 procedure DD_ShutDownDoomEngine;
@@ -120,6 +128,7 @@ begin
   SC_ShutDown;
   DEH_ShutDown;
   PS_ShutDownProcLists;
+  Info_ShutDown;
 end;
 
 function DD_Compile(const _inp: string; var _out: string; var _msgs: string): boolean;
@@ -643,7 +652,6 @@ var
   csvstr: string;
   lst: TDStringList;
 begin
-  Info_Init(true);
   DD_InitDoomEngine;
   try
     lst := DEH_MobjInfoCSV;
@@ -653,7 +661,6 @@ begin
   finally
     DD_ShutDownDoomEngine;
   end;
-  Info_ShutDown;
 end;
 
 procedure dd_getstatescsv_radix(
@@ -662,7 +669,6 @@ var
   csvstr: string;
   lst: TDStringList;
 begin
-  Info_Init(true);
   DD_InitDoomEngine;
   try
     lst := DEH_StatesCSV;
@@ -672,7 +678,6 @@ begin
   finally
     DD_ShutDownDoomEngine;
   end;
-  Info_ShutDown;
 end;
 
 procedure dd_getspritescsv_radix(
@@ -681,7 +686,6 @@ var
   csvstr: string;
   lst: TDStringList;
 begin
-  Info_Init(true);
   DD_InitDoomEngine;
   try
     lst := DEH_SpritesCSV;
@@ -691,7 +695,6 @@ begin
   finally
     DD_ShutDownDoomEngine;
   end;
-  Info_ShutDown;
 end;
 
 function dd_convert_edit_wad(

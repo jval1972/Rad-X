@@ -808,7 +808,9 @@ end;
 
 procedure fprintf(var f: file; const str: string);
 begin
+  {$I-}
   BlockWrite(f, (@str[1])^, Length(str));
+  {$I+}
 end;
 
 procedure fprintf(var f: file; const Fmt: string; const Args: array of const);
@@ -821,12 +823,14 @@ end;
 
 procedure fprintf(const f: TFile; const str: string);
 begin
-  fprintf(f.f, str);
+  if f <> nil then
+    fprintf(f.f, str);
 end;
 
 procedure fprintf(const f: TFile; const Fmt: string; const Args: array of const);
 begin
-  fprintf(f.f, Fmt, Args);
+  if f <> nil then
+    fprintf(f.f, Fmt, Args);
 end;
 
 function itoa(i: integer): string;
@@ -3636,7 +3640,9 @@ var
   N2: integer;
 begin
   N1 := sz1 * sz2;
+  {$I-}
   BlockWrite(f, PByteArray(data)^, N1, N2);
+  {$I+}
   result := N1 = N2;
 end;
 
@@ -4369,6 +4375,7 @@ begin
   end;
   {$I-}
   BlockWrite(f, Pointer(str)^, Length(str));
+  {$I+}
   close(f);
 end;
 

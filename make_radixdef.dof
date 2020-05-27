@@ -90,18 +90,18 @@ MaxStackSize=1048576
 ImageBase=4194304
 ExeDescription=
 [Directories]
-OutputDir=..\bin
-UnitOutputDir=..\dcu\ddc_radix
+OutputDir=
+UnitOutputDir=
 PackageDLLOutputDir=
 PackageDCPOutputDir=
 SearchPath=
-Packages=vcl;rtl;vclx;indy;inet;xmlrtl;vclie;inetdbbde;inetdbxpress;dbrtl;dsnap;dsnapcon;vcldb;soaprtl;VclSmp;dbexpress;dbxcds;inetdb;bdertl;vcldbx;webdsnap;websnap;adortl;ibxpress;teeui;teedb;tee;dss;visualclx;visualdbclx;vclactnband;vclshlctrls;IntrawebDB_50_70;Intraweb_50_70;Rave50CLX;Rave50VCL;dclOfficeXP
-Conditionals=DOOM;DLL;ShareMM
+Packages=
+Conditionals=
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
 RunParams=
-HostApplication=F:\DelphiDoom_Release\DelphiDoom_Src\bin\Tools\DD_IDE.exe
+HostApplication=
 Launcher=
 UseLauncher=0
 DebugCWD=
@@ -110,29 +110,30 @@ ActiveLang=
 ProjectLang=
 RootDir=
 [Version Info]
-IncludeVerInfo=1
+IncludeVerInfo=0
 AutoIncBuild=0
-MajorVer=2
+MajorVer=1
 MinorVer=0
-Release=5
-Build=738
+Release=0
+Build=0
 Debug=0
 PreRelease=0
 Special=0
 Private=0
 DLL=0
-Locale=1033
-CodePage=1252
+Locale=1032
+CodePage=1253
 [Version Info Keys]
-CompanyName=Jim Valavanis
-FileDescription=RAD Script DLL
-FileVersion=2.0.5.738
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
 InternalName=
-LegalCopyright=Copyright 2016-2020, Jim Valavanis
+LegalCopyright=
 LegalTrademarks=
-OriginalFilename=ddc_radix.dll
+OriginalFilename=
 ProductName=
-ProductVersion=2.0
+ProductVersion=1.0.0.0
+Comments=
 [HistoryLists\hlConditionals]
 Count=3
 Item0=DOOM;DLL;ShareMM
@@ -142,11 +143,8 @@ Item2=DOOM
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlUnitOutputDirectory]
-Count=3
-Item0=..\dcu\ddc_radix
-Item1=..\DelphiDoom_Src\bin\Tools
-Item2=..\dcu\RAD_LIB
+Count=1
+Item0=..\dcu\RAD_LIB
 [HistoryLists\hlOutputDirectorry]
-Count=2
+Count=1
 Item0=..\bin
-Item1=..\..\DelphiDoom_Src\bin\Tools

@@ -38,7 +38,7 @@ const
   DDCVERSION = 101;
 
 const
-  RAD_LIBNAME = 'RAD_LIB.dll';
+  RAD_LIBNAME = 'ddc_radix.dll';
 
 function dll_compile(const game: string; const code: string; var pcode: string; var msgs: string): Boolean;
 
