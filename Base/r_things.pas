@@ -1335,6 +1335,7 @@ var
   midn: integer;  // JVAL: 3d floors
   sprlights: PBytePArray; // JVAL: 3d floors
   scaledtop: fixed_t;
+  vr3: fixed_t;
 //  donclip3dfloor: boolean;
 {$ENDIF}
   soffset, swidth: fixed_t;
@@ -1489,7 +1490,9 @@ begin
   tx := tx - soffset;
   x1 := FixedInt(centerxfrac + FixedMul(tx, xscale));
 {$IFNDEF OPENGL}
-  vx1 := FixedInt(centerxfrac + FixedMul(tx + soffset - thing.state.voxelradius, xscale));
+  // JVAL: 20200528 - Approximate sqrt(2) with 3 div 2 ;-)
+  vr3 := thing.state.voxelradius * 3;
+  vx1 := FixedInt(centerxfrac + FixedMul(tx + soffset - vr3 div 2, xscale));
 {$ENDIF}
 
   // off the right side?
@@ -1506,7 +1509,8 @@ begin
   tx := tx + swidth;
   x2 := FixedInt(centerxfrac + FixedMul(tx, xscale)) - 1;
 {$IFNDEF OPENGL}
-  vx2 := FixedInt(centerxfrac + FixedMul(tx - swidth + 2 * thing.state.voxelradius, xscale));
+  // JVAL: 20200528 - Approximate sqrt(2) with 3 div 2 ;-)
+  vx2 := FixedInt(centerxfrac + FixedMul(tx - swidth + vr3, xscale));
 {$ENDIF}
 
   // off the left side
