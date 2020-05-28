@@ -1629,7 +1629,7 @@ begin
   if result <> nil then
     ZeroMemory(result, size);
 end;
-                  
+
 procedure realloc(var p: pointer; const oldsize, newsize: integer);
 begin
   if newsize = 0 then

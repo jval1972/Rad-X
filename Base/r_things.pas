@@ -1610,6 +1610,13 @@ begin
     vis.vx2 := viewwidth - 1
   else
     vis.vx2 := vx2;
+
+  // JVAL: 20200528
+  if vis.vx1 > vis.x1 then
+    vis.vx1 := vis.x1;
+  if vis.vx2 < vis.x2 then
+    vis.vx2 := vis.x2;
+
   iscale := FixedDiv(FRACUNIT, xscale);
 
   // JVAL: 3d Floors
