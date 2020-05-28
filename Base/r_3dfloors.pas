@@ -743,7 +743,7 @@ begin
           dc_source := R_GetColumn(texnum, texturecolumn);
         end;
         if depthbufferactive then
-          R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc)
+          R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc, spryscale)
         else
           wallcolfunc;
       end;
@@ -803,7 +803,7 @@ begin
       inc(lightnum[1]);
     end;
   end;
-  
+
   if lightnum[0] < 0 then
     lightnum[0] := 0
   else if lightnum[0] >= LIGHTLEVELS then
@@ -923,7 +923,7 @@ begin
       if dc_yl <= dc_yh then
       begin
         if depthbufferactive then
-          R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc)
+          R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc, spryscale)
         else
           wallcolfunc;
       end;
@@ -949,7 +949,7 @@ begin
       begin
         dc_texturemid := texturemid[1];
         if depthbufferactive then
-          R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc)
+          R_DrawColumnWithDepthBufferCheckWrite(wallcolfunc, spryscale)
         else
           wallcolfunc;
       end;
