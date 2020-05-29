@@ -399,7 +399,8 @@ uses
   r_span32_ripple in 'Base\r_span32_ripple.pas',
   r_flat32_ripple in 'Base\r_flat32_ripple.pas',
   r_flat8_ripple in 'Base\r_flat8_ripple.pas',
-  p_animdefs in 'Base\p_animdefs.pas';
+  p_animdefs in 'Base\p_animdefs.pas',
+  p_easyslope in 'Base\p_easyslope.pas';
 
 var
   Saved8087CW: Word;

@@ -176,6 +176,7 @@ uses
   p_udmf,
   p_3dfloors, // JVAL: 3d Floors
   p_slopes,   // JVAL: Slopes
+  p_easyslope,
   p_affectees,
   p_musinfo,
   p_animdefs,
@@ -802,6 +803,12 @@ begin
     result := false;
     exit;
   end;
+  if (doomdnum = MT_RAISEFLOORTOANGLE) or (doomdnum = MT_LOWERFLOORTOANGLE) or
+     (doomdnum = MT_RAISECEILINGTOANGLE) or (doomdnum = MT_LOWERCEILINGTOANGLE) then
+  begin
+    result := false;
+    exit;
+  end;
   result := true;
 end;
 
@@ -871,6 +878,30 @@ begin
   end
   else
     extradata := nil;
+
+  P_EasySlopeInit;
+
+  dmt := Pdoommapthing_t(data);
+  for i := 0 to numthings - 1 do
+  begin
+    if P_IsEasySlopeItem(dmt._type) then // Do spawn easy slope items
+    begin
+      mt.x := dmt.x;
+      mt.y := dmt.y;
+      mt.angle := dmt.angle;
+      mt._type := dmt._type;
+      mt.options := dmt.options;
+      mt.z := -1;
+      mt.height_speed := 0;
+      mt.radix_skill := -1;
+      mt.radix_id := -1;
+      P_SpawnEasySlopeThing(@mt);
+    end;
+
+    inc(dmt);
+  end;
+
+  P_EasySlopeExecute;
 
   dmt := Pdoommapthing_t(data);
   for i := 0 to numthings - 1 do

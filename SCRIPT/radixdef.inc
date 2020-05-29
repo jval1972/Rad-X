@@ -297,6 +297,190 @@
     '}'#13#10 +
     ''#13#10 +
     '////////////////////////////////////////////////////////////////////////////////'#13#10 +
+    '// RAISEFLOORTOANGLE'#13#10 +
+    'ACTOR RAISEFLOORTOANGLE 1250'#13#10 +
+    '{'#13#10 +
+    '    HEALTH 1000'#13#10 +
+    '    REACTIONTIME 8'#13#10 +
+    '    RADIUS 16'#13#10 +
+    '    HEIGHT 16'#13#10 +
+    '    MASS 1000'#13#10 +
+    '    SPEED 0'#13#10 +
+    '    +NOBLOCKMAP'#13#10 +
+    '    +NOCLIP'#13#10 +
+    '    +DONTDRAW '#13#10 +
+    '    +NOGRAVITY '#13#10 +
+    '    +PRECISESPAWNANGLE'#13#10 +
+    '    States'#13#10 +
+    '    {'#13#10 +
+    '    Spawn:'#13#10 +
+    '        TNT1 A 1 '#13#10 +
+    '        Stop'#13#10 +
+    '    }'#13#10 +
+    '}'#13#10 +
+    ''#13#10 +
+    '////////////////////////////////////////////////////////////////////////////////'#13#10 +
+    '// LOWERFLOORTOANGLE '#13#10 +
+    'ACTOR LOWERFLOORTOANGLE 1251'#13#10 +
+    '{'#13#10 +
+    '    HEALTH 1000'#13#10 +
+    '    REACTIONTIME 8'#13#10 +
+    '    RADIUS 16'#13#10 +
+    '    HEIGHT 16'#13#10 +
+    '    MASS 1000'#13#10 +
+    '    SPEED 0'#13#10 +
+    '    +NOBLOCKMAP'#13#10 +
+    '    +NOCLIP'#13#10 +
+    '    +DONTDRAW '#13#10 +
+    '    +NOGRAVITY '#13#10 +
+    '    +PRECISESPAWNANGLE'#13#10 +
+    '    States'#13#10 +
+    '    {'#13#10 +
+    '    Spawn:'#13#10 +
+    '        TNT1 A 1 '#13#10 +
+    '        Stop'#13#10 +
+    '    }'#13#10 +
+    '}'#13#10 +
+    ''#13#10 +
+    '////////////////////////////////////////////////////////////////////////////////'#13#10 +
+    '// RAISECEILINGTOANGLE'#13#10 +
+    'ACTOR RAISECEILINGTOANGLE 1252'#13#10 +
+    '{'#13#10 +
+    '    HEALTH 1000'#13#10 +
+    '    REACTIONTIME 8'#13#10 +
+    '    RADIUS 16'#13#10 +
+    '    HEIGHT 16'#13#10 +
+    '    MASS 1000'#13#10 +
+    '    SPEED 0'#13#10 +
+    '    +NOBLOCKMAP'#13#10 +
+    '    +NOCLIP'#13#10 +
+    '    +DONTDRAW '#13#10 +
+    '    +NOGRAVITY '#13#10 +
+    '    +PRECISESPAWNANGLE'#13#10 +
+    '    States'#13#10 +
+    '    {'#13#10 +
+    '    Spawn:'#13#10 +
+    '        TNT1 A 1 '#13#10 +
+    '        Stop'#13#10 +
+    '    }'#13#10 +
+    '}'#13#10 +
+    ''#13#10 +
+    '////////////////////////////////////////////////////////////////////////////////'#13#10 +
+    '// LOWERCEILINGTOANGLE'#13#10 +
+    'ACTOR LOWERCEILINGTOANGLE 1253'#13#10 +
+    '{'#13#10 +
+    '    HEALTH 1000'#13#10 +
+    '    REACTIONTIME 8'#13#10 +
+    '    RADIUS 16'#13#10 +
+    '    HEIGHT 16'#13#10 +
+    '    MASS 1000'#13#10 +
+    '    SPEED 0'#13#10 +
+    '    +NOBLOCKMAP'#13#10 +
+    '    +NOCLIP'#13#10 +
+    '    +DONTDRAW '#13#10 +
+    '    +NOGRAVITY '#13#10 +
+    '    +PRECISESPAWNANGLE'#13#10 +
+    '    States'#13#10 +
+    '    {'#13#10 +
+    '    Spawn:'#13#10 +
+    '        TNT1 A 1 '#13#10 +
+    '        Stop'#13#10 +
+    '    }'#13#10 +
+    '}'#13#10 +
+    ''#13#10 +
+    '////////////////////////////////////////////////////////////////////////////////'#13#10 +
+    '// VERTEXRAISEFLOORTOANGLE'#13#10 +
+    'ACTOR VERTEXRAISEFLOORTOANGLE 1254'#13#10 +
+    '{'#13#10 +
+    '    HEALTH 1000'#13#10 +
+    '    REACTIONTIME 8'#13#10 +
+    '    RADIUS 16'#13#10 +
+    '    HEIGHT 16'#13#10 +
+    '    MASS 1000'#13#10 +
+    '    SPEED 0'#13#10 +
+    '    +NOBLOCKMAP'#13#10 +
+    '    +NOCLIP'#13#10 +
+    '    +DONTDRAW '#13#10 +
+    '    +NOGRAVITY '#13#10 +
+    '    +PRECISESPAWNANGLE'#13#10 +
+    '    States'#13#10 +
+    '    {'#13#10 +
+    '    Spawn:'#13#10 +
+    '        TNT1 A 1 '#13#10 +
+    '        Stop'#13#10 +
+    '    }'#13#10 +
+    '}'#13#10 +
+    ''#13#10 +
+    '////////////////////////////////////////////////////////////////////////////////'#13#10 +
+    '// VERTEXLOWERFLOORTOANGLE '#13#10 +
+    'ACTOR VERTEXLOWERFLOORTOANGLE 1255'#13#10 +
+    '{'#13#10 +
+    '    HEALTH 1000'#13#10 +
+    '    REACTIONTIME 8'#13#10 +
+    '    RADIUS 16'#13#10 +
+    '    HEIGHT 16'#13#10 +
+    '    MASS 1000'#13#10 +
+    '    SPEED 0'#13#10 +
+    '    +NOBLOCKMAP'#13#10 +
+    '    +NOCLIP'#13#10 +
+    '    +DONTDRAW '#13#10 +
+    '    +NOGRAVITY '#13#10 +
+    '    +PRECISESPAWNANGLE'#13#10 +
+    '    States'#13#10 +
+    '    {'#13#10 +
+    '    Spawn:'#13#10 +
+    '        TNT1 A 1 '#13#10 +
+    '        Stop'#13#10 +
+    '    }'#13#10 +
+    '}'#13#10 +
+    ''#13#10 +
+    '////////////////////////////////////////////////////////////////////////////////'#13#10 +
+    '// VERTEXRAISECEILINGTOANGLE'#13#10 +
+    'ACTOR VERTEXRAISECEILINGTOANGLE 1256'#13#10 +
+    '{'#13#10 +
+    '    HEALTH 1000'#13#10 +
+    '    REACTIONTIME 8'#13#10 +
+    '    RADIUS 16'#13#10 +
+    '    HEIGHT 16'#13#10 +
+    '    MASS 1000'#13#10 +
+    '    SPEED 0'#13#10 +
+    '    +NOBLOCKMAP'#13#10 +
+    '    +NOCLIP'#13#10 +
+    '    +DONTDRAW '#13#10 +
+    '    +NOGRAVITY '#13#10 +
+    '    +PRECISESPAWNANGLE'#13#10 +
+    '    States'#13#10 +
+    '    {'#13#10 +
+    '    Spawn:'#13#10 +
+    '        TNT1 A 1 '#13#10 +
+    '        Stop'#13#10 +
+    '    }'#13#10 +
+    '}'#13#10 +
+    ''#13#10 +
+    '////////////////////////////////////////////////////////////////////////////////'#13#10 +
+    '// VERTEXLOWERCEILINGTOANGLE'#13#10 +
+    'ACTOR VERTEXLOWERCEILINGTOANGLE 1257'#13#10 +
+    '{'#13#10 +
+    '    HEALTH 1000'#13#10 +
+    '    REACTIONTIME 8'#13#10 +
+    '    RADIUS 16'#13#10 +
+    '    HEIGHT 16'#13#10 +
+    '    MASS 1000'#13#10 +
+    '    SPEED 0'#13#10 +
+    '    +NOBLOCKMAP'#13#10 +
+    '    +NOCLIP'#13#10 +
+    '    +DONTDRAW '#13#10 +
+    '    +NOGRAVITY '#13#10 +
+    '    +PRECISESPAWNANGLE'#13#10 +
+    '    States'#13#10 +
+    '    {'#13#10 +
+    '    Spawn:'#13#10 +
+    '        TNT1 A 1 '#13#10 +
+    '        Stop'#13#10 +
+    '    }'#13#10 +
+    '}'#13#10 +
+    ''#13#10 +
+    '////////////////////////////////////////////////////////////////////////////////'#13#10 +
     '// SMOKESPAWNER_UP_1'#13#10 +
     '// Spawns smoke upwards every 1 second (randomly)'#13#10 +
     'ACTOR SMOKESPAWNER_UP_1 1210'#13#10 +

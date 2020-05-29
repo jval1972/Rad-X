@@ -185,6 +185,190 @@ ACTOR PLAYERFLOORSLIDE64 1204
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// RAISEFLOORTOANGLE
+ACTOR RAISEFLOORTOANGLE 1250
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    +PRECISESPAWNANGLE
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+        Stop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// LOWERFLOORTOANGLE 
+ACTOR LOWERFLOORTOANGLE 1251
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    +PRECISESPAWNANGLE
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+        Stop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// RAISECEILINGTOANGLE
+ACTOR RAISECEILINGTOANGLE 1252
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    +PRECISESPAWNANGLE
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+        Stop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// LOWERCEILINGTOANGLE
+ACTOR LOWERCEILINGTOANGLE 1253
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    +PRECISESPAWNANGLE
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+        Stop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// VERTEXRAISEFLOORTOANGLE
+ACTOR VERTEXRAISEFLOORTOANGLE 1254
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    +PRECISESPAWNANGLE
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+        Stop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// VERTEXLOWERFLOORTOANGLE 
+ACTOR VERTEXLOWERFLOORTOANGLE 1255
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    +PRECISESPAWNANGLE
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+        Stop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// VERTEXRAISECEILINGTOANGLE
+ACTOR VERTEXRAISECEILINGTOANGLE 1256
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    +PRECISESPAWNANGLE
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+        Stop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// VERTEXLOWERCEILINGTOANGLE
+ACTOR VERTEXLOWERCEILINGTOANGLE 1257
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    +PRECISESPAWNANGLE
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+        Stop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // SMOKESPAWNER_UP_1
 // Spawns smoke upwards every 1 second (randomly)
 ACTOR SMOKESPAWNER_UP_1 1210

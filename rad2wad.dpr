@@ -352,7 +352,12 @@ uses
   w_wadreader in 'Base\w_wadreader.pas',
   radix_vertical_fight in 'Radix\radix_vertical_fight.pas',
   frm_rad2wadoptions in 'RAD2WAD\frm_rad2wadoptions.pas' {OptionsForm},
-  radix_extra_sprites in 'Radix\radix_extra_sprites.pas';
+  radix_extra_sprites in 'Radix\radix_extra_sprites.pas',
+  r_flat8_ripple in 'Base\r_flat8_ripple.pas',
+  r_flat32_ripple in 'Base\r_flat32_ripple.pas',
+  p_animdefs in 'Base\p_animdefs.pas',
+  psi_radix in 'SCRIPT\psi_radix.pas',
+  r_span32_ripple in 'Base\r_span32_ripple.pas';
 
 {$R *.res}
 
