@@ -346,9 +346,15 @@ begin
     flat_width := 64
   else if lumpsize = 16384 then
     flat_width := 128
+  else if lumpsize = 65536 then
+    flat_width := 256
+  else if lumpsize = 262144 then
+    flat_width := 512
+  else if lumpsize = 1048576 then
+    flat_width := 1024
   else
-    flat_width := 256;
-    
+    flat_width := 64;
+
   v := lst[0].v1;
   t[0].x := v.x div FRACTOMAPUNIT;
   t[0].y := v.y div FRACTOMAPUNIT;
