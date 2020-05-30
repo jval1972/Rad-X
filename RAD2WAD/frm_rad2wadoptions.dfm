@@ -1053,7 +1053,7 @@ object OptionsForm: TOptionsForm
     Width = 319
     Height = 41
     Align = alTop
-    Caption = 'Convertion Options'
+    Caption = 'Conversion Options'
     Color = clBlack
     Font.Charset = GREEK_CHARSET
     Font.Color = clWhite

@@ -357,7 +357,8 @@ uses
   r_flat32_ripple in 'Base\r_flat32_ripple.pas',
   p_animdefs in 'Base\p_animdefs.pas',
   psi_radix in 'SCRIPT\psi_radix.pas',
-  r_span32_ripple in 'Base\r_span32_ripple.pas';
+  r_span32_ripple in 'Base\r_span32_ripple.pas',
+  p_easyslope in 'Base\p_easyslope.pas';
 
 {$R *.res}
 
