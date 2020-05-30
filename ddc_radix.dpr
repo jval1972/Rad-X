@@ -406,7 +406,8 @@ uses
   r_flat32_ripple in 'Base\r_flat32_ripple.pas',
   r_span32_ripple in 'Base\r_span32_ripple.pas',
   radix_extra_sprites in 'Radix\radix_extra_sprites.pas',
-  psi_radix in 'SCRIPT\psi_radix.pas';
+  psi_radix in 'SCRIPT\psi_radix.pas',
+  p_easyslope in 'Base\p_easyslope.pas';
 
 exports
   dd_compile_radix,

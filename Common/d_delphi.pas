@@ -2605,7 +2605,7 @@ end;
 function TDPointerList.Get(Index: Integer): pointer;
 begin
   if (Index < 0) or (Index >= fNumItems) then
-    result := 0
+    result := nil
   else
     result := fList[Index];
 end;
