@@ -352,6 +352,8 @@ begin
     flat_width := 512
   else if lumpsize = 1048576 then
     flat_width := 1024
+  else if lumpsize = 4194304 then
+    flat_width := 2048
   else
     flat_width := 64;
 
