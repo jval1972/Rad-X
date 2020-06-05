@@ -3,7 +3,7 @@
     xstep := ds_xstep;
     ystep := ds_ystep;
 {$IFNDEF NO_INLINE_LOOPS}
-    while count >= 16 do
+    while count >= 14 do
     begin
       {$I R_DrawSpanNormal_Loop.inc}
       {$I R_DrawSpanNormal_Loop.inc}
@@ -19,9 +19,7 @@
       {$I R_DrawSpanNormal_Loop.inc}
       {$I R_DrawSpanNormal_Loop.inc}
       {$I R_DrawSpanNormal_Loop.inc}
-      {$I R_DrawSpanNormal_Loop.inc}
-      {$I R_DrawSpanNormal_Loop.inc}
-      count := count - 16;
+      count := count - 14;
     end;
 
     while count >= 4 do
@@ -35,7 +33,8 @@
 
 {$ENDIF}
 
-    for i := 0 to count do
+    while count >= 0 do
     begin
       {$I R_DrawSpanNormal_Loop.inc}
+      dec(count);
     end;

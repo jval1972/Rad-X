@@ -27,7 +27,7 @@
 
 {$I RAD.inc}
 
-unit r_span32_ripple;
+unit r_span32_ripple_z;
 
 interface
 
@@ -36,13 +36,12 @@ uses
   m_fixed,
   r_main;
 
-procedure R_DrawSpanNormal_Ripple;
+procedure R_DrawSpanNormal_Ripple_Z;
 
 implementation
 
 uses
   r_span32,
-  r_span32_ripple_z,
   r_precalc,
   r_ripple,
   r_span,
@@ -54,7 +53,7 @@ uses
   r_zbuffer,
   v_video;
 
-procedure R_DrawSpanNormal_Ripple;
+procedure R_DrawSpanNormal_Ripple_Z;
 var
   xfrac: fixed_t;
   yfrac: fixed_t;
@@ -74,12 +73,6 @@ var
   rpl: PIntegerArray;
   x: integer;
 begin
-  if checkzbuffer3dfloors then
-  begin
-    R_DrawSpanNormal_Ripple_Z;
-    exit;
-  end;
-
   destl := @((ylookupl[ds_y]^)[columnofs[ds_x1]]);
 
   // We do not check for zero spans here?
@@ -97,7 +90,7 @@ begin
     {$DEFINE RIPPLE}
     {$UNDEF INVERSECOLORMAPS}
     {$UNDEF TRANSPARENTFLAT}
-    {$UNDEF CHECK3DFLOORSZ}
+    {$DEFINE CHECK3DFLOORSZ}
     {$I R_DrawSpanNormal.inc}
   end
   else // Use inversecolormap
@@ -105,7 +98,7 @@ begin
     {$DEFINE RIPPLE}
     {$DEFINE INVERSECOLORMAPS}
     {$UNDEF TRANSPARENTFLAT}
-    {$UNDEF CHECK3DFLOORSZ}
+    {$DEFINE CHECK3DFLOORSZ}
     {$I R_DrawSpanNormal.inc}
   end;
 end;

@@ -40,6 +40,14 @@
       spot := _SHR(yfrac, 6) and (1047552) + _SHR(xfrac, FRACBITS) and 1023;
 {$ENDIF}
 {$ENDIF}
+{$IFDEF SCALE2048x2048}
+{$IFDEF RIPPLE}
+      spot := (LongWord(yfrac + 32 * rpl[(LongWord(xfrac) shr 21) and 127]) shr 5) and (4192256) or
+              (LongWord(xfrac + 32 * rpl[(LongWord(yfrac) shr 21) and 127]) shr FRACBITS) and 2047;
+{$ELSE}
+      spot := _SHR(yfrac, 5) and (4192256) + _SHR(xfrac, FRACBITS) and 2047;
+{$ENDIF}
+{$ENDIF}
 {$ELSE}
 {$IFDEF SCALE64x64}
 {$IFDEF RIPPLE}
@@ -79,6 +87,14 @@
               (LongWord(xfrac + 16 * rpl[(LongWord(yfrac) shr 20) and 127]) shr FRACBITS) and 1023;
 {$ELSE}
       spot := (LongWord(yfrac) shr 6) and (1047552) or (LongWord(xfrac) shr FRACBITS) and 1023;
+{$ENDIF}
+{$ENDIF}
+{$IFDEF SCALE2048x2048}
+{$IFDEF RIPPLE}
+      spot := (LongWord(yfrac + 32 * rpl[(LongWord(xfrac) shr 21) and 127]) shr 5) and (4192256) or
+              (LongWord(xfrac + 32 * rpl[(LongWord(yfrac) shr 21) and 127]) shr FRACBITS) and 2047;
+{$ELSE}
+      spot := (LongWord(yfrac) shr 5) and (4192256) or (LongWord(xfrac) shr FRACBITS) and 2047;
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}

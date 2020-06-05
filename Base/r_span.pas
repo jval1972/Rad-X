@@ -64,7 +64,7 @@ var
 
 
 type
-  dsscale_t = (ds64x64, ds128x128, ds256x256, ds512x512, ds1024x1024, NUMDSSCALES);
+  dsscale_t = (ds64x64, ds128x128, ds256x256, ds512x512, ds1024x1024, ds2048x2048, NUMDSSCALES);
 
 const
   dsscalesize: array[0..Ord(NUMDSSCALES) - 1] of integer = (
@@ -72,7 +72,8 @@ const
      128 *  128,
      256 *  256,
      512 *  512,
-    1024 * 1024
+    1024 * 1024,
+    2048 * 2048
   );
 
 var
