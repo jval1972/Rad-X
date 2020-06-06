@@ -45,7 +45,7 @@ const
 procedure R_ReadDS32Cache(const flat: integer);
 
 type
-  ds32_t = array[0..512 * 512 - 1] of LongWord;
+  ds32_t = array[0..2048 * 2048 - 1] of LongWord;
   Pds32_t = ^ds32_t;
 
   ds32cacheinfo_t = record
@@ -160,8 +160,12 @@ begin
           fsize := 128
         else if t.GetWidth <= 256 then
           fsize := 256
-        else
-          fsize := 512;
+        else if t.GetWidth <= 512 then
+          fsize := 512
+        else if t.GetWidth <= 1024 then
+          fsize := 1024
+        else if t.GetWidth <= 2048 then
+          fsize := 2048;
         t.ScaleTo(fsize, fsize);
         flats[flats[flat].translation].flat32 := t;
       end;
