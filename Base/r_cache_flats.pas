@@ -164,7 +164,7 @@ begin
           fsize := 512
         else if t.GetWidth <= 1024 then
           fsize := 1024
-        else if t.GetWidth <= 2048 then
+        else
           fsize := 2048;
         t.ScaleTo(fsize, fsize);
         flats[flats[flat].translation].flat32 := t;
