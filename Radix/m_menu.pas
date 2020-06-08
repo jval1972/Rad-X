@@ -868,6 +868,8 @@ type
     gmp_vanillal1neutroncannon,
     gmp_vanillal1plasmaspreader,
     gmp_fastweaponrefire,
+    gmp_barrelexplode,
+    gmp_droneexplode,
     gmp_end
   );
 
@@ -1751,10 +1753,30 @@ begin
     helperdrones := 0;
 end;
 
+procedure M_SwitchBarrelExplode(chhoise: integer);
+begin
+  g_bigbarrelexplosion := not g_bigbarrelexplosion;
+end;
+
+procedure M_SwitchDroneExplode(chhoise: integer);
+begin
+  g_bigdroneexplosion := not g_bigdroneexplosion;
+end;
+
+const
+  EXPLOSION_SIZE_TEXT: array[boolean] of string = ('Small', 'Big');
+
 procedure M_DrawGameplay;
+var
+  ppos: menupos_t;
 begin
   M_DrawHeadLine(15, 'Options');
   M_DrawSubHeadLine(40, 'Gameplay');
+
+  ppos := M_WriteSmallText(GameplayDef.x, GameplayDef.y + GameplayDef.itemheight * Ord(gmp_barrelexplode), gameplaymenu[Ord(gmp_barrelexplode)].name + ': ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, EXPLOSION_SIZE_TEXT[g_bigbarrelexplosion], SCN_TMP);
+  ppos := M_WriteSmallText(GameplayDef.x, GameplayDef.y + GameplayDef.itemheight * Ord(gmp_droneexplode), gameplaymenu[Ord(gmp_droneexplode)].name + ': ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, EXPLOSION_SIZE_TEXT[g_bigdroneexplosion], SCN_TMP);
 end;
 
 procedure M_DrawCompatibility;
@@ -5534,6 +5556,22 @@ begin
   pmi.routine := @M_BoolCmd;
   pmi.pBoolVal := @g_fastweaponrefire;
   pmi.alphaKey := 'f';
+
+  inc(pmi);
+  pmi.status := 1;
+  pmi.name := '!Barrel death explosion';
+  pmi.cmd := '';
+  pmi.routine := @M_SwitchBarrelExplode;
+  pmi.pBoolVal := nil;
+  pmi.alphaKey := 'b';
+
+  inc(pmi);
+  pmi.status := 1;
+  pmi.name := '!Drone death explosion';
+  pmi.cmd := '';
+  pmi.routine := @M_SwitchDroneExplode;
+  pmi.pBoolVal := nil;
+  pmi.alphaKey := 'd';
 
 ////////////////////////////////////////////////////////////////////////////////
 //GameplayDef

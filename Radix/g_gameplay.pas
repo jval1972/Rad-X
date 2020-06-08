@@ -42,6 +42,8 @@ var
   g_vanillalevel1neutroncannon: boolean = false;
   g_vanillalevel1plasmaspreader: boolean = false;
   g_fastweaponrefire: boolean = false;
+  g_bigbarrelexplosion: boolean = false;
+  g_bigdroneexplosion: boolean = false;
 
 function P_GetThingDamage(const th: Pmobj_t): integer;
 

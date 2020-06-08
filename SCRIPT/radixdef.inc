@@ -2323,6 +2323,7 @@
     '      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,0,0)'#13#10 +
     '      X085 A 1 A_Fall'#13#10 +
     '      X085 A 1 A_Gravity(1.0)'#13#10 +
+    '      TNT1 A 0 A_DroneExplosion'#13#10 +
     '      X085 A -1'#13#10 +
     '      Stop'#13#10 +
     '  }'#13#10 +
@@ -4025,6 +4026,7 @@
     '      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,0,0)'#13#10 +
     '      TNT1 A 0 A_Fall'#13#10 +
     '      TNT1 A 0 A_Gravity(1.0)'#13#10 +
+    '      TNT1 A 0 A_DroneExplosion'#13#10 +
     '      X085 A 1 A_SpawnItemEx("MT_CHUNK1",0,0,RANDOM(0,20),RANDOMPICK(-3,-2,2,3),RANDOMPICK(-3,-2,2,3),FRANDOM(2,3),RANDOM(0,179)*2)'#13#10 +
     '      X085 A 1 A_Turn(30)'#13#10 +
     '      X085 A 1 A_SpawnItemEx("MT_CHUNK2",0,0,RANDOM(0,20),RANDOMPICK(-3,-2,2,3),RANDOMPICK(-3,-2,2,3),FRANDOM(2,3),RANDOM(0,179)*2)'#13#10 +
@@ -4239,6 +4241,7 @@
     '      TNT1 A 0 A_SpawnItemEx("MT_RADIXBIGSMOKE",0,0,0,0,0,0,0)'#13#10 +
     '      X085 A 1 A_Fall'#13#10 +
     '      X085 A 1 A_Gravity(1.0)'#13#10 +
+    '      TNT1 A 0 A_DroneExplosion'#13#10 +
     '      X085 A -1'#13#10 +
     '      Stop'#13#10 +
     '  }'#13#10 +
@@ -4526,12 +4529,16 @@
     '    Spawn:'#13#10 +
     '      XR62 C 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)'#13#10 +
     '      XR62 D 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)'#13#10 +
+    '      TNT1 A 0 A_BarrelExplosion'#13#10 +
     '      XR62 E 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)'#13#10 +
     '      XR62 F 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)'#13#10 +
+    '      TNT1 A 0 A_BarrelExplosion'#13#10 +
     '      XR62 G 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)'#13#10 +
     '      XR62 H 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)'#13#10 +
+    '      TNT1 A 0 A_BarrelExplosion'#13#10 +
     '      XR62 I 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop3)'#13#10 +
     '      XR62 J 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop3)'#13#10 +
+    '      TNT1 A 0 A_BarrelExplosion'#13#10 +
     '      GoTo Spawn'#13#10 +
     '    Stop1:'#13#10 +
     '      TNT1 A 0 A_PlaySound("radix/SndPlaneHit")'#13#10 +

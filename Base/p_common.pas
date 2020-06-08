@@ -389,6 +389,10 @@ procedure A_PlayerPain(actor: Pmobj_t);
 
 procedure A_PlayerFloorSlide(actor: Pmobj_t);
 
+procedure A_BarrelExplosion(actor: Pmobj_t);
+
+procedure A_DroneExplosion(actor: Pmobj_t);
+
 const
   FLOATBOBSIZE = 64;
   FLOATBOBMASK = FLOATBOBSIZE - 1;
@@ -431,6 +435,7 @@ uses
   i_system,
   c_con,
   g_game,
+  g_gameplay,
   info_h,
   info,
   info_common,
@@ -444,6 +449,8 @@ uses
   psi_globals,
   r_renderstyle,
   r_main,
+  radix_objects,
+  radix_sounds,
   sc_engine,
   sc_tokens,
   sc_states,
@@ -4210,6 +4217,46 @@ begin
         if IsIntegerInRange(pmo.x, x1, x2) and IsIntegerInRange(pmo.y, y1, y2) then
           players[i].floorslidetics := 2;
     end;
+end;
+
+procedure A_BarrelExplosion(actor: Pmobj_t);
+var
+  mo: Pmobj_t;
+begin
+  if demoplayback or demorecording then
+    exit;
+  if g_bigbarrelexplosion then
+  begin
+    mo := RX_SpawnRadixBigExplosion(actor.x, actor.y, actor.z);
+    mo.flags3_ex := mo.flags3_ex or MF3_EX_NOSOUND;
+    mo.tics := P_Random mod mo.tics;
+    if mo.tics = 0 then
+      mo.tics := 1;
+    S_AmbientSound(actor.x, actor.y, 'radix/SndExplode');
+  end;
+end;
+
+procedure A_DroneExplosion(actor: Pmobj_t);
+var
+  mo: Pmobj_t;
+  i: integer;
+begin
+  if demoplayback or demorecording then
+    exit;
+  if g_bigbarrelexplosion then
+  begin
+    for i := 0 to 3 do
+    begin
+      mo := RX_SpawnRadixBigExplosion(actor.x, actor.y, actor.z);
+      mo.flags3_ex := mo.flags3_ex or MF3_EX_NOSOUND;
+      mo.tics := P_Random mod mo.tics;
+      if mo.tics = 0 then
+        mo.tics := 1;
+      mo.momx := P_Random * 256;
+      mo.momy := P_Random * 256;
+    end;
+    S_AmbientSound(actor.x, actor.y, 'radix/SndExplode');
+  end;
 end;
 
 end.
