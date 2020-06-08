@@ -1753,15 +1753,23 @@ begin
     helperdrones := 0;
 end;
 
-procedure M_SwitchBarrelExplode(chhoise: integer);
+procedure M_SwitchPlayerWeaponDamage(choise: integer);
+begin
+  g_vanillaplayerweapondamage := not g_vanillaplayerweapondamage;
+end;
+
+procedure M_SwitchBarrelExplode(choise: integer);
 begin
   g_bigbarrelexplosion := not g_bigbarrelexplosion;
 end;
 
-procedure M_SwitchDroneExplode(chhoise: integer);
+procedure M_SwitchDroneExplode(choise: integer);
 begin
   g_bigdroneexplosion := not g_bigdroneexplosion;
 end;
+
+const
+  VANILLA_PLAYER_WEAPON_DAMAGE_TEXT: array[boolean] of string = ('Challenging', 'Vanilla');
 
 const
   EXPLOSION_SIZE_TEXT: array[boolean] of string = ('Small', 'Big');
@@ -1773,9 +1781,11 @@ begin
   M_DrawHeadLine(15, 'Options');
   M_DrawSubHeadLine(40, 'Gameplay');
 
-  ppos := M_WriteSmallText(GameplayDef.x, GameplayDef.y + GameplayDef.itemheight * Ord(gmp_barrelexplode), gameplaymenu[Ord(gmp_barrelexplode)].name + ': ', SCN_TMP);
+  ppos := M_WriteSmallText(GameplayDef.x, GameplayDef.y + GameplayDef.itemheight * Ord(gmp_vanillaplayerweapondamage), 'Player weapon damage: ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, VANILLA_PLAYER_WEAPON_DAMAGE_TEXT[g_vanillaplayerweapondamage], SCN_TMP);
+  ppos := M_WriteSmallText(GameplayDef.x, GameplayDef.y + GameplayDef.itemheight * Ord(gmp_barrelexplode), 'Barrel death explosion: ', SCN_TMP);
   M_WriteSmallWhiteText(ppos.x, ppos.y, EXPLOSION_SIZE_TEXT[g_bigbarrelexplosion], SCN_TMP);
-  ppos := M_WriteSmallText(GameplayDef.x, GameplayDef.y + GameplayDef.itemheight * Ord(gmp_droneexplode), gameplaymenu[Ord(gmp_droneexplode)].name + ': ', SCN_TMP);
+  ppos := M_WriteSmallText(GameplayDef.x, GameplayDef.y + GameplayDef.itemheight * Ord(gmp_droneexplode), 'Drone death explosion: ', SCN_TMP);
   M_WriteSmallWhiteText(ppos.x, ppos.y, EXPLOSION_SIZE_TEXT[g_bigdroneexplosion], SCN_TMP);
 end;
 
@@ -5527,10 +5537,10 @@ begin
 //GaameplayMenu
   pmi := @GameplayMenu[0];
   pmi.status := 1;
-  pmi.name := '!Weapon damage as vanilla';
-  pmi.cmd := 'g_vanillaplayerweapondamage';
-  pmi.routine := @M_BoolCmd;
-  pmi.pBoolVal := @g_vanillaplayerweapondamage;
+  pmi.name := '!Player weapon damage';
+  pmi.cmd := '';
+  pmi.routine := @M_SwitchPlayerWeaponDamage;
+  pmi.pBoolVal := nil;
   pmi.alphaKey := 'w';
 
   inc(pmi);
