@@ -358,7 +358,9 @@ uses
   p_animdefs in 'Base\p_animdefs.pas',
   psi_radix in 'SCRIPT\psi_radix.pas',
   r_span32_ripple in 'Base\r_span32_ripple.pas',
-  p_easyslope in 'Base\p_easyslope.pas';
+  p_easyslope in 'Base\p_easyslope.pas',
+  g_gameplay in 'Radix\g_gameplay.pas',
+  r_span32_ripple_z in 'Base\r_span32_ripple_z.pas';
 
 {$R *.res}
 
