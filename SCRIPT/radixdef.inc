@@ -4853,7 +4853,7 @@
     '  AltDamage 3'#13#10 +
     '  Mass 100'#13#10 +
     '  Reactiontime 8'#13#10 +
-    '  Seesound "radix/SndShot"'#13#10 +
+    '  Seesound "radix/SndMissle"'#13#10 +
     '  Deathsound "radix/SndExplodeShort"'#13#10 +
     '  +MF_NOBLOCKMAP'#13#10 +
     '  +MF_NOGRAVITY'#13#10 +
@@ -4939,7 +4939,7 @@
     '  AltDamage 3'#13#10 +
     '  Mass 100'#13#10 +
     '  Reactiontime 8'#13#10 +
-    '  Seesound "radix/SndShot"'#13#10 +
+    '  Seesound "radix/SndMissle"'#13#10 +
     '  Deathsound "radix/SndExplodeShort"'#13#10 +
     '  +MF_NOBLOCKMAP'#13#10 +
     '  +MF_NOGRAVITY'#13#10 +
@@ -4998,7 +4998,7 @@
     '  AltDamage 3'#13#10 +
     '  Mass 100'#13#10 +
     '  Reactiontime 8'#13#10 +
-    '  Seesound "radix/SndShot"'#13#10 +
+    '  Seesound "radix/SndMissle"'#13#10 +
     '  Deathsound "radix/SndExplodeShort"'#13#10 +
     '  +MF_NOBLOCKMAP'#13#10 +
     '  +MF_NOGRAVITY'#13#10 +

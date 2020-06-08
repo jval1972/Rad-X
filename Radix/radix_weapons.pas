@@ -82,6 +82,7 @@ uses
   d_think,
   d_items,
   g_game,
+  g_gameplay,
   r_defs,
   r_main,
   info,
@@ -107,8 +108,14 @@ uses
 // JVAL: 20200401 - Check if weapon can refire
 //
 function RX_CheckNextRefire(const p: Pplayer_t): boolean;
+var
+  checktics: integer;
 begin
-  if leveltime - p.lastfire[Ord(p.readyweapon)] < weaponinfo[Ord(p.readyweapon)].refiretics then
+  if g_fastweaponrefire then
+    checktics := weaponinfo[Ord(p.readyweapon)].altrefiretics
+  else
+    checktics := weaponinfo[Ord(p.readyweapon)].refiretics;
+  if leveltime - p.lastfire[Ord(p.readyweapon)] < checktics then
   begin
     result := false;
     exit;
@@ -172,19 +179,19 @@ var
   sflash: integer;
   st, st2: integer;
 
-  procedure get_def_weapon_states;
+  procedure get_def_weapon_states(const flashtics: integer);
   begin
     sraise := RX_NewWeaponState(1, @A_RaiseRadixWeapon);
     slower := RX_NewWeaponState(1, @A_LowerRadixWeapon);
     sready := RX_NewWeaponState(1, @A_WeaponReady);
-    sflash := RX_NewWeaponState(5, @A_Light1);
+    sflash := RX_NewWeaponState(flashtics, @A_Light1);
     states[sflash].nextstate := S_LIGHTDONE;
   end;
 
 begin
   cnt_radixweaponstates := 0;
 
-  get_def_weapon_states;
+  get_def_weapon_states(3);
   weaponinfo[Ord(wp_neutroncannons)].upstate := sraise;
   weaponinfo[Ord(wp_neutroncannons)].downstate := slower;
   weaponinfo[Ord(wp_neutroncannons)].readystate := sready;
@@ -194,7 +201,7 @@ begin
   states[st].nextstate := statenum_t(RX_NewWeaponState(weaponinfo[Ord(wp_neutroncannons)].refiretics, @A_Refire));
   states[Ord(states[st].nextstate)].nextstate := statenum_t(sready);
 
-  get_def_weapon_states;
+  get_def_weapon_states(5);
   weaponinfo[Ord(wp_standardepc)].upstate := sraise;
   weaponinfo[Ord(wp_standardepc)].downstate := slower;
   weaponinfo[Ord(wp_standardepc)].readystate := sready;
@@ -206,7 +213,7 @@ begin
   states[st2].nextstate := statenum_t(RX_NewWeaponState(weaponinfo[Ord(wp_standardepc)].refiretics, @A_Refire));
   states[Ord(states[st2].nextstate)].nextstate := statenum_t(sready);
 
-  get_def_weapon_states;
+  get_def_weapon_states(3);
   weaponinfo[Ord(wp_plasmaspreader)].upstate := sraise;
   weaponinfo[Ord(wp_plasmaspreader)].downstate := slower;
   weaponinfo[Ord(wp_plasmaspreader)].readystate := sready;
@@ -216,7 +223,7 @@ begin
   states[st].nextstate := statenum_t(RX_NewWeaponState(weaponinfo[Ord(wp_plasmaspreader)].refiretics, @A_Refire));
   states[Ord(states[st].nextstate)].nextstate := statenum_t(sready);
 
-  get_def_weapon_states;
+  get_def_weapon_states(5);
   weaponinfo[Ord(wp_seekingmissiles)].upstate := sraise;
   weaponinfo[Ord(wp_seekingmissiles)].downstate := slower;
   weaponinfo[Ord(wp_seekingmissiles)].readystate := sready;
@@ -226,7 +233,7 @@ begin
   states[st].nextstate := statenum_t(RX_NewWeaponState(weaponinfo[Ord(wp_seekingmissiles)].refiretics, @A_Refire));
   states[Ord(states[st].nextstate)].nextstate := statenum_t(sready);
 
-  get_def_weapon_states;
+  get_def_weapon_states(5);
   weaponinfo[Ord(wp_nuke)].upstate := sraise;
   weaponinfo[Ord(wp_nuke)].downstate := slower;
   weaponinfo[Ord(wp_nuke)].readystate := sready;
@@ -236,7 +243,7 @@ begin
   states[st].nextstate := statenum_t(RX_NewWeaponState(weaponinfo[Ord(wp_nuke)].refiretics, @A_Refire));
   states[Ord(states[st].nextstate)].nextstate := statenum_t(sready);
 
-  get_def_weapon_states;
+  get_def_weapon_states(5);
   weaponinfo[Ord(wp_phasetorpedoes)].upstate := sraise;
   weaponinfo[Ord(wp_phasetorpedoes)].downstate := slower;
   weaponinfo[Ord(wp_phasetorpedoes)].readystate := sready;
@@ -246,7 +253,7 @@ begin
   states[st].nextstate := statenum_t(RX_NewWeaponState(weaponinfo[Ord(wp_phasetorpedoes)].refiretics, @A_Refire));
   states[Ord(states[st].nextstate)].nextstate := statenum_t(sready);
 
-  get_def_weapon_states;
+  get_def_weapon_states(5);
   weaponinfo[Ord(wp_gravitywave)].upstate := sraise;
   weaponinfo[Ord(wp_gravitywave)].downstate := slower;
   weaponinfo[Ord(wp_gravitywave)].readystate := sready;
@@ -256,7 +263,7 @@ begin
   states[st].nextstate := statenum_t(RX_NewWeaponState(weaponinfo[Ord(wp_gravitywave)].refiretics, @A_Refire));
   states[Ord(states[st].nextstate)].nextstate := statenum_t(sready);
 
-  get_def_weapon_states;
+  get_def_weapon_states(5);
   weaponinfo[Ord(wp_enchancedepc)].upstate := sraise;
   weaponinfo[Ord(wp_enchancedepc)].downstate := slower;
   weaponinfo[Ord(wp_enchancedepc)].readystate := sready;
@@ -268,7 +275,7 @@ begin
   states[st2].nextstate := statenum_t(RX_NewWeaponState(weaponinfo[Ord(wp_enchancedepc)].refiretics, @A_Refire));
   states[Ord(states[st2].nextstate)].nextstate := statenum_t(sready);
 
-  get_def_weapon_states;
+  get_def_weapon_states(5);
   weaponinfo[Ord(wp_superepc)].upstate := sraise;
   weaponinfo[Ord(wp_superepc)].downstate := slower;
   weaponinfo[Ord(wp_superepc)].readystate := sready;
@@ -388,6 +395,7 @@ procedure A_FireRadixPlasma(player: Pplayer_t; psp: Ppspdef_t);
 
 var
   nlevel: integer;
+  outofenergy: boolean;
 begin
   if not RX_CheckNextRefire(player) then
     exit;
@@ -403,39 +411,63 @@ begin
     radixplasma_id := Info_GetMobjNumForName('MT_RADIXPLASMA');
 
   // JVAL: Decide the neutron cannon level
+  outofenergy := false;
   nlevel := neutroncannoninfo[player.neutroncannonlevel].firelevel;
   if nlevel > 0 then
     if player.energy < 2 * PLASMAENERGYMIN then
+    begin
+      outofenergy := true;
       nlevel := 0;  // JVAL: 20200412 -> When low energy only fire the base level
-
-  RX_DrainPlasmaEnergy(player, decide(nlevel = 0, 2, 3));
+    end;
 
   case nlevel of
     0:
       begin
-        if player.weaponflags and PWF_NEURONCANNON <> 0 then
+        if g_vanillalevel1neutroncannon and not demoplayback and not demorecording then
         begin
-          spawn_neutron(-WEAPON_SIDE_OFFSET, -8 * FRACUNIT + WEAPON_Z_OFFSET);
-          player.weaponflags := player.weaponflags and not PWF_NEURONCANNON;
+          if player.weaponflags and PWF_NEURONCANNON <> 0 then
+          begin
+            if outofenergy then
+              RX_DrainPlasmaEnergy(player, 2)
+            else
+              RX_DrainPlasmaEnergy(player, 3);
+            spawn_neutron(-WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
+            spawn_neutron(WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
+            player.weaponflags := player.weaponflags and not PWF_NEURONCANNON;
+          end
+          else
+            player.weaponflags := player.weaponflags or PWF_NEURONCANNON;
         end
         else
         begin
-          spawn_neutron(WEAPON_SIDE_OFFSET, -8 * FRACUNIT + WEAPON_Z_OFFSET);
-          player.weaponflags := player.weaponflags or PWF_NEURONCANNON;
+          RX_DrainPlasmaEnergy(player, 2);
+          if player.weaponflags and PWF_NEURONCANNON <> 0 then
+          begin
+            spawn_neutron(-WEAPON_SIDE_OFFSET, -8 * FRACUNIT + WEAPON_Z_OFFSET);
+            player.weaponflags := player.weaponflags and not PWF_NEURONCANNON;
+          end
+          else
+          begin
+            spawn_neutron(WEAPON_SIDE_OFFSET, -8 * FRACUNIT + WEAPON_Z_OFFSET);
+            player.weaponflags := player.weaponflags or PWF_NEURONCANNON;
+          end;
         end;
       end;
     1:
       begin
+        RX_DrainPlasmaEnergy(player, 3);
         spawn_neutron(-WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
         spawn_neutron(WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
       end;
     2:
       begin
+        RX_DrainPlasmaEnergy(player, 3);
         spawn_neutron(-WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
         spawn_neutron(0, 32 * FRACUNIT);
         spawn_neutron(WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
       end;
   else
+    RX_DrainPlasmaEnergy(player, 3);
     spawn_neutron(-WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
     spawn_neutron(-WEAPON_SIDE_OFFSET, 32 * FRACUNIT + WEAPON_Z_OFFSET);
     spawn_neutron(WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
@@ -618,29 +650,44 @@ begin
     if player.energy < 2 * PLASMAENERGYMIN then
       slevel := 0;  // JVAL: 20200514 -> When low energy only fire the base level
 
-  RX_DrainPlasmaEnergy(player, slevel);
-
   case slevel of
     0:
       begin
-        if player.weaponflags and PWF_NEURONSPREADER <> 0 then
+        RX_DrainPlasmaEnergy(player, 1);
+        if g_vanillalevel1plasmaspreader and not demoplayback and not demorecording then
         begin
-          spawn_spreader(radixplasmaspreadleft_id, -WEAPON_SIDE_OFFSET, -8 * FRACUNIT + WEAPON_Z_OFFSET);
-          player.weaponflags := player.weaponflags and not PWF_NEURONSPREADER;
+          if player.weaponflags and PWF_NEURONSPREADER <> 0 then
+          begin
+            spawn_spreader(radixplasmaspreadleft_id, -WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
+            spawn_spreader(radixplasmaspreadright_id, WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
+            player.weaponflags := player.weaponflags and not PWF_NEURONSPREADER;
+          end
+          else
+            player.weaponflags := player.weaponflags or PWF_NEURONSPREADER;
         end
         else
         begin
-          spawn_spreader(radixplasmaspreadright_id, WEAPON_SIDE_OFFSET, -8 * FRACUNIT + WEAPON_Z_OFFSET);
-          player.weaponflags := player.weaponflags or PWF_NEURONSPREADER;
+          if player.weaponflags and PWF_NEURONSPREADER <> 0 then
+          begin
+            spawn_spreader(radixplasmaspreadleft_id, -WEAPON_SIDE_OFFSET, -8 * FRACUNIT + WEAPON_Z_OFFSET);
+            player.weaponflags := player.weaponflags and not PWF_NEURONSPREADER;
+          end
+          else
+          begin
+            spawn_spreader(radixplasmaspreadright_id, WEAPON_SIDE_OFFSET, -8 * FRACUNIT + WEAPON_Z_OFFSET);
+            player.weaponflags := player.weaponflags or PWF_NEURONSPREADER;
+          end;
         end;
       end;
     1:
       begin
+        RX_DrainPlasmaEnergy(player, 1);
         spawn_spreader(radixplasmaspreadleft_id, -WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
         spawn_spreader(radixplasmaspreadright_id, WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
       end;
     2:
       begin
+        RX_DrainPlasmaEnergy(player, 2);
         spawn_spreader(radixplasmaspreadleft_id, -WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
         spawn_spreader(radixplasmaspreadright_id, WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
 
@@ -656,6 +703,7 @@ begin
         end;
       end;
   else
+    RX_DrainPlasmaEnergy(player, 3);
     spawn_spreader(radixplasmaspreadleft_id, WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);
     spawn_spreader(radixplasmaspreadright_id, WEAPON_SIDE_OFFSET, 32 * FRACUNIT + WEAPON_Z_OFFSET);
     spawn_spreader(radixplasmaspreadright_id, -WEAPON_SIDE_OFFSET, -32 * FRACUNIT + WEAPON_Z_OFFSET);

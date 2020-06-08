@@ -865,6 +865,9 @@ type
 //
   gameplaymenu_e = (
     gmp_vanillaplayerweapondamage,
+    gmp_vanillal1neutroncannon,
+    gmp_vanillal1plasmaspreader,
+    gmp_fastweaponrefire,
     gmp_end
   );
 
@@ -5508,6 +5511,30 @@ begin
   pmi.pBoolVal := @g_vanillaplayerweapondamage;
   pmi.alphaKey := 'w';
 
+  inc(pmi);
+  pmi.status := 1;
+  pmi.name := '!Neutron cannon L1 vanilla fire';
+  pmi.cmd := 'g_vanillalevel1neutroncannon';
+  pmi.routine := @M_BoolCmd;
+  pmi.pBoolVal := @g_vanillalevel1neutroncannon;
+  pmi.alphaKey := 'n';
+
+  inc(pmi);
+  pmi.status := 1;
+  pmi.name := '!Plasma spreader L1 vanilla fire';
+  pmi.cmd := 'g_vanillalevel1plasmaspreader';
+  pmi.routine := @M_BoolCmd;
+  pmi.pBoolVal := @g_vanillalevel1plasmaspreader;
+  pmi.alphaKey := 'p';
+
+  inc(pmi);
+  pmi.status := 1;
+  pmi.name := '!Fast weapon refire';
+  pmi.cmd := 'g_fastweaponrefire';
+  pmi.routine := @M_BoolCmd;
+  pmi.pBoolVal := @g_fastweaponrefire;
+  pmi.alphaKey := 'f';
+
 ////////////////////////////////////////////////////////////////////////////////
 //GameplayDef
   GameplayDef.numitems := Ord(gmp_end); // # of menu items
@@ -5550,7 +5577,7 @@ begin
 
   inc(pmi);
   pmi.status := 1;
-  pmi.name := '!Boss death ends Doom1 level';
+  pmi.name := '!Boss death ends level';
   pmi.cmd := 'majorbossdeathendsdoom1level';
   pmi.routine := @M_BoolCmd;
   pmi.pBoolVal := @majorbossdeathendsdoom1level;

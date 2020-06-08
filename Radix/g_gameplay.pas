@@ -38,8 +38,10 @@ uses
   p_mobj_h;
 
 var
-  g_vanillalevel1cannon: boolean = false;
   g_vanillaplayerweapondamage: boolean = false;
+  g_vanillalevel1neutroncannon: boolean = false;
+  g_vanillalevel1plasmaspreader: boolean = false;
+  g_fastweaponrefire: boolean = false;
 
 function P_GetThingDamage(const th: Pmobj_t): integer;
 

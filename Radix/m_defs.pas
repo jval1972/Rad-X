@@ -165,7 +165,7 @@ type
   Pdefault_t = ^default_t;
 
 const
-  NUMDEFAULTS = 202;
+  NUMDEFAULTS = 205;
 
 // JVAL
 // Note: All setable defaults must be in lowercase, don't ask why. Just do it. :)
@@ -887,6 +887,30 @@ const
 
     (name: 'g_vanillaplayerweapondamage';
      location: @g_vanillaplayerweapondamage;
+     setable: DFS_ALWAYS;
+     defaultsvalue: '';
+     defaultivalue: 0;
+     defaultbvalue: false;
+     _type: tBoolean),
+
+    (name: 'g_vanillalevel1neutroncannon';
+     location: @g_vanillalevel1neutroncannon;
+     setable: DFS_ALWAYS;
+     defaultsvalue: '';
+     defaultivalue: 0;
+     defaultbvalue: false;
+     _type: tBoolean),
+
+    (name: 'g_vanillalevel1plasmaspreader';
+     location: @g_vanillalevel1plasmaspreader;
+     setable: DFS_ALWAYS;
+     defaultsvalue: '';
+     defaultivalue: 0;
+     defaultbvalue: false;
+     _type: tBoolean),
+
+    (name: 'g_fastweaponrefire';
+     location: @g_fastweaponrefire;
      setable: DFS_ALWAYS;
      defaultsvalue: '';
      defaultivalue: 0;
