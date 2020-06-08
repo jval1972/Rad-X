@@ -4228,6 +4228,7 @@ begin
   if g_bigbarrelexplosion then
   begin
     mo := RX_SpawnRadixBigExplosion(actor.x, actor.y, actor.z);
+    mo.momz := -FRACUNIT;
     mo.flags3_ex := mo.flags3_ex or MF3_EX_NOSOUND;
     mo.tics := P_Random mod mo.tics;
     if mo.tics = 0 then

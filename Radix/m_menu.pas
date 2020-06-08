@@ -935,6 +935,7 @@ type
     kb_fire,
     kb_use,
     kb_strafe,
+    bk_afterburner,
     kb_speed,
     kb_lookup,
     kb_lookdown,
@@ -978,6 +979,7 @@ const
     (text: 'Fire'; pkey: @key_fire),
     (text: 'Use'; pkey: @key_use),
     (text: 'Strafe'; pkey: @key_strafe),
+    (text: 'Afterburner'; pkey: @key_afterburner),
     (text: 'Run'; pkey: @key_speed),
     (text: 'Look up'; pkey: @key_lookup),
     (text: 'Look down'; pkey: @key_lookdown),
@@ -1689,7 +1691,7 @@ begin
   M_WriteHelpControlText(160, y, @key_use);
 
   y := y + 10;
-  M_WriteHelpControlText(10, y, @key_strafe);
+  M_WriteHelpControlText(10, y, @key_afterburner);
   M_WriteHelpControlText(160, y, @key_speed);
 
   y := y + 10;
@@ -1702,6 +1704,7 @@ begin
 
   y := y + 10;
   M_WriteHelpControlText(10, y, @key_lookright);
+  M_WriteHelpControlText(160, y, @key_strafe);
 
   y := y + 14;
   M_DrawSmallLine(y, 'WEAPON SELECTION');
@@ -1819,6 +1822,7 @@ begin
     key_fire := 157;
     key_use := 32;
     key_strafe := 184;
+    key_afterburner := 47;
     key_speed := 182;
     key_lookup := 197;
     key_lookdown := 202;
@@ -1849,6 +1853,7 @@ begin
     key_fire := 157;
     key_use := 32;
     key_strafe := 184;
+    key_afterburner := 47;
     key_speed := 182;
     key_lookup := 197;
     key_lookdown := 202;
@@ -1879,6 +1884,7 @@ begin
     key_fire := 157;
     key_use := 32;
     key_strafe := 184;
+    key_afterburner := 47;
     key_speed := 182;
     key_lookup := 197;
     key_lookdown := 202;
@@ -1911,6 +1917,7 @@ begin
      (key_fire = 157) and
      (key_use = 32) and
      (key_strafe = 184) and
+     (key_afterburner = 47) and
      (key_speed = 182) and
      (key_lookup = 197) and
      (key_lookdown = 202) and
@@ -1943,6 +1950,7 @@ begin
      (key_fire = 157) and
      (key_use = 32) and
      (key_strafe = 184) and
+     (key_afterburner = 47) and
      (key_speed = 182) and
      (key_lookup = 197) and
      (key_lookdown = 202) and
@@ -1975,6 +1983,7 @@ begin
      (key_fire = 157) and
      (key_use = 32) and
      (key_strafe = 184) and
+     (key_afterburner = 47) and
      (key_speed = 182) and
      (key_lookup = 197) and
      (key_lookdown = 202) and

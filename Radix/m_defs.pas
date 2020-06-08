@@ -165,7 +165,7 @@ type
   Pdefault_t = ^default_t;
 
 const
-  NUMDEFAULTS = 207;
+  NUMDEFAULTS = 208;
 
 // JVAL
 // Note: All setable defaults must be in lowercase, don't ask why. Just do it. :)
@@ -1288,6 +1288,14 @@ const
      setable: DFS_NEVER;
      defaultsvalue: '';
      defaultivalue: Ord('b');
+     defaultbvalue: false;
+     _type: tInteger),
+
+    (name: 'key_afterburner';
+     location: @key_afterburner;
+     setable: DFS_NEVER;
+     defaultsvalue: '';
+     defaultivalue: 47;
      defaultbvalue: false;
      _type: tInteger),
 

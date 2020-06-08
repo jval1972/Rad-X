@@ -117,6 +117,7 @@ const
 
 const
   BT2_PLASMABOMB = 1;
+  BT2_AFTERBURNER = 2;
 
 {$IFDEF STRIFE}
 const

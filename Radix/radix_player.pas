@@ -83,6 +83,7 @@ implementation
 
 uses
   d_delphi,
+  d_event,
   g_game,
   m_rnd,
   r_defs,
@@ -324,7 +325,7 @@ begin
 
   if p.enginesoundtarget.reactiontime <= 0 then
   begin
-    if p.radixpowers[Ord(rpu_maneuverjets)] > 0 then
+    if (p.radixpowers[Ord(rpu_maneuverjets)] > 0) or (p.cmd.buttons2 and BT2_AFTERBURNER <> 0) then
       sndid := Ord(sfx_SndEngineAfter)
     else
       sndid := Ord(sfx_SndEngine);
@@ -593,6 +594,15 @@ begin
         );
     end;
   end;
+
+  if leveltime and 7 = 0 then
+    if p.cmd.buttons2 and BT2_AFTERBURNER <> 0 then
+    begin
+      if p.energy_reserve > 0 then
+        dec(p.energy_reserve)
+      else if p.energy > 0 then
+        dec(p.energy);
+    end;
 
   if p.energyweaponfiretics > 0 then
     dec(p.energyweaponfiretics);  // JVAL: 20201204

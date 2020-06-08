@@ -143,6 +143,7 @@ var
   key_weapon6: integer = Ord('7');
   key_weapon7: integer = Ord('8');
   key_plasmabomb: integer = Ord('b');
+  key_afterburner: integer = 47;
 
   KEY_WEAPONS: array[0..Ord(NUMWEAPONS) - 1] of PInteger;
 
@@ -213,8 +214,8 @@ var
   statcopy: pointer = nil;        // for statistics driver
 
 var
-  forwardmove: array[0..1] of shortint;
-  sidemove: array[0..1] of shortint;
+  forwardmove: array[0..2] of shortint;
+  sidemove: array[0..2] of shortint;
   angleturn: array[0..2] of smallint;
 
 function G_NeedsCompatibilityMode: boolean;
@@ -274,6 +275,7 @@ var
   PLAYERMAXARMOR: integer = 200;
   PLAYERMAXSHIELD: integer = 200;
   PLAYERMAXENERGY: integer = 100;
+  MIN_AFTERBURNER_ENERGY: integer = 4;
   MAXGRAVITYWAVE: integer = 15;
   GRAVITYWAVEENERGY: integer = 30;
 
@@ -375,11 +377,14 @@ var
   savebuffer: PByteArray;
 
 const
-  TURBOTHRESHOLD = $32;
+  TURBOTHRESHOLD = $46;
 
-function MAXPLMOVE: fixed_t;
+function MAXPLMOVE(const speed: integer): fixed_t;
 begin
-  result := forwardmove[1];
+  if speed > 1 then
+    result := forwardmove[2]
+  else
+    result := forwardmove[1];
 end;
 
 const
@@ -471,6 +476,13 @@ begin
   speed := intval(gamekeydown[key_speed] or joybuttons[joybspeed]);
   if autorunmode then
     speed := 1 - speed;
+
+  if gamekeydown[key_afterburner] then
+    if players[consoleplayer].energy > MIN_AFTERBURNER_ENERGY then
+    begin
+      cmd.buttons2 := cmd.buttons2 or BT2_AFTERBURNER;
+      speed := 2;
+    end;
 
   _forward := 0;
   side := 0;
@@ -696,18 +708,23 @@ begin
   mousex := mousex div 4;
   mousey := mousey div 4;
 
-  if _forward > MAXPLMOVE then
-    _forward := MAXPLMOVE
-  else if _forward < -MAXPLMOVE then
-    _forward := -MAXPLMOVE;
+  if (_forward = 0) and (side = 0) then
+    cmd.buttons2 := cmd.buttons2 and not BT2_AFTERBURNER
+  else
+  begin
+    if _forward > MAXPLMOVE(speed) then
+      _forward := MAXPLMOVE(speed)
+    else if _forward < -MAXPLMOVE(speed) then
+      _forward := -MAXPLMOVE(speed);
 
-  if side > MAXPLMOVE then
-    side := MAXPLMOVE
-  else if side < -MAXPLMOVE then
-    side := -MAXPLMOVE;
+    if side > MAXPLMOVE(speed) then
+      side := MAXPLMOVE(speed)
+    else if side < -MAXPLMOVE(speed) then
+      side := -MAXPLMOVE(speed);
 
-  cmd.forwardmove := cmd.forwardmove + _forward;
-  cmd.sidemove := cmd.sidemove + side;
+    cmd.forwardmove := cmd.forwardmove + _forward;
+    cmd.sidemove := cmd.sidemove + side;
+  end;
 
   if players[consoleplayer].playerstate = PST_LIVE then
   begin
@@ -2649,8 +2666,10 @@ initialization
 
   forwardmove[0] := $24;
   forwardmove[1] := $32;
+  forwardmove[2] := $46;
   sidemove[0] := $20;
   sidemove[1] := $2A;
+  sidemove[2] := $32;
   angleturn[0] := 640;
   angleturn[1] := 1280;
   angleturn[2] := 320;
