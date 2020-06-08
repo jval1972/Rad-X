@@ -11,7 +11,7 @@ ACTOR "MT_RADIXPLASMA"
   AltDamage 3
   Mass 100
   Reactiontime 8
-  Seesound "radix/SndShot"
+  Seesound "radix/SndMissle"
   Deathsound "radix/SndExplodeShort"
   +MF_NOBLOCKMAP
   +MF_NOGRAVITY
@@ -97,7 +97,7 @@ ACTOR "MT_RADIXPLASMASPREADLEFT"
   AltDamage 3
   Mass 100
   Reactiontime 8
-  Seesound "radix/SndShot"
+  Seesound "radix/SndMissle"
   Deathsound "radix/SndExplodeShort"
   +MF_NOBLOCKMAP
   +MF_NOGRAVITY
@@ -156,7 +156,7 @@ ACTOR "MT_RADIXPLASMASPREADRIGHT"
   AltDamage 3
   Mass 100
   Reactiontime 8
-  Seesound "radix/SndShot"
+  Seesound "radix/SndMissle"
   Deathsound "radix/SndExplodeShort"
   +MF_NOBLOCKMAP
   +MF_NOGRAVITY
