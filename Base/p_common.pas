@@ -4245,15 +4245,15 @@ begin
     exit;
   if g_bigbarrelexplosion then
   begin
-    for i := 0 to 3 do
+    for i := 0 to 5 do
     begin
       mo := RX_SpawnRadixBigExplosion(actor.x, actor.y, actor.z);
       mo.flags3_ex := mo.flags3_ex or MF3_EX_NOSOUND;
       mo.tics := P_Random mod mo.tics;
       if mo.tics = 0 then
         mo.tics := 1;
-      mo.momx := P_Random * 256;
-      mo.momy := P_Random * 256;
+      mo.momx := 2 * FRACUNIT - P_Random * 1024;
+      mo.momy := 2 * FRACUNIT - P_Random * 1024;
     end;
     S_AmbientSound(actor.x, actor.y, 'radix/SndExplode');
   end;

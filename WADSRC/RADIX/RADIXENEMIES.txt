@@ -2787,15 +2787,19 @@ ACTOR MT_RADIXBARREL_CHUNK
   {
     Spawn:
       XR62 C 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)
+      TNT1 A 0 A_BarrelExplosion
       XR62 D 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)
       TNT1 A 0 A_BarrelExplosion
       XR62 E 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)
+      TNT1 A 0 A_BarrelExplosion
       XR62 F 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)
       TNT1 A 0 A_BarrelExplosion
       XR62 G 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)
+      TNT1 A 0 A_BarrelExplosion
       XR62 H 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)
       TNT1 A 0 A_BarrelExplosion
       XR62 I 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop3)
+      TNT1 A 0 A_BarrelExplosion
       XR62 J 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop3)
       TNT1 A 0 A_BarrelExplosion
       GoTo Spawn
