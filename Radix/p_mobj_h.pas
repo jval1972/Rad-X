@@ -392,6 +392,8 @@ const
   MF3_EX_DONTBLOCKSPECIES = $2000000;
   // Inactive (stub) objects
   MF3_EX_INACTIVE = $4000000;
+  // Alt damage
+  MF3_EX_USEALTDAMAGE = $8000000;
 
 type
 // Map Object definition.

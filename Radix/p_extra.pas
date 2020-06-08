@@ -114,6 +114,7 @@ uses
   doomdef,
   d_player,
   g_game,
+  g_gameplay,
   info_h,
   info,
   info_common,
@@ -369,7 +370,7 @@ begin
   A_AttackSound(actor, actor);
 
 // Attack with a customizable amount of bullets (specified in damage)
-  numbullets := actor.info.damage;
+  numbullets := P_GetThingDamage(actor);
 // If parameter specified, then use parameter as custom number of bullets
   if actor.state.params <> nil then
     if actor.state.params.Count = 1 then

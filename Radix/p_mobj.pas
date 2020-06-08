@@ -127,6 +127,7 @@ uses
   d_main,
   m_vectors,
   g_game,
+  g_gameplay,
   i_system,
   z_zone,
   m_rnd,
@@ -312,7 +313,7 @@ begin
   begin
     // JVAL: 20200501 - Only missiles with MF3_EX_CANDAMAGEWALLS can damage walls
     if mo.flags3_ex and MF3_EX_CANDAMAGEWALLS <> 0 then
-      RX_DamageLine(tmline, mo.info.damage * ((P_Random mod 3) + 1));
+      RX_DamageLine(tmline, P_GetThingDamage(mo) * ((P_Random mod 3) + 1));
     tmline := nil;
   end;
 

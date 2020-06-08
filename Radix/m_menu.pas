@@ -105,6 +105,7 @@ uses
   d_player,
   d_notifications,
   g_game,
+  g_gameplay,
   m_argv,
   m_misc,
   m_fixed,
@@ -472,6 +473,7 @@ type
     opt_general,
     opt_display,
     opt_sound,
+    opt_gameplay,
     opt_compatibility,
     opt_controls,
     opt_system,
@@ -856,6 +858,19 @@ type
 var
   CompatibilityMenu: array[0..Ord(cmp_end) - 1] of menuitem_t;
   CompatibilityDef: menu_t;
+
+type
+//
+// GAMEPLAY MENU
+//
+  gameplaymenu_e = (
+    gmp_vanillaplayerweapondamage,
+    gmp_end
+  );
+
+var
+  GameplayMenu: array[0..Ord(gmp_end) - 1] of menuitem_t;
+  GameplayDef: menu_t;
 
 type
 //
@@ -1733,6 +1748,12 @@ begin
     helperdrones := 0;
 end;
 
+procedure M_DrawGameplay;
+begin
+  M_DrawHeadLine(15, 'Options');
+  M_DrawSubHeadLine(40, 'Gameplay');
+end;
+
 procedure M_DrawCompatibility;
 var
   ppos: menupos_t;
@@ -2051,6 +2072,11 @@ end;
 procedure M_OptionsSensitivity(choice: integer);
 begin
   M_SetupNextMenu(@SensitivityDef);
+end;
+
+procedure M_OptionsGameplay(choice: integer);
+begin
+  M_SetupNextMenu(@GameplayDef);
 end;
 
 procedure M_OptionsCompatibility(choice: integer);
@@ -4200,6 +4226,14 @@ begin
 
   inc(pmi);
   pmi.status := 1;
+  pmi.name := 'Gameplay';
+  pmi.cmd := '';
+  pmi.routine := @M_OptionsGameplay;
+  pmi.pBoolVal := nil;
+  pmi.alphaKey := 'g';
+
+  inc(pmi);
+  pmi.status := 1;
   pmi.name := 'Compatibility';
   pmi.cmd := '';
   pmi.routine := @M_OptionsCompatibility;
@@ -5465,6 +5499,30 @@ begin
   SoundVolDef.flags := FLG_MN_TEXTUREBK or FLG_MN_DRAWITEMON;
 
 ////////////////////////////////////////////////////////////////////////////////
+//GaameplayMenu
+  pmi := @GameplayMenu[0];
+  pmi.status := 1;
+  pmi.name := '!Weapon damage as vanilla';
+  pmi.cmd := 'g_vanillaplayerweapondamage';
+  pmi.routine := @M_BoolCmd;
+  pmi.pBoolVal := @g_vanillaplayerweapondamage;
+  pmi.alphaKey := 'w';
+
+////////////////////////////////////////////////////////////////////////////////
+//GameplayDef
+  GameplayDef.numitems := Ord(gmp_end); // # of menu items
+  GameplayDef.prevMenu := @OptionsDef; // previous menu
+  GameplayDef.leftMenu := @SoundDef; // left menu
+  GameplayDef.rightMenu := @CompatibilityDef; // right menu
+  GameplayDef.menuitems := Pmenuitem_tArray(@GameplayMenu);  // menu items
+  GameplayDef.drawproc := @M_DrawGameplay;  // draw routine
+  GameplayDef.x := DEF_MENU_ITEMS_START_X;
+  GameplayDef.y := DEF_MENU_ITEMS_START_Y;
+  GameplayDef.lastOn := 0; // last item user was on in menu
+  GameplayDef.itemheight := SMALLLINEHEIGHT;
+  GameplayDef.flags := FLG_MN_TEXTUREBK or FLG_MN_DRAWITEMON;
+
+////////////////////////////////////////////////////////////////////////////////
 //CompatibilityMenu
   pmi := @CompatibilityMenu[0];
   pmi.status := 1;
@@ -5535,7 +5593,7 @@ begin
 //CompatibilityDef
   CompatibilityDef.numitems := Ord(cmp_end); // # of menu items
   CompatibilityDef.prevMenu := @OptionsDef; // previous menu
-  CompatibilityDef.leftMenu := @SoundDef; // left menu
+  CompatibilityDef.leftMenu := @GameplayDef; // left menu
   CompatibilityDef.rightMenu := @ControlsDef; // right menu
   CompatibilityDef.menuitems := Pmenuitem_tArray(@CompatibilityMenu);  // menu items
   CompatibilityDef.drawproc := @M_DrawCompatibility;  // draw routine

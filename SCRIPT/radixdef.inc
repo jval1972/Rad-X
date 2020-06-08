@@ -4850,6 +4850,7 @@
     '  Height 8'#13#10 +
     '  Speed 3670016'#13#10 +
     '  Damage 1'#13#10 +
+    '  AltDamage 3'#13#10 +
     '  Mass 100'#13#10 +
     '  Reactiontime 8'#13#10 +
     '  Seesound "radix/SndShot"'#13#10 +
@@ -4862,6 +4863,7 @@
     '  +MF_EX_BLUELIGHT'#13#10 +
     '  +MF3_EX_NOMAXMOVE'#13#10 +
     '  +MF3_EX_CANDAMAGEWALLS'#13#10 +
+    '  +MF3_EX_USEALTDAMAGE'#13#10 +
     '  States'#13#10 +
     '  {'#13#10 +
     '    Spawn:'#13#10 +
@@ -4934,6 +4936,7 @@
     '  Height 8'#13#10 +
     '  Speed 3670016'#13#10 +
     '  Damage 1'#13#10 +
+    '  AltDamage 3'#13#10 +
     '  Mass 100'#13#10 +
     '  Reactiontime 8'#13#10 +
     '  Seesound "radix/SndShot"'#13#10 +
@@ -4950,6 +4953,7 @@
     '  +MF3_EX_WALLBOUNCE'#13#10 +
     '  +MF3_EX_CANDAMAGEWALLS'#13#10 +
     '  +MF3_EX_PREVENTTHRYSKY'#13#10 +
+    '  +MF3_EX_USEALTDAMAGE'#13#10 +
     '  States'#13#10 +
     '  {'#13#10 +
     '    Spawn:'#13#10 +
@@ -4991,6 +4995,7 @@
     '  Height 8'#13#10 +
     '  Speed 3670016'#13#10 +
     '  Damage 1'#13#10 +
+    '  AltDamage 3'#13#10 +
     '  Mass 100'#13#10 +
     '  Reactiontime 8'#13#10 +
     '  Seesound "radix/SndShot"'#13#10 +
@@ -5007,6 +5012,7 @@
     '  +MF3_EX_WALLBOUNCE'#13#10 +
     '  +MF3_EX_CANDAMAGEWALLS'#13#10 +
     '  +MF3_EX_PREVENTTHRYSKY'#13#10 +
+    '  +MF3_EX_USEALTDAMAGE'#13#10 +
     '  States'#13#10 +
     '  {'#13#10 +
     '    Spawn:'#13#10 +

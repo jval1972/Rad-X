@@ -577,6 +577,7 @@ begin
           64: mobjinfo[mobj_no].plasmabomb := mobj_val;
           65: mobjinfo[mobj_no].touchdamage := mobj_val;
           66: mobjinfo[mobj_no].patrolrange := mobj_val;
+          67: mobjinfo[mobj_no].altdamage := mobj_val;
 
         end;
       end;
@@ -1624,6 +1625,7 @@ begin
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[64]), mobjinfo[i].plasmabomb]);
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[65]), mobjinfo[i].touchdamage]);
     result.Add('%s = %d', [capitalizedstring(mobj_tokens[66]), mobjinfo[i].patrolrange]);
+    result.Add('%s = %d', [capitalizedstring(mobj_tokens[67]), mobjinfo[i].altdamage]);
 
     result.Add('');
   end;
@@ -1889,6 +1891,7 @@ begin
   mobj_tokens.Add('PLASMA BOMB');        // .plasmabomb (Radix)       // 64
   mobj_tokens.Add('TOUCH DAMAGE');       // .touchdamage (Radix)      // 65
   mobj_tokens.Add('PATROL RANGE');       // .patrolrange (Radix)      // 66
+  mobj_tokens.Add('MISSILE ALT DAMAGE'); // .altdamage                // 67
 
 
   mobj_flags := TDTextList.Create;
@@ -2022,6 +2025,7 @@ begin
   mobj_flags3_ex.Add('MF3_EX_AMTELEPORTFOG');
   mobj_flags3_ex.Add('MF3_EX_DONTBLOCKSPECIES');
   mobj_flags3_ex.Add('MF3_EX_INACTIVE');
+  mobj_flags3_ex.Add('MF3_EX_USEALTDAMAGE');
 
 
   mobj_flags4_ex := TDTextList.Create;

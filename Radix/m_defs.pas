@@ -40,6 +40,7 @@ uses
   d_englsh,
   d_main,
   g_game,
+  g_gameplay,
   hu_stuff,
   p_mobj_h,
   p_terrain,
@@ -164,7 +165,7 @@ type
   Pdefault_t = ^default_t;
 
 const
-  NUMDEFAULTS = 200;
+  NUMDEFAULTS = 202;
 
 // JVAL
 // Note: All setable defaults must be in lowercase, don't ask why. Just do it. :)
@@ -869,6 +870,23 @@ const
 
     (name: 'assumecommontranspantcolors';
      location: @assumecommontranspantcolors;
+     setable: DFS_ALWAYS;
+     defaultsvalue: '';
+     defaultivalue: 0;
+     defaultbvalue: false;
+     _type: tBoolean),
+
+     // Gameplay
+    (name: 'Gameplay';
+     location: nil;
+     setable: DFS_NEVER;
+     defaultsvalue: '';
+     defaultivalue: 0;
+     defaultbvalue: false;
+     _type: tGroup),
+
+    (name: 'g_vanillaplayerweapondamage';
+     location: @g_vanillaplayerweapondamage;
      setable: DFS_ALWAYS;
      defaultsvalue: '';
      defaultivalue: 0;

@@ -8,6 +8,7 @@ ACTOR "MT_RADIXPLASMA"
   Height 8
   Speed 3670016
   Damage 1
+  AltDamage 3
   Mass 100
   Reactiontime 8
   Seesound "radix/SndShot"
@@ -20,6 +21,7 @@ ACTOR "MT_RADIXPLASMA"
   +MF_EX_BLUELIGHT
   +MF3_EX_NOMAXMOVE
   +MF3_EX_CANDAMAGEWALLS
+  +MF3_EX_USEALTDAMAGE
   States
   {
     Spawn:
@@ -92,6 +94,7 @@ ACTOR "MT_RADIXPLASMASPREADLEFT"
   Height 8
   Speed 3670016
   Damage 1
+  AltDamage 3
   Mass 100
   Reactiontime 8
   Seesound "radix/SndShot"
@@ -108,6 +111,7 @@ ACTOR "MT_RADIXPLASMASPREADLEFT"
   +MF3_EX_WALLBOUNCE
   +MF3_EX_CANDAMAGEWALLS
   +MF3_EX_PREVENTTHRYSKY
+  +MF3_EX_USEALTDAMAGE
   States
   {
     Spawn:
@@ -149,6 +153,7 @@ ACTOR "MT_RADIXPLASMASPREADRIGHT"
   Height 8
   Speed 3670016
   Damage 1
+  AltDamage 3
   Mass 100
   Reactiontime 8
   Seesound "radix/SndShot"
@@ -165,6 +170,7 @@ ACTOR "MT_RADIXPLASMASPREADRIGHT"
   +MF3_EX_WALLBOUNCE
   +MF3_EX_CANDAMAGEWALLS
   +MF3_EX_PREVENTTHRYSKY
+  +MF3_EX_USEALTDAMAGE
   States
   {
     Spawn:

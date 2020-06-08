@@ -1376,6 +1376,7 @@ var
 
     AddRes('Touch Damage = ' + itoa(mobj.touchdamage));
     AddRes('Patrol Range = ' + itoa(mobj.patrolrange * FRACUNIT));
+    AddRes('Missile Alt Damage = ' + itoa(mobj.altdamage));
 
     str := '';
     for k := 0 to Ord(NUMAMMO) - 1 do
@@ -1798,6 +1799,7 @@ begin
           mobj.height := pinf.height div FRACUNIT;
           mobj.mass := pinf.mass;
           mobj.damage := pinf.damage;
+          mobj.altdamage := pinf.altdamage;
           mobj.activesound := itoa(pinf.activesound);
           for i := 0 to 31 do
             if pinf.flags and _SHL(1, i) <> 0 then
@@ -2094,6 +2096,12 @@ begin
         begin
           sc.GetInteger;
           mobj.damage := sc._integer;
+          sc.GetString;
+        end
+        else if sc.MatchString('altdamage') then
+        begin
+          sc.GetInteger;
+          mobj.altdamage := sc._integer;
           sc.GetString;
         end
         else if sc.MatchString('touchdamage') then
@@ -2977,6 +2985,8 @@ begin
     AddLn('Speed ' + itoa(m.speed));
   if m.damage <> 0 then
     AddLn('Damage ' + itoa(m.damage));
+  if m.altdamage <> 0 then
+    AddLn('AltDamage ' + itoa(m.damage));
   if m.painchance <> 0 then
     AddLn('Painchance ' + itoa(m.painchance));
   if m.mass <> 0 then

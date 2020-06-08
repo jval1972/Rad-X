@@ -149,6 +149,7 @@ type
     pickupsound: string;  // JVAL 20200321 - Custom pickup sound
     touchdamage: integer; // JVAL: 20200417 - Damage when touched
     patrolrange: integer; // JVAL: 20200501 - Maximum Patrol Range
+    altdamage: integer; // JVAL: 20200608 - Alternate damage
   end;
   Prtl_mobjinfo_t = ^rtl_mobjinfo_t;
 

@@ -128,6 +128,7 @@ uses
   d_delphi,
   doomdata,
   g_game,
+  g_gameplay,
   info_h,
   info_common,
   p_gravity,
@@ -578,7 +579,7 @@ begin
   // check for skulls slamming into things
   if tmthing.flags and MF_SKULLFLY <> 0 then
   begin
-    damage := ((P_Random mod 8) + 1) * tmthing.info.damage;
+    damage := ((P_Random mod 8) + 1) * P_GetThingDamage(tmthing);
     P_DamageMobj(thing, tmthing, tmthing, damage);
 
     tmthing.flags := tmthing.flags and not MF_SKULLFLY;
@@ -642,7 +643,7 @@ begin
     end;
 
     // damage / explode
-    damage := ((P_Random mod 8) + 1) * tmthing.info.damage;
+    damage := ((P_Random mod 8) + 1) * P_GetThingDamage(tmthing);
     P_DamageMobj(thing, tmthing, tmthing.target, damage);
 
     // don't traverse any more
