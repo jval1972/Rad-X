@@ -4527,17 +4527,37 @@
     '  States'#13#10 +
     '  {'#13#10 +
     '    Spawn:'#13#10 +
-    '      XR62 C 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)'#13#10 +
-    '      XR62 D 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)'#13#10 +
+    '      XR62 C 2 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)'#13#10 +
     '      TNT1 A 0 A_BarrelExplosion'#13#10 +
-    '      XR62 E 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)'#13#10 +
-    '      XR62 F 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)'#13#10 +
+    '      XR62 C 3 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)'#13#10 +
     '      TNT1 A 0 A_BarrelExplosion'#13#10 +
-    '      XR62 G 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)'#13#10 +
-    '      XR62 H 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)'#13#10 +
+    '      XR62 D 2 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)'#13#10 +
     '      TNT1 A 0 A_BarrelExplosion'#13#10 +
-    '      XR62 I 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop3)'#13#10 +
-    '      XR62 J 5 A_GoTo(IF(val(z)=val(floorz),256,0),Stop3)'#13#10 +
+    '      XR62 D 3 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)'#13#10 +
+    '      TNT1 A 0 A_BarrelExplosion'#13#10 +
+    '      XR62 E 2 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)'#13#10 +
+    '      TNT1 A 0 A_BarrelExplosion'#13#10 +
+    '      XR62 E 3 A_GoTo(IF(val(z)=val(floorz),256,0),Stop1)'#13#10 +
+    '      TNT1 A 0 A_BarrelExplosion'#13#10 +
+    '      XR62 F 2 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)'#13#10 +
+    '      TNT1 A 0 A_BarrelExplosion'#13#10 +
+    '      XR62 F 3 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)'#13#10 +
+    '      TNT1 A 0 A_BarrelExplosion'#13#10 +
+    '      XR62 G 2 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)'#13#10 +
+    '      TNT1 A 0 A_BarrelExplosion'#13#10 +
+    '      XR62 G 3 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)'#13#10 +
+    '      TNT1 A 0 A_BarrelExplosion'#13#10 +
+    '      XR62 H 2 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)'#13#10 +
+    '      TNT1 A 0 A_BarrelExplosion'#13#10 +
+    '      XR62 H 3 A_GoTo(IF(val(z)=val(floorz),256,0),Stop2)'#13#10 +
+    '      TNT1 A 0 A_BarrelExplosion'#13#10 +
+    '      XR62 I 2 A_GoTo(IF(val(z)=val(floorz),256,0),Stop3)'#13#10 +
+    '      TNT1 A 0 A_BarrelExplosion'#13#10 +
+    '      XR62 I 3 A_GoTo(IF(val(z)=val(floorz),256,0),Stop3)'#13#10 +
+    '      TNT1 A 0 A_BarrelExplosion'#13#10 +
+    '      XR62 J 2 A_GoTo(IF(val(z)=val(floorz),256,0),Stop3)'#13#10 +
+    '      TNT1 A 0 A_BarrelExplosion'#13#10 +
+    '      XR62 J 3 A_GoTo(IF(val(z)=val(floorz),256,0),Stop3)'#13#10 +
     '      TNT1 A 0 A_BarrelExplosion'#13#10 +
     '      GoTo Spawn'#13#10 +
     '    Stop1:'#13#10 +

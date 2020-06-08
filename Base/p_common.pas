@@ -4225,6 +4225,8 @@ var
 begin
   if demoplayback or demorecording then
     exit;
+  if actor.velz < 0 then
+    exit;
   if g_bigbarrelexplosion then
   begin
     mo := RX_SpawnRadixBigExplosion(actor.x, actor.y, actor.z);
