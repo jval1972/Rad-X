@@ -1,4 +1,4 @@
-# Rad-X
+# RAD
 Remake of the 1995 game "Radix - Beyond the void"
 
 ## Features
