@@ -134,6 +134,9 @@ OriginalFilename=Rad.exe
 ProductName=Rad
 ProductVersion=1.0
 Comments=https://sourceforge.net/projects/rad-x/
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=F:\DelphiDoom_Release\RAD\src\Base\
 [HistoryLists\hlConditionals]
 Count=3
 Item0=DOOM;
@@ -147,7 +150,8 @@ Count=2
 Item0=..\dcu\RAD
 Item1=..\dcu\XRadix
 [HistoryLists\hlOutputDirectorry]
-Count=3
+Count=4
 Item0=..\bin
-Item1=.\bin
-Item2=bin
+Item1=F:\rad 1\game 2
+Item2=.\bin
+Item3=bin

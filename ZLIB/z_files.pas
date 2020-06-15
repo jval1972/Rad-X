@@ -160,7 +160,7 @@ const
   Z_BLOCK         = 5;
 
 const
-  z_errmsg: Array [0..9] of String = (
+  z_errmsg: array [0..9] of string = (
     'Need dictionary',      // Z_NEED_DICT      (2)
     'Stream end',           // Z_STREAM_END     (1)
     'OK',                   // Z_OK             (0)
