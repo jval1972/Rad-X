@@ -1,5 +1,5 @@
 # RAD
-Remake of the 1995 game "Radix - Beyond the void"
+Engine Recreation of the 1995 game "Radix - Beyond the void"
 
 ## Features
 High screen resolutions.
