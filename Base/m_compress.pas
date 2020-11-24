@@ -216,9 +216,11 @@ begin
   Targ.Ptr := Target;
   Result := 0;
   while SourceSize <> 0 do
-   begin
-    if SourceSize > $FFFA then tmp := $FFFA
-    else tmp := SourceSize;
+  begin
+    if SourceSize > $FFFA then
+      tmp := $FFFA
+    else
+      tmp := SourceSize;
     dec(SourceSize, tmp);
     move(Sourc.Ptr^, s^, tmp);
     w := FastPackSeg(s, t, tmp);
@@ -228,7 +230,7 @@ begin
     Move(t^, Targ.Ptr^, w);
     inc(Targ.Long, w);
     Result := Result + w + 2;
-   end;
+  end;
   memfree(t, $FFFF);
   memfree(s, $FFFF);
 end;
@@ -244,7 +246,7 @@ begin
   Increment := 0;
   Result := 0;
   while SourceSize <> 0 do
-   begin
+  begin
     Swap.Ptr := Source;
     inc(Swap.Long, Increment);
     Move(Swap.Ptr^, tmp, 2);
@@ -256,7 +258,7 @@ begin
     inc(Result, i);
     Move(t^, Swap.Ptr^, i);
     inc(Increment, tmp + 2);
-   end;
+  end;
   memfree(t, $FFFF);
 end;
 
