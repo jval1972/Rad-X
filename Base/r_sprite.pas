@@ -1591,7 +1591,7 @@ begin
         @_sprite_render_thr, @SPRIDS[1],
         @_sprite_render_thr, @SPRIDS[2]
         );
-    4: MT_Execute(
+    4: MT_Execute4(
         @_sprite_render_thr, @SPRIDS[0],
         @_sprite_render_thr, @SPRIDS[1],
         @_sprite_render_thr, @SPRIDS[2],
@@ -1604,7 +1604,7 @@ begin
         @_sprite_render_thr, @SPRIDS[3],
         @_sprite_render_thr, @SPRIDS[4]
         );
-    6: MT_Execute(
+    6: MT_Execute6(
         @_sprite_render_thr, @SPRIDS[0],
         @_sprite_render_thr, @SPRIDS[1],
         @_sprite_render_thr, @SPRIDS[2],
@@ -1621,7 +1621,7 @@ begin
         @_sprite_render_thr, @SPRIDS[5],
         @_sprite_render_thr, @SPRIDS[6]
         );
-    8: MT_Execute(
+    8: MT_Execute8(
         @_sprite_render_thr, @SPRIDS[0],
         @_sprite_render_thr, @SPRIDS[1],
         @_sprite_render_thr, @SPRIDS[2],
@@ -1667,7 +1667,7 @@ begin
         @_sprite_render_thr, @SPRIDS[9],
         @_sprite_render_thr, @SPRIDS[10]
         );
-   12: MT_Execute(
+   12: MT_Execute12(
         @_sprite_render_thr, @SPRIDS[0],
         @_sprite_render_thr, @SPRIDS[1],
         @_sprite_render_thr, @SPRIDS[2],
@@ -1729,7 +1729,7 @@ begin
         @_sprite_render_thr, @SPRIDS[13],
         @_sprite_render_thr, @SPRIDS[14]
         );
-  else MT_Execute(
+  else MT_Execute16(
         @_sprite_render_thr, @SPRIDS[0],
         @_sprite_render_thr, @SPRIDS[1],
         @_sprite_render_thr, @SPRIDS[2],

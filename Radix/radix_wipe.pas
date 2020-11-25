@@ -169,7 +169,7 @@ begin
     r3.finish := 3 * (SCREENWIDTH * SCREENHEIGHT div 4) - 1;
     r4.start := r3.finish + 1;
     r4.finish := SCREENWIDTH * SCREENHEIGHT - 1;
-    MT_Execute(
+    MT_Execute4(
       @wipe_doFade_thr, @r1,
       @wipe_doFade_thr, @r2,
       @wipe_doFade_thr, @r3,
