@@ -436,11 +436,9 @@ begin
     r4.voxelsize := voxelsize;
     r4.start := r3.finish + 1;
     r4.finish := voxelsize - 2;
-    MT_Execute4(
-      @_mt_prepare_optimize_voxel_buffer, @r1,
-      @_mt_prepare_optimize_voxel_buffer, @r2,
-      @_mt_prepare_optimize_voxel_buffer, @r3,
-      @_mt_prepare_optimize_voxel_buffer, @r4);
+    MT_Execute4i(
+      @_mt_prepare_optimize_voxel_buffer,
+      @r1, @r2, @r3, @r4);
   end;
 
   for xx := 1 to voxelsize - 2 do
@@ -514,11 +512,9 @@ begin
     r4.voxelsize := voxelsize;
     r4.start := r3.finish + 1;
     r4.finish := voxelsize - 1;
-    MT_Execute4(
-      @_mt_prepare_voxel_columns, @r1,
-      @_mt_prepare_voxel_columns, @r2,
-      @_mt_prepare_voxel_columns, @r3,
-      @_mt_prepare_voxel_columns, @r4);
+    MT_Execute4i(
+      @_mt_prepare_voxel_columns,
+      @r1, @r2, @r3, @r4);
   end;
 end;
 

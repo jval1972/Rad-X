@@ -220,11 +220,9 @@ begin
       @_flat_thread_worker8, @R[2]
     );
    4:
-    MT_Execute4(
-      @_flat_thread_worker8, @R[0],
-      @_flat_thread_worker8, @R[1],
-      @_flat_thread_worker8, @R[2],
-      @_flat_thread_worker8, @R[3]
+    MT_Execute4i(
+      @_flat_thread_worker8,
+      @R[0], @R[1], @R[2], @R[3]
     );
    5:
     MT_Execute(
@@ -235,13 +233,9 @@ begin
       @_flat_thread_worker8, @R[4]
     );
    6:
-    MT_Execute6(
-      @_flat_thread_worker8, @R[0],
-      @_flat_thread_worker8, @R[1],
-      @_flat_thread_worker8, @R[2],
-      @_flat_thread_worker8, @R[3],
-      @_flat_thread_worker8, @R[4],
-      @_flat_thread_worker8, @R[5]
+    MT_Execute6i(
+      @_flat_thread_worker8,
+      @R[0], @R[1], @R[2], @R[3], @R[4], @R[5]
     );
    7:
     MT_Execute(
@@ -254,15 +248,9 @@ begin
       @_flat_thread_worker8, @R[6]
     );
    8:
-    MT_Execute8(
-      @_flat_thread_worker8, @R[0],
-      @_flat_thread_worker8, @R[1],
-      @_flat_thread_worker8, @R[2],
-      @_flat_thread_worker8, @R[3],
-      @_flat_thread_worker8, @R[4],
-      @_flat_thread_worker8, @R[5],
-      @_flat_thread_worker8, @R[6],
-      @_flat_thread_worker8, @R[7]
+    MT_Execute8i(
+      @_flat_thread_worker8,
+      @R[0], @R[1], @R[2], @R[3], @R[4], @R[5], @R[6], @R[7]
     );
    9:
     MT_Execute(
@@ -304,19 +292,10 @@ begin
       @_flat_thread_worker8, @R[10]
     );
   12:
-    MT_Execute12(
-      @_flat_thread_worker8, @R[0],
-      @_flat_thread_worker8, @R[1],
-      @_flat_thread_worker8, @R[2],
-      @_flat_thread_worker8, @R[3],
-      @_flat_thread_worker8, @R[4],
-      @_flat_thread_worker8, @R[5],
-      @_flat_thread_worker8, @R[6],
-      @_flat_thread_worker8, @R[7],
-      @_flat_thread_worker8, @R[8],
-      @_flat_thread_worker8, @R[9],
-      @_flat_thread_worker8, @R[10],
-      @_flat_thread_worker8, @R[11]
+    MT_Execute12i(
+      @_flat_thread_worker8,
+      @R[0], @R[1], @R[2], @R[3], @R[4], @R[5],
+      @R[6], @R[7], @R[8], @R[9], @R[10], @R[11]
     );
   13:
     MT_Execute(
@@ -370,23 +349,10 @@ begin
       @_flat_thread_worker8, @R[14]
     );
   else
-    MT_Execute16(
-      @_flat_thread_worker8, @R[0],
-      @_flat_thread_worker8, @R[1],
-      @_flat_thread_worker8, @R[2],
-      @_flat_thread_worker8, @R[3],
-      @_flat_thread_worker8, @R[4],
-      @_flat_thread_worker8, @R[5],
-      @_flat_thread_worker8, @R[6],
-      @_flat_thread_worker8, @R[7],
-      @_flat_thread_worker8, @R[8],
-      @_flat_thread_worker8, @R[9],
-      @_flat_thread_worker8, @R[10],
-      @_flat_thread_worker8, @R[11],
-      @_flat_thread_worker8, @R[12],
-      @_flat_thread_worker8, @R[13],
-      @_flat_thread_worker8, @R[14],
-      @_flat_thread_worker8, @R[15]
+    MT_Execute16i(
+      @_flat_thread_worker8,
+      @R[0], @R[1], @R[2], @R[3], @R[4], @R[5], @R[6], @R[7],
+      @R[8], @R[9], @R[10], @R[11], @R[12], @R[13], @R[14], @R[15]
     );
   end;
 
@@ -472,11 +438,9 @@ begin
       @_flat3D_thread_worker8, @R[2]
     );
    4:
-    MT_Execute4(
-      @_flat3D_thread_worker8, @R[0],
-      @_flat3D_thread_worker8, @R[1],
-      @_flat3D_thread_worker8, @R[2],
-      @_flat3D_thread_worker8, @R[3]
+    MT_Execute4i(
+      @_flat3D_thread_worker8,
+      @R[0], @R[1], @R[2], @R[3]
     );
    5:
     MT_Execute(
@@ -487,13 +451,9 @@ begin
       @_flat3D_thread_worker8, @R[4]
     );
    6:
-    MT_Execute6(
-      @_flat3D_thread_worker8, @R[0],
-      @_flat3D_thread_worker8, @R[1],
-      @_flat3D_thread_worker8, @R[2],
-      @_flat3D_thread_worker8, @R[3],
-      @_flat3D_thread_worker8, @R[4],
-      @_flat3D_thread_worker8, @R[5]
+    MT_Execute6i(
+      @_flat3D_thread_worker8,
+      @R[0], @R[1], @R[2], @R[3], @R[4], @R[5]
     );
    7:
     MT_Execute(
@@ -506,15 +466,9 @@ begin
       @_flat3D_thread_worker8, @R[6]
     );
    8:
-    MT_Execute8(
-      @_flat3D_thread_worker8, @R[0],
-      @_flat3D_thread_worker8, @R[1],
-      @_flat3D_thread_worker8, @R[2],
-      @_flat3D_thread_worker8, @R[3],
-      @_flat3D_thread_worker8, @R[4],
-      @_flat3D_thread_worker8, @R[5],
-      @_flat3D_thread_worker8, @R[6],
-      @_flat3D_thread_worker8, @R[7]
+    MT_Execute8i(
+      @_flat3D_thread_worker8,
+      @R[0], @R[1], @R[2], @R[3], @R[4], @R[5], @R[6], @R[7]
     );
    9:
     MT_Execute(
@@ -556,19 +510,10 @@ begin
       @_flat3D_thread_worker8, @R[10]
     );
   12:
-    MT_Execute12(
-      @_flat3D_thread_worker8, @R[0],
-      @_flat3D_thread_worker8, @R[1],
-      @_flat3D_thread_worker8, @R[2],
-      @_flat3D_thread_worker8, @R[3],
-      @_flat3D_thread_worker8, @R[4],
-      @_flat3D_thread_worker8, @R[5],
-      @_flat3D_thread_worker8, @R[6],
-      @_flat3D_thread_worker8, @R[7],
-      @_flat3D_thread_worker8, @R[8],
-      @_flat3D_thread_worker8, @R[9],
-      @_flat3D_thread_worker8, @R[10],
-      @_flat3D_thread_worker8, @R[11]
+    MT_Execute12i(
+      @_flat3D_thread_worker8,
+      @R[0], @R[1], @R[2], @R[3], @R[4], @R[5],
+      @R[6], @R[7], @R[8], @R[9], @R[10], @R[11]
     );
   13:
     MT_Execute(
@@ -622,23 +567,10 @@ begin
       @_flat3D_thread_worker8, @R[14]
     );
   else
-    MT_Execute16(
-      @_flat3D_thread_worker8, @R[0],
-      @_flat3D_thread_worker8, @R[1],
-      @_flat3D_thread_worker8, @R[2],
-      @_flat3D_thread_worker8, @R[3],
-      @_flat3D_thread_worker8, @R[4],
-      @_flat3D_thread_worker8, @R[5],
-      @_flat3D_thread_worker8, @R[6],
-      @_flat3D_thread_worker8, @R[7],
-      @_flat3D_thread_worker8, @R[8],
-      @_flat3D_thread_worker8, @R[9],
-      @_flat3D_thread_worker8, @R[10],
-      @_flat3D_thread_worker8, @R[11],
-      @_flat3D_thread_worker8, @R[12],
-      @_flat3D_thread_worker8, @R[13],
-      @_flat3D_thread_worker8, @R[14],
-      @_flat3D_thread_worker8, @R[15]
+    MT_Execute16i(
+      @_flat3D_thread_worker8,
+      @R[0], @R[1], @R[2], @R[3], @R[4], @R[5], @R[6], @R[7],
+      @R[8], @R[9], @R[10], @R[11], @R[12], @R[13], @R[14], @R[15]
     );
   end;
 

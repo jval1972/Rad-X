@@ -211,11 +211,9 @@ begin
     r3.finish := r3.start + ts;
     r4.start  := r3.finish + 1;
     r4.finish := dbspan_y_max;
-    MT_Execute(
-      @_thr_span_db_writer, @r1,
-      @_thr_span_db_writer, @r2,
-      @_thr_span_db_writer, @r3,
-      @_thr_span_db_writer, @r4
+    MT_Execute4i(
+      @_thr_span_db_writer,
+      @r1, @r2, @r3, @r4
     );
   end
   else
@@ -237,15 +235,9 @@ begin
     r7.finish := r7.start + ts;
     r8.start  := r7.finish + 1;
     r8.finish := dbspan_y_max;
-    MT_Execute(
-      @_thr_span_db_writer, @r1,
-      @_thr_span_db_writer, @r2,
-      @_thr_span_db_writer, @r3,
-      @_thr_span_db_writer, @r4,
-      @_thr_span_db_writer, @r5,
-      @_thr_span_db_writer, @r6,
-      @_thr_span_db_writer, @r7,
-      @_thr_span_db_writer, @r8
+    MT_Execute8i(
+      @_thr_span_db_writer,
+      @r1, @r2, @r3, @r4, @r5, @r6, @r7, @r8
     );
   end;
 

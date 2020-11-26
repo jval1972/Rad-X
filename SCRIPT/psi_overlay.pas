@@ -761,11 +761,9 @@ begin
           @_thr_ovr_flash8, @parms[2]
         );
       4:
-        MT_Execute4(
-          @_thr_ovr_flash8, @parms[0],
-          @_thr_ovr_flash8, @parms[1],
-          @_thr_ovr_flash8, @parms[2],
-          @_thr_ovr_flash8, @parms[3]
+        MT_Execute4i(
+          @_thr_ovr_flash8,
+          @parms[0], @parms[1], @parms[2], @parms[3]
         );
       5:
         MT_Execute(
@@ -776,13 +774,9 @@ begin
           @_thr_ovr_flash8, @parms[4]
         );
       6:
-        MT_Execute6(
-         @_thr_ovr_flash8, @parms[0],
-         @_thr_ovr_flash8, @parms[1],
-         @_thr_ovr_flash8, @parms[2],
-         @_thr_ovr_flash8, @parms[3],
-         @_thr_ovr_flash8, @parms[4],
-         @_thr_ovr_flash8, @parms[5]
+        MT_Execute6i(
+         @_thr_ovr_flash8,
+         @parms[0], @parms[1], @parms[2], @parms[3], @parms[4], @parms[5]
         );
       7:
         MT_Execute(
@@ -795,15 +789,9 @@ begin
          @_thr_ovr_flash8, @parms[6]
         );
       8:
-        MT_Execute8(
-         @_thr_ovr_flash8, @parms[0],
-         @_thr_ovr_flash8, @parms[1],
-         @_thr_ovr_flash8, @parms[2],
-         @_thr_ovr_flash8, @parms[3],
-         @_thr_ovr_flash8, @parms[4],
-         @_thr_ovr_flash8, @parms[5],
-         @_thr_ovr_flash8, @parms[6],
-         @_thr_ovr_flash8, @parms[7]
+        MT_Execute8i(
+         @_thr_ovr_flash8,
+         @parms[0], @parms[1], @parms[2], @parms[3], @parms[4], @parms[5], @parms[6], @parms[7]
         );
       9:
         MT_Execute(
@@ -845,19 +833,10 @@ begin
          @_thr_ovr_flash8, @parms[10]
         );
      12:
-        MT_Execute12(
-         @_thr_ovr_flash8, @parms[0],
-         @_thr_ovr_flash8, @parms[1],
-         @_thr_ovr_flash8, @parms[2],
-         @_thr_ovr_flash8, @parms[3],
-         @_thr_ovr_flash8, @parms[4],
-         @_thr_ovr_flash8, @parms[5],
-         @_thr_ovr_flash8, @parms[6],
-         @_thr_ovr_flash8, @parms[7],
-         @_thr_ovr_flash8, @parms[8],
-         @_thr_ovr_flash8, @parms[9],
-         @_thr_ovr_flash8, @parms[10],
-         @_thr_ovr_flash8, @parms[11]
+        MT_Execute12i(
+         @_thr_ovr_flash8,
+         @parms[0], @parms[1], @parms[2], @parms[3], @parms[4], @parms[5],
+         @parms[6], @parms[7], @parms[8], @parms[9], @parms[10], @parms[11]
         );
      13:
         MT_Execute(
@@ -911,23 +890,10 @@ begin
          @_thr_ovr_flash8, @parms[14]
         );
      16:
-        MT_Execute16(
-         @_thr_ovr_flash8, @parms[0],
-         @_thr_ovr_flash8, @parms[1],
-         @_thr_ovr_flash8, @parms[2],
-         @_thr_ovr_flash8, @parms[3],
-         @_thr_ovr_flash8, @parms[4],
-         @_thr_ovr_flash8, @parms[5],
-         @_thr_ovr_flash8, @parms[6],
-         @_thr_ovr_flash8, @parms[7],
-         @_thr_ovr_flash8, @parms[8],
-         @_thr_ovr_flash8, @parms[9],
-         @_thr_ovr_flash8, @parms[10],
-         @_thr_ovr_flash8, @parms[11],
-         @_thr_ovr_flash8, @parms[12],
-         @_thr_ovr_flash8, @parms[13],
-         @_thr_ovr_flash8, @parms[14],
-         @_thr_ovr_flash8, @parms[15]
+        MT_Execute16i(
+         @_thr_ovr_flash8,
+         @parms[0], @parms[1], @parms[2], @parms[3], @parms[4], @parms[5], @parms[6], @parms[7],
+         @parms[8], @parms[9], @parms[10], @parms[11], @parms[12], @parms[13], @parms[14], @parms[15]
         );
       else
         MT_Execute(
@@ -1063,11 +1029,9 @@ begin
           @_thr_ovr_flash32, @parms[2]
         );
       4:
-        MT_Execute4(
-          @_thr_ovr_flash32, @parms[0],
-          @_thr_ovr_flash32, @parms[1],
-          @_thr_ovr_flash32, @parms[2],
-          @_thr_ovr_flash32, @parms[3]
+        MT_Execute4i(
+          @_thr_ovr_flash32,
+          @parms[0], @parms[1], @parms[2], @parms[3]
         );
       5:
         MT_Execute(
@@ -1078,13 +1042,9 @@ begin
           @_thr_ovr_flash32, @parms[4]
         );
       6:
-        MT_Execute6(
-         @_thr_ovr_flash32, @parms[0],
-         @_thr_ovr_flash32, @parms[1],
-         @_thr_ovr_flash32, @parms[2],
-         @_thr_ovr_flash32, @parms[3],
-         @_thr_ovr_flash32, @parms[4],
-         @_thr_ovr_flash32, @parms[5]
+        MT_Execute6i(
+         @_thr_ovr_flash32,
+         @parms[0], @parms[1], @parms[2], @parms[3], @parms[4], @parms[5]
         );
       7:
         MT_Execute(
@@ -1097,15 +1057,9 @@ begin
          @_thr_ovr_flash32, @parms[6]
         );
       8:
-        MT_Execute8(
-         @_thr_ovr_flash32, @parms[0],
-         @_thr_ovr_flash32, @parms[1],
-         @_thr_ovr_flash32, @parms[2],
-         @_thr_ovr_flash32, @parms[3],
-         @_thr_ovr_flash32, @parms[4],
-         @_thr_ovr_flash32, @parms[5],
-         @_thr_ovr_flash32, @parms[6],
-         @_thr_ovr_flash32, @parms[7]
+        MT_Execute8i(
+         @_thr_ovr_flash32,
+         @parms[0], @parms[1], @parms[2], @parms[3], @parms[4], @parms[5], @parms[6], @parms[7]
         );
       9:
         MT_Execute(
@@ -1147,19 +1101,10 @@ begin
          @_thr_ovr_flash32, @parms[10]
         );
      12:
-        MT_Execute12(
-         @_thr_ovr_flash32, @parms[0],
-         @_thr_ovr_flash32, @parms[1],
-         @_thr_ovr_flash32, @parms[2],
-         @_thr_ovr_flash32, @parms[3],
-         @_thr_ovr_flash32, @parms[4],
-         @_thr_ovr_flash32, @parms[5],
-         @_thr_ovr_flash32, @parms[6],
-         @_thr_ovr_flash32, @parms[7],
-         @_thr_ovr_flash32, @parms[8],
-         @_thr_ovr_flash32, @parms[9],
-         @_thr_ovr_flash32, @parms[10],
-         @_thr_ovr_flash32, @parms[11]
+        MT_Execute12i(
+         @_thr_ovr_flash32,
+         @parms[0], @parms[1], @parms[2], @parms[3], @parms[4], @parms[5],
+         @parms[6], @parms[7], @parms[8], @parms[9], @parms[10], @parms[11]
         );
      13:
         MT_Execute(
@@ -1213,23 +1158,10 @@ begin
          @_thr_ovr_flash32, @parms[14]
         );
      16:
-        MT_Execute16(
-         @_thr_ovr_flash32, @parms[0],
-         @_thr_ovr_flash32, @parms[1],
-         @_thr_ovr_flash32, @parms[2],
-         @_thr_ovr_flash32, @parms[3],
-         @_thr_ovr_flash32, @parms[4],
-         @_thr_ovr_flash32, @parms[5],
-         @_thr_ovr_flash32, @parms[6],
-         @_thr_ovr_flash32, @parms[7],
-         @_thr_ovr_flash32, @parms[8],
-         @_thr_ovr_flash32, @parms[9],
-         @_thr_ovr_flash32, @parms[10],
-         @_thr_ovr_flash32, @parms[11],
-         @_thr_ovr_flash32, @parms[12],
-         @_thr_ovr_flash32, @parms[13],
-         @_thr_ovr_flash32, @parms[14],
-         @_thr_ovr_flash32, @parms[15]
+        MT_Execute16i(
+         @_thr_ovr_flash32,
+         @parms[0], @parms[1], @parms[2], @parms[3], @parms[4], @parms[5], @parms[6], @parms[7],
+         @parms[8], @parms[9], @parms[10], @parms[11], @parms[12], @parms[13], @parms[14], @parms[15]
         );
       else
         MT_Execute(
