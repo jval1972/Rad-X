@@ -2013,12 +2013,20 @@ begin
     printf('P_LoadThings()'#13#10);
   P_LoadThings(lumpnum + Ord(ML_THINGS), P_RadixLump(lumpnum + Ord(ML_RTHINGS), 'RTHINGS'));
 
+  if devparm then
+    printf('P_LoadGrid()'#13#10);
   P_LoadGrid(P_RadixLump(lumpnum + Ord(ML_RGRID), 'RGRID')); // JVAL: 20200303 - Load radix grid
 
+  if devparm then
+    printf('P_LoadMapGrid()'#13#10);
   P_LoadMapGrid(P_RadixLump(lumpnum + Ord(ML_RMAPGRID), 'RMAPGRID')); // JVAL: 20200429 - Grid to map convertion matrix
 
+  if devparm then
+    printf('P_LoadRadixSprites()'#13#10);
   P_LoadRadixSprites(P_RadixLump(lumpnum + Ord(ML_RACTION), 'RACTION')); // JVAL: 20200303 - Load radix sprites/actions
 
+  if devparm then
+    printf('P_LoadRadixTriggers()'#13#10);
   P_LoadRadixTriggers(P_RadixLump(lumpnum + Ord(ML_RTRIGGER), 'RTRIGGER'));  // JVAL: 20200303 - Load radix triggers
 
   RX_InitForceFields; // JVAL: 20200429 - Initalize forcefields
