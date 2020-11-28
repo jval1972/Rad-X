@@ -1141,7 +1141,7 @@ begin
   mobj.y := y;
   mobj.radius := info.radius;
   mobj.height := info.height;
-// JVAL: Set MF_JUSTAPPEARED flag
+  // JVAL: Set MF_JUSTAPPEARED flag
   mobj.flags := info.flags or MF_JUSTAPPEARED;
   mobj.flags_ex := info.flags_ex;
   mobj.flags2_ex := info.flags2_ex;

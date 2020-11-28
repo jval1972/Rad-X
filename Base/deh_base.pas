@@ -610,7 +610,7 @@ begin
   begin
     p := @sprnames[i];
     result.Add(itoa(i + 1) + ';' + '"' + Chr(p[0]) + Chr(p[1]) + Chr(p[2]) + Chr(p[3]) + '"');
-  end;                
+  end;
 end;
 
 procedure DEH_SaveSpritesCSV(const fname: string);
