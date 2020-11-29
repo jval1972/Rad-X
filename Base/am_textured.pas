@@ -195,8 +195,10 @@ end;
 {$ENDIF}
 
 procedure AM_DrawTexturedTriangle(const lst: seg_ap3; const lump: integer; const aminx, amaxx: integer; const {$IFDEF OPENGL}lightlevel: integer{$ELSE}amcolormap: pointer{$ENDIF});
-{$IFNDEF OPENGL}
 var
+  flat_width: integer;
+  lumpsize: integer;
+{$IFNDEF OPENGL}
   data: PByteArray;
 
   procedure fillLeftFlatTriangle(v1, v2, v3: drawpoint_t);
@@ -338,8 +340,6 @@ var
   t: drawtriangle_t;
   v: Pvertex_t;
   i: integer;
-  flat_width: integer;
-  lumpsize: integer;
 begin
   lumpsize := W_LumpLength(lump);
   if lumpsize = 4096 then
