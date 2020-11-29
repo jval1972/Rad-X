@@ -138,6 +138,7 @@ uses
   p_setup,
   p_pspr,
   p_tick,
+  radix_level,
   r_main,
   r_aspect,
   r_bsp,
@@ -2072,40 +2073,92 @@ end;
 procedure CALC_TEX_VALUES_TOP(w: PGLWall; seg: Pseg_t; peg: boolean; linelength, lineheight: float);
 var
   tex: PGLTexture;
+  _ov: float;
 begin
   w.flag := GLDWF_TOP;
   tex := w.gltexture;
   w.ul := OU(tex, seg);
   w.ur := w.ul + (linelength / tex.buffer_width);
-  if peg then
+  if seg.linedef.radixflags <> 0 then
   begin
-    w.vb := OV(tex, seg) + (tex.height / tex.tex_height);
-    w.vt := w.vb - (lineheight / tex.buffer_height);
+    if seg.linedef.radixflags and RWF_PEGTOP_CEILING <> 0 then
+    begin
+      _ov := OV(tex, seg);
+      w.vt := _ov;
+      w.vb := _ov + (w.ytop - w.ybottom) * MAP_COEFF / tex.buffer_height;
+    end
+    else if seg.linedef.radixflags and RWF_PEGBOTTOM_CEILING <> 0 then
+    begin
+      _ov := OV(tex, seg);
+      w.vb := _ov;
+      w.vt := _ov + (w.ybottom - w.ytop) * MAP_COEFF / tex.buffer_height;
+    end
+    else
+    begin
+      w.vt := {_ov + }-w.ytop * MAP_COEFF / tex.buffer_height;
+      w.vb := {_ov + }-w.ybottom * MAP_COEFF / tex.buffer_height;
+    end
   end
   else
   begin
-    w.vt := OV(tex, seg);
-    w.vb := w.vt + (lineheight / tex.buffer_height);
+    if peg then
+    begin
+      _ov := OV(tex, seg);
+      w.vb := _ov + (tex.height / tex.tex_height);
+      w.vt := w.vb - (lineheight / tex.buffer_height);
+    end
+    else
+    begin
+      _ov := OV(tex, seg);
+      w.vt := _ov;
+      w.vb := _ov + (lineheight / tex.buffer_height);
+    end;
   end;
 end;
 
 procedure CALC_TEX_VALUES_MIDDLE1S(w: PGLWall; seg: Pseg_t; peg: boolean; linelength, lineheight: float);
 var
   tex: PGLTexture;
+  _ov: float;
 begin
   w.flag := GLDWF_M1S;
   tex := w.gltexture;
   w.ul := OU(tex, seg);
   w.ur := w.ul + (linelength / tex.buffer_width);
-  if peg then
+  if seg.linedef.radixflags <> 0 then
   begin
-    w.vb := OV(tex, seg) + tex.heightscale;
-    w.vt := w.vb - (lineheight / tex.buffer_height);
+    if seg.linedef.radixflags and RWF_PEGTOP_FLOOR <> 0 then
+    begin
+      _ov := OV(tex, seg);
+      w.vt := _ov;
+      w.vb := _ov + (w.ytop - w.ybottom) * MAP_COEFF / tex.buffer_height;
+    end
+    else if seg.linedef.radixflags and RWF_PEGBOTTOM_FLOOR <> 0 then
+    begin
+      _ov := OV(tex, seg);
+      w.vb := _ov;
+      w.vt := _ov + (w.ybottom - w.ytop) * MAP_COEFF / tex.buffer_height;
+    end
+    else
+    begin
+      w.vt := {_ov +} -w.ytop * MAP_COEFF / tex.buffer_height;
+      w.vb := {_ov +} -w.ybottom * MAP_COEFF / tex.buffer_height;
+    end
   end
   else
   begin
-    w.vt := OV(tex, seg);
-    w.vb := w.vt + (lineheight / tex.buffer_height);
+    if peg then
+    begin
+      _ov := OV(tex, seg);
+      w.vb := _ov + tex.heightscale;
+      w.vt := w.vb - (lineheight / tex.buffer_height);
+    end
+    else
+    begin
+      _ov := OV(tex, seg);
+      w.vt := _ov;
+      w.vb := w.vt + (lineheight / tex.buffer_height);
+    end;
   end;
 end;
 
@@ -2152,20 +2205,45 @@ end;
 procedure CALC_TEX_VALUES_BOTTOM(w: PGLWall; seg: Pseg_t; peg: boolean; linelength, lineheight: float; v_offset: integer);
 var
   tex: PGLTexture;
+  _ov: float;
 begin
   w.flag := GLDWF_BOT;
   tex := w.gltexture;
   w.ul := OU(tex, seg);
   w.ur := w.ul + (linelength / tex.realtexwidth);
-  if peg then
+  if seg.linedef.radixflags <> 0 then
   begin
-    w.vb := OV_PEG(tex, seg, v_offset) + tex.heightscale;
-    w.vt := w.vb - lineheight / tex.buffer_height;
+    if seg.linedef.radixflags and RWF_PEGTOP_FLOOR <> 0 then
+    begin
+      _ov := OV(tex, seg);
+      w.vt := _ov;
+      w.vb := _ov + (w.ytop - w.ybottom) * MAP_COEFF / tex.buffer_height;
+    end
+    else if seg.linedef.radixflags and RWF_PEGBOTTOM_FLOOR <> 0 then
+    begin
+      _ov := OV(tex, seg);
+      w.vb := _ov;
+      w.vt := _ov + (w.ybottom - w.ytop) * MAP_COEFF / tex.buffer_height;
+    end
+    else
+    begin
+      w.vt := {_ov +} -w.ytop * MAP_COEFF / tex.buffer_height;
+      w.vb := {_ov +} -w.ybottom * MAP_COEFF / tex.buffer_height;
+    end
   end
   else
   begin
-    w.vt := OV(tex, seg);
-    w.vb := w.vt + lineheight / tex.buffer_height;
+    if peg then
+    begin
+      w.vb := OV_PEG(tex, seg, v_offset) + tex.heightscale;
+      w.vt := w.vb - lineheight / tex.buffer_height;
+    end
+    else
+    begin
+      _ov := OV(tex, seg);
+      w.vt := _ov;
+      w.vb := _ov + lineheight / tex.buffer_height;
+    end;
   end;
 end;
 
