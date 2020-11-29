@@ -100,7 +100,7 @@ Conditionals=DOOM;OPENGL
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
-RunParams=-geom 1280x800 -nofullscreen doom_assets.wad -idat RADIX_20_REG.DAT
+RunParams=
 HostApplication=
 Launcher=
 UseLauncher=0
