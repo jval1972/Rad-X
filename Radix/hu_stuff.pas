@@ -573,7 +573,7 @@ var
   c: integer;
 begin
 {$IFDEF OPENGL}
-  x := viewwindowx + (viewwidth + 8 * Length(m_fps) - 4) div 2;
+  x := (V_GetScreenWidth(SCN_FG) + 8 * Length(m_fps) - 4) div 2;
   y := 1;
   for i := length(m_fps) downto 1 do
   begin
