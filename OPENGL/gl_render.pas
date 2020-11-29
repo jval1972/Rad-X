@@ -2987,6 +2987,7 @@ var
   ftempsec: sector_t; // needed for R_FakeFlat
   btempsec: sector_t; // needed for R_FakeFlat
 {$ENDIF}
+  _ov: float;
 label
   bottomtexture;
 begin
@@ -3227,49 +3228,86 @@ begin
     temptex := gld_RegisterTexture(texturetranslation[seg.sidedef.midtexture], true);
     if temptex <> nil then
     begin
-      wall.gltexture := temptex;
-      if seg.linedef.flags and ML_DONTPEGBOTTOM > 0 then
+      if seg.linedef.radixflags and RWF_TWOSIDEDCOMPLETE <> 0 then
       begin
-        if seg.backsector.ceilingheight <= seg.frontsector.floorheight then
-          goto bottomtexture;
-        floor_height := gl_i_max(seg.frontsector.floorheight, seg.backsector.floorheight) + seg.sidedef.rowoffset;
-        ceiling_height := floor_height + (temptex.realtexheight * FRACUNIT);
+        if not R_PointOnLineSide(viewx, viewy, seg.linedef) then
+        begin
+          wall.gltexture := temptex;
+          floor_height := gl_i_max(seg.frontsector.floorheight, seg.backsector.floorheight);
+          ceiling_height := gl_i_min(seg.frontsector.ceilingheight, seg.backsector.ceilingheight);
+
+          wall.ytop := ceiling_height / MAP_SCALE;
+          wall.ybottom := floor_height / MAP_SCALE;
+          wall.flag := GLDWF_M2S;
+          wall.ul := OU(temptex, seg);
+          wall.ur := wall.ul + (seg.length / temptex.buffer_width);
+
+          if seg.linedef.radixflags and RWF_PEGTOP_FLOOR <> 0 then
+          begin
+            _ov := OV(temptex, seg);
+            wall.vt := _ov;
+            wall.vb := _ov + (wall.ytop - wall.ybottom) * MAP_COEFF / temptex.buffer_height;
+          end
+          else if seg.linedef.radixflags and RWF_PEGBOTTOM_FLOOR <> 0 then
+          begin
+            _ov := OV(temptex, seg);
+            wall.vb := _ov;
+            wall.vt := _ov + (wall.ybottom - wall.ytop) * MAP_COEFF / temptex.buffer_height;
+          end
+          else
+          begin
+            wall.vt := -wall.ytop * MAP_COEFF / temptex.buffer_height;
+            wall.vb := -wall.ybottom * MAP_COEFF / temptex.buffer_height;
+          end;
+          ADDWALL(@wall);
+        end;
       end
       else
       begin
-        if seg.backsector.ceilingheight <= seg.frontsector.floorheight then
-          goto bottomtexture;
-        ceiling_height := gl_i_min(seg.frontsector.ceilingheight, seg.backsector.ceilingheight) + seg.sidedef.rowoffset;
-        floor_height := ceiling_height - (temptex.realtexheight * FRACUNIT);
-      end;
+        wall.gltexture := temptex;
+        if seg.linedef.flags and ML_DONTPEGBOTTOM > 0 then
+        begin
+          if seg.backsector.ceilingheight <= seg.frontsector.floorheight then
+            goto bottomtexture;
+          floor_height := gl_i_max(seg.frontsector.floorheight, seg.backsector.floorheight) + seg.sidedef.rowoffset;
+          ceiling_height := floor_height + (temptex.realtexheight * FRACUNIT);
+        end
+        else
+        begin
+          if seg.backsector.ceilingheight <= seg.frontsector.floorheight then
+            goto bottomtexture;
+          ceiling_height := gl_i_min(seg.frontsector.ceilingheight, seg.backsector.ceilingheight) + seg.sidedef.rowoffset;
+          floor_height := ceiling_height - (temptex.realtexheight * FRACUNIT);
+        end;
 
-      mip := temptex.realtexheight / temptex.buffer_height;
-      if seg.sidedef.bottomtexture <> 0 then
-        floormax := gl_i_max(seg.frontsector.floorheight, seg.backsector.floorheight)
-      else
-        floormax := floor_height;
-      if seg.sidedef.toptexture <> 0 then
-        ceilingmin := gl_i_min(seg.frontsector.ceilingheight, seg.backsector.ceilingheight)
-      else
-        ceilingmin := ceiling_height;
-      linelen := abs(ceiling_height - floor_height);
-      wall.ytop := gl_i_min(ceilingmin, ceiling_height) / MAP_SCALE;
-      wall.ybottom := gl_i_max(floormax, floor_height) / MAP_SCALE;
-      wall.flag := GLDWF_M2S;
-      wall.ul := OU(temptex, seg);
-      wall.ur := wall.ul + (seg.length / temptex.buffer_width);
-      if floormax <= floor_height then
-        wall.vb := mip
-      else
-        wall.vb := mip * (ceiling_height - floormax) / linelen;
-      if ceilingmin >= ceiling_height then
-        wall.vt := 0.0
-      else
-        wall.vt := mip * (ceiling_height - ceilingmin) / linelen;
-{      if (seg.linedef.tranlump >= 0) and general_translucency)
-        wall.alpha= tran_filter_pct/100.0;}
-      ADDWALL(@wall);
-//      wall.alpha := 1.0;
+        mip := temptex.realtexheight / temptex.buffer_height;
+        if seg.sidedef.bottomtexture <> 0 then
+          floormax := gl_i_max(seg.frontsector.floorheight, seg.backsector.floorheight)
+        else
+          floormax := floor_height;
+        if seg.sidedef.toptexture <> 0 then
+          ceilingmin := gl_i_min(seg.frontsector.ceilingheight, seg.backsector.ceilingheight)
+        else
+          ceilingmin := ceiling_height;
+        linelen := abs(ceiling_height - floor_height);
+        wall.ytop := gl_i_min(ceilingmin, ceiling_height) / MAP_SCALE;
+        wall.ybottom := gl_i_max(floormax, floor_height) / MAP_SCALE;
+        wall.flag := GLDWF_M2S;
+        wall.ul := OU(temptex, seg);
+        wall.ur := wall.ul + (seg.length / temptex.buffer_width);
+        if floormax <= floor_height then
+          wall.vb := mip
+        else
+          wall.vb := mip * (ceiling_height - floormax) / linelen;
+        if ceilingmin >= ceiling_height then
+          wall.vt := 0.0
+        else
+          wall.vt := mip * (ceiling_height - ceilingmin) / linelen;
+  {      if (seg.linedef.tranlump >= 0) and general_translucency)
+          wall.alpha= tran_filter_pct/100.0;}
+        ADDWALL(@wall);
+  //      wall.alpha := 1.0;
+      end;
     end;
 
 bottomtexture:
