@@ -231,7 +231,6 @@ uses
   w_pak in 'Base\w_pak.pas',
   w_utils in 'Base\w_utils.pas',
   w_wad in 'Base\w_wad.pas',
-  wi_stuff in 'Radix\wi_stuff.pas',
   z_zone in 'Base\z_zone.pas',
   dglOpenGL in 'OPENGL\dglOpenGL.pas',
   p_genlin in 'Radix\p_genlin.pas',
@@ -353,7 +352,27 @@ uses
   radix_grid in 'Radix\radix_grid.pas',
   radix_messages in 'Radix\radix_messages.pas',
   sound_data in 'Radix\sound_data.pas',
-  radix_sounds in 'Radix\radix_sounds.pas';
+  radix_sounds in 'Radix\radix_sounds.pas',
+  radix_doom_wad in 'Radix\radix_doom_wad.pas',
+  t_radix32 in 'TEXLIB\t_radix32.pas',
+  m_compress in 'Base\m_compress.pas',
+  mn_screenshot in 'Radix\mn_screenshot.pas',
+  radix_weapons in 'Radix\radix_weapons.pas',
+  g_gameplay in 'Radix\g_gameplay.pas',
+  radix_hud in 'Radix\radix_hud.pas',
+  mn_font in 'Radix\mn_font.pas',
+  psi_radix in 'SCRIPT\psi_radix.pas',
+  radix_player in 'Radix\radix_player.pas',
+  radix_objects in 'Radix\radix_objects.pas',
+  radix_forcefield in 'Radix\radix_forcefield.pas',
+  radix_teleport in 'Radix\radix_teleport.pas',
+  p_animdefs in 'Base\p_animdefs.pas',
+  radix_intermission in 'Radix\radix_intermission.pas',
+  radix_score in 'Radix\radix_score.pas',
+  radix_extra_sprites in 'Radix\radix_extra_sprites.pas',
+  p_easyslope in 'Base\p_easyslope.pas',
+  radix_vertical_fight in 'Radix\radix_vertical_fight.pas',
+  w_wadreader in 'Base\w_wadreader.pas';
 
 var
   Saved8087CW: Word;

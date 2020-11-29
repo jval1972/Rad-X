@@ -1896,7 +1896,7 @@ begin
 
  // gld_AmbientExecute;
 
-  R_DrawPlayer;
+//  R_DrawPlayer;
 
   if scissoron then
     glDisable(GL_SCISSOR_TEST);
@@ -3361,7 +3361,7 @@ begin
           glBegin(currentloop.mode);
           for i := currentloop.vertexindex to currentloop.vertexindex + currentloop.vertexcount - 1 do
           begin
-            glTexCoord2fv(@gld_texcoords[i]);
+            glTexCoord2f(gld_texcoords[i].u * flat.gltexture.texturescale, gld_texcoords[i].v * flat.gltexture.texturescale);
             glVertex3fv(@gld_vertexes[i]);
           end;
           glEnd;
@@ -3399,8 +3399,8 @@ begin
   begin
     glMatrixMode(GL_TEXTURE);
     glPushMatrix;
-    glTranslatef(flat.uoffs {$IFDEF HEXEN}* 64 / flat.gltexture.width{$ENDIF},
-                 flat.voffs {$IFDEF HEXEN}* 64 / flat.gltexture.height{$ENDIF},
+    glTranslatef(flat.uoffs * flat.gltexture.texturescale {$IFDEF HEXEN}* 64 / flat.gltexture.width{$ENDIF},
+                 flat.voffs * flat.gltexture.texturescale {$IFDEF HEXEN}* 64 / flat.gltexture.height{$ENDIF},
                  0.0);
   end;
   {$ENDIF}
@@ -3420,7 +3420,7 @@ begin
       glBegin(currentloop.mode);
       for i := currentloop.vertexindex to currentloop.vertexindex + currentloop.vertexcount - 1 do
       begin
-        glTexCoord2fv(@gld_texcoords[i]);
+        glTexCoord2f(gld_texcoords[i].u * flat.gltexture.texturescale, gld_texcoords[i].v * flat.gltexture.texturescale);
         glVertex3f(gld_vertexes[i].x, gld_FloorHeight(sec, gld_vertexes[i].x, gld_vertexes[i].z) - fz, gld_vertexes[i].z)
       end;
       glEnd;
@@ -3435,7 +3435,7 @@ begin
       glBegin(currentloop.mode);
       for i := currentloop.vertexindex to currentloop.vertexindex + currentloop.vertexcount - 1 do
       begin
-        glTexCoord2fv(@gld_texcoords[i]);
+        glTexCoord2f(gld_texcoords[i].u * flat.gltexture.texturescale, gld_texcoords[i].v * flat.gltexture.texturescale);
         glVertex3f(gld_vertexes[i].x, gld_CeilingHeight(sec, gld_vertexes[i].x, gld_vertexes[i].z) - fz, gld_vertexes[i].z)
       end;
       glEnd;

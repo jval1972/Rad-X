@@ -56,7 +56,11 @@ implementation
 uses
   d_delphi,
   doomdef,
+  {$IFDEF OPENGL}
+  gl_main,
+  {$ELSE}
   i_video,
+  {$ENDIF}
   r_draw,
   v_video;
 
@@ -69,7 +73,9 @@ var
   c: LongWord;
   xpos, ypos: integer;
 begin
+  {$IFNDEF OPENGL}
   I_BlitBuffer;
+  {$ENDIF}
   bufsize := SCREENWIDTH * SCREENHEIGHT * 4;
   buf := malloc(bufsize);
   I_ReadScreen32(buf);

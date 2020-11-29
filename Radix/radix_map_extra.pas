@@ -60,6 +60,7 @@ procedure PS_SetCeilingSlope(const secid: integer; const x1, y1, z1: fixed_t;
 // Parse map lump for extra information about radix level
 procedure RX_LoadRadixMapInfo(const lumpnum: integer);
 
+{$IFNDEF OPENGL}
 function RX_CalculateRadixMidOffs(const seg: PSeg_t): fixed_t;
 
 function RX_CalculateRadixTopOffs(const seg: PSeg_t): fixed_t;
@@ -71,6 +72,7 @@ function RX_CalculateRadixSlopeMidOffs(const seg: PSeg_t): fixed_t;
 function RX_CalculateRadixSlopeTopOffs(const seg: PSeg_t): fixed_t;
 
 function RX_CalculateRadixSlopeBottomOffs(const seg: PSeg_t): fixed_t;
+{$ENDIF}
 
 function RX_LightLevel(const l: integer; const flags: integer): byte;
 
@@ -105,7 +107,9 @@ uses
   p_slopes,
   r_data,
   r_main,
+  {$IFNDEF OPENGL}
   r_segs,
+  {$ENDIF}
   radix_level,
   radix_logic,
   radix_objects,
@@ -535,6 +539,7 @@ begin
   tokens.Free;
 end;
 
+{$IFNDEF OPENGL}
 function RX_CalculateRadixMidOffs(const seg: PSeg_t): fixed_t;
 var
   line: Pline_t;
@@ -604,6 +609,7 @@ begin
   else
     result := line.backsector.floorheight - viewz;
 end;
+{$ENDIF}
 
 const
   MAXRADIXLIGHTLEVEL = 64;

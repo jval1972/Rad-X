@@ -188,6 +188,7 @@ begin
   begin
     gld_GLTextures[texture_num] := mallocz(SizeOf(GLTexture));
     gld_GLTextures[texture_num].textype := GLDT_UNREGISTERED;
+    gld_GLTextures[texture_num].texturescale := 1.0;
   end;
   result := gld_GLTextures[texture_num];
 end;
@@ -208,6 +209,7 @@ begin
   begin
     gld_GLPatchTextures[lump] := mallocz(SizeOf(GLTexture));
     gld_GLPatchTextures[lump].textype := GLDT_UNREGISTERED;
+    gld_GLPatchTextures[lump].texturescale := 1.0;
   end;
   result := gld_GLPatchTextures[lump];
 end;
@@ -1294,6 +1296,7 @@ begin
     result.topoffset := 0;
     result.tex_width := gld_GetTexDimension(result.realtexwidth);
     result.tex_height := gld_GetTexDimension(result.realtexheight);
+    result.texturescale := 64 / result.tex_width;
     if result.mipmap and use_mipmapping then
     begin
       result.width := result.tex_width;

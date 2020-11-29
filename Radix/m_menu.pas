@@ -2760,8 +2760,8 @@ begin
   M_DrawSubHeadLine(40, 'Voxels');
 
   vx_maxoptimizerpasscount := GetIntegerInRange(vx_maxoptimizerpasscount, 0, MAX_VX_OPTIMIZE);
-  ppos := M_WriteSmallText(OptionsDisplayOpenGLVoxelsDef.x, OptionsDisplayOpenGLVoxelsDef.y + OptionsDisplayOpenGLVoxelsDef.itemheight * Ord(od_glv_optimize), 'Voxel mesh optimization: ');
-  M_WriteSmallWhiteText(ppos.x, ppos.y, str_voxeloptimizemethod[vx_maxoptimizerpasscount]);
+  ppos := M_WriteSmallText(OptionsDisplayOpenGLVoxelsDef.x, OptionsDisplayOpenGLVoxelsDef.y + OptionsDisplayOpenGLVoxelsDef.itemheight * Ord(od_glv_optimize), 'Voxel mesh optimization: ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, str_voxeloptimizemethod[vx_maxoptimizerpasscount], SCN_TMP);
 end;
 
 procedure M_ChangeTextureFiltering(choice: integer);
@@ -2777,8 +2777,8 @@ begin
   M_DrawHeadLine(15, 'Display Options');
   M_DrawSubHeadLine(40, 'Texture Filtering');
 
-  ppos := M_WriteSmallText(OptionsDisplayOpenGLFilterDef.x, OptionsDisplayOpenGLFilterDef.y + OptionsDisplayOpenGLFilterDef.itemheight * Ord(od_glf_texture_filter), 'Filter: ');
-  M_WriteSmallWhiteText(ppos.x, ppos.y, gl_tex_filter_string);
+  ppos := M_WriteSmallText(OptionsDisplayOpenGLFilterDef.x, OptionsDisplayOpenGLFilterDef.y + OptionsDisplayOpenGLFilterDef.itemheight * Ord(od_glf_texture_filter), 'Filter: ', SCN_TMP);
+  M_WriteSmallWhiteText(ppos.x, ppos.y, gl_tex_filter_string, SCN_TMP);
 end;
 {$ENDIF}
 

@@ -48,7 +48,7 @@ procedure gld_AddAutomapTriangle(
   const x1, y1, u1, v1: integer;
   const x2, y2, u2, v2: integer;
   const x3, y3, u3, v3: integer;
-  const cc: LongWord; const lump: integer);
+  const cc: LongWord; const fwidth: integer; const lump: integer);
 
 procedure gld_DrawAutomap;
 
@@ -170,7 +170,7 @@ procedure gld_AddAutomapTriangle(
   const x1, y1, u1, v1: integer;
   const x2, y2, u2, v2: integer;
   const x3, y3, u3, v3: integer;
-  const cc: LongWord; const lump: integer);
+  const cc: LongWord; const fwidth: integer; const lump: integer);
 var
   l: Pglamrenderitem_t;
 begin
@@ -181,18 +181,18 @@ begin
 
   l.x1 := x1;
   l.y1 := y1;
-  l.u1 := u1 / FRACUNIT / 64;
-  l.v1 := v1 / FRACUNIT / 64;
+  l.u1 := u1 / FRACUNIT / fwidth;
+  l.v1 := v1 / FRACUNIT / fwidth;
 
   l.x2 := x2;
   l.y2 := y2;
-  l.u2 := u2 / FRACUNIT / 64;
-  l.v2 := v2 / FRACUNIT / 64;
+  l.u2 := u2 / FRACUNIT / fwidth;
+  l.v2 := v2 / FRACUNIT / fwidth;
 
   l.x3 := x3;
   l.y3 := y3;
-  l.u3 := u3 / FRACUNIT / 64;
-  l.v3 := v3 / FRACUNIT / 64;
+  l.u3 := u3 / FRACUNIT / fwidth;
+  l.v3 := v3 / FRACUNIT / fwidth;
 
   l.r := ((cc shr 16) and $FF) / 255;
   l.g := ((cc shr 8) and $FF) / 255;
