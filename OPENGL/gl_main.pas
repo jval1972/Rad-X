@@ -424,6 +424,21 @@ begin
   glPushAttrib(GL_ALL_ATTRIB_BITS);
   gld_Enable2D;
 
+  if menuactive and (shademenubackground >= 1) then
+  begin
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glColor4f(0.0, 0.0, 0.0, 0.5);
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_NOTEQUAL, 0);
+
+    glBegin(GL_QUADS);
+      glVertex2f(0, 0);
+      glVertex2f(SCREENWIDTH, 0);
+      glVertex2f(SCREENWIDTH, SCREENHEIGHT);
+      glVertex2f(0, SCREENHEIGHT);
+    glEnd;
+  end;
+
   glBindTexture(GL_TEXTURE_2D, overlay_tex);
   if set_hud <> gl_linear_hud then
   begin
