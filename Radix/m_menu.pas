@@ -937,6 +937,7 @@ type
     kb_strafe,
     bk_afterburner,
     kb_speed,
+
     kb_lookup,
     kb_lookdown,
     kb_lookcenter,
@@ -951,14 +952,25 @@ type
     kb_weapon6,
     kb_weapon7,
     kb_plasmabomb,
+
+    kb_am_gobigkey,
+    kb_am_followkey,
+    kb_am_gridkey,
+    kb_am_rotatekey,
+    kb_am_texturedautomap,
+    kb_am_markkey,
+    kb_am_clearmarkkey,
+
     kb_end
   );
 
 var
   KeyBindingsMenu1: array[0..Ord(kb_lookup) - 1] of menuitem_t;
   KeyBindingsDef1: menu_t;
-  KeyBindingsMenu2: array[0..Ord(kb_end) - Ord(kb_lookup) - 1] of menuitem_t;
+  KeyBindingsMenu2: array[0..Ord(kb_am_gobigkey) - Ord(kb_lookup) - 1] of menuitem_t;
   KeyBindingsDef2: menu_t;
+  KeyBindingsMenu3: array[0..Ord(kb_end) - Ord(kb_am_gobigkey) - 1] of menuitem_t;
+  KeyBindingsDef3: menu_t;
 
 type
   bindinginfo_t = record
@@ -981,6 +993,7 @@ const
     (text: 'Strafe'; pkey: @key_strafe),
     (text: 'Afterburner'; pkey: @key_afterburner),
     (text: 'Run'; pkey: @key_speed),
+
     (text: 'Look up'; pkey: @key_lookup),
     (text: 'Look down'; pkey: @key_lookdown),
     (text: 'Look center'; pkey: @key_lookcenter),
@@ -994,7 +1007,15 @@ const
     (text: 'Phase Torpedoes'; pkey: @key_weapon5),
     (text: 'Gravity Device'; pkey: @key_weapon6),
     (text: 'Enhanced EPC'; pkey: @key_weapon7),
-    (text: 'Plasma Bomb'; pkey: @key_plasmabomb)
+    (text: 'Plasma Bomb'; pkey: @key_plasmabomb),
+
+    (text: 'Automap max zoom'; pkey: @AM_GOBIGKEY),
+    (text: 'Automap follow on/off'; pkey: @AM_FOLLOWKEY),
+    (text: 'Automap grid on/off'; pkey: @AM_GRIDKEY),
+    (text: 'Automap rotate on/off'; pkey: @AM_ROTATEKEY),
+    (text: 'Automap texture on/off'; pkey: @AM_TEXTUREDAUTOMAP),
+    (text: 'Automap add mark'; pkey: @AM_MARKKEY),
+    (text: 'Automap clear mark'; pkey: @AM_CLEARMARKKEY)
   );
 
 var
@@ -1140,7 +1161,12 @@ begin
   KeyBindingsInfo[Ord(kb_weapon6)].text := 'Gravity Device';
   KeyBindingsInfo[Ord(kb_weapon7)].text := 'Enhanced EPC';
 
-  M_DrawBindings(KeyBindingsDef2, Ord(kb_lookup), Ord(kb_end));
+  M_DrawBindings(KeyBindingsDef2, Ord(kb_lookup), Ord(kb_am_gobigkey));
+end;
+
+procedure M_DrawBindings3;
+begin
+  M_DrawBindings(KeyBindingsDef3, Ord(kb_am_gobigkey), Ord(kb_end));
 end;
 
 //
@@ -1162,6 +1188,15 @@ begin
   bindkeySlot := Ord(kb_lookup) + choice;
 
   saveOldkey := KeyBindingsInfo[Ord(kb_lookup) + choice].pkey^;
+end;
+
+procedure M_KeyBindingSelect3(choice: integer);
+begin
+  bindkeyEnter := true;
+
+  bindkeySlot := Ord(kb_am_gobigkey) + choice;
+
+  saveOldkey := KeyBindingsInfo[Ord(kb_am_gobigkey) + choice].pkey^;
 end;
 
 //
@@ -1839,6 +1874,13 @@ begin
     key_weapon6 := Ord('7');
     key_weapon7 := Ord('8');
     key_plasmabomb := Ord('b');
+    AM_GOBIGKEY := Ord('0');
+    AM_FOLLOWKEY := Ord('f');
+    AM_GRIDKEY := Ord('g');
+    AM_ROTATEKEY := Ord('r');
+    AM_TEXTUREDAUTOMAP := Ord('t');
+    AM_MARKKEY := Ord('m');
+    AM_CLEARMARKKEY := Ord('c');
   end
   else if mode = 1 then
   begin
@@ -1870,6 +1912,13 @@ begin
     key_weapon6 := Ord('7');
     key_weapon7 := Ord('8');
     key_plasmabomb := Ord('b');
+    AM_GOBIGKEY := Ord('0');
+    AM_FOLLOWKEY := Ord('f');
+    AM_GRIDKEY := Ord('g');
+    AM_ROTATEKEY := Ord('r');
+    AM_TEXTUREDAUTOMAP := Ord('t');
+    AM_MARKKEY := Ord('m');
+    AM_CLEARMARKKEY := Ord('c');
   end
   else if mode = 2 then
   begin
@@ -1901,6 +1950,13 @@ begin
     key_weapon6 := Ord('7');
     key_weapon7 := Ord('8');
     key_plasmabomb := Ord('b');
+    AM_GOBIGKEY := Ord('0');
+    AM_FOLLOWKEY := Ord('f');
+    AM_GRIDKEY := Ord('g');
+    AM_ROTATEKEY := Ord('r');
+    AM_TEXTUREDAUTOMAP := Ord('t');
+    AM_MARKKEY := Ord('m');
+    AM_CLEARMARKKEY := Ord('c');
   end;
 end;
 
@@ -1933,7 +1989,14 @@ begin
      (key_weapon5 = Ord('6')) and
      (key_weapon6 = Ord('7')) and
      (key_weapon7 = Ord('8')) and
-     (key_plasmabomb = Ord('b')) then
+     (key_plasmabomb = Ord('b')) and
+     (AM_GOBIGKEY = Ord('0')) and
+     (AM_FOLLOWKEY = Ord('f')) and
+     (AM_GRIDKEY = Ord('g')) and
+     (AM_ROTATEKEY = Ord('r')) and
+     (AM_TEXTUREDAUTOMAP = Ord('t')) and
+     (AM_MARKKEY = Ord('m')) and
+     (AM_CLEARMARKKEY = Ord('c')) then
   begin
     result := 0;
     exit;
@@ -1966,7 +2029,14 @@ begin
      (key_weapon5 = Ord('6')) and
      (key_weapon6 = Ord('7')) and
      (key_weapon7 = Ord('8')) and
-     (key_plasmabomb = Ord('b')) then
+     (key_plasmabomb = Ord('b')) and
+     (AM_GOBIGKEY = Ord('0')) and
+     (AM_FOLLOWKEY = Ord('f')) and
+     (AM_GRIDKEY = Ord('g')) and
+     (AM_ROTATEKEY = Ord('r')) and
+     (AM_TEXTUREDAUTOMAP = Ord('t')) and
+     (AM_MARKKEY = Ord('m')) and
+     (AM_CLEARMARKKEY = Ord('c')) then
   begin
     result := 1;
     exit;
@@ -1999,7 +2069,14 @@ begin
      (key_weapon5 = Ord('6')) and
      (key_weapon6 = Ord('7')) and
      (key_weapon7 = Ord('8')) and
-     (key_plasmabomb = Ord('b')) then
+     (key_plasmabomb = Ord('b')) and
+     (AM_GOBIGKEY = Ord('0')) and
+     (AM_FOLLOWKEY = Ord('f')) and
+     (AM_GRIDKEY = Ord('g')) and
+     (AM_ROTATEKEY = Ord('r')) and
+     (AM_TEXTUREDAUTOMAP = Ord('t')) and
+     (AM_MARKKEY = Ord('m')) and
+     (AM_CLEARMARKKEY = Ord('c')) then
   begin
     result := 2;
     exit;
@@ -5940,7 +6017,7 @@ begin
 ////////////////////////////////////////////////////////////////////////////////
 //KeyBindingsMenu2
   pmi := @KeyBindingsMenu2[0];
-  for i := 0 to Ord(kb_end) - Ord(kb_lookup) - 1 do
+  for i := 0 to Ord(kb_am_gobigkey) - Ord(kb_lookup) - 1 do
   begin
     pmi.status := 1;
     pmi.name := '';
@@ -5953,10 +6030,10 @@ begin
 
 ////////////////////////////////////////////////////////////////////////////////
 //KeyBindingsDef2
-  KeyBindingsDef2.numitems := Ord(kb_end) - Ord(kb_lookup); // # of menu items
+  KeyBindingsDef2.numitems := Ord(kb_am_gobigkey) - Ord(kb_lookup); // # of menu items
   KeyBindingsDef2.prevMenu := @ControlsDef; // previous menu
-  KeyBindingsDef2.leftMenu := @KeyBindingsDef1; // left menu
-  KeyBindingsDef2.rightMenu := @KeyBindingsDef1; // right menu
+  KeyBindingsDef2.leftMenu := @KeyBindingsDef3; // left menu
+  KeyBindingsDef2.rightMenu := @KeyBindingsDef3; // right menu
   KeyBindingsDef2.menuitems := Pmenuitem_tArray(@KeyBindingsMenu2);  // menu items
   KeyBindingsDef2.drawproc := @M_DrawBindings2;  // draw routine
   KeyBindingsDef2.x := DEF_MENU_ITEMS_START_X;
@@ -5964,6 +6041,34 @@ begin
   KeyBindingsDef2.lastOn := 0; // last item user was on in menu
   KeyBindingsDef2.itemheight := SMALLLINEHEIGHT;
   KeyBindingsDef2.flags := FLG_MN_TEXTUREBK or FLG_MN_DRAWITEMON;
+
+////////////////////////////////////////////////////////////////////////////////
+//KeyBindingsMenu3
+  pmi := @KeyBindingsMenu3[0];
+  for i := 0 to Ord(kb_end) - Ord(kb_am_gobigkey) - 1 do
+  begin
+    pmi.status := 1;
+    pmi.name := '';
+    pmi.cmd := '';
+    pmi.routine := @M_KeyBindingSelect3;
+    pmi.pBoolVal := nil;
+    pmi.alphaKey := Chr(Ord('1') + i);
+    inc(pmi);
+  end;
+
+////////////////////////////////////////////////////////////////////////////////
+//KeyBindingsDef3
+  KeyBindingsDef3.numitems := Ord(kb_end) - Ord(kb_am_gobigkey); // # of menu items
+  KeyBindingsDef3.prevMenu := @ControlsDef; // previous menu
+  KeyBindingsDef3.leftMenu := @KeyBindingsDef1; // left menu
+  KeyBindingsDef3.rightMenu := @KeyBindingsDef1; // right menu
+  KeyBindingsDef3.menuitems := Pmenuitem_tArray(@KeyBindingsMenu3);  // menu items
+  KeyBindingsDef3.drawproc := @M_DrawBindings3;  // draw routine
+  KeyBindingsDef3.x := DEF_MENU_ITEMS_START_X;
+  KeyBindingsDef3.y := DEF_MENU_ITEMS_START_Y;
+  KeyBindingsDef3.lastOn := 0; // last item user was on in menu
+  KeyBindingsDef3.itemheight := SMALLLINEHEIGHT;
+  KeyBindingsDef3.flags := FLG_MN_TEXTUREBK or FLG_MN_DRAWITEMON;
 
 ////////////////////////////////////////////////////////////////////////////////
 //InTextMenu
