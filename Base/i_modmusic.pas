@@ -1325,7 +1325,7 @@ function threadproc(p: pointer): integer; stdcall;
 begin
   mod_status := MOD_STATUS_PLAYING;
   LoadModule;
-	PlayModule;
+  PlayModule;
   result := 0;
   mod_status := MOD_STATUS_IDLE;
 end;
