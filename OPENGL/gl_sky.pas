@@ -72,7 +72,7 @@ begin
   iStartPoint[1] := 0.0;
   iStartPoint[2] := 0.0;
 
-  iUStep := - 2 / (COMPLEXITY);
+  iUStep := 1 / COMPLEXITY;
   iRotationZ := 0;
   ipos := 0;
   for iI := (COMPLEXITY div 4) downto 0 do
@@ -94,7 +94,7 @@ begin
 
       iVertices[ipos] := iTemp;
 
-      iUVCoords[ipos][0] := 0.5 * iJ * iUStep;
+      iUVCoords[ipos][0] := iJ * iUStep - 0.25;
       iUVCoords[ipos][1] := -(iTemp[1] / aSize * 1.2 + 0.01);
       iUVCoords[ipos][1] := iUVCoords[ipos][1] * 200 / 256 - 56 / 200;
       if iUVCoords[ipos][1] < -1.0 then
