@@ -961,6 +961,10 @@ begin
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix;
   glLoadIdentity;
+
+  glMatrixMode(GL_TEXTURE);
+  glPushMatrix;
+  glLoadIdentity;
 end;
 
 procedure gld_Disable2D;
@@ -968,6 +972,8 @@ begin
   glMatrixMode(GL_PROJECTION);
   glPopMatrix;
   glMatrixMode(GL_MODELVIEW);
+  glPopMatrix;
+  glMatrixMode(GL_TEXTURE);
   glPopMatrix;
 end;
 
@@ -3597,6 +3603,7 @@ begin
   {$IFNDEF HERETIC}
   if flat.hasoffset then
   begin
+    glMatrixMode(GL_TEXTURE);
     glPopMatrix;
     glMatrixMode(GL_MODELVIEW);
   end;
