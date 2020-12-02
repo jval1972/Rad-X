@@ -414,9 +414,6 @@ begin
   gld_Finish;
 end;
 {$ENDIF}
-                 var bbb: boolean = false;
-                 iii: integer;
-                 bt: byte;
 
 procedure I_FinishUpdateOverlay(const doflush: boolean);
 {$IFDEF DOOM}
@@ -426,21 +423,6 @@ var
 begin
   glPushAttrib(GL_ALL_ATTRIB_BITS);
   gld_Enable2D;
-
-  if bbb then
-    with tfile.Create('f:\screen.dat', fCreate) do
-    begin
-      for iii := 0 to GLDRAWTEXWIDTH * GLDRAWTEXHEIGHT - 1 do
-      begin
-        bt := screen32[iii] and $ff;
-        write(bt, 1);
-        bt := (screen32[iii] shr 8) and $ff;
-        write(bt, 1);
-        bt := (screen32[iii] shr 16) and $ff;
-        write(bt, 1);
-      end;
-      free;
-    end;
 
   if menuactive and (shademenubackground >= 1) then
   begin
@@ -479,7 +461,7 @@ begin
     GL_SafeTranslate;
     glTexImage2D(GL_TEXTURE_2D, 0, 4, GLDRAWTEXWIDTH, GLDRAWTEXHEIGHT, 0, GL_BGRA, GL_UNSIGNED_BYTE, @translation_array);
 {$ELSE}
-(*{$IFDEF DOOM}
+{$IFDEF DOOM}
     dec(overlayupdatetic);
     if overlay_created then
     begin
@@ -532,9 +514,9 @@ begin
       sub_y2 := V_PreserveY(ST_Y);
       glTexImage2D(GL_TEXTURE_2D, 0, 4, GLDRAWTEXWIDTH, GLDRAWTEXHEIGHT, 0, GL_BGRA, GL_UNSIGNED_BYTE, screen32);
     end;
-{$ELSE}        *)
+{$ELSE}
     glTexImage2D(GL_TEXTURE_2D, 0, 4, GLDRAWTEXWIDTH, GLDRAWTEXHEIGHT, 0, GL_BGRA, GL_UNSIGNED_BYTE, screen32);
-//{$ENDIF}
+{$ENDIF}
 {$ENDIF}
   end;
 
