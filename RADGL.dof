@@ -115,7 +115,7 @@ AutoIncBuild=0
 MajorVer=1
 MinorVer=0
 Release=1
-Build=742
+Build=743
 Debug=0
 PreRelease=1
 Special=0
@@ -126,7 +126,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Jim Valavanis
 FileDescription=RAD
-FileVersion=1.0.1.742
+FileVersion=1.0.1.743
 InternalName=RAD
 LegalCopyright=Copyright 2004 - 2020, Jim Valavanis
 LegalTrademarks=
