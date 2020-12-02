@@ -15,8 +15,6 @@ Textured automap.
 Dynamic lights.
 
 ## Binary downloads
-[version 1.0.1.743.r838 (20201202 - win32)](https://sourceforge.net/projects/rad-x/files/RAD%201.0/RAD_1.0.1.743.r838_win32.zip/download)
-
 [version 1.0.1.742.r833 (20201202 - win32)](https://sourceforge.net/projects/rad-x/files/RAD%201.0/RAD_1.0.1.742.r833_win32.zip/download)
 
 [version 1.0.1.741.r831 (20201130 - win32)](https://sourceforge.net/projects/rad-x/files/RAD%201.0/RAD_1.0.1.741.r831_win32.zip/download)
