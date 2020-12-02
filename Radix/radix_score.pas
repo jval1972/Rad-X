@@ -98,7 +98,7 @@ var
   item: scrotetableitem_t;
 begin
   for i := 0 to NUMSCORES - 1 do
-    for j := 0 to NUMSCORES - 1 - i do
+    for j := 0 to NUMSCORES - 2 do
       if scoretable[j].rating < scoretable[j + 1].rating then
       begin
         item := scoretable[j];

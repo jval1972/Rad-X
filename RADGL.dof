@@ -145,5 +145,7 @@ Count=2
 Item0=..\dcu\RADGL
 Item1=..\dcu\XRadixGL
 [HistoryLists\hlOutputDirectorry]
-Count=1
+Count=3
 Item0=..\bin
+Item1=g:\rad
+Item2=e:\rad
