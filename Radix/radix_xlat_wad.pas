@@ -247,6 +247,8 @@ begin
       result := true;
       exit;
     end;
+  buf := nil;
+  size := 0;
   result := false;
 end;
 
