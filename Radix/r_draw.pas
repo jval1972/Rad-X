@@ -487,7 +487,10 @@ begin
     V_DrawPatch(318 - diskpatch.width, 2, SCN_FG,
       diskpatch, true);
   {$IFDEF OPENGL}
-  diskbusy_height := diskpatch.height + 3;
+  if diskpatch <> nil then
+    diskbusy_height := diskpatch.height + 3
+  else
+    diskbusy_height := 0;
   {$ENDIF}
 end;
 
