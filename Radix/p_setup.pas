@@ -1869,9 +1869,6 @@ begin
   // will be set by player think.
   players[consoleplayer].viewz := 1;
 
-  // Make sure all sounds are stopped before Z_FreeTags.
-  S_Start;
-
 {$IFDEF OPENGL}
   gld_CleanMemory; // JVAL OPENGL
 {$ENDIF}
@@ -2078,6 +2075,7 @@ begin
   gld_PreprocessLevel; // JVAL OPENGL
 {$ENDIF}
 
+  S_Start;
   R_SetInterpolateSkipTicks(2);
 end;
 
