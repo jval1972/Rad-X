@@ -464,6 +464,9 @@ var
 
 procedure R_DrawDiskBusy;
 begin
+  {$IFDEF OPENGL}
+  diskbusy_height := 0;
+  {$ENDIF}
   if not displaydiskbusyicon then
     exit;
 
@@ -488,9 +491,7 @@ begin
       diskpatch, true);
   {$IFDEF OPENGL}
   if diskpatch <> nil then
-    diskbusy_height := diskpatch.height + 3
-  else
-    diskbusy_height := 0;
+    diskbusy_height := diskpatch.height + 3;
   {$ENDIF}
 end;
 
