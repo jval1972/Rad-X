@@ -196,8 +196,11 @@ var
 var
   Interpolate: boolean;
 
+const
+  RAMPBUFFERSIZE = 128;
+
 var
-  RampBuffer: array of smallint;
+  RampBuffer: array[0..RAMPBUFFERSIZE - 1] of smallint;
 
 var
   SampleRate, C2Rate, Gain: longint;
@@ -260,7 +263,7 @@ begin
     Exit;
   end;
   MicromodSetInterpolation(Interpolation);
-  SetLength(RampBuffer, 128);
+//  SetLength(RampBuffer, 128);
   if (NumChannels > 4) then
   begin
     C2Rate := 8363;
