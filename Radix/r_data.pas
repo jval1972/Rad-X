@@ -706,7 +706,7 @@ begin
 
   // JVAL: 20200515 - Merge PNAMES0 & PNAMES
   nummappatches := nummappatches0 + nummappatches1;
-  patcheslen := patcheslen0 + patcheslen1 - SizeOf(integer);
+  patcheslen := nummappatches * SizeOf(char8_t) + SizeOf(integer);
   names := Z_Malloc(patcheslen, PU_STATIC, nil);
   PInteger(names)^ := nummappatches;
   for i := SizeOf(Integer) to patcheslen0 - 1 do
