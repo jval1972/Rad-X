@@ -129,7 +129,6 @@ uses
   z_zone;
 
 const
-//  MAX_CHANNELS: longint = 32;
   MAX_CHANNELS = 32;
   FP_SHIFT: longint = 15;
   FP_ONE: longint = 32768;
@@ -149,9 +148,6 @@ const
     255, 253, 250, 244, 235, 224, 212, 197, 180, 161, 141, 120, 97, 74, 49, 24);
 
 type
-  TShortIntArray = array of shortint;
-
-type
   TNote = record
     Key: word;
     Instrument, Effect, Param: byte;
@@ -165,7 +161,8 @@ type
     Name: string[INSTRUMENTNAMESIZE];
     Volume, FineTune: byte;
     LoopStart, LoopLength: longint;
-    SampleData: TShortIntArray;
+    SampleDataSize: integer;
+    SampleData: PShortIntArray;
   end;
 
 type
@@ -179,8 +176,11 @@ type
     TremoloAdd, VibratoAdd, ArpeggioAdd: shortint;
   end;
 
+const
+  SONGNAMESIZE = 20;
+
 var
-  SongName: string;
+  SongName: string[SONGNAMESIZE];
 
 var
 //  Channels: array of TChannel;
@@ -200,7 +200,8 @@ var
   Sequence: array[0..SEQUENCESIZE - 1] of byte;
 
 var
-  Patterns: array of byte;
+  Patterns: PByteArray;
+  PatternDataLength: integer;
 
 var
   Interpolate: boolean;
@@ -254,7 +255,7 @@ function MicromodInit(const Module: array of shortint; SamplingRate: longint;
   Interpolation: boolean): longint;
 var
   NumPatterns: longint;
-  StrIndex, PatIndex, SeqEntry, PatternDataLength: longint;
+  StrIndex, PatIndex, SeqEntry: longint;
   SampleOffset, SampleLength, LoopStart, LoopLength: longint;
   InstIndex, Volume, FineTune: longint;
   Instrument: TInstrument;
@@ -281,8 +282,7 @@ begin
     C2Rate := 8287;
     Gain := 2;
   end;
-  SetLength(SongName, 20);
-  for StrIndex := 1 to 20 do
+  for StrIndex := 1 to SONGNAMESIZE do
     SongName[StrIndex] := char(Module[StrIndex - 1] and $FF);
   SequenceLength := Module[950] and $7F;
   RestartPos := Module[951] and $7F;
@@ -297,7 +297,8 @@ begin
       NumPatterns := SeqEntry + 1;
   end;
   PatternDataLength := 4 * NumChannels * 64 * NumPatterns;
-  SetLength(Patterns, PatternDataLength);
+//  SetLength(Patterns, PatternDataLength);
+  Patterns := malloc(PatternDataLength);
   Move(Module[1084], Patterns[0], PatternDataLength);
   SampleOffset := 1084 + PatternDataLength;
   for InstIndex := 1 to NUMINSTRUMENTS - 1 do
@@ -314,7 +315,9 @@ begin
     SampleLength := UBEWord(Module, InstIndex * 30 + 12) * 2;
     if (SampleOffset + SampleLength > Length(Module)) then
       SampleLength := Length(Module) - SampleOffset;
-    SetLength(Instrument.SampleData, SampleLength + 1);
+    Instrument.SampleData := malloc(SampleLength + 1);
+    Instrument.SampleDataSize := SampleLength + 1;
+//    SetLength(Instrument.SampleData, SampleLength + 1);
     Move(Module[SampleOffset], Instrument.SampleData[0], SampleLength);
     Instrument.SampleData[SampleLength] := 0;
     SampleOffset := SampleOffset + SampleLength;
@@ -389,7 +392,7 @@ var
   OutputIndex, OutputLength: longint;
   Ins, Ampl, LAmpl, RAmpl: longint;
   SampleIdx, SampleFra, Step, LoopLen, LoopEp1: longint;
-  SampleData: TShortIntArray;
+  SampleData: PShortIntArray;
   C, M, Y, L, R: longint;
 begin
   Ins := Channel.Instrument;
@@ -1037,7 +1040,7 @@ begin
       3: Channels[Chan].Panning := 51;
     end;
   end;
-  FillChar(RampBuffer[0], 128 * SizeOf(smallint), 0);
+  FillChar(RampBuffer[0], RAMPBUFFERSIZE * SizeOf(smallint), 0);
   SequenceTick();
 end;
 
