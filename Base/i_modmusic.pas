@@ -157,9 +157,12 @@ type
     Instrument, Effect, Param: byte;
   end;
 
+const
+  INSTRUMENTNAMESIZE = 22;
+    
 type
   TInstrument = record
-    Name: string;
+    Name: string[INSTRUMENTNAMESIZE];
     Volume, FineTune: byte;
     LoopStart, LoopLength: longint;
     SampleData: TShortIntArray;
@@ -188,10 +191,16 @@ const
 
 var
 //  Instruments: array of TInstrument;
-  Instruments: array[0..NUMINSTRUMENTS - 1] of TInstrument;
+  Instruments: array[1..NUMINSTRUMENTS - 1] of TInstrument;
+
+const
+  SEQUENCESIZE = 128;
 
 var
-  Sequence, Patterns: array of byte;
+  Sequence: array[0..SEQUENCESIZE - 1] of byte;
+
+var
+  Patterns: array of byte;
 
 var
   Interpolate: boolean;
@@ -256,14 +265,12 @@ begin
     MicromodInit := MICROMOD_ERROR_MODULE_FORMAT_NOT_SUPPORTED;
     Exit;
   end;
-//  SetLength(Channels, NumChannels);
   if not MicromodSetSamplingRate(SamplingRate) then
   begin
     MicromodInit := MICROMOD_ERROR_SAMPLING_RATE_NOT_SUPPORTED;
     Exit;
   end;
   MicromodSetInterpolation(Interpolation);
-//  SetLength(RampBuffer, 128);
   if (NumChannels > 4) then
   begin
     C2Rate := 8363;
@@ -281,7 +288,6 @@ begin
   RestartPos := Module[951] and $7F;
   if RestartPos >= SequenceLength then
     RestartPos := 0;
-  SetLength(Sequence, 128);
   NumPatterns := 0;
   for PatIndex := 0 to 127 do
   begin
@@ -293,12 +299,10 @@ begin
   PatternDataLength := 4 * NumChannels * 64 * NumPatterns;
   SetLength(Patterns, PatternDataLength);
   Move(Module[1084], Patterns[0], PatternDataLength);
-//  SetLength(Instruments, 32);
   SampleOffset := 1084 + PatternDataLength;
-  for InstIndex := 1 to 31 do
+  for InstIndex := 1 to NUMINSTRUMENTS - 1 do
   begin
-    SetLength(Instrument.Name, 22);
-    for StrIndex := 1 to 22 do
+    for StrIndex := 1 to INSTRUMENTNAMESIZE do
       Instrument.Name[StrIndex] :=
         char(Module[InstIndex * 30 + StrIndex - 11] and $FF);
     FineTune := Module[InstIndex * 30 + 14] and $F;
@@ -1242,9 +1246,6 @@ begin
   { Calculate Duration. }
   InitialSamples := MicromodCalculateSongDuration;
   SamplesRemaining := InitialSamples;
-
-  { Initialise Mix Buffer. }
-//  SetLength(MixBuffer, SAMPLING_FREQ * 2 div 5);
 
   ismultithread := false;
   { Play Through Once. }
