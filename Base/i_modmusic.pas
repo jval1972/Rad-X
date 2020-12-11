@@ -129,7 +129,8 @@ uses
   z_zone;
 
 const
-  MAX_CHANNELS: longint = 32;
+//  MAX_CHANNELS: longint = 32;
+  MAX_CHANNELS = 32;
   FP_SHIFT: longint = 15;
   FP_ONE: longint = 32768;
   FP_MASK: longint = 32767;
@@ -179,10 +180,15 @@ var
   SongName: string;
 
 var
-  Channels: array of TChannel;
+//  Channels: array of TChannel;
+  Channels: array[0..MAX_CHANNELS - 1] of TChannel;
+
+const
+  NUMINSTRUMENTS = 32;
 
 var
-  Instruments: array of TInstrument;
+//  Instruments: array of TInstrument;
+  Instruments: array[0..NUMINSTRUMENTS - 1] of TInstrument;
 
 var
   Sequence, Patterns: array of byte;
@@ -247,7 +253,7 @@ begin
     MicromodInit := MICROMOD_ERROR_MODULE_FORMAT_NOT_SUPPORTED;
     Exit;
   end;
-  SetLength(Channels, NumChannels);
+//  SetLength(Channels, NumChannels);
   if not MicromodSetSamplingRate(SamplingRate) then
   begin
     MicromodInit := MICROMOD_ERROR_SAMPLING_RATE_NOT_SUPPORTED;
@@ -284,7 +290,7 @@ begin
   PatternDataLength := 4 * NumChannels * 64 * NumPatterns;
   SetLength(Patterns, PatternDataLength);
   Move(Module[1084], Patterns[0], PatternDataLength);
-  SetLength(Instruments, 32);
+//  SetLength(Instruments, 32);
   SampleOffset := 1084 + PatternDataLength;
   for InstIndex := 1 to 31 do
   begin
@@ -1068,7 +1074,8 @@ begin
 end;
 
 const
-  SAMPLING_FREQ: longint = 48000; { 48khz. }
+//  SAMPLING_FREQ: longint = 48000; { 48khz. }
+  SAMPLING_FREQ = 48000; { 48khz. }
   NUM_CHANNELS: longint = 2;     { Stereo. }
   BUFFER_SAMPLES: longint = 16384; { 64k per buffer. }
   NUM_BUFFERS: longint = 8;     { 8 buffers. }
@@ -1107,7 +1114,9 @@ var
 
 var
   Semaphore: THandle;
-  MixBuffer: array Of SmallInt;
+//  MixBuffer: array Of SmallInt;
+  MixBuffer: array [0..SAMPLING_FREQ * 2 div 5 - 1] of SmallInt;
+
   MixIndex, MixLength: LongInt;
 
 
@@ -1232,7 +1241,7 @@ begin
   SamplesRemaining := InitialSamples;
 
   { Initialise Mix Buffer. }
-  SetLength(MixBuffer, SAMPLING_FREQ * 2 div 5);
+//  SetLength(MixBuffer, SAMPLING_FREQ * 2 div 5);
 
   ismultithread := false;
   { Play Through Once. }
@@ -1249,7 +1258,10 @@ begin
       I_Sleep(10);
 
     if mod_msg = MOD_MSG_STOP then
+    begin
+      WaitForSingleObject(Semaphore, INFINITE);
       break;
+    end;
 
     { Get audio from replay. }
     Count := BUFFER_SAMPLES;
@@ -1285,6 +1297,15 @@ begin
   mod_msg := MOD_MSG_NONE;
 end;
 
+function threadproc(p: pointer): integer; stdcall;
+begin
+  mod_status := MOD_STATUS_PLAYING;
+  LoadModule;
+  PlayModule;
+  result := 0;
+  mod_status := MOD_STATUS_IDLE;
+end;
+
 procedure I_PlayMod(const data: pointer; const size: integer);
 begin
   if mod_status = MOD_STATUS_PLAYING then
@@ -1295,6 +1316,9 @@ begin
   end;
 
   mod_thread.Wait;
+  mod_thread.Free;
+
+  mod_thread := TDThread.Create(@threadproc);
 
   mod_datapointer := data;
   mod_datasize := size;
@@ -1319,15 +1343,6 @@ end;
 procedure I_StopMod;
 begin
   mod_msg := MOD_MSG_STOP;
-end;
-
-function threadproc(p: pointer): integer; stdcall;
-begin
-  mod_status := MOD_STATUS_PLAYING;
-  LoadModule;
-  PlayModule;
-  result := 0;
-  mod_status := MOD_STATUS_IDLE;
 end;
 
 procedure I_InitMod;
