@@ -739,7 +739,7 @@ begin
 
   infotable[0].filepos := f.Position;
   infotable[0].size := 0;
-  infotable[0].name := stringtochar8(amapname);
+  infotable[0].name := stringtochar8(strupper(amapname));
 
   infotable[1].filepos := f.Position;
   infotable[1].size := fnumthings * SizeOf(doommapthing_t);
