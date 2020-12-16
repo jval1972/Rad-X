@@ -165,6 +165,8 @@ const
   ML_SLIDELINE = 4096;
 // Front side is "complete"
   ML_TWOSIDEDCOMPLETE = 8192;
+// No clipping
+  ML_NOCLIP = 16384;
 
 type
 // Sector definition, from editing.

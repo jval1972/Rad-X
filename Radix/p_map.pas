@@ -349,6 +349,13 @@ begin
     exit;
   end;
 
+  // JVAL: 20201216 - No clipping flag for lines
+  if ld.flags and ML_NOCLIP <> 0 then
+  begin
+    result := true;
+    exit;
+  end;
+
   // JVAL: 20200520 - Forcefield in Doom format
   if tmthing.player <> nil then
     if ld.frontsector <> nil then
