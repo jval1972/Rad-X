@@ -365,9 +365,9 @@ end;
 
 procedure P_SlopesSetup;
 var
-  i: integer;
+  i, j: integer;
 begin
-  // JVAL: 20200225 - Create slopes from radix map 
+  // JVAL: 20200225 - Create slopes from radix map
   for i := 0 to numsectors - 1 do
   begin
     if sectors[i].renderflags and SRF_RADIXSLOPEFLOOR <> 0 then
@@ -386,6 +386,11 @@ begin
       sectors[i].slopeline := sectors[i].lines[0];
       sectors[i].slopeline.renderflags := sectors[i].slopeline.renderflags or LRF_SLOPED;
     end;
+    if sectors[i].renderflags and (SRF_RADIXSLOPEFLOOR or SRF_RADIXSLOPECEILING) <> 0 then
+      for j := 0 to sectors[i].linecount - 1 do
+        if sectors[i].lines[j].frontsector <> nil then
+          if sectors[i].lines[j].backsector <> nil then
+            sectors[i].lines[j].flags := sectors[i].lines[j].flags or ML_NOCLIP;
   end;
 
   for i := 0 to numlines - 1 do
