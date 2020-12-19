@@ -818,6 +818,7 @@ begin
     if playeringame[i] then
       if players[i].mo = nil then
       begin
+        I_Warning('G_DoLoadLevel(): Null player actor, is player start missing?'#13#10);
         gamestate := GS_DEMOSCREEN;
         D_StartTitle;
         exit;
