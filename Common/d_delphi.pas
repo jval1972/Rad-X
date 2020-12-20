@@ -2350,7 +2350,7 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-// TDNumberList
+// T2DNumberList
 constructor T2DNumberList.Create;
 begin
   fList := nil;
