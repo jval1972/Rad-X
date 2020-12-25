@@ -227,6 +227,9 @@ type
     no_toptextures: boolean;
     no_bottomtextures: boolean;
 {$ELSE}
+    // JVAL: 20201225 - Speed up maps with large number of slopes
+    floorvisslope: integer;
+    ceilingvisslope: integer;
     // [kb] For R_WiggleFix
     cachedheight: integer;
     scaleindex: integer;
