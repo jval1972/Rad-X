@@ -1660,9 +1660,13 @@ begin
     SCREENWIDTH := atoi(s1);
     if SCREENWIDTH > MAXWIDTH then
       SCREENWIDTH := MAXWIDTH;
+    if SCREENWIDTH < MINHEIGHT then
+      SCREENWIDTH := MINHEIGHT;
     SCREENHEIGHT := atoi(s2);
     if SCREENHEIGHT > MAXHEIGHT then
       SCREENHEIGHT := MAXHEIGHT;
+    if SCREENHEIGHT < MINHEIGHT then
+      SCREENHEIGHT := MINHEIGHT;
   end;
 
   p := M_CheckParm('-fullhd');
