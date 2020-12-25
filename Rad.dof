@@ -100,7 +100,7 @@ Conditionals=DOOM;
 DebugSourceDirs=F:\DelphiDoom_Release\RAD\src\Base\
 UsePackages=0
 [Parameters]
-RunParams=-nofullscreen -geom 1280x720 Example02_RAD_no_slopes.wad
+RunParams=
 HostApplication=
 Launcher=
 UseLauncher=0
