@@ -709,6 +709,7 @@ begin
     P_CreateSecNodeList(thing, thing.x, thing.y);
     thing.touching_sectorlist := sector_list; // Attach to Thing's mobj_t
     sector_list := nil; // clear for next time
+
   end;
 
   // link into blockmap
