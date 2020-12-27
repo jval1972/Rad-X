@@ -969,6 +969,7 @@ begin
   
   if focallength = oldfocallength then
     exit;
+  oldfocallength := focallength;
 
   for i := 0 to FINEANGLES div 2 - 1 do
   begin
