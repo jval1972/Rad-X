@@ -335,7 +335,7 @@ const
   // Line rendering flags
   LRF_ISOLATED = 1;
   LRF_TRANSPARENT = 2;
-  LRF_SLOPED = 4;   // JVAL: Slopes
+  LRF_SLOPED = 4; // JVAL: Slopes
 
 const
   // Sector rendering flags
