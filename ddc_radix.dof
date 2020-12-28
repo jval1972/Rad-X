@@ -111,11 +111,11 @@ ProjectLang=
 RootDir=
 [Version Info]
 IncludeVerInfo=1
-AutoIncBuild=0
+AutoIncBuild=1
 MajorVer=2
 MinorVer=0
-Release=5
-Build=739
+Release=6
+Build=740
 Debug=0
 PreRelease=0
 Special=0
@@ -126,7 +126,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Jim Valavanis
 FileDescription=RAD Script DLL
-FileVersion=2.0.5.739
+FileVersion=2.0.6.740
 InternalName=
 LegalCopyright=Copyright 2016-2020, Jim Valavanis
 LegalTrademarks=
