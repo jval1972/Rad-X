@@ -129,6 +129,7 @@ end;
 procedure P_RunThinkers;
 var
   currentthinker: Pthinker_t;
+  nextthinker: Pthinker_t;
 begin
   currentthinker := thinkercap.next;
   if isgamefreezed then
@@ -140,7 +141,9 @@ begin
         // time to remove it
         currentthinker.next.prev := currentthinker.prev;
         currentthinker.prev.next := currentthinker.next;
+        nextthinker := currentthinker.next;
         Z_Free(currentthinker);
+        currentthinker := nextthinker;
       end
       else
       begin
@@ -148,8 +151,8 @@ begin
           if @currentthinker._function.acp1 = @P_MobjThinker then
             if Pmobj_t(currentthinker).player <> nil then
               currentthinker._function.acp1(currentthinker);
+        currentthinker := currentthinker.next;
       end;
-      currentthinker := currentthinker.next;
     end;
   end
   else
@@ -161,14 +164,16 @@ begin
         // time to remove it
         currentthinker.next.prev := currentthinker.prev;
         currentthinker.prev.next := currentthinker.next;
+        nextthinker := currentthinker.next;
         Z_Free(currentthinker);
+        currentthinker := nextthinker;
       end
       else
       begin
         if Assigned(currentthinker._function.acp1) then
           currentthinker._function.acp1(currentthinker);
+        currentthinker := currentthinker.next;
       end;
-      currentthinker := currentthinker.next;
     end;
   end;
 end;
