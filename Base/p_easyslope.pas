@@ -495,7 +495,7 @@ end;
 function P_SpawnEasySlopeThing(mthing: Pmapthing_t): Pmobj_t;
 begin
   result := P_SpawnMapThing(mthing);
-  if result then
+  if result <> nil then
     inc(numslopeitems);
 end;
 
