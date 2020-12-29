@@ -45,7 +45,6 @@ function gld_CeilingHeight(const sec: Psector_t; const x, y: float): float;
 implementation
 
 uses
-  m_fixed,
   gl_defs;
 
 function gld_ZatPointFloor(const s: Psector_t; const x, y: float): float;
