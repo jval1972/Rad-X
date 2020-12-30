@@ -372,7 +372,8 @@ uses
   radix_extra_sprites in 'Radix\radix_extra_sprites.pas',
   p_easyslope in 'Base\p_easyslope.pas',
   radix_vertical_fight in 'Radix\radix_vertical_fight.pas',
-  w_wadreader in 'Base\w_wadreader.pas';
+  w_wadreader in 'Base\w_wadreader.pas',
+  p_easyangle in 'Base\p_easyangle.pas';
 
 var
   Saved8087CW: Word;

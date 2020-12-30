@@ -100,7 +100,7 @@ Conditionals=DOOM;DLL;ShareMM
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
-RunParams=
+RunParams=-nofullscreen -geom 1366x768 -file test_angles_radix.wad
 HostApplication=F:\DelphiDoom_Release\DelphiDoom_Src\bin\Tools\DD_IDE.exe
 Launcher=
 UseLauncher=0

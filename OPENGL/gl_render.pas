@@ -1109,6 +1109,8 @@ type
     light: float; // the lightlevel of the flat
     z: float; // the z position of the flat (height)
     angle: float;
+    anglex, angley: float;
+    hasangle: boolean;
     gltexture: PGLTexture;
     {$IFNDEF HERETIC}
     uoffs, voffs: float; // the texture coordinates
@@ -2758,7 +2760,8 @@ begin
   end;
 end;
 
-procedure gld_AddFlat_Extra(sectornum: integer; pic, zheight: integer; isfloor: Boolean; ripple: boolean; angle: angle_t);
+procedure gld_AddFlat_Extra(sectornum: integer; pic, zheight: integer;
+  isfloor: boolean; ripple: boolean; angle: angle_t; anglex, angley: fixed_t);
 var
   {$IFDEF DOOM_OR_STRIFE}
   tempsec: sector_t; // needed for R_FakeFlat
@@ -2816,7 +2819,21 @@ begin
   flat.voffs := 0;
   {$ENDIF}
   flat.ripple := ripple;
-  flat.angle := (angle / $FFFFFFFF) * 360.0;
+
+  if angle <> 0 then
+  begin
+    flat.angle := (angle / ANGLE_MAX) * 360.0;
+    flat.anglex := anglex / FLATUVSCALE;
+    flat.angley := angley / FLATUVSCALE;
+    flat.hasangle := True;
+  end
+  else
+  begin
+    flat.angle := 0.0;
+    flat.anglex := 0.0;
+    flat.angley := 0.0;
+    flat.hasangle := False;
+  end;
 
   // get height from plane
   flat.z := zheight / MAP_SCALE;
@@ -2832,7 +2849,8 @@ begin
 end;
 
 // For mid textures (3d Floors)
-procedure gld_AddFlat_3dFloor(sectornum: integer; pic, zheight: integer; ripple: boolean; light: integer; angle: angle_t);
+procedure gld_AddFlat_3dFloor(sectornum: integer; pic, zheight: integer;
+  ripple: boolean; light: integer; angle: angle_t; anglex, angley: fixed_t);
 var
   {$IFDEF DOOM_OR_STRIFE}
   tempsec: sector_t; // needed for R_FakeFlat
@@ -2877,7 +2895,21 @@ begin
   flat.voffs := 0;
   {$ENDIF}
   flat.ripple := ripple;
-  flat.angle := (angle / $FFFFFFFF) * 360.0;
+
+  if angle <> 0 then
+  begin
+    flat.angle := (angle / ANGLE_MAX) * 360.0;
+    flat.anglex := anglex / FLATUVSCALE;
+    flat.angley := angley / FLATUVSCALE;
+    flat.hasangle := True;
+  end
+  else
+  begin
+    flat.angle := 0.0;
+    flat.anglex := 0.0;
+    flat.angley := 0.0;
+    flat.hasangle := False;
+  end;
 
   // get height from plane
   flat.z := zheight / MAP_SCALE;
@@ -3389,7 +3421,10 @@ bottomtexture:
         else if (backsector <> nil) and (seg.linedef.renderflags and LRF_ISOLATED = 0) and
                 (frontsector.ceilingpic <> skyflatnum) and (backsector.ceilingpic <> skyflatnum) then
         begin
-          gld_AddFlat_Extra(seg.frontsector.iSectorID, seg.backsector.floorpic, seg.frontsector.floorheight, False, seg.frontsector.renderflags and SRF_RIPPLE_CEILING <> 0, seg.backsector.floorangle);
+          gld_AddFlat_Extra(
+            seg.frontsector.iSectorID, seg.backsector.floorpic, seg.frontsector.floorheight,
+            False, seg.frontsector.renderflags and SRF_RIPPLE_CEILING <> 0,
+            seg.backsector.floorangle, seg.backsector.flooranglex, seg.backsector.floorangley);
         end;
       end;
     end;
@@ -3532,9 +3567,21 @@ begin
   {$ENDIF}
 
   glActiveTextureARB(GL_TEXTURE0_ARB);
-  glMatrixMode(GL_TEXTURE);
-  glPushMatrix;
-  glRotatef(flat.angle, 0, 0, 1);
+
+  if flat.hasangle then
+  begin
+    glMatrixMode(GL_TEXTURE);
+    glPushMatrix;
+    glTranslatef(
+      flat.anglex * flat.gltexture.texturescale {$IFDEF HEXEN}* 64 / flat.gltexture.width{$ENDIF},
+      -flat.angley * flat.gltexture.texturescale {$IFDEF HEXEN}* 64 / flat.gltexture.height{$ENDIF},
+      0.0);
+    glRotatef(flat.angle, 0, 0, 1);
+    glTranslatef(
+      -flat.anglex * flat.gltexture.texturescale {$IFDEF HEXEN}* 64 / flat.gltexture.width{$ENDIF},
+      flat.angley * flat.gltexture.texturescale {$IFDEF HEXEN}* 64 / flat.gltexture.height{$ENDIF},
+      0.0);
+  end;
 
   if flat.ripple then
   begin
@@ -3543,6 +3590,7 @@ begin
     glPushMatrix;
     glMultMatrixf(@rippletexmatrix);
   end;
+
   if not flat.ceiling and (sec.renderflags and SRF_SLOPEFLOOR <> 0) then
   begin
     // go through all loops of this sector
@@ -3596,10 +3644,13 @@ begin
   end;
 
   glActiveTextureARB(GL_TEXTURE0_ARB);
-  glMatrixMode(GL_TEXTURE);
-  glPopMatrix;
-  glMatrixMode(GL_MODELVIEW);
-  glActiveTextureARB(GL_TEXTURE0_ARB);
+  if flat.hasangle then
+  begin
+    glMatrixMode(GL_TEXTURE);
+    glPopMatrix;
+    glMatrixMode(GL_MODELVIEW);
+    glActiveTextureARB(GL_TEXTURE0_ARB);
+  end;
 
   {$IFNDEF HERETIC}
   if flat.hasoffset then
@@ -3668,7 +3719,21 @@ begin
     flat.voffs := plane.yoffs / FLATUVSCALE;
     {$ENDIF}
     flat.ripple := plane.renderflags and SRF_RIPPLE_CEILING <> 0;
-    flat.angle := (plane.angle / $FFFFFFFF) * 360.0;
+
+    if plane.angle <> 0 then
+    begin
+      flat.angle := (plane.angle / ANGLE_MAX) * 360.0;
+      flat.anglex := plane.anglex / FLATUVSCALE;
+      flat.angley := plane.angley / FLATUVSCALE;
+      flat.hasangle := True;
+    end
+    else
+    begin
+      flat.angle := 0.0;
+      flat.anglex := 0.0;
+      flat.angley := 0.0;
+      flat.hasangle := False;
+    end;
   end
   else // if it is a floor ...
   begin
@@ -3700,7 +3765,21 @@ begin
     flat.voffs := plane.yoffs / FLATUVSCALE;
     {$ENDIF}
     flat.ripple := plane.renderflags and SRF_RIPPLE_FLOOR <> 0;
-    flat.angle := (plane.angle / $FFFFFFFF) * 360.0;
+
+    if plane.angle <> 0 then
+    begin
+      flat.angle := (plane.angle / ANGLE_MAX) * 360.0;
+      flat.anglex := plane.anglex / FLATUVSCALE;
+      flat.angley := plane.angley / FLATUVSCALE;
+      flat.hasangle := True;
+    end
+    else
+    begin
+      flat.angle := 0.0;
+      flat.anglex := 0.0;
+      flat.angley := 0.0;
+      flat.hasangle := False;
+    end;
   end;
 
   // get height from plane
@@ -3750,9 +3829,13 @@ begin
     begin
       msec := @sectors[sectors[secID].midsec];
       if viewz < msec.floorheight then
-        gld_AddFlat_3dFloor(secID, msec.floorpic, msec.floorheight, msec.renderflags and SRF_RIPPLE_FLOOR <> 0, msec.lightlevel, msec.floorangle);
+        gld_AddFlat_3dFloor(
+          secID, msec.floorpic, msec.floorheight, msec.renderflags and SRF_RIPPLE_FLOOR <> 0,
+          msec.lightlevel, msec.floorangle, msec.flooranglex, msec.floorangley);
       if viewz > msec.ceilingheight then
-        gld_AddFlat_3dFloor(secID, msec.ceilingpic, msec.ceilingheight, msec.renderflags and SRF_RIPPLE_CEILING <> 0, sectors[secID].lightlevel, msec.ceilingangle);
+        gld_AddFlat_3dFloor(
+          secID, msec.ceilingpic, msec.ceilingheight, msec.renderflags and SRF_RIPPLE_CEILING <> 0,
+          sectors[secID].lightlevel, msec.ceilingangle, msec.ceilinganglex, msec.ceilingangley);
     end;
 
     // set rendered true
