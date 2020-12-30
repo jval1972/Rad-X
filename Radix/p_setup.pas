@@ -177,6 +177,7 @@ uses
   p_3dfloors, // JVAL: 3d Floors
   p_slopes,   // JVAL: Slopes
   p_easyslope,
+  p_easyangle, // JVAL: 20201229 - Easy floor and ceiling texture angle
   p_affectees,
   p_musinfo,
   p_animdefs,
@@ -717,8 +718,12 @@ begin
     ss.radixmapYadd := 0;
     ss.radixflags := 0;
     // JVAL: 20200221 - Texture angle
-    ss.floorangle := 0;
-    ss.ceilingangle := 0;
+    ss.floorangle := 0;     // JVAL: 20200221 - Texture angle
+    ss.flooranglex := 0;    // JVAL: 20201229 - Texture angle rover
+    ss.floorangley := 0;    // JVAL: 20201229 - Texture angle rover
+    ss.ceilingangle := 0;   // JVAL: 20200221 - Texture angle
+    ss.ceilinganglex := 0;  // JVAL: 20201229 - Texture angle rover
+    ss.ceilingangley := 0;  // JVAL: 20201229 - Texture angle rover
 {$IFDEF OPENGL}
     ss.floorlightlevel := ss.lightlevel;
     ss.ceilinglightlevel := ss.lightlevel;
@@ -726,6 +731,7 @@ begin
     // [kb] For R_WiggleFix
     ss.cachedheight := 0;
     ss.scaleindex := 0;
+    // JVAL: 20201225 - Speed up maps with large number of slopes
     ss.floorvisslope := -1;
     ss.ceilingvisslope := -1;
 {$ENDIF}
@@ -831,8 +837,7 @@ begin
     result := false;
     exit;
   end;
-  if (doomdnum = MT_RAISEFLOORTOANGLE) or (doomdnum = MT_LOWERFLOORTOANGLE) or
-     (doomdnum = MT_RAISECEILINGTOANGLE) or (doomdnum = MT_LOWERCEILINGTOANGLE) then
+  if P_IsEasySlopeItem(doomdnum) then
   begin
     result := false;
     exit;
@@ -2037,6 +2042,11 @@ begin
   if devparm then
     printf('P_LoadThings()'#13#10);
   P_LoadThings(lumpnum + Ord(ML_THINGS), P_RadixLump(lumpnum + Ord(ML_RTHINGS), 'RTHINGS'));
+
+  // JVAL: 20201229 - Easy floor and ceiling texture angle
+  if devparm then
+    printf('P_AdjustEasyAngle()'#13#10);
+  P_AdjustEasyAngle;
 
   if devparm then
     printf('P_LoadGrid()'#13#10);

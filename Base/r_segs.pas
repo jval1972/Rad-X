@@ -770,6 +770,8 @@ begin
                      (backsector.floorpic <> frontsector.floorpic) or
                      (backsector.lightlevel <> frontsector.lightlevel) or
                      (backsector.floorangle <> frontsector.floorangle) or
+                     (backsector.flooranglex <> frontsector.flooranglex) or
+                     (backsector.floorangley <> frontsector.floorangley) or
                      {$IFDEF DOOM_OR_STRIFE}
                      // killough 3/7/98: Add checks for (x,y) offsets
                      (backsector.floor_xoffs <> frontsector.floor_xoffs) or
@@ -790,6 +792,8 @@ begin
                        (backsector.ceilingpic <> frontsector.ceilingpic) or
                        (backsector.lightlevel <> frontsector.lightlevel) or
                        (backsector.ceilingangle <> frontsector.ceilingangle) or
+                       (backsector.ceilinganglex <> frontsector.ceilinganglex) or
+                       (backsector.ceilingangley <> frontsector.ceilingangley) or
                        {$IFDEF DOOM_OR_STRIFE}
                        // killough 3/7/98: Add checks for (x,y) offsets
                        (backsector.ceiling_xoffs <> frontsector.ceiling_xoffs) or
@@ -1381,6 +1385,8 @@ begin
                      (backsector.floorpic <> frontsector.floorpic) or
                      (backsector.lightlevel <> frontsector.lightlevel) or
                      (backsector.floorangle <> frontsector.floorangle) or
+                     (backsector.flooranglex <> frontsector.flooranglex) or
+                     (backsector.floorangley <> frontsector.floorangley) or
                      {$IFDEF DOOM_OR_STRIFE}
                      // killough 3/7/98: Add checks for (x,y) offsets
                      (backsector.floor_xoffs <> frontsector.floor_xoffs) or
@@ -1401,6 +1407,8 @@ begin
                        (backsector.ceilingpic <> frontsector.ceilingpic) or
                        (backsector.lightlevel <> frontsector.lightlevel) or
                        (backsector.ceilingangle <> frontsector.ceilingangle) or
+                       (backsector.ceilinganglex <> frontsector.ceilinganglex) or
+                       (backsector.ceilingangley <> frontsector.ceilingangley) or
                        {$IFDEF DOOM_OR_STRIFE}
                        // killough 3/7/98: Add checks for (x,y) offsets
                        (backsector.ceiling_xoffs <> frontsector.ceiling_xoffs) or
