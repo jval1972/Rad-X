@@ -1,7 +1,8 @@
-//------------------------------------------------------------------------------
 //
-//  DelphiDoom: A modified and improved DOOM engine for Windows
-//  based on original Linux Doom as published by "id Software"
+//  RAD: Recreation of the game "Radix - beyond the void"
+//       powered by the DelphiDoom engine
+//
+//  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
 //  Copyright (C) 2004-2020 by Jim Valavanis
 //
@@ -24,7 +25,7 @@
 //  Easy floor and ceiling texture rotation
 //
 //------------------------------------------------------------------------------
-//  Site  : http://sourceforge.net/projects/delphidoom/
+//  Site: https://sourceforge.net/projects/rad-x/
 //------------------------------------------------------------------------------
 
 {$I RAD.inc}
