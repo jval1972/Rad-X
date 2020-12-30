@@ -446,11 +446,13 @@ begin
         begin
           sc.MustGetLongWord;
           sectors[cursector].radixfloorslope.x := sc._LongWord;
+          sectors[cursector].flooranglex := RX_RadixX2Doom(@sectors[cursector], sc._LongWord);
         end;
       9: // floorangle_y
         begin
           sc.MustGetLongWord;
           sectors[cursector].radixfloorslope.y := sc._LongWord;
+          sectors[cursector].floorangley := RX_RadixY2Doom(@sectors[cursector], sc._LongWord);
         end;
      10: // ceilingangle
         begin
@@ -464,11 +466,13 @@ begin
         begin
           sc.MustGetLongWord;
           sectors[cursector].radixceilingslope.x := sc._LongWord;
+          sectors[cursector].ceilinganglex := RX_RadixX2Doom(@sectors[cursector], sc._LongWord);
         end;
      12: // ceilingangle_y
         begin
           sc.MustGetLongWord;
           sectors[cursector].radixceilingslope.y := sc._LongWord;
+          sectors[cursector].ceilingangley := RX_RadixY2Doom(@sectors[cursector], sc._LongWord);
         end;
      13: // heightnodesx
         begin

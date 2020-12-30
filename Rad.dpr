@@ -402,7 +402,8 @@ uses
   p_animdefs in 'Base\p_animdefs.pas',
   p_easyslope in 'Base\p_easyslope.pas',
   r_span32_ripple_z in 'Base\r_span32_ripple_z.pas',
-  g_gameplay in 'Radix\g_gameplay.pas';
+  g_gameplay in 'Radix\g_gameplay.pas',
+  p_easyangle in 'Base\p_easyangle.pas';
 
 var
   Saved8087CW: Word;
