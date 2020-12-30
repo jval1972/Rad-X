@@ -369,6 +369,52 @@ ACTOR VERTEXLOWERCEILINGTOANGLE 1257
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// FLOORTOANGLE
+ACTOR FLOORTOANGLE 1258
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    +PRECISESPAWNANGLE
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+        Stop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// CEILINGTOANGLE
+ACTOR CEILINGTOANGLE 1259
+{
+    HEALTH 1000
+    REACTIONTIME 8
+    RADIUS 16
+    HEIGHT 16
+    MASS 1000
+    SPEED 0
+    +NOBLOCKMAP
+    +NOCLIP
+    +DONTDRAW 
+    +NOGRAVITY 
+    +PRECISESPAWNANGLE
+    States
+    {
+    Spawn:
+        TNT1 A 1 
+        Stop
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // SMOKESPAWNER_UP_1
 // Spawns smoke upwards every 1 second (randomly)
 ACTOR SMOKESPAWNER_UP_1 1210
