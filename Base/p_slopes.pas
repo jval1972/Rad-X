@@ -375,6 +375,7 @@ begin
       RX_CalcFloorSlope(@sectors[i]);
       P_SlopesAlignPlane(@sectors[i], nil, SRF_SLOPEFLOOR, false);
       sectors[i].renderflags := sectors[i].renderflags and not SRF_RADIXSLOPEFLOOR;
+      sectors[i].renderflags := sectors[i].renderflags or SRF_SCALEDFLOORSLOPE;
       sectors[i].slopeline := sectors[i].lines[0];
       sectors[i].slopeline.renderflags := sectors[i].slopeline.renderflags or LRF_SLOPED;
     end;
@@ -383,6 +384,7 @@ begin
       RX_CalcCeilingSlope(@sectors[i]);
       P_SlopesAlignPlane(@sectors[i], nil, SRF_SLOPECEILING, false);
       sectors[i].renderflags := sectors[i].renderflags and not SRF_RADIXSLOPECEILING;
+      sectors[i].renderflags := sectors[i].renderflags or SRF_SCALEDCEILINGSLOPE;
       sectors[i].slopeline := sectors[i].lines[0];
       sectors[i].slopeline.renderflags := sectors[i].slopeline.renderflags or LRF_SLOPED;
     end;

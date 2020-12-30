@@ -216,6 +216,10 @@ type
     ceilingangle: angle_t; // JVAL: 20200221 - Texture angle
     ceilinganglex: fixed_t; // JVAL: 20201229 - Texture angle rover
     ceilingangley: fixed_t; // JVAL: 20201229 - Texture angle rover
+    floor_xscale: fixed_t;  // JVAL: 20201230 - Texture scale
+    floor_yscale: fixed_t;  // JVAL: 20201230 - Texture scale
+    ceiling_xscale: fixed_t;  // JVAL: 20201230 - Texture scale
+    ceiling_yscale: fixed_t;  // JVAL: 20201230 - Texture scale
     radixflags: integer; // JVAL: 20200407 - Pass sector flags from RADIX.DAT
 {$IFDEF OPENGL}
     floorlightlevel: smallint;
@@ -354,6 +358,8 @@ const
   SRF_SLOPED = SRF_SLOPEFLOOR + SRF_SLOPECEILING; // JVAL: Slopes
   SRF_RADIXSLOPEFLOOR = 128; // JVAL: Radix
   SRF_RADIXSLOPECEILING = 256; // JVAL: Radix
+  SRF_SCALEDFLOORSLOPE = 512; // JVAL: Scaled slopes
+  SRF_SCALEDCEILINGSLOPE = 1024; // JVAL: Scaled slopes
 
 const
   // Vissprite render flags

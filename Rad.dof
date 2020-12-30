@@ -100,7 +100,7 @@ Conditionals=DOOM;
 DebugSourceDirs=F:\DelphiDoom_Release\RAD\src\Base\
 UsePackages=0
 [Parameters]
-RunParams=-nofullscreen -geom 1366x768 -file test_angles_radix.wad
+RunParams=-nofullscreen -geom 1366x768 
 HostApplication=
 Launcher=
 UseLauncher=0

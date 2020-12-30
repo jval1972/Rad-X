@@ -724,6 +724,10 @@ begin
     ss.ceilingangle := 0;   // JVAL: 20200221 - Texture angle
     ss.ceilinganglex := 0;  // JVAL: 20201229 - Texture angle rover
     ss.ceilingangley := 0;  // JVAL: 20201229 - Texture angle rover
+    ss.floor_xscale := FRACUNIT;  // JVAL: 20201230 - Texture scale
+    ss.floor_yscale := FRACUNIT;  // JVAL: 20201230 - Texture scale
+    ss.ceiling_xscale := FRACUNIT;  // JVAL: 20201230 - Texture scale
+    ss.ceiling_yscale := FRACUNIT;  // JVAL: 20201230 - Texture scale
 {$IFDEF OPENGL}
     ss.floorlightlevel := ss.lightlevel;
     ss.ceilinglightlevel := ss.lightlevel;

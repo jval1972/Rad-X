@@ -248,6 +248,72 @@ end;
 var
   visslope: Pvisslope_t;
 
+var
+  du_scale, dv_scale: fixed_t;
+
+procedure calcslopescale;
+var
+  sec: Psector_t;
+  roverx, rovery: fixed_t;
+  angle: angle_t;
+  hr, h1, h2: fixed_t;
+  x1, x2, y1, y2: fixed_t;
+begin
+  sec := @sectors[visslope.sectorID];
+  if sec.renderflags and (SRF_SCALEDFLOORSLOPE or SRF_SCALEDCEILINGSLOPE) = 0 then
+  begin
+    du_scale := FRACUNIT;
+    dv_scale := FRACUNIT;
+    Exit;
+  end;
+
+  if visslope.virtualfloor then
+  begin
+    angle := sec.floorangle;
+    if angle = 0 then
+    begin
+      roverx := sec.lines[0].v1.x;
+      rovery := sec.lines[0].v1.y;
+    end
+    else
+    begin
+      roverx := sec.flooranglex;
+      rovery := sec.floorangley;
+    end;
+    hr := P_FloorHeight(sec, roverx, rovery);
+    x1 := roverx + 256 * fixedcosine[angle shr FRACBITS];
+    y1 := rovery + 256 * fixedsine[angle shr FRACBITS];
+    h1 := P_FloorHeight(sec, x1, y1);
+    x2 := roverx + 256 * fixedcosine[(angle + ANG90) shr FRACBITS];
+    y2 := rovery + 256 * fixedsine[(angle + ANG90) shr FRACBITS];
+    h2 := P_FloorHeight(sec, x2, y2);
+  end
+  else
+  begin
+    angle := sec.ceilingangle;
+    if angle = 0 then
+    begin
+      roverx := sec.lines[0].v1.x;
+      rovery := sec.lines[0].v1.y;
+    end
+    else
+    begin
+      roverx := sec.ceilinganglex;
+      rovery := sec.ceilingangley;
+    end;
+    hr := P_CeilingHeight(sec, roverx, rovery);
+    x1 := roverx + 256 * fixedcosine[angle shr FRACBITS];
+    y1 := rovery + 256 * fixedsine[angle shr FRACBITS];
+    h1 := P_CeilingHeight(sec, x1, y1);
+    x2 := roverx + 256 * fixedcosine[(angle + ANG90) shr FRACBITS];
+    y2 := rovery + 256 * fixedsine[(angle + ANG90) shr FRACBITS];
+    h2 := P_CeilingHeight(sec, x2, y2);
+  end;
+
+  du_scale := round(sqrt(256 * 256 + sqr(hr / FRACUNIT - h1 / FRACUNIT)) * 256);
+  dv_scale := round(sqrt(256 * 256 + sqr(hr / FRACUNIT - h2 / FRACUNIT)) * 256);
+end;
+
 //
 //  R_MapSlopePerPixelLight
 //  Slow, but accurate light
@@ -630,16 +696,16 @@ begin
   ds_x1 := x1;
   cnt := 0;
 
-{  tsin := sin(-ds_angle / ANGLE_MAX * 2 * pi);
-  tcos := cos(-ds_angle / ANGLE_MAX * 2 * pi);
-
-  tviewx := Round(viewx * tcos - viewy * tsin);
-  tviewy := Round(viewx * tsin + viewy * tcos);}
   tsin := ds_sine;
   tcos := ds_cosine;
 
   tviewx := Round((viewx - ds_anglex) * tcos - (viewy - ds_angley) * tsin) + ds_anglex;
   tviewy := Round((viewx - ds_anglex) * tsin + (viewy - ds_angley) * tcos) + ds_angley;
+
+  tviewx := FixedMul(Round((viewx - ds_anglex) * tcos - (viewy - ds_angley) * tsin), du_scale) + ds_anglex;
+  tviewy := FixedMul(Round((viewx - ds_anglex) * tsin + (viewy - ds_angley) * tcos), dv_scale) + ds_angley;
+//      xfrac1 := FixedMul(xfrac1, du_scale);
+//      yfrac1 := FixedMul(yfrac1, dv_scale);
 
   // JVAL: 20200430 - For slope lightmap
   yslopey := slyslope[y];
@@ -668,6 +734,14 @@ begin
       {$IFDEF DOOM_OR_STRIFE} + xoffs{$ENDIF} {$IFDEF HEXEN} + ds_xoffset{$ENDIF};
       yfrac1 := -tviewy - FixedMul(fixedsine[angle], length)
       {$IFDEF DOOM_OR_STRIFE} + yoffs{$ENDIF} {$IFDEF HEXEN} + ds_yoffset{$ENDIF};
+
+      xfrac1 := tviewx + FixedMul(fixedcosine[angle], FixedMul(length, du_scale))
+      {$IFDEF DOOM_OR_STRIFE} + xoffs{$ENDIF} {$IFDEF HEXEN} + ds_xoffset{$ENDIF};
+      yfrac1 := -tviewy - FixedMul(fixedsine[angle], FixedMul(length, dv_scale))
+      {$IFDEF DOOM_OR_STRIFE} + yoffs{$ENDIF} {$IFDEF HEXEN} + ds_yoffset{$ENDIF};
+
+//      xfrac1 := FixedMul(xfrac1, du_scale);
+//      yfrac1 := FixedMul(yfrac1, dv_scale);
 
       if x = x1 then
       begin
@@ -793,6 +867,8 @@ begin
 
   pl.top[pl.maxx + 1] := VISEND;
   pl.top[pl.minx - 1] := VISEND;
+
+  calcslopescale;
 
   ds_angle := pl.angle;
   if ds_angle <> 0 then
