@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -640,6 +640,9 @@ begin
 
   tviewx := Round((viewx - ds_anglex) * tcos - (viewy - ds_angley) * tsin) + ds_anglex;
   tviewy := Round((viewx - ds_anglex) * tsin + (viewy - ds_angley) * tcos) + ds_angley;
+
+//  tviewx := Round(viewx * tcos - viewy * tsin) + ds_anglex;
+//  tviewy := Round(viewx * tsin + viewy * tcos) + ds_angley;
 
   // JVAL: 20200430 - For slope lightmap
   yslopey := slyslope[y];

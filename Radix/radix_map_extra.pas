@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -446,15 +446,15 @@ begin
         begin
           sc.MustGetLongWord;
           sectors[cursector].radixfloorslope.x := sc._LongWord;
-          sectors[cursector].flooranglex := RX_RadixX2Doom(@sectors[cursector], sc._LongWord) * FRACUNIT;
-          sectors[cursector].floor_xoffs := -sectors[cursector].flooranglex;
+//          sectors[cursector].flooranglex := RX_RadixX2Doom(@sectors[cursector], sc._LongWord) * FRACUNIT;
+//          sectors[cursector].floor_xoffs := -sectors[cursector].flooranglex;
         end;
       9: // floorangle_y
         begin
           sc.MustGetLongWord;
           sectors[cursector].radixfloorslope.y := sc._LongWord;
-          sectors[cursector].floorangley := RX_RadixY2Doom(@sectors[cursector], sc._LongWord) * FRACUNIT;
-          sectors[cursector].floor_yoffs := -sectors[cursector].floorangley;
+//          sectors[cursector].floorangley := RX_RadixY2Doom(@sectors[cursector], sc._LongWord) * FRACUNIT;
+//          sectors[cursector].floor_yoffs := -sectors[cursector].floorangley;
         end;
      10: // ceilingangle
         begin
@@ -468,15 +468,15 @@ begin
         begin
           sc.MustGetLongWord;
           sectors[cursector].radixceilingslope.x := sc._LongWord;
-          sectors[cursector].ceilinganglex := RX_RadixX2Doom(@sectors[cursector], sc._LongWord) * FRACUNIT;
-          sectors[cursector].ceiling_xoffs := -sectors[cursector].ceilinganglex;
+//          sectors[cursector].ceilinganglex := RX_RadixX2Doom(@sectors[cursector], sc._LongWord) * FRACUNIT;
+//          sectors[cursector].ceiling_xoffs := -sectors[cursector].ceilinganglex;
         end;
      12: // ceilingangle_y
         begin
           sc.MustGetLongWord;
           sectors[cursector].radixceilingslope.y := sc._LongWord;
-          sectors[cursector].ceilingangley := RX_RadixY2Doom(@sectors[cursector], sc._LongWord) * FRACUNIT;
-          sectors[cursector].ceiling_yoffs := -sectors[cursector].ceilingangley;
+//          sectors[cursector].ceilingangley := RX_RadixY2Doom(@sectors[cursector], sc._LongWord) * FRACUNIT;
+//          sectors[cursector].ceiling_yoffs := -sectors[cursector].ceilingangley;
         end;
      13: // heightnodesx
         begin
