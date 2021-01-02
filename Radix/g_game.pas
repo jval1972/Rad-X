@@ -1740,10 +1740,6 @@ begin
   M_WriteFile(name, savebuffer, len);
   save_p := savebuffer;
 
-  len := integer(save_p) - integer(savebuffer);
-  M_AppendFile(name, savebuffer, len);
-  save_p := savebuffer;
-
   P_ArchivePlayers;
 
   len := integer(save_p) - integer(savebuffer);
