@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -83,6 +83,9 @@ begin
   for y := 0 to MN_SCREENSHOTHEIGHT - 1 do
   begin
     ypos := viewwindowy + ((y * viewheight) div MN_SCREENSHOTHEIGHT);
+    {$IFDEF OPENGL}
+    ypos := SCREENHEIGHT - ypos - 1;
+    {$ENDIF}
     ypos := GetIntegerInRange(ypos, 0, SCREENHEIGHT - 1);
     xlinesource := @buf[ypos * SCREENWIDTH * 4];
     for x := 0 to MN_SCREENSHOTWIDTH - 1 do
@@ -90,11 +93,7 @@ begin
       xpos := viewwindowx + ((x * viewwidth) div MN_SCREENSHOTWIDTH);
       xpos := GetIntegerInRange(xpos, 0, SCREENWIDTH - 1);
       c := xlinesource[xpos * 4 + 2] shl 16 + xlinesource[xpos * 4 + 1] shl 8 + xlinesource[xpos * 4];
-      {$IFDEF OPENGL}
-      mn_screenshotbuffer[(MN_SCREENSHOTHEIGHT - 1 - y) * MN_SCREENSHOTWIDTH + x] := V_FindAproxColorIndex(@videopal, c, 1, 255);
-      {$ELSE}
       mn_screenshotbuffer[y * MN_SCREENSHOTWIDTH + x] := V_FindAproxColorIndex(@videopal, c, 1, 255);
-      {$ENDIF}
     end;
   end;
   memfree(pointer(buf), bufsize);
