@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -365,6 +365,15 @@ begin
       R_AddInterpolationItem(@sec.ceiling_xoffs, iinteger);
       R_AddInterpolationItem(@sec.ceiling_yoffs, iinteger);
       {$ENDIF}
+      if sec.renderflags and SRF_INTERPOLATE_ROTATE <> 0 then
+      begin
+        R_AddInterpolationItem(@sec.floorangle, iangle);
+        R_AddInterpolationItem(@sec.flooranglex, iinteger);
+        R_AddInterpolationItem(@sec.floorangley, iinteger);
+        R_AddInterpolationItem(@sec.ceilingangle, iangle);
+        R_AddInterpolationItem(@sec.ceilinganglex, iinteger);
+        R_AddInterpolationItem(@sec.ceilingangley, iinteger);
+      end;
     end;
     inc(sec);
   end;

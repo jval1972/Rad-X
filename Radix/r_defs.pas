@@ -354,6 +354,7 @@ const
   SRF_SLOPED = SRF_SLOPEFLOOR + SRF_SLOPECEILING; // JVAL: Slopes
   SRF_RADIXSLOPEFLOOR = 128; // JVAL: Radix
   SRF_RADIXSLOPECEILING = 256; // JVAL: Radix
+  SRF_INTERPOLATE_ROTATE = 512; 
 
 const
   // Vissprite render flags
