@@ -523,48 +523,25 @@ begin
   baseproclist.Add('function key_lookcenter: integer;', @PS_key_lookcenter);
   baseproclist.Add('function key_lookright: integer;', @PS_key_lookright);
   baseproclist.Add('function key_lookleft: integer;', @PS_key_lookleft);
-  {$IFNDEF STRIFE}
   baseproclist.Add('function key_lookforward: integer;', @PS_key_lookforward);
-  {$ENDIF}
   baseproclist.Add('function key_strafeleft: integer;', @PS_key_strafeleft);
   baseproclist.Add('function key_straferight: integer;', @PS_key_straferight);
   baseproclist.Add('function key_fire: integer;', @PS_key_fire);
   baseproclist.Add('function key_use: integer;', @PS_key_use);
   baseproclist.Add('function key_strafe: integer;', @PS_key_strafe);
   baseproclist.Add('function key_speed: integer;', @PS_key_speed);
+  baseproclist.Add('function key_flyup: integer;', @PS_key_flyup);
+  baseproclist.Add('function key_flydown: integer;', @PS_key_flydown);
   baseproclist.Add('function key_weapon0: integer;', @PS_key_weapon0);
   baseproclist.Add('function key_weapon1: integer;', @PS_key_weapon1);
   baseproclist.Add('function key_weapon2: integer;', @PS_key_weapon2);
   baseproclist.Add('function key_weapon3: integer;', @PS_key_weapon3);
-  {$IFNDEF HEXEN}
   baseproclist.Add('function key_weapon4: integer;', @PS_key_weapon4);
   baseproclist.Add('function key_weapon5: integer;', @PS_key_weapon5);
   baseproclist.Add('function key_weapon6: integer;', @PS_key_weapon6);
   baseproclist.Add('function key_weapon7: integer;', @PS_key_weapon7);
-  {$ENDIF}
-  {$IFDEF HERETIC_OR_HEXEN}
-  baseproclist.Add('function key_flyup: integer;', @PS_key_flyup);
-  baseproclist.Add('function key_flydown: integer;', @PS_key_flydown);
-  baseproclist.Add('function key_flycenter: integer;', @PS_key_flycenter);
-  baseproclist.Add('function key_invleft: integer;', @PS_key_invleft);
-  baseproclist.Add('function key_invright: integer;', @PS_key_invright);
-  baseproclist.Add('function key_useartifact: integer;', @PS_key_useartifact);
-  {$ENDIF}
-  {$IFDEF STRIFE}
-  baseproclist.Add('function key_invleft: integer;', @PS_key_invleft);
-  baseproclist.Add('function key_invright: integer;', @PS_key_invright);
-  baseproclist.Add('function key_weapon8: integer;', @PS_key_weapon8);
-  baseproclist.Add('function key_weapon9: integer;', @PS_key_weapon9);
-  baseproclist.Add('function key_usehealth: integer;', @PS_key_usehealth);
-  baseproclist.Add('function key_invquery: integer;', @PS_key_invquery);
-  baseproclist.Add('function key_mission: integer;', @PS_key_mission);
-  baseproclist.Add('function key_invpop: integer;', @PS_key_invpop);
-  baseproclist.Add('function key_invkey: integer;', @PS_key_invkey);
-  baseproclist.Add('function key_invhome: integer;', @PS_key_invhome);
-  baseproclist.Add('function key_invend: integer;', @PS_key_invend);
-  baseproclist.Add('function key_invuse: integer;', @PS_key_invuse);
-  baseproclist.Add('function key_invdrop: integer;', @PS_key_invdrop);
-  {$ENDIF}
+  baseproclist.Add('function key_plasmabomb: integer;', @PS_key_plasmabomb);
+  baseproclist.Add('function key_afterburner: integer;', @PS_key_afterburner);
   baseproclist.Add('function mousebfire: integer;', @PS_mousebfire);
   baseproclist.Add('function mousebstrafe: integer;', @PS_mousebstrafe);
   baseproclist.Add('function mousebforward: integer;', @PS_mousebforward);

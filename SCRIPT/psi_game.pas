@@ -644,9 +644,7 @@ function PS_key_lookright: integer;
 
 function PS_key_lookleft: integer;
 
-{$IFNDEF STRIFE}
 function PS_key_lookforward: integer;
-{$ENDIF}
 
 function PS_key_strafeleft: integer;
 
@@ -660,6 +658,10 @@ function PS_key_strafe: integer;
 
 function PS_key_speed: integer;
 
+function PS_key_flyup: integer;
+
+function PS_key_flydown: integer;
+
 function PS_key_weapon0: integer;
 
 function PS_key_weapon1: integer;
@@ -668,7 +670,6 @@ function PS_key_weapon2: integer;
 
 function PS_key_weapon3: integer;
 
-{$IFNDEF HEXEN}
 function PS_key_weapon4: integer;
 
 function PS_key_weapon5: integer;
@@ -676,49 +677,10 @@ function PS_key_weapon5: integer;
 function PS_key_weapon6: integer;
 
 function PS_key_weapon7: integer;
-{$ENDIF}
 
-{$IFDEF HERETIC_OR_HEXEN}
-function PS_key_flyup: integer;
+function PS_key_plasmabomb: integer;
 
-function PS_key_flydown: integer;
-
-function PS_key_flycenter: integer;
-
-function PS_key_invleft: integer;
-
-function PS_key_invright: integer;
-
-function PS_key_useartifact: integer;
-{$ENDIF}
-
-{$IFDEF STRIFE}
-function PS_key_invleft: integer;
-
-function PS_key_invright: integer;
-
-function PS_key_weapon8: integer;
-
-function PS_key_weapon9: integer;
-
-function PS_key_usehealth: integer;
-
-function PS_key_invquery: integer;
-
-function PS_key_mission: integer;
-
-function PS_key_invpop: integer;
-
-function PS_key_invkey: integer;
-
-function PS_key_invhome: integer;
-
-function PS_key_invend: integer;
-
-function PS_key_invuse: integer;
-
-function PS_key_invdrop: integer;
-{$ENDIF}
+function PS_key_afterburner: integer;
 
 function PS_mousebfire: integer;
 
@@ -5800,355 +5762,143 @@ end;
 
 function PS_key_right: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_right;
+  Result := key_right;
 end;
 
 function PS_key_left: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_left;
+  Result := key_left;
 end;
 
 function PS_key_up: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_up;
+  Result := key_up;
 end;
 
 function PS_key_down: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_down;
+  Result := key_down;
 end;
 
 function PS_key_lookup: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_lookup;
+  Result := key_lookup;
 end;
 
 function PS_key_lookdown: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_lookdown;
+  Result := key_lookdown;
 end;
 
 function PS_key_lookcenter: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_lookcenter;
+  Result := key_lookcenter;
 end;
 
 function PS_key_lookright: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_lookright;
+  Result := key_lookright;
 end;
 
 function PS_key_lookleft: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_lookleft;
+  Result := key_lookleft;
 end;
 
-{$IFNDEF STRIFE}
 function PS_key_lookforward: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_lookforward;
+  Result := key_lookforward;
 end;
-{$ENDIF}
 
 function PS_key_strafeleft: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_strafeleft;
+  Result := key_strafeleft;
 end;
 
 function PS_key_straferight: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_straferight;
+  Result := key_straferight;
 end;
 
 function PS_key_fire: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_fire;
+  Result := key_fire;
 end;
 
 function PS_key_use: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_use;
+  Result := key_use;
 end;
 
 function PS_key_strafe: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_strafe;
+  Result := key_strafe;
 end;
 
 function PS_key_speed: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_speed;
+  Result := key_speed;
 end;
 
-function PS_key_weapon0: integer;
-begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_weapon0;
-end;
-
-function PS_key_weapon1: integer;
-begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_weapon1;
-end;
-
-function PS_key_weapon2: integer;
-begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_weapon2;
-end;
-
-function PS_key_weapon3: integer;
-begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_weapon3;
-end;
-
-{$IFNDEF HEXEN}
-function PS_key_weapon4: integer;
-begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_weapon4;
-end;
-
-function PS_key_weapon5: integer;
-begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_weapon5;
-end;
-
-function PS_key_weapon6: integer;
-begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_weapon6;
-end;
-
-function PS_key_weapon7: integer;
-begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_weapon7;
-end;
-{$ENDIF}
-
-{$IFDEF HERETIC_OR_HEXEN}
 function PS_key_flyup: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_flyup;
+  Result := key_flyup;
 end;
 
 function PS_key_flydown: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_flydown;
+  Result := key_flydown;
 end;
 
-function PS_key_flycenter: integer;
+function PS_key_weapon0: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_flycenter;
+  Result := key_weapon0;
 end;
 
-function PS_key_invleft: integer;
+function PS_key_weapon1: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_invleft;
+  Result := key_weapon1;
 end;
 
-function PS_key_invright: integer;
+function PS_key_weapon2: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_invright;
+  Result := key_weapon2;
 end;
 
-function PS_key_useartifact: integer;
+function PS_key_weapon3: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_useartifact;
-end;
-{$ENDIF}
-
-{$IFDEF STRIFE}
-function PS_key_invleft: integer;
-begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_invleft;
+  Result := key_weapon3;
 end;
 
-function PS_key_invright: integer;
+function PS_key_weapon4: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_invright;
+  Result := key_weapon4;
 end;
 
-function PS_key_weapon8: integer;
+function PS_key_weapon5: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_weapon8;
+  Result := key_weapon5;
 end;
 
-function PS_key_weapon9: integer;
+function PS_key_weapon6: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_weapon9;
+  Result := key_weapon6;
 end;
 
-function PS_key_usehealth: integer;
+function PS_key_weapon7: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_usehealth;
+  Result := key_weapon7;
 end;
 
-function PS_key_invquery: integer;
+function PS_key_plasmabomb: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_invquery;
+  Result := key_plasmabomb;
 end;
 
-function PS_key_mission: integer;
+function PS_key_afterburner: integer;
 begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_mission;
+  Result := key_afterburner;
 end;
-
-function PS_key_invpop: integer;
-begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_invpop;
-end;
-
-function PS_key_invkey: integer;
-begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_invkey;
-end;
-
-function PS_key_invhome: integer;
-begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_invhome;
-end;
-
-function PS_key_invend: integer;
-begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_invend;
-end;
-
-function PS_key_invuse: integer;
-begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_invuse;
-end;
-
-function PS_key_invdrop: integer;
-begin
-  if demoplayback or demorecording or netgame then
-    Result := 0
-  else
-    Result := key_invdrop;
-end;
-{$ENDIF}
 
 function PS_mousebfire: integer;
 begin
