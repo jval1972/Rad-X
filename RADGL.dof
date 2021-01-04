@@ -100,7 +100,7 @@ Conditionals=DOOM;OPENGL
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
-RunParams=-nofullscreen -geom 1366x768
+RunParams=-nofullscreen -geom 1366x768 F:\DelphiDoom_Release\RAD\Releases\RAD_1.0.1.745.r873\EXAMPLES\EXAMPLE_01\EXAMPLE_01.wad
 HostApplication=
 Launcher=
 UseLauncher=0
