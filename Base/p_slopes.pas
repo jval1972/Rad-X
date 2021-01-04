@@ -66,6 +66,7 @@ uses
   doomdata,
   m_vectors,
   radix_map_extra,
+  p_gravity,
   p_setup,
   p_mobj_h,
   p_spec,
@@ -316,6 +317,7 @@ end;
 procedure P_FixSlopedMobjs(const s: Psector_t);
 var
   mo: Pmobj_t;
+  grav: fixed_t;
 begin
   mo := s.thinglist;
   // JVAL: 20200429 - Sector thinglist consistency
@@ -323,9 +325,20 @@ begin
   while (mo <> nil) and (mo.sectorvalidcount <> sectorvalidcount) do
   begin
     mo.sectorvalidcount := sectorvalidcount;
+
+    if mo.flags and MF_NOGRAVITY <> 0 then
+      grav := 0
+    else
+      grav := FixedMul(P_GetSectorGravity(s), mo.gravity);
+
     mo.floorz := P_FloorHeight(s, mo.x, mo.y);
-    if  mo.z < mo.floorz then
-      mo.z := mo.floorz;
+    mo.ceilingz := P_CeilingHeight(s, mo.x, mo.y);
+
+    if mo.z - grav < mo.floorz then
+      mo.z := mo.floorz
+    else if (grav = 0) or (mo.z > mo.ceilingz) then
+      mo.z := mo.ceilingz;
+
     mo := mo.snext;
   end;
 end;
