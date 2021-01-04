@@ -5762,147 +5762,234 @@ end;
 
 function PS_key_right: integer;
 begin
-  Result := key_right;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_right;
 end;
 
 function PS_key_left: integer;
 begin
-  Result := key_left;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_left;
 end;
 
 function PS_key_up: integer;
 begin
-  Result := key_up;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_up;
 end;
 
 function PS_key_down: integer;
 begin
-  Result := key_down;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_down;
 end;
 
 function PS_key_lookup: integer;
 begin
-  Result := key_lookup;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_lookup;
 end;
 
 function PS_key_lookdown: integer;
 begin
-  Result := key_lookdown;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_lookdown;
 end;
 
 function PS_key_lookcenter: integer;
 begin
-  Result := key_lookcenter;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_lookcenter;
 end;
 
 function PS_key_lookright: integer;
 begin
-  Result := key_lookright;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_lookright;
 end;
 
 function PS_key_lookleft: integer;
 begin
-  Result := key_lookleft;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_lookleft;
 end;
 
 function PS_key_lookforward: integer;
 begin
-  Result := key_lookforward;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_lookforward;
 end;
 
 function PS_key_strafeleft: integer;
 begin
-  Result := key_strafeleft;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_strafeleft;
 end;
 
 function PS_key_straferight: integer;
 begin
-  Result := key_straferight;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_straferight;
 end;
 
 function PS_key_fire: integer;
 begin
-  Result := key_fire;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_fire;
 end;
 
 function PS_key_use: integer;
 begin
-  Result := key_use;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_use;
 end;
 
 function PS_key_strafe: integer;
 begin
-  Result := key_strafe;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_strafe;
 end;
 
 function PS_key_speed: integer;
 begin
-  Result := key_speed;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_speed;
 end;
 
 function PS_key_flyup: integer;
 begin
-  Result := key_flyup;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_flyup;
 end;
 
 function PS_key_flydown: integer;
 begin
-  Result := key_flydown;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_flydown;
 end;
 
 function PS_key_weapon0: integer;
 begin
-  Result := key_weapon0;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_weapon0;
 end;
 
 function PS_key_weapon1: integer;
 begin
-  Result := key_weapon1;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_weapon1;
 end;
 
 function PS_key_weapon2: integer;
 begin
-  Result := key_weapon2;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_weapon2;
 end;
 
 function PS_key_weapon3: integer;
 begin
-  Result := key_weapon3;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_weapon3;
 end;
 
 function PS_key_weapon4: integer;
 begin
-  Result := key_weapon4;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_weapon4;
 end;
 
 function PS_key_weapon5: integer;
 begin
-  Result := key_weapon5;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_weapon5;
 end;
 
 function PS_key_weapon6: integer;
 begin
-  Result := key_weapon6;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_weapon6;
 end;
 
 function PS_key_weapon7: integer;
 begin
-  Result := key_weapon7;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_weapon7;
 end;
 
 function PS_key_plasmabomb: integer;
 begin
-  Result := key_plasmabomb;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_plasmabomb;
 end;
 
 function PS_key_afterburner: integer;
 begin
-  Result := key_afterburner;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := key_afterburner;
 end;
 
 function PS_mousebfire: integer;
 begin
-  Result := mousebfire;
+  if demoplayback or demorecording or netgame then
+    Result := 0
+  else
+    Result := mousebfire;
 end;
 
 function PS_mousebstrafe: integer;
@@ -6365,6 +6452,7 @@ begin
   rsector.RegisterPropertyHelper(@TRTLSectorInterpolate_R, @TRTLSectorInterpolate_W, 'Interpolate');
   rsector.RegisterPropertyHelper(@TRTLSectorGravity_R, @TRTLSectorGravity_W, 'Gravity');
   rsector.RegisterMethod(@TRTLSector.PlaySound, 'PlaySound');
+  rsector.RegisterMethod(@TRTLSector.MoveZ, 'MoveZ');
   rsector.RegisterMethod(@TRTLSector.SetFloorSlope, 'SetFloorSlope');
   rsector.RegisterMethod(@TRTLSector.SetCeilingSlope, 'SetCeilingSlope');
 
