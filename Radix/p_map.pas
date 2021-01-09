@@ -1245,7 +1245,7 @@ begin
   end;
 
   if stackceiling then
-    if thing.z + thing.height >= thing.floorz then
+    if thing.z + FRACUNIT >= thing.floorz then
       thing.z := thing.z - FRACUNIT;
 
   // JVAL: Slopes - 3d Floors SOS -> Get right P_GetThingFloorType()
