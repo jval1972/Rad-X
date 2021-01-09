@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -1495,6 +1495,8 @@ var
 
 procedure M_MenuSound;
 begin
+  if gamestate = GS_ENDOOM then
+    exit;
   if menusnd = -1 then
     menusnd := S_GetSoundNumForName(radixsounds[Ord(sfx_SndButtonClick)].name);
   if menusnd > 0 then
@@ -3214,6 +3216,12 @@ var
   i: integer;
   palette: PByteArray;
 begin
+  if gamestate = GS_ENDOOM then
+  begin
+    result := false;
+    exit;
+  end;
+
   if (ev.data1 = KEY_RALT) or (ev.data1 = KEY_LALT) then
   begin
     m_altdown := ev._type = ev_keydown;
