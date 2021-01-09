@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -1048,6 +1048,7 @@ var
   sec: Psector_t;
   newsec: Psector_t;
   checkzheights: boolean; // JVAL: 20200507 - Slide to floors/ceilings
+  stackceiling: boolean;
 begin
   floatok := false;
   tmfailfromptinair := false;
@@ -1115,6 +1116,8 @@ begin
     if p.floorslidetics > 0 then
       checkzheights := false;
 
+  stackceiling := false;
+
   if (thing.flags and MF_NOCLIP = 0) and checkzheights then
   begin
     if tmceilingz - tmfloorz < thing.height then
@@ -1134,8 +1137,13 @@ begin
         newsec := R_PointInSubsector(x, y).sector;
         if newsec.renderflags and SRF_SLOPECEILING = 0 then
         begin
-          result := false;  // mobj must lower itself to fit
-          exit;
+          if p <> nil then
+            stackceiling := true
+          else
+          begin
+            result := false;  // mobj must lower itself to fit
+            exit;
+          end;
         end;
       end;
     end;
@@ -1235,6 +1243,10 @@ begin
     end;
 
   end;
+
+  if stackceiling then
+    if thing.z + thing.height >= thing.floorz then
+      thing.z := thing.z - FRACUNIT;
 
   // JVAL: Slopes - 3d Floors SOS -> Get right P_GetThingFloorType()
   if thing.flags2_ex and MF2_EX_FLOORCLIP <> 0 then
@@ -1481,7 +1493,7 @@ begin
 {  if slidemo.player <> nil then
     if Pplayer_t(slidemo.player).floorslidetics <= 0 then
       Pplayer_t(slidemo.player).floorslidetics := 1;}
-      
+
   repeat
     inc(hitcount);
 
