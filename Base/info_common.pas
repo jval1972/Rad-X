@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -73,9 +73,14 @@ procedure Info_AddStateOwner(const st: Pstate_t; const moidx: integer);
 
 procedure Info_InitStateOwners;
 
+procedure Info_SaveActions;
+
+function Info_RestoreActions: boolean;
+
 implementation
 
 uses
+  d_think,
   i_system,
   info;
 
@@ -551,6 +556,31 @@ begin
       Info_AddStateOwner(@states[N.Numbers[j]], i);
     N.Free;
   end;
+end;
+
+var
+  save_actions: array[0..Ord(DO_NUMSTATES) - 1] of actionf_t;
+  actions_saved: boolean = false;
+
+procedure Info_SaveActions;
+var
+  i: integer;
+begin
+  for i := 0 to Ord(DO_NUMSTATES) - 1 do
+    save_actions[i] := states[i].action;
+  actions_saved := true;
+end;
+
+function Info_RestoreActions: boolean;
+var
+  i: integer;
+begin
+  result := actions_saved;
+  if not result then
+    exit;
+
+  for i := 0 to Ord(DO_NUMSTATES) - 1 do
+    states[i].action := save_actions[i];
 end;
 
 end.
