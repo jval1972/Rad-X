@@ -14,6 +14,12 @@ Textured automap.
 
 Dynamic lights.
 
+Screenshots.
+
+In game menu to configure gameplay, key bindings & screen resolution.
+
+Use Doom game editing utilities to create custom content.
+
 ## Downloads
 [version 1.0.1.745.r873 (20201228 - win32)](https://sourceforge.net/projects/rad-x/files/RAD%201.0/RAD_1.0.1.745.r873_win32.zip/download)
 
