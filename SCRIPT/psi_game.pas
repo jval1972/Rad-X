@@ -4009,7 +4009,7 @@ end;
 function PS_GetSectorFloorAngleX(const sec: Integer): Integer;
 begin
   if (sec >= 0) and (sec < numsectors) then
-    Result := sectors[sec].ceilinganglex
+    Result := sectors[sec].flooranglex
   else
     Result := 0;
 end;
@@ -4018,7 +4018,7 @@ procedure PS_SetSectorFloorAngleX(const sec: Integer; const angx: Integer);
 begin
   if (sec >= 0) and (sec < numsectors) then
   begin
-    sectors[sec].ceilinganglex := angx;
+    sectors[sec].flooranglex := angx;
     sectors[sec].renderflags := sectors[sec].renderflags or SRF_INTERPOLATE_ROTATE;
   end;
 end;
@@ -4026,7 +4026,7 @@ end;
 function PS_GetSectorFloorAngleY(const sec: Integer): Integer;
 begin
   if (sec >= 0) and (sec < numsectors) then
-    Result := sectors[sec].ceilingangley
+    Result := sectors[sec].floorangley
   else
     Result := 0;
 end;
@@ -4035,7 +4035,7 @@ procedure PS_SetSectorFloorAngleY(const sec: Integer; const angy: Integer);
 begin
   if (sec >= 0) and (sec < numsectors) then
   begin
-    sectors[sec].ceilingangley := angy;
+    sectors[sec].floorangley := angy;
     sectors[sec].renderflags := sectors[sec].renderflags or SRF_INTERPOLATE_ROTATE;
   end;
 end;
