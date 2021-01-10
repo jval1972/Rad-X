@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -1548,9 +1548,12 @@ begin
     begin
       for j := sprites[i].numframes - 1 downto 0 do
       begin
-        sflump := @sprites[i].spriteframes[j].lump;
-        for k := 7 downto 0 do
-          gld_BindPatch(gld_RegisterPatch(firstspritelump + sflump[k], Ord(CR_DEFAULT)), Ord(CR_DEFAULT));
+        if sprites[i].spriteframes[j].rotate >= 0 then
+        begin
+          sflump := @sprites[i].spriteframes[j].lump;
+          for k := 7 downto 0 do
+            gld_BindPatch(gld_RegisterPatch(firstspritelump + sflump[k], Ord(CR_DEFAULT)), Ord(CR_DEFAULT));
+        end;
       end;
     end;
 
