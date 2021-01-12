@@ -57,6 +57,9 @@ function PS_TActor(const key: LongWord): LongWord;
 function PS_GetActorTarget(const key: LongWord): LongWord;
 procedure PS_SetActorTarget(const key: LongWord; const targ: LongWord);
 
+function PS_GetActorTracer(const key: LongWord): LongWord;
+procedure PS_SetActorTracer(const key: LongWord; const trac: LongWord);
+
 function PS_GetActorMaster(const key: LongWord): LongWord;
 procedure PS_SetActorMaster(const key: LongWord; const mast: LongWord);
 
@@ -918,6 +921,34 @@ begin
   if mo = nil then
     Exit;
   mo.target := mobj_from_key(targ);
+end;
+
+function PS_GetActorTracer(const key: LongWord): LongWord;
+var
+  mo: Pmobj_t;
+  tmo: Pmobj_t;
+begin
+  mo := mobj_from_key(key);
+  if mo = nil then
+  begin
+    Result := ACTOR_INVALID;
+    Exit;
+  end;
+  tmo := mo.tracer;
+  if tmo <> nil then
+    Result := tmo.key
+  else
+    Result := ACTOR_INVALID;
+end;
+
+procedure PS_SetActorTracer(const key: LongWord; const trac: LongWord);
+var
+  mo: Pmobj_t;
+begin
+  mo := mobj_from_key(key);
+  if mo = nil then
+    Exit;
+  mo.tracer := mobj_from_key(trac);
 end;
 
 function PS_GetActorMaster(const key: LongWord): LongWord;
@@ -2595,6 +2626,16 @@ end;
 procedure TRTLActorTarget_R(Self: TRTLActor; var T: TRTLActor);
 begin
   T := TRTLActor(PS_GetActorTarget(LongWord(Self)));
+end;
+
+procedure TRTLActorTracer_W(Self: TRTLActor; const T: TRTLActor);
+begin
+  PS_SetActorTracer(LongWord(Self), LongWord(T));
+end;
+
+procedure TRTLActorTracer_R(Self: TRTLActor; var T: TRTLActor);
+begin
+  T := TRTLActor(PS_GetActorTracer(LongWord(Self)));
 end;
 
 procedure TRTLActorMaster_W(Self: TRTLActor; const T: TRTLActor);
@@ -6089,6 +6130,7 @@ begin
 
   cactor.RegisterProperty('key', 'LongWord', iptR);
   cactor.RegisterProperty('Target', '!TActor', iptRW);
+  cactor.RegisterProperty('Tracer', '!TActor', iptRW);
   cactor.RegisterProperty('Master', '!TActor', iptRW);
   cactor.RegisterProperty('X', 'fixed_t', iptRW);
   cactor.RegisterProperty('Y', 'fixed_t', iptRW);
@@ -6320,6 +6362,7 @@ begin
 
   ractor.RegisterPropertyHelper(@TRTLActorkey_R, nil, 'key');
   ractor.RegisterPropertyHelper(@TRTLActorTarget_R, @TRTLActorTarget_W, 'Target');
+  ractor.RegisterPropertyHelper(@TRTLActorTracer_R, @TRTLActorTracer_W, 'Tracer');
   ractor.RegisterPropertyHelper(@TRTLActorMaster_R, @TRTLActorMaster_W, 'Master');
   ractor.RegisterPropertyHelper(@TRTLActorX_R, @TRTLActorX_W, 'X');
   ractor.RegisterPropertyHelper(@TRTLActorY_R, @TRTLActorY_W, 'Y');
