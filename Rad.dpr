@@ -403,7 +403,15 @@ uses
   p_easyslope in 'Base\p_easyslope.pas',
   r_span32_ripple_z in 'Base\r_span32_ripple_z.pas',
   g_gameplay in 'Radix\g_gameplay.pas',
-  p_easyangle in 'Base\p_easyangle.pas';
+  p_easyangle in 'Base\p_easyangle.pas',
+  libflac in 'AUDIOLIB\libflac.pas',
+  libogg in 'AUDIOLIB\libogg.pas',
+  libsndfile in 'AUDIOLIB\libsndfile.pas',
+  libvorbis in 'AUDIOLIB\libvorbis.pas',
+  c_lib in 'C_LIB\c_lib.pas',
+  scanf in 'C_LIB\scanf.pas',
+  scanf_c in 'C_LIB\scanf_c.pas',
+  audiolib in 'AUDIOLIB\audiolib.pas';
 
 var
   Saved8087CW: Word;

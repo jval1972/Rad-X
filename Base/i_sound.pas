@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -82,6 +82,9 @@ implementation
 
 uses
   d_delphi,
+{$IFNDEF DLL}
+  audiolib, // JVAL: 20210117 - Search for various sound formats
+{$ENDIF}
   MMSystem,
   z_zone,
   m_argv,
@@ -121,8 +124,9 @@ type
   soundparam_t = record
     length: integer;
     offset: integer;
-    freq: word;
-    avgfreq: word;
+    wavformat: word;
+    freq: LongWord;
+    avgfreq: LongWord;
     samples: byte;
     channels: byte;
     wavestatus: wavestatus_t;
@@ -188,7 +192,7 @@ begin
     
   sprintf(namebuf, 'ds%s', [sfxinfo.name]);
   result := W_CheckNumForName(namebuf);
-  
+
   if result = -1 then // JVAL, search without the ds prefix
     result := W_CheckNumForName(sfxinfo.name);
 end;
@@ -202,18 +206,25 @@ const
   CS_fmt  = $20746D66;  // fmt' ' in HEX
   CS_data = $61746164;  // data in HEX
 
+{$IFNDEF DLL}
+const
+  CS_fLac = 1130450022; // fLac
+  CS_OggS = 1399285583; // OggS
+{$ENDIF}  
+
 procedure I_CacheSFX(const sfxid: integer);
 var
   name: string;
   sfx: Psfxinfo_t;
   lump: integer;
-  strm: TPakStream;
+  strm: TDStream;
   wavfilename: string;
   externalwavfilenames: TDStringList;
   foundwav: boolean;
   wavformat: TWAVEFORMATEX;
   i: integer;
   l: LongWord;
+  len: integer;
   datalen: integer;
   dwtype: LongWord;
   dwlen: integer;
@@ -233,28 +244,36 @@ begin
 
   if useexternalwav and (sparm.wavestatus <> ws_wavefailed) then
   begin
-  // JVAL: Create a list with external wav filenames to check
-    externalwavfilenames := TDStringList.Create;
-    externalwavfilenames.Add('ds%s.wav', [sfx.name]);
-    externalwavfilenames.Add('%s.wav', [sfx.name]);
+    // JVAL: 20210117 - Search for various sound formats
+{$IFNDEF DLL}
+    foundwav := Audiolib_SearchSoundPAK(sfx.name, strm, 0);
 
-    for i := 0 to externalwavfilenames.Count - 1 do
+    if not foundwav then
+{$ENDIF}
     begin
-      wavfilename := externalwavfilenames[i];
-      if preferewavnamesingamedirectory then
-        strm := TPakStream.Create(wavfilename, pm_prefered, gamedirectories)
-      else
-        strm := TPakStream.Create(wavfilename, pm_short, '', FOLDER_SOUNDS);
-      strm.OnBeginBusy := I_BeginDiskBusy;
-      foundwav := strm.IOResult = 0;
-      if foundwav then
-        break
-      else
-        strm.Free;
+      // JVAL: Create a list with external wav filenames to check
+      externalwavfilenames := TDStringList.Create;
+      externalwavfilenames.Add('ds%s.wav', [sfx.name]);
+      externalwavfilenames.Add('%s.wav', [sfx.name]);
+
+      for i := 0 to externalwavfilenames.Count - 1 do
+      begin
+        wavfilename := externalwavfilenames[i];
+        if preferewavnamesingamedirectory then
+          strm := TPakStream.Create(wavfilename, pm_prefered, gamedirectories)
+        else
+          strm := TPakStream.Create(wavfilename, pm_short, '', FOLDER_SOUNDS);
+        strm.OnBeginBusy := I_BeginDiskBusy;
+        foundwav := strm.IOResult = 0;
+        if foundwav then
+          break
+        else
+          strm.Free;
+      end;
+
+      externalwavfilenames.Free;
+
     end;
-
-    externalwavfilenames.Free;
-
   end;
 
   datalen := 0;
@@ -310,6 +329,7 @@ begin
           end;
 
           strm.Seek(dwlen - SizeOf(TWAVEFORMATEX), sFromCurrent);
+          sparm.wavformat := wavformat.wFormatTag;
           sparm.freq := wavformat.nSamplesPerSec;
           sparm.avgfreq := wavformat.nAvgBytesPerSec;
           sparm.samples := wavformat.wBitsPerSample;
@@ -325,7 +345,7 @@ begin
           end;
           donedata := true;
           sparm.length := dwlen;
-          sfx.data := Z_Malloc(dwlen, PU_SOUND, sfx.data);
+          sfx.data := Z_Malloc(dwlen, PU_SOUND, @sfx.data);
           strm.Read(sfx.data^, dwlen);
           sparm.offset := 0;
         end
@@ -378,13 +398,19 @@ begin
     end;
 
     sfx.data := W_CacheLumpNum(sfx.lumpnum, PU_SOUND);
+    len := W_LumpLength(sfx.lumpnum);
     PLData := sfx.data;
+{$IFNDEF DLL}
+    if (PLData[0] = CS_fLac) or (PLData[0] = CS_OggS) then
+      if Audiolib_DecodeSoundWAD(sfx.data, len, @sfx.data, len, 1) then
+        PLData := sfx.data;
+{$ENDIF}
     PLData2 := PLongWordArray(Integer(PLData) + 2);
     if PLData[0] = CS_RIFF then // WAVE Sound inside WAD as lump
     begin
 
       repeat
-        if W_LumpLength(sfx.lumpnum) < 8 + SizeOf(TWAVEFORMATEX) then
+        if len < 8 + SizeOf(TWAVEFORMATEX) then
         begin
           I_Warning('CacheSFX(): Sound %s has invalid size'#13#10, [sfx.name]);
           break;
@@ -399,7 +425,7 @@ begin
           break;
         end;
 
-        while i < (W_LumpLength(sfx.lumpnum) div 4) - 2 do
+        while i < (len div 4) - 2 do
         begin
           dwtype := PLData[i];
           if (dwtype <> CS_fmt) and (dwtype <> CS_data) then
@@ -430,6 +456,7 @@ begin
             end;
 
             i := i + dwlen div 4; // JVAL: skip WAVEFORMAT record
+            sparm.wavformat := wavformat.wFormatTag;
             sparm.freq := wavformat.nSamplesPerSec;
             sparm.avgfreq := wavformat.nAvgBytesPerSec;
             sparm.samples := wavformat.wBitsPerSample;
@@ -437,7 +464,7 @@ begin
           end
           else if (dwtype = CS_data) and not donedata then
           begin
-            if dwlen > W_LumpLength(sfx.lumpnum) - i * 4 then
+            if dwlen > len - i * 4 then
             begin
               I_Warning('CacheSFX(): Sound %s has invalid data CHUNK'#13#10, [sfx.name]);
               break;
@@ -464,7 +491,8 @@ begin
     end
     else
     begin
-      sparm.length := W_LumpLength(sfx.lumpnum);
+      sparm.length := len;
+      sparm.wavformat := WAVE_FORMAT_PCM;
       sparm.freq := Psoundheader_t(sfx.data).freq;
       sparm.avgfreq := Psoundheader_t(sfx.data).freq;
       sparm.samples := 8;
@@ -479,6 +507,7 @@ var
   sparm: Psoundparam_t;
 begin
   sparm := GetSoundParam(sfxid);
+  SampleFormat.wFormatTag := sparm.wavformat;
   SampleFormat.nSamplesPerSec := sparm.freq;
   SampleFormat.nAvgBytesPerSec := sparm.avgfreq;
   SampleFormat.wBitsPerSample := sparm.samples;
