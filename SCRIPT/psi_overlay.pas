@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -49,6 +49,7 @@ const
 type
   overlayindexes_t = array[0..OVERLAYSIZE - 1] of Integer;
   overlayindexes_p = ^overlayindexes_t;
+
 type
   overlaydrawer_t = record
     proc: Integer;
@@ -59,8 +60,8 @@ type
     iparam1: Integer;
     iparam2: Integer;
     iparam3: Integer;
-    istart: Integer;
-    iend: Integer;
+    xparam2: Integer;
+    yparam2: Integer;
   end;
   Poverlaydrawer_t = ^overlaydrawer_t;
   overlaydrawer_tArray = array[0..$FFF] of overlaydrawer_t;
@@ -80,6 +81,7 @@ type
   private
     foverlayscreen: PByteArray;
     foverlaylookup: overlaylookup_p;
+    foverlaylookupsize: integer;
     ffirstoverlaylookup: overlayindexes_t;
     flastoverlaylookup: overlayindexes_t;
     fdrawers: Poverlaydrawer_tArray;
@@ -94,6 +96,8 @@ type
     procedure DrawPatch(const x, y: Integer; const patchlump: Integer); overload; virtual;
     procedure DrawPatch(const x, y: Integer; const patch: Ppatch_t); overload; virtual;
     procedure DrawPixel(const x, y: Integer; const red, green, blue: byte); virtual;
+    procedure DrawRect(const x1, y1, x2, y2: Integer; const red, green, blue: byte); virtual;
+    procedure DrawLine(const x1, y1, x2, y2: Integer; const red, green, blue: byte); virtual;
     procedure DrawText(const txt: string; const align: Integer;
       const x, y: Integer);
     procedure DrawDrawer(const i: Integer); virtual;
@@ -112,6 +116,10 @@ type
       const x, y: Integer);
     procedure AddPixel(const ticks: Integer; const red, green, blue: byte;
       const x, y: Integer);
+    procedure AddRect(const ticks: Integer; const red, green, blue: byte;
+      const x1, y1, x2, y2: Integer);
+    procedure AddLine(const ticks: Integer; const red, green, blue: byte;
+      const x1, y1, x2, y2: Integer);
     procedure AddText(const ticks: Integer; const txt: string; const align: Integer;
       const x, y: Integer);
     procedure AddLeftText(const ticks: Integer; const txt: string;
@@ -127,6 +135,7 @@ type
     {$IFDEF OPENGL}
     function GetOverlayHeight: Integer;
     {$ENDIF}
+    procedure ReCalcOverlayLookUp;
     property Modified: Boolean read fmodified;
     property overlayscreen: PByteArray read foverlayscreen;
     property overlaylookup: overlaylookup_p read foverlaylookup;
@@ -145,6 +154,12 @@ procedure PS_OverlayDrawPatch(const ticks: Integer; const patchname: string;
 
 procedure PS_OverlayDrawPixel(const ticks: Integer; const red, green, blue: byte;
   const x, y: Integer);
+
+procedure PS_OverlayDrawRect(const ticks: Integer; const red, green, blue: byte;
+  const x1, y1, x2, y2: Integer);
+
+procedure PS_OverlayDrawLine(const ticks: Integer; const red, green, blue: byte;
+  const x1, y1, x2, y2: Integer);
 
 procedure PS_OverlayDrawText(const ticks: Integer; const txt: string; const align: Integer;
   const x, y: Integer);
@@ -190,6 +205,7 @@ uses
   i_system,
   mt_utils,
   p_tick,
+  sc_engine,
   {$IFNDEF OPENGL}
   r_hires,
   {$ENDIF}
@@ -205,7 +221,8 @@ constructor TOverlayDrawer.Create;
 begin
   inherited Create;
   foverlayscreen := malloc(OVERLAYSIZE * SizeOf(Byte));
-  foverlaylookup := malloc(V_GetScreenWidth(SCN_FG) * V_GetScreenHeight(SCN_FG) * SizeOf(PByte));
+  foverlaylookupsize := V_GetScreenWidth(SCN_FG) * V_GetScreenHeight(SCN_FG) * SizeOf(PByte);
+  foverlaylookup := malloc(foverlaylookupsize);
   CalcOverlayLookUp;
   fdrawers := malloc(OVR_GROWSTEP * SizeOf(overlaydrawer_t));
   fnumdrawers := 0;
@@ -220,7 +237,7 @@ end;
 destructor TOverlayDrawer.Destroy;
 begin
   memfree(Pointer(fdrawers), frealnumdrawers * SizeOf(overlaydrawer_t));
-  memfree(Pointer(foverlaylookup), V_GetScreenWidth(SCN_FG) * V_GetScreenHeight(SCN_FG) * SizeOf(PByte));
+  memfree(Pointer(foverlaylookup), foverlaylookupsize);
   memfree(Pointer(foverlayscreen), OVERLAYSIZE * SizeOf(Byte));
   inherited;
 end;
@@ -240,14 +257,14 @@ begin
   h := V_GetScreenHeight(SCN_FG);
   for y := 0 to h - 1 do
   begin
-    th := Round(y / h * OVERLAYHEIGHT);
+    th := Trunc(y / h * OVERLAYHEIGHT);
     if th >= OVERLAYHEIGHT then
       th := OVERLAYHEIGHT - 1
     else if th < 0 then
       th := 0;
     for x := 0 to w - 1 do
     begin
-      tw := Round(x / w * OVERLAYWIDTH);
+      tw := Trunc(x / w * OVERLAYWIDTH);
       if tw >= OVERLAYWIDTH then
         tw := OVERLAYWIDTH - 1
       else if tw < 0 then
@@ -261,6 +278,14 @@ begin
       Inc(idx);
     end;
   end;
+end;
+
+procedure TOverlayDrawer.ReCalcOverlayLookUp;
+begin
+  memfree(Pointer(foverlaylookup), foverlaylookupsize);
+  foverlaylookupsize := V_GetScreenWidth(SCN_FG) * V_GetScreenHeight(SCN_FG) * SizeOf(PByte);
+  foverlaylookup := malloc(foverlaylookupsize);
+  CalcOverlayLookUp;
 end;
 
 procedure TOverlayDrawer.SaveToBuffer(var buff: pointer);
@@ -413,6 +438,159 @@ begin
   end;
 end;
 
+procedure TOverlayDrawer.DrawRect(const x1, y1, x2, y2: Integer; const red, green, blue: byte);
+var
+  pos1: Integer;
+  pos2: Integer;
+  pb: PByte;
+  c: byte;
+  x, y: integer;
+  xx1, xx2, yy1, yy2: integer;
+begin
+  c := V_FindAproxColorIndex(@videopal, blue or (green shl 8) or (red shl 16));
+
+  xx1 := GetIntegerInRange(x1, 0, OVERLAYWIDTH - 1);
+  xx2 := GetIntegerInRange(x2, 0, OVERLAYWIDTH - 1);
+  yy1 := GetIntegerInRange(y1, 0, OVERLAYWIDTH - 1);
+  yy2 := GetIntegerInRange(y2, 0, OVERLAYWIDTH - 1);
+  for y := yy1 to yy2 do
+  begin
+    pos1 := BufferPosition(xx1, y);
+    pb := @foverlayscreen[pos1];
+    for x := xx1 to xx2 do
+    begin
+      pb^ := c;
+      inc(pb);
+    end;
+  end;
+  pos1 := BufferPosition(xx1, yy1);
+  pos2 := BufferPosition(xx2, yy2);
+  NotifyDrawSize(pos1, pos2);
+end;
+
+procedure TOverlayDrawer.DrawLine(const x1, y1, x2, y2: Integer; const red, green, blue: byte);
+// Bresenham's Line Algorithm.  Byte, March 1988, pp. 249-253.
+// Modified from http://www.efg2.com/Lab/Library/Delphi/Graphics/Bresenham.txt and tested.
+var
+  c: byte;
+  pos1: Integer;
+  pos2: Integer;
+  pb: PByte;
+  xx1, xx2, yy1, yy2: integer;
+  a, b: integer;        // displacements in x and y
+  d: integer;           // decision variable
+  diag_inc: integer;    // d's increment for diagonal steps
+  dx_diag: integer;     // diagonal x step for next pixel
+  dx_nondiag: integer;  // nondiagonal x step for next pixel
+  dy_diag: integer;     // diagonal y step for next pixel
+  dy_nondiag: integer;  // nondiagonal y step for next pixel
+  i: integer;           // loop index
+  nondiag_inc: integer; // d's increment for nondiagonal steps
+  swap: integer;        // temporary variable for swap
+  x, y: integer;        // current x and y coordinates
+begin
+  c := V_FindAproxColorIndex(@videopal, blue or (green shl 8) or (red shl 16));
+  pos1 := BufferPosition(x1, y1);
+  pos2 := BufferPosition(x2, y2);
+  NotifyDrawSize(pos1, pos2); // JVAL: Inaccurate, since we haven't check clipping yet
+
+  // Special case - Horizontal line
+  if y1 = y2 then
+  begin
+    if IsIntegerInRange(y1, 0, OVERLAYHEIGHT - 1) then
+    begin
+      xx1 := GetIntegerInRange(x1, 0, OVERLAYWIDTH - 1);
+      xx2 := GetIntegerInRange(x2, 0, OVERLAYWIDTH - 1);
+      pos1 := BufferPosition(xx1, y1);
+      pb := @foverlayscreen[pos1];
+      for x := xx1 to xx2 do
+      begin
+        pb^ := c;
+        inc(pb);
+      end;
+    end;
+    Exit;
+  end;
+
+  // Special case - Verical line
+  if x1 = x2 then
+  begin
+    if IsIntegerInRange(x1, 0, OVERLAYWIDTH - 1) then
+    begin
+      yy1 := GetIntegerInRange(y1, 0, OVERLAYHEIGHT - 1);
+      yy2 := GetIntegerInRange(y2, 0, OVERLAYHEIGHT - 1);
+      pos1 := BufferPosition(x1, yy1);
+      pb := @foverlayscreen[pos1];
+      for y := yy1 to yy2 do
+      begin
+        pb^ := c;
+        inc(pb, OVERLAYWIDTH);
+      end;
+    end;
+    Exit;
+  end;
+
+  x := x1;              // line starting point
+  y := y1;
+  // Determine drawing direction and step to the next pixel.
+  a := x2 - x1;         // difference in x dimension
+  b := y2 - y1;         // difference in y dimension
+  // Determine whether end point lies to right or left of start point.
+  if a < 0 then         // drawing towards smaller x values?
+  begin
+    a := -a;            // make 'a' positive
+    dx_diag := -1
+  end
+  else
+    dx_diag := 1;
+
+  // Determine whether end point lies above or below start point.
+  if b < 0 then         // drawing towards smaller x values?
+  begin
+    b := -b;            // make 'a' positive
+    dy_diag := -1
+  end
+  else
+    dy_diag := 1;
+
+  // Identify octant containing end point.
+  if a < b then
+  begin
+    swap := a;
+    a := b;
+    b := swap;
+    dx_nondiag := 0;
+    dy_nondiag := dy_diag
+  end
+  else
+  begin
+    dx_nondiag := dx_diag;
+    dy_nondiag := 0
+  end;
+
+  d := b + b - a;       // initial value for d is 2*b - a
+  nondiag_inc := b + b; // set initial d increment values
+  diag_inc := b + b - a - a;
+  for i := 0 to a do
+  begin   /// draw the a+1 pixels
+    pos1 := BufferPosition(x, y);
+    if (x >= 0) and (y < OVERLAYSIZE) then
+      foverlayscreen[pos1] := c;
+    if d < 0 then       // is midpoint above the line?
+    begin               // step nondiagonally
+      x := x + dx_nondiag;
+      y := y + dy_nondiag;
+      d := d + nondiag_inc  // update decision variable
+    end
+    else
+    begin               // midpoint is above the line; step diagonally}
+      x := x + dx_diag;
+      y := y + dy_diag;
+      d := d + diag_inc
+    end;
+  end;
+end;
+
 procedure TOverlayDrawer.DrawText(const txt: string; const align: Integer;
   const x, y: Integer);
 var
@@ -480,6 +658,8 @@ const
   OVR_DRAWTEXT = 1;
   OVR_DRAWPATCH = 2;
   OVR_DRAWPIXEL = 3;
+  OVR_DRAWRECT = 4;
+  OVR_DRAWLINE = 5;
 
 procedure TOverlayDrawer.DrawDrawer(const i: Integer);
 var
@@ -493,6 +673,10 @@ begin
       DrawPatch(dr.xparam, dr.yparam, dr.iparam1);
     OVR_DRAWPIXEL:
       DrawPixel(dr.xparam, dr.yparam, dr.iparam1, dr.iparam2, dr.iparam3);
+    OVR_DRAWRECT:
+      DrawRect(dr.xparam, dr.yparam, dr.xparam2, dr.yparam2, dr.iparam1, dr.iparam2, dr.iparam3);
+    OVR_DRAWLINE:
+      DrawLine(dr.xparam, dr.yparam, dr.xparam2, dr.yparam2, dr.iparam1, dr.iparam2, dr.iparam3);
   else
     begin
       I_Warning('TOverlayDrawer.DrawDrawer(): Unknown drawer type "%d"'#13#10, [dr.proc]);
@@ -504,9 +688,21 @@ end;
 procedure TOverlayDrawer.NotifyDrawSize(const astart, aend: Integer);
 begin
   if astart < fstart then
+  begin
     fstart := astart;
+    if fstart < 0 then
+      fstart := 0
+    else if fstart >= OVERLAYSIZE then
+      fstart := OVERLAYSIZE - 1;
+  end;
   if aend > fend then
+  begin
     fend := aend;
+    if fend < 0 then
+      fend := 0
+    else if fend >= OVERLAYSIZE then
+      fend := OVERLAYSIZE - 1;
+  end;
 end;
 
 function TOverlayDrawer.BufferPosition(const x, y: Integer): Integer;
@@ -565,6 +761,52 @@ begin
   pdrawer.tick := leveltime + ticks;
   pdrawer.xparam := x;
   pdrawer.yparam := y;
+  pdrawer.iparam1 := red;
+  pdrawer.iparam2 := green;
+  pdrawer.iparam3 := blue;
+end;
+
+procedure TOverlayDrawer.AddRect(const ticks: Integer; const red, green, blue: byte;
+  const x1, y1, x2, y2: Integer);
+var
+  pdrawer: Poverlaydrawer_t;
+begin
+  if ticks < 0 then
+    Exit;
+
+  Grow;
+  pdrawer := @fdrawers[fnumdrawers];
+  Inc(fnumdrawers);
+
+  pdrawer.proc := OVR_DRAWRECT;
+  pdrawer.tick := leveltime + ticks;
+  pdrawer.xparam := x1;
+  pdrawer.yparam := y1;
+  pdrawer.xparam2 := x2;
+  pdrawer.yparam2 := y2;
+  pdrawer.iparam1 := red;
+  pdrawer.iparam2 := green;
+  pdrawer.iparam3 := blue;
+end;
+
+procedure TOverlayDrawer.AddLine(const ticks: Integer; const red, green, blue: byte;
+  const x1, y1, x2, y2: Integer);
+var
+  pdrawer: Poverlaydrawer_t;
+begin
+  if ticks < 0 then
+    Exit;
+
+  Grow;
+  pdrawer := @fdrawers[fnumdrawers];
+  Inc(fnumdrawers);
+
+  pdrawer.proc := OVR_DRAWLINE;
+  pdrawer.tick := leveltime + ticks;
+  pdrawer.xparam := x1;
+  pdrawer.yparam := y1;
+  pdrawer.xparam2 := x2;
+  pdrawer.yparam2 := y2;
   pdrawer.iparam1 := red;
   pdrawer.iparam2 := green;
   pdrawer.iparam3 := blue;
@@ -1310,6 +1552,100 @@ begin
   CmdOverlayDrawText(s1, s2, OVR_ALIGN_CENTER);
 end;
 
+procedure CmdOverlayDrawRect(const s1, s2: string);
+var
+  ticks: Integer;
+  x1, y1, x2, y2: Integer;
+  red, green, blue: byte;
+  sc: TScriptEngine;
+begin
+  if gamestate <> GS_LEVEL then
+  begin
+    printf('Overlay drawer is available only when playing the game'#13#10);
+    Exit;
+  end;
+
+  if (s1 = '') or (s2 = '') then
+  begin
+    printf('overlaydrawrect [ticks] [x1] [y1] [x2] [y2] [red] [green] [blue]'#13#10);
+    Exit;
+  end;
+
+  ticks := atoi(s1, -1);
+  if ticks < 0 then
+  begin
+    printf('Ticks must be a positive number'#13#10);
+    Exit;
+  end;
+
+  sc := TScriptEngine.Create(s2);
+
+  sc.MustGetInteger;
+  x1 := sc._Integer;
+  sc.MustGetInteger;
+  y1 := sc._Integer;
+  sc.MustGetInteger;
+  x2 := sc._Integer;
+  sc.MustGetInteger;
+  y2 := sc._Integer;
+  sc.MustGetInteger;
+  red := sc._Integer;
+  sc.MustGetInteger;
+  green := sc._Integer;
+  sc.MustGetInteger;
+  blue := sc._Integer;
+  sc.Free;
+
+  overlay.AddRect(ticks, red, green, blue, x1, y1, x2, y2);
+end;
+
+procedure CmdOverlayDrawLine(const s1, s2: string);
+var
+  ticks: Integer;
+  x1, y1, x2, y2: Integer;
+  red, green, blue: byte;
+  sc: TScriptEngine;
+begin
+  if gamestate <> GS_LEVEL then
+  begin
+    printf('Overlay drawer is available only when playing the game'#13#10);
+    Exit;
+  end;
+
+  if (s1 = '') or (s2 = '') then
+  begin
+    printf('overlaydrawline [ticks] [x1] [y1] [x2] [y2] [red] [green] [blue]'#13#10);
+    Exit;
+  end;
+
+  ticks := atoi(s1, -1);
+  if ticks < 0 then
+  begin
+    printf('Ticks must be a positive number'#13#10);
+    Exit;
+  end;
+
+  sc := TScriptEngine.Create(s2);
+
+  sc.MustGetInteger;
+  x1 := sc._Integer;
+  sc.MustGetInteger;
+  y1 := sc._Integer;
+  sc.MustGetInteger;
+  x2 := sc._Integer;
+  sc.MustGetInteger;
+  y2 := sc._Integer;
+  sc.MustGetInteger;
+  red := sc._Integer;
+  sc.MustGetInteger;
+  green := sc._Integer;
+  sc.MustGetInteger;
+  blue := sc._Integer;
+  sc.Free;
+
+  overlay.AddLine(ticks, red, green, blue, x1, y1, x2, y2);
+end;
+
 procedure PS_InitOverlay;
 begin
   overlay := TOverlayDrawer.Create;
@@ -1318,6 +1654,8 @@ begin
   C_AddCmd('overlaydrawtextright', @CmdOverlayDrawTextRight);
   C_AddCmd('overlaydrawtextcenter', @CmdOverlayDrawTextCenter);
   C_AddCmd('overlaydrawpixel, overlayputpixel', @CmdOverlayPutPixel);
+  C_AddCmd('overlaydrawrect', @CmdOverlayDrawRect);
+  C_AddCmd('overlaydrawline', @CmdOverlayDrawLine);
 end;
 
 procedure PS_ShutDownOverlay;
@@ -1373,6 +1711,20 @@ begin
     overlay.AddPixel(ticks, red, green, blue, x, y);
 end;
 
+procedure PS_OverlayDrawRect(const ticks: Integer; const red, green, blue: byte;
+  const x1, y1, x2, y2: Integer);
+begin
+  if overlay <> nil then
+    overlay.AddRect(ticks, red, green, blue, x1, y1, x2, y2);
+end;
+
+procedure PS_OverlayDrawLine(const ticks: Integer; const red, green, blue: byte;
+  const x1, y1, x2, y2: Integer);
+begin
+  if overlay <> nil then
+    overlay.AddLine(ticks, red, green, blue, x1, y1, x2, y2);
+end;
+
 procedure PS_OverlayDrawText(const ticks: Integer; const txt: string; const align: Integer;
   const x, y: Integer);
 begin
@@ -1411,6 +1763,8 @@ begin
     RegisterMethod('Procedure Clear');
     RegisterMethod('Procedure DrawPatch( const ticks : Integer; const patchname : string; const x, y : Integer)');
     RegisterMethod('Procedure DrawPixel( const ticks : Integer; const red, green, blue : byte; const x, y : Integer)');
+    RegisterMethod('Procedure DrawRect( const ticks : Integer; const red, green, blue : byte; const x1, y1, x2, y2 : Integer)');
+    RegisterMethod('Procedure DrawLine( const ticks : Integer; const red, green, blue : byte; const x1, y1, x2, y2 : Integer)');
     RegisterMethod('Procedure DrawText( const ticks : Integer; const txt : string; const align : Integer; const x, y : Integer)');
     RegisterMethod('Procedure DrawLeftText( const ticks : Integer; const txt : string; const x, y : Integer)');
     RegisterMethod('Procedure DrawRightText( const ticks : Integer; const txt : string; const x, y : Integer)');
@@ -1427,6 +1781,8 @@ begin
     RegisterVirtualMethod(@TOverlayDrawer.Clear, 'Clear');
     RegisterMethod(@TOverlayDrawer.AddPatch, 'DrawPatch');
     RegisterMethod(@TOverlayDrawer.AddPixel, 'DrawPixel');
+    RegisterMethod(@TOverlayDrawer.AddRect, 'DrawRect');
+    RegisterMethod(@TOverlayDrawer.AddLine, 'DrawLine');
     RegisterMethod(@TOverlayDrawer.AddText, 'DrawText');
     RegisterMethod(@TOverlayDrawer.AddLeftText, 'DrawLeftText');
     RegisterMethod(@TOverlayDrawer.AddRightText, 'DrawRightText');

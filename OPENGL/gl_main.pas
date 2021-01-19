@@ -1013,6 +1013,7 @@ begin
     AM_Start;               // Start the aytomap
     C_AdjustScreenSize;
     R_ExecuteSetViewSize;   // Set-up new SCREENWIDTH & SCREENHEIGHT
+    overlay.ReCalcOverlayLookUp;
     result := true;
   end;
 end;
