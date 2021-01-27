@@ -31,6 +31,22 @@ Works with radix v2 remix edition.
 
 History
 -------
+2021027 - v.1.0.15.747.r923
+---------------------------
+Fixed rotating textures OpenGL bug.
+Can use flac & ogg sound files for sound effects.
+Actor's tracer available in PascalScript.
+Added Overlay.DrawLine & OverlayDrawLine PascalScript functions. params -> (const ticks: Integer; const red, green, blue: byte; const x1, y1, x2, y2: Integer)
+Added overlaydrawline console command. Usage is overlaydrawline [ticks] [x1] [y1] [x2] [y2] [red] [green] [blue].
+Added Overlay.DrawRect & OverlayDrawRect PascalScript functions. params -> (const ticks: Integer; const red, green, blue: byte; const x1, y1, x2, y2: Integer)
+Added overlaydrawrect console command. Usage is overlaydrawrect [ticks] [x1] [y1] [x2] [y2] [red] [green] [blue].
+Added overlaydrawpatch console command, usage is "overlaydrawpatch [ticks] [x] [y] [patch]".
+Added Overlay.DrawPatchStretched & OverlayDrawPatchStretched PascalScript functions. params -> (const ticks: Integer; const patchname: string; const x1, y1, x2, y2: Integer)
+Added overlaydrawpatchstretched console command. Usage is overlaydrawpatchstretched [ticks] [x1] [y1] [x2] [y2] [patch].
+Fixed problem with Overlay display after changing screen dimentions
+
+2021010 - v.1.0.14.746.r914
+---------------------------
 Floor and ceiling texure angle corrections.
 Texture angle in 3d floors.
 Key bindings can now accept SHIFT & CTRL keys.
