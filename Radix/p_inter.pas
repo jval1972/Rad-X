@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -206,7 +206,7 @@ var
   ammo: ammotype_t;
 begin
   ammo := weaponinfo[Ord(weapon)].ammo;
-  if netgame and (deathmatch <> 2) and (not dropped) then
+  if netgame and (deathmatch <> 2) and not dropped then
   begin
   // leave placed weapons forever on net games
     if player.weaponowned[Ord(weapon)] <> 0 then
@@ -1202,7 +1202,7 @@ begin
 
     // make fall forwards sometimes
     if (damage < 40) and (damage > target.health) and
-       (target.z - inflictor.z > 64 * FRACUNIT) and ((P_Random and 1) <> 0) then
+       (target.z - inflictor.z > 64 * FRACUNIT) and (P_Random and 1 <> 0) then
     begin
       ang := ang + ANG180;
       thrust := thrust * 4;
