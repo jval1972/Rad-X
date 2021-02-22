@@ -6212,4 +6212,13 @@
     '    }'#13#10 +
     '  }'#13#10 +
     '}'#13#10 +
+    '///////////////////////////////'#13#10 +
+    '// ACTORALIAS.TXT'#13#10 +
+    '///////////////////////////////'#13#10 +
+    ''#13#10 +
+    ''#13#10 +
+    'ACTORALIAS "PLAYER" "RadixPlayer"'#13#10 +
+    'ACTORALIAS "MT_BIOMINE1" "Weak biomine"'#13#10 +
+    'ACTORALIAS "MT_BIOMINE2" "Black biomine"'#13#10 +
+    'ACTORALIAS "MT_ALIENFODDER" "Alien Fodder"'#13#10 +
     '';

@@ -41,7 +41,7 @@ end;
 begin
   { TODO -oUser -cConsole Main : Insert code here }
   fout := '';
-  for i := 0 to ParamCount - 2 do
+  for i := 0 to ParamCount - 1 do
     if UpperCase(ParamStr(i)) = '-O' then
       fout := ParamStr(i + 1);
   if fout = '' then
@@ -51,7 +51,7 @@ begin
   end;
 
   sout := TStringList.Create;
-  for i := 0 to ParamCount - 2 do
+  for i := 0 to ParamCount - 1 do
     if UpperCase(ParamStr(i)) = '-I' then
       AddFile(ParamStr(i + 1));
   sout.Add('    '''';');
