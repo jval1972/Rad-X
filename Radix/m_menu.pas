@@ -108,6 +108,7 @@ uses
   g_gameplay,
   m_argv,
   m_misc,
+  m_rnd,
   m_fixed,
   mn_font,
   mn_screenshot,
@@ -142,6 +143,7 @@ uses
   radix_hud,
   radix_sounds,
   radix_score,
+  radix_messages,
   r_aspect,
   r_data,
   r_defs,
@@ -1768,10 +1770,16 @@ begin
 //  M_WriteHelpControlText(160, y, @key_weapon7);
 end;
 
+var
+  hiddenmessageid: integer = 0;
+
 procedure M_DrawReadThisExt;
 begin
   inhelpscreens := true;
   V_PageDrawer(char8tostring(W_GetNameForNum(extrahelpscreens.Numbers[extrahelpscreens_idx])));
+  // JVAL: 20210317 - Recreate hidden messages on help screen
+  if extrahelpscreens_idx = 13 then
+    M_WriteSmallWhiteTextCenterNarrow(137, radixhiddenmessages[hiddenmessageid], SCN_TMP);
 end;
 
 //
@@ -3025,6 +3033,7 @@ end;
 procedure M_FinishReadExtThis(choice: integer);
 begin
   inc(extrahelpscreens_idx);
+  hiddenmessageid := (gametic + M_Random) mod NUMHIDDENMESSAGES;
   if extrahelpscreens_idx >= extrahelpscreens.Count then
   begin
     extrahelpscreens_idx := 0;
