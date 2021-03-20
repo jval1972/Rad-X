@@ -70,8 +70,7 @@ var
 var
   h_DC: HDC;    // Global device context
   h_RC: HGLRC;  // OpenGL rendering context
-  hMainWnd: HWND = 0;
-  
+
 var
   gl_initialized: boolean = false;
 
@@ -110,6 +109,7 @@ uses
   psi_overlay,
   dglOpenGL,
   gl_render, // JVAL OPENGL
+  i_mainwindow,
   gl_tex,
   gl_defs,
   v_data,

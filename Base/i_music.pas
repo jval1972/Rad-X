@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -75,7 +75,10 @@ type
   Pmp3header_t = ^mp3header_t;
 
 var
-  miditempo: integer = 160;  
+  miditempo: integer = 160;
+
+type
+  music_t = (m_none, m_mus, m_midi, m_mp3, m_mod, m_s3m, m_it, m_xm);
 
 implementation
 
@@ -89,13 +92,14 @@ uses
   i_sound,
   i_midi,
   i_mp3,
-  i_modmusic, 
+  i_s3mmusic,
+  i_modmusic,
+  i_xmmusic,
+  i_itmusic,
+  i_mikplay,
   i_tmp,
   s_sound,
   z_zone;
-
-type
-  music_t = (m_none, m_mus, m_midi, m_mp3, m_mod);
 
 const
   MAX_MIDI_EVENTS = 512;
@@ -433,8 +437,9 @@ begin
   I_InitMidi;
   I_InitMP3;
   I_InitMod;
+  I_InitMik;
+  I_InitS3M;
 end;
-
 
 //
 // I_StopMusic
@@ -480,7 +485,10 @@ begin
     m_midi: I_StopMidi;
     m_mus: I_StopMusicMus(song);
     m_mp3: I_StopMP3;
-    m_mod: I_StopMod;
+    m_mod: I_StopMik(m_mod);
+    m_s3m: I_StopMik(m_s3m);
+    m_it: I_StopMik(m_it);
+    m_xm: I_StopMik(m_xm);
   end;
 end;
 
@@ -515,6 +523,10 @@ begin
   I_ShutDownMP3;
   I_StopMod;
   I_ShutDownMod;
+  I_StopS3M;
+  I_ShutDownS3M;
+  I_StopMik(m_none);
+  I_ShutDownMik;
 end;
 
 //
@@ -549,7 +561,10 @@ begin
     m_midi: I_PauseMidi;
     m_mus: I_PauseSongMus(handle);
     m_mp3: I_PauseMP3;
-    m_mod: I_PauseMod;
+    m_mod: I_PauseMik(m_mod);
+    m_s3m: I_PauseMik(m_s3m);
+    m_it: I_PauseMik(m_it);
+    m_xm: I_PauseMik(m_xm);
   end;
 end;
 
@@ -574,7 +589,10 @@ begin
     m_midi: I_ResumeMidi;
     m_mus: I_ResumeSongMus(handle);
     m_mp3: I_ResumeMP3;
-    m_mod: I_ResumeMod;
+    m_mod: I_ResumeMik(m_mod);
+    m_s3m: I_ResumeMik(m_s3m);
+    m_it: I_ResumeMik(m_it);
+    m_xm: I_ResumeMik(m_xm);
   end;
 end;
 
@@ -636,8 +654,26 @@ begin
   if IsModMusicFile(data, size) then
   begin
     m_type := m_mod;
-    I_PlayMod(data, size);
-    I_SetMusicVolumeMod(snd_MusicVolume);
+    I_PlayMik(data, size, m_mod);
+    I_SetMusicVolumeMik(snd_MusicVolume, m_mod);
+  end
+  else if IsS3MMusicFile(data, size) then
+  begin
+    m_type := m_s3m;
+    I_PlayMik(data, size, m_s3m);
+    I_SetMusicVolumeMik(snd_MusicVolume, m_s3m);
+  end
+  else if IsXMMusicFile(data, size) then
+  begin
+    m_type := m_xm;
+    I_PlayMik(data, size, m_xm);
+    I_SetMusicVolumeMik(snd_MusicVolume, m_xm);
+  end
+  else if IsITMusicFile(data, size) then
+  begin
+    m_type := m_it;
+    I_PlayMik(data, size, m_it);
+    I_SetMusicVolumeMik(snd_MusicVolume, m_it);
   end
   else if Pmp3header_t(data).ID = MP3MAGIC then
   begin
@@ -758,7 +794,8 @@ begin
     m_mus: I_SetMusicVolumeMus(volume);
     m_midi: I_SetMusicVolumeMidi(volume);
     m_mp3: ; // unsupported :(
-    m_mod: I_SetMusicVolumeMod(volume); // unsupported :(
+    m_mod: I_SetMusicVolumeMik(volume, m_mod);
+    m_s3m: I_SetMusicVolumeMik(volume, m_s3m);
   end;
 end;
 
@@ -826,7 +863,8 @@ begin
     m_mus: I_ProcessMusicMus;
     m_midi: I_ProcessMidi;
     m_mp3: ; // nothing to do
-    m_mod: I_ProcessMod; // nothing to do
+    m_mod: I_ProcessMik(m_mod);
+    m_s3m: I_ProcessMik(m_s3m);
   end;
 end;
 

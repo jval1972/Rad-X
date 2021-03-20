@@ -22,7 +22,7 @@
 //  02111-1307, USA.
 //
 // DESCRIPTION:
-//  S3M music file playback using mikwin.dll
+//  S3M & MOD music file playback using mikwin.dll
 //
 //------------------------------------------------------------------------------
 //  Site: https://sourceforge.net/projects/rad-x/
@@ -34,21 +34,24 @@ unit i_mikplay;
 
 interface
 
-procedure I_PlayMik(const data: pointer; const size: integer);
+uses
+  i_music;
 
-procedure I_PauseMik;
+procedure I_PlayMik(const data: pointer; const size: integer; const typ: music_t);
 
-procedure I_ResumeMik;
+procedure I_PauseMik(const typ: music_t);
 
-procedure I_StopMik;
+procedure I_ResumeMik(const typ: music_t);
+
+procedure I_StopMik(const typ: music_t);
 
 procedure I_InitMik;
 
 procedure I_ShutDownMik;
 
-procedure I_SetMusicVolumeMik(volume: integer);
+procedure I_SetMusicVolumeMik(volume: integer; const typ: music_t);
 
-procedure I_ProcessMik;
+procedure I_ProcessMik(const typ: music_t);
 
 implementation
 
@@ -58,10 +61,11 @@ uses
   m_sha1,
   m_misc,
   mikmod,
+  i_modmusic,
   i_s3mmusic,
   i_system,
   i_tmp,
-  gl_main;
+  i_mainwindow;
 
 var
   mik_init: boolean = false;
@@ -89,13 +93,16 @@ begin
   MikWin_FreeLibrary;
 end;
 
-procedure I_PlayMik(const data: pointer; const size: integer);
+procedure I_PlayMik(const data: pointer; const size: integer; const typ: music_t);
 var
   mikfilename: string;
 begin
   if not mik_init then
   begin
-    I_PlayS3M(data, size);
+    if typ = m_s3m then
+      I_PlayS3M(data, size)
+    else if typ = m_mod then
+      I_PlayMod(data, size);
     Exit;
   end;
 
@@ -118,11 +125,14 @@ begin
   MikWin_Play(True);
 end;
 
-procedure I_PauseMik;
+procedure I_PauseMik(const typ: music_t);
 begin
   if not mik_init then
   begin
-    I_PauseS3M;
+    if typ = m_s3m then
+      I_PauseS3M
+    else if typ = m_mod then
+      I_PauseMod;
     Exit;
   end;
 
@@ -130,11 +140,14 @@ begin
     MikWin_Pause;
 end;
 
-procedure I_ResumeMik;
+procedure I_ResumeMik(const typ: music_t);
 begin
   if not mik_init then
   begin
-    I_ResumeS3M;
+    if typ = m_s3m then
+      I_ResumeS3M
+    else if typ = m_mod then
+      I_ResumeMod;
     Exit;
   end;
 
@@ -142,11 +155,14 @@ begin
     MikWin_Pause;
 end;
 
-procedure I_StopMik;
+procedure I_StopMik(const typ: music_t);
 begin
   if not mik_init then
   begin
-    I_StopS3M;
+    if typ = m_s3m then
+      I_StopS3M
+    else if typ = m_mod then
+      I_StopMod;
     Exit;
   end;
 
@@ -161,22 +177,28 @@ const
     102,   111,    119,   127
   );
 
-procedure I_SetMusicVolumeMik(volume: integer);
+procedure I_SetMusicVolumeMik(volume: integer; const typ: music_t);
 begin
   if not mik_init then
   begin
-    I_SetMusicVolumeS3M(volume);
+    if typ = m_s3m then
+      I_SetMusicVolumeS3M(volume)
+    else if typ = m_mod then
+      I_SetMusicVolumeMod(volume);
     Exit;
   end;
 
   Player_SetVolume(MIK_VOLUME_CONTROL[ibetween(volume, 1, 15)]);
 end;
 
-procedure I_ProcessMik;
+procedure I_ProcessMik(const typ: music_t);
 begin
   if not mik_init then
   begin
-    I_ProcessS3M;
+    if typ = m_s3m then
+      I_ProcessS3M
+    else if typ = m_mod then
+      I_ProcessMod;
     Exit;
   end;
 

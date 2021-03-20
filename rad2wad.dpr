@@ -361,7 +361,18 @@ uses
   p_easyslope in 'Base\p_easyslope.pas',
   g_gameplay in 'Radix\g_gameplay.pas',
   r_span32_ripple_z in 'Base\r_span32_ripple_z.pas',
-  p_easyangle in 'Base\p_easyangle.pas';
+  p_easyangle in 'Base\p_easyangle.pas',
+  i_s3mmusic in 'Base\i_s3mmusic.pas',
+  libs3m in 'AUDIOLIB\libs3m.pas',
+  c_lib in 'C_LIB\c_lib.pas',
+  scanf in 'C_LIB\scanf.pas',
+  scanf_c in 'C_LIB\scanf_c.pas',
+  i_mikplay in 'Base\i_mikplay.pas',
+  mikmod in 'Base\mikmod.pas',
+  BTMemoryModule in 'Base\BTMemoryModule.pas',
+  i_mainwindow in 'Base\i_mainwindow.pas',
+  i_itmusic in 'Base\i_itmusic.pas',
+  i_xmmusic in 'Base\i_xmmusic.pas';
 
 {$R *.res}
 

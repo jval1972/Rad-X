@@ -89,11 +89,7 @@ uses
   z_zone,
   m_argv,
   i_system,
-{$IFDEF OPENGL}
-  gl_main,
-{$ELSE}
-  i_main,
-{$ENDIF}
+  i_mainwindow,
   DirectX,
   s_sound,
   sounds,
