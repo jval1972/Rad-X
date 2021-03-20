@@ -419,7 +419,8 @@ uses
   i_s3mmusic in 'Base\i_s3mmusic.pas',
   i_mainwindow in 'Base\i_mainwindow.pas',
   i_xmmusic in 'Base\i_xmmusic.pas',
-  i_itmusic in 'Base\i_itmusic.pas';
+  i_itmusic in 'Base\i_itmusic.pas',
+  s_externalmusic in 'Base\s_externalmusic.pas';
 
 var
   Saved8087CW: Word;
