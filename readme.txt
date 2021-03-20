@@ -31,8 +31,16 @@ Works with radix v2 remix edition.
 
 History
 -------
-2021027 - v.1.0.15.747.r923
----------------------------
+20210320 - v.1.0.16.749.r941
+----------------------------
+PNG transparency fixes.
+Allow MODELDEF declarations without texture.
+Recreate hidden messages on help screen.
+Can load MOD, S3M, IT & XM track music from WAD or PK3 files.
+Print OpenGL extensions on start-up only when -devparm is specified.
+
+20210127 - v.1.0.15.747.r923
+----------------------------
 Fixed rotating textures OpenGL bug.
 Can use flac & ogg sound files for sound effects.
 Actor's tracer available in PascalScript.
@@ -45,8 +53,8 @@ Added Overlay.DrawPatchStretched & OverlayDrawPatchStretched PascalScript functi
 Added overlaydrawpatchstretched console command. Usage is overlaydrawpatchstretched [ticks] [x1] [y1] [x2] [y2] [patch].
 Fixed problem with Overlay display after changing screen dimentions
 
-2021010 - v.1.0.14.746.r914
----------------------------
+20210110 - v.1.0.14.746.r914
+----------------------------
 Floor and ceiling texure angle corrections.
 Texture angle in 3d floors.
 Key bindings can now accept SHIFT & CTRL keys.
