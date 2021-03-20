@@ -1178,8 +1178,9 @@ begin
       Count := OutRemain;
     Move(MixBuffer[MixIndex * 2], OutputBuffer[OutOffset * 2],
       Count * 2 * SizeOf(smallint));
-    for i := 0 to 2 * Count - 1 do
-      OutputBuffer[OutOffset * 2 + i] := FixedMul(OutputBuffer[OutOffset * 2 + i], modvolume);
+    if modvolume < 65535 then
+      for i := 0 to 2 * Count - 1 do
+        OutputBuffer[OutOffset * 2 + i] := FixedMul(OutputBuffer[OutOffset * 2 + i], modvolume);
 
     MixIndex := MixIndex + Count;
     if MixIndex >= MixLength then
