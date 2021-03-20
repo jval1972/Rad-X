@@ -93,6 +93,7 @@ implementation
 uses
   doomstat,
   d_net,
+  d_main,
   i_system,
   tables,
   doomtype,
@@ -499,7 +500,8 @@ begin
   printf('GL_VENDOR: %s'#13#10 , [glGetString(GL_VENDOR)]);
   printf('GL_RENDERER: %s'#13#10, [glGetString(GL_RENDERER)]);
   printf('GL_VERSION: %s'#13#10, [glGetString(GL_VERSION)]);
-  printf('GL_EXTENSIONS:'#13#10);
+  if devparm then
+    printf('GL_EXTENSIONS:'#13#10);
 
   extensions := StringVal(glGetString(GL_EXTENSIONS));
   extensions_l := '';
@@ -514,8 +516,9 @@ begin
   ext_lst := TDStringList.Create;
   try
     ext_lst.Text := extensions_l;
-    for i := 0 to ext_lst.count - 1 do
-      printf('  %s'#13#10, [ext_lst.strings[i]]);
+    if devparm then
+      for i := 0 to ext_lst.count - 1 do
+        printf('  %s'#13#10, [ext_lst.strings[i]]);
     gld_InitExtensions(ext_lst);
   finally
     ext_lst.Free;
