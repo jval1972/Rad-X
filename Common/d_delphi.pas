@@ -797,6 +797,8 @@ function isdigit(const c: char): boolean;
 
 function Isign(const x: integer): integer;
 
+function readablestring(const s: string): string;
+
 implementation
 
 uses
@@ -4554,6 +4556,22 @@ begin
     result := 1
   else
     result := 0;
+end;
+
+function readablestring(const s: string): string;
+var
+  i: integer;
+  h: string;
+begin
+  result := '';
+  h := '0123456789ABCDEF';
+  for i := 1 to Length(s) do
+  begin
+    if Pos(toupper(s[i]), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') > 0 then
+      result := result + toupper(s[i])
+    else
+      result := result + h[Ord(s[i]) div 16 + 1] + h[Ord(s[i]) mod 16 + 1];
+  end;
 end;
 
 end.
