@@ -925,7 +925,6 @@ begin
           ceiling := Z_Malloc(SizeOf(ceiling_t), PU_LEVEL, nil);
           memcpy(ceiling, save_p, SizeOf(ceiling_t));
           incp(pointer(save_p), SizeOf(ceiling_t));
-
           ceiling.sector := @sectors[integer(ceiling.sector)];
           ceiling.sector.ceilingdata := ceiling;
 
@@ -941,7 +940,6 @@ begin
           door := Z_Malloc(SizeOf(vldoor_t), PU_LEVEL, nil);
           memcpy(door, save_p, SizeOf(vldoor_t));
           incp(pointer(save_p), SizeOf(vldoor_t));
-
           door.sector := @sectors[integer(door.sector)];
           door.sector.ceilingdata := door;
           if integer(door.line) = -1 then
@@ -958,7 +956,6 @@ begin
           floor := Z_Malloc(SizeOf(floormove_t), PU_LEVEL, nil);
           memcpy(floor, save_p, SizeOf(floormove_t));
           incp(pointer(save_p), SizeOf(floormove_t));
-
           floor.sector := @sectors[integer(floor.sector)];
           floor.sector.floordata := floor;
           @floor.thinker._function.acp1 := @T_MoveFloor;
@@ -1015,7 +1012,6 @@ begin
           scroll := Z_Malloc(SizeOf(scroll_t), PU_LEVEL, nil);
           memcpy(scroll, save_p, SizeOf(scroll_t));
           incp(pointer(save_p), SizeOf(scroll_t));
-
           @scroll.thinker._function.acp1 := @T_Scroll;
           P_AddThinker(@scroll.thinker);
         end;
@@ -1025,7 +1021,6 @@ begin
           friction := Z_Malloc(SizeOf(friction_t), PU_LEVEL, nil);
           memcpy(friction, save_p, SizeOf(friction_t));
           incp(pointer(save_p), SizeOf(friction_t));
-          
           @friction.thinker._function.acp1 := @T_Friction;
           P_AddThinker(@friction.thinker);
         end;
@@ -1035,7 +1030,6 @@ begin
           pusher := Z_Malloc(SizeOf(pusher_t), PU_LEVEL, nil);
           memcpy(pusher, save_p, SizeOf(pusher_t));
           incp(pointer(save_p), SizeOf(pusher_t));
-
           @pusher.thinker._function.acp1 := @T_Pusher;
           pusher.source := P_GetPushThing(pusher.affectee);
           P_AddThinker(@pusher.thinker);
@@ -1046,7 +1040,6 @@ begin
           flicker := Z_Malloc(SizeOf(fireflicker_t), PU_LEVEL, nil);
           memcpy(flicker, save_p, SizeOf(fireflicker_t));
           incp(pointer(save_p), SizeOf(fireflicker_t));
-
           @flicker.thinker._function.acp1 := @T_FireFlicker;
           flicker.sector := @sectors[integer(flicker.sector)];
           P_AddThinker(@flicker.thinker);
