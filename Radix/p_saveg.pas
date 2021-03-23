@@ -647,7 +647,7 @@ begin
           memcpy(mobj, save_p, SizeOf(mobj_t));
           incp(pointer(save_p), SizeOf(mobj_t));
 
-          if mobj.key < 2 then
+          if mobj.key < 1 then
             mobj.key := P_GenGlobalMobjKey;
           P_NotifyMobjKey(mobj);
 
