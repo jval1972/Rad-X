@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 313;
+  DEHNUMACTIONS = 323;
 
 type
   deh_action_t = record
@@ -125,6 +125,7 @@ uses
   p_pspr,
   p_inter,
   p_musinfo,
+  psi_overlay,
   radix_messages,
   radix_weapons,
   radix_sounds,
@@ -3018,6 +3019,36 @@ begin
   deh_actions[312].action.acp1 := @A_DroneExplosion;
   deh_actions[312].name := strupper('DroneExplosion');
   {$IFDEF DLL}deh_actions[312].decl := 'A_DroneExplosion';{$ENDIF}
+  deh_actions[313].action.acp1 := @A_OverlayClear;
+  deh_actions[313].name := strupper('OverlayClear');
+  {$IFDEF DLL}deh_actions[313].decl := 'A_OverlayClear()';{$ENDIF}
+  deh_actions[314].action.acp1 := @A_OverlayDrawPatch;
+  deh_actions[314].name := strupper('OverlayDrawPatch');
+  {$IFDEF DLL}deh_actions[314].decl := 'A_OverlayDrawPatch(ticks: Integer; patchname: string; x, y: Integer )';{$ENDIF}
+  deh_actions[315].action.acp1 := @A_OverlayDrawPatchStretched;
+  deh_actions[315].name := strupper('OverlayDrawPatchStretched');
+  {$IFDEF DLL}deh_actions[315].decl := 'A_OverlayDrawPatchStretched(ticks: Integer; patchname: string; x1, y1, x2, y2: Integer )';{$ENDIF}
+  deh_actions[316].action.acp1 := @A_OverlayDrawPixel;
+  deh_actions[316].name := strupper('OverlayDrawPixel');
+  {$IFDEF DLL}deh_actions[316].decl := 'A_OverlayDrawPixel(ticks: Integer; red, green, blue: byte; x, y: Integer )';{$ENDIF}
+  deh_actions[317].action.acp1 := @A_OverlayDrawRect;
+  deh_actions[317].name := strupper('OverlayDrawRect');
+  {$IFDEF DLL}deh_actions[317].decl := 'A_OverlayDrawRect(ticks: Integer; red, green, blue: byte; x1, y1, x2, y2: Integer )';{$ENDIF}
+  deh_actions[318].action.acp1 := @A_OverlayDrawLine;
+  deh_actions[318].name := strupper('OverlayDrawLine');
+  {$IFDEF DLL}deh_actions[318].decl := 'A_OverlayDrawLine(ticks: Integer; red, green, blue: byte; x1, y1, x2, y2: Integer )';{$ENDIF}
+  deh_actions[319].action.acp1 := @A_OverlayDrawText;
+  deh_actions[319].name := strupper('OverlayDrawText');
+  {$IFDEF DLL}deh_actions[319].decl := 'A_OverlayDrawText(ticks: Integer; txt: string; align: Integer; x, y: Integer )';{$ENDIF}
+  deh_actions[320].action.acp1 := @A_OverlayDrawLeftText;
+  deh_actions[320].name := strupper('OverlayDrawLeftText');
+  {$IFDEF DLL}deh_actions[320].decl := 'A_OverlayDrawLeftText(ticks: Integer; txt: string; x, y: Integer )';{$ENDIF}
+  deh_actions[321].action.acp1 := @A_OverlayDrawRightText;
+  deh_actions[321].name := strupper('OverlayDrawRightText');
+  {$IFDEF DLL}deh_actions[321].decl := 'A_OverlayDrawRightText(ticks: Integer; txt: string; x, y: Integer )';{$ENDIF}
+  deh_actions[322].action.acp1 := @A_OverlayDrawCenterText;
+  deh_actions[322].name := strupper('OverlayDrawCenterText');
+  {$IFDEF DLL}deh_actions[322].decl := 'A_OverlayDrawCenterText(ticks: Integer; txt: string; x, y: Integer )';{$ENDIF}
 
 
   deh_strings.numstrings := 0;
