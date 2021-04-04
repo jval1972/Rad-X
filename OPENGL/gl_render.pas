@@ -500,6 +500,7 @@ begin
   printf('GL_VENDOR: %s'#13#10 , [glGetString(GL_VENDOR)]);
   printf('GL_RENDERER: %s'#13#10, [glGetString(GL_RENDERER)]);
   printf('GL_VERSION: %s'#13#10, [glGetString(GL_VERSION)]);
+
   if devparm then
     printf('GL_EXTENSIONS:'#13#10);
 
@@ -2562,7 +2563,6 @@ begin
 
   if wall.blend <> fblend then
     exit;
-
 
   if (wall.flag = GLDWF_TOPFLUD) or (wall.flag = GLDWF_BOTFLUD) then
   begin
@@ -4942,6 +4942,7 @@ begin
 
   // Floors and ceilings
   glDisable(GL_BLEND);
+
   for i := gld_drawinfo.num_drawitems downto 0 do
   begin
     pglitem := @gld_drawinfo.drawitems[i];
@@ -4958,7 +4959,6 @@ begin
 
   gld_DrawWalls(wallrange, false);
 
-//  glCullFace(GL_BACK);
   // Walls
   // Sprites
   if gld_drawinfo.num_sprites > 1000 then
