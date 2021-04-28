@@ -57,6 +57,12 @@ Advanced scripting (PascalScript).
 
 [version 1.0.1.737.r684 (20200511 - win32)](https://sourceforge.net/projects/rad-x/files/RAD%201.0/RAD_1.0.1.737.r684_win32.zip/download)
 
+
+## Gameplay video
+
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/5aY8fUxg5iQ/0.jpg)](http://www.youtube.com/watch?v=5aY8fUxg5iQ "RAD - Gameplay video")
+
+
 ## Screenshots
 
 ![Screenshot 1](https://i.postimg.cc/BbCxWV4h/SSHOT-Doom-20200423-124105016.png "Screenshot 1")
