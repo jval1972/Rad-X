@@ -1,6 +1,8 @@
 # RAD
 Engine Recreation of the 1995 game "Radix - Beyond the void"
 
+To run the game you need the "radix.dat" file from the original DOS game (v2 remix version).
+
 ## Features
 High screen resolutions.
 
