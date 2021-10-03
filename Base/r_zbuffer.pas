@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -181,7 +181,7 @@ begin
   if not IsIntegerInRange(dc_yh, 0, viewwidth - 1) then
     I_Warning('R_DrawColumnToZBuffer(): ds_yh=%d not in range [0..viewheight(=%d) - 1]'#13#10, [dc_yh, viewheight]);
   if dc_yh < dc_yl then
-    I_Warning('R_DrawSpanToZBuffer(): dc_yh=%d < dc_yl=%d'#13#10, [dc_yh, dc_yl]);
+    I_Warning('R_DrawColumnToZBuffer(): dc_yh=%d < dc_yl=%d'#13#10, [dc_yh, dc_yl]);
 {$ENDIF}
 
   item := R_NewZBufferItem(@Zcolumns[dc_x]);
