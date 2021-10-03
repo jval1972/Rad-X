@@ -31,6 +31,8 @@ Works with radix v2 remix edition.
 
 History
 -------
+Holds up to 2047 bytes for enviroment variables.
+
 20210320 - v.1.0.16.749.r941
 ----------------------------
 PNG transparency fixes.
