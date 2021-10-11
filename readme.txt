@@ -26,13 +26,17 @@
 //------------------------------------------------------------------------------
 
 This is an engine remake of the 1995 game "Radix: Beyond the void".
-You will need RADIX.DAT file to play the game.
+You will need the "RADIX.DAT" file to play the game.
 Works with radix v2 remix edition.
 
 History
 -------
+20211011 - v.1.0.17.750.r961
+----------------------------
 Holds up to 2047 bytes for enviroment variables.
 Fixed potential memory corruption problem in R_MakeSpans().
+Fixed ddmodel rendering when the game is paused.
+Fixed UTF16 loading problem.
 
 20210320 - v.1.0.16.749.r941
 ----------------------------

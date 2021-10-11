@@ -29,6 +29,8 @@ Use Doom game editing utilities to create custom content.
 Advanced scripting (PascalScript).
 
 ## Downloads
+[version 1.0.17.750.r961 (20211011 - win32)](https://sourceforge.net/projects/rad-x/files/RAD%201.0/RAD_1.0.17.750.r961_win32.zip/download)
+
 [version 1.0.16.749.r941 (20210320 - win32)](https://sourceforge.net/projects/rad-x/files/RAD%201.0/RAD_1.0.16.749.r941_win32.zip/download)
 
 [version 1.0.15.747.r923 (20210127 - win32)](https://sourceforge.net/projects/rad-x/files/RAD%201.0/RAD_1.0.15.747.r923_win32.zip/download)
