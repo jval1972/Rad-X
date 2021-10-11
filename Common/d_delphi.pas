@@ -1216,23 +1216,23 @@ begin
     count := count0 - count;
 
    // if there are blocks of 64 bytes
-    if count and (not 63) <> 0 then
+    if count and not 63 <> 0 then
     begin
       if AMD3DNowMachine <> 0 then
-        memcpy_3DNow64(dest, src, count and (not 63))
+        memcpy_3DNow64(dest, src, count and not 63)
       else
-        memcpy_MMX64(dest, src, count and (not 63));
-      inc(src, count and (not 63));
-      inc(dest, count and (not 63));
+        memcpy_MMX64(dest, src, count and not 63);
+      inc(src, count and not 63);
+      inc(dest, count and not 63);
       count := count and 63;
     end;
 
     // if there are blocks of 8 bytes
-    if count and (not 7) <> 0 then
+    if count and not 7 <> 0 then
     begin
       memcpy_MMX8(dest, src, count);
-      inc(src, count and (not 7));
-      inc(dest, count and (not 7));
+      inc(src, count and not 7);
+      inc(dest, count and not 7);
       count := count and 7;
     end;
 
@@ -1328,7 +1328,7 @@ begin
       pop esi
     end;
 
-    inc(dest, count and (not 63));
+    inc(dest, count and not 63);
     count := count and 63;
   end;
 
@@ -1356,7 +1356,7 @@ begin
       pop edi
       pop esi
     end;
-    inc(dest, count and (not 7));
+    inc(dest, count and not 7);
     count := count and 7;
   end;
 
@@ -1456,7 +1456,7 @@ begin
       pop esi
     end;
 
-    inc(dest, count and (not 63));
+    inc(dest, count and not 63);
     count := count and 63;
   end;
 
@@ -1484,7 +1484,7 @@ begin
       pop edi
       pop esi
     end;
-    inc(dest, count and (not 7));
+    inc(dest, count and not 7);
     count := count and 7;
   end;
 
@@ -1581,7 +1581,7 @@ begin
       pop esi
     end;
 
-    inc(dest, count and (not 63));
+    inc(dest, count and not 63);
     count := count and 63;
   end;
 
@@ -1609,7 +1609,7 @@ begin
       pop edi
       pop esi
     end;
-    inc(dest, count and (not 7));
+    inc(dest, count and not 7);
     count := count and 7;
   end;
 
