@@ -31,6 +31,9 @@ Works with radix v2 remix edition.
 
 History
 -------
+Fixed flags in A_ChangeVelocity() ACTORDEF function.
+
+
 20211011 - v.1.0.17.750.r961
 ----------------------------
 Holds up to 2047 bytes for enviroment variables.
