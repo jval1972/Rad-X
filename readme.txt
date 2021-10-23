@@ -32,7 +32,7 @@ Works with radix v2 remix edition.
 History
 -------
 Fixed flags in A_ChangeVelocity() ACTORDEF function.
-
+Fixed MF2_EX_CANTLEAVEFLOORPIC flag behaviour.
 
 20211011 - v.1.0.17.750.r961
 ----------------------------
