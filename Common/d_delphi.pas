@@ -89,7 +89,6 @@ type
   TLongWordPArray = packed array[0..$7FFF] of PLongWordArray;
   PLongWordPArray = ^TLongWordPArray;
 
-
   TIntegerPArray = packed array[0..$7FFF] of PIntegerArray;
   PIntegerPArray = ^TIntegerPArray;
 
