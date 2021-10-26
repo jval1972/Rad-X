@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -815,7 +815,7 @@ begin
     if s.Count > 1 then
     begin
       acceptablever := False;
-      for ver := VERSION downto 110 do
+      for ver := VERSION + 1 downto 110 do  // JVAL: 20211026 - Accept next version config
       begin
         sprintf(verstr, VERFMT, [ver div 100, 2, ver mod 100]);
         if Pos(verstr, s[0]) > 0 then
