@@ -372,7 +372,8 @@ uses
   BTMemoryModule in 'Base\BTMemoryModule.pas',
   i_mainwindow in 'Base\i_mainwindow.pas',
   i_itmusic in 'Base\i_itmusic.pas',
-  i_xmmusic in 'Base\i_xmmusic.pas';
+  i_xmmusic in 'Base\i_xmmusic.pas',
+  s_externalmusic in 'Base\s_externalmusic.pas';
 
 {$R *.res}
 
