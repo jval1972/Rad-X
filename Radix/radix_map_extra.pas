@@ -37,6 +37,7 @@ interface
 uses
   d_delphi,
   m_fixed,
+  p_mobj_h,
   r_defs;
 
 function RX_RadixX2Doom(const sec: Psector_t; const x: integer): integer; overload;
@@ -86,6 +87,8 @@ procedure RX_LineTrace(const fromx, fromy, fromz: fixed_t; const tox, toy, toz: 
 
 function RX_PointLineSqrDistance(const x, y: fixed_t; const line: Pline_t): integer;
 
+procedure RX_WallBounceMobj(const mo: Pmobj_t; const line: Pline_t);
+
 var
   level_position_hack: boolean;
 
@@ -97,10 +100,10 @@ implementation
 uses
   m_rnd,
   m_bbox,
+  m_vectors,
   p_setup,
   p_3dfloors,
   p_local,
-  p_mobj_h,
   p_maputl,
   p_map,
   p_spec,
@@ -1034,6 +1037,20 @@ begin
   dx := ix - xx;
   dy := iy - yy;
   result := (dx * dx) + (dy * dy);
+end;
+
+procedure RX_WallBounceMobj(const mo: Pmobj_t; const line: Pline_t);
+var
+  d, wall, reflect: vec2_t;
+begin
+  d[0] := mo.momx / FRACUNIT;
+  d[1] := mo.momy / FRACUNIT;
+  wall[0] := line.dx / FRACUNIT;
+  wall[1] := line.dy / FRACUNIT;
+  CalculateReflect2(d, wall, reflect);
+  mo.momx := Round(reflect[0] * FRACUNIT);
+  mo.momy := Round(reflect[1] * FRACUNIT);
+  mo.angle := R_PointToAngle(mo.momx, mo.momy);
 end;
 
 end.

@@ -472,7 +472,8 @@ begin
           end;
           if dobounce then
           begin
-            speed := P_AproxDistance(mo.momx, mo.momy);
+            RX_WallBounceMobj(mo, tmbounceline);
+{            speed := P_AproxDistance(mo.momx, mo.momy);
             tangle := mo.angle;
             langle := R_PointToAngle2(tmbounceline.v1.x, tmbounceline.v1.y, tmbounceline.v2.x, tmbounceline.v2.y);
             anglediff := tangle - langle;
@@ -480,7 +481,7 @@ begin
             mo.angle := newangle;
             newangle := newangle shr ANGLETOFINESHIFT;
             mo.momx := FixedMul(speed, finecosine[newangle]);
-            mo.momy := FixedMul(speed, finesine[newangle]);
+            mo.momy := FixedMul(speed, finesine[newangle]);  }
           end;
         end
         else if not tmfailfromptinair then
