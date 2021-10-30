@@ -1041,16 +1041,33 @@ end;
 
 procedure RX_WallBounceMobj(const mo: Pmobj_t; const line: Pline_t);
 var
+  s1, s2: boolean;
+  dist1, dist2: integer;
   d, wall, reflect: vec2_t;
+  newx, newy: fixed_t;
 begin
-  d[0] := mo.momx / FRACUNIT;
-  d[1] := mo.momy / FRACUNIT;
-  wall[0] := line.dx / FRACUNIT;
-  wall[1] := line.dy / FRACUNIT;
-  CalculateReflect2(d, wall, reflect);
-  mo.momx := Round(reflect[0] * FRACUNIT);
-  mo.momy := Round(reflect[1] * FRACUNIT);
-  mo.angle := R_PointToAngle(mo.momx, mo.momy);
+  dist1 := RX_PointLineSqrDistance(mo.x, mo.y, line);
+  dist2 := RX_PointLineSqrDistance(mo.x + mo.momx, mo.y + mo.momy, line);
+  s1 := R_PointOnLineSide(mo.x, mo.y, line);
+  s2 := R_PointOnLineSide(mo.x + mo.momx, mo.y + mo.momy, line);
+  if (s1 <> s2) or ((s1 = s2) and (dist2 < dist1)) then
+  begin
+    d[0] := mo.momx / FRACUNIT;
+    d[1] := mo.momy / FRACUNIT;
+    wall[0] := line.dx / FRACUNIT;
+    wall[1] := line.dy / FRACUNIT;
+    CalculateReflect2(d, wall, reflect);
+    mo.momx := Round(reflect[0] * FRACUNIT);
+    mo.momy := Round(reflect[1] * FRACUNIT);
+    mo.angle := R_PointToAngle(mo.momx, mo.momy);
+  end;
+  newx := mo.x + mo.momx;
+  newy := mo.y + mo.momy;
+  if P_TryMove(mo, newx, newy) then
+  begin
+    mo.x := newx;
+    mo.y := newy;
+  end;
 end;
 
 end.
