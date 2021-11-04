@@ -2618,7 +2618,6 @@ var
   ppos: menupos_t;
 begin
   M_DrawHeadLine(15, 'Display Options');
-
   M_DrawSubHeadLine(40, 'Detail');
 
   ppos := M_WriteSmallText(OptionsDisplayDetailDef.x, OptionsDisplayDetailDef.y + OptionsDisplayDetailDef.itemheight * Ord(od_detaillevel), 'Detail level: ', SCN_TMP);
@@ -2650,7 +2649,6 @@ var
   ppos: menupos_t;
 begin
   M_DrawHeadLine(15, 'Display Options');
-
   M_DrawSubHeadLine(40, 'Set Video Mode');
 
   {$IFNDEF OPENGL}
@@ -2691,7 +2689,6 @@ var
   ppos: menupos_t;
 begin
   M_DrawHeadLine(15, 'Display Options');
-
   M_DrawSubHeadLine(40, 'Appearence');
 
   ppos := M_WriteSmallText(OptionsDisplayAppearanceDef.x, OptionsDisplayAppearanceDef.y + OptionsDisplayAppearanceDef.itemheight * Ord(od_shademenubackground), 'Menu background: ', SCN_TMP);
