@@ -6031,7 +6031,7 @@ begin
 //KeyBindingsDef1
   KeyBindingsDef1.numitems := Ord(kb_lookup); // # of menu items
   KeyBindingsDef1.prevMenu := @ControlsDef; // previous menu
-  KeyBindingsDef1.leftMenu := @KeyBindingsDef2; // left menu
+  KeyBindingsDef1.leftMenu := @KeyBindingsDef3; // left menu
   KeyBindingsDef1.rightMenu := @KeyBindingsDef2; // right menu
   KeyBindingsDef1.menuitems := Pmenuitem_tArray(@KeyBindingsMenu1);  // menu items
   KeyBindingsDef1.drawproc := @M_DrawBindings1;  // draw routine
@@ -6059,7 +6059,7 @@ begin
 //KeyBindingsDef2
   KeyBindingsDef2.numitems := Ord(kb_am_gobigkey) - Ord(kb_lookup); // # of menu items
   KeyBindingsDef2.prevMenu := @ControlsDef; // previous menu
-  KeyBindingsDef2.leftMenu := @KeyBindingsDef3; // left menu
+  KeyBindingsDef2.leftMenu := @KeyBindingsDef1; // left menu
   KeyBindingsDef2.rightMenu := @KeyBindingsDef3; // right menu
   KeyBindingsDef2.menuitems := Pmenuitem_tArray(@KeyBindingsMenu2);  // menu items
   KeyBindingsDef2.drawproc := @M_DrawBindings2;  // draw routine
@@ -6087,7 +6087,7 @@ begin
 //KeyBindingsDef3
   KeyBindingsDef3.numitems := Ord(kb_end) - Ord(kb_am_gobigkey); // # of menu items
   KeyBindingsDef3.prevMenu := @ControlsDef; // previous menu
-  KeyBindingsDef3.leftMenu := @KeyBindingsDef1; // left menu
+  KeyBindingsDef3.leftMenu := @KeyBindingsDef2; // left menu
   KeyBindingsDef3.rightMenu := @KeyBindingsDef1; // right menu
   KeyBindingsDef3.menuitems := Pmenuitem_tArray(@KeyBindingsMenu3);  // menu items
   KeyBindingsDef3.drawproc := @M_DrawBindings3;  // draw routine
