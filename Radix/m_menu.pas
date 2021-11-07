@@ -977,47 +977,48 @@ var
 type
   bindinginfo_t = record
     text: string[25];
+    shorttext: string[20];
     pkey: PInteger;
   end;
 
 const
   KeyBindingsInfo: array [0..Ord(kb_end) - 1] of bindinginfo_t = (
-    (text: 'Move forward'; pkey: @key_up),
-    (text: 'Move backward'; pkey: @key_down),
-    (text: 'Turn left'; pkey: @key_left),
-    (text: 'Turn right'; pkey: @key_right),
-    (text: 'Strafe left'; pkey: @key_strafeleft),
-    (text: 'Strafe right'; pkey: @key_straferight),
-    (text: 'Fly up'; pkey: @key_flyup),
-    (text: 'Fly down'; pkey: @key_flydown),
-    (text: 'Fire'; pkey: @key_fire),
-    (text: 'Use'; pkey: @key_use),
-    (text: 'Strafe'; pkey: @key_strafe),
-    (text: 'Afterburner'; pkey: @key_afterburner),
-    (text: 'Run'; pkey: @key_speed),
+    (text: 'Move forward'; shorttext: ''; pkey: @key_up),
+    (text: 'Move backward'; shorttext: ''; pkey: @key_down),
+    (text: 'Turn left'; shorttext: ''; pkey: @key_left),
+    (text: 'Turn right'; shorttext: ''; pkey: @key_right),
+    (text: 'Strafe left'; shorttext: ''; pkey: @key_strafeleft),
+    (text: 'Strafe right'; shorttext: ''; pkey: @key_straferight),
+    (text: 'Fly up'; shorttext: ''; pkey: @key_flyup),
+    (text: 'Fly down'; shorttext: ''; pkey: @key_flydown),
+    (text: 'Fire'; shorttext: ''; pkey: @key_fire),
+    (text: 'Use'; shorttext: ''; pkey: @key_use),
+    (text: 'Strafe'; shorttext: ''; pkey: @key_strafe),
+    (text: 'Afterburner'; shorttext: ''; pkey: @key_afterburner),
+    (text: 'Run'; shorttext: ''; pkey: @key_speed),
 
-    (text: 'Look up'; pkey: @key_lookup),
-    (text: 'Look down'; pkey: @key_lookdown),
-    (text: 'Look center'; pkey: @key_lookcenter),
-    (text: 'Look left'; pkey: @key_lookleft),
-    (text: 'Look right'; pkey: @key_lookright),
-    (text: 'Neutron Cannon'; pkey: @key_weapon0),
-    (text: 'Standard EPC'; pkey: @key_weapon1),
-    (text: 'Plasma Spreader'; pkey: @key_weapon2),
-    (text: 'Seeking Missiles'; pkey: @key_weapon3),
-    (text: 'Nuke'; pkey: @key_weapon4),
-    (text: 'Phase Torpedoes'; pkey: @key_weapon5),
-    (text: 'Gravity Device'; pkey: @key_weapon6),
-    (text: 'Enhanced EPC'; pkey: @key_weapon7),
-    (text: 'Plasma Bomb'; pkey: @key_plasmabomb),
+    (text: 'Look up'; shorttext: ''; pkey: @key_lookup),
+    (text: 'Look down'; shorttext: ''; pkey: @key_lookdown),
+    (text: 'Look center'; shorttext: ''; pkey: @key_lookcenter),
+    (text: 'Look left'; shorttext: ''; pkey: @key_lookleft),
+    (text: 'Look right'; shorttext: ''; pkey: @key_lookright),
+    (text: 'Neutron Cannon'; shorttext: ''; pkey: @key_weapon0),
+    (text: 'Standard EPC'; shorttext: ''; pkey: @key_weapon1),
+    (text: 'Plasma Spreader'; shorttext: ''; pkey: @key_weapon2),
+    (text: 'Seeking Missiles'; shorttext: ''; pkey: @key_weapon3),
+    (text: 'Nuke'; shorttext: ''; pkey: @key_weapon4),
+    (text: 'Phase Torpedoes'; shorttext: ''; pkey: @key_weapon5),
+    (text: 'Gravity Device'; shorttext: ''; pkey: @key_weapon6),
+    (text: 'Enhanced EPC'; shorttext: ''; pkey: @key_weapon7),
+    (text: 'Plasma Bomb'; shorttext: ''; pkey: @key_plasmabomb),
 
-    (text: 'Automap max zoom'; pkey: @AM_GOBIGKEY),
-    (text: 'Automap follow on/off'; pkey: @AM_FOLLOWKEY),
-    (text: 'Automap grid on/off'; pkey: @AM_GRIDKEY),
-    (text: 'Automap rotate on/off'; pkey: @AM_ROTATEKEY),
-    (text: 'Automap texture on/off'; pkey: @AM_TEXTUREDAUTOMAP),
-    (text: 'Automap add mark'; pkey: @AM_MARKKEY),
-    (text: 'Automap clear mark'; pkey: @AM_CLEARMARKKEY)
+    (text: 'Automap max zoom'; shorttext: 'Max Zoom'; pkey: @AM_GOBIGKEY),
+    (text: 'Automap follow on/off'; shorttext: 'Follow On/Off'; pkey: @AM_FOLLOWKEY),
+    (text: 'Automap grid on/off'; shorttext: 'Grid On/Off'; pkey: @AM_GRIDKEY),
+    (text: 'Automap rotate on/off'; shorttext: 'Rotate On/Off'; pkey: @AM_ROTATEKEY),
+    (text: 'Automap texture on/off'; shorttext: 'Texture On/Off'; pkey: @AM_TEXTUREDAUTOMAP),
+    (text: 'Automap add mark'; shorttext: 'Add Mark'; pkey: @AM_MARKKEY),
+    (text: 'Automap clear mark'; shorttext: 'Clear Mark'; pkey: @AM_CLEARMARKKEY)
   );
 
 var
@@ -1619,6 +1620,29 @@ begin
   result := M_WriteSmallText(mp.x, mp.y, s2, SCN_TMP);
 end;
 
+//
+// Read This Menus - optional second page.
+//
+function M_WriteHelpControlText(const x, y: integer; const control: PInteger): menupos_t;
+var
+  i: integer;
+  txt: string;
+begin
+  for i := 0 to Ord(kb_end) - 1 do
+    if KeyBindingsInfo[i].pkey = control then
+    begin
+      txt := KeyBindingsInfo[i].shorttext;
+      if txt = '' then
+        txt := KeyBindingsInfo[i].text;
+      result := M_WriteSmallText(x, y, txt + ': ', SCN_TMP);
+      result := M_WriteSmallWhiteText(result.x, result.y, M_KeyToString(control^), SCN_TMP);
+      exit;
+    end;
+
+  result.x := x;
+  result.y := y;
+end;
+
 procedure M_DrawReadThis1;
 var
   y: integer;
@@ -1664,14 +1688,18 @@ begin
   M_DrawSmallLine(y, 'AUTOMAP');
 
   y := y + 14;
-  M_WriteHelpText(10, y, 'F', 'FOLLOW MODE');
-  M_WriteHelpText(110, y, 'M', 'ADD MARK');
-  M_WriteHelpText(210, y, 'C', 'CLEAR MARKS');
+  M_WriteHelpControlText(10, y, @AM_FOLLOWKEY);
+  M_WriteHelpControlText(110, y, @AM_MARKKEY);
+  M_WriteHelpControlText(210, y, @AM_CLEARMARKKEY);
 
   y := y + 10;
-  M_WriteHelpText(10, y, 'G', 'TOGGLE GRID');
-  M_WriteHelpText(110, y, 'T', 'TOGGLE TEXTURES');
-  M_WriteHelpText(210, y, '+/-', 'ZOOM SIZE');
+  M_WriteHelpControlText(10, y, @AM_GRIDKEY);
+  M_WriteHelpControlText(110, y, @AM_TEXTUREDAUTOMAP);
+  M_WriteHelpControlText(210, y, @AM_ROTATEKEY);
+
+  y := y + 10;
+  M_WriteHelpControlText(10, y, @AM_GOBIGKEY);
+  M_WriteHelpText(110, y, '+/-', 'ZOOM SIZE');
 
   y := y + 14;
   M_DrawSmallLine(y, 'MENU');
@@ -1680,25 +1708,6 @@ begin
   M_WriteHelpText(10, y, 'ARROWS', 'NAVIGATE');
   M_WriteHelpText(110, y, 'ENTER', 'SELECT');
   M_WriteHelpText(210, y, 'BACKSPACE', 'GO BACK');
-end;
-
-//
-// Read This Menus - optional second page.
-//
-function M_WriteHelpControlText(const x, y: integer; const control: PInteger): menupos_t;
-var
-  i: integer;
-begin
-  for i := 0 to Ord(kb_end) - 1 do
-    if KeyBindingsInfo[i].pkey = control then
-    begin
-      result := M_WriteSmallText(x, y, KeyBindingsInfo[i].text + ': ', SCN_TMP);
-      result := M_WriteSmallWhiteText(result.x, result.y, M_KeyToString(control^), SCN_TMP);
-      exit;
-    end;
-
-  result.x := x;
-  result.y := y;
 end;
 
 procedure M_DrawReadThis2;
