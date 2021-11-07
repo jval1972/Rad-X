@@ -1620,9 +1620,6 @@ begin
   result := M_WriteSmallText(mp.x, mp.y, s2, SCN_TMP);
 end;
 
-//
-// Read This Menus - optional second page.
-//
 function M_WriteHelpControlText(const x, y: integer; const control: PInteger): menupos_t;
 var
   i: integer;
