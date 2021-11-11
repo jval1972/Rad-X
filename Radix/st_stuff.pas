@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -988,8 +988,8 @@ begin
   for i := 0 to 9 do
   begin
     namebuf := 'FNTA' + IntToStrzFill(3, i + Ord('0'));
-    tallnum[i] := Ppatch_t(W_CacheLumpName(namebuf, PU_STATIC));
-    shortnum[i] := Ppatch_t(W_CacheLumpName(namebuf, PU_STATIC));
+    tallnum[i] := W_CacheLumpName(namebuf, PU_STATIC);
+    shortnum[i] := W_CacheLumpName(namebuf, PU_STATIC);
   end;
 
   // Load percent key.
@@ -1001,7 +1001,7 @@ begin
   for i := 0 to Ord(NUMCARDS) - 1 do
   begin
     sprintf(namebuf, 'STKEYS%d', [i]);
-    keys[i] := Ppatch_t(W_CacheLumpName(namebuf, PU_STATIC));
+    keys[i] := W_CacheLumpName(namebuf, PU_STATIC);
   end;
 end;
 
@@ -1230,7 +1230,7 @@ begin
   if st_stopped then
     exit;
 
-  pal := PByteArray(W_CacheLumpNum(lu_palette, PU_STATIC));
+  pal := W_CacheLumpNum(lu_palette, PU_STATIC);
   {$IFDEF OPENGL}
   I_SetPalette(pal);
   V_SetPalette(pal);
