@@ -2938,7 +2938,7 @@ begin
   {$IFDEF DLL}deh_actions[284].decl := 'A_Bobing()';{$ENDIF}
   deh_actions[285].action.acp1 := @A_MatchTargetZ;
   deh_actions[285].name := strupper('MatchTargetZ');
-  {$IFDEF DLL}deh_actions[285].decl := 'A_MatchTargetZ(zspeed: integer; threshold: integer)';{$ENDIF}
+  {$IFDEF DLL}deh_actions[285].decl := 'A_MatchTargetZ(zspeed: float; threshold: float; maxmomz: float)';{$ENDIF}
   deh_actions[286].action.acp1 := @A_DropFarTarget;
   deh_actions[286].name := strupper('DropFarTarget');
   {$IFDEF DLL}deh_actions[286].decl := 'A_DropFarTarget(distance: integer; propability: integer)';{$ENDIF}
