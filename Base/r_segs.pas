@@ -926,10 +926,13 @@ begin
       if frontsector.midsec >= 0 then
       begin
         lightnum2 := _SHR(sectors[frontsector.midsec].lightlevel, LIGHTSEGSHIFT) + extralight;
-        if curline.v1.y = curline.v2.y then
-          dec(lightnum2)
-        else if curline.v1.x = curline.v2.x then
-          inc(lightnum2);
+        if r_fakecontrast then
+        begin
+          if curline.v1.y = curline.v2.y then
+            dec(lightnum2)
+          else if curline.v1.x = curline.v2.x then
+            inc(lightnum2);
+        end;
 
         if lightnum2 < 0 then
           lightnum2 := 0
@@ -943,10 +946,13 @@ begin
       else if pds.midsec <> nil then
       begin
         lightnum2 := _SHR(pds.midsec.lightlevel, LIGHTSEGSHIFT) + extralight;
-        if curline.v1.y = curline.v2.y then
-          dec(lightnum2)
-        else if curline.v1.x = curline.v2.x then
-          inc(lightnum2);
+        if r_fakecontrast then
+        begin
+          if curline.v1.y = curline.v2.y then
+            dec(lightnum2)
+          else if curline.v1.x = curline.v2.x then
+            inc(lightnum2);
+        end;
 
         if lightnum2 < 0 then
           lightnum2 := 0
@@ -968,10 +974,13 @@ begin
         end
         else
           lightnum2 := _SHR(Psector_t(pds.midvis).lightlevel, LIGHTSEGSHIFT) + extralight;
-        if curline.v1.y = curline.v2.y then
-          dec(lightnum2)
-        else if curline.v1.x = curline.v2.x then
-          inc(lightnum2);
+        if r_fakecontrast then
+        begin
+          if curline.v1.y = curline.v2.y then
+            dec(lightnum2)
+          else if curline.v1.x = curline.v2.x then
+            inc(lightnum2);
+        end;
 
         if lightnum2 < 0 then
           lightnum2 := 0
@@ -1540,10 +1549,13 @@ begin
       if frontsector.midsec >= 0 then
       begin
         lightnum2 := _SHR(sectors[frontsector.midsec].lightlevel, LIGHTSEGSHIFT) + extralight;
-        if curline.v1.y = curline.v2.y then
-          dec(lightnum2)
-        else if curline.v1.x = curline.v2.x then
-          inc(lightnum2);
+        if r_fakecontrast then
+        begin
+          if curline.v1.y = curline.v2.y then
+            dec(lightnum2)
+          else if curline.v1.x = curline.v2.x then
+            inc(lightnum2);
+        end;
 
         if lightnum2 < 0 then
           lightnum2 := 0
@@ -1560,10 +1572,13 @@ begin
       if pds.midsec <> nil then
       begin
         lightnum2 := _SHR(pds.midsec.lightlevel, LIGHTSEGSHIFT) + extralight;
-        if curline.v1.y = curline.v2.y then
-          dec(lightnum2)
-        else if curline.v1.x = curline.v2.x then
-          inc(lightnum2);
+        if r_fakecontrast then
+        begin
+          if curline.v1.y = curline.v2.y then
+            dec(lightnum2)
+          else if curline.v1.x = curline.v2.x then
+            inc(lightnum2);
+        end;
 
         if lightnum2 < 0 then
           lightnum2 := 0
@@ -1585,10 +1600,13 @@ begin
         end
         else
           lightnum2 := _SHR(Psector_t(pds.midvis).lightlevel, LIGHTSEGSHIFT) + extralight;
-        if curline.v1.y = curline.v2.y then
-          dec(lightnum2)
-        else if curline.v1.x = curline.v2.x then
-          inc(lightnum2);
+        if r_fakecontrast then
+        begin
+          if curline.v1.y = curline.v2.y then
+            dec(lightnum2)
+          else if curline.v1.x = curline.v2.x then
+            inc(lightnum2);
+        end;
 
         if lightnum2 < 0 then
           lightnum2 := 0
