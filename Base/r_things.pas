@@ -1114,7 +1114,6 @@ end;
 // R_DrawVisSpriteLight
 // Used for sprites that emits light
 //
-
 procedure R_DrawVisSpriteLight(vis: Pvissprite_t; x1: integer; x2: integer);
 var
   texturecolumn: integer;
@@ -1870,10 +1869,10 @@ begin
     silhouette := ds.silhouette;
 
     if spr.gz >= ds.bsilheight then
-      silhouette := silhouette and (not SIL_BOTTOM);
+      silhouette := silhouette and not SIL_BOTTOM;
 
     if spr.gzt <= ds.tsilheight then
-      silhouette := silhouette and (not SIL_TOP);
+      silhouette := silhouette and not SIL_TOP;
 
     if silhouette = 1 then
     begin
@@ -2073,10 +2072,10 @@ begin
     silhouette := ds.silhouette;
 
     if spr.gz >= ds.bsilheight then
-      silhouette := silhouette and (not SIL_BOTTOM);
+      silhouette := silhouette and not SIL_BOTTOM;
 
     if spr.gzt <= ds.tsilheight then
-      silhouette := silhouette and (not SIL_TOP);
+      silhouette := silhouette and not SIL_TOP;
 
     if silhouette = 1 then
     begin
