@@ -95,7 +95,7 @@ begin
   Edit1.Text := '';
   Edit2.Text := '';
   Memo1.Lines.Clear;
-  println('RAD2WAD v1.0, (c) 2020 by Jim Valavanis');
+  println('RAD2WAD v1.0, (c) 2020-2021 by Jim Valavanis');
   println('Use this tool to create an editing WAD from RADIX.DAT.');
   println('The output WAD can be used by editors to create custom levels for RAD.');
   println('IMPORTANT: ');
@@ -146,14 +146,13 @@ begin
   end;
 
   foutfilename := Trim(foutfilename);
-  if finpfilename = '' then
+  if foutfilename = '' then
   begin
     println('Please select output file!');
     exit;
   end;
 
   if UpperCase(ExpandFileName(foutfilename)) = UpperCase(ExpandFileName(finpfilename)) then
-  if finpfilename = '' then
   begin
     println('Input and output file must be different!');
     exit;
