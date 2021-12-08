@@ -59,6 +59,7 @@ const
   R2W_DOOMTEXTURES = $40000;
   R2W_DOOMLEVELS = $80000;
   R2W_EXTRASPRITES = $100000;
+  R2W_BRIEFINGSCRIPT = $200000;
 
 procedure Radix2WAD_Game(const fin, fout: string);
 
@@ -150,6 +151,7 @@ type
     function GenerateCockpitOverlay: boolean;
     function GenerateSounds: boolean;
     function GenerateMissionText: boolean;
+    function GenerateMissionBriefing: boolean;
     function GenerateEndText: boolean;
     procedure WritePK3Entry;
   public
@@ -2618,6 +2620,10 @@ begin
   for ch := 'B' to 'W' do
     MakeRotatingSprite8('NetRadixPlane', _DOOM_THING_2_RADIX_ + 5, 1, nil, -255, -255, true, true, ch);
 
+  // briefing screen sprites:
+  MakeOneSprite('EndLevelDoor', 9000);
+  MakeOneSprite('MissileWallBitmap', 9001);
+
   bmp := TRadixBitmap.Create;
 
   for j := 0 to numsprinfo - 1 do
@@ -2711,6 +2717,7 @@ begin
     stmp := spr.dname;
 
     wadwriter.AddData(stmp, p, size);
+    aliases.Add(stmp + '=' + spr.rname);
 
     memfree(pointer(buf), rcol.offs + rcol.size);
     memfree(p, size);
@@ -2925,6 +2932,29 @@ begin
     end;
 end;
 
+function TRadixToWADConverter.GenerateMissionBriefing: boolean;
+var
+  rname, wname: string;
+  i, j: integer;
+  tbuffer: pointer;
+  tsize: integer;
+begin
+  result := false;
+  for i := 1 to 3 do
+    for j := 1 to 9 do
+    begin
+      rname := 'MissionBrief[' + itoa(i) +'][' + itoa(j) + ']';
+      if ReadLump(lumps, numlumps, rname, tbuffer, tsize) then
+      begin
+        wname := 'BRIEF_' + itoa(i) + itoa(j);
+        wadwriter.AddData(wname, tbuffer, tsize);
+        aliases.Add(wname + '=' + rname);
+        result := true;
+        memfree(tbuffer, tsize);
+      end;
+    end;
+end;
+
 function TRadixToWADConverter.GenerateEndText: boolean;
 var
   rname, wname: string;
@@ -2988,6 +3018,7 @@ begin
   GenerateCockpitOverlay;
   GenerateSounds;
   GenerateMissionText;
+  GenerateMissionBriefing;
   GenerateEndText;
   WritePK3Entry;
 
@@ -3016,6 +3047,7 @@ begin
   GenerateMusic;
   GenerateSounds;
   GenerateMissionText;
+  GenerateMissionBriefing;
   GenerateEndText;
 
   ffilename := '';
@@ -3076,6 +3108,8 @@ begin
     GenerateSounds;
   if flags and R2W_OBJECTIVES <> 0 then
     GenerateMissionText;
+  if flags and R2W_BRIEFINGSCRIPT <> 0 then
+    GenerateMissionBriefing;
   if flags and R2W_ENDTEXT <> 0 then
     GenerateEndText;
   WritePK3Entry;
