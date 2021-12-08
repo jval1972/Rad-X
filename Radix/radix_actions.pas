@@ -341,7 +341,7 @@ begin
         if step < 0 then
           if not playercheck(sec.floorheight, sec.ceilingheight + step) then
             exit;
-            
+
         sec.ceilingheight := sec.ceilingheight + step;
 
         if parms.direction = 1 then // Up
@@ -832,7 +832,7 @@ var
   deltaviewheight: integer;
 begin
   parms := radixplaneteleport_p(@action.params);
-                 
+
   if parms.delay > 0 then
   begin
     dec(parms.delay);
@@ -1121,7 +1121,7 @@ begin
         if step < 0 then
           if not playercheck(sec.floorheight, sec.ceilingheight + step) then
             exit;
-            
+
         sec.ceilingheight := sec.ceilingheight + step;
 
         if parms.direction = 1 then // Up
@@ -1208,7 +1208,7 @@ begin
     if cnt < 0 then
       parms.countdown := 10 * TICRATE // JVAL: 10 seconds to replay sound
     else
-      parms.countdown := cnt; // JVAL: 20200312 - Restart sound after it finishes 
+      parms.countdown := cnt; // JVAL: 20200312 - Restart sound after it finishes
   end;
 end;
 
@@ -1715,7 +1715,7 @@ begin
 
   if zlen = 0 then
     exit;
-    
+
   if xlen = 0 then
   begin
     x := li.v1.x div 2 + li.v2.x div 2;

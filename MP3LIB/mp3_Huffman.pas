@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -191,7 +191,7 @@ const
     (10,1),(4,1),(2,1),(0,70),(0,115),(2,1),(0,55),(2,1),(0,101),(0,86),
     (10,1),(6,1),(4,1),(2,1),(0,85),(0,87),(0,116),(2,1),(0,71),(0,102),
     (4,1),(2,1),(0,117),(0,118),(2,1),(0,103),(0,119));
-    
+
   ValTab12: array[0..126] of THTArray = (
     (12,1),(4,1),(2,1),(0,16),(0,1),(2,1),(0,17),(2,1),(0,0),(2,1),
     (0,32),(0,2),(16,1),(4,1),(2,1),(0,33),(0,18),(4,1),(2,1),(0,34),

@@ -354,7 +354,7 @@ const
   SRF_SLOPED = SRF_SLOPEFLOOR + SRF_SLOPECEILING; // JVAL: Slopes
   SRF_RADIXSLOPEFLOOR = 128; // JVAL: Radix
   SRF_RADIXSLOPECEILING = 256; // JVAL: Radix
-  SRF_INTERPOLATE_ROTATE = 512; 
+  SRF_INTERPOLATE_ROTATE = 512;
   SRF_INTERPOLATE_FLOORSLOPE = 1024;
   SRF_INTERPOLATE_CEILINGSLOPE = 2048;
 
@@ -410,7 +410,7 @@ type
     iSegID: integer;
 {$ELSE}
     map_length: integer;
-    inv_length: double;      
+    inv_length: double;
 {$ENDIF}
     miniseg: boolean;
   end;

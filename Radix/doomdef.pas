@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -90,7 +90,7 @@ const
   // MIN RENDERING DIMENTIONS
   MINWIDTH = 320;
   MINHEIGHT = 200;
-  
+
 var
 // Rendering Engine Screen Dimentions
   SCREENWIDTH: integer;
@@ -226,7 +226,7 @@ type
     rpu_rapidenergy,
     rpu_maneuverjets,
     rpu_nightvision,
-    rpu_alds, // JVAL: 20200322 - Automated Laser Defence System 
+    rpu_alds, // JVAL: 20200322 - Automated Laser Defence System
     NUMRADIXPOWERUPS
   );
   Pradixpowerup_t = ^radixpowerup_t;

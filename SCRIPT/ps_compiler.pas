@@ -8486,7 +8486,7 @@ function TPSPascalCompiler.ProcessSub(BlockInfo: TPSBlockInfo): Boolean;
                 Result := nil;
                 Exit;
               end;
-              if (GetTypeNo(BlockInfo, NewVar) = nil) or 
+              if (GetTypeNo(BlockInfo, NewVar) = nil) or
                  ((GetTypeNo(BlockInfo, NewVar).BaseType <> btClass) and
                  (GetTypeNo(BlockInfo, NewVar).BaseType <> btInterface) and
                  (GetTypeNo(BlockInfo, NewVar).BaseType <> btPChar) and
@@ -11640,7 +11640,7 @@ begin
       {$IFDEF PS_USESSUPPORT} or (BlockInfo.SubType = tUnitInit) or (BlockInfo.SubType = tUnitFinish){$ENDIF}) //nvds
          and (FParser.CurrTokenId <> CSTI_Period) then
       begin
-        MakeError('', ecPeriodExpected, '');      
+        MakeError('', ecPeriodExpected, '');
         Exit;
       end;
       if (BlockInfo.SubType = tProcBegin) and (FParser.CurrTokenId <> CSTI_Semicolon) then
@@ -12835,7 +12835,7 @@ begin
       if FParser.CurrTokenId <> CSTI_Period then
       begin
         MakeError('', ecPeriodExpected, '');
-        Cleanup;                                     
+        Cleanup;
         Exit;
       end;
       Break;

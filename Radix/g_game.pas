@@ -39,7 +39,7 @@ uses
   d_player,
   d_ticcmd;
 
-// 
+//
 // GAME
 //
 

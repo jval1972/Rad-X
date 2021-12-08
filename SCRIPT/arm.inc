@@ -82,7 +82,7 @@ asm
 	str	r3, [r11, #-56] 	(* stack *)
 	ldr	r0, [r11, #4]
 	str	r0, [r11, #-60]		(* stacksize *)
-	ldr	r0, [r11, #8]		
+	ldr	r0, [r11, #8]
 	str	r0, [r11, #-64]		(* resulttype *)
 
 	(* store params for sub-routine that don't fit into r0-r3 at start of stack *)

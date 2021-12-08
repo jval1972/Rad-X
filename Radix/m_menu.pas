@@ -262,7 +262,7 @@ type
   end;
 
 var
-  itemOn: smallint;             // selected menu item 
+  itemOn: smallint;             // selected menu item
 
 // current menudef
   currentMenu: Pmenu_t;
@@ -4296,7 +4296,7 @@ begin
   PilotNameDef.lastOn := Ord(pilotname1); // last item user was on in menu
   PilotNameDef.itemheight := BIGLINEHEIGHT;
   PilotNameDef.flags := 0;
-                                   
+
 ////////////////////////////////////////////////////////////////////////////////
 //NewGameMenu
   pmi := @NewGameMenu[0];

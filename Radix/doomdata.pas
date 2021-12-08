@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -68,7 +68,7 @@ type
     ML_RMAP,      // JVAL: Extra sectors and walls information (scripted)
     ML_RTHINGS,   // JVAL: Extra things information (Radix)
     ML_RGRID,     // JVAL: Trigger's grid (Radix) - unpacked from WorldData[x][y] lumps
-    ML_RMAPGRID,  // JVAL: 20200429 - Grid to map precalculated positions 
+    ML_RMAPGRID,  // JVAL: 20200429 - Grid to map precalculated positions
     ML_RACTION,   // JVAL: Sprite/actions (Radix) - unpacked from WorldData[x][y] lumps
     ML_RTRIGGER   // JVAL: Triggers (Radix) - unpacked from WorldData[x][y] lumps
   );
@@ -250,7 +250,7 @@ type
   mapthing_tArray = array[0..$FFFF] of mapthing_t;
   Pmapthing_tArray = ^mapthing_tArray;
 
-// Extra radix things information (RTHINGS lump)  
+// Extra radix things information (RTHINGS lump)
   radixmapthingextra_t = packed record
     z: smallint;
     speed: smallint;

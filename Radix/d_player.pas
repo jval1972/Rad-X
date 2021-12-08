@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -208,7 +208,7 @@ type
     maxammo: array[0..Ord(NUMAMMO) - 1] of integer;
     lastfire: array[0..Ord(NUMWEAPONS) - 1] of integer; // JVAL: 20200401 - Refire control
     gravitywave: integer; // JVAL: 20200403 - Number of gravity wave shots
-    weaponchangetics: integer; // JVAL: 20200507 - Avoid rapid repeating weapon changes 
+    weaponchangetics: integer; // JVAL: 20200507 - Avoid rapid repeating weapon changes
 
     // True if button down last tic.
     attackdown: boolean;

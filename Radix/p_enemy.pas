@@ -1156,7 +1156,7 @@ begin
         actor.angle := actor.angle + ANG90 div 2;
     end;
   end;
-  
+
   if (actor.target = nil) or
      (actor.target.flags and MF_SHOOTABLE = 0) then
   begin

@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -99,7 +99,7 @@ uses
   g_game,
   r_wall32,
   r_cache_main,
-{$IFDEF DOOM_OR_STRIFE}  
+{$IFDEF DOOM_OR_STRIFE}
   r_colormaps,
   r_diher,
 {$ENDIF}
@@ -937,7 +937,7 @@ var
 begin
   for i := 0 to numtextures - 1 do
     if textures[i] <> nil then  // JVAL: This could happen if wrong IWAD used
-                                //  with PWAD, eg sunlust.wad with DOOM.WAD 
+                                //  with PWAD, eg sunlust.wad with DOOM.WAD
     begin
       if LongWord(textures[i].texture32) > 1 then
         dispose(textures[i].texture32, destroy);

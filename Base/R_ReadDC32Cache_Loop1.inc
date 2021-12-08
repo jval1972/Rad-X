@@ -6,4 +6,4 @@
         inc(plw);
 {$IFNDEF LASTLOOP}
         inc(src1);
-{$ENDIF}        
+{$ENDIF}

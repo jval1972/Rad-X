@@ -184,8 +184,8 @@ begin
   // JVAL: 20171216 - Fix links
   if sfxinfo.link <> nil then
     sfxinfo := sfxinfo.link;
-{$ENDIF}    
-    
+{$ENDIF}
+
   sprintf(namebuf, 'ds%s', [sfxinfo.name]);
   result := W_CheckNumForName(namebuf);
 
@@ -206,7 +206,7 @@ const
 const
   CS_fLac = 1130450022; // fLac
   CS_OggS = 1399285583; // OggS
-{$ENDIF}  
+{$ENDIF}
 
 procedure I_CacheSFX(const sfxid: integer);
 var
@@ -469,7 +469,7 @@ begin
             sparm.length := dwlen;
             sparm.offSet := i * 4;
             if plwhat = 2 then
-              sparm.offset := sparm.offset + 2; 
+              sparm.offset := sparm.offset + 2;
           end
           else
             dec(i);
@@ -767,7 +767,7 @@ begin
         else
           sparm.avgfreq := SampleFormat.nAvgBytesPerSec;
       end;
-      
+
     end
     else
     begin

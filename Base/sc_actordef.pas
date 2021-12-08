@@ -1360,7 +1360,7 @@ var
     {$ENDIF}
     AddRes('Scale = ' + itoa(round(mobj.scale * FRACUNIT)));
     AddRes('Gravity = ' + itoa(round(mobj.gravity * FRACUNIT)));
-    
+
     AddRes('Armor Inc = ' + itoa(mobj.armour_inc));
     AddRes('Energy Inc = ' + itoa(mobj.energy_inc));
     AddRes('Shield Inc = ' + itoa(mobj.shield_inc));

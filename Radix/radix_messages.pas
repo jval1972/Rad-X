@@ -71,7 +71,7 @@ function RX_StartUpMessage(const episode, map: integer): string;
 const
   NUMHIDDENMESSAGES = 147;
 
-// Hidden messages from https://www.tcrf.net/Radix:_Beyond_the_Void  
+// Hidden messages from https://www.tcrf.net/Radix:_Beyond_the_Void
 var
   radixhiddenmessages: array[0..NUMHIDDENMESSAGES - 1] of string = (
    'So you''ve beat the Bio-Spawner?! Wait til you meet Ryan!',

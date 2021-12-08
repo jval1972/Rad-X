@@ -958,7 +958,7 @@ begin
     else
       palette := 0;
   end;
-  
+
   if palette <> st_palette then
   begin
     st_palette := palette;

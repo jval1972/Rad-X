@@ -205,9 +205,9 @@ asm
 @work:
 {$IFDEF FPC}
   push qword ptr [rcx]
-{$ELSE} 
+{$ELSE}
   push [rcx]
-{$ENDIF}  
+{$ENDIF}
   dec r8
   sub rcx,8
 @compareitems:
@@ -701,7 +701,7 @@ begin
       if (length(Stack) mod 16) <> 0 then begin
         SetLength(Stack, Length(Stack)+16 - (Length(Stack) mod 16));
       end;
-      {$ENDIF} 
+      {$ENDIF}
       if Stack = nil then pp := nil else pp := @Stack[Length(Stack) -8];
 {$IFDEF WINDOWS}
       Registers.Stack := pp;

@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -240,7 +240,7 @@ begin
   end;
 
   if (buf[1] = $50) and (buf[2] = $4E) and (buf[3] = $47) then // PNG
-    ext := PNGSPRITEEXT           
+    ext := PNGSPRITEEXT
   else if (buf[0] = $42) and (buf[1] = $4D) then // BMP
     ext := '.BMP'
   else

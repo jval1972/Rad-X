@@ -21,11 +21,11 @@
 //  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
-// DESCRIPTION: 
-//  MapObj data. Map Objects or mobjs are actors, entities, 
-//  thinker, take-your-pick... anything that moves, acts, or 
-//  suffers state changes of more or less violent nature. 
-// 
+// DESCRIPTION:
+//  MapObj data. Map Objects or mobjs are actors, entities,
+//  thinker, take-your-pick... anything that moves, acts, or
+//  suffers state changes of more or less violent nature.
+//
 //------------------------------------------------------------------------------
 //  Site: https://sourceforge.net/projects/rad-x/
 //------------------------------------------------------------------------------

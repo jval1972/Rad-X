@@ -294,7 +294,7 @@ begin
     P_HitFloor(mo);
     mo.flags2_ex := mo.flags2_ex and not MF2_EX_NOHITFLOOR;
   end;
-  
+
   mo.momx := 0;
   mo.momy := 0;
   mo.momz := 0;
@@ -1127,7 +1127,7 @@ begin
     result := nil;
     exit;
   end;
-  
+
   mobj := Z_Malloc(SizeOf(mobj_t), PU_LEVEL, nil);
 
   ZeroMemory(mobj, SizeOf(mobj_t));
@@ -1679,7 +1679,7 @@ begin
       if mthing.options and MTF_ONMIDSECTOR <> 0 then
         z := sectors[ss.sector.midsec].ceilingheight;
   end;
-  
+
   result := P_SpawnMobj(x, y, z, Ord(MT_PLAYER), @mthing);
 
   // set color translations for player sprites
@@ -2872,7 +2872,7 @@ begin
     result := nil;
     exit;
   end;
-  
+
   currentthinker := thinkercap.next;
   while Pointer(currentthinker) <> Pointer(@thinkercap) do
   begin

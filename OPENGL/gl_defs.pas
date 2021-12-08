@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -130,7 +130,7 @@ const
 var
   gl_tex_format_string: string;
   gl_tex_format: integer = GL_RGBA8;
-  gl_fakecontrast: boolean; 
+  gl_fakecontrast: boolean;
 
 type
   tex_format_lookup_t = record
@@ -174,7 +174,7 @@ const
   MAP_SCALE = MAP_COEFF * FRACUNIT;
   FLATUVSCALE = FRACUNIT * 64.0;
 
-const  
+const
   COORDMIN = -1.0E38;
   COORDMAX =  1.0E38;
 

@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -428,7 +428,7 @@ begin
       end;
       exit;
     end;
-    
+
     while frac <= fraclimit2 do
     begin
     // Re-map color indices from wall texture column
@@ -1548,7 +1548,7 @@ end;
 const
   MAXSPRITETHREADS = 16;
 
-var  
+var
   SPRIDS: array[0..MAXSPRITETHREADS - 1] of integer = (
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
   );

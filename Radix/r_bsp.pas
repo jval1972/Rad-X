@@ -122,7 +122,7 @@ var
     tempsec.ceilingheight := ss.floorheight - 1;
     result := not back;
   end;
-  
+
 begin
   if floorlightlevel <> nil then
   begin

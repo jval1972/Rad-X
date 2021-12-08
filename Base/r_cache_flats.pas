@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -106,7 +106,7 @@ var
   r2, g2, b2: byte;
   r, g, b: LongWord;
   c: LongWord;
-{$IFDEF DOOM_OR_STRIFE}  
+{$IFDEF DOOM_OR_STRIFE}
   dihertable: Pdihertable_t;
 {$ENDIF}
   lump: integer;
@@ -238,7 +238,7 @@ begin
             c := plw^;
             b2 := (c shr 16) shr DIHERSHIFT;
             g2 := ((c shr 8) and $FF) shr DIHERSHIFT;
-            r2 := (c and $FF) shr DIHERSHIFT;              
+            r2 := (c and $FF) shr DIHERSHIFT;
             plw^ := dihertable[b2, g2, r2];
             inc(plw);
           end;

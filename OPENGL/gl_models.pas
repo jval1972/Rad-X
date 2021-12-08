@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ type
     mt_md2,     // md2 (Quake2) models
     mt_ddmodel, // DelphiDoom Procedural model (source code)
     mt_dmx,     // DelphiDoom Procedural model (binary)
-    mt_dll,     // External DLL  
+    mt_dll,     // External DLL
     mt_unknown
   );
 
@@ -471,7 +471,7 @@ begin
             end;
           end;
         end;
-        
+
       else
         begin
           I_Warning('SC_ParseModelDefinition(): Unknown token "%s" at line %d'#13#10, [token, sc._Line]);

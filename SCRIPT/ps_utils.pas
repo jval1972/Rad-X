@@ -1493,6 +1493,6 @@ procedure TPSUnit.SetUnitName(const Value: TbtString);
 begin
   fUnitName := FastUpperCase(Value);
 end;
-  
+
 end.
 

@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
-// 
+//
 // DESCRIPTION:
 //  Game completion, final screen animation.
 //
@@ -416,7 +416,7 @@ begin
         continue;
       end;
     end;
-    
+
     w := hu_font[c1].width;
     if cx + w > 320 then
       continue;
@@ -662,7 +662,7 @@ begin
   F_CastPrint(castorder[castnum].name);
 
   // draw the current frame in the middle of the screen
-  sprdef := @sprites[caststate.sprite];    
+  sprdef := @sprites[caststate.sprite];
   sprframe := @sprdef.spriteframes[caststate.frame and FF_FRAMEMASK];
   lump := sprframe.lump[0];
   flip := sprframe.flip[0];

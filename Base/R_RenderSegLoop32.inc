@@ -377,7 +377,7 @@ begin
     else if mid < 0 then
       pceilingclip^ := -1
     else
-{$ENDIF}    
+{$ENDIF}
           pceilingclip^ := mid;
           {$IFDEF DEBUG}
           R_CheckClipItem(pceilingclip);
@@ -411,7 +411,7 @@ begin
     else if yl < 1 then
       pceilingclip^ := -1
     else
-{$ENDIF}    
+{$ENDIF}
           pceilingclip^ := yl - 1;
           {$IFDEF DEBUG}
           R_CheckClipItem(pceilingclip);
@@ -510,7 +510,7 @@ begin
       else if mid < -1 then
         pfloorclip^ := -1
       else
-{$ENDIF}      
+{$ENDIF}
           pfloorclip^ := mid;
           {$IFDEF DEBUG}
           R_CheckClipItem(pfloorclip);
@@ -544,7 +544,7 @@ begin
       else if yh + 1 < -1 then
         pfloorclip^ := -1
       else
-{$ENDIF}      
+{$ENDIF}
           pfloorclip^ := yh + 1;
           {$IFDEF DEBUG}
           R_CheckClipItem(pfloorclip);

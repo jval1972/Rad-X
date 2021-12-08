@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -167,7 +167,7 @@ begin
   for i := 0 to drawprocs.Count - 1 do
     if drawproc_t(drawprocs.List[i])(frm1, frm2, offset) then
       Break;
-      
+
   glPopMatrix;
 end;
 
