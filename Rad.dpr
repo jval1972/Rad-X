@@ -420,7 +420,8 @@ uses
   i_mainwindow in 'Base\i_mainwindow.pas',
   i_xmmusic in 'Base\i_xmmusic.pas',
   i_itmusic in 'Base\i_itmusic.pas',
-  s_externalmusic in 'Base\s_externalmusic.pas';
+  s_externalmusic in 'Base\s_externalmusic.pas',
+  radix_briefing in 'Radix\radix_briefing.pas';
 
 var
   Saved8087CW: Word;
