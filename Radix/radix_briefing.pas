@@ -60,6 +60,7 @@ uses
   mn_font,
   p_setup,
   sc_engine,
+  radix_level,
   r_data,
   r_defs,
   r_draw,
@@ -378,12 +379,29 @@ var
   ax, ay: integer;
   d: integer;
   color: byte;
+  sec, sec1, sec2: Psector_t;
 begin
   if pl.flags and ML_AUTOMAPIGNOGE <> 0 then
     exit;
 
+  sec := pl.frontsector;
+  if sec = nil then
+    sec := pl.backsector;
+  if sec = nil then
+    Exit; // ?
+
+  if sec.radixflags and RSF_HIDDEN <> 0 then
+    exit;
+
   if twosided and (pl.flags and ML_TWOSIDED <> 0) then
-    color := aprox_lightblue
+  begin
+    color := aprox_lightblue;
+    sec1 := pl.frontsector;
+    sec2 := pl.backsector;
+    if (sec1 <> nil) and (sec2 <> nil) then
+      if (sec1.radixflags and RSF_HIDDEN <> 0) or (sec2.radixflags and RSF_HIDDEN <> 0) then
+        color := aprox_red;
+  end
   else if not twosided and (pl.flags and ML_TWOSIDED = 0) then
     color := aprox_red
   else
