@@ -150,7 +150,7 @@ begin
     curdrawinfo.curanimtex := cmd.sparam;
   end;
   if cmd.tic < cmd.iparams[1] then
-    Inc(cmd.tic)
+    Inc(cmd.tic, 3)
   else
   begin
     cmd.tic := 0;
