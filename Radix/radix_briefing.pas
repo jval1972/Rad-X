@@ -874,7 +874,7 @@ begin
 
   if curdrawinfo.curanimtex <> '' then
   begin
-    ZeroMemory(screens[SCN_TMP640], 640 * 400);
+    ZeroMemory(screens[SCN_TMP640], V_ScreensSize(SCN_TMP640));
     p := W_CacheLumpName(curdrawinfo.curanimtex, PU_LEVEL);
     V_DrawPatch(448, 92 + p.topoffset - p.height div 2, SCN_TMP640, p, false);
     V_CopyRectTransparent(0, 0, SCN_TMP640, 640, 400, 0, 0, SCN_FG, True);
