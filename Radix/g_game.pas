@@ -873,6 +873,12 @@ begin
     result := E_Responder(ev);
     exit;
   end;
+  if gamestate = GS_BRIEFING then
+  begin
+    result := RB_Responder(ev);
+    if result then
+      exit;
+  end;
   // allow spy mode changes even during the demo
   if (gamestate = GS_LEVEL) and (ev._type = ev_keydown) and
      (ev.data1 = KEY_F12) and (singledemo or (deathmatch = 0)) then

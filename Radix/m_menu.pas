@@ -140,6 +140,7 @@ uses
   p_enemy,
   p_user,
   p_adjust,
+  radix_briefing,
   radix_hud,
   radix_sounds,
   radix_score,
@@ -3625,8 +3626,13 @@ begin
   begin
     if ch = KEY_ESCAPE then
     begin
-      M_StartControlPanel;
-      M_MenuSound;
+      if gamestate = GS_BRIEFING then
+        RB_Exit
+      else
+      begin
+        M_StartControlPanel;
+        M_MenuSound;
+      end;
       result := true;
       exit;
     end;

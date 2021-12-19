@@ -40,6 +40,10 @@ procedure RB_Ticker;
 
 procedure RB_Drawer;
 
+procedure RB_Exit;
+
+function RB_Responder(ev: Pevent_t): boolean;
+
 var
   showbriefingscreen: Boolean = true;
 
@@ -72,6 +76,7 @@ type
     curmsg: string;
     curanimtex: string;
     mapcreated: boolean;
+    finished: boolean;
   end;
   Prbframedrawinfo_t = ^rbframedrawinfo_t;
 
@@ -504,6 +509,7 @@ var
 begin
   acceleratestage := False;
   curdrawinfo.mapcreated := False;
+  curdrawinfo.finished := False;
   curdrawinfo.curmappos := 0;
   curdrawinfo.targmappos := 0;
   curdrawinfo.mapscrollspeed := 128;
@@ -704,6 +710,9 @@ var
   player: Pplayer_t;
   scrollspeed: integer;
 begin
+  if curdrawinfo.finished then
+    exit;
+
   RB_CreateMap;
 
   // check for button presses to skip delays
@@ -765,8 +774,7 @@ begin
       if not commands[i].cmd(@commands[i]) then
         Exit;
 
-  wipegamestate := -1;
-  gamestate := GS_LEVEL;
+  curdrawinfo.finished := True;
 end;
 
 procedure RB_DrawFrame(const bx, by, bw, bh: integer);
@@ -881,6 +889,30 @@ begin
   end;
 
   V_FullScreenStretch;
+end;
+
+procedure RB_Exit;
+begin
+  wipegamestate := -1;
+  gamestate := GS_LEVEL;
+end;
+
+function RB_Responder(ev: Pevent_t): boolean;
+begin
+  if ev._type <> ev_keydown then
+  begin
+    Result := False;
+    exit;
+  end;
+
+  if curdrawinfo.finished then
+  begin
+    wipegamestate := -1;
+    gamestate := GS_LEVEL;
+    Result := True;
+    exit;
+  end;
+  Result := False;
 end;
 
 end.
