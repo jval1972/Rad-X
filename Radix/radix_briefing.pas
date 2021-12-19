@@ -329,7 +329,7 @@ begin
   pl := @lines[0];
   for i := 0 to numlines - 1 do
   begin
-    if pl.flags and ML_AUTOMAPIGNOGE = 0 then
+    if (pl.flags and ML_AUTOMAPIGNOGE = 0) and (pl.radixflags and RWF_LINEBRIEFINGIGNORE = 0) then
     begin
       RB_PointToRadix(pl, pl.v1.x, pl.v1.y, rx, ry);
       if rx < min_x then
@@ -382,6 +382,9 @@ var
   sec, sec1, sec2: Psector_t;
 begin
   if pl.flags and ML_AUTOMAPIGNOGE <> 0 then
+    exit;
+
+  if pl.radixflags and RWF_LINEBRIEFINGIGNORE <> 0 then
     exit;
 
   sec := pl.frontsector;

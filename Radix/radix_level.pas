@@ -75,6 +75,8 @@ const
   RWF_TWOSIDEDCOMPLETE = 512;
   RWF_ACTIVATETRIGGER = 1024;
   RWF_MISSILEWALL = 2048;
+  // JVAL 20211219 - Ignore in briefing
+  RWF_LINEBRIEFINGIGNORE = $4000000;
   // JVAL 20200519 - Shootable line
   RWF_SHOOTABLE = $8000000;
   // JVAL 20200307 - Set at runtime
@@ -1318,6 +1320,22 @@ var
       doomsidedefs[doomlinedefs[1169].sidenum[0]].midtexture := doomsidedefs[doomlinedefs[1169].sidenum[0]].bottomtexture;
       doomlinedefs[1169].flags := doomlinedefs[1169].flags or ML_BLOCKING;
       doomlinedefs[1169].flags := doomlinedefs[1169].flags and not ML_TWOSIDED;
+
+      // Fix for briefing screens
+      doommapscript.Add('wallid 184 LINEBRIEFINGIGNORE');
+      doommapscript.Add('wallid 429 LINEBRIEFINGIGNORE');
+      doommapscript.Add('wallid 534 LINEBRIEFINGIGNORE');
+      doommapscript.Add('wallid 665 LINEBRIEFINGIGNORE');
+      doommapscript.Add('wallid 1166 LINEBRIEFINGIGNORE');
+      doommapscript.Add('wallid 1167 LINEBRIEFINGIGNORE');
+      doommapscript.Add('wallid 1168 LINEBRIEFINGIGNORE');
+      doommapscript.Add('wallid 1169 LINEBRIEFINGIGNORE');
+      doommapscript.Add('wallid 1170 LINEBRIEFINGIGNORE');
+      doommapscript.Add('wallid 1171 LINEBRIEFINGIGNORE');
+      doommapscript.Add('wallid 1172 LINEBRIEFINGIGNORE');
+      doommapscript.Add('wallid 1173 LINEBRIEFINGIGNORE');
+      doommapscript.Add('wallid 1174 LINEBRIEFINGIGNORE');
+      doommapscript.Add('wallid 1175 LINEBRIEFINGIGNORE');
 
       // Deny access to monsters in the trans-corridor
       doomlinedefs[537].flags := doomlinedefs[537].flags or ML_BLOCKMONSTERS;

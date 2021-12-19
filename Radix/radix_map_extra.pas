@@ -356,6 +356,7 @@ begin
   tokens.Add('WALLHITPOINTS'); // 19
   tokens.Add('WALLTRIGGER'); // 20
   tokens.Add('SECTORFLAGS'); // 21
+  tokens.Add('LINEBRIEFINGIGNORE'); // 22
 
   cursector := 0;
   curline := 0;
@@ -549,6 +550,10 @@ begin
         begin
           sc.MustGetInteger;
           sectors[cursector].radixflags := sc._Integer;
+        end;
+     22:  // LINEBRIEFINGIGNORE
+        begin
+          lines[curline].radixflags := lines[curline].radixflags or RWF_LINEBRIEFINGIGNORE;
         end;
     end;  // case
   end;
