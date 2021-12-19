@@ -874,9 +874,9 @@ begin
 
   RB_DrawFrame(2, 2, 110, 193);
   RB_DrawMap;
-  RB_DrawFrame(136, 2, 170, 88);
-  RB_DrawFrame(136, 107, 170, 88);
-  M_WriteSmallTextNarrow(140, 113, curdrawinfo.curmsg, SCN_TMP);
+  RB_DrawFrame(136, 2, 170, 84);
+  RB_DrawFrame(136, 103, 170, 84);
+  M_WriteSmallTextNarrow(140, 109, curdrawinfo.curmsg, SCN_TMP);
 
   V_CopyRect(0, 0, SCN_TMP, 320, 200, 0, 0, SCN_FG, true);
 
@@ -884,7 +884,7 @@ begin
   begin
     ZeroMemory(screens[SCN_TMP640], V_ScreensSize(SCN_TMP640));
     p := W_CacheLumpName(curdrawinfo.curanimtex, PU_LEVEL);
-    V_DrawPatch(448, 92 + p.topoffset - p.height div 2, SCN_TMP640, p, false);
+    V_DrawPatch(448, 88 + p.topoffset - p.height div 2, SCN_TMP640, p, false);
     V_CopyRectTransparent(0, 0, SCN_TMP640, 640, 400, 0, 0, SCN_FG, True);
   end;
 
