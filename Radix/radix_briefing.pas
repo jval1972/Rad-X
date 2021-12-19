@@ -605,8 +605,12 @@ begin
           else
           begin
             for i := Length(stmp) downto 1 do
+            begin
               if stmp[i] = '$' then
-                stmp[i] := ' ';
+                stmp[i] := ' '
+              else if stmp[i] = '''' then
+                stmp[i] := '`';
+            end;
           end;
           printparm := printparm + stmp;
         end
@@ -618,8 +622,12 @@ begin
           else
           begin
             for i := Length(stmp) downto 1 do
+            begin
               if stmp[i] = '$' then
-                stmp[i] := ' ';
+                stmp[i] := ' '
+              else if stmp[i] = '''' then
+                stmp[i] := '`';
+            end;
           end;
           printparm := printparm + stmp + #13#10;
         end
