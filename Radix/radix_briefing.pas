@@ -339,7 +339,7 @@ begin
     exit;
 
   if twosided and (pl.flags and ML_TWOSIDED <> 0) then
-    color := aprox_blue
+    color := aprox_lightblue
   else if not twosided and (pl.flags and ML_TWOSIDED = 0) then
     color := aprox_red
   else
@@ -817,9 +817,8 @@ var
 begin
   V_DrawPatchFullScreenTMP320x200('BACKIMG');
 
-  RB_DrawMap;
-
   RB_DrawFrame(2, 2, 110, 193);
+  RB_DrawMap;
   RB_DrawFrame(136, 2, 170, 88);
   RB_DrawFrame(136, 107, 170, 88);
   M_WriteSmallTextNarrow(140, 113, curdrawinfo.curmsg, SCN_TMP);
