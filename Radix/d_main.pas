@@ -179,6 +179,7 @@ uses
   ps_main,
   psi_overlay,
   radix_alias,
+  radix_briefing,
   radix_score,
   radix_weapons,
   radix_version,
@@ -398,6 +399,8 @@ begin
 
   // do buffered drawing
   case gamestate of
+    GS_BRIEFING:
+      RB_Drawer;
     GS_LEVEL:
       begin
         if gametic <> 0 then

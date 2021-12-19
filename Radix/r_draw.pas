@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -85,6 +85,16 @@ var
   ylookup: array[0..MAXHEIGHT - 1] of PByteArray;
   ylookupl: array[0..MAXHEIGHT - 1] of PLongWordArray;
   columnofs: array[0..MAXWIDTH - 1] of integer;
+
+var
+  brdr_t: integer = -1;
+  brdr_b: integer = -1;
+  brdr_l: integer = -1;
+  brdr_r: integer = -1;
+  brdr_tl: integer = -1;
+  brdr_tr: integer = -1;
+  brdr_bl: integer = -1;
+  brdr_br: integer = -1;
 
 type
   crange_idx_e = (
@@ -237,16 +247,6 @@ begin
     inc(x, SCREENWIDTH);
   end;
 end;
-
-var
-  brdr_t: integer = -1;
-  brdr_b: integer = -1;
-  brdr_l: integer = -1;
-  brdr_r: integer = -1;
-  brdr_tl: integer = -1;
-  brdr_tr: integer = -1;
-  brdr_bl: integer = -1;
-  brdr_br: integer = -1;
 
 //
 // R_FillBackScreen

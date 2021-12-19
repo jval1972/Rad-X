@@ -48,6 +48,8 @@ function M_SmallStringHeight(const str: string): integer;
 
 function M_WriteSmallText(x, y: integer; const str: string; const scn: integer): menupos_t;
 
+function M_WriteSmallTextNarrow(x, y: integer; const str: string; const scn: integer): menupos_t;
+
 function M_WriteSmallTextCenter(y: integer; const str: string; const scn: integer): menupos_t;
 
 function M_WriteSmallWhiteText(x, y: integer; const str: string; const scn: integer): menupos_t;
@@ -186,6 +188,68 @@ begin
     if (c < 0) or (c >= HU_FONTSIZE) then
     begin
       cx := cx + 4;
+      continue;
+    end;
+
+    w := hu_font[c].width;
+    if (cx + w) > 320 then
+      break;
+    V_DrawPatch(cx, cy, scn, hu_font[c], false);
+    cx := cx + w;
+  end;
+
+  result.x := cx;
+  result.y := cy;
+end;
+
+function M_WriteSmallTextNarrow(x, y: integer; const str: string; const scn: integer): menupos_t;
+var
+  w: integer;
+  ch: integer;
+  c: integer;
+  cx: integer;
+  cy: integer;
+  len: integer;
+begin
+  len := Length(str);
+  if len = 0 then
+  begin
+    result.x := x;
+    result.y := y;
+    exit;
+  end;
+
+  ch := 1;
+  cx := x;
+  cy := y;
+
+  while true do
+  begin
+    if ch > len then
+      break;
+
+    c := Ord(str[ch]);
+    inc(ch);
+
+    if c = 0 then
+      break;
+
+    if c = 10 then
+    begin
+      cx := x;
+      continue;
+    end;
+
+    if c = 13 then
+    begin
+      cy := cy + 10;
+      continue;
+    end;
+
+    c := Ord(toupper(Chr(c))) - Ord(HU_FONTSTART);
+    if (c < 0) or (c >= HU_FONTSIZE) then
+    begin
+      cx := cx + 3;
       continue;
     end;
 

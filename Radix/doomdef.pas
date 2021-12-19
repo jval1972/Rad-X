@@ -120,6 +120,7 @@ type
   gamestate_t = (
     GS_INDETERMINED,
     GS_LEVEL,
+    GS_BRIEFING,
     GS_INTERMISSION,
     GS_FINALE,
     GS_DEMOSCREEN,

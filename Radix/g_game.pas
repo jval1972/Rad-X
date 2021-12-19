@@ -326,6 +326,7 @@ uses
   p_map,
   p_levelinfo,
   ps_main,
+  radix_briefing,
   radix_intermission,
   hu_stuff,
   st_stuff,
@@ -797,10 +798,18 @@ begin
   else
     skytexture := R_TextureNumForName('SKY1');
 
-  if wipegamestate = Ord(GS_LEVEL) then
-    wipegamestate := -1;  // force a wipe
+  if demoplayback or demorecording or netgame or not showbriefingscreen then
+    gamestate := GS_LEVEL
+  else
+  begin
+    if RB_Start(gameepisode, gamemap) then
+      gamestate := GS_BRIEFING
+    else
+    gamestate := GS_LEVEL;
+  end;
 
-  gamestate := GS_LEVEL;
+  if wipegamestate = Ord(gamestate) then
+    wipegamestate := -1;  // force a wipe
 
   for i := 0 to MAXPLAYERS - 1 do
   begin
@@ -1121,6 +1130,10 @@ begin
 
   // do main actions
   case gamestate of
+    GS_BRIEFING:
+      begin
+        RB_Ticker;
+      end;
     GS_LEVEL:
       begin
         P_Ticker;
@@ -1513,7 +1526,10 @@ end;
 
 procedure G_DoWorldDone;
 begin
-  gamestate := GS_LEVEL;
+  if demoplayback or demorecording or netgame or not showbriefingscreen then
+    gamestate := GS_LEVEL
+  else
+    gamestate := GS_BRIEFING;
   gamemap := wminfo.next + 1;
   G_DoLoadLevel;
   gameaction := ga_nothing;

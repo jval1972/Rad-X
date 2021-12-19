@@ -31,15 +31,35 @@ unit radix_briefing;
 
 interface
 
+uses
+  d_event;
+
 function RB_Start(const epi, map: integer): Boolean;
+
+procedure RB_Ticker;
+
+procedure RB_Drawer;
+
+var
+  showbriefingscreen: Boolean = true;
 
 implementation
 
 uses
   d_delphi,
+  doomdef,
   d_player,
+  g_game,
+  m_fixed,
+  mn_font,
   sc_engine,
-  w_wad;
+  r_data,
+  r_defs,
+  r_draw,
+  v_data,
+  v_video,
+  w_wad,
+  z_zone;
 
 type
   rbframedrawinfo_t = record
@@ -54,7 +74,7 @@ const
   MAXBRIEFINGCOMMANDS = 512;
 
 type
-  cmdproc_t = procedure (const cmd: pointer);
+  cmdproc_t = function (const cmd: pointer): boolean;
 
   rbcommand_t = record
     cmd: cmdproc_t;
@@ -71,28 +91,38 @@ var
   curdrawinfo: rbframedrawinfo_t;
   commands: rbcommand_tArray;
   numcommands: integer;
+  acceleratestage: Boolean = false;
 
 // --- Command procs
-procedure RB_CmdClearAnimWindow(const cmd: Prbcommand_t);
+function RB_CmdClearAnimWindow(const cmd: Prbcommand_t): Boolean;
 begin
   curdrawinfo.curanimtex := '';
   cmd.active := false;
+  Result := True;
 end;
 
-procedure RB_CmdClearTextWindow(const cmd: Prbcommand_t);
+function RB_CmdClearTextWindow(const cmd: Prbcommand_t): Boolean;
 begin
   curdrawinfo.curmsg := '';
   cmd.active := false;
+  Result := True;
 end;
 
-procedure RB_CmdDelay(const cmd: Prbcommand_t);
+function RB_CmdDelay(const cmd: Prbcommand_t): Boolean;
 begin
+  if acceleratestage then
+  begin
+    cmd.tic := cmd.iparams[0];
+    acceleratestage := False;
+  end;
+
   if cmd.tic < cmd.iparams[0] then
     Inc(cmd.tic);
   cmd.active := cmd.tic < cmd.iparams[0];
+  Result := not cmd.active;
 end;
 
-procedure RB_CmdDisplayAnimation(const cmd: Prbcommand_t);
+function RB_CmdDisplayAnimation(const cmd: Prbcommand_t): Boolean;
 var
   nanims: integer;
   anim: string;
@@ -108,28 +138,36 @@ begin
   begin
     cmd.tic := 0;
     nanims := cmd.iparams[0];
-    anim := cmd.sparam;
     if nanims > 0 then
     begin
       if cmd.iparams[2] >= nanims then
         cmd.iparams[2] := 1
       else
         Inc(cmd.iparams[2]);
-      SetLength(anim, Length(anim) - 1);
-      anim := anim + itoa(cmd.iparams[2]);
-      curdrawinfo.curanimtex := anim;
     end;
   end;
+  anim := cmd.sparam;
+  SetLength(anim, Length(anim) - 1);
+  anim := anim + itoa(cmd.iparams[2]);
+  curdrawinfo.curanimtex := anim;
+  Result := True;
 end;
 
-procedure RB_CmdDisplayImage(const cmd: Prbcommand_t);
+function RB_CmdDisplayImage(const cmd: Prbcommand_t): Boolean;
 begin
   curdrawinfo.curanimtex := cmd.sparam;
-  cmd.active := False;
+  cmd.active := True;
+  Result := True;
 end;
 
-procedure RB_CmdPrint(const cmd: Prbcommand_t);
+function RB_CmdPrint(const cmd: Prbcommand_t): Boolean;
 begin
+  if acceleratestage then
+  begin
+    cmd.tic := Length(cmd.sparam);
+    curdrawinfo.curmsg := cmd.sparam;
+    acceleratestage := False;
+  end;
   if cmd.tic < Length(cmd.sparam) then
   begin
     Inc(cmd.tic);
@@ -138,37 +176,46 @@ begin
   end
   else
     cmd.active := False;
+  Result := not cmd.active;
 end;
 
-procedure RB_CmdScrollMapX(const cmd: Prbcommand_t);
+function RB_CmdScrollMapX(const cmd: Prbcommand_t): Boolean;
 begin
   curdrawinfo.targmappos := cmd.iparams[0];
   cmd.active := False;
+  Result := True;
 end;
 
-procedure RB_CmdMapPrint(const cmd: Prbcommand_t);
+function RB_CmdMapPrint(const cmd: Prbcommand_t): Boolean;
 begin
-
+  Result := True;
 end;
 
-procedure RB_CmdNextPoint(const cmd: Prbcommand_t);
+function RB_CmdNextPoint(const cmd: Prbcommand_t): Boolean;
 begin
-
+  Result := True;
 end;
 
-procedure RB_CmdPointMap(const cmd: Prbcommand_t);
+function RB_CmdPointMap(const cmd: Prbcommand_t): Boolean;
 begin
-
+  Result := True;
 end;
 
-procedure RB_CmdShowScreen(const cmd: Prbcommand_t);
+function RB_CmdShowScreen(const cmd: Prbcommand_t): Boolean;
 begin
-
+  Result := True;
 end;
 
-procedure RB_CmdWaitAction(const cmd: Prbcommand_t);
+function RB_CmdWaitAction(const cmd: Prbcommand_t): Boolean;
 begin
-
+  if acceleratestage then
+  begin
+    Result := True;
+    acceleratestage := False;
+    cmd.active := False;
+  end
+  else
+    Result := False;
 end;
 
 function RB_Start(const epi, map: integer): Boolean;
@@ -225,6 +272,7 @@ begin
   begin
     utoken := strupper(sc._String);
     cmd := @commands[numcommands];
+    cmd.active := True;
     if utoken = 'CLEARANIMWINDOW' then
     begin
       cmd.cmd := @RB_CmdClearAnimWindow;
@@ -242,6 +290,8 @@ begin
     else if utoken = 'DISPLAYANIMATION' then
     begin
       cmd.cmd := @RB_CmdDisplayAnimation;
+      sc.MustGetString;
+      cmd.sparam := sc._String;
       for i := 0 to 2 do
       begin
         sc.MustGetInteger;
@@ -251,6 +301,8 @@ begin
     else if utoken = 'DISPLAYIMAGE' then
     begin
       cmd.cmd := @RB_CmdDisplayImage;
+      sc.MustGetString;
+      cmd.sparam := sc._String;
       for i := 0 to 1 do
       begin
         sc.MustGetInteger;
@@ -265,8 +317,7 @@ begin
         sc.MustGetInteger;
         cmd.iparams[i] := sc._Integer;
       end;
-      sc.MustGetString;
-      cmd.sparam := sc._String;
+      cmd.sparam := sc.GetStringEOL;
     end
     else if utoken = 'NEXTPOINT' then
     begin
@@ -294,7 +345,7 @@ begin
           begin
             for i := Length(stmp) downto 1 do
               if stmp[i] = '$' then
-                Delete(stmp, i, 1);
+                stmp[i] := ' ';
           end;
           printparm := printparm + stmp;
         end
@@ -307,7 +358,7 @@ begin
           begin
             for i := Length(stmp) downto 1 do
               if stmp[i] = '$' then
-                Delete(stmp, i, 1);
+                stmp[i] := ' ';
           end;
           printparm := printparm + stmp + #13#10;
         end
@@ -333,6 +384,10 @@ begin
     else if utoken = 'SHOWSCREEN' then
     begin
       cmd.cmd := @RB_CmdShowScreen;
+    end
+    else if utoken = 'WAITACTION' then
+    begin
+      cmd.cmd := @RB_CmdWaitAction;
     end;
 
     if printparm <> '' then
@@ -348,7 +403,163 @@ begin
 
   sc.Free;
 
+  acceleratestage := false;
+
   Result := numcommands > 0;
+end;
+
+procedure RB_Ticker;
+var
+  i: integer;
+  player: Pplayer_t;
+begin
+  // check for button presses to skip delays
+  for i := 0 to MAXPLAYERS - 1 do
+  begin
+    player := @players[i];
+
+    if playeringame[i] then
+    begin
+
+      if player.cmd.buttons and BT_ATTACK <> 0 then
+      begin
+        if not player.attackdown then
+          acceleratestage := True;
+        player.attackdown := True;
+      end
+      else
+        player.attackdown := False;
+
+      if player.cmd.buttons and BT_USE <> 0 then
+      begin
+        if not player.usedown then
+          acceleratestage := True;
+        player.usedown := True;
+      end
+      else
+        player.usedown := False;
+    end;
+  end;
+
+  for i := 0 to numcommands - 1 do
+    if commands[i].active then
+      if not commands[i].cmd(@commands[i]) then
+        Exit;
+
+  gamestate := GS_LEVEL;
+end;
+
+procedure RB_DrawFrame(const bx, by, bw, bh: integer);
+var
+  p: Ppatch_t;
+  x, y, pix: Integer;
+  cmap: PByteArray;
+begin
+  cmap := @def_colormaps[(NUMCOLORMAPS div 2) * 256];
+  for y := by to by + bh do
+    for x := bx to bx + bw do
+    begin
+      pix := y * 320 + x;
+      screens[SCN_TMP][pix] := cmap[screens[SCN_TMP][pix]];
+    end;
+
+  if brdr_t < 0 then
+    brdr_t := W_GetNumForName('brdr_t');
+  if brdr_b < 0 then
+    brdr_b := W_GetNumForName('brdr_b');
+  if brdr_l < 0 then
+    brdr_l := W_GetNumForName('brdr_l');
+  if brdr_r < 0 then
+    brdr_r := W_GetNumForNAme('brdr_r');
+  if brdr_tl < 0 then
+    brdr_tl := W_GetNumForName('brdr_tl');
+  if brdr_tr < 0 then
+    brdr_tr := W_GetNumForName('brdr_tr');
+  if brdr_bl < 0 then
+    brdr_bl := W_GetNumForName('brdr_bl');
+  if brdr_br < 0 then
+    brdr_br := W_GetNumForName('brdr_br');
+
+  p := W_CacheLumpNum(brdr_t, PU_STATIC);
+  x := bx;
+  y := by;
+  while x < bx + bw do
+  begin
+    if x + p.width > bx + bw then
+      x := bx + bw - p.width;
+    V_DrawPatch(x, y, SCN_TMP, p, false);
+    x := x + 8;
+  end;
+  Z_ChangeTag(p, PU_CACHE);
+
+  p := W_CacheLumpNum(brdr_b, PU_STATIC);
+  x := bx;
+  y := by + bh;
+  while x < bx + bw do
+  begin
+    if x + p.width > bx + bw then
+      x := bx + bw - p.width;
+    V_DrawPatch(x, y, SCN_TMP, p, false);
+    x := x + 8;
+  end;
+  Z_ChangeTag(p, PU_CACHE);
+
+  p := W_CacheLumpNum(brdr_l, PU_STATIC);
+  x := bx;
+  y := by;
+  while y < by + bh do
+  begin
+    if y + p.height > by + bh then
+      y := by + bh - p.height;
+    V_DrawPatch(x, y, SCN_TMP, p, false);
+    y := y + 8;
+  end;
+  Z_ChangeTag(p, PU_CACHE);
+
+  p := W_CacheLumpNum(brdr_r, PU_STATIC);
+  x := bx + bw;
+  y := by;
+  while y < by + bh do
+  begin
+    if y + p.height > by + bh then
+      y := by + bh - p.height;
+    V_DrawPatch(x, y, SCN_TMP, p, false);
+    y := y + 8;
+  end;
+  Z_ChangeTag(p, PU_CACHE);
+
+  // Draw beveled edge.
+  V_DrawPatch(bx, by, SCN_TMP, brdr_tl, false);
+
+  V_DrawPatch(bx + bw, y, SCN_TMP, brdr_tr, false);
+
+  V_DrawPatch(bx, by + bh, SCN_TMP, brdr_bl, false);
+
+  V_DrawPatch(bx + bw, by + bh, SCN_TMP, brdr_br, false);
+end;
+
+procedure RB_Drawer;
+var
+  p: Ppatch_t;
+begin
+  V_DrawPatchFullScreenTMP320x200('BACKIMG');
+
+  RB_DrawFrame(2, 2, 110, 193);
+  RB_DrawFrame(136, 2, 170, 88);
+  RB_DrawFrame(136, 107, 170, 88);
+  M_WriteSmallTextNarrow(140, 113, curdrawinfo.curmsg, SCN_TMP);
+
+  V_CopyRect(0, 0, SCN_TMP, 320, 200, 0, 0, SCN_FG, true);
+
+  if curdrawinfo.curanimtex <> '' then
+  begin
+    ZeroMemory(screens[SCN_TMP640], 640 * 400);
+    p := W_CacheLumpName(curdrawinfo.curanimtex, PU_LEVEL);
+    V_DrawPatch(448, 92 + p.topoffset - p.height div 2, SCN_TMP640, p, false);
+    V_CopyRectTransparent(0, 0, SCN_TMP640, 640, 400, 0, 0, SCN_FG, True);
+  end;
+
+  V_FullScreenStretch;
 end;
 
 end.
