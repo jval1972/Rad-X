@@ -587,7 +587,7 @@ begin
   m_w := FTOM(f_w);
   m_h := FTOM(f_h);
 
-  if gamestate =  gs_level then
+  if gamestate = gs_level then
   begin
     // find player to center on initially
     pnum := consoleplayer;
