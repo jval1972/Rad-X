@@ -47,11 +47,13 @@ implementation
 
 uses
   d_delphi,
+  doomdata,
   doomdef,
   d_player,
   g_game,
   m_fixed,
   mn_font,
+  p_setup,
   sc_engine,
   r_data,
   r_defs,
@@ -92,6 +94,7 @@ var
   commands: rbcommand_tArray;
   numcommands: integer;
   acceleratestage: Boolean = false;
+  mapcreated: Boolean = false;
 
 // --- Command procs
 function RB_CmdClearAnimWindow(const cmd: Prbcommand_t): Boolean;
@@ -218,6 +221,222 @@ begin
     Result := False;
 end;
 
+const
+  MAPX = 100;
+  MAPY = 4000;
+
+var
+  mapscreen: array[0..MAPY - 1] of array [0..MAPX - 1] of Byte;
+  mapscale: int64;
+  mapleft: fixed_t;
+  maptop: fixed_t;
+  mapwidth: fixed_t;
+  mapheight: integer;
+
+procedure RB_PointToRadix(const pl: Pline_t; const x, y: integer; var rx, ry: integer);
+var
+  sec: Psector_t;
+begin
+  sec := pl.frontsector;
+  if sec = nil then
+    sec := pl.backsector;
+  rx := sec.radixmapXmult * (x div FRACUNIT - sec.radixmapXadd);
+  ry := sec.radixmapYmult * (y div FRACUNIT - sec.radixmapYadd);
+end;
+
+function RB_RadixYToMapX(const x: integer): integer;
+begin
+  Result := MAPY - Trunc((x - mapleft) / mapscale * FRACUNIT) - 1;
+end;
+
+function RB_RadixXToMapY(const y: integer): integer;
+begin
+  Result := Trunc((y - maptop) / mapscale * FRACUNIT);
+end;
+
+procedure RB_PointToMap(const pl: Pline_t; const x, y: integer; var mx, my: integer);
+var
+  rx, ry: integer;
+begin
+  RB_PointToRadix(pl, x, y, rx, ry);
+  mx := RB_RadixXToMapY(ry);
+  my := RB_RadixYToMapX(rx);
+end;
+
+procedure RB_FindBoundaries;
+var
+  i: integer;
+  rx, ry: integer;
+  pl: Pline_t;
+  min_x, min_y, max_x, max_y: integer;
+  i64: int64;
+begin
+  min_x := MAXINT;
+  min_y := MAXINT;
+  max_x := -MAXINT;
+  max_y := -MAXINT;
+
+  pl := @lines[0];
+  for i := 0 to numlines - 1 do
+  begin
+    if pl.flags and ML_AUTOMAPIGNOGE = 0 then
+    begin
+      RB_PointToRadix(pl, pl.v1.x, pl.v1.y, rx, ry);
+      if rx < min_x then
+        min_x := rx
+      else if rx > max_x then
+        max_x := rx;
+
+      if ry < min_y then
+        min_y := ry
+      else if ry > max_y then
+        max_y := ry;
+
+      RB_PointToRadix(pl, pl.v2.x, pl.v2.y, rx, ry);
+      if rx < min_x then
+        min_x := rx
+      else if rx > max_x then
+        max_x := rx;
+
+      if ry < min_y then
+        min_y := ry
+      else if ry > max_y then
+        max_y := ry;
+    end;
+
+    Inc(pl);
+  end;
+
+  mapleft := min_x;
+  maptop := min_y;
+  mapwidth := max_x - min_x + 1;
+  mapheight := max_y - min_y + 1;
+  i64 := mapwidth;
+  i64 := i64 * FRACUNIT div MAPY;
+  mapscale := i64;
+  i64 := mapheight;
+  i64 := i64 * FRACUNIT div MAPX;
+  if mapscale < i64 then
+    mapscale := i64;
+end;
+
+procedure RB_DrawLine(const pl: Pline_t);
+var
+  x1, y1, x2, y2: integer;
+  x, y: integer;
+  dx, dy: integer;
+  sx, sy: integer;
+  ax, ay: integer;
+  d: integer;
+  color: byte;
+begin
+  if pl.flags and ML_AUTOMAPIGNOGE <> 0 then
+    exit;
+
+  if pl.flags and ML_TWOSIDED <> 0 then
+    color := aprox_blue
+  else
+    color := aprox_red;
+
+  RB_PointToMap(pl, pl.v1.x, pl.v1.y, x1, y1);
+  RB_PointToMap(pl, pl.v2.x, pl.v2.y, x2, y2);
+
+  dx := x2 - x1;
+  ax := 2 * abs(dx);
+  if dx < 0 then
+    sx := -1
+  else
+    sx := 1;
+
+  dy := y2 - y1;
+  ay := 2 * abs(dy);
+  if dy < 0 then
+    sy := -1
+  else
+    sy := 1;
+
+  x := x1;
+  y := y1;
+
+  if ax > ay then
+  begin
+    d := ay - ax div 2;
+    while true do
+    begin
+      mapscreen[ibetween(y, 0, MAPY - 1), ibetween(x, 0, MAPX - 1)] := color;
+      if x = x2 then
+        exit;
+      if d >= 0 then
+      begin
+        y := y + sy;
+        d := d - ax;
+      end;
+      x := x + sx;
+      d := d + ay;
+    end;
+  end
+  else
+  begin
+    d := ax - ay div 2;
+    while true do
+    begin
+      mapscreen[ibetween(y, 0, MAPY - 1), ibetween(x, 0, MAPX - 1)] := color;
+      if y = y2 then
+        exit;
+      if d >= 0 then
+      begin
+        x := x + sx;
+        d := d - ay;
+      end;
+      y := y + sy;
+      d := d + ax;
+    end;
+  end;
+end;
+
+procedure RB_DrawLines;
+var
+  i: integer;
+  pl: Pline_t;
+begin
+  pl := @lines[0];
+  for i := 0 to numlines - 1 do
+  begin
+    RB_DrawLine(pl);
+    inc(pl);
+  end;
+end;
+
+procedure RB_CreateMap;
+begin
+  if mapcreated then
+    exit;
+
+  RB_FindBoundaries;
+
+  ZeroMemory(@mapscreen, SizeOf(mapscreen));
+  RB_DrawLines;
+
+  mapcreated := True;
+end;
+
+procedure RB_DrawMap;
+var
+  dest: PByteArray;
+  src: PByteArray;
+  i, drow, srow: integer;
+begin
+  for drow := 5 to 195 do
+  begin
+    srow := 3500 + drow;
+    src := @mapscreen[srow][0];
+    dest := @screens[SCN_TMP][drow * 320 + 6];
+    for i := 0 to MAPX - 1 do
+      if src[i] <> 0 then
+        dest[i] := src[i];
+  end;
+end;
+
 function RB_Start(const epi, map: integer): Boolean;
 var
   utoken: string;
@@ -229,6 +448,13 @@ var
   cmd: Prbcommand_t;
   printparm: string;
 begin
+  acceleratestage := False;
+  mapcreated := False;
+  curdrawinfo.curmappos := 0;
+  curdrawinfo.targmappos := 0;
+  curdrawinfo.curmsg := '';
+  curdrawinfo.curanimtex := '';
+
   sl := TDStringList.Create;
 
   sprintf(lumpname, 'MissionBrief[%d][%d]', [epi, map]);
@@ -403,8 +629,6 @@ begin
 
   sc.Free;
 
-  acceleratestage := false;
-
   Result := numcommands > 0;
 end;
 
@@ -543,6 +767,9 @@ var
   p: Ppatch_t;
 begin
   V_DrawPatchFullScreenTMP320x200('BACKIMG');
+
+  RB_CreateMap;
+  RB_DrawMap;
 
   RB_DrawFrame(2, 2, 110, 193);
   RB_DrawFrame(136, 2, 170, 88);
