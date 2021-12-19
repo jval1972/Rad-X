@@ -206,11 +206,6 @@ begin
   Result := True;
 end;
 
-function RB_CmdMapPrint(const cmd: Prbcommand_t): Boolean;
-begin
-  Result := True;
-end;
-
 function RB_CmdNextPoint(const cmd: Prbcommand_t): Boolean;
 begin
   Result := True;
@@ -281,6 +276,31 @@ begin
     begin
       mapscreen[y + i, x + i] := c;
       mapscreen[y + i, x - i] := c;
+    end;
+    cmd.active := False;
+  end;
+  Result := True;
+end;
+
+function RB_CmdMapPrint(const cmd: Prbcommand_t): Boolean;
+var
+  x, y, i, j, w, h: integer;
+  src, dest: PByteArray;
+begin
+  if curdrawinfo.mapcreated then
+  begin
+    ZeroMemory(screens[SCN_ST], V_ScreensSize(SCN_ST));
+    y := RB_RadixYToMapX(cmd.iparams[0]);
+    x := RB_RadixXToMapY(cmd.iparams[1]);
+    w := M_SmallStringWidthNarrow(cmd.sparam);
+    h := M_SmallStringHeight(cmd.sparam);
+    M_WriteSmallTextNarrow(x, 1, cmd.sparam, SCN_ST);
+    for i := 0 to h + 1 do
+    begin
+      src := @screens[SCN_ST][i * V_GetScreenWidth(SCN_ST) + x - 1];
+      dest := @mapscreen[ibetween(y + i, 0, MAPY - 1)][ibetween(x - 1, 0, MAPX - 1)];
+      for j := 0 to w + 1 do
+        dest[j] := src[j];
     end;
     cmd.active := False;
   end;

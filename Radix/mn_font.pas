@@ -44,6 +44,8 @@ type
 
 function M_SmallStringWidth(const str: string): integer;
 
+function M_SmallStringWidthNarrow(const str: string): integer;
+
 function M_SmallStringHeight(const str: string): integer;
 
 function M_WriteSmallText(x, y: integer; const str: string; const scn: integer): menupos_t;
