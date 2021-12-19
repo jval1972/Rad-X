@@ -98,6 +98,18 @@ var
   numcommands: integer;
   acceleratestage: Boolean = false;
 
+const
+  MAPX = 100;
+  MAPY = 4000;
+
+var
+  mapscreen: array[0..MAPY - 1] of array [0..MAPX - 1] of Byte;
+  mapscale: int64;
+  mapleft: fixed_t;
+  maptop: fixed_t;
+  mapwidth: fixed_t;
+  mapheight: integer;
+
 // --- Command procs
 function RB_CmdClearAnimWindow(const cmd: Prbcommand_t): Boolean;
 begin
@@ -204,11 +216,6 @@ begin
   Result := True;
 end;
 
-function RB_CmdPointMap(const cmd: Prbcommand_t): Boolean;
-begin
-  Result := True;
-end;
-
 function RB_CmdShowScreen(const cmd: Prbcommand_t): Boolean;
 begin
   Result := True;
@@ -226,18 +233,7 @@ begin
     Result := False;
 end;
 
-const
-  MAPX = 100;
-  MAPY = 4000;
-
-var
-  mapscreen: array[0..MAPY - 1] of array [0..MAPX - 1] of Byte;
-  mapscale: int64;
-  mapleft: fixed_t;
-  maptop: fixed_t;
-  mapwidth: fixed_t;
-  mapheight: integer;
-
+// --- Map drawing
 procedure RB_PointToRadix(const pl: Pline_t; const x, y: integer; var rx, ry: integer);
 var
   sec: Psector_t;
@@ -266,6 +262,29 @@ begin
   RB_PointToRadix(pl, x, y, rx, ry);
   mx := RB_RadixXToMapY(ry);
   my := RB_RadixYToMapX(rx);
+end;
+
+function RB_CmdPointMap(const cmd: Prbcommand_t): Boolean;
+var
+  x, y, i: integer;
+  r, g, b, c: byte;
+begin
+  if curdrawinfo.mapcreated then
+  begin
+    y := RB_RadixYToMapX(cmd.iparams[0]);
+    x := RB_RadixXToMapY(cmd.iparams[1]);
+    r := cmd.iparams[2] * 4 + 2;
+    g := cmd.iparams[3] * 4 + 2;
+    b := cmd.iparams[4] * 4 + 2;
+    c := V_FindAproxColorIndex(@curpal, b + g shl 8 + r shl 16, 1, 255);
+    for i := -2 to 2 do
+    begin
+      mapscreen[y + i, x + i] := c;
+      mapscreen[y + i, x - i] := c;
+    end;
+    cmd.active := False;
+  end;
+  Result := True;
 end;
 
 procedure RB_FindBoundaries;
