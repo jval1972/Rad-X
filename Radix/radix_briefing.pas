@@ -49,6 +49,7 @@ uses
   d_delphi,
   doomdata,
   doomdef,
+  d_main,
   d_player,
   g_game,
   m_fixed,
@@ -67,8 +68,10 @@ type
   rbframedrawinfo_t = record
     curmappos: integer;
     targmappos: integer;
+    mapscrollspeed: integer;
     curmsg: string;
     curanimtex: string;
+    mapcreated: boolean;
   end;
   Prbframedrawinfo_t = ^rbframedrawinfo_t;
 
@@ -94,7 +97,6 @@ var
   commands: rbcommand_tArray;
   numcommands: integer;
   acceleratestage: Boolean = false;
-  mapcreated: Boolean = false;
 
 // --- Command procs
 function RB_CmdClearAnimWindow(const cmd: Prbcommand_t): Boolean;
@@ -185,6 +187,9 @@ end;
 function RB_CmdScrollMapX(const cmd: Prbcommand_t): Boolean;
 begin
   curdrawinfo.targmappos := cmd.iparams[0];
+  curdrawinfo.mapscrollspeed := Abs(curdrawinfo.curmappos - curdrawinfo.targmappos) div (2 * TICRATE);
+  if curdrawinfo.mapscrollspeed > 256 then
+    curdrawinfo.mapscrollspeed := 256;
   cmd.active := False;
   Result := True;
 end;
@@ -320,7 +325,7 @@ begin
     mapscale := i64;
 end;
 
-procedure RB_DrawLine(const pl: Pline_t);
+procedure RB_DrawLine(const pl: Pline_t; const twosided: boolean);
 var
   x1, y1, x2, y2: integer;
   x, y: integer;
@@ -333,10 +338,13 @@ begin
   if pl.flags and ML_AUTOMAPIGNOGE <> 0 then
     exit;
 
-  if pl.flags and ML_TWOSIDED <> 0 then
+  if twosided and (pl.flags and ML_TWOSIDED <> 0) then
     color := aprox_blue
+  else if not twosided and (pl.flags and ML_TWOSIDED = 0) then
+    color := aprox_red
   else
-    color := aprox_red;
+    exit;
+
 
   RB_PointToMap(pl, pl.v1.x, pl.v1.y, x1, y1);
   RB_PointToMap(pl, pl.v2.x, pl.v2.y, x2, y2);
@@ -394,7 +402,7 @@ begin
   end;
 end;
 
-procedure RB_DrawLines;
+procedure RB_DrawLines(const twosided: boolean);
 var
   i: integer;
   pl: Pline_t;
@@ -402,22 +410,23 @@ begin
   pl := @lines[0];
   for i := 0 to numlines - 1 do
   begin
-    RB_DrawLine(pl);
+    RB_DrawLine(pl, twosided);
     inc(pl);
   end;
 end;
 
 procedure RB_CreateMap;
 begin
-  if mapcreated then
+  if curdrawinfo.mapcreated then
     exit;
 
   RB_FindBoundaries;
 
   ZeroMemory(@mapscreen, SizeOf(mapscreen));
-  RB_DrawLines;
+  RB_DrawLines(True);   // Two-sided lines first
+  RB_DrawLines(False);  // Single-sided lines
 
-  mapcreated := True;
+  curdrawinfo.mapcreated := True;
 end;
 
 procedure RB_DrawMap;
@@ -426,14 +435,20 @@ var
   src: PByteArray;
   i, drow, srow: integer;
 begin
+  if not curdrawinfo.mapcreated then
+    exit;
+
   for drow := 5 to 195 do
   begin
-    srow := 3500 + drow;
-    src := @mapscreen[srow][0];
-    dest := @screens[SCN_TMP][drow * 320 + 6];
-    for i := 0 to MAPX - 1 do
-      if src[i] <> 0 then
-        dest[i] := src[i];
+    srow := RB_RadixYToMapX(curdrawinfo.curmappos) + drow - 95;
+    if IsIntegerInRange(srow, 0, MAPY - 1) then
+    begin
+      src := @mapscreen[srow][0];
+      dest := @screens[SCN_TMP][drow * 320 + 9];
+      for i := 0 to MAPX - 1 do
+        if src[i] <> 0 then
+          dest[i] := src[i];
+    end;
   end;
 end;
 
@@ -449,9 +464,10 @@ var
   printparm: string;
 begin
   acceleratestage := False;
-  mapcreated := False;
+  curdrawinfo.mapcreated := False;
   curdrawinfo.curmappos := 0;
   curdrawinfo.targmappos := 0;
+  curdrawinfo.mapscrollspeed := 128;
   curdrawinfo.curmsg := '';
   curdrawinfo.curanimtex := '';
 
@@ -633,10 +649,16 @@ begin
 end;
 
 procedure RB_Ticker;
+const
+  SCROLLBRAKEDIST = 1024;
+  SCROLLSPEEDMIN = 16;
 var
   i: integer;
   player: Pplayer_t;
+  scrollspeed: integer;
 begin
+  RB_CreateMap;
+
   // check for button presses to skip delays
   for i := 0 to MAXPLAYERS - 1 do
   begin
@@ -665,11 +687,38 @@ begin
     end;
   end;
 
+  scrollspeed := curdrawinfo.mapscrollspeed;
+  if curdrawinfo.curmappos > curdrawinfo.targmappos then
+  begin
+    if curdrawinfo.curmappos - curdrawinfo.targmappos < SCROLLBRAKEDIST then
+    begin
+      scrollspeed := scrollspeed * (curdrawinfo.curmappos - curdrawinfo.targmappos) div SCROLLBRAKEDIST;
+      if scrollspeed < SCROLLSPEEDMIN then
+        scrollspeed := SCROLLSPEEDMIN;
+    end;
+    curdrawinfo.curmappos := curdrawinfo.curmappos - scrollspeed;
+    if curdrawinfo.curmappos < curdrawinfo.targmappos then
+      curdrawinfo.curmappos := curdrawinfo.targmappos;
+  end
+  else if curdrawinfo.curmappos < curdrawinfo.targmappos then
+  begin
+    if curdrawinfo.targmappos - curdrawinfo.curmappos < SCROLLBRAKEDIST then
+    begin
+      scrollspeed := scrollspeed * (curdrawinfo.targmappos - curdrawinfo.curmappos) div SCROLLBRAKEDIST;
+      if scrollspeed < SCROLLSPEEDMIN then
+        scrollspeed := SCROLLSPEEDMIN;
+    end;
+    curdrawinfo.curmappos := curdrawinfo.curmappos + scrollspeed;
+    if curdrawinfo.curmappos > curdrawinfo.targmappos then
+      curdrawinfo.curmappos := curdrawinfo.targmappos;
+  end;
+
   for i := 0 to numcommands - 1 do
     if commands[i].active then
       if not commands[i].cmd(@commands[i]) then
         Exit;
 
+  wipegamestate := -1;
   gamestate := GS_LEVEL;
 end;
 
@@ -768,7 +817,6 @@ var
 begin
   V_DrawPatchFullScreenTMP320x200('BACKIMG');
 
-  RB_CreateMap;
   RB_DrawMap;
 
   RB_DrawFrame(2, 2, 110, 193);
