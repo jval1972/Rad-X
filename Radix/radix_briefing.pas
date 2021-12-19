@@ -438,9 +438,9 @@ begin
   if not curdrawinfo.mapcreated then
     exit;
 
-  for drow := 5 to 195 do
+  for drow := 6 to 194 do
   begin
-    srow := RB_RadixYToMapX(curdrawinfo.curmappos) + drow - 95;
+    srow := RB_RadixYToMapX(curdrawinfo.curmappos) + drow - 94;
     if IsIntegerInRange(srow, 0, MAPY - 1) then
     begin
       src := @mapscreen[srow][0];
