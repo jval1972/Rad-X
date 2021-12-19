@@ -873,6 +873,7 @@ type
     gmp_fastweaponrefire,
     gmp_barrelexplode,
     gmp_droneexplode,
+    gmp_briefingscreens,
     gmp_end
   );
 
@@ -5699,6 +5700,14 @@ begin
   pmi.pBoolVal := nil;
   pmi.alphaKey := 'd';
 
+  inc(pmi);
+  pmi.status := 1;
+  pmi.name := '!Show briefing screen';
+  pmi.cmd := 'showbriefingscreen';
+  pmi.routine := @M_BoolCmd;
+  pmi.pBoolVal := @showbriefingscreen;
+  pmi.alphaKey := 'b';
+
 ////////////////////////////////////////////////////////////////////////////////
 //GameplayDef
   GameplayDef.numitems := Ord(gmp_end); // # of menu items
@@ -5778,7 +5787,6 @@ begin
   pmi.routine := @M_ChangeDrones;
   pmi.pBoolVal := nil;
   pmi.alphaKey := 'd';
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //CompatibilityDef

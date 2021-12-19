@@ -77,6 +77,7 @@ uses
   r_hires,
   r_lights,
   r_intrpl,
+  radix_briefing,
   radix_hud,
   vx_base,
 {$IFNDEF OPENGL}
@@ -164,7 +165,7 @@ type
   Pdefault_t = ^default_t;
 
 const
-  NUMDEFAULTS = 215;
+  NUMDEFAULTS = 216;
 
 // JVAL
 // Note: All setable defaults must be in lowercase, don't ask why. Just do it. :)
@@ -1015,6 +1016,14 @@ const
 
     (name: 'allowvanillademos';
      location: @allowvanillademos;
+     setable: DFS_ALWAYS;
+     defaultsvalue: '';
+     defaultivalue: 0;
+     defaultbvalue: true;
+     _type: tBoolean),
+
+    (name: 'showbriefingscreen';
+     location: @showbriefingscreen;
      setable: DFS_ALWAYS;
      defaultsvalue: '';
      defaultivalue: 0;
