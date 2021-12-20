@@ -42,11 +42,7 @@ uses
   p_mobj_h,
   s_sound,
   d_player,
-  p_pspr_h,
-// State.
-  doomstat,
-// Data.
-  sounds;
+  p_pspr_h;
 
 procedure A_Fall(actor: Pmobj_t);
 
@@ -213,7 +209,6 @@ uses
   p_inter,
   p_floor,
   p_pspr,
-  p_extra,
   p_common,
   p_sounds,
   ps_main,

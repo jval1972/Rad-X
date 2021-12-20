@@ -34,8 +34,7 @@ interface
 uses
   d_delphi,
   m_fixed,
-  tables, // JVAL: 20200221 - Texture angle
-  r_main;
+  tables;
 
 // Span blitting for rows, floor/ceiling.
 // No Sepctre effect needed.
@@ -89,6 +88,7 @@ uses
   r_3dfloors,
   r_depthbuffer,
   r_zbuffer;
+
 //
 // R_DrawSpan
 // With DOOM style restrictions on view orientation,

@@ -428,7 +428,6 @@ implementation
 uses
   d_delphi,
   doomdef,
-  deh_main,
   d_player,
   m_vectors,
   m_bbox,

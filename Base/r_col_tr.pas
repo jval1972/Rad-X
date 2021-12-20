@@ -45,9 +45,7 @@ uses
   m_fixed,
   r_draw,
   r_main,
-  r_column,
-  r_hires,
-  v_video;
+  r_column;
 
 //
 // R_DrawTranslatedColumn

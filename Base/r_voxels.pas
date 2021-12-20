@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -76,14 +76,11 @@ uses
   g_game,
   mt_utils,
   r_renderstyle,
-  r_softgl,
   r_palette,
   r_utils,
   r_main,
   r_draw,
   r_things,
-  r_data,
-  r_bsp,
   r_segs,
   r_segs2,
   r_column,
@@ -96,15 +93,12 @@ uses
   r_3dfloors, // JVAL: 3d Floors
   r_depthbuffer, // JVAL: 3d Floors
   p_setup,
-  p_pspr,
   p_tick,
   tables,
   info_h,
   vx_base,
   i_system,
-  i_threads,
   sc_engine,
-  v_data,
   v_video,
   w_folders,
   w_pak,

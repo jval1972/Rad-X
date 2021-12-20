@@ -49,8 +49,6 @@ function P_CheckVisibility(const atx, aty, atz: fixed_t; const atradious: fixed_
 implementation
 
 uses
-  d_delphi,
-  doomdef,
   doomdata,
   g_game,
   m_bbox,

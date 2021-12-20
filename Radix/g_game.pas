@@ -306,7 +306,6 @@ uses
   f_finale,
   info_h,
   info,
-  info_rnd,
   m_rnd,
   i_system,
   i_io,
@@ -336,7 +335,6 @@ uses
 // Data.
   dstrings,
   d_englsh,
-  sounds,
   sound_data,
   r_data,
 // SKY handling - still the wrong place.

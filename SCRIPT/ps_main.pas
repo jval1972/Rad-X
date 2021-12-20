@@ -107,7 +107,7 @@ uses
   i_system,
   sc_params,
   p_common,
-  p_setup,
+  
   ps_import,
   ps_events,
   ps_dll,
@@ -115,7 +115,7 @@ uses
   psi_game,
   psi_globals,
   psi_overlay,
-  uPSR_dll,
+  
   w_folders,
   w_pak,
   ps_utils;

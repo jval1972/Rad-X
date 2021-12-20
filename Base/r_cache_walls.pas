@@ -114,8 +114,7 @@ uses
   r_cache_sky,
 {$ENDIF}
   t_main,
-  v_video,
-  z_zone;
+  v_video;
 
 function R_GetHash(const tex, col, dmod: integer): LongWord;
 // JVAL

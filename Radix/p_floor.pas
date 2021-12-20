@@ -35,13 +35,11 @@ unit p_floor;
 interface
 
 uses
-  doomdef,
   z_zone,
   p_spec,
   m_fixed,
   r_defs,
-  s_sound,
-  sounds;
+  s_sound;
 
 //
 // FLOORS

@@ -42,15 +42,10 @@ uses
   d_delphi,
   m_fixed,
   r_draw,
-  r_main,
   r_precalc,
-  r_ripple,
   r_span,
-  r_span32,
   r_flat32,
-  r_3dfloors,
-  r_zbuffer,
-  r_depthbuffer;
+  r_zbuffer;
 
 procedure R_DrawSpanNormal_RippleMT(const fi: pointer);
 var

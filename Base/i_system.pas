@@ -200,7 +200,6 @@ uses
   gl_main,
 {$ELSE}
   i_video,
-  i_main,
 {$ENDIF}
   d_main,
   d_net,

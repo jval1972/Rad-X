@@ -340,8 +340,6 @@ uses
   m_bbox,
   m_misc,
   p_setup,
-  p_sight,
-  p_map,
   p_3dfloors,  // JVAL: 3d floors
   {$IFNDEF OPENGL}
   i_video,

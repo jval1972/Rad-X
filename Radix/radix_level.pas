@@ -285,7 +285,6 @@ uses
   doomdef,
   radix_defs,
   radix_things,
-  radix_grid,
   radix_map_extra,
   m_crc32,
   doomdata,

@@ -46,10 +46,7 @@ uses
   m_fixed,
   tables,
   d_player,
-  r_defs,
-// State.
-// Data.
-  sounds;
+  r_defs;
 
 function P_TeleportMove(thing: Pmobj_t; x, y: fixed_t): boolean;
 

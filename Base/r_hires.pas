@@ -134,7 +134,6 @@ uses
 {$ENDIF}
   r_main,
 {$IFNDEF OPENGL}
-  r_cache_flats,
   r_cache_main,
   r_grow,
   r_defs,

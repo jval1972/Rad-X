@@ -76,7 +76,6 @@ uses
   p_local,
   p_setup,    // JVAL: 3d Floors
   p_slopes,   // JVAL: Slopes
-  p_3dfloors, // JVAL: Slopes
   p_spec,
   p_map,
   p_maputl,

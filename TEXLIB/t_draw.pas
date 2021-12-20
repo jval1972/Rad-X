@@ -47,11 +47,13 @@ implementation
 uses
   doomdef,
   m_fixed,
+  {$IFDEF OPENGL}
+  v_data,
+  {$ENDIF}
   r_hires,
   r_mmx,
   t_main,
   v_video,
-  v_data,
   w_wad;
 
 type

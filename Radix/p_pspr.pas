@@ -138,7 +138,6 @@ uses
 // State.
   doomstat,
 // Data.
-  sounds,
   sound_data;
 
 //

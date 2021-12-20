@@ -44,7 +44,6 @@ uses
   r_defs,
   v_data;
 
-
 function V_GetScreenWidth(scrn: integer): integer;
 
 function V_GetScreenHeight(scrn: integer): integer;
@@ -309,7 +308,6 @@ uses
   st_stuff,
   {$ENDIF}
   {$ENDIF}
-  r_aspect,
   i_system,
   t_draw,
   w_wad,

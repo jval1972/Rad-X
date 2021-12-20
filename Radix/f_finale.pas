@@ -85,7 +85,7 @@ uses
   d_delphi,
   mt_utils,
   am_map,
-  d_player,
+  
   d_main,
   g_game,
   info,
@@ -102,10 +102,8 @@ uses
 // Data.
   dstrings,
   d_englsh,
-  sounds,
   sound_data,
   doomdef,
-  doomstat,
   hu_stuff;
 
 var

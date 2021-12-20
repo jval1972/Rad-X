@@ -55,8 +55,7 @@ uses
   w_pak,
   w_wad,
   w_wadwriter,
-  w_wadreader,
-  z_zone;
+  w_wadreader;
 
 const
   DOOM_END_NAME = 'ENDOOM';

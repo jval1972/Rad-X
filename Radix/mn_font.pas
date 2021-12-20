@@ -83,7 +83,6 @@ implementation
 uses
   d_delphi,
   hu_stuff,
-  v_data,
   v_video,
   w_wad,
   z_zone;

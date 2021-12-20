@@ -98,7 +98,7 @@ procedure _safe_malloc_muladd2_; external;
 implementation
 
 uses
-  c_lib, libogg, libflac;
+  c_lib, libogg;
 
 // libvorbis
 {$L libvorbis\obj\alloc.obj}

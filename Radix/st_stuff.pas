@@ -93,9 +93,6 @@ implementation
 
 uses
   d_delphi,
-  d_net,
-  m_menu,
-  tables,
   c_cmds,
   d_items,
   z_zone,
@@ -103,6 +100,7 @@ uses
   info,
   info_h,
 {$IFDEF OPENGL}
+  v_video,
   gl_main,
   gl_render,
 {$ELSE}
@@ -116,8 +114,6 @@ uses
   p_enemy,
   d_player,
   r_defs,
-  r_main,
-  r_draw,
   am_map,
   m_cheat,
   m_rnd,
@@ -125,13 +121,11 @@ uses
   s_sound,
 // Needs access to LFB.
   v_data,
-  v_video,
 // State.
   doomstat,
 // Data.
   dstrings,
   d_englsh,
-  sounds,
   sound_data,
 // for mapnames
   hu_stuff;

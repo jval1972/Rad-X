@@ -109,7 +109,6 @@ uses
   m_argv,
   m_misc,
   m_rnd,
-  m_fixed,
   mn_font,
   mn_screenshot,
   mt_utils,
@@ -120,6 +119,7 @@ uses
   i_sound,
   i_displaymodes,
 {$IFDEF OPENGL}
+  p_setup,
   gl_main,
   gl_defs,
   gl_models,
@@ -134,7 +134,6 @@ uses
   r_slopes, // JVAL: Slopes
 {$ENDIF}
   e_endoom,
-  p_setup,
   p_mobj_h,
   p_terrain,
   p_enemy,
@@ -160,13 +159,11 @@ uses
   r_draw,
   r_sky,
   t_main,
-  vx_voxelsprite,
   v_data,
   v_video,
   hu_stuff,
   s_sound,
   sounds,
-  sound_data,
   w_wad,
   z_zone;
 

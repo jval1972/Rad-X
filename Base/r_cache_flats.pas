@@ -80,7 +80,6 @@ uses
 {$ENDIF}
   r_data,
   r_flat32,
-  r_grow,
   r_span32,
   r_hires,
   r_mmx,

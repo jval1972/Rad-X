@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -55,8 +55,6 @@ implementation
 
 uses
   d_delphi,
-  doomdef,
-  doomstat,
   d_think,
   d_player,
   info_h,
@@ -71,7 +69,6 @@ uses
   p_user,
   r_main,
   s_sound,
-  sounds,
   sound_data,
   tables;
 

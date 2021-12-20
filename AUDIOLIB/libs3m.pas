@@ -196,7 +196,7 @@ procedure _s3m_register_row_changed_callback(s3m: Ps3m_t; func: s3m_func_t; arg:
 implementation
 
 uses
-  c_lib, scanf, scanf_c;
+  c_lib;
 
 {$L libs3m\obj\channel.obj}
 {$L libs3m\obj\pattern.obj}

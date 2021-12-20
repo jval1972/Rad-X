@@ -67,7 +67,6 @@ uses
   p_floor,
   p_setup,
   s_sound,
-  sounds,
   sound_data,
   z_zone;
 

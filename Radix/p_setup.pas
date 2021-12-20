@@ -163,7 +163,6 @@ uses
   i_system,
   w_wad,
   info,
-  info_h,
   p_local,
   p_mobj,
   p_tick,
@@ -187,7 +186,6 @@ uses
 {$IFNDEF OPENGL}
   r_3dfloors,
 {$ENDIF}
-  info_rnd,
   m_rnd,
   mt_utils,
   r_colormaps,

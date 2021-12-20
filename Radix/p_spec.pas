@@ -547,7 +547,6 @@ uses
   p_tick,
   s_sound,
 // Data.
-  sounds,
   sound_data;
 
 //

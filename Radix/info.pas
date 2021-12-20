@@ -68,11 +68,9 @@ const
 implementation
 
 uses
-  i_system,
   p_enemy,
   p_pspr,
   p_mobj_h,
-  p_extra,
   p_common,
   info_common,
   r_renderstyle,

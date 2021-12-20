@@ -146,7 +146,6 @@ uses
   f_finale,
   m_argv,
   m_crc32,
-  m_defs,
   m_misc,
   m_menu,
   mn_font,
@@ -162,13 +161,13 @@ uses
   i_startup,
   i_steam,
 {$IFDEF OPENGL}
+  nd_main,
   gl_main,
 {$ELSE}
   r_defs,
   r_fake3d,
   i_video,
 {$ENDIF}
-  nd_main,
   g_game,
   hu_stuff,
   st_stuff,
@@ -192,7 +191,6 @@ uses
   r_data,
   r_camera,
   r_lights,
-  sounds,
   sound_data,
   s_sound,
   sc_actordef,

@@ -91,19 +91,16 @@ implementation
 
 uses
   doomdef,
-  d_ticcmd,
   d_player,
   d_think,
   g_game,
   m_compress,
-  m_fixed,
   mn_screenshot,
   info_h,
   info,
   i_tmp,
   i_system,
   p_3dfloors, // JVAL: 3d floors
-  p_local,    // JVAL: sector gravity (VERSION 204)
   p_pspr_h,
   p_setup,
   p_mobj_h,
@@ -130,7 +127,6 @@ uses
   r_defs,
   r_data,
   r_colormaps,
-  r_renderstyle,
   w_wad,
   z_zone;
 

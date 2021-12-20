@@ -92,7 +92,6 @@ uses
   i_mainwindow,
   DirectX,
   s_sound,
-  sounds,
   w_wad,
   w_folders,
   w_pak,

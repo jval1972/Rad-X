@@ -111,7 +111,6 @@ implementation
 
 uses
   d_delphi,
-  doomdef,
   d_player,
   g_game,
   g_gameplay,

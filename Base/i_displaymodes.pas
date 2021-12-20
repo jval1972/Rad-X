@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -72,13 +72,11 @@ uses
   Windows,
   d_delphi,
   doomdef,
-  r_hires,
   {$IFDEF OPENGL}
-  gl_main,
+  gl_main;
   {$ELSE}
-  i_main,
+  i_main;
   {$ENDIF}
-  i_system;
 
 procedure SortDisplayModes;
 

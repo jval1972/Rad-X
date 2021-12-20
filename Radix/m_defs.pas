@@ -32,7 +32,6 @@ unit m_defs;
 interface
 
 uses
-  d_delphi,
   am_map,
   c_con,
   doomdef,
@@ -79,7 +78,6 @@ uses
   r_intrpl,
   radix_briefing,
   radix_hud,
-  vx_base,
 {$IFNDEF OPENGL}
   r_fake3d,
   r_slopes, // JVAL: Slopes
@@ -97,7 +95,6 @@ uses
   m_sshot_jpg,
   vx_voxelsprite,
   v_video;
-
 
 const
   DFS_NEVER = 0;

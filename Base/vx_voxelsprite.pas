@@ -49,8 +49,6 @@ uses
   m_sha1,
   {$IFDEF OPENGL}
   gl_voxels,
-  {$ELSE}
-  r_voxels,
   {$ENDIF}
   r_defs,
   sc_engine,

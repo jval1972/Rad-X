@@ -77,7 +77,6 @@ uses
   m_bbox,
   p_setup,
   p_slopes, // JVAL: Slopes
-  radix_level,
   {$IFNDEF OPENGL}
   r_segs,
   r_3dfloors, // JVAL: 3d Floors

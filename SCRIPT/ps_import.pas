@@ -39,8 +39,7 @@ uses
   ps_defs,
   ps_compiler,
   uPSPreProcessor,
-  ps_runtime,
-  ps_utils;
+  ps_runtime;
 
 procedure PS_InitProcLists;
 

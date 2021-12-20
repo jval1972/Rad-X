@@ -121,7 +121,6 @@ uses
 {$ENDIF}
   p_mobj_h,
   p_pspr,
-  p_pspr_h,
   p_local,
   p_maputl,
   r_data,

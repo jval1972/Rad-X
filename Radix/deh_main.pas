@@ -115,7 +115,6 @@ uses
   info,
   info_common,
   m_argv,
-  m_fixed,
   ps_main,
   p_mobj,
   p_mobj_h,
@@ -138,8 +137,6 @@ uses
   sc_engine,
   sc_states,
   v_data,
-  w_wad,
-  w_folders,
   w_pak;
 
 procedure DEH_AddString(deh_strings: Pdeh_strings_t; pstr: PString; const name: string);

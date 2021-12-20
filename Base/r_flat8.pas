@@ -84,8 +84,7 @@ uses
   r_ripple,
   r_3dfloors,
   r_zbuffer,
-  r_depthbuffer,
-  r_flat8_ripple;
+  r_depthbuffer;
 
 var
   flatcache8: Pflatrenderinfo8_tArray;
