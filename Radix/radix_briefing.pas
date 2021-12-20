@@ -280,8 +280,8 @@ begin
     c := V_FindAproxColorIndex(@curpal, b + g shl 8 + r shl 16, 1, 255);
     for i := -2 to 2 do
     begin
-      mapscreen[y + i, x + i] := c;
-      mapscreen[y + i, x - i] := c;
+      mapscreen[ibetween(y + i, 0, MAPY - 1), ibetween(x + i, 0, MAPX - 1)] := c;
+      mapscreen[ibetween(y + i, 0, MAPY - 1), ibetween(x - i, 0, MAPX - 1)] := c;
     end;
     cmd.active := False;
   end;
@@ -292,6 +292,7 @@ function RB_CmdMapPrint(const cmd: Prbcommand_t): Boolean;
 var
   x, y, i, j, w, h: integer;
   src, dest: PByteArray;
+  mx: integer;
 begin
   if curdrawinfo.mapcreated then
   begin
@@ -304,9 +305,15 @@ begin
     for i := 0 to h + 1 do
     begin
       src := @screens[SCN_ST][i * V_GetScreenWidth(SCN_ST) + x - 1];
-      dest := @mapscreen[ibetween(y + i, 0, MAPY - 1)][ibetween(x - 1, 0, MAPX - 1)];
+      dest := @mapscreen[ibetween(y + i, 0, MAPY - 1)][0];
+      mx := ibetween(x - 1, 0, MAPX - 1);
       for j := 0 to w + 1 do
-        dest[j] := src[j];
+      begin
+        dest[ibetween(mx, 0, MAPX - 1)] := src[j];
+        Inc(mx);
+        if mx >= MAPX then
+          Break;
+      end;
     end;
     cmd.active := False;
   end;
