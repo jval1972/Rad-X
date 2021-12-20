@@ -1184,6 +1184,8 @@ var
   lightnum2: integer; // JVAL: 3d Floors
   pds: Pdrawseg_t;
   overflow: boolean;
+  high_less_top: boolean;
+  low_greater_bottom: boolean;
 begin
   if curline.linedef.renderflags and LRF_SLOPED <> 0 then
   begin
@@ -1644,6 +1646,10 @@ begin
     end;
   end;
 
+  // Compare before shifting
+  high_less_top := worldhigh < worldtop;
+  low_greater_bottom := worldlow > worldbottom;
+
   // calculate incremental stepping values for texture edges
   worldtop := worldtop div WORLDUNIT;
 //  worldtop := worldtop shr WORLDBITS;
@@ -1663,13 +1669,13 @@ begin
     worldhigh := worldhigh div WORLDUNIT;
     worldlow := worldlow div WORLDUNIT;
 
-    if worldhigh < worldtop then
+    if high_less_top then
     begin
       pixhigh := (int64(centeryfrac) div WORLDUNIT) - int64(worldhigh) * int64(rw_scale) shr FRACBITS;  // R_WiggleFix
       pixhighstep := -FixedMul(rw_scalestep, worldhigh);
     end;
 
-    if worldlow > worldbottom then
+    if low_greater_bottom then
     begin
       pixlow := (int64(centeryfrac) div WORLDUNIT) - int64(worldlow) * int64(rw_scale) shr FRACBITS;  // R_WiggleFix
       pixlowstep := -FixedMul(rw_scalestep, worldlow);
