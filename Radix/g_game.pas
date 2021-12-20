@@ -168,6 +168,7 @@ var
   demoplayback: boolean;
   showdemoplaybackprogress: boolean;
   preparingdemoplayback: boolean = false;
+  preparing_loadgame: boolean = false;
 
   gameepisode: integer;
   gamemap: integer;
@@ -798,7 +799,7 @@ begin
   else
     skytexture := R_TextureNumForName('SKY1');
 
-  if demoplayback or demorecording or netgame or preparingdemoplayback or not showbriefingscreen then
+  if demoplayback or demorecording or netgame or preparingdemoplayback or preparing_loadgame or not showbriefingscreen then
     gamestate := GS_LEVEL
   else
   begin
@@ -1647,7 +1648,9 @@ begin
   end;
 
   // load a base level
+  preparing_loadgame := True;
   G_InitNew(gameskill, gameepisode, gamemap);
+  preparing_loadgame := False;
 
   // get the times
   a := save_p[0];
