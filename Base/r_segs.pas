@@ -1712,7 +1712,7 @@ begin
 
   if pds.midvis <> nil then
   begin
-    if (pds.midsec <> nil) then
+    if pds.midsec <> nil then
     begin
       f_RenderSegLoop_3dFloors_Vis(pds); // version 205
     end
@@ -1723,7 +1723,7 @@ begin
   end
   else
   begin
-    if (pds.midsec <> nil) then
+    if pds.midsec <> nil then
     begin
       f_RenderSegLoop_3dFloors(pds); // version 205
     end
