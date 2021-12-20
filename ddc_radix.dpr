@@ -422,7 +422,8 @@ uses
   scanf in 'C_LIB\scanf.pas',
   scanf_c in 'C_LIB\scanf_c.pas',
   BTMemoryModule in 'Base\BTMemoryModule.pas',
-  s_externalmusic in 'Base\s_externalmusic.pas';
+  s_externalmusic in 'Base\s_externalmusic.pas',
+  radix_briefing in 'Radix\radix_briefing.pas';
 
 exports
   dd_compile_radix,
