@@ -31,9 +31,14 @@ Works with radix v2 remix edition.
 
 History
 -------
+20211220 - v.1.1.18.751.r1037
+-----------------------------
+Mission Briefing screens.
 Fixed flags in A_ChangeVelocity() ACTORDEF function.
 Fixed MF2_EX_CANTLEAVEFLOORPIC flag behaviour.
 Fixed uncapped framerate bug for floor & ceiling offsets.
+Wall bouncing improvements.
+
 
 20211011 - v.1.0.17.750.r961
 ----------------------------
