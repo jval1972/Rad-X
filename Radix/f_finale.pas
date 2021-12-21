@@ -85,7 +85,7 @@ uses
   d_delphi,
   mt_utils,
   am_map,
-  
+
   d_main,
   g_game,
   info,
