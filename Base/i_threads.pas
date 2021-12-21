@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -52,6 +52,7 @@ type
     info: threadinfo_t;
     fstatus: integer;
     fterminated: boolean;
+    frunning: boolean;
   public
     constructor Create(const func: threadfunc_t = nil);
     destructor Destroy; override;
@@ -81,13 +82,15 @@ begin
   th := Pthreadinfo_t(p).thread;
   while true do
   begin
-    while (th.fstatus = THR_IDLE) and (not th.fterminated) do
+    while (th.fstatus = THR_IDLE) and not th.fterminated do
     begin
       I_Sleep(0);
     end;
     if th.fterminated then
       exit;
+    th.frunning := true;
     th.ffunc(th.fparms);
+    th.frunning := false;
     if th.fterminated then
       exit;
     th.fstatus := THR_IDLE;
@@ -100,6 +103,7 @@ begin
   ffunc := func;
   fparms := nil;
   fstatus := THR_IDLE;
+  frunning := false;
   info.thread := Self;
   fid := I_CreateProcess(@ThreadWorker, @info, true);
   suspended := true;
@@ -107,9 +111,11 @@ end;
 
 destructor TDThread.Destroy;
 begin
+  while frunning do
+    I_Sleep(0);
   fterminated := true;
   fstatus := THR_DEAD;
-  I_WaitForProcess(fid, 100);
+  I_WaitForProcess(fid, 1);
   Inherited Destroy;
 end;
 
