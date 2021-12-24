@@ -213,12 +213,12 @@ begin
   while (p = 0) and (i < l) do
   begin
     if r[i] = '"' then
-      quote := not quote;
-    if r[i] = '(' then
-      Inc(bracket);
-    if r[i] = ')' then
+      quote := not quote
+    else if r[i] = '(' then
+      Inc(bracket)
+    else if r[i] = ')' then
       Dec(bracket);
-    if (not quote) and (bracket = 0) and (r[i] = ',') then
+    if not quote and (bracket = 0) and (r[i] = ',') then
       p := i;
     Inc(i);
   end;
@@ -893,7 +893,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure TEvaluator._err_incompatible_types(const callfunc: string; const s1, s2: string);
 begin
-  I_Warning('TEvaluator.' + callfunc + '(): Incomatible types ("%s", "%s)'#13#10, [s1, s2]);
+  I_Warning('TEvaluator.' + callfunc + '(): Incompatible types ("%s", "%s)'#13#10, [s1, s2]);
 end;
 
 function TEvaluator.OP_Add(v1, v2: string): string;
