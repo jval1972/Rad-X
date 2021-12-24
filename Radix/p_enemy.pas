@@ -1022,6 +1022,7 @@ begin
       end;
   result := false;
 end;
+
 //
 // A_Look
 // Stay in state until a player is sighted.
