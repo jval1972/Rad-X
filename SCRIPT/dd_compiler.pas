@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -112,6 +112,9 @@ const
 
 procedure DD_InitDoomEngine;
 begin
+  ThousandSeparator := #0;
+  DecimalSeparator := '.';
+
   Info_Init(true);
   RX_InitWeaponStates;
   DEH_Init;
@@ -508,7 +511,6 @@ begin
   end;
 end;
 
-
 procedure dd_getconstants_radix(
   var _out: PChar; var _outsize: Integer); stdcall;
 var
@@ -609,6 +611,7 @@ begin
     if not IFPS3DataToText(pcode, disasm) then
     begin
       _outsize := 0;
+      DD_ShutDownDoomEngine;
       Exit;
     end;
     DD_CopyStringToPChar(disasm, _out, _outsize);
