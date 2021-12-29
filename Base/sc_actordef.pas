@@ -1829,7 +1829,7 @@ begin
           mobj.vspeed := pinf.vspeed / FRACUNIT;
           mobj.pushfactor := pinf.pushfactor / FRACUNIT;
           mobj.scale := pinf.scale / FRACUNIT;
-
+          mobj.gravity := pinf.gravity / FRACUNIT;
           mobj.armour_inc := pinf.armour_inc;  // JVAL 20200321 - Armour inc for pickable objects
           mobj.energy_inc := pinf.energy_inc;  // JVAL 20200321 - Energy inc for pickable objects
           mobj.shield_inc := pinf.shield_inc;  // JVAL 20200321 - Shield inc for pickable objects
