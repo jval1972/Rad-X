@@ -616,8 +616,13 @@ function TCustomParamList.GetBool(index: integer): boolean;
 var
   ret: string;
 begin
-  ret := SC_EvaluateActorExpression(fActor, fList[index].s_param);
-  result := ret = 'TRUE';
+  if (index >= 0) and (index < fNumItems) then
+  begin
+    ret := SC_EvaluateActorExpression(fActor, fList[index].s_param);
+    result := strupper(RemoveQuotesFromString(ret)) = 'TRUE';
+  end
+  else
+    result := false;
 end;
 
 function TCustomParamList.GetString(index: integer): string;
@@ -627,6 +632,8 @@ begin
   if (index >= 0) and (index < fNumItems) then
   begin
     case fList[index].globalidx of
+      GLBF_EVALUATE:
+        result := RemoveQuotesFromString(SC_EvaluateActorExpression(fActor, fList[index].s_param));
       GLBF_MAP_STRING:
         result := PS_GetMapStr(fList[index].s_param);
       GLBF_MAP_INTEGER:
