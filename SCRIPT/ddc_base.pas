@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -35,10 +35,11 @@ uses
   Classes;
 
 const
-  DDCVERSION = 101;
+  DDCVERSION = 103;
 
-const
-  RAD_LIBNAME = 'ddc_radix.dll';
+procedure dll_loadlibrary(const game: string);
+
+procedure dll_freelibrary;
 
 function dll_compile(const game: string; const code: string; var pcode: string; var msgs: string): Boolean;
 
@@ -78,6 +79,53 @@ uses
   Windows,
   SysUtils;
 
+var
+  inst: THandle = 0;
+
+procedure dll_loadlibrary(const game: string);
+var
+  libname: string;
+begin
+  libname := 'ddc_' + game + '.dll';
+  inst := LoadLibrary(PChar(libname));
+end;
+
+procedure dll_freelibrary;
+begin
+  if inst <> 0 then
+  begin
+    FreeLibrary(inst);
+    inst := 0;
+  end;
+end;
+
+var
+  localload: Boolean = False;
+
+function localLoadLibrary(lpLibFileName: PChar): HMODULE; stdcall;
+begin
+  if inst = 0 then
+  begin
+    inst := LoadLibrary(lpLibFileName);
+    localload := True;
+  end
+  else
+    localload := False;
+  Result := inst;
+end;
+
+function localFreeLibrary(var hLibModule: HMODULE): BOOL; stdcall;
+begin
+  if localload then
+  begin
+    Result := FreeLibrary(hLibModule);
+    localload := False;
+    hLibModule := 0;
+  end
+  else
+    Result := False;
+end;
+
 type
   dllcompilefunc_t =
     function (
@@ -96,8 +144,8 @@ var
   i: integer;
   _inp, _out, _msgs: PChar;
 begin
-  libname := RAD_LIBNAME;
-  inst := LoadLibrary(PChar(libname));
+  libname := 'ddc_' + game + '.dll';
+  inst := localLoadLibrary(PChar(libname));
   if inst = 0 then
   begin
     msgs := 'ERROR: ' + libname + ' not found.';
@@ -109,7 +157,7 @@ begin
   func := GetProcAddress(inst, PChar(funcname));
   if not Assigned(func) then
   begin
-    FreeLibrary(inst);
+    localFreeLibrary(inst);
     msgs := 'ERROR: ' + funcname + '() could not be loaded. (incorrect version?)';
     Result := False;
     Exit;
@@ -153,7 +201,7 @@ begin
   FreeMem(_msgs, mlen1);
   FreeMem(_inp, clen);
 
-  FreeLibrary(inst);
+  localFreeLibrary(inst);
 end;
 
 // Returns a TStringList with the unit names
@@ -186,8 +234,8 @@ var
   tmpstr: string;
   funclist: TStringList;
 begin
-  libname := RAD_LIBNAME;
-  inst := LoadLibrary(PChar(libname));
+  libname := 'ddc_' + game + '.dll';
+  inst := localLoadLibrary(PChar(libname));
   if inst = 0 then
   begin
     Result := nil;
@@ -198,7 +246,7 @@ begin
   funcunits := GetProcAddress(inst, PChar(funcname));
   if not Assigned(funcunits) then
   begin
-    FreeLibrary(inst);
+    localFreeLibrary(inst);
     Result := nil;
     Exit;
   end;
@@ -207,7 +255,7 @@ begin
   funcunitfunctions := GetProcAddress(inst, PChar(funcname));
   if not Assigned(funcunitfunctions) then
   begin
-    FreeLibrary(inst);
+    localFreeLibrary(inst);
     Result := nil;
     Exit;
   end;
@@ -247,7 +295,7 @@ begin
   FreeMem(unitnames, MAXALLOCSIZE);
   FreeMem(unitdecls, MAXALLOCSIZE);
 
-  FreeLibrary(inst);
+  localFreeLibrary(inst);
 end;
 
 type
@@ -266,8 +314,8 @@ var
   tmpstr: string;
   i: integer;
 begin
-  libname := RAD_LIBNAME;
-  inst := LoadLibrary(PChar(libname));
+  libname := 'ddc_' + game + '.dll';
+  inst := localLoadLibrary(PChar(libname));
   if inst = 0 then
   begin
     Result := nil;
@@ -278,7 +326,7 @@ begin
   func := GetProcAddress(inst, PChar(funcname));
   if not Assigned(func) then
   begin
-    FreeLibrary(inst);
+    localFreeLibrary(inst);
     Result := nil;
     Exit;
   end;
@@ -299,7 +347,7 @@ begin
   Result.Text := tmpstr;
 
   FreeMem(outp, MAXALLOCSIZE);
-  FreeLibrary(inst);
+  localFreeLibrary(inst);
 end;
 
 function dll_getconstants(const game: string): TStringList;
@@ -381,8 +429,8 @@ var
 begin
   Result := '';
 
-  libname := RAD_LIBNAME;
-  inst := LoadLibrary(PChar(libname));
+  libname := 'ddc_' + game + '.dll';
+  inst := localLoadLibrary(PChar(libname));
   if inst = 0 then
   begin
     Exit;
@@ -392,7 +440,7 @@ begin
   func := GetProcAddress(inst, PChar(funcname));
   if not Assigned(func) then
   begin
-    FreeLibrary(inst);
+    localFreeLibrary(inst);
     Exit;
   end;
 
@@ -413,7 +461,7 @@ begin
 
   FreeMem(outp, MAXALLOCSIZE);
   FreeMem(inpp, inplen);
-  FreeLibrary(inst);
+  localFreeLibrary(inst);
 end;
 
 function dll_getevents(const game: string): string;
