@@ -49,10 +49,13 @@ implementation
 uses
   d_delphi,
   m_fixed,
+  g_game,
   {$IFDEF HERETIC}
   r_defs,
   {$ENDIF}
   p_params,
+  p_setup,
+  p_tick,
   psi_globals,
   sc_evaluate,
   m_rnd;
@@ -70,6 +73,14 @@ type
     function PF_random2(p: TDStrings): string;
     function PF_frandom(p: TDStrings): string;
     function PF_randompick(p: TDStrings): string;
+    // General
+    function PF_leveltime(p: TDStrings): string;
+    {$IFDEF DOOM_OR_HERETIC}
+    function PF_gameepisode(p: TDStrings): string;
+    {$ENDIF}
+    function PF_gamemap(p: TDStrings): string;
+    function PF_levelname(p: TDStrings): string;
+    function PF_gameskill(p: TDStrings): string;
     // Actor position and movement
     function PF_X(p: TDStrings): string;
     function PF_Y(p: TDStrings): string;
@@ -104,6 +115,7 @@ type
     function PF_CUSTOMPARAM(p: TDStrings): string;
     function PF_TARGETCUSTOMPARAM(p: TDStrings): string;
     function PF_MASTERCUSTOMPARAM(p: TDStrings): string;
+    function PF_TRACERCUSTOMPARAM(p: TDStrings): string;
     // States
     function PF_SPAWN(p: TDStrings): string;
     function PF_SEE(p: TDStrings): string;
@@ -114,10 +126,10 @@ type
     function PF_XDEATH(p: TDStrings): string;
     function PF_HEAL(p: TDStrings): string;
     function PF_CRASH(p: TDStrings): string;
-    {$IFDEF DOOM_OR_STRIFE}
     function PF_INTERACT(p: TDStrings): string;
-    {$ENDIF}
     function PF_RAISE(p: TDStrings): string;
+    // Special
+    function PF_EVAL(p: TDStrings): string;
   public
     constructor Create; override;
     function EvaluateActor(const actor: pmobj_t; const aexpr: string): string;
@@ -142,6 +154,14 @@ begin
   AddFunc('FRANDOM', PF_frandom, -1);
   AddFunc('RANDOMPICK', PF_randompick, -1);
   AddFunc('FRANDOMPICK', PF_randompick, -1);
+  // General
+  AddFunc('LEVELTIME', PF_leveltime, -1);
+  {$IFDEF DOOM_OR_HERETIC}
+  AddFunc('GAMEEPISODE', PF_gameepisode, -1);
+  {$ENDIF}
+  AddFunc('GAMEMAP', PF_gamemap, -1);
+  AddFunc('LEVELNAME', PF_levelname, -1);
+  AddFunc('GAMESKILL', PF_gameskill, -1);
   // Actor position and movement
   AddFunc('X', PF_X, 0);
   AddFunc('Y', PF_Y, 0);
@@ -182,6 +202,8 @@ begin
   AddFunc('TARGETPARAM', PF_TARGETCUSTOMPARAM, 1);
   AddFunc('MASTERCUSTOMPARAM', PF_MASTERCUSTOMPARAM, 1);
   AddFunc('MASTERPARAM', PF_MASTERCUSTOMPARAM, 1);
+  AddFunc('TRACERCUSTOMPARAM', PF_TRACERCUSTOMPARAM, 1);
+  AddFunc('TRACERPARAM', PF_TRACERCUSTOMPARAM, 1);
   // States
   AddFunc('SPAWN', PF_SPAWN, 0);
   AddFunc('SEE', PF_SEE, 0);
@@ -192,10 +214,9 @@ begin
   AddFunc('XDEATH', PF_XDEATH, 0);
   AddFunc('HEAL', PF_HEAL, 0);
   AddFunc('CRASH', PF_CRASH, 0);
-  {$IFDEF DOOM_OR_STRIFE}
   AddFunc('INTERACT', PF_INTERACT, 0);
-  {$ENDIF}
   AddFunc('RAISE', PF_RAISE, 0);
+  AddFunc('EVAL', PF_EVAL, -1);
 end;
 
 procedure TActorEvaluator.AddFunc(aname: string; afunc: TObjFunc; anump: integer);
@@ -296,6 +317,34 @@ begin
     exit;
   end;
   result := p[N_Random mod p.count];
+end;
+
+// General
+function TActorEvaluator.PF_leveltime(p: TDStrings): string;
+begin
+  result := itoa(leveltime);
+end;
+
+{$IFDEF DOOM_OR_HERETIC}
+function TActorEvaluator.PF_gameepisode(p: TDStrings): string;
+begin
+  result := itoa(gameepisode);
+end;
+{$ENDIF}
+
+function TActorEvaluator.PF_gamemap(p: TDStrings): string;
+begin
+  result := itoa(gamemap);
+end;
+
+function TActorEvaluator.PF_levelname(p: TDStrings): string;
+begin
+  result := P_GetMapName({$IFDEF DOOM_OR_HERETIC}gameepisode, {$ENDIF}gamemap);
+end;
+
+function TActorEvaluator.PF_gameskill(p: TDStrings): string;
+begin
+  result := itoa(Ord(gameskill));
 end;
 
 // Actor position and movement
@@ -488,6 +537,22 @@ begin
   result := '0';
 end;
 
+function TActorEvaluator.PF_TRACERCUSTOMPARAM(p: TDStrings): string;
+var
+  parm: Pmobjcustomparam_t;
+begin
+  if factor.tracer <> nil then
+  begin
+    parm := P_GetMobjCustomParam(factor.tracer, p[0]);
+    if parm <> nil then
+    begin
+      result := itoa(parm.value);
+      exit;
+    end;
+  end;
+  result := '0';
+end;
+
 // States
 function TActorEvaluator.PF_SPAWN(p: TDStrings): string;
 begin
@@ -534,16 +599,25 @@ begin
   result := itoa(factor.info.crashstate);
 end;
 
-{$IFDEF DOOM_OR_STRIFE}
 function TActorEvaluator.PF_INTERACT(p: TDStrings): string;
 begin
   result := itoa(factor.info.interactstate);
 end;
-{$ENDIF}
 
 function TActorEvaluator.PF_RAISE(p: TDStrings): string;
 begin
   result := itoa(factor.info.raisestate);
+end;
+
+function TActorEvaluator.PF_EVAL(p: TDStrings): string;
+begin
+  if p.Count = 0 then
+  begin
+    result := '0';
+    exit;
+  end;
+
+  result := p.Strings[N_Random mod p.Count];
 end;
 
 function TActorEvaluator.EvaluateActor(const actor: pmobj_t; const aexpr: string): string;

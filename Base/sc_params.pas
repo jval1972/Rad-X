@@ -51,6 +51,8 @@ const
   GLBF_FRANDOM = 10;
   GLBF_EVALUATE = 11;
   GLBF_MOBJ_MASTERCUSTOMPARM = 12;
+  GLBF_MOBJ_TRACERCUSTOMPARM = 13;
+  GLBF_FORCE_EVALUATE = 14;
 
 type
   customparam_t = record
@@ -98,6 +100,8 @@ type
     property Declaration: string read fdeclaration;
     property Actor: pointer read fActor write fActor;
   end;
+
+function SC_EvalString(const token: string): string;
 
 implementation
 
@@ -177,6 +181,8 @@ begin
           else
             AddParam(GLBF_EVALUATE, lst[i]);
         end
+        else if utoken = 'EVAL' then
+          AddParam(GLBF_FORCE_EVALUATE, lst[i])
         else if (utoken = 'MAPSTR') or
                 (utoken = 'WORLDSTR') or
                 (utoken = 'MAPINT') or
@@ -185,7 +191,8 @@ begin
                 (utoken = 'WORLDFLOAT') or
                 (utoken = 'CUSTOMPARAM') or
                 (utoken = 'TARGETCUSTOMPARAM') or
-                (utoken = 'MASTERCUSTOMPARAM') then
+                (utoken = 'MASTERCUSTOMPARAM') or
+                (utoken = 'TRACERCUSTOMPARAM') then
         begin
           ok := false;
           if lstparam.Count = 2 then
@@ -211,6 +218,8 @@ begin
               AddParam(GLBF_MOBJ_TARGETCUSTOMPARM, 'TARGETCUSTOMPARAM ' + RemoveQuotesFromString(lstparam[1]))
             else if utoken = 'MASTERCUSTOMPARAM' then
               AddParam(GLBF_MOBJ_MASTERCUSTOMPARM, 'MASTERCUSTOMPARAM ' + RemoveQuotesFromString(lstparam[1]))
+            else if utoken = 'TRACERCUSTOMPARAM' then
+              AddParam(GLBF_MOBJ_TRACERCUSTOMPARM, 'TRACERCUSTOMPARAM ' + RemoveQuotesFromString(lstparam[1]))
           end
           else
           begin
@@ -301,6 +310,12 @@ begin
       end;
     end;
   end
+  else if (utoken = 'EVAL') and (parmtype = GLBF_FORCE_EVALUATE) then
+  begin
+    fList[fNumItems].globalidx := GLBF_FORCE_EVALUATE;
+    fList[fNumItems].computed := false;
+    fList[fNumItems].s_param := value;
+  end
   else
   begin
     if (utoken = 'MAPSTR') and (parmtype = GLBF_MAP_STRING) then
@@ -346,6 +361,11 @@ begin
     else if (utoken = 'MASTERCUSTOMPARAM') and (parmtype = GLBF_MOBJ_MASTERCUSTOMPARM) then
     begin
       fList[fNumItems].globalidx := GLBF_MOBJ_MASTERCUSTOMPARM;
+      fList[fNumItems].s_param := token;
+    end
+    else if (utoken = 'TRACERCUSTOMPARAM') and (parmtype = GLBF_MOBJ_TRACERCUSTOMPARM) then
+    begin
+      fList[fNumItems].globalidx := GLBF_MOBJ_TRACERCUSTOMPARM;
       fList[fNumItems].s_param := token;
     end
     else
@@ -399,7 +419,8 @@ begin
         result := fList[index].i_parm1 + (N_Random * (fList[index].i_parm2 - fList[index].i_parm1 + 1)) div 256;
       GLBF_FRANDOM:
         result := round(fList[index].f_parm1 + (N_Random * (fList[index].f_parm2 - fList[index].f_parm1 + 1)) / 256);
-      GLBF_EVALUATE:
+      GLBF_EVALUATE,
+      GLBF_FORCE_EVALUATE:
         result := round(atof(SC_EvaluateActorExpression(fActor, fList[index].s_param)));
       GLBF_MAP_STRING:
         result := atoi(PS_GetMapStr(fList[index].s_param), 0);
@@ -445,6 +466,17 @@ begin
                 result := parm.value;
             end;
         end;
+      GLBF_MOBJ_TRACERCUSTOMPARM:
+        begin
+          result := 0;
+          if fActor <> nil then
+            if Pmobj_t(fActor).tracer <> nil then
+            begin
+              parm := P_GetMobjCustomParam(Pmobj_t(fActor).tracer, fList[index].s_param);
+              if parm <> nil then
+                result := parm.value;
+            end;
+        end;
     else
       result := fList[index].i_param;
     end;
@@ -479,7 +511,8 @@ begin
         result := (fList[index].i_parm1 * FRACUNIT + N_Random * (fList[index].i_parm2 - fList[index].i_parm1 + 1) * 256) / FRACUNIT;
       GLBF_FRANDOM:
         result := (fList[index].f_parm1 * FRACUNIT + N_Random * (fList[index].f_parm2 - fList[index].f_parm1 + 1) * 256) / FRACUNIT;
-      GLBF_EVALUATE:
+      GLBF_EVALUATE,
+      GLBF_FORCE_EVALUATE:
         result := atof(SC_EvaluateActorExpression(fActor, fList[index].s_param));
       GLBF_MAP_STRING:
         result := atof(PS_GetMapStr(fList[index].s_param), 0.0);
@@ -525,6 +558,17 @@ begin
                 result := parm.value;
             end;
         end;
+      GLBF_MOBJ_TRACERCUSTOMPARM:
+        begin
+          result := 0.0;
+          if fActor <> nil then
+            if Pmobj_t(fActor).tracer <> nil then
+            begin
+              parm := P_GetMobjCustomParam(Pmobj_t(fActor).tracer, fList[index].s_param);
+              if parm <> nil then
+                result := parm.value;
+            end;
+        end;
     else
       result := fList[index].f_param;
     end;
@@ -560,7 +604,8 @@ begin
         result := fList[index].i_parm1 * FRACUNIT + N_Random * (fList[index].i_parm2 - fList[index].i_parm1 + 1) * 256;
       GLBF_FRANDOM:
         result := round(fList[index].f_parm1 * FRACUNIT + N_Random * (fList[index].f_parm2 - fList[index].f_parm1 + 1) * 256);
-      GLBF_EVALUATE:
+      GLBF_EVALUATE,
+      GLBF_FORCE_EVALUATE:
         result := round(atof(SC_EvaluateActorExpression(fActor, fList[index].s_param)) * FRACUNIT);
       GLBF_MAP_STRING:
         result := round(atof(PS_GetMapStr(fList[index].s_param), 0.0) * FRACUNIT);
@@ -606,6 +651,17 @@ begin
                 result := parm.value * FRACUNIT;
             end;
         end;
+      GLBF_MOBJ_TRACERCUSTOMPARM:
+        begin
+          result := 0;
+          if fActor <> nil then
+            if Pmobj_t(fActor).tracer <> nil then
+            begin
+              parm := P_GetMobjCustomParam(Pmobj_t(fActor).tracer, fList[index].s_param);
+              if parm <> nil then
+                result := parm.value * FRACUNIT;
+            end;
+        end;
     else
       result := fList[index].fx_param;
     end;
@@ -634,66 +690,7 @@ begin
   if (index >= 0) and (index < fNumItems) then
   begin
     case fList[index].globalidx of
-      GLBF_MAP_STRING:
-        result := PS_GetMapStr(fList[index].s_param);
-      GLBF_MAP_INTEGER:
-        result := itoa(PS_GetMapInt(fList[index].s_param));
-      GLBF_MAP_FLOAT:
-        result := ftoa(PS_GetMapFloat(fList[index].s_param));
-      GLBF_WORLD_STRING:
-        result := PS_GetWorldStr(fList[index].s_param);
-      GLBF_WORLD_INTEGER:
-        result := itoa(PS_GetWorldInt(fList[index].s_param));
-      GLBF_WORLD_FLOAT:
-        result := ftoa(PS_GetWorldFloat(fList[index].s_param));
-      GLBF_MOBJ_CUSTOMPARM:
-        begin
-          result := '';
-          if fActor <> nil then
-          begin
-            parm := P_GetMobjCustomParam(fActor, fList[index].s_param);
-            if parm <> nil then
-              result := itoa(parm.value);
-          end;
-        end;
-      GLBF_MOBJ_TARGETCUSTOMPARM:
-        begin
-          result := '';
-          if fActor <> nil then
-            if Pmobj_t(fActor).target <> nil then
-            begin
-              parm := P_GetMobjCustomParam(Pmobj_t(fActor).target, fList[index].s_param);
-              if parm <> nil then
-                result := itoa(parm.value);
-            end;
-        end;
-      GLBF_MOBJ_MASTERCUSTOMPARM:
-        begin
-          result := '';
-          if fActor <> nil then
-            if Pmobj_t(fActor).master <> nil then
-            begin
-              parm := P_GetMobjCustomParam(Pmobj_t(fActor).master, fList[index].s_param);
-              if parm <> nil then
-                result := itoa(parm.value);
-            end;
-        end;
-      else
-        result := fList[index].s_param
-    end;
-  end
-  else
-    result := '';
-end;
-
-function TCustomParamList.GetEvaluateString(index: integer): string;
-var
-  parm: Pmobjcustomparam_t;
-begin
-  if (index >= 0) and (index < fNumItems) then
-  begin
-    case fList[index].globalidx of
-      GLBF_EVALUATE:
+      GLBF_FORCE_EVALUATE:
         result := RemoveQuotesFromString(SC_EvaluateActorExpression(fActor, fList[index].s_param));
       GLBF_MAP_STRING:
         result := PS_GetMapStr(fList[index].s_param);
@@ -739,12 +736,115 @@ begin
                 result := itoa(parm.value);
             end;
         end;
+      GLBF_MOBJ_TRACERCUSTOMPARM:
+        begin
+          result := '';
+          if fActor <> nil then
+            if Pmobj_t(fActor).tracer <> nil then
+            begin
+              parm := P_GetMobjCustomParam(Pmobj_t(fActor).tracer, fList[index].s_param);
+              if parm <> nil then
+                result := itoa(parm.value);
+            end;
+        end;
       else
-        result := fList[index].s_param
+        result := RemoveQuotesFromString(fList[index].s_param);
     end;
   end
   else
     result := '';
+end;
+
+function TCustomParamList.GetEvaluateString(index: integer): string;
+var
+  parm: Pmobjcustomparam_t;
+begin
+  if (index >= 0) and (index < fNumItems) then
+  begin
+    case fList[index].globalidx of
+      GLBF_EVALUATE,
+      GLBF_FORCE_EVALUATE:
+        result := RemoveQuotesFromString(SC_EvaluateActorExpression(fActor, fList[index].s_param));
+      GLBF_MAP_STRING:
+        result := PS_GetMapStr(fList[index].s_param);
+      GLBF_MAP_INTEGER:
+        result := itoa(PS_GetMapInt(fList[index].s_param));
+      GLBF_MAP_FLOAT:
+        result := ftoa(PS_GetMapFloat(fList[index].s_param));
+      GLBF_WORLD_STRING:
+        result := PS_GetWorldStr(fList[index].s_param);
+      GLBF_WORLD_INTEGER:
+        result := itoa(PS_GetWorldInt(fList[index].s_param));
+      GLBF_WORLD_FLOAT:
+        result := ftoa(PS_GetWorldFloat(fList[index].s_param));
+      GLBF_MOBJ_CUSTOMPARM:
+        begin
+          result := '';
+          if fActor <> nil then
+          begin
+            parm := P_GetMobjCustomParam(fActor, fList[index].s_param);
+            if parm <> nil then
+              result := itoa(parm.value);
+          end;
+        end;
+      GLBF_MOBJ_TARGETCUSTOMPARM:
+        begin
+          result := '';
+          if fActor <> nil then
+            if Pmobj_t(fActor).target <> nil then
+            begin
+              parm := P_GetMobjCustomParam(Pmobj_t(fActor).target, fList[index].s_param);
+              if parm <> nil then
+                result := itoa(parm.value);
+            end;
+        end;
+      GLBF_MOBJ_MASTERCUSTOMPARM:
+        begin
+          result := '';
+          if fActor <> nil then
+            if Pmobj_t(fActor).master <> nil then
+            begin
+              parm := P_GetMobjCustomParam(Pmobj_t(fActor).master, fList[index].s_param);
+              if parm <> nil then
+                result := itoa(parm.value);
+            end;
+        end;
+      GLBF_MOBJ_TRACERCUSTOMPARM:
+        begin
+          result := '';
+          if fActor <> nil then
+            if Pmobj_t(fActor).tracer <> nil then
+            begin
+              parm := P_GetMobjCustomParam(Pmobj_t(fActor).tracer, fList[index].s_param);
+              if parm <> nil then
+                result := itoa(parm.value);
+            end;
+        end;
+      else
+        result := RemoveQuotesFromString(fList[index].s_param);
+    end;
+  end
+  else
+    result := '';
+end;
+
+function SC_EvalString(const token: string): string;
+var
+  sl: TDStringList;
+begin
+  sl := wordstolist(token, ['(', ')', ' ', ',', '[', ']']);
+  if sl.Count > 1 then
+  begin
+    if strupper(sl.strings[0]) = 'RANDOMPICK' then
+    begin
+      sl.Delete(0);
+      Result := RemoveQuotesFromString(sl.Strings[N_Random mod sl.Count]);
+      sl.Free;
+      Exit;
+    end;
+  end;
+  sl.Free;
+  Result := RemoveQuotesFromString(token);
 end;
 
 end.

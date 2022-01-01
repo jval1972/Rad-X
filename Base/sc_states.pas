@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -49,9 +49,9 @@ procedure SC_ParseStatedefLump;
 
 procedure SC_AddRadixWeaponStates;
 
-function P_GetStateFromName(const actor: Pmobj_t; const s: string): integer;
+function P_GetStateFromName(const actor: Pmobj_t; const s1: string): integer;
 
-function P_GetStateFromNameWithOffsetCheck(const actor: Pmobj_t; const s: string): integer;
+function P_GetStateFromNameWithOffsetCheck(const actor: Pmobj_t; const s1: string): integer;
 
 function SC_StateName(const st: integer): string;
 
@@ -65,6 +65,7 @@ uses
   info_common,
   radix_weapons,
   sc_engine,
+  sc_params,
   w_wad;
 
 const
@@ -104,9 +105,9 @@ begin
     statenames.Add('S_RADIXWEAPONINFO' + itoa(i));
 end;
 
-function P_GetStateFromName(const actor: Pmobj_t; const s: string): integer;
+function P_GetStateFromName(const actor: Pmobj_t; const s1: string): integer;
 var
-  st: string;
+  s, st: string;
   fw, sw: string;
   pps, ppp, ppb: integer;
 
@@ -193,13 +194,11 @@ var
         result := inf.crashstate;
         exit;
       end
-      {$IFDEF DOOM_OR_STRIFE}
       else if sss1 = 'INTERACT' then
       begin
         result := inf.interactstate;
         exit;
       end
-      {$ENDIF};
     end;
 
     sss1 := 'S_' + strupper(actor.info.name) + '_' + sss;
@@ -207,6 +206,7 @@ var
   end;
 
 begin
+  s := SC_EvalString(s1);
   st := strtrim(strupper(strtrim(s)));
   pps := Pos('+', st);
   ppp := Pos('-', st);
@@ -239,10 +239,12 @@ begin
   Result := -1; // JVAL: No match
 end;
 
-function P_GetStateFromNameWithOffsetCheck(const actor: Pmobj_t; const s: string): integer;
+function P_GetStateFromNameWithOffsetCheck(const actor: Pmobj_t; const s1: string): integer;
 var
+  s: string;
   check: string;
 begin
+  s := SC_EvalString(s1);
   check := s;
   if check = '' then
   begin
