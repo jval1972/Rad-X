@@ -2339,7 +2339,7 @@ begin
   end;
   if mobj_no = -1 then
   begin
-    I_Warning('A_SpawnItem(): Unknown item %s'#13#10, [actor.state.params.StrVal[0]]);
+    I_Warning('A_SpawnItem(): Unknown item %s'#13#10, [actor.state.params.EvaluateStrVal[0]]);
     exit;
   end;
 
@@ -2408,7 +2408,7 @@ begin
     mobj_no := actor.state.params.IntVal[0]
   else
   begin
-    mobj_no := Info_GetMobjNumForName(actor.state.params.StrVal[0]);
+    mobj_no := Info_GetMobjNumForName(actor.state.params.EvaluateStrVal[0]);
     actor.state.params.IntVal[0] := mobj_no;
   end;
   if mobj_no = -1 then
