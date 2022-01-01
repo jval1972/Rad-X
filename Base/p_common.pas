@@ -79,6 +79,12 @@ procedure A_AddMasterCustomParam(actor: Pmobj_t);
 
 procedure A_SubtractMasterCustomParam(actor: Pmobj_t);
 
+procedure A_SetTracerCustomParam(actor: Pmobj_t);
+
+procedure A_AddTracerCustomParam(actor: Pmobj_t);
+
+procedure A_SubtractTracerCustomParam(actor: Pmobj_t);
+
 procedure A_JumpIf(actor: Pmobj_t);
 
 procedure A_JumpIfCustomParam(actor: Pmobj_t);
@@ -98,6 +104,12 @@ procedure A_JumpIfMasterCustomParam(actor: Pmobj_t);
 procedure A_JumpIfMasterCustomParamLess(actor: Pmobj_t);
 
 procedure A_JumpIfMasterCustomParamGreater(actor: Pmobj_t);
+
+procedure A_JumpIfTracerCustomParam(actor: Pmobj_t);
+
+procedure A_JumpIfTracerCustomParamLess(actor: Pmobj_t);
+
+procedure A_JumpIfTracerCustomParamGreater(actor: Pmobj_t);
 
 procedure A_JumpIfMapStringEqual(actor: Pmobj_t);
 procedure A_JumpIfMapStringLess(actor: Pmobj_t);
@@ -140,6 +152,12 @@ procedure A_GoToIfMasterCustomParam(actor: Pmobj_t);
 procedure A_GoToIfMasterCustomParamLess(actor: Pmobj_t);
 
 procedure A_GoToIfMasterCustomParamGreater(actor: Pmobj_t);
+
+procedure A_GoToIfTracerCustomParam(actor: Pmobj_t);
+
+procedure A_GoToIfTracerCustomParamLess(actor: Pmobj_t);
+
+procedure A_GoToIfTracerCustomParamGreater(actor: Pmobj_t);
 
 procedure A_GoToIfMapStringEqual(actor: Pmobj_t);
 procedure A_GoToIfMapStringLess(actor: Pmobj_t);
@@ -440,6 +458,7 @@ uses
   info_common,
   p_enemy,
   p_extra,
+  p_inter,
   p_mobj,
   p_pspr,
   p_map,
@@ -573,8 +592,12 @@ begin
   if N_Random < propability then
   begin
     if not actor.state.params.IsComputed[1] then
-      actor.state.params.IntVal[1] := P_GetStateFromName(actor, actor.state.params.StrVal[1]);
-    newstate := actor.state.params.IntVal[1];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[1]);
+      actor.state.params.IntVal[1] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[1];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -611,8 +634,12 @@ begin
   if P_AproxDistance(actor.x - target.x, actor.y - target.y) < dist then
   begin
     if not actor.state.params.IsComputed[1] then
-      actor.state.params.IntVal[1] := P_GetStateFromName(actor, actor.state.params.StrVal[1]);
-    newstate := actor.state.params.IntVal[1];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[1]);
+      actor.state.params.IntVal[1] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[1];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -633,8 +660,12 @@ begin
   if actor.health < actor.state.params.IntVal[0] then
   begin
     if not actor.state.params.IsComputed[1] then
-      actor.state.params.IntVal[1] := P_GetStateFromName(actor, actor.state.params.StrVal[1]);
-    newstate := actor.state.params.IntVal[1];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[1]);
+      actor.state.params.IntVal[1] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[1];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -686,29 +717,33 @@ end;
 procedure A_AddCustomParam(actor: Pmobj_t);
 var
   parm: Pmobjcustomparam_t;
+  sparm: string;
 begin
   if not P_CheckStateParams(actor, 2) then
     exit;
 
-  parm := P_GetMobjCustomParam(actor, actor.state.params.StrVal[0]);
+  sparm := actor.state.params.StrVal[0];
+  parm := P_GetMobjCustomParam(actor, sparm);
   if parm = nil then
-    P_SetMobjCustomParam(actor, actor.state.params.StrVal[0], actor.state.params.IntVal[1])
+    P_SetMobjCustomParam(actor, sparm, actor.state.params.IntVal[1])
   else
-    P_SetMobjCustomParam(actor, actor.state.params.StrVal[0], parm.value + actor.state.params.IntVal[1])
+    P_SetMobjCustomParam(actor, sparm, parm.value + actor.state.params.IntVal[1])
 end;
 
 procedure A_SubtractCustomParam(actor: Pmobj_t);
 var
   parm: Pmobjcustomparam_t;
+  sparm: string;
 begin
   if not P_CheckStateParams(actor, 2) then
     exit;
 
-  parm := P_GetMobjCustomParam(actor, actor.state.params.StrVal[0]);
+  sparm := actor.state.params.StrVal[0];
+  parm := P_GetMobjCustomParam(actor, sparm);
   if parm <> nil then
-    P_SetMobjCustomParam(actor, actor.state.params.StrVal[0], parm.value - actor.state.params.IntVal[1])
+    P_SetMobjCustomParam(actor, sparm, parm.value - actor.state.params.IntVal[1])
   else
-    P_SetMobjCustomParam(actor, actor.state.params.StrVal[0], - actor.state.params.IntVal[1])
+    P_SetMobjCustomParam(actor, sparm, - actor.state.params.IntVal[1])
 end;
 
 procedure A_SetTargetCustomParam(actor: Pmobj_t);
@@ -725,6 +760,7 @@ end;
 procedure A_AddTargetCustomParam(actor: Pmobj_t);
 var
   parm: Pmobjcustomparam_t;
+  sparm: string;
 begin
   if not P_CheckStateParams(actor, 2) then
     exit;
@@ -732,16 +768,18 @@ begin
   if actor.target = nil then
     exit;
 
-  parm := P_GetMobjCustomParam(actor.target, actor.state.params.StrVal[0]);
+  sparm := actor.state.params.StrVal[0];
+  parm := P_GetMobjCustomParam(actor.target, sparm);
   if parm = nil then
-    P_SetMobjCustomParam(actor.target, actor.state.params.StrVal[0], actor.state.params.IntVal[1])
+    P_SetMobjCustomParam(actor.target, sparm, actor.state.params.IntVal[1])
   else
-    P_SetMobjCustomParam(actor.target, actor.state.params.StrVal[0], parm.value + actor.state.params.IntVal[1])
+    P_SetMobjCustomParam(actor.target, sparm, parm.value + actor.state.params.IntVal[1])
 end;
 
 procedure A_SubtractTargetCustomParam(actor: Pmobj_t);
 var
   parm: Pmobjcustomparam_t;
+  sparm: string;
 begin
   if not P_CheckStateParams(actor, 2) then
     exit;
@@ -749,11 +787,12 @@ begin
   if actor.target = nil then
     exit;
 
-  parm := P_GetMobjCustomParam(actor.target, actor.state.params.StrVal[0]);
+  sparm := actor.state.params.StrVal[0];
+  parm := P_GetMobjCustomParam(actor.target, sparm);
   if parm <> nil then
-    P_SetMobjCustomParam(actor.target, actor.state.params.StrVal[0], parm.value - actor.state.params.IntVal[1])
+    P_SetMobjCustomParam(actor.target, sparm, parm.value - actor.state.params.IntVal[1])
   else
-    P_SetMobjCustomParam(actor.target, actor.state.params.StrVal[0], - actor.state.params.IntVal[1])
+    P_SetMobjCustomParam(actor.target, sparm, - actor.state.params.IntVal[1])
 end;
 
 procedure A_SetMasterCustomParam(actor: Pmobj_t);
@@ -770,6 +809,7 @@ end;
 procedure A_AddMasterCustomParam(actor: Pmobj_t);
 var
   parm: Pmobjcustomparam_t;
+  sparm: string;
 begin
   if not P_CheckStateParams(actor, 2) then
     exit;
@@ -777,16 +817,18 @@ begin
   if actor.master = nil then
     exit;
 
-  parm := P_GetMobjCustomParam(actor.master, actor.state.params.StrVal[0]);
+  sparm := actor.state.params.StrVal[0];
+  parm := P_GetMobjCustomParam(actor.master, sparm);
   if parm = nil then
-    P_SetMobjCustomParam(actor.master, actor.state.params.StrVal[0], actor.state.params.IntVal[1])
+    P_SetMobjCustomParam(actor.master, sparm, actor.state.params.IntVal[1])
   else
-    P_SetMobjCustomParam(actor.master, actor.state.params.StrVal[0], parm.value + actor.state.params.IntVal[1])
+    P_SetMobjCustomParam(actor.master, sparm, parm.value + actor.state.params.IntVal[1])
 end;
 
 procedure A_SubtractMasterCustomParam(actor: Pmobj_t);
 var
   parm: Pmobjcustomparam_t;
+  sparm: string;
 begin
   if not P_CheckStateParams(actor, 2) then
     exit;
@@ -794,11 +836,61 @@ begin
   if actor.master = nil then
     exit;
 
-  parm := P_GetMobjCustomParam(actor.master, actor.state.params.StrVal[0]);
+  sparm := actor.state.params.StrVal[0];
+  parm := P_GetMobjCustomParam(actor.master, sparm);
   if parm <> nil then
-    P_SetMobjCustomParam(actor.master, actor.state.params.StrVal[0], parm.value - actor.state.params.IntVal[1])
+    P_SetMobjCustomParam(actor.master, sparm, parm.value - actor.state.params.IntVal[1])
   else
-    P_SetMobjCustomParam(actor.master, actor.state.params.StrVal[0], - actor.state.params.IntVal[1])
+    P_SetMobjCustomParam(actor.master, sparm, - actor.state.params.IntVal[1])
+end;
+
+procedure A_SetTracerCustomParam(actor: Pmobj_t);
+begin
+  if not P_CheckStateParams(actor, 2) then
+    exit;
+
+  if actor.tracer = nil then
+    exit;
+
+  P_SetMobjCustomParam(actor.tracer, actor.state.params.StrVal[0], actor.state.params.IntVal[1]);
+end;
+
+procedure A_AddTracerCustomParam(actor: Pmobj_t);
+var
+  parm: Pmobjcustomparam_t;
+  sparm: string;
+begin
+  if not P_CheckStateParams(actor, 2) then
+    exit;
+
+  if actor.tracer = nil then
+    exit;
+
+  sparm := actor.state.params.StrVal[0];
+  parm := P_GetMobjCustomParam(actor.tracer, sparm);
+  if parm = nil then
+    P_SetMobjCustomParam(actor.tracer, sparm, actor.state.params.IntVal[1])
+  else
+    P_SetMobjCustomParam(actor.tracer, sparm, parm.value + actor.state.params.IntVal[1])
+end;
+
+procedure A_SubtractTracerCustomParam(actor: Pmobj_t);
+var
+  parm: Pmobjcustomparam_t;
+  sparm: string;
+begin
+  if not P_CheckStateParams(actor, 2) then
+    exit;
+
+  if actor.tracer = nil then
+    exit;
+
+  sparm := actor.state.params.StrVal[0];
+  parm := P_GetMobjCustomParam(actor.tracer, sparm);
+  if parm <> nil then
+    P_SetMobjCustomParam(actor.tracer, sparm, parm.value - actor.state.params.IntVal[1])
+  else
+    P_SetMobjCustomParam(actor.tracer, sparm, - actor.state.params.IntVal[1])
 end;
 
 //
@@ -1021,10 +1113,78 @@ begin
   end;
 end;
 
+//
+// JVAL
+// Change state offset
+// A_JumpIfTracerCustomParam(customparam, value of customparam, offset)
+//
+procedure A_JumpIfTracerCustomParam(actor: Pmobj_t);
+var
+  offset: integer;
+begin
+  if actor.tracer = nil then
+    exit;
+
+  if not P_CheckStateParams(actor, 3) then
+    exit;
+
+  if P_GetMobjCustomParamValue(actor.tracer, actor.state.params.StrVal[0]) = actor.state.params.IntVal[1] then
+  begin
+    offset := P_GetStateFromNameWithOffsetCheck(actor, actor.state.params.StrVal[2]);
+    if @states[offset] <> actor.state then
+      P_SetMobjState(actor, statenum_t(offset));
+  end;
+end;
+
+//
+// JVAL
+// Change state offset
+// A_JumpIfTracerCustomParamLess(customparam, value of customparam, offset)
+//
+procedure A_JumpIfTracerCustomParamLess(actor: Pmobj_t);
+var
+  offset: integer;
+begin
+  if actor.tracer = nil then
+    exit;
+
+  if not P_CheckStateParams(actor, 3) then
+    exit;
+
+  if P_GetMobjCustomParamValue(actor.tracer, actor.state.params.StrVal[0]) < actor.state.params.IntVal[1] then
+  begin
+    offset := P_GetStateFromNameWithOffsetCheck(actor, actor.state.params.StrVal[2]);
+    if @states[offset] <> actor.state then
+      P_SetMobjState(actor, statenum_t(offset));
+  end;
+end;
+
+//
+// JVAL
+// Change state offset
+// A_JumpIfTracerCustomParamGreater(customparam, value of customparam, offset)
+//
+procedure A_JumpIfTracerCustomParamGreater(actor: Pmobj_t);
+var
+  offset: integer;
+begin
+  if actor.tracer = nil then
+    exit;
+
+  if not P_CheckStateParams(actor, 3) then
+    exit;
+
+  if P_GetMobjCustomParamValue(actor.tracer, actor.state.params.StrVal[0]) > actor.state.params.IntVal[1] then
+  begin
+    offset := P_GetStateFromNameWithOffsetCheck(actor, actor.state.params.StrVal[2]);
+    if @states[offset] <> actor.state then
+      P_SetMobjState(actor, statenum_t(offset));
+  end;
+end;
+
 procedure A_JumpIfMapStringEqual(actor: Pmobj_t);
 var
   offset: integer;
-  cur: integer;
 begin
   if actor.target = nil then
     exit;
@@ -1034,11 +1194,9 @@ begin
 
   if mapvars.StrVal[actor.state.params.StrVal[0]] = actor.state.params.StrVal[1] then
   begin
-    offset := actor.state.params.IntVal[2];
-
-    cur := (integer(actor.state) - integer(states)) div SizeOf(state_t);
-
-    P_SetMobjState(actor, statenum_t(cur + offset));
+    offset := P_GetStateFromNameWithOffsetCheck(actor, actor.state.params.StrVal[2]);
+    if @states[offset] <> actor.state then
+      P_SetMobjState(actor, statenum_t(offset));
   end;
 end;
 
@@ -1060,18 +1218,15 @@ end;
 procedure A_JumpIfMapStringGreater(actor: Pmobj_t);
 var
   offset: integer;
-  cur: integer;
 begin
   if not P_CheckStateParams(actor, 3) then
     exit;
 
   if mapvars.StrVal[actor.state.params.StrVal[0]] > actor.state.params.StrVal[1] then
   begin
-    offset := actor.state.params.IntVal[2];
-
-    cur := (integer(actor.state) - integer(states)) div SizeOf(state_t);
-
-    P_SetMobjState(actor, statenum_t(cur + offset));
+    offset := P_GetStateFromNameWithOffsetCheck(actor, actor.state.params.StrVal[2]);
+    if @states[offset] <> actor.state then
+      P_SetMobjState(actor, statenum_t(offset));
   end;
 end;
 
@@ -1093,18 +1248,15 @@ end;
 procedure A_JumpIfMapIntegerLess(actor: Pmobj_t);
 var
   offset: integer;
-  cur: integer;
 begin
   if not P_CheckStateParams(actor, 3) then
     exit;
 
   if mapvars.IntVal[actor.state.params.StrVal[0]] < actor.state.params.IntVal[1] then
   begin
-    offset := actor.state.params.IntVal[2];
-
-    cur := (integer(actor.state) - integer(states)) div SizeOf(state_t);
-
-    P_SetMobjState(actor, statenum_t(cur + offset));
+    offset := P_GetStateFromNameWithOffsetCheck(actor, actor.state.params.StrVal[2]);
+    if @states[offset] <> actor.state then
+      P_SetMobjState(actor, statenum_t(offset));
   end;
 end;
 
@@ -1216,18 +1368,15 @@ end;
 procedure A_JumpIfWorldIntegerEqual(actor: Pmobj_t);
 var
   offset: integer;
-  cur: integer;
 begin
   if not P_CheckStateParams(actor, 3) then
     exit;
 
   if Worldvars.IntVal[actor.state.params.StrVal[0]] = actor.state.params.IntVal[1] then
   begin
-    offset := actor.state.params.IntVal[2];
-
-    cur := (integer(actor.state) - integer(states)) div SizeOf(state_t);
-
-    P_SetMobjState(actor, statenum_t(cur + offset));
+    offset := P_GetStateFromNameWithOffsetCheck(actor, actor.state.params.StrVal[2]);
+    if @states[offset] <> actor.state then
+      P_SetMobjState(actor, statenum_t(offset));
   end;
 end;
 
@@ -1321,8 +1470,12 @@ begin
   if P_GetMobjCustomParamValue(actor, actor.state.params.StrVal[0]) = actor.state.params.IntVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1343,8 +1496,12 @@ begin
   if P_GetMobjCustomParamValue(actor, actor.state.params.StrVal[0]) < actor.state.params.IntVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1365,8 +1522,12 @@ begin
   if P_GetMobjCustomParamValue(actor, actor.state.params.StrVal[0]) > actor.state.params.IntVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1390,8 +1551,12 @@ begin
   if P_GetMobjCustomParamValue(actor.target, actor.state.params.StrVal[0]) = actor.state.params.IntVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1415,8 +1580,12 @@ begin
   if P_GetMobjCustomParamValue(actor.target, actor.state.params.StrVal[0]) < actor.state.params.IntVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1440,8 +1609,12 @@ begin
   if P_GetMobjCustomParamValue(actor.target, actor.state.params.StrVal[0]) > actor.state.params.IntVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1465,8 +1638,12 @@ begin
   if P_GetMobjCustomParamValue(actor.master, actor.state.params.StrVal[0]) = actor.state.params.IntVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1490,8 +1667,12 @@ begin
   if P_GetMobjCustomParamValue(actor.master, actor.state.params.StrVal[0]) < actor.state.params.IntVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1515,8 +1696,99 @@ begin
   if P_GetMobjCustomParamValue(actor.master, actor.state.params.StrVal[0]) > actor.state.params.IntVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
+
+    P_SetMobjState(actor, statenum_t(newstate));
+  end;
+end;
+
+//
+// JVAL
+// Change state
+// A_GoToIfTracerCustomParam(customparam, value of customparam, newstate)
+//
+procedure A_GoToIfTracerCustomParam(actor: Pmobj_t);
+var
+  newstate: integer;
+begin
+  if actor.tracer = nil then
+    exit;
+
+  if not P_CheckStateParams(actor, 3) then
+    exit;
+
+  if P_GetMobjCustomParamValue(actor.tracer, actor.state.params.StrVal[0]) = actor.state.params.IntVal[1] then
+  begin
+    if not actor.state.params.IsComputed[2] then
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
+
+    P_SetMobjState(actor, statenum_t(newstate));
+  end;
+end;
+
+//
+// JVAL
+// Change state
+// A_GoToIfTracerCustomParamLess(customparam, value of customparam, newstate)
+//
+procedure A_GoToIfTracerCustomParamLess(actor: Pmobj_t);
+var
+  newstate: integer;
+begin
+  if actor.tracer = nil then
+    exit;
+
+  if not P_CheckStateParams(actor, 3) then
+    exit;
+
+  if P_GetMobjCustomParamValue(actor.tracer, actor.state.params.StrVal[0]) < actor.state.params.IntVal[1] then
+  begin
+    if not actor.state.params.IsComputed[2] then
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
+
+    P_SetMobjState(actor, statenum_t(newstate));
+  end;
+end;
+
+//
+// JVAL
+// Change state
+// A_GoToIfTracerCustomParamGreater(customparam, value of customparam, newstate)
+//
+procedure A_GoToIfTracerCustomParamGreater(actor: Pmobj_t);
+var
+  newstate: integer;
+begin
+  if actor.tracer = nil then
+    exit;
+
+  if not P_CheckStateParams(actor, 3) then
+    exit;
+
+  if P_GetMobjCustomParamValue(actor.tracer, actor.state.params.StrVal[0]) > actor.state.params.IntVal[1] then
+  begin
+    if not actor.state.params.IsComputed[2] then
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1537,8 +1809,12 @@ begin
   if mapvars.StrVal[actor.state.params.StrVal[0]] = actor.state.params.StrVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1559,8 +1835,12 @@ begin
   if mapvars.StrVal[actor.state.params.StrVal[0]] < actor.state.params.StrVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1581,8 +1861,12 @@ begin
   if mapvars.StrVal[actor.state.params.StrVal[0]] > actor.state.params.StrVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1598,8 +1882,12 @@ begin
   if mapvars.IntVal[actor.state.params.StrVal[0]] = actor.state.params.IntVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1615,8 +1903,12 @@ begin
   if mapvars.IntVal[actor.state.params.StrVal[0]] < actor.state.params.IntVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1632,8 +1924,12 @@ begin
   if mapvars.IntVal[actor.state.params.StrVal[0]] > actor.state.params.IntVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1649,8 +1945,12 @@ begin
   if mapvars.FloatVal[actor.state.params.StrVal[0]] = actor.state.params.FloatVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1666,8 +1966,12 @@ begin
   if mapvars.FloatVal[actor.state.params.StrVal[0]] < actor.state.params.FloatVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1683,8 +1987,12 @@ begin
   if mapvars.FloatVal[actor.state.params.StrVal[0]] > actor.state.params.FloatVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1705,8 +2013,12 @@ begin
   if Worldvars.StrVal[actor.state.params.StrVal[0]] = actor.state.params.StrVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1727,8 +2039,12 @@ begin
   if Worldvars.StrVal[actor.state.params.StrVal[0]] < actor.state.params.StrVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1749,8 +2065,12 @@ begin
   if Worldvars.StrVal[actor.state.params.StrVal[0]] > actor.state.params.StrVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1766,8 +2086,12 @@ begin
   if Worldvars.IntVal[actor.state.params.StrVal[0]] = actor.state.params.IntVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1783,8 +2107,12 @@ begin
   if Worldvars.IntVal[actor.state.params.StrVal[0]] < actor.state.params.IntVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1800,8 +2128,12 @@ begin
   if Worldvars.IntVal[actor.state.params.StrVal[0]] > actor.state.params.IntVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1817,8 +2149,12 @@ begin
   if Worldvars.FloatVal[actor.state.params.StrVal[0]] = actor.state.params.FloatVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1834,8 +2170,12 @@ begin
   if Worldvars.FloatVal[actor.state.params.StrVal[0]] < actor.state.params.FloatVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -1851,8 +2191,12 @@ begin
   if Worldvars.FloatVal[actor.state.params.StrVal[0]] > actor.state.params.FloatVal[1] then
   begin
     if not actor.state.params.IsComputed[2] then
-      actor.state.params.IntVal[2] := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
-    newstate := actor.state.params.IntVal[2];
+    begin
+      newstate := P_GetStateFromName(actor, actor.state.params.StrVal[2]);
+      actor.state.params.IntVal[2] := newstate;
+    end
+    else
+      newstate := actor.state.params.IntVal[2];
 
     P_SetMobjState(actor, statenum_t(newstate));
   end;
@@ -2130,7 +2474,7 @@ begin
     mobj_no := actor.state.params.IntVal[0]
   else
   begin
-    mobj_no := Info_GetMobjNumForName(actor.state.params.StrVal[0]);
+    mobj_no := Info_GetMobjNumForName(actor.state.params.EvaluateStrVal[0]);
     actor.state.params.IntVal[0] := mobj_no;
   end;
   if mobj_no = -1 then
@@ -2259,7 +2603,7 @@ begin
     mobj_no := actor.state.params.IntVal[ridx]
   else
   begin
-    mobj_no := Info_GetMobjNumForName(actor.state.params.StrVal[ridx]);
+    mobj_no := Info_GetMobjNumForName(actor.state.params.EvaluateStrVal[ridx]);
     actor.state.params.IntVal[ridx] := mobj_no;
   end;
   if mobj_no = -1 then
@@ -2334,12 +2678,12 @@ begin
     mobj_no := actor.state.params.IntVal[0]
   else
   begin
-    mobj_no := Info_GetMobjNumForName(actor.state.params.StrVal[0]);
+    mobj_no := Info_GetMobjNumForName(actor.state.params.EvaluateStrVal[0]);
     actor.state.params.IntVal[0] := mobj_no;
   end;
   if mobj_no = -1 then
   begin
-    I_Warning('A_SpawnItem(): Unknown item %s'#13#10, [actor.state.params.EvaluateStrVal[0]]);
+    I_Warning('A_SpawnItem(): Unknown item %s'#13#10, [actor.state.params.StrVal[0]]);
     exit;
   end;
 
@@ -2428,7 +2772,7 @@ begin
   flags := actor.state.params.IntVal[8];
 
   if flags and SIXF_ABSOLUTEANGLE = 0 then
-    ang1 := ang1 + Actor.angle;
+    ang1 := ang1 + actor.angle;
 
   ang := ang1 shr ANGLETOFINESHIFT;
 
@@ -2690,7 +3034,7 @@ begin
       mobj_no := actor.state.params.IntVal[0]
     else
     begin
-      mobj_no := Info_GetMobjNumForName(actor.state.params.StrVal[0]);
+      mobj_no := Info_GetMobjNumForName(actor.state.params.EvaluateStrVal[0]);
       actor.state.params.IntVal[0] := mobj_no;
     end;
     if mobj_no = -1 then
@@ -2864,7 +3208,6 @@ begin
   actor.flags := actor.flags and not MF_MISSILE;
 end;
 
-//=============================================================================
 //
 // P_DoNewChaseDir
 //
@@ -2873,8 +3216,6 @@ end;
 // Most of P_NewChaseDir(), except for what
 // determines the new direction to take
 //
-//=============================================================================
-
 const
   opposite: array[0..8] of dirtype_t = (
     DI_WEST, DI_SOUTHWEST, DI_SOUTH, DI_SOUTHEAST,
@@ -2988,12 +3329,9 @@ begin
   actor.movedir := Ord(DI_NODIR);  // can not move
 end;
 
-//=============================================================================
 //
 // P_RandomChaseDir
 //
-//=============================================================================
-
 procedure P_RandomChaseDir(actor: Pmobj_t);
 var
   turndir, tdir: integer;
@@ -3132,7 +3470,7 @@ begin
     mobj_no := actor.state.params.IntVal[0]
   else
   begin
-    mobj_no := Info_GetMobjNumForName(actor.state.params.StrVal[0]);
+    mobj_no := Info_GetMobjNumForName(actor.state.params.EvaluateStrVal[0]);
     actor.state.params.IntVal[0] := mobj_no;
   end;
   if mobj_no = -1 then
@@ -3165,7 +3503,7 @@ begin
     mobj_no := actor.state.params.IntVal[0]
   else
   begin
-    mobj_no := Info_GetMobjNumForName(actor.state.params.StrVal[0]);
+    mobj_no := Info_GetMobjNumForName(actor.state.params.EvaluateStrVal[0]);
     actor.state.params.IntVal[0] := mobj_no;
   end;
   if mobj_no = -1 then
@@ -3368,8 +3706,12 @@ begin
   idx := N_Random mod actor.state.params.Count;
 
   if not actor.state.params.IsComputed[idx] then
-    actor.state.params.IntVal[idx] := P_GetStateFromName(actor, actor.state.params.StrVal[idx]);
-  newstate := actor.state.params.IntVal[idx];
+  begin
+    newstate := P_GetStateFromName(actor, actor.state.params.StrVal[idx]);
+    actor.state.params.IntVal[idx] := newstate;
+  end
+  else
+    newstate := actor.state.params.IntVal[idx];
 
   P_SetMobjState(actor, statenum_t(newstate));
 end;
@@ -3380,6 +3722,12 @@ var
 begin
   if mo.health <= 0 then
     exit;
+
+  if h <= 0 then
+  begin
+    P_DamageMobj(mo, nil, nil, 10000);
+    exit;
+  end;
 
   mo.health := h;
   p := mo.player;

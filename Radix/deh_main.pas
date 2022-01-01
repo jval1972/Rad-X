@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 329;
+  DEHNUMACTIONS = 338;
 
 type
   deh_action_t = record
@@ -3065,7 +3065,33 @@ begin
   deh_actions[328].action.acp1 := @A_ActiveSound1;
   deh_actions[328].name := strupper('ActiveSound');
   {$IFDEF DLL}deh_actions[328].decl := 'A_ActiveSound()';{$ENDIF}
-
+  deh_actions[329].action.acp1 := @A_SetTracerCustomParam;
+  deh_actions[329].name := strupper('SetTracerCustomParam');
+  {$IFDEF DLL}deh_actions[329].decl := 'A_SetTracerCustomParam(param: string, value: integer)';{$ENDIF}
+  deh_actions[330].action.acp1 := @A_AddTracerCustomParam;
+  deh_actions[330].name := strupper('AddTracerCustomParam');
+  {$IFDEF DLL}deh_actions[330].decl := 'A_AddTracerCustomParam(param: string, value: integer)';{$ENDIF}
+  deh_actions[331].action.acp1 := @A_SubtractTracerCustomParam;
+  deh_actions[331].name := strupper('SubtractTracerCustomParam');
+  {$IFDEF DLL}deh_actions[331].decl := 'A_SubtractTracerCustomParam(param: string, value: integer)';{$ENDIF}
+  deh_actions[332].action.acp1 := @A_JumpIfTracerCustomParam;
+  deh_actions[332].name := strupper('JumpIfTracerCustomParam');
+  {$IFDEF DLL}deh_actions[332].decl := 'A_JumpIfTracerCustomParam(param: string, value: integer, offset: integer)';{$ENDIF}
+  deh_actions[333].action.acp1 := @A_JumpIfTracerCustomParamLess;
+  deh_actions[333].name := strupper('JumpIfTracerCustomParamLess');
+  {$IFDEF DLL}deh_actions[333].decl := 'A_JumpIfTracerCustomParamLess(param: string, value: integer, offset: integer)';{$ENDIF}
+  deh_actions[334].action.acp1 := @A_JumpIfTracerCustomParamGreater;
+  deh_actions[334].name := strupper('JumpIfTracerCustomParamGreater');
+  {$IFDEF DLL}deh_actions[334].decl := 'A_JumpIfTracerCustomParamGreater(param: string, value: integer, offset: integer)';{$ENDIF}
+  deh_actions[335].action.acp1 := @A_GoToIfTracerCustomParam;
+  deh_actions[335].name := strupper('GoToIfTracerCustomParam');
+  {$IFDEF DLL}deh_actions[335].decl := 'A_GoToIfTracerCustomParam(param: string, value: integer, state: state_t)';{$ENDIF}
+  deh_actions[336].action.acp1 := @A_GoToIfTracerCustomParamLess;
+  deh_actions[336].name := strupper('GoToIfTracerCustomParamLess');
+  {$IFDEF DLL}deh_actions[336].decl := 'A_GoToIfTracerCustomParamLess(param: string, value: integer, state: state_t)';{$ENDIF}
+  deh_actions[337].action.acp1 := @A_GoToIfTracerCustomParamGreater;
+  deh_actions[337].name := strupper('GoToIfTracerCustomParamGreater');
+  {$IFDEF DLL}deh_actions[337].decl := 'A_GoToIfTracerCustomParamGreater(param: string, value: integer, state: state_t)';{$ENDIF}
 
   deh_strings.numstrings := 0;
   deh_strings.realnumstrings := 0;
