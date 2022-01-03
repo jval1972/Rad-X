@@ -31,6 +31,8 @@ Works with radix v2 remix edition.
 
 History
 -------
+Evalueate actor flags in ACTORDEF functions parameters with the FLAG() function.
+
 20211220 - v.1.1.18.751.r1037
 -----------------------------
 Mission Briefing screens.

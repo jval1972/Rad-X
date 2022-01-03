@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -53,6 +53,7 @@ uses
   {$IFDEF HERETIC}
   r_defs,
   {$ENDIF}
+  p_common,
   p_params,
   p_setup,
   p_tick,
@@ -92,6 +93,7 @@ type
     function PF_CEILINGZ(p: TDStrings): string;
     function PF_ANGLE(p: TDStrings): string;
     // Actor properties
+    function PF_flag(p: TDStrings): string;
     function PF_radius(p: TDStrings): string;
     function PF_height(p: TDStrings): string;
     function PF_alpha(p: TDStrings): string;
@@ -176,6 +178,7 @@ begin
   AddFunc('CEILINGZ', PF_CEILINGZ, 0);
   AddFunc('ANGLE', PF_ANGLE, 0);
   // Actor properties
+  AddFunc('FLAG', PF_flag, 1);
   AddFunc('RADIUS', PF_radius, 0);
   AddFunc('HEIGHT', PF_height, 0);
   AddFunc('ALPHA', PF_alpha, 0);
@@ -394,6 +397,19 @@ begin
 end;
 
 // Actor properties
+function TActorEvaluator.PF_flag(p: TDStrings): string;
+begin
+  if p.Count = 0 then
+  begin
+    result := 'FALSE';
+    exit;
+  end;
+  if P_CheckFlag(factor, p[0]) then
+    result := 'TRUE'
+  else
+    result := 'FALSE';
+end;
+
 function TActorEvaluator.PF_radius(p: TDStrings): string;
 begin
   result := ftoa(factor.radius / FRACUNIT);
