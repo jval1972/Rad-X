@@ -32,6 +32,16 @@ Works with radix v2 remix edition.
 History
 -------
 Evalueate actor flags in ACTORDEF functions parameters with the FLAG() function.
+New ACTORDEF functions:
+ -A_SetTracerCustomParam(param: string, value: integer)
+ -A_AddTracerCustomParam(param: string, value: integer)
+ -A_SubtractTracerCustomParam(param: string, value: integer)
+ -A_JumpIfTracerCustomParam(param: string, value: integer, offset: integer)
+ -A_JumpIfTracerCustomParamLess(param: string, value: integer, offset: integer)
+ -A_JumpIfTracerCustomParamGreater(param: string, value: integer, offset: integer)
+ -A_GoToIfTracerCustomParam(param: string, value: integer, state: state_t)
+ -A_GoToIfTracerCustomParamLess(param: string, value: integer, state: state_t)
+ -A_GoToIfTracerCustomParamGreater(param: string, value: integer, state: state_t)
 
 20211220 - v.1.1.18.751.r1037
 -----------------------------
@@ -40,7 +50,6 @@ Fixed flags in A_ChangeVelocity() ACTORDEF function.
 Fixed MF2_EX_CANTLEAVEFLOORPIC flag behaviour.
 Fixed uncapped framerate bug for floor & ceiling offsets.
 Wall bouncing improvements.
-
 
 20211011 - v.1.0.17.750.r961
 ----------------------------
