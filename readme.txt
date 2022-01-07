@@ -42,6 +42,7 @@ New ACTORDEF functions:
  -A_GoToIfTracerCustomParam(param: string, value: integer, state: state_t)
  -A_GoToIfTracerCustomParamLess(param: string, value: integer, state: state_t)
  -A_GoToIfTracerCustomParamGreater(param: string, value: integer, state: state_t)
+Auto fix interpolation for instant changes in sectors heights and texture offsets.
 
 20211220 - v.1.1.18.751.r1037
 -----------------------------
