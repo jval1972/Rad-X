@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -1502,8 +1502,12 @@ begin
     while sector_list <> nil do
       sector_list := P_DelSecnode(sector_list);
 
-  // stop any playing sound
-  S_StopSound(mobj);
+  // From Woof: [FG] removed map objects may finish their sounds
+  if full_sounds then
+    S_UnlinkSound(mobj)
+  else
+    // stop any playing sound
+    S_StopSound(mobj);
 
   P_RemoveMobjCustomParams(mobj.customparams);
 
