@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -2207,7 +2207,7 @@ begin
     if thing.player = nil then
       if bombsource.info.doomednum > 0 then
       begin
-        if bombsource.info.flags_ex and MF_EX_DONTHURTSPECIES <> 0 then
+        if bombsource.flags_ex and MF_EX_DONTHURTSPECIES <> 0 then
           if Info_GetInheritance(thing.info) = Info_GetInheritance(bombsource.info) then
           begin
             result := true;
