@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -394,6 +394,12 @@ const
   MF3_EX_INACTIVE = $4000000;
   // Alt damage
   MF3_EX_USEALTDAMAGE = $8000000;
+
+const
+  // Ignore full_sounds console variable and always finishes sounds
+  MF4_EX_ALWAYSFINISHSOUND = $1;
+  // Ignore full_sounds console variable and never finishes sounds
+  MF4_EX_NEVERFINISHSOUND = $2;
 
 type
 // Map Object definition.
