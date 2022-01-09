@@ -48,7 +48,7 @@ procedure DEH_Init;
 procedure DEH_ShutDown;
 
 const
-  DEHNUMACTIONS = 338;
+  DEHNUMACTIONS = 339;
 
 type
   deh_action_t = record
@@ -3094,6 +3094,9 @@ begin
   deh_actions[337].action.acp1 := @A_GoToIfTracerCustomParamGreater;
   deh_actions[337].name := strupper('GoToIfTracerCustomParamGreater');
   {$IFDEF DLL}deh_actions[337].decl := 'A_GoToIfTracerCustomParamGreater(param: string, value: integer, state: state_t)';{$ENDIF}
+  deh_actions[338].action.acp1 := @A_ChangeSpriteFlip;
+  deh_actions[338].name := strupper('ChangeSpriteFlip');
+  {$IFDEF DLL}deh_actions[338].decl := 'A_ChangeSpriteFlip(propability: integer)';{$ENDIF}
 
   deh_strings.numstrings := 0;
   deh_strings.realnumstrings := 0;
