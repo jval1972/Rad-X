@@ -393,7 +393,7 @@ end;
 
 function TActorEvaluator.PF_ANGLE(p: TDStrings): string;
 begin
-  result := ftoa(factor.angle / $FFFFFFFF * 2 * pi);
+  result := ftoa(factor.angle / $FFFFFFFF * 360);
 end;
 
 // Actor properties
