@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION (d_main.h):
@@ -193,6 +193,7 @@ uses
   r_lights,
   sound_data,
   s_sound,
+  s_pk3sounds,
   sc_actordef,
   t_main,
   v_data,
@@ -2113,6 +2114,11 @@ begin
   MT_Init;
 
   SUC_Progress(69);
+
+  printf('W_InitPK3Sounds: Initializing sound files in pk3 filesystem'#13#10);
+  W_InitPK3Sounds;
+
+  SUC_Progress(70);
 
   printf('R_Init: Init Rendering Engine.'#13#10);
   R_Init;

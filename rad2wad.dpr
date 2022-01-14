@@ -374,7 +374,8 @@ uses
   i_itmusic in 'Base\i_itmusic.pas',
   i_xmmusic in 'Base\i_xmmusic.pas',
   s_externalmusic in 'Base\s_externalmusic.pas',
-  radix_briefing in 'Radix\radix_briefing.pas';
+  radix_briefing in 'Radix\radix_briefing.pas',
+  s_pk3sounds in 'Base\s_pk3sounds.pas';
 
 {$R *.res}
 
