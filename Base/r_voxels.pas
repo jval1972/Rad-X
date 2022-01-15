@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -1808,20 +1808,24 @@ begin
         right := aleftx;}
 //------------------------------------------------------
 
+      if right < left then
+        Continue;
+
       left := left + centerx;
       right := right + centerx;
       if left < 0 then
         left := 0
       else if left >= viewwidth then
-        left := viewwidth - 1;
+        Continue;
+
       if right >= viewwidth then
         right := viewwidth - 1
       else if right < 0 then
-        right := 0;
+        Continue;
 
       if vx_simpleclip then
       begin
-        num_batch_columns := right - left;
+        num_batch_columns := right - left + 1;
         dc_x := left;
       end;
 
@@ -2082,10 +2086,10 @@ begin
     silhouette := ds.silhouette;
 
     if vis.gz >= ds.bsilheight then
-      silhouette := silhouette and (not SIL_BOTTOM);
+      silhouette := silhouette and not SIL_BOTTOM;
 
     if vis.gzt <= ds.tsilheight then
-      silhouette := silhouette and (not SIL_TOP);
+      silhouette := silhouette and not SIL_TOP;
 
     if silhouette = 1 then
     begin
