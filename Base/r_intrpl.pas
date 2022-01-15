@@ -202,7 +202,7 @@ end;
 
 procedure R_InterpolationCalcI2(const pi: Piitem_t; const frac: fixed_t);
 const
-  II2MARGIN = 32 * 1024;
+  II2MARGIN = 8 * FRACUNIT;
 var
   diff: integer;
 begin
@@ -324,7 +324,7 @@ begin
       end;
     iinteger2:
       begin
-        pi.iprev2 := pi.inext;
+        pi.iprev2 := pi.inext2;
         pi.inext2 := PInteger(addr)^;
       end;
     ismallint:
