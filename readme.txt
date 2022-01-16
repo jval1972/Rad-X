@@ -31,7 +31,10 @@ Works with radix v2 remix edition.
 
 History
 -------
-Evalueate actor flags in ACTORDEF functions parameters with the FLAG() function.
+Faster and safer thread de-allocation
+Fix gravity field inheritance in ACTORDEF declarations.
+String and boolean evaluation in parameters of ACTORDEF functions.
+Evaluate actor flags in ACTORDEF functions parameters with the FLAG() function.
 New ACTORDEF functions:
  -A_SetTracerCustomParam(param: string, value: integer)
  -A_AddTracerCustomParam(param: string, value: integer)
@@ -42,7 +45,13 @@ New ACTORDEF functions:
  -A_GoToIfTracerCustomParam(param: string, value: integer, state: state_t)
  -A_GoToIfTracerCustomParamLess(param: string, value: integer, state: state_t)
  -A_GoToIfTracerCustomParamGreater(param: string, value: integer, state: state_t)
+3D floor logic corrections.
 Auto fix interpolation for instant changes in sectors heights and texture offsets.
+Added full_sounds console variable. When true, the mobjs will finish their sounds when removed.
+Added MF4_EX_ALWAYSFINISHSOUND & MF4_EX_NEVERFINISHSOUND mobj flags to overwrite the full_sounds console variable.
+Added A_ChangeSpriteFlip(propability: integer) ACTORDEF function.
+Correct evaluation of angle in functions parameter's evaluation.
+Voxel glitches fix and optimization in software rendering.
 "ACTIVE SOUND" alias for "ACTION SOUND" DEHACKED field.
 
 20211220 - v.1.1.18.751.r1037
