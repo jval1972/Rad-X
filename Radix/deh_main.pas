@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -347,7 +347,8 @@ begin
           17: mobjinfo[mobj_no].height := mobj_val;
           18: mobjinfo[mobj_no].mass := mobj_val;
           19: mobjinfo[mobj_no].damage := mobj_val;
-          20: mobjinfo[mobj_no].activesound := S_GetSoundNumForName(token2);
+          20,
+          68: mobjinfo[mobj_no].activesound := S_GetSoundNumForName(token2);
           21: begin
                 if mobj_val >= 0 then
                   mobjinfo[mobj_no].flags := mobj_val
@@ -1914,7 +1915,7 @@ begin
   mobj_tokens.Add('TOUCH DAMAGE');       // .touchdamage (Radix)      // 65
   mobj_tokens.Add('PATROL RANGE');       // .patrolrange (Radix)      // 66
   mobj_tokens.Add('MISSILE ALT DAMAGE'); // .altdamage                // 67
-
+  mobj_tokens.Add('ACTIVE SOUND');       // .activesound              // 68 - Alias for 20
 
   mobj_flags := TDTextList.Create;
   mobj_flags.Add('MF_SPECIAL');

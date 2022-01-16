@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -43,6 +43,7 @@ New ACTORDEF functions:
  -A_GoToIfTracerCustomParamLess(param: string, value: integer, state: state_t)
  -A_GoToIfTracerCustomParamGreater(param: string, value: integer, state: state_t)
 Auto fix interpolation for instant changes in sectors heights and texture offsets.
+"ACTIVE SOUND" alias for "ACTION SOUND" DEHACKED field.
 
 20211220 - v.1.1.18.751.r1037
 -----------------------------
