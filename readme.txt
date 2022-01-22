@@ -53,6 +53,7 @@ Added A_ChangeSpriteFlip(propability: integer) ACTORDEF function.
 Correct evaluation of angle in functions parameter's evaluation.
 Voxel glitches fix and optimization in software rendering.
 "ACTIVE SOUND" alias for "ACTION SOUND" DEHACKED field.
+Emulates correctly the ripple effect in OpenGL mode.
 
 20211220 - v.1.1.18.751.r1037
 -----------------------------

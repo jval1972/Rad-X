@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -63,6 +63,7 @@ type
     buffer_size: integer;
     heightscale: single;
     glTexID: array[0..CR_INVUL] of integer;
+    glRippleTexID: array[0..31] of integer;
     textype: GLTexType;
     mipmap: boolean;
   end;
@@ -95,6 +96,7 @@ var
   // Hack to avoid Intel HD4000 problem with Win10
   // https://communities.intel.com/thread/117626
   gl_no_glfinish_hack: Boolean = true;
+  gl_old_ripple_effect: Boolean = False;
 
 type
   lp3DFXFUNC = procedure(i1, i2, i3, i4, i5: integer; const p: pointer);

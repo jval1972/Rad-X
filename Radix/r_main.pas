@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -364,10 +364,10 @@ uses
   r_hires,
   r_camera,
   r_precalc,
+  r_ripple,
 {$IFNDEF OPENGL}
   r_cache_main,
   r_fake3d,
-  r_ripple,
   r_trans8,
   r_voxels,
   r_3dfloors, // JVAL: 3d Floors
@@ -1611,10 +1611,8 @@ begin
   R_InitData;
   printf('R_InitCustomColormaps'#13#10);
   R_InitCustomColormaps;
-{$IFNDEF OPENGL}
   printf('R_InitRippleEffects'#13#10);
   R_InitRippleEffects;
-{$ENDIF}
   printf('R_InitInterpolations'#13#10);
   R_InitInterpolations;
   printf('R_InitPointToAngle'#13#10);

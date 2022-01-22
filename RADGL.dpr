@@ -392,7 +392,8 @@ uses
   i_xmmusic in 'Base\i_xmmusic.pas',
   s_externalmusic in 'Base\s_externalmusic.pas',
   radix_briefing in 'Radix\radix_briefing.pas',
-  s_pk3sounds in 'Base\s_pk3sounds.pas';
+  s_pk3sounds in 'Base\s_pk3sounds.pas',
+  r_ripple in 'Base\r_ripple.pas';
 
 var
   Saved8087CW: Word;
