@@ -53,6 +53,7 @@ Added A_ChangeSpriteFlip(propability: integer) ACTORDEF function.
 Correct evaluation of angle in functions parameter's evaluation.
 Voxel glitches fix and optimization in software rendering.
 "ACTIVE SOUND" alias for "ACTION SOUND" DEHACKED field.
+"RADIUS" alias for "WIDTH" DEHACKED field.
 Emulates correctly the ripple effect in OpenGL mode.
 
 20211220 - v.1.1.18.751.r1037
@@ -62,8 +63,6 @@ Fixed flags in A_ChangeVelocity() ACTORDEF function.
 Fixed MF2_EX_CANTLEAVEFLOORPIC flag behaviour.
 Fixed uncapped framerate bug for floor & ceiling offsets.
 Wall bouncing improvements.
-"ACTIVE SOUND" alias for "ACTION SOUND" DEHACKED field.
-"RADIUS" alias for "WIDTH" DEHACKED field.
 
 20211011 - v.1.0.17.750.r961
 ----------------------------
