@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -95,7 +95,7 @@ begin
   Edit1.Text := '';
   Edit2.Text := '';
   Memo1.Lines.Clear;
-  println('RAD2WAD v1.0, (c) 2020-2021 by Jim Valavanis');
+  println('RAD2WAD v1.0, (c) 2020-2022 by Jim Valavanis');
   println('Use this tool to create an editing WAD from RADIX.DAT.');
   println('The output WAD can be used by editors to create custom levels for RAD.');
   println('IMPORTANT: ');
