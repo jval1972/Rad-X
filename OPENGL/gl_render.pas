@@ -92,13 +92,11 @@ implementation
 
 uses
   doomstat,
-  d_net,
   d_main,
   i_system,
   tables,
   doomtype,
   doomdef,
-  am_map,
   {$IFDEF DOOM}
   r_plane,
   st_stuff,
@@ -111,7 +109,6 @@ uses
   g_game,
   v_video,
   v_data,
-  m_stack,
   info,
   sc_states,
   gl_ambient,
@@ -141,13 +138,11 @@ uses
   p_tick,
   radix_level,
   r_main,
-  r_aspect,
   r_bsp,
   r_draw,
   r_data,
   r_sky,
   r_intrpl,
-  r_things,
   r_lights,
   r_renderstyle,
   sc_engine,
@@ -4788,12 +4783,12 @@ begin
     sprite.y2 := sprite.y2 * vspr.infoscale / FRACUNIT;
   end;
 
-  if (sprite.y2 < 0) and (vspr.mobjflags and (MF_SPAWNCEILING or MF_FLOAT or MF_MISSILE or MF_NOGRAVITY) = 0) then
+{  if (sprite.y2 < 0) and (vspr.mobjflags and (MF_SPAWNCEILING or MF_FLOAT or MF_MISSILE or MF_NOGRAVITY) = 0) then
   begin
     sprite.y1 := sprite.y1 - sprite.y2;
     sprite.y2 := 0.0;
     sprite.flags := sprite.flags or GLS_CLIPPED;
-  end;
+  end;}
 
   if gld_drawinfo.num_sprites >= gld_drawinfo.max_sprites then
   begin
