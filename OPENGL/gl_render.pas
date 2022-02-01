@@ -4783,12 +4783,12 @@ begin
     sprite.y2 := sprite.y2 * vspr.infoscale / FRACUNIT;
   end;
 
-{  if (sprite.y2 < 0) and (vspr.mobjflags and (MF_SPAWNCEILING or MF_FLOAT or MF_MISSILE or MF_NOGRAVITY) = 0) then
+  if (sprite.y2 < 0) and (vspr.mobjflags and (MF_SPAWNCEILING or MF_FLOAT or MF_MISSILE or MF_NOGRAVITY) = 0) then
   begin
     sprite.y1 := sprite.y1 - sprite.y2;
     sprite.y2 := 0.0;
     sprite.flags := sprite.flags or GLS_CLIPPED;
-  end;}
+  end;
 
   if gld_drawinfo.num_sprites >= gld_drawinfo.max_sprites then
   begin
