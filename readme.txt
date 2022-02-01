@@ -55,6 +55,7 @@ Voxel glitches fix and optimization in software rendering.
 "ACTIVE SOUND" alias for "ACTION SOUND" DEHACKED field.
 "RADIUS" alias for "WIDTH" DEHACKED field.
 Emulates correctly the ripple effect in OpenGL mode.
+Fixed finale rendering in OpenGL mode.
 
 20211220 - v.1.1.18.751.r1037
 -----------------------------
