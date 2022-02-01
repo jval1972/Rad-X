@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -2684,7 +2684,13 @@ begin
     if spr.translation <> nil then
       bmp.ApplyTranslationTable(spr.translation);
 
-    if (spr.dname = 'XR38B1') or (spr.dname = 'XR38B2') or (spr.dname = 'XR38B8') then
+    if spr.dname = 'XR30K0' then
+    begin
+      bmp.Crop(63, 62);
+      bl.width := 63;
+      bl.height := 62;
+    end
+    else if (spr.dname = 'XR38B1') or (spr.dname = 'XR38B2') or (spr.dname = 'XR38B8') then
     begin
       for x := 0 to bmp.width - 1 do
         if bmp.Pixels[x, 0] = 0 then
@@ -2705,6 +2711,11 @@ begin
     begin
       bl.height := 96;
       bmp.Crop(bmp.width, 96);
+    end
+    else
+    begin
+      repeat until not bmp.BottomCrop;
+      bl.height := bmp.height;
     end;
 
     if spr.defaultoffs then

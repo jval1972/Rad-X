@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -62,6 +62,7 @@ type
     procedure AttachImage(const buf: PByteArray; const awidth, aheight: integer);
     procedure Clear(const color: byte);
     procedure Crop(const nw, nh: integer);
+    function BottomCrop: boolean;
     property width: integer read fwidth write SetWidth;
     property height: integer read fheight write SetHeight;
     property Pixels[x, y: integer]: byte read GetPixel write SetPixel; default;
@@ -203,6 +204,27 @@ begin
     for j := 0 to h - 1 do
       fimg[pos2idx(i, j)] := tmp.Pixels[i, j];
   tmp.Free;
+end;
+
+function TRadixBitmap.BottomCrop: boolean;
+var
+  i: integer;
+begin
+  if fheight < 2 then
+  begin
+    result := false;
+    exit;
+  end;
+
+  for i := 0 to fwidth - 1 do
+    if fimg[pos2idx(i, fheight - 1)] <> 254 then
+    begin
+      result := false;
+      exit;
+    end;
+
+  Crop(fwidth, fheight - 1);
+  result := true;
 end;
 
 procedure TRadixBitmap.SetWidth(const awidth: integer);
