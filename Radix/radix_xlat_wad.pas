@@ -2711,11 +2711,6 @@ begin
     begin
       bl.height := 96;
       bmp.Crop(bmp.width, 96);
-    end
-    else
-    begin
-      repeat until not bmp.BottomCrop;
-      bl.height := bmp.height;
     end;
 
     if spr.defaultoffs then

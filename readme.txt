@@ -56,7 +56,7 @@ Voxel glitches fix and optimization in software rendering.
 "RADIUS" alias for "WIDTH" DEHACKED field.
 Emulates correctly the ripple effect in OpenGL mode.
 Fixed finale rendering in OpenGL mode.
-Fixed "floating" sprites in OpenGL mode.
+Fixed the "floating" sprite of the alien head in OpenGL mode.
 
 20211220 - v.1.1.18.751.r1037
 -----------------------------
