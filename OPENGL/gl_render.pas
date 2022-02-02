@@ -1050,6 +1050,7 @@ type
     loopcount: integer;     // number of loops for this sector
     loops: PGLLoopDefArray; // the loops itself
     list: GLuint;
+    lissttexscale: float;
   end;
   PGLSector = ^GLSector;
   GLSectorArray = array[0..$FFFF] of GLSector;
@@ -3528,6 +3529,8 @@ begin
 
         glEndList;
 
+        glsec.lissttexscale := flat.gltexture.texturescale;
+
         if G_PlayingEngineVersion < VERSIONSLOPES then
           Z_Free(glsec.loops);  // JVAL: Slopes
       end
@@ -3625,9 +3628,9 @@ begin
   else
   begin
     // JVAL: Call the precalced list if available
-    if glsec.list <> GL_BAD_LIST then
+    if (glsec.list <> GL_BAD_LIST) and (glsec.lissttexscale = flat.gltexture.texturescale) then
       glCallList(glsec.list)
-    else
+    else if flat.gltexture.texturescale = 1.0 then
     begin
     // go through all loops of this sector
       for loopnum := 0 to glsec.loopcount - 1 do
@@ -3635,6 +3638,20 @@ begin
           // set the current loop
         currentloop := @glsec.loops[loopnum];
         glDrawArrays(currentloop.mode, currentloop.vertexindex, currentloop.vertexcount);
+      end;
+    end
+    else
+    begin
+      for loopnum := 0 to glsec.loopcount - 1 do
+      begin
+        currentloop := @glsec.loops[loopnum];
+        glBegin(currentloop.mode);
+        for i := currentloop.vertexindex to currentloop.vertexindex + currentloop.vertexcount - 1 do
+        begin
+          glTexCoord2f(gld_texcoords[i].u * flat.gltexture.texturescale, gld_texcoords[i].v * flat.gltexture.texturescale);
+          glVertex3fv(@gld_vertexes[i]);
+        end;
+        glEnd;
       end;
     end;
   end;
