@@ -26,12 +26,12 @@
 //------------------------------------------------------------------------------
 
 This is an engine remake of the 1995 game "Radix: Beyond the void".
-You will need the "RADIX.DAT" file to play the game.
-Works with radix v2 remix edition.
+In oder to play RAD, you need the "RADIX.DAT" file from the DOS game.
+RAD works only with radix v2.0 remix edition. It will not work with v1.0 or v1.1 of the game.
 
 History
 -------
-Faster and safer thread de-allocation
+Faster and safer thread de-allocation.
 Fix gravity field inheritance in ACTORDEF declarations.
 String and boolean evaluation in parameters of ACTORDEF functions.
 Evaluate actor flags in ACTORDEF functions parameters with the FLAG() function.
@@ -93,7 +93,7 @@ Added overlaydrawrect console command. Usage is overlaydrawrect [ticks] [x1] [y1
 Added overlaydrawpatch console command, usage is "overlaydrawpatch [ticks] [x] [y] [patch]".
 Added Overlay.DrawPatchStretched & OverlayDrawPatchStretched PascalScript functions. params -> (const ticks: Integer; const patchname: string; const x1, y1, x2, y2: Integer)
 Added overlaydrawpatchstretched console command. Usage is overlaydrawpatchstretched [ticks] [x1] [y1] [x2] [y2] [patch].
-Fixed problem with Overlay display after changing screen dimentions
+Fixed problem with Overlay display after changing screen dimentions.
 
 20210110 - v.1.0.14.746.r914
 ----------------------------
@@ -132,8 +132,8 @@ Fixed potential me﻿mory corruption problem when loading WADs without a PNAMES 
 Fixed potential memory corruption problem when working with the original data file, or a WAD file that does not contain a disk busy patch. (STCDROM or STDISK).
 Fixed potential memory corruption problem when taking screenshots in OpenGL mode.
 Fixed potential error with the shareware data file of RADIX.
-Prevents infinite loop for erronous A_Chase() placement ﻿
-Corrected dehacked parsing of the "CODEP FRAME" keyword ﻿
+Prevents infinite loop for erronous A_Chase() placement. ﻿
+Corrected dehacked parsing of the "CODEP FRAME" keyword.
 Loads a bit faster due to some optimizations. 
 Fixed diskbuzy height calculation in OpenGL mode.
 
@@ -148,8 +148,8 @@ Fixed bug with score table sorting.
 20201130 - v.1.0.1.741.r831
 ---------------------------
 Added a new executable (RadGL.exe) with OpenGL rendering. It will run even with an Intel HD graphics card.
-Improvements to the multi-th﻿reading software rendering
-Key bindings for Automap actions ﻿
+Improvements to the multi-th﻿reading software rendering.
+Key bindings for Automap actions.
 
 20200615 - v.1.0.1.739.r807
 ---------------------------
@@ -157,9 +157,9 @@ Fixed problem with inter-process communication with glbsp, the error was occurri
 
 20200608 - v.1.0.1.739.r804
 ---------------------------
-Support for flats with dimensions 2048x2048
-Added support for (the forgotten) Afterburn key
-Autorun mode is on by default (but the name has not changed yet) 
+Support for flats with dimensions 2048x2048.
+Added support for (the forgotten) Afterburn key.
+Autorun mode is on by default (but the name has not changed yet).
 Gameplay compatibility options:
  - Player weapon damage (challenging/vanilla)
  - Neutron Cannon L1 vanilla fire (Yes/No)
@@ -172,14 +172,14 @@ Gameplay compatibility options:
 ---------------------------
 HUD displays player's keys (all 6 of them).
 Important features of RADIX can now be used with classic Doom mapping tools: Forcefields (sector based), and various types of destructible lines.
-Fixes/improvements i﻿n slope rendering
-Fixes/improvements in 3d floors rendering
-Support for ANIMDEFS lump
-Support for flats with dimensions up to 1024x1024 px
+Fixes/improvements i﻿n slope rendering.
+Fixes/improvements in 3d floors rendering.
+Support for ANIMDEFS lump.
+Support for flats with dimensions up to 1024x1024 px.
 New (easy)slope definition mechanism, slope a floor or ceiling by defining 3 points (things), or slope a vertex with a single thing to apply slope on all nearby triangle sectors. The new things are using the angle to identify the strength of the effect.
 Dynamic slopes can be controlled by PascalScript.
-Fixes to voxel clipping
-A lot of other fixes to improve stability 
+Fixes to voxel clipping.
+A lot of other fixes to improve stability.
 
 20200515 - v.1.0.1.737.r723
 ---------------------------
