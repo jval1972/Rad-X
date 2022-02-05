@@ -3495,6 +3495,7 @@ procedure gld_DrawFlat(flat: PGLFlat);
 var
   loopnum, i: integer; // current loop number
   currentloop: PGLLoopDef; // the current loop
+  ftexturescale: float;
   glsec: PGLSector;
   sec: Psector_t;
   fz: float;
@@ -3502,6 +3503,7 @@ begin
   if flat.sectornum < 0 then
     exit;
 
+  ftexturescale := flat.gltexture.texturescale;
   glsec := @sectorloops[flat.sectornum];
   sec := @sectors[flat.sectornum];
   if glsec.list = 0 then
@@ -3521,7 +3523,7 @@ begin
           glBegin(currentloop.mode);
           for i := currentloop.vertexindex to currentloop.vertexindex + currentloop.vertexcount - 1 do
           begin
-            glTexCoord2f(gld_texcoords[i].u * flat.gltexture.texturescale, gld_texcoords[i].v * flat.gltexture.texturescale);
+            glTexCoord2f(gld_texcoords[i].u * ftexturescale, gld_texcoords[i].v * ftexturescale);
             glVertex3fv(@gld_vertexes[i]);
           end;
           glEnd;
@@ -3529,7 +3531,7 @@ begin
 
         glEndList;
 
-        glsec.listtexscale := flat.gltexture.texturescale;
+        glsec.listtexscale := ftexturescale;
 
         if G_PlayingEngineVersion < VERSIONSLOPES then
           Z_Free(glsec.loops);  // JVAL: Slopes
@@ -3564,8 +3566,8 @@ begin
   begin
     glMatrixMode(GL_TEXTURE);
     glPushMatrix;
-    glTranslatef(flat.uoffs * flat.gltexture.texturescale {$IFDEF HEXEN}* 64 / flat.gltexture.width{$ENDIF},
-                 flat.voffs * flat.gltexture.texturescale {$IFDEF HEXEN}* 64 / flat.gltexture.height{$ENDIF},
+    glTranslatef(flat.uoffs * ftexturescale {$IFDEF HEXEN}* 64 / flat.gltexture.width{$ENDIF},
+                 flat.voffs * ftexturescale {$IFDEF HEXEN}* 64 / flat.gltexture.height{$ENDIF},
                  0.0);
   end;
   {$ENDIF}
@@ -3577,13 +3579,13 @@ begin
     glMatrixMode(GL_TEXTURE);
     glPushMatrix;
     glTranslatef(
-      flat.anglex * flat.gltexture.texturescale {$IFDEF HEXEN}* 64 / flat.gltexture.width{$ENDIF},
-      -flat.angley * flat.gltexture.texturescale {$IFDEF HEXEN}* 64 / flat.gltexture.height{$ENDIF},
+      flat.anglex * ftexturescale {$IFDEF HEXEN}* 64 / flat.gltexture.width{$ENDIF},
+      -flat.angley * ftexturescale {$IFDEF HEXEN}* 64 / flat.gltexture.height{$ENDIF},
       0.0);
     glRotatef(flat.angle, 0, 0, 1);
     glTranslatef(
-      -flat.anglex * flat.gltexture.texturescale {$IFDEF HEXEN}* 64 / flat.gltexture.width{$ENDIF},
-      flat.angley * flat.gltexture.texturescale {$IFDEF HEXEN}* 64 / flat.gltexture.height{$ENDIF},
+      -flat.anglex * ftexturescale {$IFDEF HEXEN}* 64 / flat.gltexture.width{$ENDIF},
+      flat.angley * ftexturescale {$IFDEF HEXEN}* 64 / flat.gltexture.height{$ENDIF},
       0.0);
   end;
 
@@ -3604,7 +3606,7 @@ begin
       glBegin(currentloop.mode);
       for i := currentloop.vertexindex to currentloop.vertexindex + currentloop.vertexcount - 1 do
       begin
-        glTexCoord2f(gld_texcoords[i].u * flat.gltexture.texturescale, gld_texcoords[i].v * flat.gltexture.texturescale);
+        glTexCoord2f(gld_texcoords[i].u * ftexturescale, gld_texcoords[i].v * ftexturescale);
         glVertex3f(gld_vertexes[i].x, gld_FloorHeight(sec, gld_vertexes[i].x, gld_vertexes[i].z) - fz, gld_vertexes[i].z)
       end;
       glEnd;
@@ -3619,7 +3621,7 @@ begin
       glBegin(currentloop.mode);
       for i := currentloop.vertexindex to currentloop.vertexindex + currentloop.vertexcount - 1 do
       begin
-        glTexCoord2f(gld_texcoords[i].u * flat.gltexture.texturescale, gld_texcoords[i].v * flat.gltexture.texturescale);
+        glTexCoord2f(gld_texcoords[i].u * ftexturescale, gld_texcoords[i].v * ftexturescale);
         glVertex3f(gld_vertexes[i].x, gld_CeilingHeight(sec, gld_vertexes[i].x, gld_vertexes[i].z) - fz, gld_vertexes[i].z)
       end;
       glEnd;
@@ -3630,7 +3632,7 @@ begin
     // JVAL: Call the precalced list if available
     if (glsec.list <> GL_BAD_LIST) and (glsec.listtexscale = flat.gltexture.texturescale) then
       glCallList(glsec.list)
-    else if flat.gltexture.texturescale = 1.0 then
+    else if ftexturescale = 1.0 then
     begin
     // go through all loops of this sector
       for loopnum := 0 to glsec.loopcount - 1 do
@@ -3648,7 +3650,7 @@ begin
         glBegin(currentloop.mode);
         for i := currentloop.vertexindex to currentloop.vertexindex + currentloop.vertexcount - 1 do
         begin
-          glTexCoord2f(gld_texcoords[i].u * flat.gltexture.texturescale, gld_texcoords[i].v * flat.gltexture.texturescale);
+          glTexCoord2f(gld_texcoords[i].u * ftexturescale, gld_texcoords[i].v * ftexturescale);
           glVertex3fv(@gld_vertexes[i]);
         end;
         glEnd;
