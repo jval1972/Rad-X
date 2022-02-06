@@ -202,6 +202,9 @@ var
 
   music_idx: integer;
 
+  sprite_idx: integer;
+  sprite_val: integer;
+
   misc_idx: integer;
   misc_val: integer;
 
@@ -1085,6 +1088,81 @@ begin
     ////////////////////////////////////////////////////////////////////////////
     // Parse sprite ////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
+      while true do
+      begin
+        if not DEH_NextLine(s, str, i) then
+          break;
+
+        if CharPos('=', str) = 0 then
+        begin
+          mustnextline := false; // Already got line
+          break;
+        end;
+
+        splitstring_ch(str, token1, token2, '=');
+
+        sprite_idx := -1;
+        sprite_val := atoi(token1, -1);
+        if IsIntegerInRange(sprite_val, 0, Ord(DO_NUMSPRITES) - 1) then
+        begin
+          sprite_idx := sprite_val;
+          token1 := DO_sprnames[sprite_idx];
+        end
+        else if (numsprites >= Ord(DO_NUMSPRITES)) and IsIntegerInRange(sprite_val, Ord(DO_NUMSPRITES), numsprites) then
+        begin
+          sprite_idx := sprite_val;
+          token1 := Chr(sprnames[sprite_idx] and $FF) +
+                    Chr(sprnames[sprite_idx] shr 8 and $FF) +
+                    Chr(sprnames[sprite_idx] shr 16 and $FF) +
+                    Chr(sprnames[sprite_idx] shr 24 and $FF);
+        end;
+
+        if length(token1) <> 4 then
+        begin
+          I_Warning('DEH_Parse(): Sprite name with %d characters = %s'#13#10, [length(token1), token1]);
+          Continue;
+        end;
+
+        if length(token2) <> 4 then
+        begin
+          I_Warning('DEH_Parse(): Sprite name with %d characters = %s'#13#10, [length(token2), token2]);
+          Continue;
+        end;
+
+        strupperproc(token1);
+        strupperproc(token2);
+
+        // JVAL: Check the original sprite names (https://eternity.youfailit.net/wiki/DeHackEd_/_BEX_Reference/Eternity_Extension:_SPRITES_Block)
+        if sprite_idx < 0 then
+        begin
+          for j := 0 to Ord(DO_NUMSPRITES) - 1 do
+            if DO_sprnames[j] = token1 then
+            begin
+              sprite_idx := j;
+              break;
+            end;
+          if sprite_idx < 0 then
+            for j := Ord(DO_NUMSPRITES) to numsprites - 1 do
+              if Chr(sprnames[j] and $FF) + Chr(sprnames[j] shr 8 and $FF) +
+                Chr(sprnames[j] shr 16 and $FF) + Chr(sprnames[j] shr 24 and $FF) = token1 then
+              begin
+                sprite_idx := j;
+                break;
+              end;
+        end;
+
+        if sprite_idx < 0 then
+        begin
+          I_Warning('DEH_Parse(): Can not find sprite = %s'#13#10, [token1]);
+          Continue;
+        end;
+
+        sprnames[sprite_idx] :=
+          Ord(token2[1]) +
+          Ord(token2[2]) shl 8 +
+          Ord(token2[3]) shl 16 +
+          Ord(token2[4]) shl 24;
+      end;
     end
 
 

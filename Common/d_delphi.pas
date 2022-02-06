@@ -683,7 +683,15 @@ procedure splitstring(const inp: string; var out1, out2: string; const splitter:
 
 procedure splitstring(const inp: string; var out1, out2: string; const splitters: charset_t); overload;
 
+procedure trimproc(var s: string);
+
+procedure trimprocU(var s: string);
+
+procedure splitstring_ch(const inp: string; var out1, out2: string; const splitter: char = ' ');
+
 function firstword(const inp: string; const splitter: string = ' '): string; overload;
+
+function firstword_ch(const inp: string; const splitter: char = ' '): string;
 
 function firstword(const inp: string; const splitters: charset_t): string; overload;
 
@@ -802,6 +810,9 @@ function Isign(const x: integer): integer;
 
 function readablestring(const s: string): string;
 
+// Idea from "The Tomes of Delphi™ Algorithms and Data Structures - Pg 18
+function CharPos(const ch: Char; const s: string): integer;
+
 implementation
 
 uses
@@ -902,7 +913,7 @@ begin
       val('$' + Copy(s, 4, Length(s) - 3), ret2, code);
       ret2 := -ret2;
     end
-    else if Pos('#', s) = 1 then
+    else if CharPos('#', s) = 1 then
       val(Copy(s, 2, Length(s) - 1), ret2, code);
     if code = 0 then
       result := ret2
@@ -927,7 +938,7 @@ begin
       val('$' + Copy(s, 4, Length(s) - 3), ret2, code);
       ret2 := -ret2;
     end
-    else if Pos('#', s) = 1 then
+    else if CharPos('#', s) = 1 then
       val(Copy(s, 2, Length(s) - 1), ret2, code);
     if code = 0 then
       result := ret2
@@ -947,7 +958,7 @@ begin
     ret2 := 0;
     if Pos('0x', s) = 1 then
       val('$' + Copy(s, 3, Length(s) - 2), ret2, code)
-    else if Pos('#', s) = 1 then
+    else if CharPos('#', s) = 1 then
       val(Copy(s, 2, Length(s) - 1), ret2, code);
     if code = 0 then
       result := ret2
@@ -967,7 +978,7 @@ begin
     ret2 := default;
     if Pos('0x', s) = 1 then
       val('$' + Copy(s, 3, Length(s) - 2), ret2, code)
-    else if Pos('#', s) = 1 then
+    else if CharPos('#', s) = 1 then
       val(Copy(s, 2, Length(s) - 1), ret2, code);
     if code = 0 then
       result := ret2
@@ -3008,7 +3019,7 @@ function TDStrings.GetValueIdx(const idx: integer): string;
 var
   tmp: string;
 begin
-  splitstring(Get(idx), tmp, result, '=');
+  splitstring_ch(Get(idx), tmp, result, '=');
 end;
 
 function TDStrings.IndexOf(const S: string): Integer;
@@ -3989,11 +4000,133 @@ begin
   end;
 end;
 
+procedure trimproc(var s: string);
+var
+  I, L: Integer;
+  len: integer;
+  j: integer;
+begin
+  len := Length(S);
+  L := len;
+  I := 1;
+  while (I <= L) and (S[I] <= ' ') do inc(I);
+  if I > L then
+    S := ''
+  else
+  begin
+    while S[L] <= ' ' do dec(L);
+    if (I = 1) and (L = len) then
+    else
+    begin
+      len := L - I + 1;
+      if i <> 1 then
+        for j := 1 to L do
+        begin
+          s[j] := s[i];
+          Inc(i);
+        end;
+      SetLength(s, len);
+    end;
+  end;
+end;
+
+procedure trimprocU(var s: string);
+var
+  I, L: Integer;
+  len: integer;
+  j: integer;
+  Ch: char;
+begin
+  len := Length(S);
+  L := len;
+  I := 1;
+  while (I <= L) and (S[I] <= ' ') do inc(I);
+  if I > L then
+    S := ''
+  else
+  begin
+    while S[L] <= ' ' do dec(L);
+    if I = 1 then
+    begin
+      for j := 1 to L do
+      begin
+        Ch := s[j];
+        if (Ch >= 'a') and (Ch <= 'z') then
+          Dec(s[j], 32);
+      end;
+      SetLength(s, L);
+    end
+    else
+    begin
+      len := L - I + 1;
+      if i <> 1 then
+        for j := 1 to L do
+        begin
+          Ch := s[i];
+          if (Ch >= 'a') and (Ch <= 'z') then
+            Dec(Ch, 32);
+          s[j] := Ch;
+          Inc(i);
+        end;
+      SetLength(s, len);
+    end;
+  end;
+end;
+
+procedure splitstring_ch(const inp: string; var out1, out2: string; const splitter: char = ' ');
+var
+  p, len: integer;
+  i: integer;
+begin
+  p := 1;
+  len := Length(inp);
+  while p <= len do
+  begin
+    if inp[p] = splitter then
+      break;
+    Inc(p);
+  end;
+  if p > len then
+  begin
+    out1 := inp;
+    out2 := '';
+  end
+  else
+  begin
+    SetLength(out1, p - 1);
+    for i := 1 to p - 1 do
+      out1[i] := inp[i];
+    trimproc(out1);
+
+    SetLength(out2, len - p);
+    for i := p + 1 to len do
+      out2[i - p] := inp[i];
+    trimproc(out2);
+  end;
+end;
+
 function firstword(const inp: string; const splitter: string = ' '): string;
 var
   tmp: string;
 begin
   splitstring(inp, result, tmp, splitter);
+end;
+
+function firstword_ch(const inp: string; const splitter: char = ' '): string;
+var
+  p, len: integer;
+begin
+  p := 1;
+  len := Length(inp);
+  SetLength(result, len);
+  while p <= len do
+  begin
+    if inp[p] = splitter then
+      break;
+    result[p] := inp[p];
+    Inc(p);
+  end;
+  SetLength(result, p - 1);
 end;
 
 function firstword(const inp: string; const splitters: charset_t): string;
@@ -4409,7 +4542,7 @@ function StrIsInteger(const s: string): Boolean;
 var
   check: string;
 begin
-  if Pos('-', s) = 1 then
+  if CharPos('-', s) = 1 then
   begin
     check := s;
     delete(check, 1, 1);
@@ -4667,6 +4800,19 @@ begin
     else
       result := result + h[Ord(s[i]) div 16 + 1] + h[Ord(s[i]) mod 16 + 1];
   end;
+end;
+
+function CharPos(const ch: Char; const s: string): integer;
+var
+  i: integer;
+begin
+  for i := 1 to Length(s) do
+    if s[i] = ch then
+    begin
+      result := i;
+      exit;
+    end;
+  result := 0;
 end;
 
 end.
