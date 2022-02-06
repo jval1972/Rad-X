@@ -58,6 +58,7 @@ Emulates correctly the ripple effect in OpenGL mode.
 Fixed finale rendering in OpenGL mode.
 Fixed the "floating" sprite of the alien head in OpenGL mode.
 Corrected flat scale in OpenGL mode.
+Speed optimizations in string manipulation.
 
 20211220 - v.1.1.18.751.r1037
 -----------------------------
