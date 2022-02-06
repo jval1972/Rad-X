@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //
@@ -107,7 +107,7 @@ var
 
             if str_incl <> '' then
             begin
-              s2 := strupper(s2);
+              strupperproc(s2);
               if includes.IndexOf(s2) < 0 then
               begin
                 includes.Add(s2);
