@@ -31,6 +31,8 @@ RAD works only with radix v2.0 remix edition. It will not work with v1.0 or v1.1
 
 History
 -------
+20220206 - v.1.1.19.752.r1097
+-----------------------------
 Faster and safer thread de-allocation.
 Fix gravity field inheritance in ACTORDEF declarations.
 String and boolean evaluation in parameters of ACTORDEF functions.
