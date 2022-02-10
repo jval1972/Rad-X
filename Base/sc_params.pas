@@ -101,6 +101,11 @@ type
     property Actor: pointer read fActor write fActor;
   end;
 
+//==============================================================================
+//
+// SC_EvalString
+//
+//==============================================================================
 function SC_EvalString(const token: string): string;
 
 implementation
@@ -250,6 +255,11 @@ begin
     realloc(pointer(fList), fNumItems * SizeOf(customparam_t), 0);
 end;
 
+//==============================================================================
+//
+// TCustomParamList.AddParam
+//
+//==============================================================================
 procedure TCustomParamList.AddParam(const parmtype: integer; const value: string);
 var
   ival: integer;
@@ -403,11 +413,21 @@ begin
   inc(fNumItems);
 end;
 
+//==============================================================================
+//
+// TCustomParamList.GetIsComputed
+//
+//==============================================================================
 function TCustomParamList.GetIsComputed(index: integer): boolean;
 begin
   result := fList[index].computed;
 end;
 
+//==============================================================================
+//
+// TCustomParamList.GetInteger
+//
+//==============================================================================
 function TCustomParamList.GetInteger(index: integer): integer;
 var
   parm: Pmobjcustomparam_t;
@@ -485,6 +505,11 @@ begin
     result := 0;
 end;
 
+//==============================================================================
+//
+// TCustomParamList.PutInteger
+//
+//==============================================================================
 procedure TCustomParamList.PutInteger(index: Integer; const value: integer);
 begin
   if (index >= 0) and (index < fNumItems) then
@@ -500,6 +525,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TCustomParamList.GetFloat
+//
+//==============================================================================
 function TCustomParamList.GetFloat(index: integer): single;
 var
   parm: Pmobjcustomparam_t;
@@ -577,6 +607,11 @@ begin
     result := 0.0;
 end;
 
+//==============================================================================
+//
+// TCustomParamList.PutFloat
+//
+//==============================================================================
 procedure TCustomParamList.PutFloat(index: Integer; const value: float);
 begin
   if (index >= 0) and (index < fNumItems) then
@@ -593,6 +628,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TCustomParamList.GetFixed
+//
+//==============================================================================
 function TCustomParamList.GetFixed(index: integer): fixed_t;
 var
   parm: Pmobjcustomparam_t;
@@ -670,6 +710,11 @@ begin
     result := 0;
 end;
 
+//==============================================================================
+//
+// TCustomParamList.GetBool
+//
+//==============================================================================
 function TCustomParamList.GetBool(index: integer): boolean;
 var
   ret: string;
@@ -683,6 +728,11 @@ begin
     result := false;
 end;
 
+//==============================================================================
+//
+// TCustomParamList.GetString
+//
+//==============================================================================
 function TCustomParamList.GetString(index: integer): string;
 var
   parm: Pmobjcustomparam_t;
@@ -755,6 +805,11 @@ begin
     result := '';
 end;
 
+//==============================================================================
+//
+// TCustomParamList.GetEvaluateString
+//
+//==============================================================================
 function TCustomParamList.GetEvaluateString(index: integer): string;
 var
   parm: Pmobjcustomparam_t;
@@ -828,6 +883,11 @@ begin
     result := '';
 end;
 
+//==============================================================================
+//
+// SC_EvalString
+//
+//==============================================================================
 function SC_EvalString(const token: string): string;
 var
   sl: TDStringList;

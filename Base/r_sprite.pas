@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -57,28 +57,89 @@ type
   spriterenderinfo_tArray = array[0..$FFF] of spriterenderinfo_t;
   Pspriterenderinfo_tArray = ^spriterenderinfo_tArray;
 
+//==============================================================================
+//
+// R_SpriteAddMTInfo
+//
+//==============================================================================
 function R_SpriteAddMTInfo: Pspriterenderinfo_t;
+
+//==============================================================================
+//
+// R_SpriteRenderMT
+//
+//==============================================================================
 procedure R_SpriteRenderMT;
 
+//==============================================================================
+// R_DrawMaskedColumnNormalMT
+//
 ////////////////////////////////////////////////////////////////////////////////
 // Normal functions
+//
+//==============================================================================
 procedure R_DrawMaskedColumnNormalMT(p: Pspriterenderinfo_t);
 
+//==============================================================================
+// R_DrawColumnMedium_BatchMT
+//
 ////////////////////////////////////////////////////////////////////////////////
 // Batch functions
-
 // Medium res
+//
+//==============================================================================
 procedure R_DrawColumnMedium_BatchMT(p: Pspriterenderinfo_t);
 {$IFDEF DOOM_OR_STRIFE}
+
+//==============================================================================
+//
+// R_DrawColumnAlphaMedium_BatchMT
+//
+//==============================================================================
 procedure R_DrawColumnAlphaMedium_BatchMT(p: Pspriterenderinfo_t);
 {$ENDIF}
+
+//==============================================================================
+//
+// R_DrawColumnAddMedium_BatchMT
+//
+//==============================================================================
 procedure R_DrawColumnAddMedium_BatchMT(p: Pspriterenderinfo_t);
+
+//==============================================================================
+//
+// R_DrawColumnSubtractMedium_BatchMT
+//
+//==============================================================================
 procedure R_DrawColumnSubtractMedium_BatchMT(p: Pspriterenderinfo_t);
 
+//==============================================================================
+// R_DrawColumnHi_BatchMT
+//
 // Hi res
+//
+//==============================================================================
 procedure R_DrawColumnHi_BatchMT(p: Pspriterenderinfo_t);
+
+//==============================================================================
+//
+// R_DrawColumnAlphaHi_BatchMT
+//
+//==============================================================================
 procedure R_DrawColumnAlphaHi_BatchMT(p: Pspriterenderinfo_t);
+
+//==============================================================================
+//
+// R_DrawColumnAddHi_BatchMT
+//
+//==============================================================================
 procedure R_DrawColumnAddHi_BatchMT(p: Pspriterenderinfo_t);
+
+//==============================================================================
+//
+// R_DrawColumnSubtractHi_BatchMT
+//
+//==============================================================================
 procedure R_DrawColumnSubtractHi_BatchMT(p: Pspriterenderinfo_t);
 
 implementation
@@ -98,8 +159,13 @@ uses
   v_video,
   z_zone;
 
+//==============================================================================
+// R_DrawMaskedColumnNormalMT
+//
 ////////////////////////////////////////////////////////////////////////////////
 // Normal functions
+//
+//==============================================================================
 procedure R_DrawMaskedColumnNormalMT(p: Pspriterenderinfo_t);
 var
   count: integer;
@@ -168,8 +234,13 @@ begin
   {$ENDIF}
 end;
 
+//==============================================================================
+// R_DrawColumnMedium_BatchMT
+//
 ////////////////////////////////////////////////////////////////////////////////
 // Batch functions
+//
+//==============================================================================
 procedure R_DrawColumnMedium_BatchMT(p: Pspriterenderinfo_t);
 var
   count: integer;
@@ -966,6 +1037,12 @@ begin
 end;
 
 {$IFDEF DOOM_OR_STRIFE}
+
+//==============================================================================
+//
+// R_DrawColumnAlphaMedium_BatchMT
+//
+//==============================================================================
 procedure R_DrawColumnAlphaMedium_BatchMT(p: Pspriterenderinfo_t);
 var
   count: integer;
@@ -1014,13 +1091,17 @@ begin
       dec(cnt);
     end;
 
-
     inc(dest, swidth);
     inc(frac, fracstep);
   end;
 end;
 {$ENDIF}
 
+//==============================================================================
+//
+// R_DrawColumnAddMedium_BatchMT
+//
+//==============================================================================
 procedure R_DrawColumnAddMedium_BatchMT(p: Pspriterenderinfo_t);
 var
   count: integer;
@@ -1069,12 +1150,16 @@ begin
       dec(cnt);
     end;
 
-
     inc(dest, swidth);
     inc(frac, fracstep);
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawColumnSubtractMedium_BatchMT
+//
+//==============================================================================
 procedure R_DrawColumnSubtractMedium_BatchMT(p: Pspriterenderinfo_t);
 var
   count: integer;
@@ -1123,12 +1208,16 @@ begin
       dec(cnt);
     end;
 
-
     inc(dest, swidth);
     inc(frac, fracstep);
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawColumnHi_BatchMT
+//
+//==============================================================================
 procedure R_DrawColumnHi_BatchMT(p: Pspriterenderinfo_t);
 var
   count: integer;
@@ -1300,6 +1389,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawColumnAlphaHi_BatchMT
+//
+//==============================================================================
 procedure R_DrawColumnAlphaHi_BatchMT(p: Pspriterenderinfo_t);
 var
   count: integer;
@@ -1370,6 +1464,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawColumnAddHi_BatchMT
+//
+//==============================================================================
 procedure R_DrawColumnAddHi_BatchMT(p: Pspriterenderinfo_t);
 var
   count: integer;
@@ -1448,6 +1547,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawColumnSubtractHi_BatchMT
+//
+//==============================================================================
 procedure R_DrawColumnSubtractHi_BatchMT(p: Pspriterenderinfo_t);
 var
   count: integer;
@@ -1534,6 +1638,11 @@ var
   numspritejobs: integer = 0;
   spritejobs: Pspriterenderinfo_tArray = nil;
 
+//==============================================================================
+//
+// R_SpriteAddMTInfo
+//
+//==============================================================================
 function R_SpriteAddMTInfo: Pspriterenderinfo_t;
 begin
   inc(numspritejobs);
@@ -1556,6 +1665,11 @@ var
 var
   numspritethreads: integer;
 
+//==============================================================================
+//
+// _sprite_render_thr
+//
+//==============================================================================
 function _sprite_render_thr(p: pointer): integer; stdcall;
 var
   i: integer;
@@ -1566,6 +1680,11 @@ begin
   result := 0;
 end;
 
+//==============================================================================
+//
+// R_SpriteRenderMT
+//
+//==============================================================================
 procedure R_SpriteRenderMT;
 var
   ncpus: integer;

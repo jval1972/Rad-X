@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -46,10 +46,25 @@ uses
   s_sound,
   d_player;
 
+//==============================================================================
+//
+// P_GivePower
+//
+//==============================================================================
 function P_GivePower(player: Pplayer_t; power: integer): boolean;
 
+//==============================================================================
+//
+// P_TouchSpecialThing
+//
+//==============================================================================
 procedure P_TouchSpecialThing(special: Pmobj_t; toucher: Pmobj_t);
 
+//==============================================================================
+//
+// P_DamageMobj
+//
+//==============================================================================
 procedure P_DamageMobj(target, inflictor, source: Pmobj_t; damage: integer);
 
 const
@@ -58,6 +73,11 @@ const
   maxammo: array[0..Ord(NUMAMMO) - 1] of integer = (5000, 400, 1500, 50);
   clipammo: array[0..Ord(NUMAMMO) - 1] of integer = (50, 4, 10, 1);
 
+//==============================================================================
+//
+// P_CmdSuicide
+//
+//==============================================================================
 procedure P_CmdSuicide;
 
 var
@@ -94,13 +114,13 @@ uses
 const
   BONUSADD = 6;
 
+//==============================================================================
 //
 // GET STUFF
 //
-
-//
 // P_GiveAmmo
 //
+//==============================================================================
 function P_GiveAmmo(player: Pplayer_t; ammo: ammotype_t; num: integer): boolean;
 var
   oldammo: integer;
@@ -132,7 +152,6 @@ begin
     // give double ammo in nightmare
     num := num * 2
   end;
-
 
   oldammo := player.ammo[Ord(ammo)];
   player.ammo[Ord(ammo)] := player.ammo[Ord(ammo)] + num;
@@ -193,10 +212,12 @@ begin
   result := true;
 end;
 
+//==============================================================================
 //
 // P_GiveWeapon
 // The weapon name may have a MF_DROPPED flag ored in.
 //
+//==============================================================================
 function P_GiveWeapon(player: Pplayer_t; weapon: weapontype_t; dropped: boolean): boolean;
 var
   gaveammo: boolean;
@@ -264,10 +285,12 @@ begin
   result := gaveweapon or gaveammo;
 end;
 
+//==============================================================================
 //
 // P_GiveBody
 // Returns false if the body isn't needed at all
 //
+//==============================================================================
 function P_GiveBody(player: Pplayer_t; num: integer): boolean;
 begin
   if player.health >= mobjinfo[Ord(MT_PLAYER)].spawnhealth then
@@ -284,11 +307,13 @@ begin
   result := true;
 end;
 
+//==============================================================================
 //
 // P_GiveArmor
 // Returns false if the armor is worse
 // than the current armor.
 //
+//==============================================================================
 function P_GiveArmor(player: Pplayer_t; armortype: integer): boolean;
 var
   hits: integer;
@@ -306,11 +331,13 @@ begin
   result := true;
 end;
 
+//==============================================================================
 //
 // JVAL 20200321 - New function
 // P_GiveEnergy
 //   Increases player energy
 //
+//==============================================================================
 function P_GiveEnergy(player: Pplayer_t; ammount: integer): boolean;
 begin
   if player.energy >= PLAYERMAXENERGY then
@@ -326,9 +353,11 @@ begin
   result := true;
 end;
 
+//==============================================================================
 //
 // P_GiveCard
 //
+//==============================================================================
 procedure P_GiveCard(player: Pplayer_t; card: card_t);
 begin
   if player.cards[Ord(card)] then
@@ -338,9 +367,11 @@ begin
   player.cards[Ord(card)] := true;
 end;
 
+//==============================================================================
 //
 // P_GivePower
 //
+//==============================================================================
 function P_GivePower(player: Pplayer_t; power: integer): boolean;
 begin
   if power = Ord(pw_invulnerability) then
@@ -389,6 +420,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// P_GiveRapidShield
+//
+//==============================================================================
 function P_GiveRapidShield(const p: Pplayer_t; const tics: integer): boolean;
 begin
   if p.radixpowers[Ord(rpu_rapidshield)] < tics then
@@ -400,6 +436,11 @@ begin
     result := false;
 end;
 
+//==============================================================================
+//
+// P_GiveRapidEnergy
+//
+//==============================================================================
 function P_GiveRapidEnergy(const p: Pplayer_t; const tics: integer): boolean;
 begin
   if p.radixpowers[Ord(rpu_rapidenergy)] < tics then
@@ -411,6 +452,11 @@ begin
     result := false;
 end;
 
+//==============================================================================
+//
+// P_GiveManeuverJets
+//
+//==============================================================================
 function P_GiveManeuverJets(const p: Pplayer_t; const tics: integer): boolean;
 begin
   if p.radixpowers[Ord(rpu_maneuverjets)] < tics then
@@ -422,6 +468,11 @@ begin
     result := false;
 end;
 
+//==============================================================================
+//
+// P_GiveNightVision
+//
+//==============================================================================
 function P_GiveNightVision(const p: Pplayer_t; const tics: integer): boolean;
 begin
   if p.radixpowers[Ord(rpu_nightvision)] < tics then
@@ -433,6 +484,11 @@ begin
     result := false;
 end;
 
+//==============================================================================
+//
+// P_GiveALDS
+//
+//==============================================================================
 function P_GiveALDS(const p: Pplayer_t; const tics: integer): boolean;
 begin
   if p.radixpowers[Ord(rpu_alds)] < tics then
@@ -444,6 +500,11 @@ begin
     result := false;
 end;
 
+//==============================================================================
+//
+// P_GivePlasmaBombs
+//
+//==============================================================================
 function P_GivePlasmaBombs(const p: Pplayer_t; const bombs: integer): boolean;
 begin
   if p.plasmabombs < PLAYERMAXPLASMABOMBS then
@@ -457,6 +518,11 @@ begin
     result := false;
 end;
 
+//==============================================================================
+//
+// P_UpgradeNeutronCannons
+//
+//==============================================================================
 function P_UpgradeNeutronCannons(const p: Pplayer_t): boolean;
 begin
   if p.neutroncannonlevel < MAXNEUTRONCANNONLEVEL - 1 then
@@ -468,6 +534,11 @@ begin
     result := false;
 end;
 
+//==============================================================================
+//
+// P_UpgradeNeutronSpreader
+//
+//==============================================================================
 function P_UpgradeNeutronSpreader(const p: Pplayer_t): boolean;
 begin
   if p.neutronspreaderlevel < MAXNEUTRONCANNONLEVEL - 1 then
@@ -479,9 +550,11 @@ begin
     result := false;
 end;
 
+//==============================================================================
 //
 // P_TouchSpecialThing
 //
+//==============================================================================
 procedure P_TouchSpecialThing(special: Pmobj_t; toucher: Pmobj_t);
 var
   player: Pplayer_t;
@@ -1004,9 +1077,12 @@ begin
       S_StartSound(nil, sound);
 end;
 
+//==============================================================================
+// P_SpawnDroppedMobj
 //
 // KillMobj
 //
+//==============================================================================
 function P_SpawnDroppedMobj(x, y, z: fixed_t; _type: integer): Pmobj_t;
 begin
   result := P_SpawnMobj(x, y, z, _type);
@@ -1021,6 +1097,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// P_KillMobj
+//
+//==============================================================================
 procedure P_KillMobj(source: Pmobj_t; target: Pmobj_t);
 var
   item: integer;
@@ -1118,6 +1199,7 @@ begin
     P_SpawnDroppedMobj(target.x, target.y, ONFLOORZ, item);
 end;
 
+//==============================================================================
 //
 // P_DamageMobj
 // Damages both enemies and players
@@ -1129,6 +1211,7 @@ end;
 // Source can be NULL for slime, barrel explosions
 // and other environmental stuff.
 //
+//==============================================================================
 procedure P_DamageMobj(target, inflictor, source: Pmobj_t; damage: integer);
 var
   ang: angle_t;
@@ -1286,6 +1369,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// P_CmdSuicide
+//
+//==============================================================================
 procedure P_CmdSuicide;
 begin
   if demoplayback then

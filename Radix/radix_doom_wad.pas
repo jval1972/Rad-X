@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -37,10 +37,25 @@ interface
 uses
   d_delphi;
 
+//==============================================================================
+//
+// Wad2RadixPaletteWAD
+//
+//==============================================================================
 function Wad2RadixPaletteWAD(const fin, fout: string): boolean;
 
+//==============================================================================
+//
+// Wad2RadixPaletteStream
+//
+//==============================================================================
 function Wad2RadixPaletteStream(const fin: string; const strm: TDStream): boolean;
 
+//==============================================================================
+//
+// RX_IsPaletteWAD
+//
+//==============================================================================
 function RX_IsPaletteWAD(const fin: string): boolean;
 
 implementation
@@ -98,6 +113,11 @@ begin
   Inherited;
 end;
 
+//==============================================================================
+//
+// TWADConverter.Clear
+//
+//==============================================================================
 procedure TWADConverter.Clear;
 begin
   if wadwriter <> nil then
@@ -112,6 +132,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TWADConverter.CreateXlatPalette
+//
+//==============================================================================
 function TWADConverter.CreateXlatPalette: boolean;
 var
   rpal: array[0..255] of LongWord;
@@ -134,6 +159,11 @@ begin
   memfree(buf, bufsize);
 end;
 
+//==============================================================================
+//
+// TWADConverter.CopyEntry
+//
+//==============================================================================
 function TWADConverter.CopyEntry(const id: integer; const newname: string = ''): boolean;
 var
   buf: pointer;
@@ -151,12 +181,22 @@ begin
   memfree(buf, bufsize);
 end;
 
+//==============================================================================
+//
+// TWADConverter.CreatePalette
+//
+//==============================================================================
 function TWADConverter.CreatePalette(const id: integer): boolean;
 begin
   wadwriter.AddData(DOOM_PALETTE_NAME, @def_radix_palette, 768);
   result := true;
 end;
 
+//==============================================================================
+//
+// TWADConverter.ConvertFlat
+//
+//==============================================================================
 function TWADConverter.ConvertFlat(const id: integer): boolean;
 var
   i: integer;
@@ -177,6 +217,11 @@ begin
   memfree(buf, bufsize);
 end;
 
+//==============================================================================
+//
+// TWADConverter.ConvertPatch
+//
+//==============================================================================
 function TWADConverter.ConvertPatch(const id: integer; const newname: string = ''): boolean;
 var
   buf: pointer;
@@ -253,6 +298,11 @@ begin
   memfree(buf, bufsize);
 end;
 
+//==============================================================================
+//
+// TWADConverter.Convert
+//
+//==============================================================================
 function TWADConverter.Convert(const fname: string): boolean;
 var
   i: integer;
@@ -373,16 +423,31 @@ begin
   result := true;
 end;
 
+//==============================================================================
+//
+// TWADConverter.SaveToFile
+//
+//==============================================================================
 procedure TWADConverter.SaveToFile(const fname: string);
 begin
   wadwriter.SaveToFile(fname);
 end;
 
+//==============================================================================
+//
+// TWADConverter.SaveToSream
+//
+//==============================================================================
 procedure TWADConverter.SaveToSream(const strm: TDStream);
 begin
   wadwriter.SaveToStream(strm);
 end;
 
+//==============================================================================
+//
+// Wad2RadixPaletteWAD
+//
+//==============================================================================
 function Wad2RadixPaletteWAD(const fin, fout: string): boolean;
 var
   cnv: TWADConverter;
@@ -400,6 +465,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// Wad2RadixPaletteStream
+//
+//==============================================================================
 function Wad2RadixPaletteStream(const fin: string; const strm: TDStream): boolean;
 var
   cnv: TWADConverter;
@@ -417,6 +487,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RX_IsPaletteWAD
+//
+//==============================================================================
 function RX_IsPaletteWAD(const fin: string): boolean;
 var
   wadreader: TWadReader;

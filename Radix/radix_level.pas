@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -38,11 +38,21 @@ uses
   d_delphi,
   w_wadwriter;
 
+//==============================================================================
+//
+// RX_CreateDoomLevel
+//
+//==============================================================================
 function RX_CreateDoomLevel(const levelname: string;
   const rlevel: pointer; const rsize: integer; const markflats: PBooleanArray;
   const texturewidths, textureheights: PIntegerArray; const doextrainfo: boolean;
   const wadwriter: TWadWriter): boolean;
 
+//==============================================================================
+//
+// RX_CreateRadixMapCSV
+//
+//==============================================================================
 function RX_CreateRadixMapCSV(const levelname: string; const apath: string;
   const rlevel: pointer; const rsize: integer): boolean;
 
@@ -290,6 +300,11 @@ uses
   doomdata,
   w_wad;
 
+//==============================================================================
+//
+// Radix_v10_levelCRC
+//
+//==============================================================================
 function Radix_v10_levelCRC(const lname: string): string;
 begin
   if lname ='E1M1' then result := '508E903B'
@@ -323,6 +338,11 @@ begin
   result := strupper(result);
 end;
 
+//==============================================================================
+//
+// Radix_v11_levelCRC
+//
+//==============================================================================
 function Radix_v11_levelCRC(const lname: string): string;
 begin
   if lname ='E1M1' then result := '9332AD1B'
@@ -356,7 +376,12 @@ begin
   result := strupper(result);
 end;
 
+//==============================================================================
+// Radix_v2_levelCRC
+//
 // radix 2.0 crc32
+//
+//==============================================================================
 function Radix_v2_levelCRC(const lname: string): string;
 begin
   if lname ='E1M1' then result := '1e621abe'
@@ -398,6 +423,11 @@ type
   radixmapsectorextra_tArray = array[0..$FFFF] of radixmapsectorextra_t;
   Pradixmapsectorextra_tArray = ^radixmapsectorextra_tArray;
 
+//==============================================================================
+//
+// RX_CreateDoomLevel
+//
+//==============================================================================
 function RX_CreateDoomLevel(const levelname: string;
   const rlevel: pointer; const rsize: integer; const markflats: PBooleanArray;
   const texturewidths, textureheights: PIntegerArray; const doextrainfo: boolean;
@@ -646,7 +676,6 @@ var
     dsec.lightlevel := RX_LightLevel(ss.lightlevel, ss.flags);
     dsec.special := 0;
     dsec.tag := 0;
-
 
     // Create extra data stored in MAP header
     doommapscript.Add('sectorid ' + itoa(numdoomsectors));
@@ -1854,6 +1883,11 @@ begin
   ms.Free;
 end;
 
+//==============================================================================
+//
+// RX_CreateRadixMapCSV
+//
+//==============================================================================
 function RX_CreateRadixMapCSV(const levelname: string; const apath: string;
   const rlevel: pointer; const rsize: integer): boolean;
 var
@@ -2045,7 +2079,6 @@ var
         end;
       until i_grid_x >= grid_X_size;
     end;
-
 
     csvgrid := TDStringList.Create;
     csvgrid.Add('x=' + itoa(grid_X_size));
@@ -2339,7 +2372,6 @@ begin
   memfree(pointer(rthings), header.numthings * SizeOf(radixthing_t));
   memfree(pointer(ractions), header.numactions * SizeOf(radixaction_t));
   memfree(pointer(rtriggers), header.numtriggers * SizeOf(radixtrigger_t));
-
 
   ms.Free;
 end;

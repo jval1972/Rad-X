@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -47,16 +47,47 @@ var
 
 { Returns the position of the given parameter }
 { in the arg list (0 if not found). }
+
+//==============================================================================
+//
+// M_CheckParm
+//
+//==============================================================================
 function M_CheckParm(const check: string): integer;
 
+//==============================================================================
+//
+// M_CheckParmCDROM
+//
+//==============================================================================
 function M_CheckParmCDROM: boolean;
 
+//==============================================================================
+//
+// M_InitArgv
+//
+//==============================================================================
 procedure M_InitArgv;
 
+//==============================================================================
+//
+// M_CmdShowCommandLineParams
+//
+//==============================================================================
 procedure M_CmdShowCommandLineParams(const parm: string);
 
+//==============================================================================
+//
+// M_CmdShowCmdline
+//
+//==============================================================================
 procedure M_CmdShowCmdline(const parm: string);
 
+//==============================================================================
+//
+// M_SaveFileName
+//
+//==============================================================================
 function M_SaveFileName(const filename: string): string;
 
 const
@@ -87,6 +118,11 @@ var
 var
   cmdparams: TDStringList;
 
+//==============================================================================
+//
+// M_CheckParm
+//
+//==============================================================================
 function M_CheckParm(const check: string): integer;
 var
   i: integer;
@@ -103,6 +139,11 @@ begin
   result := 0;
 end;
 
+//==============================================================================
+//
+// M_CheckParmCDROM
+//
+//==============================================================================
 function M_CheckParmCDROM: boolean;
 begin
   if cdchecked = -1 then
@@ -117,6 +158,11 @@ begin
   result := cdchecked > 0;
 end;
 
+//==============================================================================
+//
+// M_InitArgv
+//
+//==============================================================================
 procedure M_InitArgv;
 var
   i: integer;
@@ -214,6 +260,11 @@ begin
 
 end;
 
+//==============================================================================
+//
+// M_CmdShowCommandLineParams
+//
+//==============================================================================
 procedure M_CmdShowCommandLineParams(const parm: string);
 var
   i: integer;
@@ -231,6 +282,11 @@ begin
   mlist.Free;
 end;
 
+//==============================================================================
+//
+// M_CmdShowCmdline
+//
+//==============================================================================
 procedure M_CmdShowCmdline(const parm: string);
 var
   i: integer;
@@ -240,6 +296,11 @@ begin
   printf(#13#10);
 end;
 
+//==============================================================================
+//
+// M_SaveFileName
+//
+//==============================================================================
 function M_SaveFileName(const filename: string): string;
 begin
   if M_CheckParmCDROM then

@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -39,7 +39,6 @@ unit jpg_dMarker;
 { History
    9.7.96                   Conversion to pascal started      jnn
    22.3.98                  updated to 6b                     jnn }
-
 
 interface
 
@@ -142,20 +141,44 @@ type
   end;
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_resync_to_restart
+//
+//==============================================================================
 function jpeg_resync_to_restart(cinfo: j_decompress_ptr;
                                 desired: int): boolean;
 {GLOBAL}
+
+//==============================================================================
+//
+// jinit_marker_reader 
+//
+//==============================================================================
 procedure jinit_marker_reader (cinfo: j_decompress_ptr);
 
 {$ifdef SAVE_MARKERS_SUPPORTED}
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_save_markers 
+//
+//==============================================================================
 procedure jpeg_save_markers (cinfo: j_decompress_ptr;
                              marker_code: int;
                  length_limit: uint);
 {$ENDIF}
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_set_marker_processor 
+//
+//==============================================================================
 procedure jpeg_set_marker_processor (cinfo: j_decompress_ptr;
                                      marker_code: int;
                                routine: jpeg_marker_parser_method);
@@ -170,7 +193,6 @@ uses
 { At all times, cinfo1.src.next_input_byte and .bytes_in_buffer reflect
   the current restart point; we update them only when we have reached a
   suitable place to restart if a suspension occurs. }
-
 
 { Routines to process JPEG markers.
 
@@ -201,6 +223,12 @@ uses
   require more care. }
 
 {LOCAL}
+
+//==============================================================================
+//
+// get_soi 
+//
+//==============================================================================
 function get_soi (cinfo: j_decompress_ptr): boolean;
 { Process an SOI marker }
 var
@@ -245,8 +273,13 @@ begin
   get_soi := TRUE;
 end; { get_soi }
 
-
 {LOCAL}
+
+//==============================================================================
+//
+// get_sof
+//
+//==============================================================================
 function get_sof(cinfo: j_decompress_ptr;
                  is_prog: boolean;
                  is_arith: boolean): boolean;
@@ -307,7 +340,6 @@ begin
 
   inc( length, GETJOCTET( next_input_byte^));
   inc( next_input_byte );
-
 
   { Read a byte into variable cinfo^.data_precision.
     If must suspend, return FALSE. }
@@ -545,8 +577,13 @@ begin
   get_sof := TRUE;
 end;  { get_sof }
 
-
 {LOCAL}
+
+//==============================================================================
+//
+// get_sos 
+//
+//==============================================================================
 function get_sos (cinfo: j_decompress_ptr): boolean;
 { Process a SOS marker }
 label
@@ -609,7 +646,6 @@ begin
 
   inc( length, GETJOCTET( next_input_byte^));
   inc( next_input_byte );
-
 
   { Read a byte into variable n (Number of components).
     If must suspend, return FALSE. }
@@ -793,8 +829,13 @@ begin
   get_sos := TRUE;
 end;  { get_sos }
 
-
 {METHODDEF}
+
+//==============================================================================
+//
+// skip_variable 
+//
+//==============================================================================
 function skip_variable (cinfo: j_decompress_ptr): boolean; far;
 { Skip over an unknown or uninteresting variable-length marker }
 var
@@ -866,10 +907,15 @@ begin
   skip_variable := TRUE;
 end;  { skip_variable }
 
-
 {$IFDEF D_ARITH_CODING_SUPPORTED}
 
 {LOCAL}
+
+//==============================================================================
+//
+// get_dac 
+//
+//==============================================================================
 function get_dac (cinfo: j_decompress_ptr): boolean;
 { Process a DAC marker }
 var
@@ -1003,6 +1049,12 @@ end;  { get_dac }
 {$ELSE}
 
 {LOCAL}
+
+//==============================================================================
+//
+// get_dac 
+//
+//==============================================================================
 function get_dac (cinfo: j_decompress_ptr): boolean;
 begin
   get_dac := skip_variable(cinfo);
@@ -1011,6 +1063,12 @@ end;
 {$ENDIF}
 
 {LOCAL}
+
+//==============================================================================
+//
+// get_dht 
+//
+//==============================================================================
 function get_dht (cinfo: j_decompress_ptr): boolean;
 { Process a DHT marker }
 var
@@ -1195,8 +1253,13 @@ begin
   get_dht := TRUE;
 end;  { get_dht }
 
-
 {LOCAL}
+
+//==============================================================================
+//
+// get_dqt 
+//
+//==============================================================================
 function get_dqt (cinfo: j_decompress_ptr): boolean;
 { Process a DQT marker }
 var
@@ -1394,8 +1457,13 @@ begin
   get_dqt := TRUE;
 end;  { get_dqt }
 
-
 {LOCAL}
+
+//==============================================================================
+//
+// get_dri 
+//
+//==============================================================================
 function get_dri (cinfo: j_decompress_ptr): boolean;
 { Process a DRI marker }
 var
@@ -1506,7 +1574,6 @@ begin
   get_dri := TRUE;
 end;  { get_dri }
 
-
 { Routines for processing APPn and COM markers.
   These are either saved in memory or discarded, per application request.
   APP0 and APP14 are specially checked to see if they are
@@ -1517,8 +1584,13 @@ const
   APP14_DATA_LEN = 12;  { Length of interesting data in APP14 }
   APPN_DATA_LEN = 14;   { Must be the largest of the above!! }
 
-
 {LOCAL}
+
+//==============================================================================
+//
+// examine_app0 
+//
+//==============================================================================
 procedure examine_app0 (cinfo: j_decompress_ptr;
                         var data: array of JOCTET;
                         datalen: uint;
@@ -1608,8 +1680,13 @@ begin
     end;
 end;
 
-
 {LOCAL}
+
+//==============================================================================
+//
+// examine_app14 
+//
+//==============================================================================
 procedure examine_app14 (cinfo: j_decompress_ptr;
                          var data: array of JOCTET;
                    datalen: uint;
@@ -1653,8 +1730,13 @@ begin
   end;
 end;
 
-
 {METHODDEF}
+
+//==============================================================================
+//
+// get_interesting_appn 
+//
+//==============================================================================
 function get_interesting_appn (cinfo: j_decompress_ptr): boolean; far;
 { Process an APP0 or APP14 marker without saving it }
 var
@@ -1772,6 +1854,12 @@ end;
 {$ifdef SAVE_MARKERS_SUPPORTED}
 
 {METHODDEF}
+
+//==============================================================================
+//
+// save_marker 
+//
+//==============================================================================
 function save_marker (cinfo: j_decompress_ptr): boolean; far;
 { Save an APPn or COM marker into the marker list }
 var
@@ -1965,7 +2053,6 @@ end;
 
 {$endif} { SAVE_MARKERS_SUPPORTED }
 
-
 { Find the next JPEG marker, save it in cinfo^.unread_marker.
   Returns FALSE if had to suspend before reaching a marker;
   in that case cinfo^.unread_marker is unchanged.
@@ -1974,6 +2061,12 @@ end;
   but it will never be 0 or FF. }
 
 {LOCAL}
+
+//==============================================================================
+//
+// next_marker 
+//
+//==============================================================================
 function next_marker (cinfo: j_decompress_ptr): boolean;
 var
   c: int;
@@ -2094,8 +2187,13 @@ begin
   next_marker := TRUE;
 end;  { next_marker }
 
-
 {LOCAL}
+
+//==============================================================================
+//
+// first_marker 
+//
+//==============================================================================
 function first_marker (cinfo: j_decompress_ptr): boolean;
 { Like next_marker, but used to obtain the initial SOI marker. }
 { For this marker, we do not allow preceding garbage or fill; otherwise,
@@ -2165,13 +2263,18 @@ begin
   first_marker := TRUE;
 end;  { first_marker }
 
-
 { Read markers until SOS or EOI.
 
   Returns same codes as are defined for jpeg_consume_input:
   JPEG_SUSPENDED, JPEG_REACHED_SOS, or JPEG_REACHED_EOI.   }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// read_markers 
+//
+//==============================================================================
 function read_markers (cinfo: j_decompress_ptr): int; far;
 begin
   { Outer loop repeats once for each marker. }
@@ -2364,7 +2467,6 @@ begin
   Until false;
 end;  { read_markers }
 
-
 { Read a restart marker, which is expected to appear next in the datastream;
   if the marker is not there, take appropriate recovery action.
   Returns FALSE if suspension is required.
@@ -2376,6 +2478,12 @@ end;  { read_markers }
   it holds a marker which the decoder will be unable to read past. }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// read_restart_marker 
+//
+//==============================================================================
 function read_restart_marker (cinfo: j_decompress_ptr) :boolean; far;
 begin
   { Obtain a marker unless we already did. }
@@ -2416,7 +2524,6 @@ begin
 
   read_restart_marker := TRUE;
 end; { read_restart_marker }
-
 
 { This is the default resync_to_restart method for data source managers
   to use if they don't have any better approach.  Some data source managers
@@ -2465,8 +2572,13 @@ end; { read_restart_marker }
   files might find it better to apply #2 for markers other than EOI, since
   any other marker would have to be bogus data in that case. }
 
-
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_resync_to_restart
+//
+//==============================================================================
 function jpeg_resync_to_restart(cinfo: j_decompress_ptr;
                                 desired: int): boolean;
 var
@@ -2529,10 +2641,15 @@ begin
   Until false; { end loop }
 end;  { jpeg_resync_to_restart }
 
-
 { Reset marker processing state to begin a fresh datastream. }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// reset_marker_reader 
+//
+//==============================================================================
 procedure reset_marker_reader (cinfo: j_decompress_ptr); far;
 var
   marker: my_marker_ptr;
@@ -2550,11 +2667,16 @@ begin
   marker^.cur_marker := nil;
 end; { reset_marker_reader }
 
-
 { Initialize the marker reader module.
   This is called only once, when the decompression object is created. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jinit_marker_reader 
+//
+//==============================================================================
 procedure jinit_marker_reader (cinfo: j_decompress_ptr);
 var
   marker: my_marker_ptr;
@@ -2587,13 +2709,17 @@ begin
   reset_marker_reader(cinfo);
 end; { jinit_marker_reader }
 
-
 { Control saving of COM and APPn markers into marker_list. }
-
 
 {$ifdef SAVE_MARKERS_SUPPORTED}
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_save_markers 
+//
+//==============================================================================
 procedure jpeg_save_markers (cinfo: j_decompress_ptr;
                              marker_code: int;
                  length_limit: uint);
@@ -2653,6 +2779,11 @@ end;
 
 {GLOBAL}
 
+//==============================================================================
+//
+// jpeg_set_marker_processor 
+//
+//==============================================================================
 procedure jpeg_set_marker_processor (cinfo: j_decompress_ptr;
                                      marker_code: int;
                    routine: jpeg_marker_parser_method);

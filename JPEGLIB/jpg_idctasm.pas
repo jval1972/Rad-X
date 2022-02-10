@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -94,6 +94,12 @@ uses
 { Perform dequantization and inverse DCT on one block of coefficients. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_idct_islow
+//
+//==============================================================================
 procedure jpeg_idct_islow(cinfo: j_decompress_ptr; compptr: jpeg_component_info_ptr;
   coef_block: JCOEFPTR; output_buf: JSAMPARRAY; output_col: JDIMENSION);
 
@@ -163,7 +169,6 @@ const
   FIX_2_562915447 = INT32(Round(CONST_SCALE * 2.562915447));  {20995}
   FIX_3_072711026 = INT32(Round(CONST_SCALE * 3.072711026));  {25172}
 
-
 { for DESCALE }
 const
   ROUND_CONST = (INT32(1) shl (CONST_BITS-PASS1_BITS-1));
@@ -173,6 +178,12 @@ const
 { Perform dequantization and inverse DCT on one block of coefficients. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_idct_islow 
+//
+//==============================================================================
 procedure jpeg_idct_islow (cinfo: j_decompress_ptr;
                            compptr: jpeg_component_info_ptr;
                coef_block: JCOEFPTR;
@@ -593,7 +604,6 @@ asm
     {end;}
 @loop525:
 {$endif}
-
 
     { Even part: reverse the even part of the forward DCT. }
     { The rotator is sqrt(2)*c(-6). }

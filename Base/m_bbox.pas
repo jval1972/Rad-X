@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -41,9 +41,19 @@ const
   BOXLEFT = 2;
   BOXRIGHT = 3;
 
+//==============================================================================
+// M_ClearBox
+//
 // Bounding box functions.
+//
+//==============================================================================
 procedure M_ClearBox(box: Pfixed_tArray);
 
+//==============================================================================
+//
+// M_AddToBox
+//
+//==============================================================================
 procedure M_AddToBox(box: Pfixed_tArray; x: fixed_t; y: fixed_t);
 
 implementation
@@ -51,6 +61,11 @@ implementation
 uses
   doomtype;
 
+//==============================================================================
+//
+// M_ClearBox
+//
+//==============================================================================
 procedure M_ClearBox(box: Pfixed_tArray);
 begin
   box[BOXTOP] := MININT;
@@ -59,6 +74,11 @@ begin
   box[BOXLEFT] := MAXINT;
 end;
 
+//==============================================================================
+//
+// M_AddToBox
+//
+//==============================================================================
 procedure M_AddToBox(box: Pfixed_tArray; x: fixed_t; y: fixed_t);
 begin
   if x < box[BOXLEFT] then

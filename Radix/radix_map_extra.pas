@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -40,53 +40,164 @@ uses
   p_mobj_h,
   r_defs;
 
+//==============================================================================
+//
+// RX_RadixX2Doom
+//
+//==============================================================================
 function RX_RadixX2Doom(const sec: Psector_t; const x: integer): integer; overload;
 
+//==============================================================================
+//
+// RX_RadixX2Doom
+//
+//==============================================================================
 function RX_RadixX2Doom(const x, y: integer): integer; overload;
 
+//==============================================================================
+//
+// RX_RadixY2Doom
+//
+//==============================================================================
 function RX_RadixY2Doom(const sec: Psector_t; const y: integer): integer; overload;
 
+//==============================================================================
+//
+// RX_RadixY2Doom
+//
+//==============================================================================
 function RX_RadixY2Doom(const x, y: integer): integer; overload;
 
+//==============================================================================
+//
+// RX_CalcFloorSlope
+//
+//==============================================================================
 procedure RX_CalcFloorSlope(const sec: Psector_t);
 
+//==============================================================================
+//
+// RX_CalcCeilingSlope
+//
+//==============================================================================
 procedure RX_CalcCeilingSlope(const sec: Psector_t);
 
+//==============================================================================
+//
+// PS_SetFloorSlope
+//
+//==============================================================================
 procedure PS_SetFloorSlope(const secid: integer; const x1, y1, z1: fixed_t;
   const x2, y2, z2: fixed_t; const x3, y3, z3: fixed_t);
 
+//==============================================================================
+//
+// PS_SetCeilingSlope
+//
+//==============================================================================
 procedure PS_SetCeilingSlope(const secid: integer; const x1, y1, z1: fixed_t;
   const x2, y2, z2: fixed_t; const x3, y3, z3: fixed_t);
 
+//==============================================================================
+// RX_LoadRadixMapInfo
+//
 // Parse map lump for extra information about radix level
+//
+//==============================================================================
 procedure RX_LoadRadixMapInfo(const lumpnum: integer);
 
 {$IFNDEF OPENGL}
+
+//==============================================================================
+//
+// RX_CalculateRadixMidOffs
+//
+//==============================================================================
 function RX_CalculateRadixMidOffs(const seg: PSeg_t): fixed_t;
 
+//==============================================================================
+//
+// RX_CalculateRadixTopOffs
+//
+//==============================================================================
 function RX_CalculateRadixTopOffs(const seg: PSeg_t): fixed_t;
 
+//==============================================================================
+//
+// RX_CalculateRadixBottomOffs
+//
+//==============================================================================
 function RX_CalculateRadixBottomOffs(const seg: PSeg_t): fixed_t;
 
+//==============================================================================
+//
+// RX_CalculateRadixSlopeMidOffs
+//
+//==============================================================================
 function RX_CalculateRadixSlopeMidOffs(const seg: PSeg_t): fixed_t;
 
+//==============================================================================
+//
+// RX_CalculateRadixSlopeTopOffs
+//
+//==============================================================================
 function RX_CalculateRadixSlopeTopOffs(const seg: PSeg_t): fixed_t;
 
+//==============================================================================
+//
+// RX_CalculateRadixSlopeBottomOffs
+//
+//==============================================================================
 function RX_CalculateRadixSlopeBottomOffs(const seg: PSeg_t): fixed_t;
 {$ENDIF}
 
+//==============================================================================
+//
+// RX_LightLevel
+//
+//==============================================================================
 function RX_LightLevel(const l: integer; const flags: integer): byte;
 
+//==============================================================================
+//
+// RX_DamageLine
+//
+//==============================================================================
 procedure RX_DamageLine(const l: Pline_t; const damage: integer);
 
+//==============================================================================
+//
+// RX_ShootableLine
+//
+//==============================================================================
 function RX_ShootableLine(const l: Pline_t): boolean;
 
+//==============================================================================
+//
+// RX_LineLengthf
+//
+//==============================================================================
 function RX_LineLengthf(li: Pline_t): float;
 
+//==============================================================================
+//
+// RX_LineTrace
+//
+//==============================================================================
 procedure RX_LineTrace(const fromx, fromy, fromz: fixed_t; const tox, toy, toz: fixed_t; out newx, newy, newz: fixed_t);
 
+//==============================================================================
+//
+// RX_PointLineSqrDistance
+//
+//==============================================================================
 function RX_PointLineSqrDistance(const x, y: fixed_t; const line: Pline_t): integer;
 
+//==============================================================================
+//
+// RX_WallBounceMobj
+//
+//==============================================================================
 procedure RX_WallBounceMobj(const mo: Pmobj_t; const line: Pline_t);
 
 var
@@ -123,12 +234,22 @@ uses
   tables,
   w_wad;
 
+//==============================================================================
+// RX_RadixX2Doom
+//
 // radixmapXmult & radixmapYmult must be -1 or 1, no other values allowed :)
+//
+//==============================================================================
 function RX_RadixX2Doom(const sec: Psector_t; const x: integer): integer;
 begin
   result := x * sec.radixmapXmult + sec.radixmapXadd;
 end;
 
+//==============================================================================
+//
+// RX_RadixX2Doom
+//
+//==============================================================================
 function RX_RadixX2Doom(const x, y: integer): integer;
 begin
   if level_position_hack then
@@ -142,11 +263,21 @@ begin
     result := x * RADIX_MAP_X_MULT + RADIX_MAP_X_ADD;
 end;
 
+//==============================================================================
+//
+// RX_RadixY2Doom
+//
+//==============================================================================
 function RX_RadixY2Doom(const sec: Psector_t; const y: integer): integer;
 begin
   result := y * sec.radixmapYmult + sec.radixmapYadd;
 end;
 
+//==============================================================================
+//
+// RX_RadixY2Doom
+//
+//==============================================================================
 function RX_RadixY2Doom(const x, y: integer): integer;
 begin
   if level_position_hack then
@@ -191,6 +322,11 @@ begin
   fd := (- fa * x1 - fb * y1 - fc * z1);
 end;
 
+//==============================================================================
+//
+// RX_CalcFloorSlope
+//
+//==============================================================================
 procedure RX_CalcFloorSlope(const sec: Psector_t);
 var
   fa, fb, fc, fd: float;
@@ -206,6 +342,11 @@ begin
   sec.fd := fd;
 end;
 
+//==============================================================================
+//
+// RX_CalcCeilingSlope
+//
+//==============================================================================
 procedure RX_CalcCeilingSlope(const sec: Psector_t);
 var
   ca, cb, cc, cd: float;
@@ -221,6 +362,11 @@ begin
   sec.cd := cd;
 end;
 
+//==============================================================================
+//
+// PS_SetFloorSlope
+//
+//==============================================================================
 procedure PS_SetFloorSlope(const secid: integer; const x1, y1, z1: fixed_t;
   const x2, y2, z2: fixed_t; const x3, y3, z3: fixed_t);
 var
@@ -270,6 +416,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// PS_SetCeilingSlope
+//
+//==============================================================================
 procedure PS_SetCeilingSlope(const secid: integer; const x1, y1, z1: fixed_t;
   const x2, y2, z2: fixed_t; const x3, y3, z3: fixed_t);
 var
@@ -319,6 +470,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RX_LoadRadixMapInfo
+//
+//==============================================================================
 procedure RX_LoadRadixMapInfo(const lumpnum: integer);
 var
   sc: TScriptEngine;
@@ -563,6 +719,12 @@ begin
 end;
 
 {$IFNDEF OPENGL}
+
+//==============================================================================
+//
+// RX_CalculateRadixMidOffs
+//
+//==============================================================================
 function RX_CalculateRadixMidOffs(const seg: PSeg_t): fixed_t;
 var
   line: Pline_t;
@@ -576,6 +738,11 @@ begin
     result := -viewz;
 end;
 
+//==============================================================================
+//
+// RX_CalculateRadixTopOffs
+//
+//==============================================================================
 function RX_CalculateRadixTopOffs(const seg: PSeg_t): fixed_t;
 var
   line: Pline_t;
@@ -589,6 +756,11 @@ begin
     result := -viewz;
 end;
 
+//==============================================================================
+//
+// RX_CalculateRadixBottomOffs
+//
+//==============================================================================
 function RX_CalculateRadixBottomOffs(const seg: PSeg_t): fixed_t;
 var
   line: Pline_t;
@@ -602,11 +774,21 @@ begin
     result := -viewz;
 end;
 
+//==============================================================================
+//
+// RX_CalculateRadixSlopeMidOffs
+//
+//==============================================================================
 function RX_CalculateRadixSlopeMidOffs(const seg: PSeg_t): fixed_t;
 begin
   result := -viewz;
 end;
 
+//==============================================================================
+//
+// RX_CalculateRadixSlopeTopOffs
+//
+//==============================================================================
 function RX_CalculateRadixSlopeTopOffs(const seg: PSeg_t): fixed_t;
 var
   line: Pline_t;
@@ -620,6 +802,11 @@ begin
     result := line.frontsector.ceilingheight - viewz;
 end;
 
+//==============================================================================
+//
+// RX_CalculateRadixSlopeBottomOffs
+//
+//==============================================================================
 function RX_CalculateRadixSlopeBottomOffs(const seg: PSeg_t): fixed_t;
 var
   line: Pline_t;
@@ -637,6 +824,11 @@ end;
 const
   MAXRADIXLIGHTLEVEL = 64;
 
+//==============================================================================
+//
+// RX_LightLevel
+//
+//==============================================================================
 function RX_LightLevel(const l: integer; const flags: integer): byte;
 begin
   if flags and (RSF_FOG or RSF_DARKNESS) = 0 then
@@ -654,6 +846,11 @@ const
   LEF_DELAY = 0;
   LEF_NODELAY = 1;
 
+//==============================================================================
+//
+// RX_ExplosionParade
+//
+//==============================================================================
 procedure RX_ExplosionParade(const x1, x2, y1, y2, z1, z2: integer; const side: integer;
   const fracdensity: integer; const flags: LongWord);
 var
@@ -708,6 +905,11 @@ begin
   S_AmbientSound(x1 div 2 + x2 div 2, y1 div 2 + y2 div 2, 'radix/SndExplode');
 end;
 
+//==============================================================================
+//
+// RX_LineExplosion
+//
+//==============================================================================
 procedure RX_LineExplosion(const l: Pline_t; const flags: LongWord);
 var
   x1, x2, y1, y2: integer;
@@ -756,16 +958,31 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RX_LowerSectorToLowestFloor
+//
+//==============================================================================
 procedure RX_LowerSectorToLowestFloor(const sec: Psector_t);
 begin
   sec.floorheight := P_FindLowestFloorSurrounding(sec);
 end;
 
+//==============================================================================
+//
+// RX_RaiseSectorToHighestCeiling
+//
+//==============================================================================
 procedure RX_RaiseSectorToHighestCeiling(const sec: Psector_t);
 begin
   sec.ceilingheight := P_FindHighestCeilingSurrounding(sec);
 end;
 
+//==============================================================================
+//
+// RX_DamageLine
+//
+//==============================================================================
 procedure RX_DamageLine(const l: Pline_t; const damage: integer);
 var
   s: integer;
@@ -864,6 +1081,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RX_ShootableLine
+//
+//==============================================================================
 function RX_ShootableLine(const l: Pline_t): boolean;
 begin
   if l.radixflags and (RWF_ACTIVATETRIGGER or RWF_MISSILEWALL) = 0 then
@@ -875,6 +1097,11 @@ begin
   result := l.radixhitpoints > 0;
 end;
 
+//==============================================================================
+//
+// RX_LineLengthf
+//
+//==============================================================================
 function RX_LineLengthf(li: Pline_t): float;
 var
   fx, fy: float;
@@ -890,6 +1117,11 @@ var
   LTbbox: array[0..3] of fixed_t;
   LTline: Pline_t;
 
+//==============================================================================
+//
+// PIT_LineTrace
+//
+//==============================================================================
 function PIT_LineTrace(ld: Pline_t): boolean;
 var
   A1, B1, C1: int64;
@@ -945,6 +1177,11 @@ begin
   result := true;
 end;
 
+//==============================================================================
+//
+// RX_LineTrace
+//
+//==============================================================================
 procedure RX_LineTrace(const fromx, fromy, fromz: fixed_t; const tox, toy, toz: fixed_t; out newx, newy, newz: fixed_t);
 var
   xl: integer;
@@ -994,6 +1231,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RX_PointLineSqrDistance
+//
+//==============================================================================
 function RX_PointLineSqrDistance(const x, y: fixed_t; const line: Pline_t): integer;
 var
   A, B, C, D: integer;
@@ -1044,6 +1286,11 @@ begin
   result := (dx * dx) + (dy * dy);
 end;
 
+//==============================================================================
+//
+// RX_WallBounceMobj
+//
+//==============================================================================
 procedure RX_WallBounceMobj(const mo: Pmobj_t; const line: Pline_t);
 var
   s1, s2: boolean;

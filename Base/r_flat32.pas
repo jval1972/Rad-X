@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -59,22 +59,56 @@ type
   flatrenderinfo32_tArray = array[0..$FFF] of flatrenderinfo32_t;
   Pflatrenderinfo32_tArray = ^flatrenderinfo32_tArray;
 
+//==============================================================================
+//
+// R_StoreFlatSpan32
+//
+//==============================================================================
 procedure R_StoreFlatSpan32;
 
+//==============================================================================
+//
+// R_InitFlatsCache32
+//
+//==============================================================================
 procedure R_InitFlatsCache32;
 
+//==============================================================================
+//
+// R_ShutDownFlatsCache32
+//
+//==============================================================================
 procedure R_ShutDownFlatsCache32;
 
+//==============================================================================
+//
+// R_RenderSingleThreadFlats32
+//
+//==============================================================================
 procedure R_RenderSingleThreadFlats32;
 
+//==============================================================================
+//
+// R_RenderMultiThreadFlats32
+//
+//==============================================================================
 procedure R_RenderMultiThreadFlats32;
 
+//==============================================================================
+//
+// R_RenderMultiThreadFFloors32
+//
+//==============================================================================
 procedure R_RenderMultiThreadFFloors32;
-
 
 var
   force_numflatrenderingthreads_32bit: integer = 0;
 
+//==============================================================================
+//
+// R_DrawSpanNormalMT
+//
+//==============================================================================
 procedure R_DrawSpanNormalMT(const fi: pointer);
 
 implementation
@@ -96,6 +130,11 @@ var
   flatcachesize32: integer;
   flatcacherealsize32: integer;
 
+//==============================================================================
+//
+// R_GrowFlatsCache32
+//
+//==============================================================================
 procedure R_GrowFlatsCache32;
 begin
   if flatcachesize32 >= flatcacherealsize32 then
@@ -105,6 +144,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_StoreFlatSpan32
+//
+//==============================================================================
 procedure R_StoreFlatSpan32;
 var
   flat: Pflatrenderinfo32_t;
@@ -132,6 +176,11 @@ begin
   inc(flatcachesize32);
 end;
 
+//==============================================================================
+//
+// R_InitFlatsCache32
+//
+//==============================================================================
 procedure R_InitFlatsCache32;
 begin
   flatcache32 := nil;
@@ -139,6 +188,11 @@ begin
   flatcacherealsize32 := 0;
 end;
 
+//==============================================================================
+//
+// R_ShutDownFlatsCache32
+//
+//==============================================================================
 procedure R_ShutDownFlatsCache32;
 begin
   if flatcacherealsize32 <> 0 then
@@ -148,6 +202,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_RenderSingleThreadFlats32
+//
+//==============================================================================
 procedure R_RenderSingleThreadFlats32;
 var
   item1, item2: Pflatrenderinfo32_t;
@@ -168,6 +227,11 @@ end;
 const
   MAXFLATRENDERINGTHREADS32 = 16;
 
+//==============================================================================
+//
+// _flat_thread_worker32
+//
+//==============================================================================
 procedure _flat_thread_worker32(const p: pointer) stdcall;
 var
   item1, item2: Pflatrenderinfo32_t;
@@ -181,6 +245,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_RenderMultiThreadFlats32
+//
+//==============================================================================
 procedure R_RenderMultiThreadFlats32;
 var
   R: array[0..MAXFLATRENDERINGTHREADS32 - 1] of mt_range_t;
@@ -381,7 +450,11 @@ begin
   flatcachesize32 := 0;
 end;
 
-
+//==============================================================================
+//
+// _flat3D_thread_worker32
+//
+//==============================================================================
 procedure _flat3D_thread_worker32(const p: pointer) stdcall;
 var
   item1, item2: Pflatrenderinfo32_t;
@@ -400,6 +473,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_RenderMultiThreadFFloors32
+//
+//==============================================================================
 procedure R_RenderMultiThreadFFloors32;
 var
   R: array[0..MAXFLATRENDERINGTHREADS32 - 1] of mt_range_t;
@@ -600,9 +678,12 @@ begin
   flatcachesize32 := 0;
 end;
 
+//==============================================================================
+// R_DrawSpanNormalMT
 //
 // Draws the actual span (Normal resolution).
 //
+//==============================================================================
 procedure R_DrawSpanNormalMT(const fi: pointer);
 var
   ds_source32: PLongWordArray;

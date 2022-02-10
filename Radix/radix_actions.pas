@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -38,92 +38,312 @@ uses
   d_delphi,
   radix_level;
 
+//==============================================================================
+//
+// RA_ScrollingWall
+//
+//==============================================================================
 procedure RA_ScrollingWall(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_MovingSurface
+//
+//==============================================================================
 procedure RA_MovingSurface(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_SwitchWallBitmap
+//
+//==============================================================================
 procedure RA_SwitchWallBitmap(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_SwitchSecBitmap
+//
+//==============================================================================
 procedure RA_SwitchSecBitmap(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_ToggleWallBitmap
+//
+//==============================================================================
 procedure RA_ToggleWallBitmap(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_ToggleSecBitmap
+//
+//==============================================================================
 procedure RA_ToggleSecBitmap(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_CircleBitmap
+//
+//==============================================================================
 procedure RA_CircleBitmap(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_LightFlicker
+//
+//==============================================================================
 procedure RA_LightFlicker(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_LightsOff
+//
+//==============================================================================
 procedure RA_LightsOff(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_LightsOn
+//
+//==============================================================================
 procedure RA_LightsOn(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_LightOscilate
+//
+//==============================================================================
 procedure RA_LightOscilate(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_PlaneTeleport
+//
+//==============================================================================
 procedure RA_PlaneTeleport(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_PlaneTranspo
+//
+//==============================================================================
 procedure RA_PlaneTranspo(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_NewMovingSurface
+//
+//==============================================================================
 procedure RA_NewMovingSurface(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_PlaySound
+//
+//==============================================================================
 procedure RA_PlaySound(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_RandLightsFlicker
+//
+//==============================================================================
 procedure RA_RandLightsFlicker(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_EndOfLevel
+//
+//==============================================================================
 procedure RA_EndOfLevel(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_SpriteTriggerActivate
+//
+//==============================================================================
 procedure RA_SpriteTriggerActivate(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_SectorBasedGravity
+//
+//==============================================================================
 procedure RA_SectorBasedGravity(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_DeactivateTrigger
+//
+//==============================================================================
 procedure RA_DeactivateTrigger(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_ActivateTrigger
+//
+//==============================================================================
 procedure RA_ActivateTrigger(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_CompleteMissileWall
+//
+//==============================================================================
 procedure RA_CompleteMissileWall(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_ScannerJam
+//
+//==============================================================================
 procedure RA_ScannerJam(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_PrintMessage
+//
+//==============================================================================
 procedure RA_PrintMessage(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_FloorMissileWall
+//
+//==============================================================================
 procedure RA_FloorMissileWall(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_CeilingMissileWall
+//
+//==============================================================================
 procedure RA_CeilingMissileWall(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_BigSpriteTrig
+//
+//==============================================================================
 procedure RA_BigSpriteTrig(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_MassiveExplosion
+//
+//==============================================================================
 procedure RA_MassiveExplosion(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_WallDeadCheck
+//
+//==============================================================================
 procedure RA_WallDeadCheck(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_SecondaryObjective
+//
+//==============================================================================
 procedure RA_SecondaryObjective(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_SeekCompleteMissileWall
+//
+//==============================================================================
 procedure RA_SeekCompleteMissileWall(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_LightMovement
+//
+//==============================================================================
 procedure RA_LightMovement(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_MultLightOscilate
+//
+//==============================================================================
 procedure RA_MultLightOscilate(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_MultRandLightsFlicker
+//
+//==============================================================================
 procedure RA_MultRandLightsFlicker(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_KillRatio
+//
+//==============================================================================
 procedure RA_KillRatio(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_HurtPlayerExplosion
+//
+//==============================================================================
 procedure RA_HurtPlayerExplosion(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_SwitchShadeType
+//
+//==============================================================================
 procedure RA_SwitchShadeType(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_SixLightMovement
+//
+//==============================================================================
 procedure RA_SixLightMovement(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_SurfacePowerUp
+//
+//==============================================================================
 procedure RA_SurfacePowerUp(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_SecretSprite
+//
+//==============================================================================
 procedure RA_SecretSprite(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_BossEyeHandler
+//
+//==============================================================================
 procedure RA_BossEyeHandler(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_VertExplosion
+//
+//==============================================================================
 procedure RA_VertExplosion(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_ChangeFloorOffsets
+//
+//==============================================================================
 procedure RA_ChangeFloorOffsets(const action: Pradixaction_t);
 
+//==============================================================================
+//
+// RA_MassiveLightMovement
+//
+//==============================================================================
 procedure RA_MassiveLightMovement(const action: Pradixaction_t);
 
 implementation
@@ -169,6 +389,11 @@ type
   end;
   radixscrollingwall_p = ^radixscrollingwall_t;
 
+//==============================================================================
+//
+// RA_ScrollingWall
+//
+//==============================================================================
 procedure RA_ScrollingWall(const action: Pradixaction_t);
 var
   parms: radixscrollingwall_p;
@@ -252,6 +477,11 @@ type
   end;
   radixmovingsurface_p = ^radixmovingsurface_t;
 
+//==============================================================================
+//
+// RA_MovingSurface
+//
+//==============================================================================
 procedure RA_MovingSurface(const action: Pradixaction_t);
 var
   parms: radixmovingsurface_p;
@@ -369,6 +599,11 @@ type
   end;
   radixswitchwallbitmap_p = ^radixswitchwallbitmap_t;
 
+//==============================================================================
+//
+// RA_SwitchWallBitmap
+//
+//==============================================================================
 procedure RA_SwitchWallBitmap(const action: Pradixaction_t);
 var
   parms: radixswitchwallbitmap_p;
@@ -439,6 +674,11 @@ type
   end;
   radixswitchsecbitmap_p = ^radixswitchsecbitmap_t;
 
+//==============================================================================
+//
+// RA_SwitchSecBitmap
+//
+//==============================================================================
 procedure RA_SwitchSecBitmap(const action: Pradixaction_t);
 var
   parms: radixswitchsecbitmap_p;
@@ -474,6 +714,11 @@ type
   end;
   radixtogglewallbitmap_p = ^radixtogglewallbitmap_t;
 
+//==============================================================================
+//
+// RA_ToggleWallBitmap
+//
+//==============================================================================
 procedure RA_ToggleWallBitmap(const action: Pradixaction_t);
 var
   parms: radixtogglewallbitmap_p;
@@ -594,6 +839,11 @@ type
   end;
   radixtongglesecbitmap_p = ^radixtongglesecbitmap_t;
 
+//==============================================================================
+//
+// RA_ToggleSecBitmap
+//
+//==============================================================================
 procedure RA_ToggleSecBitmap(const action: Pradixaction_t);
 var
   parms: radixtongglesecbitmap_p;
@@ -643,6 +893,11 @@ type
   end;
   radixcirclebitmap_p = ^radixcirclebitmap_t;
 
+//==============================================================================
+//
+// RA_CircleBitmap
+//
+//==============================================================================
 procedure RA_CircleBitmap(const action: Pradixaction_t);
 var
   parms: radixcirclebitmap_p;
@@ -699,6 +954,11 @@ type
   end;
   radixlightflicker_p = ^radixlightflicker_t;
 
+//==============================================================================
+//
+// RA_LightFlicker
+//
+//==============================================================================
 procedure RA_LightFlicker(const action: Pradixaction_t);
 var
   parms: radixlightflicker_p;
@@ -735,6 +995,11 @@ type
   end;
   radixlightsoff_p = ^radixlightsoff_t;
 
+//==============================================================================
+//
+// RA_LightsOff
+//
+//==============================================================================
 procedure RA_LightsOff(const action: Pradixaction_t);
 var
   parms: radixlightsoff_p;
@@ -756,6 +1021,11 @@ type
   end;
   radixlightson_p = ^radixlightson_t;
 
+//==============================================================================
+//
+// RA_LightsOn
+//
+//==============================================================================
 procedure RA_LightsOn(const action: Pradixaction_t);
 var
   parms: radixlightson_p;
@@ -781,6 +1051,11 @@ type
   end;
   radixlightoscilate_p = ^radixlightoscilate_t;
 
+//==============================================================================
+//
+// RA_LightOscilate
+//
+//==============================================================================
 procedure RA_LightOscilate(const action: Pradixaction_t);
 var
   parms: radixlightoscilate_p;
@@ -821,6 +1096,11 @@ type
   end;
   radixplaneteleport_p = ^radixplaneteleport_t;
 
+//==============================================================================
+//
+// RA_PlaneTeleport
+//
+//==============================================================================
 procedure RA_PlaneTeleport(const action: Pradixaction_t);
 var
   parms: radixplaneteleport_p;
@@ -908,6 +1188,11 @@ type
   end;
   radixplanetranspo_p = ^radixplanetranspo_t;
 
+//==============================================================================
+//
+// RA_PlaneTranspo
+//
+//==============================================================================
 procedure RA_PlaneTranspo(const action: Pradixaction_t);
 var
   parms: radixplanetranspo_p;
@@ -966,6 +1251,11 @@ type
   end;
   radixnewmovingsurface_p = ^radixnewmovingsurface_t;
 
+//==============================================================================
+//
+// RA_NewMovingSurface
+//
+//==============================================================================
 procedure RA_NewMovingSurface(const action: Pradixaction_t);
 var
   parms: radixnewmovingsurface_p;
@@ -1175,6 +1465,11 @@ type
   end;
   radixplaysound_p = ^radixplaysound_t;
 
+//==============================================================================
+//
+// RA_PlaySound
+//
+//==============================================================================
 procedure RA_PlaySound(const action: Pradixaction_t);
 var
   parms: radixplaysound_p;
@@ -1229,6 +1524,11 @@ type
   end;
   radixrandlightsflicker_p = ^radixrandlightsflicker_t;
 
+//==============================================================================
+//
+// RA_RandLightsFlicker
+//
+//==============================================================================
 procedure RA_RandLightsFlicker(const action: Pradixaction_t);
 var
   parms: radixrandlightsflicker_p;
@@ -1274,6 +1574,11 @@ type
   end;
   radixendoflevel_p = ^radixendoflevel_t;
 
+//==============================================================================
+//
+// RA_EndOfLevel
+//
+//==============================================================================
 procedure RA_EndOfLevel(const action: Pradixaction_t);
 var
   parms: radixendoflevel_p;
@@ -1312,6 +1617,11 @@ type
   end;
   radixspritetriggeractivate_p = ^radixspritetriggeractivate_t;
 
+//==============================================================================
+//
+// RA_SpriteTriggerActivate
+//
+//==============================================================================
 procedure RA_SpriteTriggerActivate(const action: Pradixaction_t);
 var
   parms: radixspritetriggeractivate_p;
@@ -1372,6 +1682,11 @@ type
   end;
   radixsectorbasedgravity_p = ^radixsectorbasedgravity_t;
 
+//==============================================================================
+//
+// RA_SectorBasedGravity
+//
+//==============================================================================
 procedure RA_SectorBasedGravity(const action: Pradixaction_t);
 var
   parms: radixsectorbasedgravity_p;
@@ -1431,6 +1746,11 @@ type
   end;
   radixdeactivatetrigger_p = ^radixdeactivatetrigger_t;
 
+//==============================================================================
+//
+// RA_DeactivateTrigger
+//
+//==============================================================================
 procedure RA_DeactivateTrigger(const action: Pradixaction_t);
 var
   parms: radixdeactivatetrigger_p;
@@ -1449,6 +1769,11 @@ type
   end;
   radixactivatetrigger_p = ^radixactivatetrigger_t;
 
+//==============================================================================
+//
+// RA_ActivateTrigger
+//
+//==============================================================================
 procedure RA_ActivateTrigger(const action: Pradixaction_t);
 var
   parms: radixactivatetrigger_p;
@@ -1477,6 +1802,11 @@ type
   end;
   radixcompletemissilewall_p = ^radixcompletemissilewall_t;
 
+//==============================================================================
+//
+// RA_CompleteMissileWall
+//
+//==============================================================================
 procedure RA_CompleteMissileWall(const action: Pradixaction_t);
 var
   parms: radixcompletemissilewall_p;
@@ -1577,6 +1907,11 @@ type
   end;
   radixscannerjam_p = ^radixscannerjam_t;
 
+//==============================================================================
+//
+// RA_ScannerJam
+//
+//==============================================================================
 procedure RA_ScannerJam(const action: Pradixaction_t);
 var
   parms: radixscannerjam_p;
@@ -1598,6 +1933,11 @@ type
   end;
   radixprintmessage_p = ^radixprintmessage_t;
 
+//==============================================================================
+//
+// RA_PrintMessage
+//
+//==============================================================================
 procedure RA_PrintMessage(const action: Pradixaction_t);
 var
   parms: radixprintmessage_p;
@@ -1644,6 +1984,11 @@ type
   end;
   radixfloormissilewall_p = ^radixfloormissilewall_t;
 
+//==============================================================================
+//
+// RA_FloorMissileWall
+//
+//==============================================================================
 procedure RA_FloorMissileWall(const action: Pradixaction_t);
 var
   parms: radixfloormissilewall_p;
@@ -1768,6 +2113,11 @@ type
   end;
   radixceilingmissilewall_p = ^radixceilingmissilewall_t;
 
+//==============================================================================
+//
+// RA_CeilingMissileWall
+//
+//==============================================================================
 procedure RA_CeilingMissileWall(const action: Pradixaction_t);
 var
   parms: radixceilingmissilewall_p;
@@ -1886,6 +2236,11 @@ type
   end;
   radixbigspritetrig_p = ^radixbigspritetrig_t;
 
+//==============================================================================
+//
+// RA_BigSpriteTrig
+//
+//==============================================================================
 procedure RA_BigSpriteTrig(const action: Pradixaction_t);
 var
   parms: radixbigspritetrig_p;
@@ -1947,6 +2302,11 @@ type
   end;
   radixmassiveexplosion_p = ^radixmassiveexplosion_t;
 
+//==============================================================================
+//
+// RA_MassiveExplosion
+//
+//==============================================================================
 procedure RA_MassiveExplosion(const action: Pradixaction_t);
 var
   parms: radixmassiveexplosion_p;
@@ -1996,6 +2356,11 @@ type
   end;
   radixwalldeadcheck_p = ^radixwalldeadcheck_t;
 
+//==============================================================================
+//
+// RA_WallDeadCheck
+//
+//==============================================================================
 procedure RA_WallDeadCheck(const action: Pradixaction_t);
 var
   parms: radixwalldeadcheck_p;
@@ -2029,6 +2394,11 @@ type
   end;
   radixsecondaryobjective_p = ^radixsecondaryobjective_t;
 
+//==============================================================================
+//
+// RA_SecondaryObjective
+//
+//==============================================================================
 procedure RA_SecondaryObjective(const action: Pradixaction_t);
 const
   MSG_SECONDARY = 12;
@@ -2071,6 +2441,11 @@ type
   end;
   radixseekcompletemissilewall_p = ^radixseekcompletemissilewall_t;
 
+//==============================================================================
+//
+// RA_SeekCompleteMissileWall
+//
+//==============================================================================
 procedure RA_SeekCompleteMissileWall(const action: Pradixaction_t);
 var
   parms: radixseekcompletemissilewall_p;
@@ -2176,6 +2551,11 @@ type
   end;
   radixspritelightmovement_p = ^radixspritelightmovement_t;
 
+//==============================================================================
+//
+// RA_LightMovement
+//
+//==============================================================================
 procedure RA_LightMovement(const action: Pradixaction_t);
 var
   parms: radixspritelightmovement_p;
@@ -2255,6 +2635,11 @@ type
   end;
   radixmultlightoscilate_p = ^radixmultlightoscilate_t;
 
+//==============================================================================
+//
+// RA_MultLightOscilate
+//
+//==============================================================================
 procedure RA_MultLightOscilate(const action: Pradixaction_t);
 var
   parms: radixmultlightoscilate_p;
@@ -2309,6 +2694,11 @@ type
   end;
   radixmultrandlightsflicker_p = ^radixmultrandlightsflicker_t;
 
+//==============================================================================
+//
+// RA_MultRandLightsFlicker
+//
+//==============================================================================
 procedure RA_MultRandLightsFlicker(const action: Pradixaction_t);
 var
   parms: radixmultrandlightsflicker_p;
@@ -2359,6 +2749,11 @@ type
   end;
   radixkillratio_p = ^radixkillratio_t;
 
+//==============================================================================
+//
+// RA_KillRatio
+//
+//==============================================================================
 procedure RA_KillRatio(const action: Pradixaction_t);
 var
   parms: radixkillratio_p;
@@ -2434,6 +2829,11 @@ type
   end;
   radixhurtplayerexplosion_p = ^radixhurtplayerexplosion_t;
 
+//==============================================================================
+//
+// RA_HurtPlayerExplosion
+//
+//==============================================================================
 procedure RA_HurtPlayerExplosion(const action: Pradixaction_t);
 var
   parms: radixhurtplayerexplosion_p;
@@ -2506,6 +2906,11 @@ type
   end;
   radixswitchshadetype_p = ^radixswitchshadetype_t;
 
+//==============================================================================
+//
+// RA_SwitchShadeType
+//
+//==============================================================================
 procedure RA_SwitchShadeType(const action: Pradixaction_t);
 var
   parms: radixswitchshadetype_p;
@@ -2532,6 +2937,11 @@ type
   end;
   radix6lightmovement_p = ^radix6lightmovement_t;
 
+//==============================================================================
+//
+// RA_SixLightMovement
+//
+//==============================================================================
 procedure RA_SixLightMovement(const action: Pradixaction_t);
 var
   parms: radix6lightmovement_p;
@@ -2582,6 +2992,11 @@ type
   end;
   radixsurfacepowerup_p = ^radixsurfacepowerup_t;
 
+//==============================================================================
+//
+// RA_SurfacePowerUp
+//
+//==============================================================================
 procedure RA_SurfacePowerUp(const action: Pradixaction_t);
 var
   parms: radixsurfacepowerup_p;
@@ -2615,6 +3030,11 @@ type
   end;
   radixsecretsprite_p = ^radixsecretsprite_t;
 
+//==============================================================================
+//
+// RA_SecretSprite
+//
+//==============================================================================
 procedure RA_SecretSprite(const action: Pradixaction_t);
 var
   parms: radixsecretsprite_p;
@@ -2645,6 +3065,11 @@ type
   end;
   radixbosseyehandler_p = ^radixbosseyehandler_t;
 
+//==============================================================================
+//
+// RA_BossEyeHandler
+//
+//==============================================================================
 procedure RA_BossEyeHandler(const action: Pradixaction_t);
 var
   parms: radixbosseyehandler_p;
@@ -2671,6 +3096,11 @@ type
   end;
   radixvertexplosion_p = ^radixvertexplosion_t;
 
+//==============================================================================
+//
+// RA_VertExplosion
+//
+//==============================================================================
 procedure RA_VertExplosion(const action: Pradixaction_t);
 var
   parms: radixvertexplosion_p;
@@ -2722,6 +3152,11 @@ type
   end;
   radixchangeflooroffsets_p = ^radixchangeflooroffsets_t;
 
+//==============================================================================
+//
+// RA_ChangeFloorOffsets
+//
+//==============================================================================
 procedure RA_ChangeFloorOffsets(const action: Pradixaction_t);
 var
   parms: radixchangeflooroffsets_p;
@@ -2751,6 +3186,11 @@ type
   end;
   radixmassivelightmovement_p = ^radixmassivelightmovement_t;
 
+//==============================================================================
+//
+// RA_MassiveLightMovement
+//
+//==============================================================================
 procedure RA_MassiveLightMovement(const action: Pradixaction_t);
 var
   parms: radixmassivelightmovement_p;

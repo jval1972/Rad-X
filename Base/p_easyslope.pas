@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -48,12 +48,32 @@ const
   MT_VERTEXRAISECEILINGTOANGLE = 1256;
   MT_VERTEXLOWERCEILINGTOANGLE = 1257;
 
+//==============================================================================
+//
+// P_IsEasySlopeItem
+//
+//==============================================================================
 function P_IsEasySlopeItem(const doomdnum: integer): boolean;
 
+//==============================================================================
+//
+// P_EasySlopeInit
+//
+//==============================================================================
 procedure P_EasySlopeInit;
 
+//==============================================================================
+//
+// P_EasySlopeExecute
+//
+//==============================================================================
 procedure P_EasySlopeExecute;
 
+//==============================================================================
+//
+// P_SpawnEasySlopeThing
+//
+//==============================================================================
 function P_SpawnEasySlopeThing(mthing: Pmapthing_t): Pmobj_t;
 
 implementation
@@ -68,6 +88,11 @@ uses
   p_slopes,
   r_defs;
 
+//==============================================================================
+//
+// P_IsEasySlopeItem
+//
+//==============================================================================
 function P_IsEasySlopeItem(const doomdnum: integer): boolean;
 begin
   if (doomdnum = MT_RAISEFLOORTOANGLE) or (doomdnum = MT_LOWERFLOORTOANGLE) or
@@ -97,11 +122,21 @@ type
   slopeitem_tArray = array[0..$FFF] of slopeitem_t;
   Pslopeitem_tArray = ^slopeitem_tArray;
 
+//==============================================================================
+//
+// P_EasySlopeInit
+//
+//==============================================================================
 procedure P_EasySlopeInit;
 begin
   numslopeitems := 0;
 end;
 
+//==============================================================================
+//
+// P_FindClosestSectorPoint
+//
+//==============================================================================
 function P_FindClosestSectorPoint(const secid: integer; const mo: Pmobj_t): Pvertex_t;
 var
   dist, mindist: integer;
@@ -159,6 +194,11 @@ begin
   fd := (- fa * x1 - fb * y1 - fc * z1);
 end;
 
+//==============================================================================
+//
+// calcz
+//
+//==============================================================================
 function calcz(const secid: integer; const mo: Pmobj_t; const default: fixed_t = 0): fixed_t;
 var
   sec: Psector_t;
@@ -186,6 +226,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// P_EasySlopeExecute3Points
+//
+//==============================================================================
 procedure P_EasySlopeExecute3Points;
 var
   slopeinfo: Pslopeitem_tArray;
@@ -275,6 +320,11 @@ begin
   memfree(pointer(slopeinfo), numsectors * SizeOf(slopeitem_t));
 end;
 
+//==============================================================================
+//
+// P_FindSectorFromVertex3
+//
+//==============================================================================
 function P_FindSectorFromVertex3(v: Pvertex_t; var start: integer): integer;
 var
   i, j: integer;
@@ -295,6 +345,11 @@ begin
   start := -1;
 end;
 
+//==============================================================================
+//
+// P_FillControlVertexesFloor
+//
+//==============================================================================
 procedure P_FillControlVertexesFloor(const sec: Psector_t; const it: Pslopeitem_t);
 var
   i: integer;
@@ -333,6 +388,11 @@ begin
   lst.Free;
 end;
 
+//==============================================================================
+//
+// P_FillControlVertexesCeiling
+//
+//==============================================================================
 procedure P_FillControlVertexesCeiling(const sec: Psector_t; const it: Pslopeitem_t);
 var
   i: integer;
@@ -371,6 +431,11 @@ begin
   lst.Free;
 end;
 
+//==============================================================================
+//
+// P_EasySlopeExecuteVertex
+//
+//==============================================================================
 procedure P_EasySlopeExecuteVertex;
 var
   slopeinfo: Pslopeitem_tArray;
@@ -486,12 +551,22 @@ begin
   memfree(pointer(slopeinfo), numsectors * SizeOf(slopeitem_t));
 end;
 
+//==============================================================================
+//
+// P_EasySlopeExecute
+//
+//==============================================================================
 procedure P_EasySlopeExecute;
 begin
   P_EasySlopeExecute3Points;
   P_EasySlopeExecuteVertex;
 end;
 
+//==============================================================================
+//
+// P_SpawnEasySlopeThing
+//
+//==============================================================================
 function P_SpawnEasySlopeThing(mthing: Pmapthing_t): Pmobj_t;
 begin
   result := P_SpawnMapThing(mthing);

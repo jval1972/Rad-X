@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -39,13 +39,26 @@ uses
   p_mobj_h,
   r_defs;
 
+//==============================================================================
+// EV_Teleport
 //
 // TELEPORTATION
 //
+//==============================================================================
 function EV_Teleport(line: Pline_t; side: integer; thing: Pmobj_t): integer;
 
+//==============================================================================
+//
+// EV_SilentTeleport
+//
+//==============================================================================
 function EV_SilentTeleport(line: Pline_t; side: integer; thing: Pmobj_t): integer;
 
+//==============================================================================
+//
+// EV_SilentLineTeleport
+//
+//==============================================================================
 function EV_SilentLineTeleport(line: Pline_t; side: integer; thing: Pmobj_t; reverse: boolean): integer;
 
 const
@@ -72,6 +85,11 @@ uses
   sound_data,
   tables;
 
+//==============================================================================
+//
+// EV_Teleport
+//
+//==============================================================================
 function EV_Teleport(line: Pline_t; side: integer; thing: Pmobj_t): integer;
 var
   i: integer;
@@ -100,7 +118,6 @@ begin
     result := 0;
     exit;
   end;
-
 
   // Don't teleport if hit back of line,
   //  so you can get out of teleporter.
@@ -202,11 +219,13 @@ begin
   result := 0;
 end;
 
+//==============================================================================
+// EV_SilentTeleport
 //
 // Silent TELEPORTATION, by Lee Killough
 // Primarily for rooms-over-rooms etc.
 //
-
+//==============================================================================
 function EV_SilentTeleport(line: Pline_t; side: integer; thing: Pmobj_t): integer;
 var
   i: integer;
@@ -317,6 +336,11 @@ end;
 const
   FUDGEFACTOR = 10;
 
+//==============================================================================
+//
+// EV_SilentLineTeleport
+//
+//==============================================================================
 function EV_SilentLineTeleport(line: Pline_t; side: integer; thing: Pmobj_t; reverse: boolean): integer;
 var
   i: integer;
@@ -338,7 +362,6 @@ begin
     result := 0;
     exit;
   end;
-
 
   i := -1;
   while P_FindLineFromLineTag2(line, i) >= 0 do

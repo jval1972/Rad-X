@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -48,8 +48,18 @@ const
   CACHECOLBITS = 10;
   CACHECOLMASK = 1 shl CACHECOLBITS - 1;
 
+//==============================================================================
+//
+// R_ReadDC32Cache
+//
+//==============================================================================
 procedure R_ReadDC32Cache(const rtex, rcol: integer);
 
+//==============================================================================
+//
+// R_Precache32bittexture
+//
+//==============================================================================
 procedure R_Precache32bittexture(const rtex: integer);
 
 const
@@ -79,16 +89,49 @@ type
   dc32cacheinfo_tArray = array[0..COL32CACHESIZE - 1] of dc32cacheinfo_t;
   dc32cacheinfo_tPArray = array[0..COL32CACHESIZE - 1] of Pdc32cacheinfo_t;
 
+//==============================================================================
+//
+// R_ClearDC32Cache
+//
+//==============================================================================
 procedure R_ClearDC32Cache;
+
+//==============================================================================
+//
+// R_ResetDC32Cache
+//
+//==============================================================================
 procedure R_ResetDC32Cache;
+
+//==============================================================================
+//
+// R_InitDC32Cache
+//
+//==============================================================================
 procedure R_InitDC32Cache;
+
+//==============================================================================
+//
+// R_ShutDownDC32Cache
+//
+//==============================================================================
 procedure R_ShutDownDC32Cache;
 
+//==============================================================================
+//
+// R_GetUID
+//
+//==============================================================================
 function R_GetUID(const tex, col, dmod: integer): LongWord;
 
 var
   dc32cache: dc32cacheinfo_tPArray;
 
+//==============================================================================
+//
+// R_Get_dc32
+//
+//==============================================================================
 function R_Get_dc32(p: Pdc32cacheitem_t; columnsize: integer): Pdc32_t;
 
 implementation
@@ -116,6 +159,11 @@ uses
   t_main,
   v_video;
 
+//==============================================================================
+//
+// R_GetHash
+//
+//==============================================================================
 function R_GetHash(const tex, col, dmod: integer): LongWord;
 // JVAL
 // Get a hash value depending on tex, col and dc_mod.
@@ -126,6 +174,11 @@ begin
   result := (97 * tex + col * 3833 + dmod * 7867) and (COL32CACHESIZE - 1);
 end;
 
+//==============================================================================
+//
+// R_GetUID
+//
+//==============================================================================
 function R_GetUID(const tex, col, dmod: integer): LongWord;
 // JVAL
 // In addition the UID depending on tex, col and dc_mod
@@ -144,6 +197,11 @@ begin
   result := tex + _SHL(col, CACHECOLSHIFT) + _SHL(dmod, CACHECOLSHIFT + CACHECOLBITS);
 end;
 
+//==============================================================================
+//
+// R_Get_dc32
+//
+//==============================================================================
 function R_Get_dc32(p: Pdc32cacheitem_t; columnsize: integer): Pdc32_t;
 begin
   if p.dc32 = nil then
@@ -159,12 +217,14 @@ begin
   result := p.dc32;
 end;
 
+//==============================================================================
 //
 // R_ReadDC32ExternalCache
 //
 // JVAL
 //  Create dc_source32 from an external texture
 //
+//==============================================================================
 function R_ReadDC32ExternalCache(const rtex, rcol: integer): boolean;
 var
   plw: PLongWord;
@@ -477,12 +537,14 @@ begin
   result := true;
 end;
 
+//==============================================================================
 //
 // R_ReadDC32InternalCache
 //
 // JVAL
 //  Create dc_source32 from internal (IWAD) texture
 //
+//==============================================================================
 procedure R_ReadDC32InternalCache(const rtex, rcol: integer);
 var
   plw: PLongWord;
@@ -900,6 +962,11 @@ begin
   dc_height := texturecolumnheight[rtex];
 end;
 
+//==============================================================================
+//
+// R_ReadDC32Cache
+//
+//==============================================================================
 procedure R_ReadDC32Cache(const rtex, rcol: integer);
 begin
   if not R_ReadDC32ExternalCache(rtex, rcol) then
@@ -914,11 +981,21 @@ begin
   inc(c_ctot);
 end;
 
+//==============================================================================
+//
+// R_Precache32bittexture
+//
+//==============================================================================
 procedure R_Precache32bittexture(const rtex: integer);
 begin
   R_ReadDC32Cache(rtex, 0);
 end;
 
+//==============================================================================
+//
+// R_ResetDC32Cache
+//
+//==============================================================================
 procedure R_ResetDC32Cache;
 var
   i, j: integer;
@@ -930,6 +1007,11 @@ begin
           dc32cache[i][j].UID := $FFFFFFFF;
 end;
 
+//==============================================================================
+//
+// R_ClearDC32Cache
+//
+//==============================================================================
 procedure R_ClearDC32Cache;
 var
   i, j: integer;
@@ -958,6 +1040,11 @@ begin
     end;
 end;
 
+//==============================================================================
+//
+// R_InitDC32Cache
+//
+//==============================================================================
 procedure R_InitDC32Cache;
 var
   i: integer;
@@ -966,6 +1053,11 @@ begin
     dc32cache[i] := nil;
 end;
 
+//==============================================================================
+//
+// R_ShutDownDC32Cache
+//
+//==============================================================================
 procedure R_ShutDownDC32Cache;
 var
   i: integer;

@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -38,12 +38,32 @@ interface
 uses
   p_mobj_h;
 
+//==============================================================================
+//
+// R_MarkDLights
+//
+//==============================================================================
 procedure R_MarkDLights(const mo: Pmobj_t);
 
+//==============================================================================
+//
+// R_AddAdditionalLights
+//
+//==============================================================================
 procedure R_AddAdditionalLights;
 
+//==============================================================================
+//
+// R_DrawLightsSingleThread
+//
+//==============================================================================
 procedure R_DrawLightsSingleThread;
 
+//==============================================================================
+//
+// R_DrawLightsMultiThread
+//
+//==============================================================================
 procedure R_DrawLightsMultiThread;
 
 var
@@ -70,8 +90,18 @@ const
   LIGHTMAPFADEOUT_SIGMOID = 4;
   NUMLIGHTMAPFADEOUTFUNCS = 5;
 
+//==============================================================================
+//
+// R_InitLightTexture
+//
+//==============================================================================
 procedure R_InitLightTexture;
 
+//==============================================================================
+//
+// R_ShutDownLightTexture
+//
+//==============================================================================
 procedure R_ShutDownLightTexture;
 
 implementation
@@ -105,9 +135,11 @@ var
   lightexturelookup: array[0..LIGHTTEXTURESIZE - 1] of lpost_t;
   lighttexture: PLongWordArray = nil;
 
+//==============================================================================
 //
 // R_InitLightTexture
 //
+//==============================================================================
 procedure R_InitLightTexture;
 var
   i, j: integer;
@@ -164,9 +196,11 @@ begin
   end;
 end;
 
+//==============================================================================
 //
 // R_ShutDownLightTexture
 //
+//==============================================================================
 procedure R_ShutDownLightTexture;
 begin
   if lighttexture <> nil then
@@ -177,6 +211,11 @@ const
   MAXLIGHTDISTANCE = 2048;
   MAXSQRLIGHTDISTANCE = MAXLIGHTDISTANCE * MAXLIGHTDISTANCE;
 
+//==============================================================================
+//
+// R_MarkDLights
+//
+//==============================================================================
 procedure R_MarkDLights(const mo: Pmobj_t);
 var
   l: PGLDRenderLight;
@@ -225,6 +264,11 @@ begin
     end;
 end;
 
+//==============================================================================
+//
+// RIT_AddAdditionalLights
+//
+//==============================================================================
 function RIT_AddAdditionalLights(mo: Pmobj_t): boolean;
 begin
   R_MarkDLights(mo);
@@ -235,6 +279,11 @@ end;
 const
   MAXLIGHTRADIUS = 256 * FRACUNIT;
 
+//==============================================================================
+//
+// R_AddAdditionalLights
+//
+//==============================================================================
 procedure R_AddAdditionalLights;
 var
   x: integer;
@@ -258,6 +307,11 @@ const
   DEPTHBUFFER_NEAR = $3FFF * FRACUNIT;
   DEPTHBUFFER_FAR = 256;
 
+//==============================================================================
+//
+// R_GetVisLightProjection
+//
+//==============================================================================
 function R_GetVisLightProjection(const x, y, z: fixed_t; const radius: fixed_t;
   const color: LongWord): Pvislight_t;
 var
@@ -341,7 +395,6 @@ begin
   else
     result.x2 := x2;
 
-
   // get depthbuffer range
   an := R_PointToAngle(x, y);
   an := an shr ANGLETOFINESHIFT;
@@ -404,11 +457,13 @@ begin
   result.color32 := color;
 end;
 
+//==============================================================================
 //
 //  R_SortDlights()
 //  JVAL: Sort the dynamic lights according to square distance of view
 //        (note: closer light is first!)
 //
+//==============================================================================
 procedure R_SortDlights;
 
   procedure qsort(l, r: Integer);
@@ -486,6 +541,11 @@ var
   precalc32op1A: array[0..255] of precalc32op1_p;
   precalc32op1_calced: boolean = false;
 
+//==============================================================================
+//
+// calc_precalc32op1
+//
+//==============================================================================
 procedure calc_precalc32op1;
 var
   i, j: integer;
@@ -511,6 +571,11 @@ type
   end;
   Pfastzbuf_t = ^fastzbuf_t;
 
+//==============================================================================
+//
+// R_FastZBufferAt
+//
+//==============================================================================
 function R_FastZBufferAt(const x, y: integer; const pfdb: Pfastzbuf_t): Pzbufferitem_t;
 begin
   if pfdb.next >= y then
@@ -526,6 +591,11 @@ begin
     pfdb.next := y;
 end;
 
+//==============================================================================
+//
+// R_DrawColumnLightmap8
+//
+//==============================================================================
 procedure R_DrawColumnLightmap8(const parms: Plightparams_t);
 var
   count, x, y: integer;
@@ -642,7 +712,6 @@ begin
               dest^ := approxcolorindexarray[rr shl (16 - FASTTABLESHIFT - FASTTABLESHIFT) + gg shl (8 - FASTTABLESHIFT) + bb];
             end;
 
-
         {  Slower code:
             factor := FixedMul(dls, dfactor);
             if factor > 0 then
@@ -662,6 +731,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawColumnLightmap32
+//
+//==============================================================================
 procedure R_DrawColumnLightmap32(const parms: Plightparams_t);
 var
   count, x, y: integer;
@@ -773,6 +847,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawVisLight
+//
+//==============================================================================
 procedure R_DrawVisLight(const psl: Pdlsortitem_t; const threadid, numlthreads: integer);
 var
   frac: fixed_t;
@@ -844,6 +923,11 @@ var
   old_lightwidthfactor: integer = -1;
   old_lightmapfadeoutfunc: integer = -1;
 
+//==============================================================================
+//
+// R_SetUpLightEffects
+//
+//==============================================================================
 procedure R_SetUpLightEffects;
 begin
   lightmapcolorintensity := ibetween(lightmapcolorintensity, MINLMCOLORSENSITIVITY, MAXLMCOLORSENSITIVITY);
@@ -862,6 +946,11 @@ begin
     drawcolumnlightmap := R_DrawColumnLightmap8;
 end;
 
+//==============================================================================
+//
+// f2b
+//
+//==============================================================================
 function f2b(const ff: float): byte;
 var
   ii: integer;
@@ -875,6 +964,11 @@ begin
     result := ii;
 end;
 
+//==============================================================================
+//
+// R_GetVisLightProjections
+//
+//==============================================================================
 procedure R_GetVisLightProjections;
 var
   i: integer;
@@ -900,12 +994,22 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawLightSingleThread
+//
+//==============================================================================
 procedure R_DrawLightSingleThread(const psl: Pdlsortitem_t);
 begin
   if psl.vis <> nil then
     R_DrawVisLight(psl, 0, 1);
 end;
 
+//==============================================================================
+//
+// R_DrawLightsSingleThread
+//
+//==============================================================================
 procedure R_DrawLightsSingleThread;
 var
   i: integer;
@@ -917,12 +1021,22 @@ begin
     R_DrawLightSingleThread(@dlbuffer[i]);
 end;
 
+//==============================================================================
+//
+// R_DrawLightMultiThread
+//
+//==============================================================================
 procedure R_DrawLightMultiThread(const psl: Pdlsortitem_t; const threadid, numlthreads: integer);
 begin
   if psl.vis <> nil then
     R_DrawVisLight(psl, threadid, numlthreads);
 end;
 
+//==============================================================================
+//
+// _DrawLightsMultiThread_thr
+//
+//==============================================================================
 function _DrawLightsMultiThread_thr(p: iterator_p): integer; stdcall;
 var
   i: integer;
@@ -932,6 +1046,11 @@ begin
   result := 0;
 end;
 
+//==============================================================================
+//
+// R_DrawLightsMultiThread
+//
+//==============================================================================
 procedure R_DrawLightsMultiThread;
 begin
   R_SetUpLightEffects;

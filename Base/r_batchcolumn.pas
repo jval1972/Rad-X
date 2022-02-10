@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -39,34 +39,151 @@ uses
   m_fixed,
   r_main;
 
+//==============================================================================
+// R_DrawColumnMedium_Batch
+//
 // Batch column drawers
+//
+//==============================================================================
 procedure R_DrawColumnMedium_Batch;
+
+//==============================================================================
+//
+// R_DrawColumnHi_Batch
+//
+//==============================================================================
 procedure R_DrawColumnHi_Batch;
 {$IFNDEF STRIFE}
+
+//==============================================================================
+//
+// R_DrawFuzzColumn_Batch
+//
+//==============================================================================
 procedure R_DrawFuzzColumn_Batch;
+
+//==============================================================================
+//
+// R_DrawFuzzColumn32_Batch
+//
+//==============================================================================
 procedure R_DrawFuzzColumn32_Batch;
+
+//==============================================================================
+//
+// R_DrawFuzzColumnHi_Batch
+//
+//==============================================================================
 procedure R_DrawFuzzColumnHi_Batch;
 {$ENDIF}
+
+//==============================================================================
+//
+// R_DrawTranslatedColumn_Batch
+//
+//==============================================================================
 procedure R_DrawTranslatedColumn_Batch;
+
+//==============================================================================
+//
+// R_DrawTranslatedColumnHi_Batch
+//
+//==============================================================================
 procedure R_DrawTranslatedColumnHi_Batch;
 {$IFDEF DOOM_OR_STRIFE}
+
+//==============================================================================
+//
+// R_DrawColumnAverageMedium_Batch
+//
+//==============================================================================
 procedure R_DrawColumnAverageMedium_Batch;
 {$ENDIF}
+
+//==============================================================================
+//
+// R_DrawColumnAverageHi_Batch
+//
+//==============================================================================
 procedure R_DrawColumnAverageHi_Batch;
 {$IFDEF DOOM_OR_STRIFE}
+
+//==============================================================================
+//
+// R_DrawColumnAlphaMedium_Batch
+//
+//==============================================================================
 procedure R_DrawColumnAlphaMedium_Batch;
 {$ENDIF}
+
+//==============================================================================
+//
+// R_DrawColumnAlphaHi_Batch
+//
+//==============================================================================
 procedure R_DrawColumnAlphaHi_Batch;
+
+//==============================================================================
+//
+// R_DrawWhiteLightColumnHi_Batch
+//
+//==============================================================================
 procedure R_DrawWhiteLightColumnHi_Batch;
+
+//==============================================================================
+//
+// R_DrawRedLightColumnHi_Batch
+//
+//==============================================================================
 procedure R_DrawRedLightColumnHi_Batch;
+
+//==============================================================================
+//
+// R_DrawGreenLightColumnHi_Batch
+//
+//==============================================================================
 procedure R_DrawGreenLightColumnHi_Batch;
+
+//==============================================================================
+//
+// R_DrawBlueLightColumnHi_Batch
+//
+//==============================================================================
 procedure R_DrawBlueLightColumnHi_Batch;
+
+//==============================================================================
+//
+// R_DrawYellowLightColumnHi_Batch
+//
+//==============================================================================
 procedure R_DrawYellowLightColumnHi_Batch;
 
+//==============================================================================
+//
+// R_DrawColumnAddMedium_Batch
+//
+//==============================================================================
 procedure R_DrawColumnAddMedium_Batch;
+
+//==============================================================================
+//
+// R_DrawColumnAddHi_Batch
+//
+//==============================================================================
 procedure R_DrawColumnAddHi_Batch;
 
+//==============================================================================
+//
+// R_DrawColumnSubtractMedium_Batch
+//
+//==============================================================================
 procedure R_DrawColumnSubtractMedium_Batch;
+
+//==============================================================================
+//
+// R_DrawColumnSubtractHi_Batch
+//
+//==============================================================================
 procedure R_DrawColumnSubtractHi_Batch;
 
 var
@@ -90,6 +207,11 @@ uses
   r_hires,
   v_video;
 
+//==============================================================================
+//
+// R_DrawColumnMedium_Batch
+//
+//==============================================================================
 procedure R_DrawColumnMedium_Batch;
 var
   count: integer;
@@ -885,6 +1007,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawColumnHi_Batch
+//
+//==============================================================================
 procedure R_DrawColumnHi_Batch;
 var
   count: integer;
@@ -1057,6 +1184,12 @@ begin
 end;
 
 {$IFNDEF STRIFE}
+
+//==============================================================================
+//
+// R_DrawFuzzColumn_Batch
+//
+//==============================================================================
 procedure R_DrawFuzzColumn_Batch;
 var
   count: integer;
@@ -1107,6 +1240,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawFuzzColumn32_Batch
+//
+//==============================================================================
 procedure R_DrawFuzzColumn32_Batch;
 var
   count: integer;
@@ -1157,6 +1295,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawFuzzColumnHi_Batch
+//
+//==============================================================================
 procedure R_DrawFuzzColumnHi_Batch;
 var
   count: integer;
@@ -1210,7 +1353,11 @@ begin
 end;
 {$ENDIF}
 
-
+//==============================================================================
+//
+// R_DrawTranslatedColumn_Batch
+//
+//==============================================================================
 procedure R_DrawTranslatedColumn_Batch;
 var
   count: integer;
@@ -1259,6 +1406,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawTranslatedColumnHi_Batch
+//
+//==============================================================================
 procedure R_DrawTranslatedColumnHi_Batch;
 var
   count: integer;
@@ -1309,6 +1461,12 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 
 {$IFDEF DOOM_OR_STRIFE}
+
+//==============================================================================
+//
+// R_DrawColumnAverageMedium_Batch
+//
+//==============================================================================
 procedure R_DrawColumnAverageMedium_Batch;
 var
   count: integer;
@@ -1363,6 +1521,11 @@ begin
 end;
 {$ENDIF}
 
+//==============================================================================
+//
+// R_DrawColumnAverageHi_Batch
+//
+//==============================================================================
 procedure R_DrawColumnAverageHi_Batch;
 var
   count: integer;
@@ -1422,6 +1585,12 @@ begin
 end;
 
 {$IFDEF DOOM_OR_STRIFE}
+
+//==============================================================================
+//
+// R_DrawColumnAlphaMedium_Batch
+//
+//==============================================================================
 procedure R_DrawColumnAlphaMedium_Batch;
 var
   count: integer;
@@ -1470,13 +1639,17 @@ begin
       dec(cnt);
     end;
 
-
     inc(dest, swidth);
     inc(frac, fracstep);
   end;
 end;
 {$ENDIF}
 
+//==============================================================================
+//
+// R_DrawColumnAlphaHi_Batch
+//
+//==============================================================================
 procedure R_DrawColumnAlphaHi_Batch;
 var
   count: integer;
@@ -1547,32 +1720,61 @@ begin
   end;
 end;
 
-
+//==============================================================================
+//
+// R_DrawWhiteLightColumnHi_Batch
+//
+//==============================================================================
 procedure R_DrawWhiteLightColumnHi_Batch;
 {$DEFINE WHITE}
 {$I R_DrawLightColumnHi_Batch.inc}
 {$UNDEF WHITE}
 
+//==============================================================================
+//
+// R_DrawRedLightColumnHi_Batch
+//
+//==============================================================================
 procedure R_DrawRedLightColumnHi_Batch;
 {$DEFINE RED}
 {$I R_DrawLightColumnHi_Batch.inc}
 {$UNDEF RED}
 
+//==============================================================================
+//
+// R_DrawGreenLightColumnHi_Batch
+//
+//==============================================================================
 procedure R_DrawGreenLightColumnHi_Batch;
 {$DEFINE GREEN}
 {$I R_DrawLightColumnHi_Batch.inc}
 {$UNDEF GREEN}
 
+//==============================================================================
+//
+// R_DrawBlueLightColumnHi_Batch
+//
+//==============================================================================
 procedure R_DrawBlueLightColumnHi_Batch;
 {$DEFINE BLUE}
 {$I R_DrawLightColumnHi_Batch.inc}
 {$UNDEF BLUE}
 
+//==============================================================================
+//
+// R_DrawYellowLightColumnHi_Batch
+//
+//==============================================================================
 procedure R_DrawYellowLightColumnHi_Batch;
 {$DEFINE YELLOW}
 {$I R_DrawLightColumnHi_Batch.inc}
 {$UNDEF YELLOW}
 
+//==============================================================================
+//
+// R_DrawColumnAddMedium_Batch
+//
+//==============================================================================
 procedure R_DrawColumnAddMedium_Batch;
 var
   count: integer;
@@ -1621,12 +1823,16 @@ begin
       dec(cnt);
     end;
 
-
     inc(dest, swidth);
     inc(frac, fracstep);
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawColumnAddHi_Batch
+//
+//==============================================================================
 procedure R_DrawColumnAddHi_Batch;
 var
   count: integer;
@@ -1705,6 +1911,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawColumnSubtractMedium_Batch
+//
+//==============================================================================
 procedure R_DrawColumnSubtractMedium_Batch;
 var
   count: integer;
@@ -1753,12 +1964,16 @@ begin
       dec(cnt);
     end;
 
-
     inc(dest, swidth);
     inc(frac, fracstep);
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawColumnSubtractHi_Batch
+//
+//==============================================================================
 procedure R_DrawColumnSubtractHi_Batch;
 var
   count: integer;

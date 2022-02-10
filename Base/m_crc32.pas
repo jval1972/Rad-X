@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -75,11 +75,32 @@ var
     $BDBDF21C, $CABAC28A, $53B39330, $24B4A3A6, $BAD03605, $CDD70693, $54DE5729, $23D967BF,
     $B3667A2E, $C4614AB8, $5D681B02, $2A6F2B94, $B40BBE37, $C30C8EA1, $5A05DF1B, $2D02EF8D);
 
+//==============================================================================
+//
+// GetCRC32
+//
+//==============================================================================
 function GetCRC32(const FileName: string): string;
 
+//==============================================================================
+//
+// GetLumpCRC32
+//
+//==============================================================================
 function GetLumpCRC32(const LumpName: string): string; overload;
+
+//==============================================================================
+//
+// GetLumpCRC32
+//
+//==============================================================================
 function GetLumpCRC32(const LumpNum: integer): string; overload;
 
+//==============================================================================
+//
+// GetBufCRC32
+//
+//==============================================================================
 function GetBufCRC32(const buf: pointer; const sz: integer): string;
 
 implementation
@@ -88,11 +109,21 @@ uses
   w_wad,
   z_zone;
 
+//==============================================================================
+//
+// RecountCRC
+//
+//==============================================================================
 function RecountCRC(b: byte; CrcOld: Longword): Longword;
 begin
   RecountCRC := FixedCRCTable[byte(CrcOld xor Longword(b))] xor ((CrcOld shr 8) and $00FFFFFF)
 end;
 
+//==============================================================================
+//
+// HextW
+//
+//==============================================================================
 function HextW(w: Word): string;
 const
   h: array[0..15] of Char = '0123456789abcdef';
@@ -100,12 +131,22 @@ begin
   result := h[Hi(w) shr 4] + h[Hi(w) and $F] + h[Lo(w) shr 4] + h[Lo(w) and $F];
 end;
 
+//==============================================================================
+//
+// HextL
+//
+//==============================================================================
 function HextL(l: Longint): string;
 begin
   with Long(l) do
     result := HextW(HiWord) + HextW(LoWord);
 end;
 
+//==============================================================================
+//
+// GetCRC32
+//
+//==============================================================================
 function GetCRC32(const FileName: string): string;
 var
   Buffer: PChar;
@@ -140,11 +181,21 @@ begin
   Result := HextL(CRC);
 end;
 
+//==============================================================================
+//
+// GetLumpCRC32
+//
+//==============================================================================
 function GetLumpCRC32(const LumpName: string): string;
 begin
   result := GetLumpCRC32(W_CheckNumForName(LumpName));
 end;
 
+//==============================================================================
+//
+// GetLumpCRC32
+//
+//==============================================================================
 function GetLumpCRC32(const LumpNum: integer): string; overload;
 var
   b: PByteArray;
@@ -166,6 +217,11 @@ begin
   result := HextL(CRC);
 end;
 
+//==============================================================================
+//
+// GetBufCRC32
+//
+//==============================================================================
 function GetBufCRC32(const buf: pointer; const sz: integer): string;
 var
   b: PByteArray;

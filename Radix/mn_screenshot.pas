@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -47,8 +47,18 @@ var
   mn_screenshotbuffer: menuscreenbuffer_t;
   mn_makescreenshot: boolean = false;
 
+//==============================================================================
+//
+// MN_ScreenShotFromBlitBuffer
+//
+//==============================================================================
 procedure MN_ScreenShotFromBlitBuffer;
 
+//==============================================================================
+//
+// MN_ScreenShotFromSaveGame
+//
+//==============================================================================
 procedure MN_ScreenShotFromSaveGame(const path: string; const outbuff: Pmenuscreenbuffer_t);
 
 implementation
@@ -64,6 +74,11 @@ uses
   r_draw,
   v_video;
 
+//==============================================================================
+//
+// MN_ScreenShotFromBlitBuffer
+//
+//==============================================================================
 procedure MN_ScreenShotFromBlitBuffer;
 var
   x, y: integer;
@@ -100,6 +115,11 @@ begin
   mn_makescreenshot := false;
 end;
 
+//==============================================================================
+//
+// MN_ScreenShotFromSaveGame
+//
+//==============================================================================
 procedure MN_ScreenShotFromSaveGame(const path: string; const outbuff: Pmenuscreenbuffer_t);
 var
   f: TFile;

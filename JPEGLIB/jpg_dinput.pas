@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -53,6 +53,12 @@ uses
   This is called only once, when the decompression object is created. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jinit_input_controller 
+//
+//==============================================================================
 procedure jinit_input_controller (cinfo: j_decompress_ptr);
 
 implementation
@@ -71,16 +77,25 @@ type
     inheaders: boolean;    { TRUE until first SOS is reached }
   end; {my_input_controller;}
 
-
-
 { Forward declarations }
 {METHODDEF}
-function consume_markers (cinfo: j_decompress_ptr): int; far; forward;
 
+//==============================================================================
+//
+// consume_markers 
+//
+//==============================================================================
+function consume_markers (cinfo: j_decompress_ptr): int; far; forward;
 
 { Routines to calculate various quantities related to the size of the image. }
 
 {LOCAL}
+
+//==============================================================================
+//
+// initial_setup 
+//
+//==============================================================================
 procedure initial_setup (cinfo: j_decompress_ptr);
 { Called once, when first SOS marker is reached }
 var
@@ -170,8 +185,13 @@ begin
     cinfo^.inputctl^.has_multiple_scans := FALSE;
 end;
 
-
 {LOCAL}
+
+//==============================================================================
+//
+// per_scan_setup 
+//
+//==============================================================================
 procedure per_scan_setup (cinfo: j_decompress_ptr);
 { Do computations that are needed before processing a JPEG scan }
 { cinfo^.comps_in_scan and cinfo^.cur_comp_info[] were set from SOS marker }
@@ -257,7 +277,6 @@ begin
   end;
 end;
 
-
 { Save away a copy of the Q-table referenced by each component present
   in the current scan, unless already saved during a prior scan.
 
@@ -278,6 +297,12 @@ end;
   not at the current Q-table slots. }
 
 {LOCAL}
+
+//==============================================================================
+//
+// latch_quant_tables 
+//
+//==============================================================================
 procedure latch_quant_tables (cinfo: j_decompress_ptr);
 var
   ci, qtblno: int;
@@ -304,13 +329,18 @@ begin
   end;
 end;
 
-
 { Initialize the input modules to read a scan of compressed data.
   The first call to this is done by jdmaster.c after initializing
   the entire decompressor (during jpeg_start_decompress).
   Subsequent calls come from consume_markers, below. }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// start_input_pass 
+//
+//==============================================================================
 procedure start_input_pass (cinfo: j_decompress_ptr); far;
 begin
   per_scan_setup(cinfo);
@@ -320,17 +350,21 @@ begin
   cinfo^.inputctl^.consume_input := cinfo^.coef^.consume_data;
 end;
 
-
 { Finish up after inputting a compressed-data scan.
   This is called by the coefficient controller after it's read all
   the expected data of the scan. }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// finish_input_pass 
+//
+//==============================================================================
 procedure finish_input_pass (cinfo: j_decompress_ptr); far;
 begin
   cinfo^.inputctl^.consume_input := consume_markers;
 end;
-
 
 { Read JPEG markers before, between, or after compressed-data scans.
   Change state as necessary when a new scan is reached.
@@ -341,6 +375,12 @@ end;
   we are reading a compressed data segment or inter-segment markers. }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// consume_markers 
+//
+//==============================================================================
 function consume_markers (cinfo: j_decompress_ptr): int;
 var
   val: int;
@@ -397,10 +437,15 @@ begin
   consume_markers := val;
 end;
 
-
 { Reset state to begin a fresh datastream. }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// reset_input_controller 
+//
+//==============================================================================
 procedure reset_input_controller (cinfo: j_decompress_ptr); far;
 var
   inputctl: my_inputctl_ptr;
@@ -418,11 +463,16 @@ begin
   cinfo^.coef_bits := nil;
 end;
 
-
 { Initialize the input controller module.
   This is called only once, when the decompression object is created. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jinit_input_controller 
+//
+//==============================================================================
 procedure jinit_input_controller (cinfo: j_decompress_ptr);
 var
   inputctl: my_inputctl_ptr;

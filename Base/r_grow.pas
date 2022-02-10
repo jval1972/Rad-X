@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -36,10 +36,25 @@ uses
   r_cache_flats,
   r_hires;
 
+//==============================================================================
+//
+// R_GrowSpan64to128
+//
+//==============================================================================
 procedure R_GrowSpan64to128(const p: Pds32cacheinfo_t);
 
+//==============================================================================
+//
+// R_GrowSpan64to256
+//
+//==============================================================================
 procedure R_GrowSpan64to256(const p: Pds32cacheinfo_t);
 
+//==============================================================================
+//
+// R_GrowSpan64to512
+//
+//==============================================================================
 procedure R_GrowSpan64to512(const p: Pds32cacheinfo_t);
 
 var
@@ -47,6 +62,11 @@ var
   spanpixels_down: array[0..4095] of integer;
   spanpixels_leftdown: array[0..4095] of integer;
 
+//==============================================================================
+//
+// R_InitSpanTables
+//
+//==============================================================================
 procedure R_InitSpanTables;
 
 implementation
@@ -56,6 +76,11 @@ uses
   m_fixed,
   r_span;
 
+//==============================================================================
+//
+// R_GrowSpan64to128
+//
+//==============================================================================
 procedure R_GrowSpan64to128(const p: Pds32cacheinfo_t);
 var
   i: integer;
@@ -90,6 +115,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_GrowSpan64to256
+//
+//==============================================================================
 procedure R_GrowSpan64to256(const p: Pds32cacheinfo_t);
 var
   i: integer;
@@ -136,11 +166,14 @@ begin
   end;
 end;
 
+//==============================================================================
+// R_GrowSpan64to512
 //
 // JVAL
 //
 // For extreme flat filtering, slow
 //
+//==============================================================================
 procedure R_GrowSpan64to512(const p: Pds32cacheinfo_t);
 var
   i: integer;
@@ -187,9 +220,12 @@ begin
   end;
 end;
 
+//==============================================================================
 //
 // R_ExpandColumn
 // Asuming factor < DC_HIRESFACTOR
+//
+//==============================================================================
 procedure R_ExpandColumn(const dc32: Pdc32_t; const factor: integer);
 var
   i, j: integer;
@@ -203,9 +239,11 @@ begin
   end;
 end;
 
+//==============================================================================
 //
 // R_InitSpanTables
 //
+//==============================================================================
 procedure R_InitSpanTables;
 var
   i: integer;

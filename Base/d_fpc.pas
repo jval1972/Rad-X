@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -96,17 +96,36 @@ type
   end;
   PImageOptionalHeader = ^TImageOptionalHeader;
 
-
+//==============================================================================
+//
+// GetEnvironmentVariable
+//
+//==============================================================================
 function GetEnvironmentVariable(lpName: PChar; lpBuffer: PChar; nSize: DWORD): DWORD; stdcall;
 
+//==============================================================================
+//
+// AllocMemSize
+//
+//==============================================================================
 function AllocMemSize: integer;
 
 {$ENDIF}
 implementation
 {$IFDEF FPC}
 
+//==============================================================================
+//
+// GetEnvironmentVariable
+//
+//==============================================================================
 function GetEnvironmentVariable(lpName: PChar; lpBuffer: PChar; nSize: DWORD): DWORD; stdcall; external 'kernel32.dll' name 'GetEnvironmentVariableA';
 
+//==============================================================================
+//
+// AllocMemSize
+//
+//==============================================================================
 function AllocMemSize: integer;
 begin
   result := 0;

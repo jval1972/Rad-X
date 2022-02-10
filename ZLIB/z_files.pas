@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -113,26 +113,60 @@ type
     reserved : Longint;   // reserved for future use
   end;
 
+//==============================================================================
+//
+// inflate
+//
+//==============================================================================
 function inflate(var strm: TZStreamRec; flush: Integer): Integer;
 
+//==============================================================================
+//
+// inflateInit2_
+//
+//==============================================================================
 function inflateInit2_(var strm: TZStreamRec; windowBits: Integer;
   version: PChar; recsize: Integer): Integer;
 
+//==============================================================================
+//
+// deflateInit_
+//
+//==============================================================================
 function deflateInit_(var strm: TZStreamRec; level: Integer; version: PChar;
   recsize: Integer): Integer;
 
+//==============================================================================
+//
+// deflate
+//
+//==============================================================================
 function deflate(var strm: TZStreamRec; flush: Integer): Integer;
 
+//==============================================================================
+//
+// deflateEnd
+//
+//==============================================================================
 function deflateEnd(var strm: TZStreamRec): Integer;
 
+//==============================================================================
+//
+// inflateInit_
+//
+//==============================================================================
 function inflateInit_(var strm: TZStreamRec; version: PChar;
   recsize: Integer): Integer;
 
+//==============================================================================
+//
+// inflateEnd
+//
+//==============================================================================
 function inflateEnd(var strm: TZStreamRec): Integer;
 
 const
   ZLIB_VERSION = '1.2.8';
-
 
 implementation
 
@@ -174,49 +208,115 @@ const
   );
 
 {** c function implementations **********************************************}
+
+//==============================================================================
+//
+// zcalloc
+//
+//==============================================================================
 function zcalloc(opaque: Pointer; items, size: Integer): Pointer;
 begin
   GetMem(result, items * size);
 end;
 
+//==============================================================================
+//
+// zcfree
+//
+//==============================================================================
 procedure zcfree(opaque, block: Pointer);
 begin
   FreeMem(block);
 end;
 
+//==============================================================================
+//
+// memcpy
+//
+//==============================================================================
 procedure memcpy(dest, source: Pointer; count: Integer); cdecl;
 begin
   d_delphi.memcpy(dest, source, count);
 end;
 
+//==============================================================================
+//
+// memset
+//
+//==============================================================================
 function memset(p: Pointer; b: Byte; count: Integer): pointer; cdecl;
 begin
   d_delphi.memset(p, b, count);
   Result := p;
 end;
 
+//==============================================================================
+//
+// inflate
+//
+//==============================================================================
 function inflate(var strm: TZStreamRec; flush: Integer): Integer; external;
 
+//==============================================================================
+//
+// inflateInit2_
+//
+//==============================================================================
 function inflateInit2_(var strm: TZStreamRec; windowBits: Integer;
   version: PChar; recsize: Integer): Integer; external;
 
+//==============================================================================
+//
+// deflateInit_
+//
+//==============================================================================
 function deflateInit_(var strm: TZStreamRec; level: Integer; version: PChar;
   recsize: Integer): Integer; external;
 
+//==============================================================================
+//
+// deflate
+//
+//==============================================================================
 function deflate(var strm: TZStreamRec; flush: Integer): Integer; external;
 
+//==============================================================================
+//
+// deflateEnd
+//
+//==============================================================================
 function deflateEnd(var strm: TZStreamRec): Integer; external;
 
+//==============================================================================
+//
+// inflateInit_
+//
+//==============================================================================
 function inflateInit_(var strm: TZStreamRec; version: PChar;
   recsize: Integer): Integer; external;
 
+//==============================================================================
+//
+// inflateEnd
+//
+//==============================================================================
 function inflateEnd(var strm: TZStreamRec): Integer; external;
 
+//==============================================================================
+//
+// InflateInit2
+//
+//==============================================================================
 function InflateInit2(var stream: TZStreamRec; windowBits: Integer): Integer;
 begin
   result := inflateInit2_(stream, windowBits, ZLIB_VERSION, SizeOf(TZStreamRec));
 end;
 
+//==============================================================================
+//
+// ZDecompress2
+//
+//==============================================================================
 procedure ZDecompress2(const inBuffer: Pointer; const inSize: Integer;
   const outSize: Integer; out outBuffer: Pointer);
 var
@@ -234,7 +334,6 @@ begin
   outBuffer := malloc(outSize);
 
   CheckErr(InflateInit2(zstream, -15));
-
 
   zstream.next_in := inBuffer;
   zstream.avail_in := inSize;
@@ -288,6 +387,11 @@ begin
   Inherited Destroy;
 end;
 
+//==============================================================================
+//
+// TZipFile.GetZipFileData
+//
+//==============================================================================
 function TZipFile.GetZipFileData(const Index: integer; var p: pointer;
   var size: integer): boolean;
 var
@@ -325,6 +429,11 @@ begin
     result := false;
 end;
 
+//==============================================================================
+//
+// TZipFile.GetZipFileData
+//
+//==============================================================================
 function TZipFile.GetZipFileData(const Name: string; var p: pointer;
   var size: integer): boolean;
 var
@@ -338,11 +447,21 @@ begin
   result := GetZipFileData(fFiles.IndexOf(Name2), p, size);
 end;
 
+//==============================================================================
+//
+// TZipFile.GetFile
+//
+//==============================================================================
 function TZipFile.GetFile(Index: Integer): string;
 begin
   result := fFiles[Index];
 end;
 
+//==============================================================================
+//
+// TZipFile.Load
+//
+//==============================================================================
 procedure TZipFile.Load;
 var
   h: TZipFileHeader;
@@ -381,6 +500,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TZipFile.Clear
+//
+//==============================================================================
 procedure TZipFile.Clear;
 var
   i: integer;
@@ -391,6 +515,11 @@ begin
   f.Free;
 end;
 
+//==============================================================================
+//
+// TZipFile.SetFileName
+//
+//==============================================================================
 procedure TZipFile.SetFileName(const Value: string);
 begin
   if fFileName <> Value then
@@ -400,12 +529,23 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TZipFile.GetFileCount
+//
+//==============================================================================
 function TZipFile.GetFileCount: integer;
 begin
   result := fFiles.Count;
 end;
 
 {$ifndef WIN64}
+
+//==============================================================================
+//
+// _llmod
+//
+//==============================================================================
 procedure _llmod;
 asm
   jmp System.@_llmod;

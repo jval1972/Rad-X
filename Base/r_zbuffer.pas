@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -61,25 +61,70 @@ var
   Zspans: array[0..MAXHEIGHT] of zbuffer_t;
   Zcolumns: array[0..MAXWIDTH] of zbuffer_t;
 
+//==============================================================================
+//
+// R_DrawSpanToZBuffer
+//
+//==============================================================================
 procedure R_DrawSpanToZBuffer;
 
+//==============================================================================
+//
+// R_DrawSlopeToZBuffer
+//
+//==============================================================================
 procedure R_DrawSlopeToZBuffer;
 
+//==============================================================================
+//
+// R_DrawColumnToZBuffer
+//
+//==============================================================================
 procedure R_DrawColumnToZBuffer;
 
+//==============================================================================
+// R_ZBufferAt
+//
 // Returns the z buffer value at (x, y) or screen
 // Lower value means far away
 // no z-buffer is sky (or render glitch) - we do not write o zbuffer in skycolfunc
+//
+//==============================================================================
 function R_ZBufferAt(const x, y: integer): Pzbufferitem_t;
 
+//==============================================================================
+//
+// R_ZBufferAtSeg
+//
+//==============================================================================
 function R_ZBufferAtSeg(const x, y: integer): Pzbufferitem_t;
 
+//==============================================================================
+//
+// R_InitZBuffer
+//
+//==============================================================================
 procedure R_InitZBuffer;
 
+//==============================================================================
+//
+// R_ShutDownZBuffer
+//
+//==============================================================================
 procedure R_ShutDownZBuffer;
 
+//==============================================================================
+//
+// R_StartZBuffer
+//
+//==============================================================================
 procedure R_StartZBuffer;
 
+//==============================================================================
+//
+// R_StopZBuffer
+//
+//==============================================================================
 procedure R_StopZBuffer;
 
 var
@@ -98,6 +143,11 @@ uses
   r_plane,
   r_main;
 
+//==============================================================================
+//
+// R_NewZBufferItem
+//
+//==============================================================================
 function R_NewZBufferItem(const Z: Pzbuffer_t): Pzbufferitem_t;
 const
   GROWSTEP = 4;
@@ -111,6 +161,11 @@ begin
   inc(Z.numitems);
 end;
 
+//==============================================================================
+//
+// R_DrawSpanToZBuffer
+//
+//==============================================================================
 procedure R_DrawSpanToZBuffer;
 var
   item: Pzbufferitem_t;
@@ -139,6 +194,11 @@ begin
   item.stop := ds_x2;
 end;
 
+//==============================================================================
+//
+// R_DrawSlopeToZBuffer
+//
+//==============================================================================
 procedure R_DrawSlopeToZBuffer;
 var
   item: Pzbufferitem_t;
@@ -169,6 +229,11 @@ begin
   item.stop := ds_x2;
 end;
 
+//==============================================================================
+//
+// R_DrawColumnToZBuffer
+//
+//==============================================================================
 procedure R_DrawColumnToZBuffer;
 var
   item: Pzbufferitem_t;
@@ -201,6 +266,11 @@ var
     seg: nil;
   );
 
+//==============================================================================
+//
+// R_ZBufferAt
+//
+//==============================================================================
 function R_ZBufferAt(const x, y: integer): Pzbufferitem_t;
 var
   Z: Pzbuffer_t;
@@ -245,6 +315,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_ZBufferAtSeg
+//
+//==============================================================================
 function R_ZBufferAtSeg(const x, y: integer): Pzbufferitem_t;
 var
   Z: Pzbuffer_t;
@@ -272,12 +347,22 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_InitZBuffer
+//
+//==============================================================================
 procedure R_InitZBuffer;
 begin
   ZeroMemory(@Zspans, SizeOf(Zspans));
   ZeroMemory(@Zcolumns, SizeOf(Zcolumns));
 end;
 
+//==============================================================================
+//
+// R_ShutDownZBuffer
+//
+//==============================================================================
 procedure R_ShutDownZBuffer;
 var
   i: integer;
@@ -299,10 +384,20 @@ begin
     end;
 end;
 
+//==============================================================================
+//
+// R_StartZBuffer
+//
+//==============================================================================
 procedure R_StartZBuffer;
 begin
 end;
 
+//==============================================================================
+//
+// R_StopZBuffer
+//
+//==============================================================================
 procedure R_StopZBuffer;
 var
   i: integer;

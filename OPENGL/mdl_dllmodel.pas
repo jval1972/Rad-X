@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -114,6 +114,11 @@ begin
       LoadFrom(additionalframes.Strings[i]);
 end;
 
+//==============================================================================
+//
+// TDLLModel.LoadFrom
+//
+//==============================================================================
 procedure TDLLModel.LoadFrom(const libname: string);
 var
   handle: LongWord;
@@ -155,6 +160,11 @@ begin
   Inherited;
 end;
 
+//==============================================================================
+//
+// TDLLModel.Draw
+//
+//==============================================================================
 procedure TDLLModel.Draw(const frm1, frm2: integer; const offset: float);
 var
   i: integer;
@@ -171,6 +181,11 @@ begin
   glPopMatrix;
 end;
 
+//==============================================================================
+//
+// TDLLModel.DrawSimple
+//
+//==============================================================================
 procedure TDLLModel.DrawSimple(const frm: integer);
 begin
   Draw(frm, frm, 0.0);

@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -31,14 +31,39 @@ unit gl_frustum;
 
 interface
 
+//==============================================================================
+//
+// fr_CalculateFrustum
+//
+//==============================================================================
 procedure fr_CalculateFrustum;
 
+//==============================================================================
+//
+// fr_PointInFrustum
+//
+//==============================================================================
 function fr_PointInFrustum(X, Y, Z: single): boolean;
 
+//==============================================================================
+//
+// fr_SphereInFrustum
+//
+//==============================================================================
 function fr_SphereInFrustum(X, Y, Z, Radius: single): boolean;
 
+//==============================================================================
+//
+// fr_CubeInFrustum
+//
+//==============================================================================
 function fr_CubeInFrustum(X, Y, Z, Size: single): boolean;
 
+//==============================================================================
+//
+// fr_BoxInFrustum
+//
+//==============================================================================
 function fr_BoxInFrustum(X, Y, Z, sizeX, sizeY, sizeZ: single): boolean;
 
 implementation
@@ -60,10 +85,15 @@ const
   BACK    = 4;  // The BACK   side of the frustum
   FRONT   = 5;  // The FRONT  side of the frustum
 
-
 {------------------------------------------------------------------}
 {--- This normalizes a plane (A side) from a given frustum.     ---}
 {------------------------------------------------------------------}
+
+//==============================================================================
+//
+// NormalizeFrustum
+//
+//==============================================================================
 procedure NormalizeFrustum(side: integer);
 var
   magnitude: single;
@@ -77,11 +107,16 @@ begin
   frustum[side][3] := frustum[side][3] / magnitude;
 end;
 
-
 { TFrustum }
 
 {---------------------------------------------------------------------}
 {---------------------------------------------------------------------}
+
+//==============================================================================
+//
+// fr_CalculateFrustum
+//
+//==============================================================================
 procedure fr_CalculateFrustum;
 var
   proj, modl, clip: array[0..15] of single;
@@ -174,10 +209,15 @@ begin
   NormalizeFrustum(FRONT);
 end;
 
-
 {----------------------------------------------------------------}
 {--- This determines if a point is inside of the view frustum ---}
 {----------------------------------------------------------------}
+
+//==============================================================================
+//
+// fr_PointInFrustum
+//
+//==============================================================================
 function fr_PointInFrustum(X, Y, Z: single): boolean;
 var
   i: integer;
@@ -195,10 +235,15 @@ begin
   result := true;
 end;
 
-
 {----------------------------------------------------------------}
 {--- This determines if a sphere is inside our view frustum   ---}
 {----------------------------------------------------------------}
+
+//==============================================================================
+//
+// fr_SphereInFrustum
+//
+//==============================================================================
 function fr_SphereInFrustum(X, Y, Z, Radius: single): boolean;
 var
   i: integer;
@@ -215,11 +260,16 @@ begin
   result := true;
 end;
 
-
 {----------------------------------------------------------------}
 {--- This determines if a BOX is in or around our view        ---}
 {--- frustum by it's min and max points                       ---}
 {----------------------------------------------------------------}
+
+//==============================================================================
+//
+// fr_BoxInFrustum
+//
+//==============================================================================
 function fr_BoxInFrustum(X, Y, Z, sizeX, sizeY, sizeZ: single): boolean;
 var
   i: integer;
@@ -252,11 +302,16 @@ begin
   result := true;
 end;
 
-
 {----------------------------------------------------------------}
 {---    This determines if a cube is in or around our view    ---}
 {---    frustum by using it's center and 1/2 it's length      ---}
 {----------------------------------------------------------------}
+
+//==============================================================================
+//
+// fr_CubeInFrustum
+//
+//==============================================================================
 function fr_CubeInFrustum(X, Y, Z, Size: single): boolean;
 var
   i: integer;
@@ -289,5 +344,4 @@ begin
 end;
 
 end.
-
 

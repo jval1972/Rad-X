@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -38,25 +38,65 @@ uses
 // Needs access to LFB (guess what).
   v_video;
 
+//==============================================================================
+//
+// R_VideoErase
+//
+//==============================================================================
 procedure R_VideoErase(const ofs: integer; const count: integer);
 
+//==============================================================================
+//
+// R_VideoBlanc
+//
+//==============================================================================
 procedure R_VideoBlanc(const scn: integer; const ofs: integer; const count: integer; const black: byte = 0);
 
+//==============================================================================
+//
+// R_PlayerViewBlanc
+//
+//==============================================================================
 procedure R_PlayerViewBlanc(const black: byte);
 
+//==============================================================================
+//
+// R_InitBuffer
+//
+//==============================================================================
 procedure R_InitBuffer(width, height: integer);
 
+//==============================================================================
+// R_InitTranslationTables
+//
 // Initialize color translation tables,
 //  for player rendering etc.
+//
+//==============================================================================
 procedure R_InitTranslationTables;
 
+//==============================================================================
+// R_FillBackScreen
+//
 // Rendering function.
+//
+//==============================================================================
 procedure R_FillBackScreen;
 
+//==============================================================================
+// R_DrawViewBorder
+//
 // If the view size is not full screen, draws a border around it.
+//
+//==============================================================================
 procedure R_DrawViewBorder;
 
+//==============================================================================
+// R_DrawDiskBusy
+//
 // Draw disk busy patch
+//
+//==============================================================================
 procedure R_DrawDiskBusy;
 
 var
@@ -135,6 +175,7 @@ uses
 {$ENDIF}
   v_data;
 
+//==============================================================================
 //
 // R_InitTranslationTables
 // Creates the translation tables to map
@@ -142,6 +183,7 @@ uses
 // Assumes a given structure of the PLAYPAL.
 // Could be read from a lump instead.
 //
+//==============================================================================
 procedure R_InitTranslationTables;
 var
   i, j: integer;
@@ -190,6 +232,7 @@ begin
 
 end;
 
+//==============================================================================
 //
 // R_InitBuffer
 // Creats lookup tables that avoid
@@ -197,6 +240,7 @@ end;
 //  for getting the framebuffer address
 //  of a pixel to draw.
 //
+//==============================================================================
 procedure R_InitBuffer(width, height: integer);
 var
   i: integer;
@@ -234,6 +278,11 @@ begin
 {$ENDIF}
 end;
 
+//==============================================================================
+//
+// R_ScreenBlanc
+//
+//==============================================================================
 procedure R_ScreenBlanc(const scn: integer; const black: byte = 0);
 var
   x, i: integer;
@@ -246,12 +295,14 @@ begin
   end;
 end;
 
+//==============================================================================
 //
 // R_FillBackScreen
 // Fills the back screen with a pattern
 //  for variable screen sizes
 // Also draws a beveled edge.
 //
+//==============================================================================
 procedure R_FillBackScreen;
 var
 {$IFNDEF OPENGL}
@@ -382,9 +433,12 @@ begin
 {$ENDIF}
 end;
 
+//==============================================================================
+// R_VideoErase
 //
 // Copy a screen buffer.
 //
+//==============================================================================
 procedure R_VideoErase(const ofs: integer; const count: integer);
 var
   i: integer;
@@ -415,6 +469,11 @@ begin
 {$ENDIF}
 end;
 
+//==============================================================================
+//
+// R_VideoBlanc
+//
+//==============================================================================
 procedure R_VideoBlanc(const scn: integer; const ofs: integer; const count: integer; const black: byte = 0);
 var
   start: PByte;
@@ -439,16 +498,23 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_PlayerViewBlanc
+//
+//==============================================================================
 procedure R_PlayerViewBlanc(const black: byte);
 begin
   R_ScreenBlanc(SCN_FG, black);
 end;
 
+//==============================================================================
 //
 // R_DrawViewBorder
 // Draws the border around the view
 //  for different size windows?
 //
+//==============================================================================
 procedure R_DrawViewBorder;
 begin
   if scaledviewwidth < SCREENWIDTH then
@@ -460,6 +526,11 @@ var
   disklump: integer = -2;
   diskpatch: Ppatch_t = nil;
 
+//==============================================================================
+//
+// R_DrawDiskBusy
+//
+//==============================================================================
 procedure R_DrawDiskBusy;
 begin
   {$IFDEF OPENGL}

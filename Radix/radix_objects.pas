@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -38,18 +38,53 @@ uses
   m_fixed,
   p_mobj_h;
 
+//==============================================================================
+//
+// RX_SpawnRadixBigExplosion
+//
+//==============================================================================
 function RX_SpawnRadixBigExplosion(const x, y, z: fixed_t): Pmobj_t;
 
+//==============================================================================
+//
+// RX_SpawnRadixSmallExplosion
+//
+//==============================================================================
 function RX_SpawnRadixSmallExplosion(const x, y, z: fixed_t): Pmobj_t;
 
+//==============================================================================
+//
+// PX_SpawnWallMissileObject
+//
+//==============================================================================
 function PX_SpawnWallMissileObject(const x, y, z: fixed_t): Pmobj_t;
 
+//==============================================================================
+//
+// RX_SpawnRadixEnemyMissile
+//
+//==============================================================================
 function RX_SpawnRadixEnemyMissile(const x, y, z: fixed_t): Pmobj_t;
 
+//==============================================================================
+//
+// RX_SpawnRadixEnemySeekerMissile
+//
+//==============================================================================
 function RX_SpawnRadixEnemySeekerMissile(const x, y, z: fixed_t): Pmobj_t;
 
+//==============================================================================
+//
+// RX_SpawnRadixBigSmoke
+//
+//==============================================================================
 function RX_SpawnRadixBigSmoke(const x, y, z: fixed_t): Pmobj_t;
 
+//==============================================================================
+//
+// RX_SpawnAlienBlood
+//
+//==============================================================================
 procedure RX_SpawnAlienBlood(x, y, z: fixed_t);
 
 implementation
@@ -63,6 +98,11 @@ uses
 var
   radixbigexposion_id: integer = -1;
 
+//==============================================================================
+//
+// RX_SpawnRadixBigExplosion
+//
+//==============================================================================
 function RX_SpawnRadixBigExplosion(const x, y, z: fixed_t): Pmobj_t;
 begin
   if radixbigexposion_id < 0 then
@@ -74,6 +114,11 @@ end;
 var
   radixsmallexplosion_id: integer = -1;
 
+//==============================================================================
+//
+// RX_SpawnRadixSmallExplosion
+//
+//==============================================================================
 function RX_SpawnRadixSmallExplosion(const x, y, z: fixed_t): Pmobj_t;
 begin
   if radixsmallexplosion_id < 0 then
@@ -85,6 +130,11 @@ end;
 var
   wallmissile_id: integer = -1;
 
+//==============================================================================
+//
+// PX_SpawnWallMissileObject
+//
+//==============================================================================
 function PX_SpawnWallMissileObject(const x, y, z: fixed_t): Pmobj_t;
 begin
   if wallmissile_id < 0 then
@@ -96,6 +146,11 @@ end;
 var
   radixenemymissile_id: integer = -1;
 
+//==============================================================================
+//
+// RX_SpawnRadixEnemyMissile
+//
+//==============================================================================
 function RX_SpawnRadixEnemyMissile(const x, y, z: fixed_t): Pmobj_t;
 begin
   if radixenemymissile_id < 0 then
@@ -107,6 +162,11 @@ end;
 var
   radixenemyseekermissile_id: integer = -1;
 
+//==============================================================================
+//
+// RX_SpawnRadixEnemySeekerMissile
+//
+//==============================================================================
 function RX_SpawnRadixEnemySeekerMissile(const x, y, z: fixed_t): Pmobj_t;
 begin
   if radixenemyseekermissile_id < 0 then
@@ -118,6 +178,11 @@ end;
 var
   radixbigsmoke_id: integer = -1;
 
+//==============================================================================
+//
+// RX_SpawnRadixBigSmoke
+//
+//==============================================================================
 function RX_SpawnRadixBigSmoke(const x, y, z: fixed_t): Pmobj_t;
 begin
   if radixbigsmoke_id < 0 then
@@ -129,6 +194,11 @@ end;
 var
   radixalienblood_id: integer = -1;
 
+//==============================================================================
+//
+// RX_SpawnAlienBlood
+//
+//==============================================================================
 procedure RX_SpawnAlienBlood(x, y, z: fixed_t);
 var
   th: Pmobj_t;

@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -142,15 +142,40 @@ const
     (name: 'SndSplash'; duration: -1)
   );
 
+//==============================================================================
+//
+// S_AmbientSound
+//
+//==============================================================================
 function S_AmbientSound(const x, y: integer; const sndname: string): Pmobj_t;
 
+//==============================================================================
+//
+// S_AmbientSoundFV
+//
+//==============================================================================
 function S_AmbientSoundFV(const x, y: integer; const sndname: string): Pmobj_t;
 
+//==============================================================================
+// S_RadixSoundDuration
+//
 // Returns duration of sound in tics
+//
+//==============================================================================
 function S_RadixSoundDuration(const radix_snd: integer): integer;
 
+//==============================================================================
+//
+// A_AmbientSound
+//
+//==============================================================================
 procedure A_AmbientSound(actor: Pmobj_t);
 
+//==============================================================================
+//
+// A_AmbientSoundFV
+//
+//==============================================================================
 procedure A_AmbientSoundFV(actor: Pmobj_t);
 
 implementation
@@ -173,6 +198,11 @@ var
 const
   STR_AMBIENTSOUND = 'AMBIENTSOUND';
 
+//==============================================================================
+//
+// S_AmbientSound
+//
+//==============================================================================
 function S_AmbientSound(const x, y: integer; const sndname: string): Pmobj_t;
 begin
   if m_ambient = -1 then
@@ -188,6 +218,11 @@ begin
   S_StartSound(result, sndname);
 end;
 
+//==============================================================================
+//
+// S_AmbientSoundFV
+//
+//==============================================================================
 function S_AmbientSoundFV(const x, y: integer; const sndname: string): Pmobj_t;
 begin
   if m_ambient = -1 then
@@ -206,6 +241,11 @@ end;
 type
   char4_t = packed array[0..3] of char;
 
+//==============================================================================
+//
+// char4tostring
+//
+//==============================================================================
 function char4tostring(const c4: char4_t): string;
 var
   i: integer;
@@ -219,6 +259,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// S_GetWaveLength
+//
+//==============================================================================
 function S_GetWaveLength(const wavename: string): integer;
 var
   groupID: char4_t;
@@ -290,7 +335,12 @@ begin
   Z_ChangeTag(p, PU_CACHE);
 end;
 
+//==============================================================================
+// S_RadixSoundDuration
+//
 // Returns duration of sound in tics
+//
+//==============================================================================
 function S_RadixSoundDuration(const radix_snd: integer): integer;
 begin
   if (radix_snd < Ord(sfx_SndScrape)) or (radix_snd >= Ord(sfx_NumRadixSnd)) then
@@ -307,6 +357,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// A_AmbientSound
+//
+//==============================================================================
 procedure A_AmbientSound(actor: Pmobj_t);
 var
   dx, dy: fixed_t;
@@ -325,6 +380,11 @@ begin
     S_AmbientSound(actor.x + dx, actor.y + dy, snd);
 end;
 
+//==============================================================================
+//
+// A_AmbientSoundFV
+//
+//==============================================================================
 procedure A_AmbientSoundFV(actor: Pmobj_t);
 var
   dx, dy: fixed_t;

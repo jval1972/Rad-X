@@ -60,6 +60,11 @@ var
   mobjinfo: PmobjinfoArray_t = nil;
   nummobjtypes: integer = Ord(DO_NUMMOBJTYPES);
 
+//==============================================================================
+//
+// Info_Init
+//
+//==============================================================================
 procedure Info_Init(const usethinkers: boolean);
 
 const
@@ -11516,7 +11521,6 @@ const
     flags_ex: 0;              // flags_ex
    )                          // S_DOGS_RAISE6
 
-
   );
 
 const // Doom Original mobjinfo
@@ -17472,6 +17476,11 @@ const // Doom Original mobjinfo
 
   );
 
+//==============================================================================
+//
+// Info_Init
+//
+//==============================================================================
 procedure Info_Init(const usethinkers: boolean);
 var
   i: integer;

@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -224,6 +224,11 @@ begin
   inherited Create;
 end;
 
+//==============================================================================
+//
+// TScriptEvents.Clear
+//
+//==============================================================================
 procedure TScriptEvents.Clear;
 begin
   fProcActorDied.Code := nil;
@@ -238,6 +243,11 @@ begin
   fProcMapStart.Code := nil;
 end;
 
+//==============================================================================
+//
+// TScriptEvents.LinkEvents
+//
+//==============================================================================
 procedure TScriptEvents.LinkEvents;
 begin
   fProcActorDied := fExec.GetProcAsMethodN('ONACTORDIED');
@@ -252,6 +262,11 @@ begin
   fProcMapStart := fExec.GetProcAsMethodN('ONMAPSTART');
 end;
 
+//==============================================================================
+//
+// TScriptEvents.RunProc
+//
+//==============================================================================
 procedure TScriptEvents.RunProc(const aProc: TMethod; const aParams: array of Integer);
 var
   ExceptionProc: TPSProcRec;
@@ -283,51 +298,101 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TScriptEvents.ProcActorDied
+//
+//==============================================================================
 procedure TScriptEvents.ProcActorDied(actor: LongWord; killer: LongWord);
 begin
   RunProc(fProcActorDied, [actor, killer]);
 end;
 
+//==============================================================================
+//
+// TScriptEvents.ProcPlayerEnter
+//
+//==============================================================================
 procedure TScriptEvents.ProcPlayerEnter(playerNO: Integer);
 begin
   RunProc(fProcPlayerEnter, [playerNO]);
 end;
 
+//==============================================================================
+//
+// TScriptEvents.ProcPlayerDied
+//
+//==============================================================================
 procedure TScriptEvents.ProcPlayerDied(playerNO: Integer; killer: LongWord);
 begin
   RunProc(fProcPlayerDied, [playerNO, killer]);
 end;
 
+//==============================================================================
+//
+// TScriptEvents.ProcCrossLine
+//
+//==============================================================================
 procedure TScriptEvents.ProcCrossLine(actor: LongWord; line: Integer; oldside: Integer);
 begin
   RunProc(fProcCrossLine, [actor, line, oldside]);
 end;
 
+//==============================================================================
+//
+// TScriptEvents.ProcShootLine
+//
+//==============================================================================
 procedure TScriptEvents.ProcShootLine(actor: LongWord; line: Integer; oldside: Integer);
 begin
   RunProc(fProcShootLine, [actor, line, oldside]);
 end;
 
+//==============================================================================
+//
+// TScriptEvents.ProcUseLine
+//
+//==============================================================================
 procedure TScriptEvents.ProcUseLine(actor: LongWord; line: Integer; oldside: Integer);
 begin
   RunProc(fProcUseLine, [actor, line, oldside]);
 end;
 
+//==============================================================================
+//
+// TScriptEvents.ProcTick
+//
+//==============================================================================
 procedure TScriptEvents.ProcTick(tick: Integer);
 begin
   RunProc(fProcTick, [tick]);
 end;
 
+//==============================================================================
+//
+// TScriptEvents.ProcTimerEverySecond
+//
+//==============================================================================
 procedure TScriptEvents.ProcTimerEverySecond(second: Integer);
 begin
   RunProc(fProcTimerEverySecond, [second]);
 end;
 
+//==============================================================================
+//
+// TScriptEvents.ProcTimerEveryMinute
+//
+//==============================================================================
 procedure TScriptEvents.ProcTimerEveryMinute(minute: Integer);
 begin
   RunProc(fProcTimerEveryMinute, [minute]);
 end;
 
+//==============================================================================
+//
+// TScriptEvents.ProcMapStart
+//
+//==============================================================================
 procedure TScriptEvents.ProcMapStart;
 begin
   RunProc(fProcMapStart, []);

@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -54,6 +54,11 @@ interface
 uses
   mp3_Shared;
 
+//==============================================================================
+//
+// InvMDCT
+//
+//==============================================================================
 procedure InvMDCT(input: PSingleArray; output: PSingleArray; block_type: Integer);
 
 implementation
@@ -120,6 +125,11 @@ const
      -1.5350360518E-01, -1.3758624925E-01, -1.2103922149E-01, -2.0710679058E-01,
      -8.4752577594E-02, -6.4157525656E-02, -4.1131172614E-02, -1.4790705759E-02));
 
+//==============================================================================
+//
+// InvMDCT
+//
+//==============================================================================
 procedure InvMDCT(input: PSingleArray; output: PSingleArray; block_type: Integer);
 var tmp: array[0..17] of Single;
     win_bt: PSingleArray;

@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -44,14 +44,34 @@ uses
   p_mobj_h,
   r_defs;
 
+//==============================================================================
+//
+// P_GetMapName
+//
+//==============================================================================
 function P_GetMapName(const episode, map: integer): string;
 
+//==============================================================================
+// P_SetupLevel
+//
 // NOT called by W_Ticker. Fixme.
+//
+//==============================================================================
 procedure P_SetupLevel(episode, map, playermask: integer; skill: skill_t);
 
+//==============================================================================
+// P_Init
+//
 // Called by startup code.
+//
+//==============================================================================
 procedure P_Init;
 
+//==============================================================================
+//
+// P_ShutDown
+//
+//==============================================================================
 procedure P_ShutDown;
 
 var
@@ -140,6 +160,11 @@ var
 
   playerstarts: array[0..MAXPLAYERS - 1] of mapthing_t;
 
+//==============================================================================
+//
+// P_GameValidThing
+//
+//==============================================================================
 function P_GameValidThing(const doomdnum: integer): boolean;
 
 var
@@ -213,9 +238,11 @@ var
   glmapnum: integer;
 {$ENDIF}
 
+//==============================================================================
 //
 // P_LoadVertexes
 //
+//==============================================================================
 procedure P_LoadVertexes(lump: integer);
 var
   data: pointer;
@@ -279,6 +306,11 @@ end;
 var
   firstglvert: integer;
 
+//==============================================================================
+//
+// P_GLLoadVertexes
+//
+//==============================================================================
 procedure P_GLLoadVertexes(lump, gllump: integer);
 var
   data: pointer;
@@ -349,6 +381,11 @@ begin
   gld_GetGLVertexes(li, gllump, numglverts, glnodesver);
 end;
 
+//==============================================================================
+//
+// GetDistance
+//
+//==============================================================================
 function GetDistance(dx, dy: integer): float;
 var
   fx, fy: float;
@@ -359,9 +396,11 @@ begin
 end;
 {$ENDIF}
 
+//==============================================================================
 //
 // P_LoadSegs
 //
+//==============================================================================
 procedure P_LoadSegs(lump: integer);
 var
   data: pointer;
@@ -420,6 +459,12 @@ begin
 end;
 
 {$IFDEF OPENGL}
+
+//==============================================================================
+//
+// CheckGLVertex
+//
+//==============================================================================
 function CheckGLVertex(num: integer): integer;
 begin
   if glnodesver <= 3 then
@@ -449,6 +494,11 @@ begin
   result := num;
 end;
 
+//==============================================================================
+//
+// GetOffset
+//
+//==============================================================================
 function GetOffset(v1, v2: Pvertex_t): fixed_t;
 var
   a, b: single;
@@ -458,9 +508,11 @@ begin
   result := round(sqrt(a * a + b * b) * FRACUNIT);
 end;
 
+//==============================================================================
 //
 // P_LoadGLSegs
 //
+//==============================================================================
 procedure P_LoadGLSegs(lump: integer);
 var
   data: pointer;
@@ -602,9 +654,11 @@ begin
 end;
 {$ENDIF}
 
+//==============================================================================
 //
 // P_LoadSubsectors
 //
+//==============================================================================
 procedure P_LoadSubsectors(lump: integer);
 var
   data: pointer;
@@ -632,6 +686,12 @@ begin
 end;
 
 {$IFDEF OPENGL}
+
+//==============================================================================
+//
+// P_LoadSubsectorsV3V5
+//
+//==============================================================================
 procedure P_LoadSubsectorsV3V5(lump: integer);
 var
   data: pointer;
@@ -665,9 +725,11 @@ begin
 end;
 {$ENDIF}
 
+//==============================================================================
 //
 // P_LoadSectors
 //
+//==============================================================================
 procedure P_LoadSectors(lump: integer);
 var
   data: pointer;
@@ -744,9 +806,11 @@ begin
   Z_Free(data);
 end;
 
+//==============================================================================
 //
 // P_LoadNodes
 //
+//==============================================================================
 procedure P_LoadNodes(lump: integer);
 var
   data: pointer;
@@ -791,6 +855,12 @@ begin
 end;
 
 {$IFDEF OPENGL}
+
+//==============================================================================
+//
+// P_LoadNodesV4V5
+//
+//==============================================================================
 procedure P_LoadNodesV4V5(lump: integer);
 var
   data: pointer;
@@ -827,6 +897,11 @@ begin
 end;
 {$ENDIF}
 
+//==============================================================================
+//
+// P_GameValidThing
+//
+//==============================================================================
 function P_GameValidThing(const doomdnum: integer): boolean;
 begin
   // Don't spawn DoomBuilder 3D Editing mode camera
@@ -843,6 +918,11 @@ begin
   result := true;
 end;
 
+//==============================================================================
+//
+// P_DontDrawDuplicateThings
+//
+//==============================================================================
 procedure P_DontDrawDuplicateThings(const _type: integer);
 var
   i, j, count: integer;
@@ -883,10 +963,11 @@ begin
   Z_Free(mobjs);
 end;
 
-
+//==============================================================================
 //
 // P_LoadThings
 //
+//==============================================================================
 procedure P_LoadThings(lump, lumpextra: integer);
 var
   data: pointer;
@@ -969,13 +1050,14 @@ begin
     Z_Free(extradata);
 end;
 
+//==============================================================================
 //
 // JVAL: Changed for compatibility with DelphiDoom ver 0.8
-
 //
 // P_LoadLineDefs
 // Also counts secret lines for intermissions.
 //
+//==============================================================================
 procedure P_LoadLineDefs(lump: integer);
 var
   data: pointer;
@@ -1071,9 +1153,11 @@ begin
   Z_Free (data);
 end;
 
+//==============================================================================
 //
 // P_LoadSideDefs
 //
+//==============================================================================
 procedure P_LoadSideDefs(lump: integer);
 var
   data: pointer;
@@ -1133,11 +1217,13 @@ type
   linelist_tPArray = array[0..$FFFF] of Plinelist_t;
   Plinelist_tPArray = ^linelist_tPArray;
 
+//==============================================================================
+// AddBlockLine
 //
 // Subroutine to add a line number to a block list
 // It simply returns if the line is already in the block
 //
-
+//==============================================================================
 procedure AddBlockLine(lists: Plinelist_tPArray; count: PIntegerArray; done: PIntegerArray;
   blockno: integer; lineno: integer);
 var
@@ -1154,6 +1240,8 @@ begin
   done[blockno] := 1;
 end;
 
+//==============================================================================
+// P_CreateBlockMap
 //
 // Actually construct the blockmap lump from the level data
 //
@@ -1161,7 +1249,7 @@ end;
 // row lines at the left and bottom of each blockmap cell. It then
 // adds the line to all block lists touching the intersection.
 //
-
+//==============================================================================
 procedure P_CreateBlockMap;
 var
   xorg, yorg: integer;            // blockmap origin (lower left)
@@ -1296,7 +1384,6 @@ begin
     bx := _SHR(x2 - xorg, blkshift);
     by := _SHR(y2 - yorg, blkshift);
     AddBlockLine(blocklists, blockcount, blockdone, by * ncols + bx, i);
-
 
     // For each column, see where the line along its left edge, which
     // it contains, intersects the Linedef i. Add i to each corresponding
@@ -1475,9 +1562,11 @@ begin
   memfree(pointer(blockdone), NBlocks * SizeOf(integer));
 end;
 
+//==============================================================================
 //
 // P_LoadBlockMap
 //
+//==============================================================================
 procedure P_LoadBlockMap(lump: integer);
 var
   count: integer;
@@ -1497,11 +1586,13 @@ begin
   ZeroMemory(blocklinks, count);
 end;
 
+//==============================================================================
 //
 // P_GroupLines
 // Builds sector line lists and subsector sector numbers.
 // Finds block bounding boxes for sectors.
 //
+//==============================================================================
 procedure P_GroupLines;
 var
   linebuffer: Pline_tPArray; // pointer to an array of pointers Pline_t
@@ -1625,7 +1716,6 @@ begin
     inc(sector);
   end;
 
-
   li := @lines[0];
   for i := 0 to numlines - 1 do
   begin
@@ -1652,12 +1742,19 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// P_GetMapName
+//
+//==============================================================================
 function P_GetMapName(const episode, map: integer): string;
 begin
   // find map name
   sprintf(result, 'E%dM%d', [episode, map]);
 end;
 
+//==============================================================================
+// P_RemoveSlimeTrails
 //
 // killough 10/98
 //
@@ -1703,7 +1800,7 @@ end;
 //
 // Firelines (TM) is a Rezistered Trademark of MBF Productions
 //
-
+//==============================================================================
 procedure P_RemoveSlimeTrails;  // killough 10/98
 var
   hit: PByteArray;
@@ -1753,6 +1850,11 @@ begin
   memfree(pointer(hit), numvertexes);
 end;
 
+//==============================================================================
+//
+// P_RadixLump
+//
+//==============================================================================
 function P_RadixLump(const lumpnum: integer; const lumpname: string): integer;
 begin
   result := -1;
@@ -1762,10 +1864,12 @@ begin
     result := lumpnum;
 end;
 
+//==============================================================================
 //
 // P_LoadGrid
 // JVAL: 20200303 - Load radix grid from RGRID lump
 //
+//==============================================================================
 procedure P_LoadGrid(lump: integer);
 var
   data: Pradixgridinfo_t;
@@ -1781,10 +1885,12 @@ begin
   Z_Free(data);
 end;
 
+//==============================================================================
 //
 // P_LoadMapGrid
 // JVAL: 20200429 - Load grid to map convertion matrix
 //
+//==============================================================================
 procedure P_LoadMapGrid(lump: integer);
 var
   data: Pradixmappointsgrid_t;
@@ -1800,10 +1906,12 @@ begin
   Z_Free(data);
 end;
 
+//==============================================================================
 //
 // P_LoadRadixSprites
 // JVAL: 20200303 - Load radix sprites/actions from RSPRITE lump
 //
+//==============================================================================
 procedure P_LoadRadixSprites(lump: integer);
 var
   i: integer;
@@ -1836,10 +1944,12 @@ begin
   end;
 end;
 
+//==============================================================================
 //
 // P_LoadRadixTriggers
 // JVAL: 20200303 - Load radix triggers from RTRIGGER lump
 //
+//==============================================================================
 procedure P_LoadRadixTriggers(lump: integer);
 begin
   if lump = -1 then
@@ -1853,9 +1963,11 @@ begin
   numradixtriggers := W_LumpLength(lump) div SizeOf(radixtrigger_t);
 end;
 
+//==============================================================================
 //
 // P_SetupLevel
 //
+//==============================================================================
 procedure P_SetupLevel(episode, map, playermask: integer; skill: skill_t);
 var
   i: integer;
@@ -2011,7 +2123,6 @@ begin
   rejectmatrixsize := W_LumpLength(lumpnum + Ord(ML_REJECT));
   P_GroupLines;
 
-
   {$IFNDEF OPENGL}levelhas3dfloors := {$ENDIF}P_3dFloorSetupSegs{$IFNDEF OPENGL} > 0{$ENDIF}; // JVAL: 3d Floors
 
   P_RemoveSlimeTrails;    // killough 10/98: remove slime trails from wad
@@ -2113,9 +2224,11 @@ begin
   R_SetInterpolateSkipTicks(2);
 end;
 
+//==============================================================================
 //
 // P_Init
 //
+//==============================================================================
 procedure P_Init;
 begin
   P_InitSwitchList;
@@ -2128,6 +2241,11 @@ begin
   C_AddCmd('doadjustmissingtextures', @P_AdjustMissingTextures);
 end;
 
+//==============================================================================
+//
+// P_ShutDown
+//
+//==============================================================================
 procedure P_ShutDown;
 begin
   P_ShutDownAnimations;

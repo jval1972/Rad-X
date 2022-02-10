@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -46,8 +46,18 @@ type
     next: Plevelinfo_t;
   end;
 
+//==============================================================================
+//
+// P_GetLevelInfo
+//
+//==============================================================================
 function P_GetLevelInfo(const levelname: string): Plevelinfo_t;
 
+//==============================================================================
+//
+// P_LevelInfoChangeMusic
+//
+//==============================================================================
 procedure P_LevelInfoChangeMusic;
 
 implementation
@@ -63,6 +73,11 @@ uses
 var
   levelinfo: Plevelinfo_t;
 
+//==============================================================================
+//
+// P_GetLevelInfo
+//
+//==============================================================================
 function P_GetLevelInfo(const levelname: string): Plevelinfo_t;
 var
   check: string;
@@ -85,6 +100,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// P_LevelInfoChangeMusic
+//
+//==============================================================================
 procedure P_LevelInfoChangeMusic;
 var
   linfo: Plevelinfo_t;

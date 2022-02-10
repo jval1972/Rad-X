@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -31,10 +31,25 @@ unit gl_ambient;
 
 interface
 
+//==============================================================================
+//
+// gld_InitAmbient
+//
+//==============================================================================
 procedure gld_InitAmbient;
 
+//==============================================================================
+//
+// gld_AmbientDone
+//
+//==============================================================================
 procedure gld_AmbientDone;
 
+//==============================================================================
+//
+// gld_AmbientExecute
+//
+//==============================================================================
 procedure gld_AmbientExecute;
 
 implementation
@@ -54,6 +69,11 @@ var
   ambient_tex: PTexture;
   tex: GLUint;
 
+//==============================================================================
+//
+// gld_AmbientExecute
+//
+//==============================================================================
 procedure gld_AmbientExecute;
 var
   x, y: integer;
@@ -107,6 +127,11 @@ begin
 
 end;
 
+//==============================================================================
+//
+// gld_InitAmbient
+//
+//==============================================================================
 procedure gld_InitAmbient;
 begin
   xstep := SCREENWIDTH / (AMBIENTPRECISION - 1);
@@ -117,6 +142,11 @@ begin
   tex := gld_LoadExternalTexture(ambient_tex, True, GL_CLAMP);
 end;
 
+//==============================================================================
+//
+// gld_AmbientDone
+//
+//==============================================================================
 procedure gld_AmbientDone;
 begin
   glDeleteTextures(1, @tex);

@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -35,8 +35,18 @@ unit m_hash;
 
 interface
 
+//==============================================================================
+//
+// M_HashIndex
+//
+//==============================================================================
 function M_HashIndex(const s: string): integer;
 
+//==============================================================================
+//
+// M_HashUpdate
+//
+//==============================================================================
 procedure M_HashUpdate(const s: string; const idx: integer);
 
 implementation
@@ -67,6 +77,11 @@ begin
   ZeroMemory(@htable, SizeOf(htable));
 end;
 
+//==============================================================================
+//
+// TSDBMHash.Hash
+//
+//==============================================================================
 function TSDBMHash.Hash(const s: string): LongWord;
 var
   i: integer;
@@ -77,16 +92,31 @@ begin
   Result := Result and (SDBMHASHSIZE - 1);
 end;
 
+//==============================================================================
+//
+// TSDBMHash.GetHashIndex
+//
+//==============================================================================
 function TSDBMHash.GetHashIndex(const h: integer): integer;
 begin
   result := htable[h];
 end;
 
+//==============================================================================
+//
+// TSDBMHash.SetHashIndex
+//
+//==============================================================================
 procedure TSDBMHash.SetHashIndex(const h: integer; const idx: integer);
 begin
   htable[h] := idx;
 end;
 
+//==============================================================================
+//
+// M_HashIndex
+//
+//==============================================================================
 function M_HashIndex(const s: string): integer;
 var
   h: integer;
@@ -95,6 +125,11 @@ begin
   Result := globalhashmanager.htable[h];
 end;
 
+//==============================================================================
+//
+// M_HashUpdate
+//
+//==============================================================================
 procedure M_HashUpdate(const s: string; const idx: integer);
 var
   h: integer;

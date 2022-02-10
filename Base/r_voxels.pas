@@ -62,10 +62,25 @@ type
     property radius: fixed_t read fradius;
   end;
 
+//==============================================================================
+//
+// R_InitVoxels
+//
+//==============================================================================
 procedure R_InitVoxels;
 
+//==============================================================================
+//
+// R_VoxelsDone
+//
+//==============================================================================
 procedure R_VoxelsDone;
 
+//==============================================================================
+//
+// R_DrawVoxel
+//
+//==============================================================================
 procedure R_DrawVoxel(const vis: Pvissprite_t);
 
 implementation
@@ -160,11 +175,13 @@ type
     r, g, b: Byte;
   end;
 
+//==============================================================================
 //
 // JVAL
 // R_VoxelColumnFromBuffer()
 // Create a vertical column from a voxelbuffer
 //
+//==============================================================================
 function R_VoxelColumnFromBuffer(const buf: voxelbuffer2D_p; const size: integer; const mip: integer): voxelcolumn_p;
 var
   i, j: integer;
@@ -334,6 +351,11 @@ begin
 
 end;
 
+//==============================================================================
+//
+// R_ClearVoxelBuffer
+//
+//==============================================================================
 procedure R_ClearVoxelBuffer(const voxelbuffer: voxelbuffer_p; const voxelsize: integer);
 var
   xx, yy, zz: integer;
@@ -367,6 +389,11 @@ type
   end;
   mt_struct1_p = ^mt_struct1_t;
 
+//==============================================================================
+//
+// _mt_prepare_optimize_voxel_buffer
+//
+//==============================================================================
 function _mt_prepare_optimize_voxel_buffer(r: mt_struct1_p): integer; stdcall;
 var
   xx, yy, zz: integer;
@@ -391,6 +418,11 @@ begin
   result := 0;
 end;
 
+//==============================================================================
+//
+// R_OptimizeVoxelBuffer
+//
+//==============================================================================
 procedure R_OptimizeVoxelBuffer(const voxelbuffer: voxelbuffer_p; const voxelsize: integer);
 var
   xx, yy, zz: integer;
@@ -443,6 +475,11 @@ begin
 
 end;
 
+//==============================================================================
+//
+// _mt_prepare_voxel_columns
+//
+//==============================================================================
 function _mt_prepare_voxel_columns(r: mt_struct1_p): integer; stdcall;
 var
   xx, yy, zz: integer;
@@ -467,6 +504,11 @@ begin
   result := 0;
 end;
 
+//==============================================================================
+//
+// R_PrepareVoxelColumns
+//
+//==============================================================================
 procedure R_PrepareVoxelColumns(const voxelbuffer: voxelbuffer_p; const voxelsize: integer);
 var
   xx, yy, zz: integer;
@@ -521,6 +563,11 @@ type
   distancetable_t = array[0..$1FFF] of distancetableitem_t;
   distancetable_p = ^distancetable_t;
 
+//==============================================================================
+//
+// R_QSortDistanceTable
+//
+//==============================================================================
 procedure R_QSortDistanceTable(const A: distancetable_p; const len: Integer);
 
   procedure qsorttbl(l, r: Integer);
@@ -558,6 +605,11 @@ begin
     qsorttbl(0, len - 1);
 end;
 
+//==============================================================================
+//
+// R_CreateVoxelMipSortOrderAngle
+//
+//==============================================================================
 function R_CreateVoxelMipSortOrderAngle(const mip: voxelmip_p; const an: integer): boolean;
 var
   i: integer;
@@ -638,6 +690,11 @@ begin
   result := true;
 end;
 
+//==============================================================================
+//
+// R_CreateVoxelMipSortOrder
+//
+//==============================================================================
 procedure R_CreateVoxelMipSortOrder(const mip: voxelmip_p);
 var
   i: integer;
@@ -649,6 +706,11 @@ begin
     R_CreateVoxelMipSortOrderAngle(mip, i);
 end;
 
+//==============================================================================
+//
+// R_VoxelColumnsFromBuffer
+//
+//==============================================================================
 function R_VoxelColumnsFromBuffer(const voxelbuffer: voxelbuffer_p; const voxelsize: integer; const offset, scale: fixed_t): voxelcolumns_p;
 var
   xx, yy, zz: integer;
@@ -931,6 +993,11 @@ begin
   memfree(Pointer(vbuf), SizeOf(voxelbuffer2D_t));
 end;
 
+//==============================================================================
+//
+// SwapRGB
+//
+//==============================================================================
 function SwapRGB(const c: LongWord): LongWord;
 var
   r, g, b: byte;
@@ -941,6 +1008,11 @@ begin
   result := b shl 16 + g shl 8 + r;
 end;
 
+//==============================================================================
+//
+// R_LoadDDVOX
+//
+//==============================================================================
 function R_LoadDDVOX(const fname: string; const offset, scale: fixed_t): voxelcolumns_p;
 var
   buf: TDStringList;
@@ -1017,6 +1089,11 @@ type
   ddmeshitem_a = array[0..$FFF] of ddmeshitem_t;
   ddmeshitem_pa = ^ddmeshitem_a;
 
+//==============================================================================
+//
+// R_LoadDDMESH
+//
+//==============================================================================
 function R_LoadDDMESH(const fname: string; const offset, scale: fixed_t): voxelcolumns_p;
 var
   strm: TPakStream;
@@ -1087,7 +1164,6 @@ begin
   result := R_VoxelColumnsFromBuffer(voxelbuffer, voxelsize, offset, scale);
 end;
 
-
 const
   MAXKVXSIZE = 256;
 
@@ -1104,6 +1180,11 @@ type
   end;
   kvxslab_p = ^kvxslab_t;
 
+//==============================================================================
+//
+// R_LoadKVX
+//
+//==============================================================================
 function R_LoadKVX(const fn: string; const offset, scale: fixed_t): voxelcolumns_p;
 var
   strm: TDStream;
@@ -1297,7 +1378,6 @@ begin
         if kvxbuffer[xx - x1, yy - y1, zz - z1] <> $FFFF then
           voxelbuffer[xx, zz, voxelsize - yy - 1].color := pal[kvxbuffer[xx - x1, yy - y1, zz - z1]];
 
-
   R_OptimizeVoxelBuffer(voxelbuffer, voxelsize);
   R_PrepareVoxelColumns(voxelbuffer, voxelsize);
   result := R_VoxelColumnsFromBuffer(voxelbuffer, voxelsize, offset, scale);
@@ -1309,10 +1389,12 @@ begin
   memfree(pointer(voxdata), voxdatasize);
 end;
 
+//==============================================================================
 //
 // R_LoadSlab6VOX
 // JVAL 20191004 Support for slab6 VOX files
 //
+//==============================================================================
 function R_LoadSlab6VOX(const fn: string; const offset, scale: fixed_t): voxelcolumns_p;
 var
   strm: TDStream;
@@ -1489,6 +1571,11 @@ begin
   frames.Free;
 end;
 
+//==============================================================================
+//
+// VX_RotatePoint
+//
+//==============================================================================
 procedure VX_RotatePoint(x: Pfixed_t; y: Pfixed_t; a: angle_t);
 var
   tmpx: fixed_t;
@@ -1512,6 +1599,11 @@ var
   vx_ceilingclip: fixed_t;
   vx_floorclip: fixed_t;
 
+//==============================================================================
+//
+// R_InitVoxels
+//
+//==============================================================================
 procedure R_InitVoxels;
 var
   size: integer;
@@ -1522,11 +1614,21 @@ begin
   memfree(pointer(vx_membuffer), size);
 end;
 
+//==============================================================================
+//
+// R_VoxelsDone
+//
+//==============================================================================
 procedure R_VoxelsDone;
 begin
   VX_VoxelsDone;
 end;
 
+//==============================================================================
+//
+// R_DrawThingVoxel
+//
+//==============================================================================
 procedure R_DrawThingVoxel(const thing: Pmobj_t; const vidx: integer; const depth: LongWord;
   const renderflags: LongWord);
 var
@@ -1652,7 +1754,6 @@ begin
     else
       mip := @clms.mips[2];
 
-
     {$IFDEF HERETIC}
     if (thing.flags2 and MF2_FEETARECLIPPED <> 0) and (thing.z <= Psubsector_t(thing.subsector).sector.floorheight) then
       footclip := 10 * FRACUNIT
@@ -1742,7 +1843,6 @@ begin
 
       a_x[3] := c_x_acos2 - c_y_asin2 + t_x;
       a_y[3] := c_x_asin2 + c_y_acos2 + t_y;
-
 
       tz := FixedMul(a_x[0], viewcos) + FixedMul(a_y[0], viewsin);
       if tz < MINZ then
@@ -2002,6 +2102,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawThingVoxels
+//
+//==============================================================================
 procedure R_DrawThingVoxels(const thing: Pmobj_t; const depth: LongWord;
   const renderflags: LongWord);
 var
@@ -2011,6 +2116,11 @@ begin
     R_DrawThingVoxel(thing, thing.state.voxels.Numbers[i], depth, renderflags);
 end;
 
+//==============================================================================
+//
+// R_DrawVoxel
+//
+//==============================================================================
 procedure R_DrawVoxel(const vis: Pvissprite_t);
 var
   i: integer;
@@ -2120,7 +2230,6 @@ begin
       end;
     end;
   end;
-
 
   {$IFDEF DOOM_OR_STRIFE}
   // killough 3/27/98:

@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -45,8 +45,19 @@ uses
   r_defs;
 
 {$IFNDEF OPENGL}
+
+//==============================================================================
+//
+// R_RenderMaskedSegRange
+//
+//==============================================================================
 procedure R_RenderMaskedSegRange(const ds: Pdrawseg_t; const x1, x2: integer);
 
+//==============================================================================
+//
+// R_StoreWallRange
+//
+//==============================================================================
 procedure R_StoreWallRange(const start: integer; const stop: integer);
 {$ENDIF}
 
@@ -101,7 +112,6 @@ var
   bottomstep: fixed_t;
 {$ENDIF}
 
-
 {$IFNDEF OPENGL}
 var
   maskedtexturecol: PSmallIntArray; // JVAL: declared in r_defs
@@ -127,9 +137,20 @@ var
   midwallcolfunc: PProcedure;
 {$ENDIF}
 
+//==============================================================================
+//
+// R_NewDrawSeg
+//
+//==============================================================================
 function R_NewDrawSeg: Pdrawseg_t;
 
 {$IFNDEF OPENGL}
+
+//==============================================================================
+//
+// R_WiggleFix
+//
+//==============================================================================
 procedure R_WiggleFix(sec: Psector_t);
 {$ENDIF}
 
@@ -137,12 +158,23 @@ var
   r_fakecontrast: boolean;
 
 {$IFNDEF OPENGL}
+
+//==============================================================================
+//
+// R_CompleteWall
+//
+//==============================================================================
 function R_CompleteWall(const l: Pline_t): boolean;
 
 var
   completewall: boolean;
   completewallactive: boolean;
 
+//==============================================================================
+//
+// R_ClearCompleteWallMarks
+//
+//==============================================================================
 procedure R_ClearCompleteWallMarks;
 
 var
@@ -181,7 +213,6 @@ uses
   r_debug,
 {$ENDIF}
   z_zone;
-
 
 {$IFNDEF OPENGL}
 
@@ -246,6 +277,11 @@ var
     (clamp:   64 * FRACUNIT; heightbits:  9)
   );
 
+//==============================================================================
+//
+// R_WiggleFix
+//
+//==============================================================================
 procedure R_WiggleFix(sec: Psector_t);
 var
   height: integer;
@@ -287,12 +323,11 @@ begin
   end;
 end;
 
-
 // OPTIMIZE: closed two sided lines as single sided
-
 //
 // R_RenderMaskedSegRange
 //
+//==============================================================================
 procedure R_RenderMaskedSegRange(const ds: Pdrawseg_t; const x1, x2: integer);
 var
   index: integer;
@@ -545,6 +580,11 @@ var
   rndsepi: integer = -1;
 {$ENDIF}
 
+//==============================================================================
+//
+// R_NewDrawSeg
+//
+//==============================================================================
 function R_NewDrawSeg: Pdrawseg_t;
 var
   i, bufid: integer;
@@ -585,6 +625,12 @@ end;
 //  between start and stop pixels (inclusive).
 //
 {$IFNDEF OPENGL}
+
+//==============================================================================
+//
+// R_StoreWallRange_DBL
+//
+//==============================================================================
 procedure R_StoreWallRange_DBL(const pds: Pdrawseg_t; const start: integer; const stop: integer);
 var
   vtop: fixed_t;
@@ -1034,7 +1080,6 @@ begin
   bottomstep := round(bottomstep_dbl);
   bottomfrac := round(bottomfrac_dbl);
 
-
   if backsector <> nil then
   begin
     worldhigh_dbl := worldhigh / WORLDUNIT;
@@ -1167,11 +1212,13 @@ begin
   inc(ds_p);
 end;
 
+//==============================================================================
 //
 // R_StoreWallRange
 // A wall segment will be drawn
 //  between start and stop pixels (inclusive).
 //
+//==============================================================================
 procedure R_StoreWallRange(const start: integer; const stop: integer);
 var
   vtop: fixed_t;
@@ -1770,6 +1817,12 @@ end;
 {$ENDIF}
 
 {$IFNDEF OPENGL}
+
+//==============================================================================
+//
+// R_CompleteWall
+//
+//==============================================================================
 function R_CompleteWall(const l: Pline_t): boolean;
 begin
   result := (l.radixflags and RWF_TWOSIDEDCOMPLETE <> 0);
@@ -1777,6 +1830,11 @@ begin
     result := not R_PointOnLineSide(viewx, viewy, l);
 end;
 
+//==============================================================================
+//
+// R_ClearCompleteWallMarks
+//
+//==============================================================================
 procedure R_ClearCompleteWallMarks;
 begin
   memset(@completewallmarks, 0, SCREENWIDTH * SizeOf(fixed_t));

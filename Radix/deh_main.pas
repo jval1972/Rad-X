@@ -39,12 +39,32 @@ uses
   d_delphi,
   d_think;
 
+//==============================================================================
+//
+// DEH_Parse
+//
+//==============================================================================
 procedure DEH_Parse(const s: TDStringList);
 
+//==============================================================================
+//
+// DEH_CurrentSettings
+//
+//==============================================================================
 function DEH_CurrentSettings: TDStringList;
 
+//==============================================================================
+//
+// DEH_Init
+//
+//==============================================================================
 procedure DEH_Init;
 
+//==============================================================================
+//
+// DEH_ShutDown
+//
+//==============================================================================
 procedure DEH_ShutDown;
 
 const
@@ -93,6 +113,11 @@ var
   deh_actions: array[0..DEHNUMACTIONS - 1] of deh_action_t;
   deh_strings: deh_strings_t;
 
+//==============================================================================
+//
+// Deh_ActionName
+//
+//==============================================================================
 function Deh_ActionName(action: actionf_t): string;
 
 implementation
@@ -139,6 +164,11 @@ uses
   v_data,
   w_pak;
 
+//==============================================================================
+//
+// DEH_AddString
+//
+//==============================================================================
 procedure DEH_AddString(deh_strings: Pdeh_strings_t; pstr: PString; const name: string);
 begin
   if deh_strings.numstrings = deh_strings.realnumstrings then
@@ -158,6 +188,11 @@ end;
 var
   deh_initialized: boolean = false;
 
+//==============================================================================
+//
+// DEH_Parse
+//
+//==============================================================================
 procedure DEH_Parse(const s: TDStringList);
 var
   i, j, k: integer;
@@ -595,8 +630,6 @@ begin
 
     end
 
-
-
     ////////////////////////////////////////////////////////////////////////////
     else if (token1 = 'FRAME') or (token1 = 'STATE') then
     begin
@@ -756,9 +789,6 @@ begin
       end;
     end
 
-
-
-
     ////////////////////////////////////////////////////////////////////////////
     else if token1 = 'TEXT' then
     begin
@@ -858,9 +888,6 @@ begin
 
     end
 
-
-
-
     ////////////////////////////////////////////////////////////////////////////
     else if token1 = 'POINTER' then
     begin
@@ -910,9 +937,6 @@ begin
       else
         I_Warning('DEH_Parse(): Invalid state number "%s" while parsing CODEP FRAME'#13#10, [token2]);
     end
-
-
-
 
     ////////////////////////////////////////////////////////////////////////////
     else if token1 = 'SOUND' then
@@ -971,9 +995,6 @@ begin
       end;
     end
 
-
-
-
     ////////////////////////////////////////////////////////////////////////////
     else if token1 = 'AMMO' then
     begin
@@ -1021,9 +1042,6 @@ begin
 
       end;
     end
-
-
-
 
     ////////////////////////////////////////////////////////////////////////////
     else if token1 = 'WEAPON' then
@@ -1078,9 +1096,6 @@ begin
       end;
 
     end
-
-
-
 
     ////////////////////////////////////////////////////////////////////////////
     else if token1 = 'SPRITE' then
@@ -1165,9 +1180,6 @@ begin
       end;
     end
 
-
-
-
     ////////////////////////////////////////////////////////////////////////////
     else if token1 = 'CHEAT' then
     begin
@@ -1175,9 +1187,6 @@ begin
     // Parse cheat /////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
     end
-
-
-
 
     ////////////////////////////////////////////////////////////////////////////
     else if token1 = 'MISC' then
@@ -1232,9 +1241,6 @@ begin
 
     end
 
-
-
-
     ////////////////////////////////////////////////////////////////////////////
     else if (token1 = '[PARS]') or (token1 = 'PARS') then // BEX
     begin
@@ -1275,9 +1281,6 @@ begin
       end;
     end
 
-
-
-
     ////////////////////////////////////////////////////////////////////////////
     else if (token1 = '[STRINGS]') or (token1 = 'STRINGS') then // BEX
     begin
@@ -1312,9 +1315,6 @@ begin
           end;
       end;
     end
-
-
-
 
     ////////////////////////////////////////////////////////////////////////////
     else if (token1 = '[CODEPTR]') or (token1 = 'CODEPTR') then // BEX
@@ -1363,7 +1363,6 @@ begin
         end;
       end;
     end
-
 
     ////////////////////////////////////////////////////////////////////////////
     else if (token1 = '[PLAYER]') or (token1 = 'PLAYER') then // BEX
@@ -1466,9 +1465,6 @@ begin
       end;
     end
 
-
-
-
     ////////////////////////////////////////////////////////////////////////////
     else if (token1 = '[SOUND]') or (token1 = '[SOUNDS]') then // BEX
     begin
@@ -1511,9 +1507,6 @@ begin
       end;
     end
 
-
-
-
     ////////////////////////////////////////////////////////////////////////////
     else if (token1 = 'SUBMITNEWSTATES') or (token1 = 'SUBMITNEWFRAMES') then // DelphiDoom specific
     begin
@@ -1535,6 +1528,11 @@ begin
   memfree(pointer(code_ptrs), numstates * SizeOf(actionf_t));
 end;
 
+//==============================================================================
+//
+// DEH_CurrentSettings
+//
+//==============================================================================
 function DEH_CurrentSettings: TDStringList;
 var
   i, j: integer;
@@ -1732,7 +1730,6 @@ begin
     result.Add('');
   end;
 
-
   result.Add('');
   result.Add('# States');
   result.Add('');
@@ -1787,7 +1784,6 @@ begin
     result.Add('');
   end;
 
-
   //////////////////////////////////////////////////////////////////////////////
   // Add Weapons
   //////////////////////////////////////////////////////////////////////////////
@@ -1807,7 +1803,6 @@ begin
 
     result.Add('');
   end;
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Add Misc
@@ -1830,7 +1825,6 @@ begin
   result.Add('%s = %d', [capitalizedstring(misc_tokens[9]), p_bfgcells]);
 
   result.Add('');
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Add pars
@@ -1904,18 +1898,19 @@ begin
     result.Add('%d = %s', [i, S_sfx[i].name]);
   result.Add('');
 
-
   result.Add(StringOfChar('#', 80));
   result.Add('# End of file');
   result.Add(StringOfChar('#', 80));
 end;
 
+//==============================================================================
 //
 // DEH_Init
 //
 // JVAL
 // Initializing DEH tokens
 //
+//==============================================================================
 procedure DEH_Init;
 var
   i, j, k: integer;
@@ -2064,7 +2059,6 @@ begin
   mobj_flags_ex.Add('MF_EX_THRUGHOST');
   mobj_flags_ex.Add('MF_EX_LOOKALLAROUND');
 
-
   mobj_flags2_ex := TDTextList.Create;
   mobj_flags2_ex.Add('MF2_EX_MEDIUMGRAVITY');
   mobj_flags2_ex.Add('MF2_EX_NOHITFLOOR');
@@ -2129,7 +2123,6 @@ begin
   mobj_flags3_ex.Add('MF3_EX_DONTBLOCKSPECIES');
   mobj_flags3_ex.Add('MF3_EX_INACTIVE');
   mobj_flags3_ex.Add('MF3_EX_USEALTDAMAGE');
-
 
   mobj_flags4_ex := TDTextList.Create;
   mobj_flags4_ex.Add('MF4_EX_ALWAYSFINISHSOUND');
@@ -2934,7 +2927,6 @@ begin
   deh_actions[257].name := strupper('UnSetWallBounce');
   {$IFDEF DLL}deh_actions[257].decl := 'A_UnSetWallBounce()';{$ENDIF}
 
-
   deh_actions[258].action.acp1 := @A_RaiseRadixWeapon;
   deh_actions[258].name := strupper('RaiseRadixWeapon');
   {$IFDEF DLL}deh_actions[258].decl := 'A_RaiseRadixWeapon()';{$ENDIF}
@@ -3286,7 +3278,6 @@ begin
 
   DEH_AddString(@deh_strings, @STSTR_MASSACRE, 'STSTR_MASSACRE');
 
-
   DEH_AddString(@deh_strings, @E1TEXT, 'E1TEXT');
   DEH_AddString(@deh_strings, @E2TEXT, 'E2TEXT');
   DEH_AddString(@deh_strings, @E3TEXT, 'E3TEXT');
@@ -3410,7 +3401,6 @@ begin
   DEH_AddString(@deh_strings, @GGSAVED, 'GGSAVED');
   DEH_AddString(@deh_strings, @SAVEGAMENAME, 'SAVEGAMENAME');
 
-
   DEH_AddString(@deh_strings, @S_NIGHTVISION_DEPLETED, 'S_NIGHTVISION_DEPLETED');
   DEH_AddString(@deh_strings, @S_RAPID_ENERGY_DEPLETED, 'S_RAPID_ENERGY_DEPLETED');
   DEH_AddString(@deh_strings, @S_RAPID_SHIELD_DEPLETED, 'S_RAPID_SHIELD_DEPLETED');
@@ -3424,7 +3414,6 @@ begin
   ammo_tokens.Add('MAX AMMO');
   ammo_tokens.Add('PER AMMO');
 
-
   weapon_tokens := TDTextList.Create;
 
   weapon_tokens.Add('AMMO TYPE');     // .ammo
@@ -3434,13 +3423,11 @@ begin
   weapon_tokens.Add('SHOOTING FRAME');// .atkstate
   weapon_tokens.Add('FIRING FRAME');  // .flashstate
 
-
   sound_tokens := TDTextList.Create;
 
   sound_tokens.Add('ZERO/ONE');
   sound_tokens.Add('VALUE');
   sound_tokens.Add('NAME'); // DelphiDoom specific
-
 
   renderstyle_tokens := TDTextList.Create;
 
@@ -3448,7 +3435,6 @@ begin
   renderstyle_tokens.Add('TRANSLUCENT');
   renderstyle_tokens.Add('ADD');
   renderstyle_tokens.Add('SUBTRACT');
-
 
   misc_tokens := TDTextList.Create;
 
@@ -3463,7 +3449,6 @@ begin
   misc_tokens.Add('BLUE ARMOR CLASS');    // p_bluearmorclass
   misc_tokens.Add('BFG CELLS/SHOT');      // p_bfgcells
 
-
   C_AddCmd('DEH_ParseFile, BEX_ParseFile', @DEH_ParseFile);
   C_AddCmd('DEH_ParseLump, BEX_ParseLump', @DEH_ParseLumpName);
   C_AddCmd('DEH_PrintCurrentSettings, DEH_PrintSettings, BEX_PrintCurrentSettings, BEX_PrintSettings', @DEH_PrintCurrentSettings);
@@ -3476,6 +3461,11 @@ begin
   C_AddCmd('DEH_PrintActions, DEH_ShowActions, BEX_PrintActions, BEX_ShowActions', @DEH_PrintActions);
 end;
 
+//==============================================================================
+//
+// DEH_ShutDown
+//
+//==============================================================================
 procedure DEH_ShutDown;
 begin
   if not deh_initialized then
@@ -3498,6 +3488,11 @@ begin
   realloc(pointer(deh_strings._array), deh_strings.realnumstrings * SizeOf(deh_string_t), 0);
 end;
 
+//==============================================================================
+//
+// Deh_ActionName
+//
+//==============================================================================
 function Deh_ActionName(action: actionf_t): string;
 var
   i: integer;

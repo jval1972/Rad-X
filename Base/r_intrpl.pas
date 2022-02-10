@@ -38,18 +38,53 @@ interface
 uses
     m_fixed;
 
+//==============================================================================
+//
+// R_InitInterpolations
+//
+//==============================================================================
 procedure R_InitInterpolations;
 
+//==============================================================================
+//
+// R_ResetInterpolationBuffer
+//
+//==============================================================================
 procedure R_ResetInterpolationBuffer;
 
+//==============================================================================
+//
+// R_StoreInterpolationData
+//
+//==============================================================================
 procedure R_StoreInterpolationData(const tick: integer; const counts: integer);
 
+//==============================================================================
+//
+// R_RestoreInterpolationData
+//
+//==============================================================================
 procedure R_RestoreInterpolationData;
 
+//==============================================================================
+//
+// R_Interpolate
+//
+//==============================================================================
 function R_Interpolate: boolean;
 
+//==============================================================================
+//
+// R_InterpolateTicker
+//
+//==============================================================================
 procedure R_InterpolateTicker;
 
+//==============================================================================
+//
+// R_SetInterpolateSkipTicks
+//
+//==============================================================================
 procedure R_SetInterpolateSkipTicks(const ticks: integer);
 
 var
@@ -117,6 +152,11 @@ var
   imobjs: array[0..$FFFF] of Pmobj_t;
   numismobjs: integer;
 
+//==============================================================================
+//
+// CmdInterpolate
+//
+//==============================================================================
 procedure CmdInterpolate(const parm: string = '');
 var
   newval: boolean;
@@ -137,6 +177,11 @@ begin
   CmdInterpolate;
 end;
 
+//==============================================================================
+//
+// CmdInterpolateOncapped
+//
+//==============================================================================
 procedure CmdInterpolateOncapped(const parm: string = '');
 var
   newval: boolean;
@@ -157,6 +202,11 @@ begin
   CmdInterpolateOncapped;
 end;
 
+//==============================================================================
+//
+// R_InitInterpolations
+//
+//==============================================================================
 procedure R_InitInterpolations;
 begin
   istruct.numitems := 0;
@@ -168,6 +218,11 @@ begin
   C_AddCmd('interpolateoncapped, r_interpolateoncapped', @CmdInterpolateOncapped);
 end;
 
+//==============================================================================
+//
+// R_ResetInterpolationBuffer
+//
+//==============================================================================
 procedure R_ResetInterpolationBuffer;
 begin
   memfree(pointer(istruct.items), istruct.realsize * SizeOf(iitem_t));
@@ -176,6 +231,11 @@ begin
   numismobjs := 0;
 end;
 
+//==============================================================================
+//
+// R_InterpolationCalcIF
+//
+//==============================================================================
 function R_InterpolationCalcIF(const prev, next: fixed_t; const frac: fixed_t): fixed_t;
 begin
   if next = prev then
@@ -184,6 +244,11 @@ begin
     result := prev + round((next - prev) / FRACUNIT * frac);
 end;
 
+//==============================================================================
+//
+// R_InterpolationCalcSIF
+//
+//==============================================================================
 function R_InterpolationCalcSIF(const prev, next: smallint; const frac: fixed_t): smallint;
 begin
   if next = prev then
@@ -192,6 +257,11 @@ begin
     result := prev + round((next - prev) / FRACUNIT * frac);
 end;
 
+//==============================================================================
+//
+// R_InterpolationCalcI
+//
+//==============================================================================
 procedure R_InterpolationCalcI(const pi: Piitem_t; const frac: fixed_t);
 begin
   if pi.inext = pi.iprev then
@@ -200,6 +270,11 @@ begin
   PInteger(pi.address)^ := pi.iprev + round((pi.inext - pi.iprev) / FRACUNIT * frac);
 end;
 
+//==============================================================================
+//
+// R_InterpolationCalcI2
+//
+//==============================================================================
 procedure R_InterpolationCalcI2(const pi: Piitem_t; const frac: fixed_t);
 const
   II2MARGIN = 8 * FRACUNIT;
@@ -221,6 +296,11 @@ begin
     PInteger(pi.address)^ := pi.iprev2 + round((pi.inext2 - pi.iprev2) / FRACUNIT * frac);
 end;
 
+//==============================================================================
+//
+// R_InterpolationCalcSI
+//
+//==============================================================================
 procedure R_InterpolationCalcSI(const pi: Piitem_t; const frac: fixed_t);
 begin
   if pi.sinext = pi.siprev then
@@ -229,6 +309,11 @@ begin
   PSmallInt(pi.address)^ := pi.siprev + round((pi.sinext - pi.siprev) / FRACUNIT * frac);
 end;
 
+//==============================================================================
+//
+// R_InterpolationCalcB
+//
+//==============================================================================
 function R_InterpolationCalcB(const prev, next: byte; const frac: fixed_t): byte;
 begin
   if next = prev then
@@ -241,6 +326,11 @@ begin
     result := prev + (next - prev) * frac div FRACUNIT;
 end;
 
+//==============================================================================
+//
+// R_InterpolationCalcA
+//
+//==============================================================================
 function R_InterpolationCalcA(const prev, next: angle_t; const frac: fixed_t): angle_t;
 var
   prev_e, next_e, mid_e: Extended;
@@ -275,6 +365,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_InterpolationCalcF
+//
+//==============================================================================
 procedure R_InterpolationCalcF(const pi: Piitem_t; const frac: fixed_t);
 begin
   if pi.fnext = pi.fprev then
@@ -283,6 +378,11 @@ begin
   Pfloat(pi.address)^ := pi.fprev + (pi.fnext - pi.fprev) / FRACUNIT * frac;
 end;
 
+//==============================================================================
+//
+// R_AddInterpolationItem
+//
+//==============================================================================
 procedure R_AddInterpolationItem(const addr: pointer; const typ: itype);
 var
   newrealsize: integer;
@@ -359,6 +459,11 @@ var
 var
   skipinterpolationticks: integer = -1;
 
+//==============================================================================
+//
+// R_StoreInterpolationData
+//
+//==============================================================================
 procedure R_StoreInterpolationData(const tick: integer; const counts: integer);
 var
   sec: Psector_t;
@@ -484,6 +589,11 @@ begin
   {$ENDIF}
 end;
 
+//==============================================================================
+//
+// R_RestoreInterpolationData_thr1
+//
+//==============================================================================
 function R_RestoreInterpolationData_thr1(p: pointer): integer; stdcall;
 var
   i: integer;
@@ -507,6 +617,11 @@ begin
   result := 0;
 end;
 
+//==============================================================================
+//
+// R_RestoreInterpolationData_thr2
+//
+//==============================================================================
 function R_RestoreInterpolationData_thr2(p: pointer): integer; stdcall;
 var
   i: integer;
@@ -523,6 +638,11 @@ begin
   result := 0;
 end;
 
+//==============================================================================
+//
+// R_RestoreInterpolationData_Single_Thread
+//
+//==============================================================================
 procedure R_RestoreInterpolationData_Single_Thread;
 var
   i: integer;
@@ -553,6 +673,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_RestoreInterpolationData
+//
+//==============================================================================
 procedure R_RestoreInterpolationData;
 var
   r1, r2, r3: mt_range_t;
@@ -576,6 +701,11 @@ begin
     R_RestoreInterpolationData_Single_Thread;
 end;
 
+//==============================================================================
+//
+// R_DoInterpolate_thr1
+//
+//==============================================================================
 function R_DoInterpolate_thr1(p: pointer): integer; stdcall;
 var
   pi, pi2: Piitem_t;
@@ -600,6 +730,11 @@ begin
   result := 0;
 end;
 
+//==============================================================================
+//
+// R_DoInterpolate_thr2
+//
+//==============================================================================
 function R_DoInterpolate_thr2(p: pointer): integer; stdcall;
 var
   i: integer;
@@ -622,6 +757,11 @@ end;
 var
   frametime: integer = 0;
 
+//==============================================================================
+//
+// R_Interpolate
+//
+//==============================================================================
 function R_Interpolate: boolean;
 var
   i: integer;
@@ -707,12 +847,22 @@ begin
   frametime := I_GetFracTime - frametime;
 end;
 
+//==============================================================================
+//
+// R_InterpolateTicker
+//
+//==============================================================================
 procedure R_InterpolateTicker;
 begin
   if skipinterpolationticks >= 0 then
     dec(skipinterpolationticks);
 end;
 
+//==============================================================================
+//
+// R_SetInterpolateSkipTicks
+//
+//==============================================================================
 procedure R_SetInterpolateSkipTicks(const ticks: integer);
 begin
   skipinterpolationticks := ticks;

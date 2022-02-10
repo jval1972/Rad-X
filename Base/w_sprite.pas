@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -34,10 +34,32 @@ unit w_sprite;
 
 interface
 
+//==============================================================================
+//
+// W_InitSprites
+//
+//==============================================================================
 procedure W_InitSprites;
+
+//==============================================================================
+//
+// W_ShutDownSprites
+//
+//==============================================================================
 procedure W_ShutDownSprites;
 
+//==============================================================================
+//
+// W_CacheSpriteNum
+//
+//==============================================================================
 function W_CacheSpriteNum(const lump: integer; const tag: integer): pointer;
+
+//==============================================================================
+//
+// W_CacheSpriteName
+//
+//==============================================================================
 function W_CacheSpriteName(const name: string; const tag: integer): pointer;
 
 implementation
@@ -79,6 +101,11 @@ begin
   Inherited;
 end;
 
+//==============================================================================
+//
+// TSpriteLumpCache.NotifySize
+//
+//==============================================================================
 procedure TSpriteLumpCache.NotifySize(const lastsprite: integer);
 begin
   if fsize <> 0 then
@@ -91,12 +118,22 @@ end;
 var
   spritecache: TSpriteLumpCache;
 
+//==============================================================================
+//
+// W_InitSprites
+//
+//==============================================================================
 procedure W_InitSprites;
 begin
   spritecache := TSpriteLumpCache.Create;
   spritecache.NotifySize(W_NumLumps);
 end;
 
+//==============================================================================
+//
+// W_ShutDownSprites
+//
+//==============================================================================
 procedure W_ShutDownSprites;
 begin
   spritecache.Free;
@@ -110,6 +147,11 @@ type
     topoffset: smallint;  // pixels below the origin
   end;
 
+//==============================================================================
+//
+// W_TextureAsPatch
+//
+//==============================================================================
 function W_TextureAsPatch(const tex: PTexture; const tag: integer; const user: pointer): pointer;
 var
   m, fs: TDMemoryStream;
@@ -203,6 +245,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// W_CacheSpriteNum
+//
+//==============================================================================
 function W_CacheSpriteNum(const lump: integer; const tag: integer): pointer;
 var
   ext: string;
@@ -265,6 +312,11 @@ begin
   strm.Free;
 end;
 
+//==============================================================================
+//
+// W_CacheSpriteName
+//
+//==============================================================================
 function W_CacheSpriteName(const name: string; const tag: integer): pointer;
 begin
   result := W_CacheSpriteNum(W_GetNumForName(name, TYPE_SPRITE), tag);

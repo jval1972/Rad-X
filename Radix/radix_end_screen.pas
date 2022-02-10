@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -34,6 +34,11 @@ unit radix_end_screen;
 
 interface
 
+//==============================================================================
+//
+// RX_GetEndScreenData
+//
+//==============================================================================
 function RX_GetEndScreenData: pointer;
 
 implementation
@@ -1664,6 +1669,11 @@ const
     $20, $0E, $20, $0E, $20, $0E, $20, $0E, $20, $0E
   );
 
+//==============================================================================
+//
+// RX_GetEndScreenData
+//
+//==============================================================================
 function RX_GetEndScreenData: pointer;
 begin
   case radixversion of

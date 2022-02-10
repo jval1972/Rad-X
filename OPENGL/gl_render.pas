@@ -47,45 +47,145 @@ var
   extra_blue: float = 0.0;
   extra_alpha: float = 0.0;
 
+//==============================================================================
+//
+// gld_DrawBackground
+//
+//==============================================================================
 procedure gld_DrawBackground(const name: string);
 
+//==============================================================================
+//
+// gld_DrawBackgroundFrame
+//
+//==============================================================================
 procedure gld_DrawBackgroundFrame;
 
+//==============================================================================
+//
+// gld_Finish
+//
+//==============================================================================
 procedure gld_Finish;
 
+//==============================================================================
+//
+// gld_AddSprite
+//
+//==============================================================================
 procedure gld_AddSprite(vspr: Pvissprite_t);
 
+//==============================================================================
+//
+// gld_AddWall
+//
+//==============================================================================
 procedure gld_AddWall(seg: Pseg_t{$IFDEF HEXEN}; const ispolyobj: boolean; const ssec: Psector_t{$ENDIF});
 
+//==============================================================================
+//
+// gld_StartDrawScene
+//
+//==============================================================================
 procedure gld_StartDrawScene;
 
+//==============================================================================
+//
+// gld_DrawScene
+//
+//==============================================================================
 procedure gld_DrawScene(player: Pplayer_t);
 
+//==============================================================================
+//
+// gld_EndDrawScene
+//
+//==============================================================================
 procedure gld_EndDrawScene;
 
+//==============================================================================
+//
+// gld_AddPlane
+//
+//==============================================================================
 procedure gld_AddPlane(subsectornum: integer; floor, ceiling: Pvisplane_t);
 
+//==============================================================================
+//
+// gld_PreprocessLevel
+//
+//==============================================================================
 procedure gld_PreprocessLevel;
 
+//==============================================================================
+//
+// gld_DrawWeapon
+//
+//==============================================================================
 procedure gld_DrawWeapon(weaponlump: integer; vis: Pvissprite_t; lightlevel: integer);
 
+//==============================================================================
+//
+// gld_Init
+//
+//==============================================================================
 procedure gld_Init(width, height: integer);
 
+//==============================================================================
+//
+// gld_SetPalette
+//
+//==============================================================================
 procedure gld_SetPalette(palette: integer);
 
+//==============================================================================
+//
+// gld_DrawNumPatch
+//
+//==============================================================================
 procedure gld_DrawNumPatch(x, y: integer; lump: integer; cm: integer; flags: integer;
   const zoomx: float = 1.0; const zoomy: float = 1.0);
 
+//==============================================================================
+//
+// gld_Enable2D
+//
+//==============================================================================
 procedure gld_Enable2D;
 
+//==============================================================================
+//
+// gld_Disable2D
+//
+//==============================================================================
 procedure gld_Disable2D;
 
+//==============================================================================
+//
+// gld_StaticLight
+//
+//==============================================================================
 procedure gld_StaticLight(light: float);
 
+//==============================================================================
+//
+// gld_CleanMemory
+//
+//==============================================================================
 procedure gld_CleanMemory;
 
+//==============================================================================
+//
+// R_ShutDownOpenGL
+//
+//==============================================================================
 procedure R_ShutDownOpenGL;
 
+//==============================================================================
+//
+// gld_DrawLine
+//
+//==============================================================================
 procedure gld_DrawLine(x0, y0, x1, y1: integer; PalColor: byte);
 
 implementation
@@ -338,12 +438,21 @@ const
     0.9920068677, 0.9939926561, 0.9940176603, 0.9960034189, 0.9979842304, 0.9980042278, 0.9999850094, 1.0000000000
   ));
 
+//==============================================================================
+//
+// gld_CalcLightLevel
+//
+//==============================================================================
 function gld_CalcLightLevel(lightlevel: integer): float;
 begin
   result := gl_lighttable[usegamma][gl_i_max(gl_i_min((lightlevel), 255), 0)];
 end;
 
-
+//==============================================================================
+//
+// gld_StaticLightAlpha
+//
+//==============================================================================
 procedure gld_StaticLightAlpha(light: float; alpha: float);
 begin
   if players[displayplayer].fixedcolormap <> 0 then
@@ -352,6 +461,11 @@ begin
     glColor4f(light, light, light, alpha);
 end;
 
+//==============================================================================
+//
+// gld_StaticLight
+//
+//==============================================================================
 procedure gld_StaticLight(light: float);
 begin
   if players[displayplayer].fixedcolormap <> 0 then
@@ -360,6 +474,11 @@ begin
     glColor4f(light, light, light, 1.0);
 end;
 
+//==============================================================================
+//
+// gld_InitExtensions
+//
+//==============================================================================
 procedure gld_InitExtensions(ext_list: TDStringList);
 begin
   gl_texture_filter_anisotropic := ext_list.IndexOf('GL_EXT_TEXTURE_FILTER_ANISOTROPIC') > -1;
@@ -412,6 +531,11 @@ type
 var
   gld_VSync_Warning: boolean = false;
 
+//==============================================================================
+//
+// gld_VSync
+//
+//==============================================================================
 function gld_VSync(vsync: TVSyncMode): boolean;
 var
   i: Integer;
@@ -441,6 +565,11 @@ end;
 var
   gld_InitLightTable_initialized: Boolean = false;
 
+//==============================================================================
+//
+// gld_InitLightTable
+//
+//==============================================================================
 procedure gld_InitLightTable;
 var
   sc: TScriptEngine;
@@ -474,6 +603,11 @@ end;
 var
   last_screensync: boolean;
 
+//==============================================================================
+//
+// gld_Init
+//
+//==============================================================================
 procedure gld_Init(width, height: integer);
 var
   params: array[0..3] of TGLfloat;
@@ -605,7 +739,11 @@ begin
   gld_InitAmbient;
 end;
 
-
+//==============================================================================
+//
+// gld_DrawNumPatch
+//
+//==============================================================================
 procedure gld_DrawNumPatch(x, y: integer; lump: integer; cm: integer; flags: integer;
   const zoomx: float = 1.0; const zoomy: float = 1.0);
 
@@ -682,6 +820,11 @@ begin
   glEnd;
 end;
 
+//==============================================================================
+//
+// gld_DrawBackground
+//
+//==============================================================================
 procedure gld_DrawBackground(const name: string);
 var
   gltexture: PGLTexture;
@@ -720,6 +863,11 @@ end;
 var
   scissoron: boolean = false;
 
+//==============================================================================
+//
+// gld_DrawBackgroundFrame
+//
+//==============================================================================
 procedure gld_DrawBackgroundFrame;
 var
   x1, x2, y1, y2: integer;
@@ -746,6 +894,11 @@ begin
   glEnable(GL_TEXTURE_2D);
 end;
 
+//==============================================================================
+//
+// gld_DrawLine
+//
+//==============================================================================
 procedure gld_DrawLine(x0, y0, x1, y1: integer; PalColor: byte);
 var
   playpal: PByteArray;
@@ -768,6 +921,11 @@ begin
   glEnd;
 end;
 
+//==============================================================================
+//
+// gld_DrawWeapon
+//
+//==============================================================================
 procedure gld_DrawWeapon(weaponlump: integer; vis: Pvissprite_t; lightlevel: integer);
 var
   gltexture: PGLTexture;
@@ -832,6 +990,11 @@ begin
   glColor3f(1.0, 1.0, 1.0);
 end;
 
+//==============================================================================
+//
+// gld_FillBlock
+//
+//==============================================================================
 procedure gld_FillBlock(x, y, width, height: integer; col: integer);
 var
   playpal: PByteArray;
@@ -856,6 +1019,11 @@ end;
 var
   last_palette: integer = 0;
 
+//==============================================================================
+//
+// gld_SetPalette
+//
+//==============================================================================
 procedure gld_SetPalette(palette: integer);
 var
   playpal: PByteArray;
@@ -947,6 +1115,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// gld_Enable2D
+//
+//==============================================================================
 procedure gld_Enable2D;
 var
   vPort: array[0..3] of GLInt;
@@ -967,6 +1140,11 @@ begin
   glLoadIdentity;
 end;
 
+//==============================================================================
+//
+// gld_Disable2D
+//
+//==============================================================================
 procedure gld_Disable2D;
 begin
   glMatrixMode(GL_PROJECTION);
@@ -977,7 +1155,11 @@ begin
   glPopMatrix;
 end;
 
-
+//==============================================================================
+//
+// gld_Set2DMode
+//
+//==============================================================================
 procedure gld_Set2DMode;
 begin
   glMatrixMode(GL_MODELVIEW);
@@ -995,6 +1177,11 @@ begin
   glDisable(GL_DEPTH_TEST);
 end;
 
+//==============================================================================
+//
+// gld_Finish
+//
+//==============================================================================
 procedure gld_Finish;
 begin
   gld_Set2DMode;
@@ -1019,6 +1206,11 @@ var
   gld_vertexes: PGLVertexArray = nil;
   gld_texcoords: PGLTexcoordArray = nil;
 
+//==============================================================================
+//
+// gld_AddGlobalVertexes
+//
+//==============================================================================
 procedure gld_AddGlobalVertexes(count: integer);
 begin
   if (gld_num_vertexes + count) >= gld_max_vertexes then
@@ -1212,7 +1404,6 @@ var
   sectorrenderedflatex2: PByteArray;
   segrendered: PByteArray; // true if sector rendered (only here for malloc)
 
-
 {*****************************
  *
  * FLATS
@@ -1227,18 +1418,33 @@ var
 const
   MAX_CC_SIDES = 64;
 
+//==============================================================================
+//
+// FIX2DBL
+//
+//==============================================================================
 function FIX2DBL(const x: fixed_t): double;
 begin
   result := x / 1.0;
 end;
 
+//==============================================================================
+//
+// gld_PointOnSide
+//
+//==============================================================================
 function gld_PointOnSide(p: Pvertex_t; d: Pdivline_t): boolean;
 begin
   // We'll return false if the point c is on the left side.
   result := (FIX2DBL(d.y) - FIX2DBL(p.y)) * FIX2DBL(d.dx) - (FIX2DBL(d.x) - FIX2DBL(p.x)) * FIX2DBL(d.dy) >= 0;
 end;
 
+//==============================================================================
+// gld_CalcIntersectionVertex
+//
 // Lines start-end and fdiv must intersect.
+//
+//==============================================================================
 procedure gld_CalcIntersectionVertex(s: Pvertex_t; e: Pvertex_t; d: Pdivline_t; i: Pvertex_t);
 var
   ax: double;
@@ -1264,8 +1470,12 @@ begin
   i.y := round(FIX2DBL(s.y) + r * (FIX2DBL(e.y) - FIX2DBL(s.y)));
 end;
 
+//==============================================================================
+// gld_FlatEdgeClipper
+//
 // Returns a pointer to the list of points. It must be used.
 //
+//==============================================================================
 function gld_FlatEdgeClipper(numpoints: Pinteger; points: Pvertex_tArray; numclippers: integer; clippers: Pdivline_tArray): Pvertex_tArray;
 var
   sidelist: array[0..MAX_CC_SIDES - 1] of boolean;
@@ -1355,6 +1565,11 @@ begin
   result := points;
 end;
 
+//==============================================================================
+//
+// gld_FlatConvexCarver
+//
+//==============================================================================
 procedure gld_FlatConvexCarver(ssidx: integer; num: integer; list: Pdivline_tArray);
 var
   ssec: Psubsector_t;
@@ -1448,6 +1663,11 @@ begin
   memfree(pointer(clippers), numclippers * SizeOf(divline_t));
 end;
 
+//==============================================================================
+//
+// gld_CarveFlats
+//
+//==============================================================================
 procedure gld_CarveFlats(bspnode: integer; numdivlines: integer; divlines: Pdivline_tArray; sectorclosed: PBooleanArray);
 var
   nod: Pnode_t;
@@ -1505,7 +1725,6 @@ begin
   memfree(pointer(childlist), childlistsize * SizeOf(divline_t));
 end;
 
-
 (********************************************
  * Name     : gld_GetSubSectorVertices      *
  * created  : 08/13/00                      *
@@ -1515,6 +1734,11 @@ end;
  *            (glnodes only)                *
  ********************************************)
 
+//==============================================================================
+//
+// gld_GetSubSectorVertices
+//
+//==============================================================================
 procedure gld_GetSubSectorVertices(sectorclosed: PBooleanArray);
 var
   i, j: integer;
@@ -1566,6 +1790,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// gld_PrepareSectorSpecialEffects
+//
+//==============================================================================
 procedure gld_PrepareSectorSpecialEffects(const sec: Psector_t);
 var
   i: integer;
@@ -1619,8 +1848,13 @@ end;
       to do the same kind of tests in your program.  Fine, but if you use
       these ideas, don't forget to credit DEU...  Just a reminder... :-)
 *)
-// so I credited DEU
 
+//==============================================================================
+// gld_PreprocessSectors
+//
+// so I credited DEU
+//
+//==============================================================================
 procedure gld_PreprocessSectors;
 var
   sectorclosed: PBooleanArray;
@@ -1736,6 +1970,11 @@ var
   inv_yaw: float = 0.0;
   pitch: float = 0.0;
 
+//==============================================================================
+//
+// infinitePerspective
+//
+//==============================================================================
 procedure infinitePerspective(fovy: GLdouble; aspect: GLdouble; znear: GLdouble);
 var
   left, right, bottom, top: GLdouble;
@@ -1778,6 +2017,11 @@ var
 var
   xCamera, yCamera, zCamera: float;
 
+//==============================================================================
+//
+// gld_StartDrawScene
+//
+//==============================================================================
 procedure gld_StartDrawScene;
 var
   height: integer;
@@ -1850,7 +2094,6 @@ begin
 
   infinitePerspective(64.0, 320.0 / 200.0 * monitor_relative_aspect, gl_nearclip / 100.0);
 
-
   if zaxisshift then
     pitch := -players[displayplayer].lookdir16 / 32 // JVAL Smooth Look Up/Down
   else
@@ -1894,6 +2137,11 @@ begin
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 end;
 
+//==============================================================================
+//
+// gld_EndDrawScene
+//
+//==============================================================================
 procedure gld_EndDrawScene;
 var
   player: Pplayer_t;
@@ -1999,6 +2247,11 @@ begin
     glDisable(GL_SHARED_TEXTURE_PALETTE_EXT);
 end;
 
+//==============================================================================
+//
+// gld_AddDrawItem
+//
+//==============================================================================
 procedure gld_AddDrawItem(itemtype: GLDrawItemType; itemindex: integer);
 var
   item: PGLDrawItem;
@@ -2050,6 +2303,11 @@ end;
 const
   SMALLDELTA = 0.001;
 
+//==============================================================================
+//
+// CALC_Y_VALUES
+//
+//==============================================================================
 procedure CALC_Y_VALUES(w: PGLWall; var lineheight: float; floor_height, ceiling_height: integer);
 begin
   w.ytop := ceiling_height / MAP_SCALE + SMALLDELTA;
@@ -2057,6 +2315,11 @@ begin
   lineheight := abs((ceiling_height - floor_height) / FRACUNIT);
 end;
 
+//==============================================================================
+//
+// CALC_Y_VALUES2
+//
+//==============================================================================
 procedure CALC_Y_VALUES2(w: PGLWall; var lineheight: float; floor_height, ceiling_height: integer);
 begin
   w.ytop := ceiling_height / MAP_SCALE + SMALLDELTA;
@@ -2064,21 +2327,41 @@ begin
   lineheight := (ceiling_height - floor_height) / FRACUNIT;
 end;
 
+//==============================================================================
+//
+// OU
+//
+//==============================================================================
 function OU(tex: PGLTexture; seg: Pseg_t): float;
 begin
   result := ((seg.sidedef.textureoffset + seg.offset) / FRACUNIT) / tex.buffer_width;
 end;
 
+//==============================================================================
+//
+// OV
+//
+//==============================================================================
 function OV(tex: PGLTexture; seg: Pseg_t): float;
 begin
   result := (seg.sidedef.rowoffset / FRACUNIT) / tex.buffer_height;
 end;
 
+//==============================================================================
+//
+// OV_PEG
+//
+//==============================================================================
 function OV_PEG(tex: PGLTexture; seg: Pseg_t; v_offset: integer): float;
 begin
   result := ((seg.sidedef.rowoffset - v_offset) / FRACUNIT) / tex.buffer_height;
 end;
 
+//==============================================================================
+//
+// CALC_TEX_VALUES_TOP
+//
+//==============================================================================
 procedure CALC_TEX_VALUES_TOP(w: PGLWall; seg: Pseg_t; peg: boolean; linelength, lineheight: float);
 var
   tex: PGLTexture;
@@ -2125,6 +2408,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// CALC_TEX_VALUES_MIDDLE1S
+//
+//==============================================================================
 procedure CALC_TEX_VALUES_MIDDLE1S(w: PGLWall; seg: Pseg_t; peg: boolean; linelength, lineheight: float);
 var
   tex: PGLTexture;
@@ -2171,6 +2459,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// CALC_TEX_VALUES_MIDDLETS
+//
+//==============================================================================
 procedure CALC_TEX_VALUES_MIDDLETS(w: PGLWall; seg: Pseg_t; peg: boolean; linelength, lineheight: float);
 var
   tex: PGLTexture;
@@ -2191,6 +2484,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// CALC_TEX_VALUES_MIDDLE2S
+//
+//==============================================================================
 procedure CALC_TEX_VALUES_MIDDLE2S(w: PGLWall; seg: Pseg_t; peg: boolean; linelength, lineheight: float);
 var
   tex: PGLTexture;
@@ -2211,6 +2509,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// CALC_TEX_VALUES_BOTTOM
+//
+//==============================================================================
 procedure CALC_TEX_VALUES_BOTTOM(w: PGLWall; seg: Pseg_t; peg: boolean; linelength, lineheight: float; v_offset: integer);
 var
   tex: PGLTexture;
@@ -2257,6 +2560,12 @@ begin
 end;
 
 {$IFDEF DOOM}
+
+//==============================================================================
+//
+// gld_GetSkyTexture
+//
+//==============================================================================
 function gld_GetSkyTexture(const w: PGLWall): integer;
 begin
   result := skytexture;
@@ -2264,6 +2573,11 @@ begin
     result := texturetranslation[sides[lines[frontsector.sky and not PL_SKYFLAT].sidenum[0]].toptexture];
 end;
 
+//==============================================================================
+//
+// gld_GetSkyTextureFlag
+//
+//==============================================================================
 function gld_GetSkyTextureFlag(const w: PGLWall): integer;
 begin
   result := GLDWF_SKY;
@@ -2273,6 +2587,11 @@ begin
 end;
 {$ENDIF}
 
+//==============================================================================
+//
+// ADDSKYTEXTURE
+//
+//==============================================================================
 procedure ADDSKYTEXTURE(wall: PGLWall);
 begin
   wall.gltexture := gld_RegisterTexture({$IFDEF DOOM}gld_GetSkyTexture(wall){$ELSE}skytexture{$ENDIF}, false);
@@ -2283,6 +2602,11 @@ begin
   dodrawsky := true;
 end;
 
+//==============================================================================
+//
+// ADDWALL
+//
+//==============================================================================
 procedure ADDWALL(wall: PGLWall);
 begin
   if gld_drawinfo.num_walls >= gld_drawinfo.max_walls then
@@ -2296,6 +2620,9 @@ begin
   inc(gld_drawinfo.num_walls);
 end;
 
+//==============================================================================
+// gld_SetupFloodStencil
+//
 //==========================================================================
 //
 // Flood gaps with the back side's ceiling/floor texture
@@ -2303,7 +2630,8 @@ end;
 // the depth buffer
 //
 //==========================================================================
-
+//
+//==============================================================================
 procedure gld_SetupFloodStencil(const wall: PGLWall);
 var
   recursion: integer;
@@ -2335,6 +2663,11 @@ begin
   glDepthMask(false);
 end;
 
+//==============================================================================
+//
+// gld_ClearFloodStencil
+//
+//==============================================================================
 procedure gld_ClearFloodStencil(const wall: PGLWall);
 var
   recursion: integer;
@@ -2362,9 +2695,12 @@ begin
   glDepthMask(true);
 end;
 
+//==============================================================================
+// gld_SetupFloodedPlaneCoords
 //
 // Calculation of the coordinates of the gap
 //
+//==============================================================================
 procedure gld_SetupFloodedPlaneCoords(const wall: PGLWall; const c: Pgl_strip_coords_t);
 var
   prj_fac1, prj_fac2: float;
@@ -2418,6 +2754,11 @@ begin
   c.t[3][1] := -c.v[3][2] / k;
 end;
 
+//==============================================================================
+//
+// gld_SetupFloodedPlaneLight
+//
+//==============================================================================
 procedure gld_SetupFloodedPlaneLight(const wall: PGLWall);
 var
   light: float;
@@ -2431,6 +2772,11 @@ begin
     gld_StaticLightAlpha(wall.light, wall.alpha);
 end;
 
+//==============================================================================
+//
+// gld_DrawTriangleStrip
+//
+//==============================================================================
 procedure gld_DrawTriangleStrip(const c: Pgl_strip_coords_t);
 begin
   glBegin(GL_TRIANGLE_STRIP);
@@ -2445,6 +2791,11 @@ begin
   glEnd();
 end;
 
+//==============================================================================
+//
+// gld_DrawWall
+//
+//==============================================================================
 procedure gld_DrawWall(wall: PGLWall; const fblend: boolean);
 var
   seg: PGLSeg;
@@ -2759,6 +3110,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// gld_AddFlat_Extra
+//
+//==============================================================================
 procedure gld_AddFlat_Extra(sectornum: integer; pic, zheight: integer;
   isfloor: boolean; ripple: boolean; angle: angle_t; anglex, angley: fixed_t);
 var
@@ -2847,7 +3203,12 @@ begin
   inc(gld_drawinfo.num_flats);
 end;
 
+//==============================================================================
+// gld_AddFlat_3dFloor
+//
 // For mid textures (3d Floors)
+//
+//==============================================================================
 procedure gld_AddFlat_3dFloor(sectornum: integer; pic, zheight: integer;
   ripple: boolean; light: integer; angle: angle_t; anglex, angley: fixed_t);
 var
@@ -2923,7 +3284,12 @@ begin
   inc(gld_drawinfo.num_flats);
 end;
 
+//==============================================================================
+// gld_AddMidWall
+//
 // JVAL: 3d floors
+//
+//==============================================================================
 procedure gld_AddMidWall(seg: Pseg_t; const ssec, msec: Psector_t);
 var
   wall: GLWall;
@@ -2971,7 +3337,6 @@ begin
     wall.ymid := (other.floorheight / MAP_SCALE + other.ceilingheight / MAP_SCALE) / 2;
   end;
 
-
   {$IFDEF DOOM}
   if seg.linedef.renderflags and LRF_TRANSPARENT <> 0 then
     wall.alpha := 0.5
@@ -3009,6 +3374,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// gld_AddWall
+//
+//==============================================================================
 procedure gld_AddWall(seg: Pseg_t{$IFDEF HEXEN}; const ispolyobj: boolean; const ssec: Psector_t{$ENDIF});
 var
   wall: GLWall;
@@ -3430,6 +3800,11 @@ bottomtexture:
   end;
 end;
 
+//==============================================================================
+//
+// gld_PreprocessSegs
+//
+//==============================================================================
 procedure gld_PreprocessSegs;
 var
   i: integer;
@@ -3456,6 +3831,11 @@ var
   rippletexmatrix: array[0..15] of TGLfloat;
   ripplelastfrac: Integer = -1;
 
+//==============================================================================
+//
+// gld_MakeRippleMatrix
+//
+//==============================================================================
 procedure gld_MakeRippleMatrix;
 var
   rsin, rcos: TGLfloat;
@@ -3491,6 +3871,11 @@ begin
   rippletexmatrix[3 + 4 * 3] := 1;
 end;
 
+//==============================================================================
+//
+// gld_DrawFlat
+//
+//==============================================================================
 procedure gld_DrawFlat(flat: PGLFlat);
 var
   loopnum, i: integer; // current loop number
@@ -3692,12 +4077,14 @@ begin
   glPopMatrix;
 end;
 
+//==============================================================================
 //
 // gld_AddFlat
 //
 // This draws on flat for the sector 'num'
 // The ceiling boolean indicates if the flat is a floor(false) or a ceiling(true)
 //
+//==============================================================================
 procedure gld_AddFlat(sectornum: integer; ceiling: boolean; plane: Pvisplane_t);
 var
   {$IFDEF DOOM_OR_STRIFE}
@@ -3847,6 +4234,11 @@ begin
   inc(gld_drawinfo.num_flats);
 end;
 
+//==============================================================================
+//
+// gld_AddPlane
+//
+//==============================================================================
 procedure gld_AddPlane(subsectornum: integer; floor, ceiling: Pvisplane_t);
 var
   subsector: Psubsector_t;
@@ -3901,6 +4293,11 @@ end;
  *                                *
  **********************************)
 
+//==============================================================================
+//
+// gld_MarkDShadow
+//
+//==============================================================================
 procedure gld_MarkDShadow(sprite: PGLSprite);
 var
   olddlitems: integer;
@@ -3931,6 +4328,11 @@ begin
   inc(numdlitems);
 end;
 
+//==============================================================================
+//
+// gld_MarkDLights
+//
+//==============================================================================
 procedure gld_MarkDLights(sprite: PGLSprite);
 var
   olddlitems: integer;
@@ -3978,6 +4380,11 @@ end;
  *               *
  *****************)
 
+//==============================================================================
+//
+// gld_FindNextModelFrame
+//
+//==============================================================================
 function gld_FindNextModelFrame(const mo: PMobj_t; const modelidx: integer): integer;
 var
   i: integer;
@@ -4025,6 +4432,11 @@ begin
   result := -1;
 end;
 
+//==============================================================================
+//
+// gld_DrawModel
+//
+//==============================================================================
 procedure gld_DrawModel(sprite: PGLSprite; const idx: integer);
 var
   info: Pmodelstate_t;
@@ -4147,6 +4559,11 @@ begin
     glBlendEquation(GL_FUNC_ADD);
 end;
 
+//==============================================================================
+//
+// gld_DrawModels
+//
+//==============================================================================
 procedure gld_DrawModels(sprite: PGLSprite);
 var
   i: integer;
@@ -4224,6 +4641,11 @@ begin
 
 end;
 
+//==============================================================================
+//
+// gld_DrawVoxel
+//
+//==============================================================================
 procedure gld_DrawVoxel(sprite: PGLSprite; const idx: integer);
 var
   info: Pvoxelstate_t;
@@ -4300,7 +4722,6 @@ begin
   printf('**drawing voxel %d'#13#10, [idx]);
   {$ENDIF}
 
-
   anglediff := voxelinf.angleoffset * ANG1;
   {$IFDEF HEXEN}
   if sprite.mo.flags2 and MF2_DROPPED <> 0 then
@@ -4327,6 +4748,11 @@ begin
     glBlendEquation(GL_FUNC_ADD);
 end;
 
+//==============================================================================
+//
+// gld_DrawVoxels
+//
+//==============================================================================
 procedure gld_DrawVoxels(sprite: PGLSprite);
 var
   i: integer;
@@ -4403,6 +4829,11 @@ begin
   glColor3f(1.0, 1.0, 1.0);
 end;
 
+//==============================================================================
+//
+// gld_DrawSprite
+//
+//==============================================================================
 procedure gld_DrawSprite(sprite: PGLSprite);
 begin
   if gl_drawmodels and (sprite.models <> nil) then
@@ -4569,11 +5000,12 @@ const
     0.0000000000
    );
 
-
+//==============================================================================
 //
 //  gld_DrawDLight()
 //  JVAL: Draw a single dynamic light
 //
+//==============================================================================
 procedure gld_DrawDLight(const pdls: Pdlsortitem_t);
 var
   i: integer;
@@ -4598,11 +5030,13 @@ begin
   glPopMatrix;
 end;
 
+//==============================================================================
 //
 //  gld_SortDlights()
 //  JVAL: Sort the dynamic lights according to square distance of camera
 //        (note: closer light is first!)
 //
+//==============================================================================
 procedure gld_SortDlights;
 
   procedure qsort(l, r: Integer);
@@ -4640,10 +5074,12 @@ begin
     qsort(0, numdlitems - 1);
 end;
 
+//==============================================================================
 //
 //  gld_DrawDLights()
 //  JVAL: Draw the marked dynamic lights
 //
+//==============================================================================
 procedure gld_DrawDLights;
 var
   pdls: Pdlsortitem_t;
@@ -4684,6 +5120,11 @@ begin
 
 end;
 
+//==============================================================================
+//
+// gld_AddSprite
+//
+//==============================================================================
 procedure gld_AddSprite(vspr: Pvissprite_t);
 var
   pSpr: Pmobj_t;
@@ -4834,6 +5275,11 @@ end;
  *               *
  *****************)
 
+//==============================================================================
+//
+// gld_StartFog
+//
+//==============================================================================
 procedure gld_StartFog;
 {$IFNDEF HERETIC}
 var
@@ -4892,6 +5338,11 @@ begin
   glDisable(GL_FOG);
 end;
 
+//==============================================================================
+//
+// gld_DrawWalls
+//
+//==============================================================================
 procedure gld_DrawWalls(const wallrange: integer; const fblend: boolean);
 var
   i, j, k, count: integer;
@@ -4942,6 +5393,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// gld_DrawScene
+//
+//==============================================================================
 procedure gld_DrawScene(player: Pplayer_t);
 var
   i, j, k: integer;
@@ -5113,6 +5569,12 @@ begin
 end;
 
 {$IFDEF DOOM}
+
+//==============================================================================
+//
+// gld_SkyTextureHack
+//
+//==============================================================================
 procedure gld_SkyTextureHack;
 var
   i: integer;
@@ -5137,6 +5599,11 @@ begin
 end;
 {$ENDIF}
 
+//==============================================================================
+//
+// gld_PreprocessLevel
+//
+//==============================================================================
 procedure gld_PreprocessLevel;
 begin
   // preload graphics
@@ -5154,6 +5621,11 @@ begin
   glVertexPointer(3, GL_FLOAT, 0, gld_vertexes);
 end;
 
+//==============================================================================
+//
+// gld_FreeSectorLists
+//
+//==============================================================================
 procedure gld_FreeSectorLists;
 var
   i: integer;
@@ -5163,6 +5635,11 @@ begin
       glDeleteLists(sectorloops[i].list, 1);
 end;
 
+//==============================================================================
+//
+// gld_CleanMemory
+//
+//==============================================================================
 procedure gld_CleanMemory;
 begin
   gld_FreeSectorLists;
@@ -5171,6 +5648,11 @@ begin
   gld_CleanModelTextures;
 end;
 
+//==============================================================================
+//
+// R_ShutDownOpenGL
+//
+//==============================================================================
 procedure R_ShutDownOpenGL;
 begin
   if gl_initialized then

@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -38,10 +38,25 @@ uses
   d_player,
   r_defs;
 
+//==============================================================================
+//
+// RX_InitForceFields
+//
+//==============================================================================
 procedure RX_InitForceFields;
 
+//==============================================================================
+//
+// RX_RunForceFields
+//
+//==============================================================================
 procedure RX_RunForceFields;
 
+//==============================================================================
+//
+// RX_ForceFieldThrust
+//
+//==============================================================================
 procedure RX_ForceFieldThrust(const p: Pplayer_t; const ln: Pline_t);
 
 implementation
@@ -83,6 +98,11 @@ var
   numforcefielditems: integer;
   forcefield: Pforcefielditem_tArray;
 
+//==============================================================================
+//
+// RX_AddForceFieldItemGrid
+//
+//==============================================================================
 procedure RX_AddForceFieldItemGrid(const xpos, ypos: integer; const trigger: Pradixtrigger_t);
 var
   i: integer;
@@ -121,6 +141,11 @@ begin
   inc(numforcefielditems);
 end;
 
+//==============================================================================
+//
+// RX_AddForceFieldItemSector
+//
+//==============================================================================
 procedure RX_AddForceFieldItemSector(const sec: Psector_t);
 var
   i: integer;
@@ -181,6 +206,11 @@ begin
     end;
 end;
 
+//==============================================================================
+//
+// RX_InitForceFields
+//
+//==============================================================================
 procedure RX_InitForceFields;
 var
   i: integer;
@@ -210,6 +240,11 @@ var
 const
   FF_DENSITY = 1;  // How many to spawn in a 64x64x64 cube
 
+//==============================================================================
+//
+// RX_SpawnForceFields
+//
+//==============================================================================
 procedure RX_SpawnForceFields(const idx: integer);
 var
   item: Pforcefielditem_t;
@@ -266,6 +301,11 @@ begin
   end
 end;
 
+//==============================================================================
+//
+// RX_RunForceFields
+//
+//==============================================================================
 procedure RX_RunForceFields;
 var
   i: integer;
@@ -280,6 +320,11 @@ end;
 const
   FORCEFIELDTHRUST = 30;
 
+//==============================================================================
+//
+// RX_ForceFieldThrust
+//
+//==============================================================================
 procedure RX_ForceFieldThrust(const p: Pplayer_t; const ln: Pline_t);
 var
   ang: angle_t;

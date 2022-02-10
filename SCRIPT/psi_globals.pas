@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -73,6 +73,11 @@ type
     procedure RebuiltHash;
   end;
 
+//==============================================================================
+//
+// FreeHashList
+//
+//==============================================================================
 procedure FreeHashList(var s: THashStringList);
 
 type
@@ -115,32 +120,102 @@ var
   mapvars: TGlobalVariablesList;
   worldvars: TGlobalVariablesList;
 
+//==============================================================================
+//
+// PS_GetMapStr
+//
+//==============================================================================
 function PS_GetMapStr(const x: string): string;
 
+//==============================================================================
+//
+// PS_SetMapStr
+//
+//==============================================================================
 procedure PS_SetMapStr(const x: string; const v: string);
 
+//==============================================================================
+//
+// PS_GetMapInt
+//
+//==============================================================================
 function PS_GetMapInt(const x: string): integer;
 
+//==============================================================================
+//
+// PS_SetMapInt
+//
+//==============================================================================
 procedure PS_SetMapInt(const x: string; const v: integer);
 
+//==============================================================================
+//
+// PS_GetMapFloat
+//
+//==============================================================================
 function PS_GetMapFloat(const x: string): float;
 
+//==============================================================================
+//
+// PS_SetMapFloat
+//
+//==============================================================================
 procedure PS_SetMapFloat(const x: string; const v: float);
 
+//==============================================================================
+//
+// PS_GetWorldStr
+//
+//==============================================================================
 function PS_GetWorldStr(const x: string): string;
 
+//==============================================================================
+//
+// PS_SetWorldStr
+//
+//==============================================================================
 procedure PS_SetWorldStr(const x: string; const v: string);
 
+//==============================================================================
+//
+// PS_GetWorldInt
+//
+//==============================================================================
 function PS_GetWorldInt(const x: string): integer;
 
+//==============================================================================
+//
+// PS_SetWorldInt
+//
+//==============================================================================
 procedure PS_SetWorldInt(const x: string; const v: integer);
 
+//==============================================================================
+//
+// PS_GetWorldFloat
+//
+//==============================================================================
 function PS_GetWorldFloat(const x: string): float;
 
+//==============================================================================
+//
+// PS_SetWorldFloat
+//
+//==============================================================================
 procedure PS_SetWorldFloat(const x: string; const v: float);
 
+//==============================================================================
+//
+// PS_InitGlobals
+//
+//==============================================================================
 procedure PS_InitGlobals;
 
+//==============================================================================
+//
+// PS_ShutDownGlobals
+//
+//==============================================================================
 procedure PS_ShutDownGlobals;
 
 // Script Runtime Helpers
@@ -215,10 +290,25 @@ type
     property value[Name: string]: float read Get write Put; default;
   end;
 
+//==============================================================================
+//
+// SIRegister_GlobalVars
+//
+//==============================================================================
 procedure SIRegister_GlobalVars(CL: TPSPascalCompiler);
 
+//==============================================================================
+//
+// RIRegister_GlobalVars
+//
+//==============================================================================
 procedure RIRegister_GlobalVars(CL: TPSRuntimeClassImporter);
 
+//==============================================================================
+//
+// RIRegisterRTL_GlobalVars
+//
+//==============================================================================
 procedure RIRegisterRTL_GlobalVars(Exec: TPSExec);
 
 implementation
@@ -229,6 +319,11 @@ uses
   m_misc,
   z_zone;
 
+//==============================================================================
+//
+// Hash
+//
+//==============================================================================
 function Hash(const name: string): integer;
 var
   b: Byte;
@@ -274,6 +369,11 @@ begin
   inherited;
 end;
 
+//==============================================================================
+//
+// THashTable.Insert
+//
+//==============================================================================
 procedure THashTable.Insert(const str: string; const p: integer);
 var
   h: integer;
@@ -287,6 +387,11 @@ begin
   positions[h].Add(p);
 end;
 
+//==============================================================================
+//
+// THashTable.AssignStringList
+//
+//==============================================================================
 procedure THashTable.AssignStringList(const s: TStringList);
 var
   i: integer;
@@ -303,6 +408,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// THashTable.Clear
+//
+//==============================================================================
 procedure THashTable.Clear;
 var
   i: integer;
@@ -312,6 +422,11 @@ begin
       positions[i].Clear;
 end;
 
+//==============================================================================
+//
+// THashTable.GetPos
+//
+//==============================================================================
 function THashTable.GetPos(const value: string): integer;
 var
   h: integer;
@@ -364,6 +479,11 @@ begin
   Result := fList.IndexOf(value);
 end;
 
+//==============================================================================
+//
+// THashTable.CheckPos
+//
+//==============================================================================
 function THashTable.CheckPos(const value: string): integer;
 var
   h: integer;
@@ -416,6 +536,11 @@ begin
   fhash.Free;
 end;
 
+//==============================================================================
+//
+// THashStringList.InsertItem
+//
+//==============================================================================
 procedure THashStringList.InsertItem(Index: Integer; const S: string; AObject: TObject);
 var
   rebuildhash: boolean;
@@ -431,6 +556,11 @@ begin
     fhash.Insert(s, Index);
 end;
 
+//==============================================================================
+//
+// THashStringList.IndexOf
+//
+//==============================================================================
 function THashStringList.IndexOf(const S: string): Integer;
 begin
   if Count = 0 then
@@ -449,6 +579,11 @@ begin
   Result := fhash.CheckPos(S);
 end;
 
+//==============================================================================
+//
+// FreeHashList
+//
+//==============================================================================
 procedure FreeHashList(var s: THashStringList);
 var
   i: integer;
@@ -462,6 +597,11 @@ begin
   s := nil;
 end;
 
+//==============================================================================
+//
+// THashStringList.RebuiltHash
+//
+//==============================================================================
 procedure THashStringList.RebuiltHash;
 begin
   fhash.AssignStringList(self);
@@ -485,6 +625,11 @@ begin
   inherited;
 end;
 
+//==============================================================================
+//
+// TGlobalVariablesList.Clear
+//
+//==============================================================================
 procedure TGlobalVariablesList.Clear;
 begin
   FreeHashList(fStringList);
@@ -495,6 +640,11 @@ begin
   fFloatList := THashStringList.Create;
 end;
 
+//==============================================================================
+//
+// TGlobalVariablesList.GetInteger
+//
+//==============================================================================
 function TGlobalVariablesList.GetInteger(name: string): integer;
 var
   uname: string;
@@ -516,6 +666,11 @@ begin
   Result := (fIntegerList.Objects[idx] as TInteger).intnum;
 end;
 
+//==============================================================================
+//
+// TGlobalVariablesList.PutInteger
+//
+//==============================================================================
 procedure TGlobalVariablesList.PutInteger(name: string; const value: integer);
 var
   uname: string;
@@ -529,6 +684,11 @@ begin
     (fIntegerList.Objects[idx] as TInteger).intnum := value;
 end;
 
+//==============================================================================
+//
+// TGlobalVariablesList.GetFloat
+//
+//==============================================================================
 function TGlobalVariablesList.GetFloat(name: string): float;
 var
   uname: string;
@@ -550,6 +710,11 @@ begin
   Result := (fFloatList.Objects[idx] as TFloat).floatnum;
 end;
 
+//==============================================================================
+//
+// TGlobalVariablesList.PutFloat
+//
+//==============================================================================
 procedure TGlobalVariablesList.PutFloat(name: string; const value: float);
 var
   uname: string;
@@ -563,6 +728,11 @@ begin
     (fFloatList.Objects[idx] as TFloat).floatnum := value;
 end;
 
+//==============================================================================
+//
+// TGlobalVariablesList.GetString
+//
+//==============================================================================
 function TGlobalVariablesList.GetString(name: string): string;
 var
   uname: string;
@@ -578,6 +748,11 @@ begin
   Result := (fStringList.Objects[idx] as TString).str;
 end;
 
+//==============================================================================
+//
+// TGlobalVariablesList.PutString
+//
+//==============================================================================
 procedure TGlobalVariablesList.PutString(name: string; const value: string);
 var
   uname: string;
@@ -591,24 +766,44 @@ begin
     (fStringList.Objects[idx] as TString).str := value;
 end;
 
+//==============================================================================
+// TGlobalVariablesList.DoAddString
+//
 // Assumes name is in Uppercase and is not duplicate
+//
+//==============================================================================
 function TGlobalVariablesList.DoAddString(const name: string; const value: string): integer;
 begin
   Result := fStringList.AddObject(name, TString.Create(value));
 end;
 
+//==============================================================================
+// TGlobalVariablesList.DoAddInteger
+//
 // Assumes name is in Uppercase and is not duplicate
+//
+//==============================================================================
 function TGlobalVariablesList.DoAddInteger(const name: string; const value: integer): integer;
 begin
   Result := fIntegerList.AddObject(name, TInteger.Create(value));
 end;
 
+//==============================================================================
+// TGlobalVariablesList.DoAddFloat
+//
 // Assumes name is in Uppercase and is not duplicate
+//
+//==============================================================================
 function TGlobalVariablesList.DoAddFloat(const name: string; const value: float): integer;
 begin
   Result := fFloatList.AddObject(name, TFloat.Create(value));
 end;
 
+//==============================================================================
+//
+// TGlobalVariablesList.AddString
+//
+//==============================================================================
 function TGlobalVariablesList.AddString(const name: string; const value: string): integer;
 var
   uname: string;
@@ -621,6 +816,11 @@ begin
     (fStringList.Objects[Result] as TString).str := value;
 end;
 
+//==============================================================================
+//
+// TGlobalVariablesList.AddInteger
+//
+//==============================================================================
 function TGlobalVariablesList.AddInteger(const name: string; const value: integer): integer;
 var
   uname: string;
@@ -633,6 +833,11 @@ begin
     (fIntegerList.Objects[Result] as TInteger).intnum := value;
 end;
 
+//==============================================================================
+//
+// TGlobalVariablesList.AddFloat
+//
+//==============================================================================
 function TGlobalVariablesList.AddFloat(const name: string; const value: float): integer;
 var
   uname: string;
@@ -645,6 +850,11 @@ begin
     (fFloatList.Objects[Result] as TFloat).floatnum := value;
 end;
 
+//==============================================================================
+//
+// TGlobalVariablesList.LoadFromBuffer
+//
+//==============================================================================
 function TGlobalVariablesList.LoadFromBuffer(const pbuf: pointer): integer;
 var
   p: integer;
@@ -714,6 +924,11 @@ begin
   Result := p;
 end;
 
+//==============================================================================
+//
+// TGlobalVariablesList.LoadFromFile
+//
+//==============================================================================
 procedure TGlobalVariablesList.LoadFromFile(const fname: string);
 var
   len: integer;
@@ -729,7 +944,12 @@ begin
   Z_Free(buf);
 end;
 
+//==============================================================================
+// TGlobalVariablesList.SaveToBuffer
+//
 // Returns the bytes written
+//
+//==============================================================================
 function TGlobalVariablesList.SaveToBuffer(const pbuf: pointer): integer;
 var
   p: integer;
@@ -794,6 +1014,11 @@ begin
   Result := p;
 end;
 
+//==============================================================================
+//
+// TGlobalVariablesList.SaveToFile
+//
+//==============================================================================
 procedure TGlobalVariablesList.SaveToFile(const fname: string);
 var
   len: integer;
@@ -810,6 +1035,11 @@ begin
   memfree(buf, len + SizeOf(Integer));
 end;
 
+//==============================================================================
+//
+// TGlobalVariablesList.StructureSize
+//
+//==============================================================================
 function TGlobalVariablesList.StructureSize: integer;
 var
   i: integer;
@@ -837,66 +1067,131 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// PS_GetMapStr
+//
+//==============================================================================
 function PS_GetMapStr(const x: string): string;
 begin
   Result := mapvars.StrVal[x];
 end;
 
+//==============================================================================
+//
+// PS_SetMapStr
+//
+//==============================================================================
 procedure PS_SetMapStr(const x: string; const v: string);
 begin
   mapvars.StrVal[x] := v;
 end;
 
+//==============================================================================
+//
+// PS_GetMapInt
+//
+//==============================================================================
 function PS_GetMapInt(const x: string): integer;
 begin
   Result := mapvars.IntVal[x];
 end;
 
+//==============================================================================
+//
+// PS_SetMapInt
+//
+//==============================================================================
 procedure PS_SetMapInt(const x: string; const v: integer);
 begin
   mapvars.IntVal[x] := v;
 end;
 
+//==============================================================================
+//
+// PS_GetMapFloat
+//
+//==============================================================================
 function PS_GetMapFloat(const x: string): float;
 begin
   Result := mapvars.FloatVal[x];
 end;
 
+//==============================================================================
+//
+// PS_SetMapFloat
+//
+//==============================================================================
 procedure PS_SetMapFloat(const x: string; const v: float);
 begin
   mapvars.FloatVal[x] := v;
 end;
 
+//==============================================================================
+//
+// PS_GetWorldStr
+//
+//==============================================================================
 function PS_GetWorldStr(const x: string): string;
 begin
   Result := worldvars.StrVal[x];
 end;
 
+//==============================================================================
+//
+// PS_SetWorldStr
+//
+//==============================================================================
 procedure PS_SetWorldStr(const x: string; const v: string);
 begin
   worldvars.StrVal[x] := v;
 end;
 
+//==============================================================================
+//
+// PS_GetWorldInt
+//
+//==============================================================================
 function PS_GetWorldInt(const x: string): integer;
 begin
   Result := worldvars.IntVal[x];
 end;
 
+//==============================================================================
+//
+// PS_SetWorldInt
+//
+//==============================================================================
 procedure PS_SetWorldInt(const x: string; const v: integer);
 begin
   worldvars.IntVal[x] := v;
 end;
 
+//==============================================================================
+//
+// PS_GetWorldFloat
+//
+//==============================================================================
 function PS_GetWorldFloat(const x: string): float;
 begin
   Result := worldvars.FloatVal[x];
 end;
 
+//==============================================================================
+//
+// PS_SetWorldFloat
+//
+//==============================================================================
 procedure PS_SetWorldFloat(const x: string; const v: float);
 begin
   worldvars.FloatVal[x] := v;
 end;
 
+//==============================================================================
+//
+// CmdGetVar
+//
+//==============================================================================
 procedure CmdGetVar(const s1, s2: string; vars: TGlobalVariablesList;
   const desc: string);
 var
@@ -927,16 +1222,31 @@ begin
   until s = '';
 end;
 
+//==============================================================================
+//
+// CmdGetWorldVar
+//
+//==============================================================================
 procedure CmdGetWorldVar(const s1, s2: string);
 begin
   CmdGetVar(s1, s2, worldvars, 'world');
 end;
 
+//==============================================================================
+//
+// CmdGetMapVar
+//
+//==============================================================================
 procedure CmdGetMapVar(const s1, s2: string);
 begin
   CmdGetVar(s1, s2, mapvars, 'map');
 end;
 
+//==============================================================================
+//
+// CmdSetVar
+//
+//==============================================================================
 procedure CmdSetVar(const s1, s2: string; vars: TGlobalVariablesList;
   const desc: string);
 begin
@@ -975,16 +1285,25 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// CmdSetWorldVar
+//
+//==============================================================================
 procedure CmdSetWorldVar(const s1, s2: string);
 begin
   CmdSetVar(s1, s2, worldvars, 'world');
 end;
 
+//==============================================================================
+//
+// CmdSetMapVar
+//
+//==============================================================================
 procedure CmdSetMapVar(const s1, s2: string);
 begin
   CmdSetVar(s1, s2, mapvars, 'map');
 end;
-
 
 var
   RTL_MapVarS: TMapStrings;
@@ -994,6 +1313,11 @@ var
   RTL_MapVarF: TMapFloats;
   RTL_WorldVarF: TWorldFloats;
 
+//==============================================================================
+//
+// PS_InitGlobals
+//
+//==============================================================================
 procedure PS_InitGlobals;
 begin
   mapvars := TGlobalVariablesList.Create;
@@ -1012,6 +1336,11 @@ begin
   C_AddCmd('setmapvar', @CmdSetMapVar);
 end;
 
+//==============================================================================
+//
+// PS_ShutDownGlobals
+//
+//==============================================================================
 procedure PS_ShutDownGlobals;
 begin
   RTL_MapVarS.Free;
@@ -1033,11 +1362,21 @@ begin
   inherited Create;
 end;
 
+//==============================================================================
+//
+// TGlobalStrings.Get
+//
+//==============================================================================
 function TGlobalStrings.Get(vname: string): string;
 begin
   Result := flist.GetString(vname);
 end;
 
+//==============================================================================
+//
+// TGlobalStrings.Put
+//
+//==============================================================================
 procedure TGlobalStrings.Put(vname: string; const value: string);
 begin
   flist.PutString(vname, value);
@@ -1061,11 +1400,21 @@ begin
   inherited Create;
 end;
 
+//==============================================================================
+//
+// TGlobalIntegers.Get
+//
+//==============================================================================
 function TGlobalIntegers.Get(vname: string): integer;
 begin
   Result := flist.GetInteger(vname);
 end;
 
+//==============================================================================
+//
+// TGlobalIntegers.Put
+//
+//==============================================================================
 procedure TGlobalIntegers.Put(vname: string; const value: integer);
 begin
   flist.PutInteger(vname, value);
@@ -1089,11 +1438,21 @@ begin
   inherited Create;
 end;
 
+//==============================================================================
+//
+// TGlobalFloats.Get
+//
+//==============================================================================
 function TGlobalFloats.Get(vname: string): float;
 begin
   Result := flist.GetFloat(vname);
 end;
 
+//==============================================================================
+//
+// TGlobalFloats.Put
+//
+//==============================================================================
 procedure TGlobalFloats.Put(vname: string; const value: float);
 begin
   flist.PutFloat(vname, value);
@@ -1109,6 +1468,11 @@ begin
   inherited Create(worldvars);
 end;
 
+//==============================================================================
+//
+// SIRegister_TWorldFloats
+//
+//==============================================================================
 procedure SIRegister_TWorldFloats(CL: TPSPascalCompiler);
 begin
   with CL.AddClassN(CL.FindClass('!TOBJECT'), '!TWorldFloats') do
@@ -1120,6 +1484,11 @@ begin
   AddImportedClassVariable(CL, 'WorldFloats', '!TWorldFloats');
 end;
 
+//==============================================================================
+//
+// SIRegister_TMapFloats
+//
+//==============================================================================
 procedure SIRegister_TMapFloats(CL: TPSPascalCompiler);
 begin
   with CL.AddClassN(CL.FindClass('!TOBJECT'), '!TMapFloats') do
@@ -1131,6 +1500,11 @@ begin
   AddImportedClassVariable(CL, 'MapFloats', '!TMapFloats');
 end;
 
+//==============================================================================
+//
+// SIRegister_TWorldIntegers
+//
+//==============================================================================
 procedure SIRegister_TWorldIntegers(CL: TPSPascalCompiler);
 begin
   with CL.AddClassN(CL.FindClass('!TOBJECT'), '!TWorldIntegers') do
@@ -1142,6 +1516,11 @@ begin
   AddImportedClassVariable(CL, 'WorldIntegers', '!TWorldIntegers');
 end;
 
+//==============================================================================
+//
+// SIRegister_TMapIntegers
+//
+//==============================================================================
 procedure SIRegister_TMapIntegers(CL: TPSPascalCompiler);
 begin
   with CL.AddClassN(CL.FindClass('!TOBJECT'), '!TMapIntegers') do
@@ -1153,6 +1532,11 @@ begin
   AddImportedClassVariable(CL, 'MapIntegers', '!TMapIntegers');
 end;
 
+//==============================================================================
+//
+// SIRegister_TWorldStrings
+//
+//==============================================================================
 procedure SIRegister_TWorldStrings(CL: TPSPascalCompiler);
 begin
   with CL.AddClassN(CL.FindClass('!TOBJECT'), '!TWorldStrings') do
@@ -1164,6 +1548,11 @@ begin
   AddImportedClassVariable(CL, 'WorldStrings', '!TWorldStrings');
 end;
 
+//==============================================================================
+//
+// SIRegister_TMapStrings
+//
+//==============================================================================
 procedure SIRegister_TMapStrings(CL: TPSPascalCompiler);
 begin
   with CL.AddClassN(CL.FindClass('!TOBJECT'), '!TMapStrings') do
@@ -1175,6 +1564,11 @@ begin
   AddImportedClassVariable(CL, 'MapStrings', '!TMapStrings');
 end;
 
+//==============================================================================
+//
+// SIRegister_GlobalVars
+//
+//==============================================================================
 procedure SIRegister_GlobalVars(CL: TPSPascalCompiler);
 begin
   SIRegister_TMapStrings(CL);
@@ -1186,66 +1580,132 @@ begin
 end;
 
 (* === run-time registration functions === *)
+
+//==============================================================================
+//
+// TWorldFloatsvalue_W
+//
+//==============================================================================
 procedure TWorldFloatsvalue_W(Self: TWorldFloats; const T: single; const t1: string);
 begin
   Self.value[t1] := T;
 end;
 
+//==============================================================================
+//
+// TWorldFloatsvalue_R
+//
+//==============================================================================
 procedure TWorldFloatsvalue_R(Self: TWorldFloats; var T: single; const t1: string);
 begin
   T := Self.value[t1];
 end;
 
+//==============================================================================
+//
+// TMapFloatsvalue_W
+//
+//==============================================================================
 procedure TMapFloatsvalue_W(Self: TMapFloats; const T: single; const t1: string);
 begin
   Self.value[t1] := T;
 end;
 
+//==============================================================================
+//
+// TMapFloatsvalue_R
+//
+//==============================================================================
 procedure TMapFloatsvalue_R(Self: TMapFloats; var T: single; const t1: string);
 begin
   T := Self.value[t1];
 end;
 
+//==============================================================================
+//
+// TWorldIntegersvalue_W
+//
+//==============================================================================
 procedure TWorldIntegersvalue_W(Self: TWorldIntegers; const T: integer; const t1: string);
 begin
   Self.value[t1] := T;
 end;
 
+//==============================================================================
+//
+// TWorldIntegersvalue_R
+//
+//==============================================================================
 procedure TWorldIntegersvalue_R(Self: TWorldIntegers; var T: integer; const t1: string);
 begin
   T := Self.value[t1];
 end;
 
+//==============================================================================
+//
+// TMapIntegersvalue_W
+//
+//==============================================================================
 procedure TMapIntegersvalue_W(Self: TMapIntegers; const T: integer; const t1: string);
 begin
   Self.value[t1] := T;
 end;
 
+//==============================================================================
+//
+// TMapIntegersvalue_R
+//
+//==============================================================================
 procedure TMapIntegersvalue_R(Self: TMapIntegers; var T: integer; const t1: string);
 begin
   T := Self.value[t1];
 end;
 
+//==============================================================================
+//
+// TWorldStringsvalue_W
+//
+//==============================================================================
 procedure TWorldStringsvalue_W(Self: TWorldStrings; const T: string; const t1: string);
 begin
   Self.value[t1] := T;
 end;
 
+//==============================================================================
+//
+// TWorldStringsvalue_R
+//
+//==============================================================================
 procedure TWorldStringsvalue_R(Self: TWorldStrings; var T: string; const t1: string);
 begin
   T := Self.value[t1];
 end;
 
+//==============================================================================
+//
+// TMapStringsvalue_W
+//
+//==============================================================================
 procedure TMapStringsvalue_W(Self: TMapStrings; const T: string; const t1: string);
 begin
   Self.value[t1] := T;
 end;
 
+//==============================================================================
+//
+// TMapStringsvalue_R
+//
+//==============================================================================
 procedure TMapStringsvalue_R(Self: TMapStrings; var T: string; const t1: string);
 begin
   T := Self.value[t1];
 end;
 
+//==============================================================================
+//
+// RIRegister_TWorldFloats
+//
+//==============================================================================
 procedure RIRegister_TWorldFloats(CL: TPSRuntimeClassImporter);
 begin
   with CL.Add2(TWorldFloats, '!TWORLDFLOATS') do
@@ -1255,6 +1715,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RIRegister_TMapFloats
+//
+//==============================================================================
 procedure RIRegister_TMapFloats(CL: TPSRuntimeClassImporter);
 begin
   with CL.Add2(TMapFloats, '!TMAPFLOATS') do
@@ -1264,6 +1729,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RIRegister_TWorldIntegers
+//
+//==============================================================================
 procedure RIRegister_TWorldIntegers(CL: TPSRuntimeClassImporter);
 begin
   with CL.Add2(TWorldIntegers, '!TWORLDINTEGERS') do
@@ -1273,6 +1743,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RIRegister_TMapIntegers
+//
+//==============================================================================
 procedure RIRegister_TMapIntegers(CL: TPSRuntimeClassImporter);
 begin
   with CL.Add2(TMapIntegers, '!TMAPINTEGERS') do
@@ -1282,6 +1757,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RIRegister_TWorldStrings
+//
+//==============================================================================
 procedure RIRegister_TWorldStrings(CL: TPSRuntimeClassImporter);
 begin
   with CL.Add2(TWorldStrings, '!TWORLDSTRINGS') do
@@ -1291,6 +1771,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RIRegister_TMapStrings
+//
+//==============================================================================
 procedure RIRegister_TMapStrings(CL: TPSRuntimeClassImporter);
 begin
   with CL.Add2(TMapStrings, '!TMAPSTRINGS') do
@@ -1300,6 +1785,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RIRegister_GlobalVars
+//
+//==============================================================================
 procedure RIRegister_GlobalVars(CL: TPSRuntimeClassImporter);
 begin
   RIRegister_TMapStrings(CL);
@@ -1310,7 +1800,12 @@ begin
   RIRegister_TWorldFloats(CL);
 end;
 
+//==============================================================================
+// RIRegisterRTL_GlobalVars
+//
 // JVAL: Must be called after Loading data.
+//
+//==============================================================================
 procedure RIRegisterRTL_GlobalVars(Exec: TPSExec);
 begin
   SetVariantToClass(Exec.GetVarNo(Exec.GetVar('MapStrings')), RTL_MapVarS);

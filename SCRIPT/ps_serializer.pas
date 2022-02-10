@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -95,6 +95,11 @@ begin
   fExec := aExec;
 end;
 
+//==============================================================================
+//
+// TScriptSerializer.SaveVariable
+//
+//==============================================================================
 function TScriptSerializer.SaveVariable(SaveStream: TStream; Src: Pointer; aType: TPSTypeRec): boolean;
 var
   ElemCount: Integer;
@@ -207,6 +212,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TScriptSerializer.LoadVariable
+//
+//==============================================================================
 function TScriptSerializer.LoadVariable(LoadStream: TStream; Src: Pointer; aType: TPSTypeRec): boolean;
 var
   ElemCount: Integer;
@@ -350,6 +360,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TScriptSerializer.SaveToFile
+//
+//==============================================================================
 function TScriptSerializer.SaveToFile(const fname: string): boolean;
 var
   fs: TFileStream;
@@ -365,6 +380,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TScriptSerializer.AppendToFile
+//
+//==============================================================================
 function TScriptSerializer.AppendToFile(const fname: string): boolean;
 var
   fs: TFileStream;
@@ -381,6 +401,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TScriptSerializer.LoadFromFile
+//
+//==============================================================================
 function TScriptSerializer.LoadFromFile(const fname: string): boolean;
 var
   fs: TFileStream;
@@ -399,6 +424,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TScriptSerializer.LoadFromFilePos
+//
+//==============================================================================
 function TScriptSerializer.LoadFromFilePos(const fname: string; var position: integer): boolean;
 var
   fs: TFileStream;
@@ -419,6 +449,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TScriptSerializer.SaveToStream
+//
+//==============================================================================
 function TScriptSerializer.SaveToStream(const SaveStream: TStream): boolean;
 var
   ElemCount: Integer;
@@ -454,6 +489,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TScriptSerializer.LoadFromStream
+//
+//==============================================================================
 function TScriptSerializer.LoadFromStream(const LoadStream: TStream): boolean;
 var
   ElemCount: Integer;
@@ -496,6 +536,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TScriptSerializer.SaveSize
+//
+//==============================================================================
 function TScriptSerializer.SaveSize: Integer;
 var
   ms: TMemoryStream;

@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -83,6 +83,11 @@ type
 {$ENDIF}
   end;
 
+//==============================================================================
+//
+// CreateWaveFileOBffer
+//
+//==============================================================================
 function CreateWaveFileOBffer(Player: TPlayer; Filename: String): TOBuffer;
 
 implementation
@@ -91,6 +96,11 @@ uses
   i_system,
   Math, mp3_Header;
 
+//==============================================================================
+//
+// CreateWaveFileOBffer
+//
+//==============================================================================
 function CreateWaveFileOBffer(Player: TPlayer; Filename: String): TOBuffer;
 var Mode: TMode;
     WhichChannels: TChannels;
@@ -110,9 +120,14 @@ end;
 
 { TOBuffer_Wave }
 
+//==============================================================================
+// TOBuffer_Wave.Append
+//
 // Need to break up the 32-bit integer into 2 8-bit bytes.
 // (ignore the first two bytes - either 0x0000 or 0xffff)
 // Note that Intel byte order is backwards!!!
+//
+//==============================================================================
 procedure TOBuffer_Wave.Append(Channel: Cardinal; Value: SmallInt);
 begin
   FTemp[FBufferP[Channel]]   := (Value and $ff);
@@ -121,12 +136,16 @@ begin
   inc(FBufferP[Channel], FChannels shl 1);
 end;
 
+//==============================================================================
+//
+// TOBuffer_Wave.ClearBuffer
+//
+//==============================================================================
 procedure TOBuffer_Wave.ClearBuffer;
 begin
   // Since we write each frame, and seeks and stops occur between
   // frames, nothing is needed here.
 end;
-
 
 constructor TOBuffer_Wave.Create(NumberOfChannels: Cardinal; Player: TPlayer; Filename: String);
 var pwf: TWAVEFORMATEX;
@@ -215,10 +234,20 @@ begin
   FreeMem(FTemp);
 end;
 
+//==============================================================================
+//
+// TOBuffer_Wave.SetStopFlag
+//
+//==============================================================================
 procedure TOBuffer_Wave.SetStopFlag;
 begin
 end;
 
+//==============================================================================
+//
+// TOBuffer_Wave.WriteBuffer
+//
+//==============================================================================
 procedure TOBuffer_Wave.WriteBuffer;
 var Write, i: Cardinal;
 begin

@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -51,6 +51,11 @@ type
     destructor Destroy; virtual;
   end;
 
+//==============================================================================
+//
+// T_IsValidPatchImage
+//
+//==============================================================================
 function T_IsValidPatchImage(var f: file; const start, size: integer): boolean;
 
 implementation
@@ -67,6 +72,11 @@ begin
   patchsize := 0;
 end;
 
+//==============================================================================
+//
+// TPatchTextureManager.LoadHeader
+//
+//==============================================================================
 function TPatchTextureManager.LoadHeader(stream: TDStream): boolean;
 var
   w, h: integer;
@@ -93,6 +103,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TPatchTextureManager.LoadImage
+//
+//==============================================================================
 function TPatchTextureManager.LoadImage(stream: TDStream): boolean;
 var
   count: integer;
@@ -170,6 +185,11 @@ begin
   Inherited destroy;
 end;
 
+//==============================================================================
+//
+// T_IsValidPatchImage
+//
+//==============================================================================
 function T_IsValidPatchImage(var f: file; const start, size: integer): boolean;
 var
   N, pos: integer;

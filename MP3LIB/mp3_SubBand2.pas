@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -553,6 +553,11 @@ begin
   FSampleNumber := 0;
 end;
 
+//==============================================================================
+//
+// TSubBandLayer2.GetAllocationLength
+//
+//==============================================================================
 function TSubBandLayer2.GetAllocationLength(Header: THeader): Cardinal;
 var
   ChannelBitrate: Cardinal;
@@ -605,6 +610,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TSubBandLayer2.PrepareSampleReading
+//
+//==============================================================================
 procedure TSubBandLayer2.PrepareSampleReading(Header: THeader; Allocation: Cardinal;
   var GroupingTable: PSingleArray; var Factor: Single; var CodeLength: Cardinal; var C,
   D: Single);
@@ -668,6 +678,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TSubBandLayer2.PutNextSample
+//
+//==============================================================================
 function TSubBandLayer2.PutNextSample(Channels: TChannels; Filter1,
   Filter2: TSynthesisFilter): boolean;
 var Sample: Single;
@@ -693,6 +708,11 @@ begin
   result := FSampleNumber = 3;
 end;
 
+//==============================================================================
+//
+// TSubBandLayer2.ReadAllocation
+//
+//==============================================================================
 procedure TSubBandLayer2.ReadAllocation(Stream: TBitStream;
   Header: THeader; CRC: TCRC16);
 var Length: Cardinal;
@@ -703,6 +723,11 @@ begin
     CRC.AddBits(FAllocation, Length);
 end;
 
+//==============================================================================
+//
+// TSubBandLayer2.ReadSampleData
+//
+//==============================================================================
 function TSubBandLayer2.ReadSampleData(Stream: TBitStream): boolean;
 var SampleCode: Cardinal;
 begin
@@ -728,6 +753,11 @@ begin
   result := FGroupnumber = 12;
 end;
 
+//==============================================================================
+//
+// TSubBandLayer2.ReadScaleFactor
+//
+//==============================================================================
 procedure TSubBandLayer2.ReadScaleFactor(Stream: TBitStream;
   Header: THeader);
 begin
@@ -767,6 +797,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TSubBandLayer2.ReadScaleFactorSelection
+//
+//==============================================================================
 procedure TSubBandLayer2.ReadScaleFactorSelection(Stream: TBitStream; CRC: TCRC16);
 begin
   if FAllocation <> 0 then
@@ -779,6 +814,11 @@ end;
 
 { TSubbandLayer2IntensityStereo }
 
+//==============================================================================
+//
+// TSubbandLayer2IntensityStereo.PutNextSample
+//
+//==============================================================================
 function TSubbandLayer2IntensityStereo.PutNextSample(Channels: TChannels;
   Filter1, Filter2: TSynthesisFilter): boolean;
 var
@@ -841,6 +881,11 @@ begin
   result := FSampleNumber = 3;
 end;
 
+//==============================================================================
+//
+// TSubbandLayer2IntensityStereo.ReadScaleFactor
+//
+//==============================================================================
 procedure TSubbandLayer2IntensityStereo.ReadScaleFactor(Stream: TBitStream;
   Header: THeader);
 begin
@@ -897,6 +942,11 @@ end;
 
 { TSubbandLayer2Stereo }
 
+//==============================================================================
+//
+// TSubbandLayer2Stereo.PutNextSample
+//
+//==============================================================================
 function TSubbandLayer2Stereo.PutNextSample(Channels: TChannels; Filter1,
   Filter2: TSynthesisFilter): boolean;
 var
@@ -925,6 +975,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TSubbandLayer2Stereo.ReadAllocation
+//
+//==============================================================================
 procedure TSubbandLayer2Stereo.ReadAllocation(Stream: TBitStream;
   Header: THeader; CRC: TCRC16);
 var
@@ -940,6 +995,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TSubbandLayer2Stereo.ReadSampleData
+//
+//==============================================================================
 function TSubbandLayer2Stereo.ReadSampleData(Stream: TBitStream): boolean;
 var
   SampleCode: Cardinal;
@@ -964,6 +1024,11 @@ begin
     end;
 end;
 
+//==============================================================================
+//
+// TSubbandLayer2Stereo.ReadScaleFactor
+//
+//==============================================================================
 procedure TSubbandLayer2Stereo.ReadScaleFactor(Stream: TBitStream;
   Header: THeader);
 begin
@@ -1006,6 +1071,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TSubbandLayer2Stereo.ReadScaleFactorSelection
+//
+//==============================================================================
 procedure TSubbandLayer2Stereo.ReadScaleFactorSelection(Stream: TBitStream;
   CRC: TCRC16);
 begin

@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -39,36 +39,116 @@ uses
   p_mobj_h,
   p_pspr_h;
 
+//==============================================================================
+//
+// RX_InitWeaponStates
+//
+//==============================================================================
 procedure RX_InitWeaponStates;
 
+//==============================================================================
+//
+// A_RaiseRadixWeapon
+//
+//==============================================================================
 procedure A_RaiseRadixWeapon(player: Pplayer_t; psp: Ppspdef_t);
 
+//==============================================================================
+//
+// A_LowerRadixWeapon
+//
+//==============================================================================
 procedure A_LowerRadixWeapon(player: Pplayer_t; psp: Ppspdef_t);
 
+//==============================================================================
+//
+// A_FireRadixPlasma
+//
+//==============================================================================
 procedure A_FireRadixPlasma(player: Pplayer_t; psp: Ppspdef_t);
 
+//==============================================================================
+//
+// A_FireRadixStandardEPC
+//
+//==============================================================================
 procedure A_FireRadixStandardEPC(player: Pplayer_t; psp: Ppspdef_t);
 
+//==============================================================================
+//
+// A_FireRadixEnhancedEPC
+//
+//==============================================================================
 procedure A_FireRadixEnhancedEPC(player: Pplayer_t; psp: Ppspdef_t);
 
+//==============================================================================
+//
+// A_FireRadixSuperEPC1
+//
+//==============================================================================
 procedure A_FireRadixSuperEPC1(player: Pplayer_t; psp: Ppspdef_t);
 
+//==============================================================================
+//
+// A_FireRadixSuperEPC2
+//
+//==============================================================================
 procedure A_FireRadixSuperEPC2(player: Pplayer_t; psp: Ppspdef_t);
 
+//==============================================================================
+//
+// A_FireRadixPlasmaSpread
+//
+//==============================================================================
 procedure A_FireRadixPlasmaSpread(player: Pplayer_t; psp: Ppspdef_t);
 
+//==============================================================================
+//
+// A_FireRadixSeekingMissiles
+//
+//==============================================================================
 procedure A_FireRadixSeekingMissiles(player: Pplayer_t; psp: Ppspdef_t);
 
+//==============================================================================
+//
+// A_FireRadixNuke
+//
+//==============================================================================
 procedure A_FireRadixNuke(player: Pplayer_t; psp: Ppspdef_t);
 
+//==============================================================================
+//
+// A_FireRadixPhaseTorpedo
+//
+//==============================================================================
 procedure A_FireRadixPhaseTorpedo(player: Pplayer_t; psp: Ppspdef_t);
 
+//==============================================================================
+//
+// A_PhaseTorpedoSplit
+//
+//==============================================================================
 procedure A_PhaseTorpedoSplit(actor: Pmobj_t);
 
+//==============================================================================
+//
+// A_FireRadixGravityWave
+//
+//==============================================================================
 procedure A_FireRadixGravityWave(player: Pplayer_t; psp: Ppspdef_t);
 
+//==============================================================================
+//
+// A_FireALDS
+//
+//==============================================================================
 procedure A_FireALDS(const player: Pplayer_t);
 
+//==============================================================================
+//
+// RX_FirePlasmaBomb
+//
+//==============================================================================
 procedure RX_FirePlasmaBomb(const player: Pplayer_t);
 
 var
@@ -103,10 +183,12 @@ uses
   radix_sounds,
   radix_map_extra;
 
+//==============================================================================
 //
 // RX_CheckNextRefire
 // JVAL: 20200401 - Check if weapon can refire
 //
+//==============================================================================
 function RX_CheckNextRefire(const p: Pplayer_t): boolean;
 var
   checktics: integer;
@@ -125,6 +207,11 @@ begin
   result := true;
 end;
 
+//==============================================================================
+//
+// RX_NewWeaponState
+//
+//==============================================================================
 function RX_NewWeaponState(const tics: integer; const proc: actionf_p2): integer;
 var
   st: Pstate_t;
@@ -139,6 +226,11 @@ begin
   inc(cnt_radixweaponstates);  // JVAL: 20200421 - Save # of new weapon states to add them later to statetokens
 end;
 
+//==============================================================================
+//
+// A_RaiseRadixWeapon
+//
+//==============================================================================
 procedure A_RaiseRadixWeapon(player: Pplayer_t; psp: Ppspdef_t);
 var
   newstate: statenum_t;
@@ -150,6 +242,11 @@ begin
   P_SetPsprite(player, Ord(ps_weapon), newstate);
 end;
 
+//==============================================================================
+//
+// A_LowerRadixWeapon
+//
+//==============================================================================
 procedure A_LowerRadixWeapon(player: Pplayer_t; psp: Ppspdef_t);
 begin
   // Player is dead.
@@ -171,6 +268,11 @@ begin
   P_BringUpWeapon(player);
 end;
 
+//==============================================================================
+//
+// RX_InitWeaponStates
+//
+//==============================================================================
 procedure RX_InitWeaponStates;
 var
   sraise: integer;
@@ -293,6 +395,11 @@ const
   WEAPON_Z_OFFSET = 32 * FRACUNIT;
   MAX_WEAPON_Z_OFFSET = 32 * FRACUNIT;
 
+//==============================================================================
+//
+// P_SpawnPlayerMissileOffsZ
+//
+//==============================================================================
 procedure P_SpawnPlayerMissileOffsZ(source: Pmobj_t; _type: integer; const doffs, dz: fixed_t);
 var
   oldx, oldy, oldz: fixed_t;
@@ -359,6 +466,11 @@ const
   PLASMAENERGYDRAINTICS = 5;
   PLASMAENERGYFIRETICS = TICRATE;
 
+//==============================================================================
+//
+// RX_DrainPlasmaEnergy
+//
+//==============================================================================
 procedure RX_DrainPlasmaEnergy(const p: Pplayer_t; const amount: integer);
 begin
   p.energyweaponfiretics := PLASMAENERGYFIRETICS;
@@ -383,6 +495,11 @@ const
 var
   radixplasma_id: integer = -1;
 
+//==============================================================================
+//
+// A_FireRadixPlasma
+//
+//==============================================================================
 procedure A_FireRadixPlasma(player: Pplayer_t; psp: Ppspdef_t);
 
   procedure spawn_neutron(offs, z: fixed_t);
@@ -489,6 +606,11 @@ type
   epccoord_tArray = array[0..$FF] of epccoord_t;
   Pepccoord_tArray = ^epccoord_tArray;
 
+//==============================================================================
+//
+// P_EPCFire
+//
+//==============================================================================
 procedure P_EPCFire(const player: Pplayer_t; const tbl: Pepccoord_tArray; const sz: integer; const accuracy: integer);
 var
   ammoid: integer;
@@ -544,6 +666,11 @@ const
     (offs:  WEAPON_SIDE_OFFSET; z: -32 * FRACUNIT + WEAPON_Z_OFFSET)
   );
 
+//==============================================================================
+//
+// A_FireRadixStandardEPC
+//
+//==============================================================================
 procedure A_FireRadixStandardEPC(player: Pplayer_t; psp: Ppspdef_t);
 begin
   if not RX_CheckNextRefire(player) then
@@ -563,6 +690,11 @@ const
     (offs:  WEAPON_SIDE_OFFSET; z: -32 * FRACUNIT + WEAPON_Z_OFFSET)
   );
 
+//==============================================================================
+//
+// A_FireRadixEnhancedEPC
+//
+//==============================================================================
 procedure A_FireRadixEnhancedEPC(player: Pplayer_t; psp: Ppspdef_t);
 begin
   if not RX_CheckNextRefire(player) then
@@ -592,6 +724,11 @@ const
     (offs: -16 * WEAPON_SIDE_OFFSET div 32; z:  28 * FRACUNIT + WEAPON_Z_OFFSET)
   );
 
+//==============================================================================
+//
+// A_FireRadixSuperEPC1
+//
+//==============================================================================
 procedure A_FireRadixSuperEPC1(player: Pplayer_t; psp: Ppspdef_t);
 begin
   if not RX_CheckNextRefire(player) then
@@ -600,6 +737,11 @@ begin
   P_EPCFire(player, @superEPCtbl1, 6, 3);
 end;
 
+//==============================================================================
+//
+// A_FireRadixSuperEPC2
+//
+//==============================================================================
 procedure A_FireRadixSuperEPC2(player: Pplayer_t; psp: Ppspdef_t);
 begin
   if not RX_CheckNextRefire(player) then
@@ -615,6 +757,11 @@ var
   radixplasmaspreadleft_id: integer = -1;
   radixplasmaspreadright_id: integer = -1;
 
+//==============================================================================
+//
+// A_FireRadixPlasmaSpread
+//
+//==============================================================================
 procedure A_FireRadixPlasmaSpread(player: Pplayer_t; psp: Ppspdef_t);
 
   procedure spawn_spreader(id: integer; offs, z: fixed_t);
@@ -711,13 +858,17 @@ begin
   end;
 end;
 
-
 //
 // A_FireRadixTorpedos
 //
 var
   radixseekingmissile_id: integer = -1;
 
+//==============================================================================
+//
+// A_FireRadixSeekingMissiles
+//
+//==============================================================================
 procedure A_FireRadixSeekingMissiles(player: Pplayer_t; psp: Ppspdef_t);
 var
   ammoid: integer;
@@ -758,6 +909,11 @@ end;
 var
   radixnuke_id: integer = -1;
 
+//==============================================================================
+//
+// A_FireRadixNuke
+//
+//==============================================================================
 procedure A_FireRadixNuke(player: Pplayer_t; psp: Ppspdef_t);
 var
   ammoid: integer;
@@ -801,6 +957,11 @@ end;
 var
   radixphasetorpedo_id: integer = -1;
 
+//==============================================================================
+//
+// A_FireRadixPhaseTorpedo
+//
+//==============================================================================
 procedure A_FireRadixPhaseTorpedo(player: Pplayer_t; psp: Ppspdef_t);
 var
   ammoid: integer;
@@ -838,6 +999,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// A_PhaseTorpedoSplit
+//
+//==============================================================================
 procedure A_PhaseTorpedoSplit(actor: Pmobj_t);
 var
   mo: Pmobj_t;
@@ -889,6 +1055,11 @@ end;
 var
   radixgravitywave_id: integer = -1;
 
+//==============================================================================
+//
+// A_FireRadixGravityWave
+//
+//==============================================================================
 procedure A_FireRadixGravityWave(player: Pplayer_t; psp: Ppspdef_t);
 var
   i: integer;
@@ -919,6 +1090,11 @@ end;
 var
   radixaldslaser_id: integer = -1;
 
+//==============================================================================
+//
+// A_FireALDS
+//
+//==============================================================================
 procedure A_FireALDS(const player: Pplayer_t);
 begin
   if radixaldslaser_id < 0 then
@@ -940,6 +1116,11 @@ const
 var
   pbplayer: Pplayer_t;
 
+//==============================================================================
+//
+// PIT_Plasmabomb
+//
+//==============================================================================
 function PIT_Plasmabomb(thing: Pmobj_t): boolean;
 var
   dist: fixed_t;
@@ -967,6 +1148,11 @@ begin
   result := true;
 end;
 
+//==============================================================================
+//
+// P_PlasmaBombAttack
+//
+//==============================================================================
 procedure P_PlasmaBombAttack(const p: Pplayer_t);
 var
   x: integer;
@@ -989,6 +1175,11 @@ begin
       P_BlockThingsIterator(x, y, PIT_Plasmabomb);
 end;
 
+//==============================================================================
+//
+// RX_FirePlasmaBomb
+//
+//==============================================================================
 procedure RX_FirePlasmaBomb(const player: Pplayer_t);
 begin
   if player.plasmabombs <= 0 then

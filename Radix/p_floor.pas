@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -41,23 +41,55 @@ uses
   r_defs,
   s_sound;
 
+//==============================================================================
+// T_MovePlane
 //
 // FLOORS
 //
-
+//==============================================================================
 function T_MovePlane(sector: Psector_t; speed: fixed_t; dest: fixed_t;
   crush: boolean; floorOrCeiling: integer; direction: integer): result_e;
 
+//==============================================================================
+//
+// T_MoveFloor
+//
+//==============================================================================
 procedure T_MoveFloor(floor: Pfloormove_t);
 
+//==============================================================================
+//
+// EV_DoFloor
+//
+//==============================================================================
 function EV_DoFloor(line: Pline_t; floortype: floor_e): integer;
 
+//==============================================================================
+//
+// EV_BuildStairs
+//
+//==============================================================================
 function EV_BuildStairs(line: Pline_t; _type: stair_e): integer;
 
+//==============================================================================
+//
+// EV_DoDonut
+//
+//==============================================================================
 function EV_DoDonut(line: Pline_t): integer;
 
+//==============================================================================
+//
+// EV_DoChange
+//
+//==============================================================================
 function EV_DoChange(line: Pline_t; changetype: change_e): integer;
 
+//==============================================================================
+//
+// EV_DoElevator
+//
+//==============================================================================
 function EV_DoElevator(line: Pline_t; elevtype: elevator_e): integer;
 
 implementation
@@ -74,9 +106,12 @@ uses
   r_data,
   sound_data;
 
+//==============================================================================
+// T_MovePlane
 //
 // Move a plane (floor or ceiling) and check for crushing
 //
+//==============================================================================
 function T_MovePlane(sector: Psector_t; speed: fixed_t; dest: fixed_t;
   crush: boolean; floorOrCeiling: integer; direction: integer): result_e;
 var
@@ -217,9 +252,12 @@ begin
   result := ok;
 end;
 
+//==============================================================================
+// T_MoveFloor
 //
 // MOVE A FLOOR TO IT'S DESTINATION (UP OR DOWN)
 //
+//==============================================================================
 procedure T_MoveFloor(floor: Pfloormove_t);
 var
   res: result_e;
@@ -316,6 +354,7 @@ begin
   end;
 end;
 
+//==============================================================================
 //
 // T_MoveElevator
 //
@@ -328,6 +367,7 @@ end;
 //
 // jff 02/22/98 added to support parallel floor/ceiling motion
 //
+//==============================================================================
 procedure T_MoveElevator(elevator: Pelevator_t);
 var
   res: result_e;
@@ -392,9 +432,12 @@ begin
   end;
 end;
 
+//==============================================================================
+// EV_DoFloor
 //
 // HANDLE FLOOR TYPES
 //
+//==============================================================================
 function EV_DoFloor(line: Pline_t; floortype: floor_e): integer;
 var
   secnum: integer;
@@ -592,6 +635,7 @@ begin
   until secnum < 0;
 end;
 
+//==============================================================================
 //
 // EV_DoChange
 //
@@ -603,6 +647,7 @@ end;
 //
 // jff 3/15/98 added to better support generalized sector types
 //
+//==============================================================================
 function EV_DoChange(line: Pline_t; changetype: change_e): integer;
 var
   secnum: integer;
@@ -640,9 +685,12 @@ begin
   end;
 end;
 
+//==============================================================================
+// EV_BuildStairs
 //
 // BUILD A STAIRCASE!
 //
+//==============================================================================
 function EV_BuildStairs(line: Pline_t; _type: stair_e): integer;
 var
   secnum: integer;
@@ -755,6 +803,7 @@ begin
   until secnum < 0;
 end;
 
+//==============================================================================
 //
 // EV_DoDonut()
 //
@@ -764,6 +813,7 @@ end;
 // Passed the linedef that triggered the donut
 // Returns whether a thinker was created
 //
+//==============================================================================
 function EV_DoDonut(line: Pline_t): integer;
 var
   s1: Psector_t;
@@ -833,6 +883,7 @@ begin
   end;
 end;
 
+//==============================================================================
 //
 // EV_DoElevator
 //
@@ -842,6 +893,7 @@ end;
 //
 // jff 2/22/98 new type to move floor and ceiling in parallel
 //
+//==============================================================================
 function EV_DoElevator(line: Pline_t; elevtype: elevator_e): integer;
 var
   secnum: integer;

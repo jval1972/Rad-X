@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -50,8 +50,13 @@ uses
   jpg_utils,
   jpg_dhuff;    { Declarations shared with jdhuff.c }
 
-
 {GLOBAL}
+
+//==============================================================================
+//
+// jinit_phuff_decoder 
+//
+//==============================================================================
 procedure jinit_phuff_decoder (cinfo: j_decompress_ptr);
 
 implementation
@@ -70,7 +75,6 @@ type
     last_dc_val: array[00..MAX_COMPS_IN_SCAN - 1] of int;
                                  { last DC coef for each component }
   end;
-
 
 type
   phuff_entropy_ptr  = ^phuff_entropy_decoder;
@@ -92,22 +96,44 @@ type
     ac_derived_tbl: d_derived_tbl_ptr; { active table during an AC scan }
   end;
 
-
-
 { Forward declarations }
 {METHODDEF}
+
+//==============================================================================
+//
+// decode_mcu_DC_first 
+//
+//==============================================================================
 function decode_mcu_DC_first (cinfo: j_decompress_ptr;
                               var MCU_data: array of JBLOCKROW): boolean;
                               far; forward;
 {METHODDEF}
+
+//==============================================================================
+//
+// decode_mcu_AC_first 
+//
+//==============================================================================
 function decode_mcu_AC_first (cinfo: j_decompress_ptr;
                               var MCU_data: array of JBLOCKROW): boolean;
                               far; forward;
 {METHODDEF}
+
+//==============================================================================
+//
+// decode_mcu_DC_refine 
+//
+//==============================================================================
 function decode_mcu_DC_refine (cinfo: j_decompress_ptr;
                                var MCU_data: array of JBLOCKROW): boolean;
                                far; forward;
 {METHODDEF}
+
+//==============================================================================
+//
+// decode_mcu_AC_refine 
+//
+//==============================================================================
 function decode_mcu_AC_refine (cinfo: j_decompress_ptr;
                                var MCU_data: array of JBLOCKROW): boolean;
                                far; forward;
@@ -115,6 +141,12 @@ function decode_mcu_AC_refine (cinfo: j_decompress_ptr;
 { Initialize for a Huffman-compressed scan. }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// start_pass_phuff_decoder 
+//
+//==============================================================================
 procedure start_pass_phuff_decoder (cinfo: j_decompress_ptr); far;
 var
   entropy: phuff_entropy_ptr;
@@ -242,7 +274,6 @@ begin
   entropy^.restarts_to_go := cinfo^.restart_interval;
 end;
 
-
 { Figure F.12: extend sign bit.
   On some machines, a shift and add will be faster than a table lookup. }
 
@@ -274,11 +305,16 @@ const
 
 {$endif} { AVOID_TABLES }
 
-
 { Check for a restart marker & resynchronize decoder.
   return:=s FALSE if must suspend. }
 
 {LOCAL}
+
+//==============================================================================
+//
+// process_restart 
+//
+//==============================================================================
 function process_restart (cinfo: j_decompress_ptr): boolean;
 var
   entropy: phuff_entropy_ptr;
@@ -317,7 +353,6 @@ begin
   process_restart := TRUE;
 end;
 
-
 { Huffman MCU decoding.
   Each of these routines decodes and returns one MCU's worth of
   Huffman-compressed coefficients.
@@ -333,11 +368,16 @@ end;
   spectral selection, since we'll just re-assign them on the next call.
   Successive approximation AC refinement has to be more careful, however.) }
 
-
 { MCU decoding for DC initial scan (either spectral selection,
   or first pass of successive approximation). }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// decode_mcu_DC_first 
+//
+//==============================================================================
 function decode_mcu_DC_first (cinfo: j_decompress_ptr;
                               var MCU_data: array of JBLOCKROW): boolean;
 label
@@ -493,11 +533,16 @@ begin
   decode_mcu_DC_first := TRUE;
 end;
 
-
 { MCU decoding for AC initial scan (either spectral selection,
   or first pass of successive approximation). }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// decode_mcu_AC_first 
+//
+//==============================================================================
 function decode_mcu_AC_first (cinfo: j_decompress_ptr;
                               var MCU_data: array of JBLOCKROW): boolean;
 label
@@ -687,12 +732,17 @@ begin
   decode_mcu_AC_first := TRUE;
 end;
 
-
 { MCU decoding for DC successive approximation refinement scan.
   Note: we assume such scans can be multi-component, although the spec
   is not very clear on the point. }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// decode_mcu_DC_refine 
+//
+//==============================================================================
 function decode_mcu_DC_refine (cinfo: j_decompress_ptr;
                                var MCU_data: array of JBLOCKROW): boolean;
 
@@ -770,10 +820,15 @@ begin
   decode_mcu_DC_refine := TRUE;
 end;
 
-
 { MCU decoding for AC successive approximation refinement scan. }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// decode_mcu_AC_refine 
+//
+//==============================================================================
 function decode_mcu_AC_refine (cinfo: j_decompress_ptr;
                                var MCU_data: array of JBLOCKROW): boolean;
 label
@@ -1053,10 +1108,15 @@ undoit:
   decode_mcu_AC_refine := FALSE;
 end;
 
-
 { Module initialization routine for progressive Huffman entropy decoding. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jinit_phuff_decoder 
+//
+//==============================================================================
 procedure jinit_phuff_decoder (cinfo: j_decompress_ptr);
 var
   entropy: phuff_entropy_ptr;

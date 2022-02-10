@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -63,20 +63,30 @@ uses
 {$endif}
   jpg_lib;
 
-
 { Compute output image dimensions and related values.
   NOTE: this is exported for possible use by application.
   Hence it mustn't do anything that can't be done twice.
   Also note that it may be called before the master module is initialized! }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_calc_output_dimensions 
+//
+//==============================================================================
 procedure jpeg_calc_output_dimensions (cinfo: j_decompress_ptr);
 { Do computations that are needed before master selection phase }
-
 
 {$ifdef D_MULTISCAN_FILES_SUPPORTED}
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_new_colormap 
+//
+//==============================================================================
 procedure jpeg_new_colormap (cinfo: j_decompress_ptr);
 
 {$endif}
@@ -85,6 +95,12 @@ procedure jpeg_new_colormap (cinfo: j_decompress_ptr);
   This is performed at the start of jpeg_start_decompress. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jinit_master_decompress 
+//
+//==============================================================================
 procedure jinit_master_decompress (cinfo: j_decompress_ptr);
 
 implementation
@@ -92,7 +108,6 @@ implementation
 uses
   d_delphi,
   jpg_defErr;
-
 
 { Private state }
 
@@ -116,6 +131,12 @@ type
   CRUCIAL: this must match the actual capabilities of jdmerge.c! }
 
 {LOCAL}
+
+//==============================================================================
+//
+// use_merged_upsample 
+//
+//==============================================================================
 function use_merged_upsample (cinfo: j_decompress_ptr): boolean;
 var
   compptr: jpeg_component_info_list_ptr;
@@ -164,13 +185,18 @@ begin
 {$endif}
 end;
 
-
 { Compute output image dimensions and related values.
   NOTE: this is exported for possible use by application.
   Hence it mustn't do anything that can't be done twice.
   Also note that it may be called before the master module is initialized! }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_calc_output_dimensions 
+//
+//==============================================================================
 procedure jpeg_calc_output_dimensions (cinfo: j_decompress_ptr);
 { Do computations that are needed before master selection phase }
 {$ifdef IDCT_SCALING_SUPPORTED}
@@ -304,7 +330,6 @@ begin
     cinfo^.rec_outbuf_height := 1;
 end;
 
-
 { Several decompression processes need to range-limit values to the range
   0..MAXJSAMPLE; the input value may fall somewhat outside this range
   due to noise introduced by quantization, roundoff error, etc.  These
@@ -347,6 +372,12 @@ end;
   enough and used often enough to justify this. }
 
 {LOCAL}
+
+//==============================================================================
+//
+// prepare_range_limit_table 
+//
+//==============================================================================
 procedure prepare_range_limit_table (cinfo: j_decompress_ptr);
 { Allocate and fill in the sample_range_limit table }
 var
@@ -380,7 +411,6 @@ begin
 
 end;
 
-
 { Master selection of decompression modules.
   This is done once at jpeg_start_decompress time.  We determine
   which modules will be used and give them appropriate initialization calls.
@@ -391,6 +421,12 @@ end;
   settings. }
 
 {LOCAL}
+
+//==============================================================================
+//
+// master_selection 
+//
+//==============================================================================
 procedure master_selection (cinfo: j_decompress_ptr);
 var
   master: my_master_ptr;
@@ -562,7 +598,6 @@ begin
 {$endif} { D_MULTISCAN_FILES_SUPPORTED }
 end;
 
-
 { Per-pass setup.
   This is called at the beginning of each output pass.  We determine which
   modules will be active during this pass and give them appropriate
@@ -571,6 +606,12 @@ end;
   (In the latter case, jdapistd.c will crank the pass to completion.) }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// prepare_for_output_pass 
+//
+//==============================================================================
 procedure prepare_for_output_pass (cinfo: j_decompress_ptr); far;
 var
   master: my_master_ptr;
@@ -647,10 +688,15 @@ begin
   end;
 end;
 
-
 { Finish up at end of an output pass. }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// finish_output_pass 
+//
+//==============================================================================
 procedure finish_output_pass (cinfo: j_decompress_ptr); far;
 var
   master: my_master_ptr;
@@ -662,12 +708,17 @@ begin
   inc(master^.pass_number);
 end;
 
-
 {$ifdef D_MULTISCAN_FILES_SUPPORTED}
 
 { Switch to a new external colormap between output passes. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_new_colormap 
+//
+//==============================================================================
 procedure jpeg_new_colormap (cinfo: j_decompress_ptr);
 var
   master: my_master_ptr;
@@ -693,11 +744,16 @@ end;
 
 {$endif} { D_MULTISCAN_FILES_SUPPORTED }
 
-
 { Initialize master decompression control and select active modules.
   This is performed at the start of jpeg_start_decompress. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jinit_master_decompress 
+//
+//==============================================================================
 procedure jinit_master_decompress (cinfo: j_decompress_ptr);
 var
   master: my_master_ptr;

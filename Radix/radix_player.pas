@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -65,18 +65,53 @@ var
 const
   PLAYERFOLLOWDISTANCE = 2048 * FRACUNIT;
 
+//==============================================================================
+//
+// RX_ClearPlayerHistory
+//
+//==============================================================================
 procedure RX_ClearPlayerHistory(const p: Pplayer_t);
 
+//==============================================================================
+//
+// RX_FollowPlayer
+//
+//==============================================================================
 function RX_FollowPlayer(const mo: Pmobj_t; const p: Pplayer_t): boolean;
 
+//==============================================================================
+//
+// RX_PlayerThink
+//
+//==============================================================================
 procedure RX_PlayerThink(p: Pplayer_t);
 
+//==============================================================================
+//
+// RX_PlayerMessage
+//
+//==============================================================================
 function RX_PlayerMessage(p: Pplayer_t; const msgid: integer): boolean;
 
+//==============================================================================
+//
+// RX_PlaneHitWall
+//
+//==============================================================================
 procedure RX_PlaneHitWall(const p: Pplayer_t; const tryx, tryy: fixed_t);
 
+//==============================================================================
+//
+// RX_PlaneHitFloor
+//
+//==============================================================================
 procedure RX_PlaneHitFloor(const p: Pplayer_t);
 
+//==============================================================================
+//
+// RX_NearestPlayer
+//
+//==============================================================================
 function RX_NearestPlayer(const mo: Pmobj_t): Pplayer_t;
 
 implementation
@@ -109,6 +144,11 @@ uses
   s_sound,
   tables;
 
+//==============================================================================
+//
+// PlayerToId
+//
+//==============================================================================
 function PlayerToId(const p: Pplayer_t): integer;
 var
   i: integer;
@@ -123,6 +163,11 @@ begin
   result := -1;
 end;
 
+//==============================================================================
+//
+// RX_PlayerHistoryNotify
+//
+//==============================================================================
 procedure RX_PlayerHistoryNotify(const p: Pplayer_t);
 var
   pid: integer;
@@ -162,6 +207,11 @@ begin
     inc(history.numitems);
 end;
 
+//==============================================================================
+//
+// RX_ClearPlayerHistory
+//
+//==============================================================================
 procedure RX_ClearPlayerHistory(const p: Pplayer_t);
 var
   pid: integer;
@@ -175,6 +225,11 @@ begin
   ZeroMemory(history, SizeOf(playertracehistory_t));
 end;
 
+//==============================================================================
+//
+// RX_FollowPlayer
+//
+//==============================================================================
 function RX_FollowPlayer(const mo: Pmobj_t; const p: Pplayer_t): boolean;
 var
   pid: integer;
@@ -305,6 +360,11 @@ const
 var
   enginesound_id: integer = -1;
 
+//==============================================================================
+//
+// RX_PlayerEngineSound
+//
+//==============================================================================
 procedure RX_PlayerEngineSound(p: Pplayer_t);
 var
   sndid: integer;
@@ -343,6 +403,11 @@ const
 var
   messagesound_id: integer = -1;
 
+//==============================================================================
+//
+// RX_PlayerMessageSound
+//
+//==============================================================================
 procedure RX_PlayerMessageSound(p: Pplayer_t);
 begin
   if p.messagesoundtarget = nil then
@@ -366,6 +431,11 @@ const
 var
   radixplayermo: Pmobj_t;
 
+//==============================================================================
+//
+// RIT_HandleFriendsNearMe
+//
+//==============================================================================
 function RIT_HandleFriendsNearMe(mo: Pmobj_t): boolean;
 var
   dist1: fixed_t;
@@ -429,6 +499,11 @@ begin
       mo.momz := mo.momz - FRACUNIT div 2;
 end;
 
+//==============================================================================
+//
+// RX_HandleFriendsNearMe
+//
+//==============================================================================
 procedure RX_HandleFriendsNearMe;
 var
   x: integer;
@@ -451,6 +526,11 @@ end;
 var
   attackingenemynear: boolean;
 
+//==============================================================================
+//
+// RIT_AttackingEnemyNearMe
+//
+//==============================================================================
 function RIT_AttackingEnemyNearMe(mo: Pmobj_t): boolean;
 begin
   result := true;
@@ -472,6 +552,11 @@ begin
     end;
 end;
 
+//==============================================================================
+//
+// RX_AttackingEnemiesNearMe
+//
+//==============================================================================
 procedure RX_AttackingEnemiesNearMe;
 const
   ATTACHINGWARNRANGE = 2048 * FRACUNIT;
@@ -501,6 +586,11 @@ end;
 const
   DOOMLEVELRADIUS = 16 * FRACUNIT;
 
+//==============================================================================
+//
+// RX_PlayerThink
+//
+//==============================================================================
 procedure RX_PlayerThink(p: Pplayer_t);
 var
   new_health: integer;
@@ -654,6 +744,11 @@ end;
 const
   MSGTIMEOUT = 4 * TICRATE;
 
+//==============================================================================
+//
+// RX_PlayerMessage
+//
+//==============================================================================
 function RX_PlayerMessage(p: Pplayer_t; const msgid: integer): boolean;
 begin
   if IsIntegerInRange(msgid, 0, NUMRADIXMESSAGES - 1) then
@@ -671,6 +766,11 @@ var
   id_radixdronehitwallsmoke1: integer = -1;
   id_radixdronehitwallsmoke2: integer = -1;
 
+//==============================================================================
+//
+// RX_PlaneHitWall
+//
+//==============================================================================
 procedure RX_PlaneHitWall(const p: Pplayer_t; const tryx, tryy: fixed_t);
 var
   mo, pmo: Pmobj_t;
@@ -716,6 +816,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RX_PlaneHitFloor
+//
+//==============================================================================
 procedure RX_PlaneHitFloor(const p: Pplayer_t);
 
   procedure _spawn_burner_smoke_floor(const dir: integer; const num_hit_smokes: LongWord);
@@ -851,6 +956,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RX_NearestPlayer
+//
+//==============================================================================
 function RX_NearestPlayer(const mo: Pmobj_t): Pplayer_t;
 var
   i: integer;

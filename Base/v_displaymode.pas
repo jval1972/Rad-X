@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -34,8 +34,18 @@ unit v_displaymode;
 
 interface
 
+//==============================================================================
+//
+// V_SetDisplayMode
+//
+//==============================================================================
 function V_SetDisplayMode(const newwidth, newheight: integer): boolean;
 
+//==============================================================================
+//
+// V_DoSetDisplayMode
+//
+//==============================================================================
 function V_DoSetDisplayMode(const newwidth, newheight: integer): boolean;
 
 implementation
@@ -58,6 +68,11 @@ uses
   r_plane,
   v_video;
 
+//==============================================================================
+//
+// V_SetDisplayMode
+//
+//==============================================================================
 function V_SetDisplayMode(const newwidth, newheight: integer): boolean;
 var
   nwidth, nheight: integer;
@@ -86,6 +101,11 @@ begin
     result := V_DoSetDisplayMode(nwidth, nheight);
 end;
 
+//==============================================================================
+//
+// V_DoSetDisplayMode
+//
+//==============================================================================
 function V_DoSetDisplayMode(const newwidth, newheight: integer): boolean;
 begin
   MT_WaitTasks;            // Wait for running tasks to stop

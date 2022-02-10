@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -37,12 +37,32 @@ interface
 uses
   d_delphi;
 
+//==============================================================================
+//
+// P_InitFTAnims
+//
+//==============================================================================
 procedure P_InitFTAnims;
 
+//==============================================================================
+//
+// P_AnimateSurfaces
+//
+//==============================================================================
 procedure P_AnimateSurfaces;
 
+//==============================================================================
+//
+// P_InitAnimations
+//
+//==============================================================================
 procedure P_InitAnimations;
 
+//==============================================================================
+//
+// P_ShutDownAnimations
+//
+//==============================================================================
 procedure P_ShutDownAnimations;
 
 var
@@ -96,12 +116,14 @@ var
   AnimDefs: array[0..MAX_ANIM_DEFS - 1] of animDef_t;
   FrameDefs: array[0..MAX_FRAME_DEFS - 1] of frameDef_t;
   AnimDefCount: integer;
+
 //==========================================================================
 //
 // P_AnimateSurfaces
 //
 //==========================================================================
-
+//
+//==============================================================================
 procedure P_AnimateSurfaces;
 var
   i: integer;
@@ -143,7 +165,8 @@ end;
 // Initialize flat and texture animation lists.
 //
 //==========================================================================
-
+//
+//==============================================================================
 procedure P_InitFTAnims;
 var
   base: integer;
@@ -279,12 +302,22 @@ begin
   sc.Free;
 end;
 
+//==============================================================================
+//
+// P_InitAnimations
+//
+//==============================================================================
 procedure P_InitAnimations;
 begin
   animatedflatslist := TDNumberList.Create;
   animatedtextureslist := TDNumberList.Create;
 end;
 
+//==============================================================================
+//
+// P_ShutDownAnimations
+//
+//==============================================================================
 procedure P_ShutDownAnimations;
 begin
   FreeAndNil(animatedflatslist);

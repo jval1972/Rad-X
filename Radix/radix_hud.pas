@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -34,10 +34,25 @@ unit radix_hud;
 
 interface
 
+//==============================================================================
+//
+// RX_InitRadixHud
+//
+//==============================================================================
 procedure RX_InitRadixHud;
 
+//==============================================================================
+//
+// RX_ShutDownRadixHud
+//
+//==============================================================================
 procedure RX_ShutDownRadixHud;
 
+//==============================================================================
+//
+// RX_HudDrawer
+//
+//==============================================================================
 procedure RX_HudDrawer;
 
 var
@@ -105,6 +120,11 @@ var
   skeybar: Ppatch_t;
   stkeys: array[0..Ord(NUMCARDS) - 1] of Ppatch_t;
 
+//==============================================================================
+//
+// RX_InitRadixHud
+//
+//==============================================================================
 procedure RX_InitRadixHud;
 var
   i: integer;
@@ -185,12 +205,22 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RX_ShutDownRadixHud
+//
+//==============================================================================
 procedure RX_ShutDownRadixHud;
 begin
   radar_list.Free;
   radar_friendlist.Free;
 end;
 
+//==============================================================================
+//
+// RX_HudDrawTime
+//
+//==============================================================================
 procedure RX_HudDrawTime(const x, y: integer);
 var
   secs: integer;
@@ -205,6 +235,11 @@ begin
     M_WriteSmallText(x, y, 'SUCKS', SCN_HUD); // JVAL 20200316 - SUCKS easter egg
 end;
 
+//==============================================================================
+//
+// RX_HudDrawSpeedIndicator
+//
+//==============================================================================
 procedure RX_HudDrawSpeedIndicator(const x, y: integer; const column: Pspeedindicatorcolumn_t; const up: boolean);
 var
   speed: float;
@@ -252,6 +287,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// PIT_AddRadarThing
+//
+//==============================================================================
 function PIT_AddRadarThing(thing: Pmobj_t): boolean;
 begin
   if thing.health > 0 then
@@ -264,6 +304,11 @@ begin
   result := true;
 end;
 
+//==============================================================================
+//
+// RX_DrawRadar
+//
+//==============================================================================
 procedure RX_DrawRadar(const x, y: integer; const range: integer);
 const
   RADAR_SHIFT_BITS = 8;
@@ -377,6 +422,11 @@ begin
   _draw_list(radar_list, aprox_yellow);
 end;
 
+//==============================================================================
+//
+// RX_HudDrawBar
+//
+//==============================================================================
 procedure RX_HudDrawBar(const x, y: integer; const bar: Ppatch_t; const pct: integer);
 var
   i, j: integer;
@@ -409,6 +459,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RX_HudDrawPowerUpIcons
+//
+//==============================================================================
 procedure RX_HudDrawPowerUpIcons;
 
   // JVAL: 20200322 - Flash icons at the end
@@ -439,19 +494,34 @@ begin
     V_DrawPatch(300, 102, SCN_HUD, PowerUpIcons[4], false);
 end;
 
+//==============================================================================
+//
+// RX_HudDrawPlasmaBall
+//
+//==============================================================================
 procedure RX_HudDrawPlasmaBall;
 begin
   V_DrawPatch(282, 0, SCN_HUD, PlasmaIcon, false);
   M_WriteSmallText(305, 4, IntToStrzFill(2, hud_player.plasmabombs), SCN_HUD);
 end;
 
+//==============================================================================
+//
+// RX_HudDrawRestartMessage
+//
+//==============================================================================
 procedure RX_HudDrawRestartMessage;
 begin
   if hud_player.playerstate = PST_DEAD then
     M_WriteSmallTextCenter(76, S_PRESS_SPACE_RESTART, SCN_HUD);
 end;
 
+//==============================================================================
+// RX_HudDrawCrossHair
+//
 // JVAL: 20200501 - Draw crosshair
+//
+//==============================================================================
 procedure RX_HudDrawCrossHair;
 var
   cidx: integer;
@@ -482,7 +552,12 @@ begin
     V_DrawPatch(160 - p.width div 2, 100 - (STATUSBAR_HEIGHT + p.height) div 2, SCN_HUD, p, false);
 end;
 
+//==============================================================================
+// RX_HudDrawKeys
+//
 // JVAL: 20200523 - Draw keys
+//
+//==============================================================================
 procedure RX_HudDrawKeys(const x, y: integer; const kbar: Ppatch_t);
 var
   i: integer;
@@ -502,6 +577,11 @@ const
   weaponxlatpos: array[0..8] of integer =
     (0, 1, 2, 3, 4, 5, 6, 1, 1);
 
+//==============================================================================
+//
+// RX_HudDrawerStatusbar
+//
+//==============================================================================
 procedure RX_HudDrawerStatusbar;
 var
   p: Ppatch_t;
@@ -623,9 +703,14 @@ type
 const
   COCKPIT_UP_PART = 120;
 
+//==============================================================================
+// RX_HudDrawerCockpit
+//
 ////////////////////////////////////////////////////////////////////////////////
 // Draw Cockpit
 ////////////////////////////////////////////////////////////////////////////////
+//
+//==============================================================================
 procedure RX_HudDrawerCockpit(const mode: cockpitmode_t);
 var
   p: Ppatch_t;
@@ -741,9 +826,14 @@ begin
   RX_HudDrawKeys(204, 134, ckeybar);
 end;
 
+//==============================================================================
+// RX_HudDrawerSmall
+//
 ////////////////////////////////////////////////////////////////////////////////
 // Mini hud
 ////////////////////////////////////////////////////////////////////////////////
+//
+//==============================================================================
 procedure RX_HudDrawerSmall;
 begin
   // Draw armor, shield and energy bars
@@ -764,9 +854,11 @@ begin
   RX_HudDrawCrossHair;
 end;
 
+//==============================================================================
 //
 // RX_HudDrawer
 //
+//==============================================================================
 procedure RX_HudDrawer;
 begin
   hud_player := @players[consoleplayer];

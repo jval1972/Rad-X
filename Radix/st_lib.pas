@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -126,25 +126,37 @@ type
     //  stating whether to update icon
     _on: PBoolean;
 
-
     p: Ppatch_t;   // icon
     data: integer; // user data
   end;
   Pst_binicon_t = ^st_binicon_t;
 
+//==============================================================================
+// STlib_initNum
 //
 // Widget creation, access, and update routines
 //
-
 // Number widget routines
+//
+//==============================================================================
 procedure STlib_initNum(n: Pst_number_t; x, y: integer; pl: Ppatch_tPArray;
   num: PInteger; _on: PBoolean; width: integer);
 
+//==============================================================================
+// STlib_initPercent
+//
 // Percent widget routines
+//
+//==============================================================================
 procedure STlib_initPercent(p: Pst_percent_t; x, y: integer; pl: Ppatch_tPArray;
   num: PInteger; _on: PBoolean; percent: Ppatch_t);
 
+//==============================================================================
+// STlib_initMultIcon
+//
 // Multiple Icon widget routines
+//
+//==============================================================================
 procedure STlib_initMultIcon(i: Pst_multicon_t; x, y: integer; il: Ppatch_tPArray;
   inum: PInteger; _on: PBoolean);
 
@@ -153,7 +165,12 @@ var
 
 implementation
 
+//==============================================================================
+// STlib_initNum
+//
 // ?
+//
+//==============================================================================
 procedure STlib_initNum(n: Pst_number_t; x, y: integer; pl: Ppatch_tPArray;
   num: PInteger; _on: PBoolean; width: integer);
 begin
@@ -166,8 +183,10 @@ begin
   n.p := pl;
 end;
 
+//==============================================================================
+// STlib_initPercent
 //
-//
+//==============================================================================
 procedure STlib_initPercent(p: Pst_percent_t; x, y: integer; pl: Ppatch_tPArray;
   num: PInteger; _on: PBoolean; percent: Ppatch_t);
 begin
@@ -175,6 +194,11 @@ begin
   p.p := percent;
 end;
 
+//==============================================================================
+//
+// STlib_initMultIcon
+//
+//==============================================================================
 procedure STlib_initMultIcon(i: Pst_multicon_t; x, y: integer; il: Ppatch_tPArray;
   inum: PInteger; _on: PBoolean);
 begin

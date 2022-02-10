@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -38,8 +38,18 @@ uses
   d_delphi,
   m_fixed;
 
+//==============================================================================
+//
+// R_InitTransparency8Tables
+//
+//==============================================================================
 procedure R_InitTransparency8Tables;
 
+//==============================================================================
+//
+// R_FreeTransparency8Tables
+//
+//==============================================================================
 procedure R_FreeTransparency8Tables;
 
 type
@@ -59,14 +69,39 @@ var
   curadd8table: Ptrans8table_t = nil;
   cursubtract8table: Ptrans8table_t = nil;
 
+//==============================================================================
+//
+// R_GetTransparency8table
+//
+//==============================================================================
 function R_GetTransparency8table(const factor: fixed_t = FRACUNIT div 2): Ptrans8table_t;
 
+//==============================================================================
+//
+// R_GetAdditive8table
+//
+//==============================================================================
 function R_GetAdditive8table(const factor: fixed_t = FRACUNIT div 2): Ptrans8table_t;
 
+//==============================================================================
+//
+// R_GetSubtractive8table
+//
+//==============================================================================
 function R_GetSubtractive8table(const factor: fixed_t = FRACUNIT div 2): Ptrans8table_t;
 
+//==============================================================================
+//
+// R_FastApproxColorIndex
+//
+//==============================================================================
 function R_FastApproxColorIndex(const c: LongWord): byte; overload;
 
+//==============================================================================
+//
+// R_FastApproxColorIndex
+//
+//==============================================================================
 function R_FastApproxColorIndex(const r, g, b: byte): byte; overload;
 
 const
@@ -82,6 +117,11 @@ type
 var
   approxcolorindexarray: Papproxcolorindexarray_t;
 
+//==============================================================================
+//
+// R_Calc8bitTables
+//
+//==============================================================================
 procedure R_Calc8bitTables;
 
 implementation
@@ -107,6 +147,11 @@ var
   approxcolorstruct: Papproxcolorstructitem_tArray;
   currpalettehash: LongWord;
 
+//==============================================================================
+//
+// R_GetPaletteHash
+//
+//==============================================================================
 function R_GetPaletteHash(const p: PLongWordArray): LongWord;
 var
   i: integer;
@@ -116,6 +161,11 @@ begin
     result := result xor (p[i] and $FFFFFF);
 end;
 
+//==============================================================================
+//
+// R_ExpandPalette
+//
+//==============================================================================
 procedure R_ExpandPalette(const inpal: PByteArray; const outpal: PLongWordArray; const gamma: integer);
 var
   dest: PLongWord;
@@ -133,6 +183,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_InitTransparency8Tables
+//
+//==============================================================================
 procedure R_InitTransparency8Tables;
 var
   pal: PByteArray; // Palette lump data
@@ -262,6 +317,11 @@ begin
   trans8tablescalced := true;
 end;
 
+//==============================================================================
+//
+// R_FreeTransparency8Tables
+//
+//==============================================================================
 procedure R_FreeTransparency8Tables;
 var
   i: integer;
@@ -281,6 +341,11 @@ begin
 
 end;
 
+//==============================================================================
+//
+// R_GetTransparency8table
+//
+//==============================================================================
 function R_GetTransparency8table(const factor: fixed_t = FRACUNIT div 2): Ptrans8table_t;
 var
   idx: integer;
@@ -294,6 +359,11 @@ begin
     result := trans8tables[idx];
 end;
 
+//==============================================================================
+//
+// R_GetAdditive8table
+//
+//==============================================================================
 function R_GetAdditive8table(const factor: fixed_t = FRACUNIT div 2): Ptrans8table_t;
 var
   idx: integer;
@@ -307,6 +377,11 @@ begin
     result := additive8tables[idx];
 end;
 
+//==============================================================================
+//
+// R_GetSubtractive8table
+//
+//==============================================================================
 function R_GetSubtractive8table(const factor: fixed_t = FRACUNIT div 2): Ptrans8table_t;
 var
   idx: integer;
@@ -320,6 +395,11 @@ begin
     result := subtractive8tables[idx];
 end;
 
+//==============================================================================
+//
+// R_FastApproxColorIndex
+//
+//==============================================================================
 function R_FastApproxColorIndex(const c: LongWord): byte; overload;
 var
   r, g, b: LongWord;
@@ -330,6 +410,11 @@ begin
   result := approxcolorindexarray[r shl (16 - FASTTABLESHIFT - FASTTABLESHIFT) + g shl (8 - FASTTABLESHIFT) + b];
 end;
 
+//==============================================================================
+//
+// R_FastApproxColorIndex
+//
+//==============================================================================
 function R_FastApproxColorIndex(const r, g, b: byte): byte; overload;
 var
   r1, g1, b1: LongWord;
@@ -346,6 +431,11 @@ var
   last_pal_index: integer;
   last_gamma: integer;
 
+//==============================================================================
+//
+// R_Calc8bitTables
+//
+//==============================================================================
 procedure R_Calc8bitTables;
 var
   i: integer;
@@ -359,7 +449,6 @@ begin
 
   if (last_pal_index = cur_pal_index) and (last_gamma = usegamma) then
     exit;
-
 
   last_pal_index := cur_pal_index;
   last_gamma := usegamma;

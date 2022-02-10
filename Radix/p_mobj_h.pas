@@ -199,7 +199,6 @@ const
   // Just appeard - new spawn monsters or just teleported monsters
   MF_JUSTAPPEARED = $10000000;
 
-
 const
   // Sprite is transparent
   MF_EX_TRANSPARENT = 1;

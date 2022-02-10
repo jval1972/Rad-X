@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -41,10 +41,25 @@ uses
   p_mobj_h,
   d_player;
 
+//==============================================================================
+//
+// P_PlayerThink
+//
+//==============================================================================
 procedure P_PlayerThink(player: Pplayer_t);
 
+//==============================================================================
+//
+// P_CalcHeight
+//
+//==============================================================================
 procedure P_CalcHeight(player: Pplayer_t);
 
+//==============================================================================
+//
+// P_PlayerFaceMobj
+//
+//==============================================================================
 procedure P_PlayerFaceMobj(const player: Pplayer_t; const face: Pmobj_t; const ticks: integer);
 
 var
@@ -98,10 +113,12 @@ const
 var
   onground: boolean;
 
+//==============================================================================
 //
 // P_Thrust
 // Moves the given origin along a given angle.
 //
+//==============================================================================
 procedure P_Thrust(player: Pplayer_t; angle: angle_t; const mv: fixed_t);
 var
   pmo: Pmobj_t;
@@ -115,7 +132,12 @@ begin
   pmo.momy := pmo.momy + FixedMul(mv, fixedsine[angle]);
 end;
 
+//==============================================================================
+// P_CalcHeight
+//
 // JVAL: Slopes
+//
+//==============================================================================
 procedure P_CalcHeight(player: Pplayer_t);
 var
   angle: integer;
@@ -228,6 +250,11 @@ begin
   player.oldviewz := oldviewz;
 end;
 
+//==============================================================================
+//
+// P_GetMoveFactor
+//
+//==============================================================================
 function P_GetMoveFactor(const mo: Pmobj_t): fixed_t;
 var
   momentum, friction: integer;
@@ -269,6 +296,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_CalcPlaneTranspoAngle
+//
+//==============================================================================
 function R_CalcPlaneTranspoAngle(const prev, next: angle_t; const tics, starttics: fixed_t): angle_t;
 var
   prev_e, next_e, mid_e: float;
@@ -305,10 +337,12 @@ begin
   end;
 end;
 
+//==============================================================================
 //
 // JVAL: 20200313 - New function (RA_PlaneTranspo action)
 // P_PlaneTranspoMove
 //
+//==============================================================================
 procedure P_PlaneTranspoMove(player: Pplayer_t);
 var
   dx, dy, dz: int64;
@@ -334,9 +368,11 @@ begin
   pmo.angle := R_CalcPlaneTranspoAngle(player.planetranspo_start_a, player.planetranspo_target_a, player.planetranspo_tics, player.planetranspo_start_tics);
 end;
 
+//==============================================================================
 //
 // P_MovePlayer
 //
+//==============================================================================
 procedure P_MovePlayer(player: Pplayer_t);
 var
   cmd: Pticcmd_t;
@@ -520,6 +556,11 @@ const
   ANG5 = ANG90 div 18;
   ANG355 = ANG270 +  ANG5 * 17; // add by JVAL
 
+//==============================================================================
+//
+// P_DeathThink
+//
+//==============================================================================
 procedure P_DeathThink(player: Pplayer_t);
 var
   angle: angle_t;
@@ -579,6 +620,11 @@ var
   brsnd2: integer = -1;
   rnd_breath: Integer = 0;
 
+//==============================================================================
+//
+// A_PlayerBreath
+//
+//==============================================================================
 procedure A_PlayerBreath(p: Pplayer_t);
 var
   sndidx: integer;
@@ -613,6 +659,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// P_AngleTarget
+//
+//==============================================================================
 procedure P_AngleTarget(player: Pplayer_t);
 var
   ticks: LongWord;
@@ -640,6 +691,11 @@ begin
   dec(player.angletargetticks);
 end;
 
+//==============================================================================
+//
+// P_PlayerFaceMobj
+//
+//==============================================================================
 procedure P_PlayerFaceMobj(const player: Pplayer_t; const face: Pmobj_t; const ticks: integer);
 begin
   player.angletargetx := face.x;
@@ -647,9 +703,11 @@ begin
   player.angletargetticks := ticks;
 end;
 
+//==============================================================================
 //
 // P_PlayerThink
 //
+//==============================================================================
 procedure P_PlayerThink(player: Pplayer_t);
 var
   cmd: Pticcmd_t;
@@ -819,7 +877,6 @@ begin
 
   if player.bonuscount <> 0 then
     player.bonuscount := player.bonuscount - 1;
-
 
   // Handling colormaps.
   if player.powers[Ord(pw_invulnerability)] <> 0 then

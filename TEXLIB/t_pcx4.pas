@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -39,6 +39,11 @@ uses
    Classes,
    Graphics;
 
+//==============================================================================
+//
+// PCXLoadFromFile
+//
+//==============================================================================
 procedure PCXLoadFromFile(FileName: string; const bitmap: TBitmap);
 
 implementation
@@ -106,6 +111,11 @@ const
 var
   IndexData: array[0..PCXBUFFERSIZE - 1] of Byte;
 
+//==============================================================================
+//
+// FileGetMore
+//
+//==============================================================================
 procedure FileGetMore;
 var
   NumRead: Integer;
@@ -116,6 +126,11 @@ begin
   Index2 := 0;
 end;
 
+//==============================================================================
+//
+// FastGetByte
+//
+//==============================================================================
 function FastGetByte: Byte;
 begin
   if Index1 = 0 then
@@ -125,17 +140,32 @@ begin
   Dec(Index1);
 end;
 
+//==============================================================================
+//
+// FastGetWord
+//
+//==============================================================================
 function FastGetWord: Word;
 begin
   FastGetWord := Word(FastGetByte) + Word(FastGetByte) * 256;
 end;
 
+//==============================================================================
+//
+// FileIoReset
+//
+//==============================================================================
 procedure FileIoReset;
 begin
   Index1 := 0;
   Index2 := 0;
 end;
 
+//==============================================================================
+//
+// OpenFile
+//
+//==============================================================================
 procedure OpenFile(var FileName: string; var FileOk: Boolean);
 var
   OldFileMode: Word;
@@ -150,11 +180,21 @@ begin
   FileMode := OldFileMode;
 end;
 
+//==============================================================================
+//
+// FillerUp
+//
+//==============================================================================
 procedure FillerUp(var TempArrayD; Size: Word; B1: Byte);
 begin
   FillChar(TempArrayD, Size, B1);
 end;
 
+//==============================================================================
+//
+// SetUpMaskGrayPalette
+//
+//==============================================================================
 procedure SetUpMaskGrayPalette;
 var
   I, J: Integer;
@@ -168,11 +208,21 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// PCXGrayValue
+//
+//==============================================================================
 function PCXGrayValue(R, G, B: Word): Word;
 begin
   Result := ((R shl 5) + (G shl 6) + (B * 12)) div 108;
 end;
 
+//==============================================================================
+//
+// MakePalBW
+//
+//==============================================================================
 procedure MakePalBW(const bitmap: TBitmap);
 begin
   SysPal.LPal.palVersion := $300;
@@ -188,6 +238,11 @@ begin
   Bitmap.Palette := CreatePalette(Syspal.LPal);
 end;
 
+//==============================================================================
+//
+// MakePalPalette
+//
+//==============================================================================
 procedure MakePalPalette(const bitmap: TBitmap);
 var
   I: Integer;
@@ -204,6 +259,11 @@ begin
   Bitmap.Palette := CreatePalette(Syspal.LPal);
 end;
 
+//==============================================================================
+//
+// MakeGenPalette
+//
+//==============================================================================
 procedure MakeGenPalette;
 var
   X: Word;
@@ -225,6 +285,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// ShouldIKeepTrueFormat
+//
+//==============================================================================
 function ShouldIKeepTrueFormat(var BPP: Word): Boolean;
 begin
 {
@@ -243,11 +308,21 @@ begin
     BPP := 24;
 end;
 
+//==============================================================================
+//
+// DetColorVGA 
+//
+//==============================================================================
 procedure DetColorVGA (var PValue: Byte; MapValue: Byte);
 begin
   PValue := MapValue div 4;
 end;
 
+//==============================================================================
+//
+// PaletteDefaults
+//
+//==============================================================================
 procedure PaletteDefaults;
 var
   i, j: integer;
@@ -259,6 +334,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// SetUpMaskAndColorMap
+//
+//==============================================================================
 procedure SetUpMaskAndColorMap;
 var
   R, G, B, PalBlue, PalGreen, PalRed: Byte;
@@ -303,6 +383,11 @@ end;
 ============================================
 }
 
+//==============================================================================
+//
+// ReadPCXLine
+//
+//==============================================================================
 procedure ReadPCXLine;
 var
   N, MaximumN, Z: Word;
@@ -404,6 +489,11 @@ begin
   until N >= MaximumN;
 end;
 
+//==============================================================================
+//
+// ReadPcxHeader
+//
+//==============================================================================
 procedure ReadPcxHeader(var FileOk: Boolean; var ErrorString: ShortString);
 var
   B1: Byte;
@@ -445,6 +535,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// PCXLoadFromFile
+//
+//==============================================================================
 procedure PCXLoadFromFile;
 var
   B1: Byte;

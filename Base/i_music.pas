@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -34,32 +34,76 @@ interface
 uses
   d_delphi;
 
-
+//==============================================================================
+// I_InitMusic
 //
 //  MUSIC I/O
 //
+//==============================================================================
 procedure I_InitMusic;
+
+//==============================================================================
+//
+// I_ShutDownMusic
+//
+//==============================================================================
 procedure I_ShutDownMusic;
 
+//==============================================================================
+// I_SetMusicVolume
+//
 // Volume.
+//
+//==============================================================================
 procedure I_SetMusicVolume(volume: integer);
 
+//==============================================================================
+// I_PauseSong
+//
 // PAUSE game handling.
+//
+//==============================================================================
 procedure I_PauseSong(handle: integer);
+
+//==============================================================================
+//
+// I_ResumeSong
+//
+//==============================================================================
 procedure I_ResumeSong(handle: integer);
 
+//==============================================================================
+// I_RegisterSong
+//
 // Registers a song handle to song data.
+//
+//==============================================================================
 function I_RegisterSong(data: pointer; size: integer): integer;
 
+//==============================================================================
+// I_PlaySong
+//
 // Called by anything that wishes to start music.
 //  plays a song, and when the song is done,
 //  starts playing it again in an endless loop.
 // Horrible thing to do, considering.
+//
+//==============================================================================
 procedure I_PlaySong(handle: integer; looping: boolean);
 
+//==============================================================================
+// I_UnRegisterSong
+//
 // See above (register), then think backwards
+//
+//==============================================================================
 procedure I_UnRegisterSong(handle: integer);
 
+//==============================================================================
+//
+// I_ProcessMusic
+//
+//==============================================================================
 procedure I_ProcessMusic;
 
 const
@@ -170,6 +214,11 @@ var
   musicstarted: boolean = false;
   CurrentSong: Psonginfo_t = nil;
 
+//==============================================================================
+//
+// XLateMUSControl
+//
+//==============================================================================
 function XLateMUSControl(control: byte): byte;
 begin
   case control of
@@ -189,6 +238,11 @@ end;
 const
   NUMTEMPOEVENTS = 2;
 
+//==============================================================================
+//
+// GetSongLength
+//
+//==============================================================================
 function GetSongLength(data: PByteArray): integer;
 var
   done: boolean;
@@ -233,6 +287,11 @@ begin
   result := events + NUMTEMPOEVENTS;
 end;
 
+//==============================================================================
+//
+// I_MusToMidi
+//
+//==============================================================================
 function I_MusToMidi(MusData: PByteArray; MidiEvents: PMidiEvent_tArray): boolean;
 var
   header: Pmusheader_t;
@@ -371,9 +430,12 @@ begin
   end;
 end;
 
+//==============================================================================
+// I_InitMus
 //
 // MUSIC API.
 //
+//==============================================================================
 procedure I_InitMus;
 var
   rc: MMRESULT;
@@ -431,6 +493,11 @@ begin
   musicstarted := false;
 end;
 
+//==============================================================================
+//
+// I_InitMusic
+//
+//==============================================================================
 procedure I_InitMusic;
 begin
   I_InitMus;
@@ -441,9 +508,12 @@ begin
   I_InitS3M;
 end;
 
+//==============================================================================
+// I_StopMusicMus
 //
 // I_StopMusic
 //
+//==============================================================================
 procedure I_StopMusicMus(song: Psonginfo_t);
 var
   i: integer;
@@ -479,6 +549,11 @@ begin
   hMidiStream := 0;}
 end;
 
+//==============================================================================
+//
+// I_StopMusic
+//
+//==============================================================================
 procedure I_StopMusic(song: Psonginfo_t);
 begin
   case m_type of
@@ -492,6 +567,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// I_StopMus
+//
+//==============================================================================
 procedure I_StopMus;
 var
   rc: MMRESULT;
@@ -512,9 +592,11 @@ begin
 
 end;
 
+//==============================================================================
 //
 // I_ShutDownMusic
 //
+//==============================================================================
 procedure I_ShutDownMusic;
 begin
   I_StopMus;
@@ -529,9 +611,11 @@ begin
   I_ShutDownMik;
 end;
 
+//==============================================================================
 //
 // I_PlaySong
 //
+//==============================================================================
 procedure I_PlaySong(handle: integer; looping: boolean);
 begin
   if (handle <> 0) and (hMidiStream <> 0) then
@@ -540,9 +624,12 @@ begin
   end;
 end;
 
+//==============================================================================
+// I_PauseSongMus
 //
 // I_PauseSong
 //
+//==============================================================================
 procedure I_PauseSongMus(handle: integer);
 var
   rc: MMRESULT;
@@ -555,6 +642,11 @@ begin
     I_Error('I_PauseSong(): midiStreamRestart failed, return value = %d', [rc]);
 end;
 
+//==============================================================================
+//
+// I_PauseSong
+//
+//==============================================================================
 procedure I_PauseSong(handle: integer);
 begin
   case m_type of
@@ -568,9 +660,12 @@ begin
   end;
 end;
 
+//==============================================================================
+// I_ResumeSongMus
 //
 // I_ResumeSong
 //
+//==============================================================================
 procedure I_ResumeSongMus(handle: integer);
 var
   rc: MMRESULT;
@@ -583,6 +678,11 @@ begin
     I_Error('I_ResumeSong(): midiStreamRestart failed, return value = %d', [rc]);
 end;
 
+//==============================================================================
+//
+// I_ResumeSong
+//
+//==============================================================================
 procedure I_ResumeSong(handle: integer);
 begin
   case m_type of
@@ -596,7 +696,12 @@ begin
   end;
 end;
 
+//==============================================================================
+// I_StopSong
+//
 // Stops a song over 3 seconds.
+//
+//==============================================================================
 procedure I_StopSong(handle: integer);
 var
   song: Psonginfo_t;
@@ -613,6 +718,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// I_UnRegisterSong
+//
+//==============================================================================
 procedure I_UnRegisterSong(handle: integer);
 var
   song: Psonginfo_t;
@@ -633,6 +743,11 @@ end;
 var
   setmusvolume: integer = -1;
 
+//==============================================================================
+//
+// I_RegisterSong
+//
+//==============================================================================
 function I_RegisterSong(data: pointer; size: integer): integer;
 var
   song: Psonginfo_t;
@@ -737,15 +852,23 @@ begin
   result := integer(song);
 end;
 
+//==============================================================================
+// I_QrySongPlaying
+//
 // Is the song playing?
+//
+//==============================================================================
 function I_QrySongPlaying(handle: integer): boolean;
 begin
   result := CurrentSong <> nil;
 end;
 
+//==============================================================================
+// I_SetMusicVolumeMus
 //
 // I_SetMusicVolume
 //
+//==============================================================================
 procedure I_SetMusicVolumeMus(volume: integer);
 var
   rc: MMRESULT;
@@ -788,6 +911,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// I_SetMusicVolume
+//
+//==============================================================================
 procedure I_SetMusicVolume(volume: integer);
 begin
   case m_type of
@@ -801,6 +929,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// I_ProcessMusicMus
+//
+//==============================================================================
 procedure I_ProcessMusicMus;
 var
   header: Pmidiheader_t;
@@ -859,6 +992,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// I_ProcessMusic
+//
+//==============================================================================
 procedure I_ProcessMusic;
 begin
   case m_type of

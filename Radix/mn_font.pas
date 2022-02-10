@@ -42,40 +42,130 @@ type
     x, y: integer;
   end;
 
+//==============================================================================
+//
+// M_SmallStringWidth
+//
+//==============================================================================
 function M_SmallStringWidth(const str: string): integer;
 
+//==============================================================================
+//
+// M_SmallStringWidthNarrow
+//
+//==============================================================================
 function M_SmallStringWidthNarrow(const str: string): integer;
 
+//==============================================================================
+//
+// M_SmallStringHeight
+//
+//==============================================================================
 function M_SmallStringHeight(const str: string): integer;
 
+//==============================================================================
+//
+// M_WriteSmallText
+//
+//==============================================================================
 function M_WriteSmallText(x, y: integer; const str: string; const scn: integer): menupos_t;
 
+//==============================================================================
+//
+// M_WriteSmallTextNarrow
+//
+//==============================================================================
 function M_WriteSmallTextNarrow(x, y: integer; const str: string; const scn: integer): menupos_t;
 
+//==============================================================================
+//
+// M_WriteSmallTextCenter
+//
+//==============================================================================
 function M_WriteSmallTextCenter(y: integer; const str: string; const scn: integer): menupos_t;
 
+//==============================================================================
+//
+// M_WriteSmallWhiteText
+//
+//==============================================================================
 function M_WriteSmallWhiteText(x, y: integer; const str: string; const scn: integer): menupos_t;
 
+//==============================================================================
+//
+// M_WriteSmallWhiteTextCenter
+//
+//==============================================================================
 function M_WriteSmallWhiteTextCenter(y: integer; const str: string; const scn: integer): menupos_t;
 
+//==============================================================================
+//
+// M_WriteSmallWhiteTextCenterNarrow
+//
+//==============================================================================
 function M_WriteSmallWhiteTextCenterNarrow(y: integer; const str: string; const scn: integer): menupos_t;
 
+//==============================================================================
+//
+// M_BigStringWidth
+//
+//==============================================================================
 function M_BigStringWidth(const str: string; const font_array: Ppatch_tPArray): integer;
 
+//==============================================================================
+//
+// M_WriteBigText
+//
+//==============================================================================
 function M_WriteBigText(x, y: integer; const font_array: Ppatch_tPArray; const str: string; const scn: integer): menupos_t;
 
+//==============================================================================
+//
+// M_WriteBigTextCenter
+//
+//==============================================================================
 function M_WriteBigTextCenter(y: integer; const font_array: Ppatch_tPArray; const str: string; const scn: integer): menupos_t;
 
+//==============================================================================
+//
+// M_WriteBigTextRed
+//
+//==============================================================================
 function M_WriteBigTextRed(x, y: integer; const str: string; const scn: integer): menupos_t;
 
+//==============================================================================
+//
+// M_WriteBigTextRedCenter
+//
+//==============================================================================
 function M_WriteBigTextRedCenter(y: integer; const str: string; const scn: integer): menupos_t;
 
+//==============================================================================
+//
+// M_WriteBigTextGray
+//
+//==============================================================================
 function M_WriteBigTextGray(x, y: integer; const str: string; const scn: integer): menupos_t;
 
+//==============================================================================
+//
+// M_WriteBigTextGrayCenter
+//
+//==============================================================================
 function M_WriteBigTextGrayCenter(y: integer; const str: string; const scn: integer): menupos_t;
 
+//==============================================================================
+//
+// M_WriteBigTextOrange
+//
+//==============================================================================
 function M_WriteBigTextOrange(x, y: integer; const str: string; const scn: integer): menupos_t;
 
+//==============================================================================
+//
+// M_WriteBigTextOrangeCenter
+//
+//==============================================================================
 function M_WriteBigTextOrangeCenter(y: integer; const str: string; const scn: integer): menupos_t;
 
 implementation
@@ -87,9 +177,12 @@ uses
   w_wad,
   z_zone;
 
+//==============================================================================
+// M_SmallStringWidth
 //
 // Find string width from hu_font chars
 //
+//==============================================================================
 function M_SmallStringWidth(const str: string): integer;
 var
   i: integer;
@@ -106,6 +199,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// M_SmallStringWidthNarrow
+//
+//==============================================================================
 function M_SmallStringWidthNarrow(const str: string): integer;
 var
   i: integer;
@@ -122,9 +220,12 @@ begin
   end;
 end;
 
+//==============================================================================
+// M_SmallStringHeight
 //
 // Find string height from hu_font chars
 //
+//==============================================================================
 function M_SmallStringHeight(const str: string): integer;
 var
   i: integer;
@@ -138,9 +239,12 @@ begin
       result := result + height;
 end;
 
+//==============================================================================
+// M_WriteSmallText
 //
 // Write a string using the hu_font
 //
+//==============================================================================
 function M_WriteSmallText(x, y: integer; const str: string; const scn: integer): menupos_t;
 var
   w: integer;
@@ -203,6 +307,11 @@ begin
   result.y := cy;
 end;
 
+//==============================================================================
+//
+// M_WriteSmallTextNarrow
+//
+//==============================================================================
 function M_WriteSmallTextNarrow(x, y: integer; const str: string; const scn: integer): menupos_t;
 var
   w: integer;
@@ -265,6 +374,11 @@ begin
   result.y := cy;
 end;
 
+//==============================================================================
+//
+// M_WriteSmallTextCenter
+//
+//==============================================================================
 function M_WriteSmallTextCenter(y: integer; const str: string; const scn: integer): menupos_t;
 var
   i, x, w: integer;
@@ -282,6 +396,11 @@ begin
   lst.Free;
 end;
 
+//==============================================================================
+//
+// M_WriteSmallWhiteText
+//
+//==============================================================================
 function M_WriteSmallWhiteText(x, y: integer; const str: string; const scn: integer): menupos_t;
 var
   w: integer;
@@ -349,6 +468,11 @@ begin
   result.y := cy;
 end;
 
+//==============================================================================
+//
+// M_WriteSmallWhiteTextNarrow
+//
+//==============================================================================
 function M_WriteSmallWhiteTextNarrow(x, y: integer; const str: string; const scn: integer): menupos_t;
 var
   w: integer;
@@ -416,6 +540,11 @@ begin
   result.y := cy;
 end;
 
+//==============================================================================
+//
+// M_WriteSmallWhiteTextCenter
+//
+//==============================================================================
 function M_WriteSmallWhiteTextCenter(y: integer; const str: string; const scn: integer): menupos_t;
 var
   i, x, w: integer;
@@ -433,6 +562,11 @@ begin
   lst.Free;
 end;
 
+//==============================================================================
+//
+// M_WriteSmallWhiteTextCenterNarrow
+//
+//==============================================================================
 function M_WriteSmallWhiteTextCenterNarrow(y: integer; const str: string; const scn: integer): menupos_t;
 var
   i, x, w: integer;
@@ -450,9 +584,12 @@ begin
   lst.Free;
 end;
 
+//==============================================================================
+// M_BigStringWidth
 //
 // Write a string using the big_fontX
 //
+//==============================================================================
 function M_BigStringWidth(const str: string; const font_array: Ppatch_tPArray): integer;
 var
   i: integer;
@@ -469,6 +606,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// M_WriteBigText
+//
+//==============================================================================
 function M_WriteBigText(x, y: integer; const font_array: Ppatch_tPArray; const str: string; const scn: integer): menupos_t;
 var
   w: integer;
@@ -531,6 +673,11 @@ begin
   result.y := cy;
 end;
 
+//==============================================================================
+//
+// M_WriteBigTextCenter
+//
+//==============================================================================
 function M_WriteBigTextCenter(y: integer; const font_array: Ppatch_tPArray; const str: string; const scn: integer): menupos_t;
 var
   i, x, w: integer;
@@ -548,36 +695,65 @@ begin
   lst.Free;
 end;
 
+//==============================================================================
+//
+// M_WriteBigTextRed
+//
+//==============================================================================
 function M_WriteBigTextRed(x, y: integer; const str: string; const scn: integer): menupos_t;
 begin
   result := M_WriteBigText(x, y, @big_fontA, str, scn);
 end;
 
+//==============================================================================
+//
+// M_WriteBigTextRedCenter
+//
+//==============================================================================
 function M_WriteBigTextRedCenter(y: integer; const str: string; const scn: integer): menupos_t;
 begin
   result := M_WriteBigTextCenter(y, @big_fontA, str, scn);
 end;
 
+//==============================================================================
+//
+// M_WriteBigTextGray
+//
+//==============================================================================
 function M_WriteBigTextGray(x, y: integer; const str: string; const scn: integer): menupos_t;
 begin
   result := M_WriteBigText(x, y, @big_fontB, str, scn);
 end;
 
+//==============================================================================
+//
+// M_WriteBigTextGrayCenter
+//
+//==============================================================================
 function M_WriteBigTextGrayCenter(y: integer; const str: string; const scn: integer): menupos_t;
 begin
   result := M_WriteBigTextCenter(y, @big_fontB, str, scn);
 end;
 
+//==============================================================================
+//
+// M_WriteBigTextOrange
+//
+//==============================================================================
 function M_WriteBigTextOrange(x, y: integer; const str: string; const scn: integer): menupos_t;
 begin
   result := M_WriteBigText(x, y, @big_fontC, str, scn);
 end;
 
+//==============================================================================
+//
+// M_WriteBigTextOrangeCenter
+//
+//==============================================================================
 function M_WriteBigTextOrangeCenter(y: integer; const str: string; const scn: integer): menupos_t;
 begin
   result := M_WriteBigTextCenter(y, @big_fontC, str, scn);
 end;
-
 
 end.
 

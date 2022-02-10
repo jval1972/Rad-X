@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -54,7 +54,6 @@ type
     GLDL_UNKNOWN  // unknown light
   );
 
-
   GLDRenderLight = record
     r, g, b: float;     // Color
     radius: float;      // radius
@@ -88,14 +87,39 @@ type
   GLDLightArray = array[0..$FFFF] of GLDLight;
   PGLDLightArray = ^GLDLightArray;
 
+//==============================================================================
+//
+// R_InitDynamicLights
+//
+//==============================================================================
 procedure R_InitDynamicLights;
 
+//==============================================================================
+//
+// R_DynamicLightsDone
+//
+//==============================================================================
 procedure R_DynamicLightsDone;
 
+//==============================================================================
+//
+// R_AddDynamicLight
+//
+//==============================================================================
 function R_AddDynamicLight(const l: GLDLight): integer;
 
+//==============================================================================
+//
+// R_FindDynamicLight
+//
+//==============================================================================
 function R_FindDynamicLight(const check: string): integer;
 
+//==============================================================================
+//
+// R_GetDynamicLight
+//
+//==============================================================================
 function R_GetDynamicLight(const index: integer): PGLDRenderLight;
 
 var
@@ -156,10 +180,13 @@ var
 //       don't bother reseting it....
   lightrnd: integer = 0;
 
+//==============================================================================
+// SC_DoParceDynamicLight
 //
 // SC_ParceDynamicLights
 // JVAL: Parse LIGHTDEF
 //
+//==============================================================================
 procedure SC_DoParceDynamicLight(const in_text: string);
 var
   sc: TScriptEngine;
@@ -516,15 +543,22 @@ begin
   sc.Free;
 end;
 
+//==============================================================================
+//
+// SC_ParceDynamicLight
+//
+//==============================================================================
 procedure SC_ParceDynamicLight(const in_text: string);
 begin
   SC_DoParceDynamicLight(SC_Preprocess(in_text, false));
 end;
 
+//==============================================================================
 //
 // SC_ParceDynamicLights
 // JVAL: Parse all LIGHTDEF lumps
 //
+//==============================================================================
 procedure SC_ParceDynamicLights;
 var
   i: integer;
@@ -560,12 +594,16 @@ begin
   lightdeflumppresent := lightdeflumppresent or (i > 0);
 end;
 
-
 var
   numdlights: integer;
   realnumdlights: integer;
   dlightslist: PGLDLightArray;
 
+//==============================================================================
+//
+// R_InitDynamicLights
+//
+//==============================================================================
 procedure R_InitDynamicLights;
 begin
   numdlights := 0;
@@ -577,6 +615,11 @@ begin
   SC_ParceDynamicLights;
 end;
 
+//==============================================================================
+//
+// R_DynamicLightsDone
+//
+//==============================================================================
 procedure R_DynamicLightsDone;
 begin
   memfree(pointer(dlightslist), realnumdlights * SizeOf(GLDLight));
@@ -588,6 +631,11 @@ begin
   realdlitems := 0;
 end;
 
+//==============================================================================
+//
+// R_GrowDynlightsArray
+//
+//==============================================================================
 procedure R_GrowDynlightsArray;
 begin
   if numdlights >= realnumdlights then
@@ -606,6 +654,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_AddDynamicLight
+//
+//==============================================================================
 function R_AddDynamicLight(const l: GLDLight): integer;
 var
   i: integer;
@@ -618,6 +671,11 @@ begin
   inc(numdlights);
 end;
 
+//==============================================================================
+//
+// R_FindDynamicLight
+//
+//==============================================================================
 function R_FindDynamicLight(const check: string): integer;
 var
   i: integer;
@@ -634,11 +692,13 @@ begin
   result := -1;
 end;
 
+//==============================================================================
 //
 // R_GetDynamicLight
 // JVAL: Retrieving rendering information for lights
 //       Dynamic lights animations
 //
+//==============================================================================
 function R_GetDynamicLight(const index: integer): PGLDRenderLight;
 var
   l: PGLDLight;

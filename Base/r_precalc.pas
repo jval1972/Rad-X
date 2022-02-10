@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -40,13 +40,34 @@ uses
   d_delphi,
   m_fixed;
 
+//==============================================================================
+//
+// R_InitPrecalc
+//
+//==============================================================================
 procedure R_InitPrecalc;
 
+//==============================================================================
+//
+// R_ShutDownPrecalc
+//
+//==============================================================================
 procedure R_ShutDownPrecalc;
 
+//==============================================================================
+//
+// R_GetPrecalc32Tables
+//
+//==============================================================================
 procedure R_GetPrecalc32Tables(const f: fixed_t; var tr, tg, tb: PIntegerArray);
 
 {$IFDEF HEXEN}
+
+//==============================================================================
+//
+// R_GetFogPrecalc32Tables
+//
+//==============================================================================
 procedure R_GetFogPrecalc32Tables(const f: fixed_t; var tr, tg, tb: PIntegerArray);
 {$ENDIF}
 
@@ -69,6 +90,11 @@ var
   precalc32_g: array[0..255] of PIntegerArray;
   precalc32_b: array[0..255] of PIntegerArray;
 
+//==============================================================================
+//
+// R_InitPrecalc
+//
+//==============================================================================
 procedure R_InitPrecalc;
 var
   i, j: integer;
@@ -138,6 +164,11 @@ begin
 
 end;
 
+//==============================================================================
+//
+// R_ShutDownPrecalc
+//
+//==============================================================================
 procedure R_ShutDownPrecalc;
 var
   i: integer;
@@ -155,6 +186,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_GetPrecalc32Tables
+//
+//==============================================================================
 procedure R_GetPrecalc32Tables(const f: fixed_t; var tr, tg, tb: PIntegerArray);
 var
   lf: Integer;
@@ -168,6 +204,12 @@ begin
 end;
 
 {$IFDEF HEXEN}
+
+//==============================================================================
+//
+// R_GetFogPrecalc32Tables
+//
+//==============================================================================
 procedure R_GetFogPrecalc32Tables(const f: fixed_t; var tr, tg, tb: PIntegerArray);
 var
   lf: Integer;

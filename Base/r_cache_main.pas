@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -34,12 +34,32 @@ unit r_cache_main;
 
 interface
 
+//==============================================================================
+//
+// R_Reset32Cache
+//
+//==============================================================================
 procedure R_Reset32Cache;
 
+//==============================================================================
+//
+// R_Clear32Cache
+//
+//==============================================================================
 procedure R_Clear32Cache;
 
+//==============================================================================
+//
+// R_Init32Cache
+//
+//==============================================================================
 procedure R_Init32Cache;
 
+//==============================================================================
+//
+// R_ShutDown32Cache
+//
+//==============================================================================
 procedure R_ShutDown32Cache;
 
 var
@@ -54,24 +74,44 @@ uses
   r_cache_walls,
   r_cache_flats;
 
+//==============================================================================
+//
+// R_Reset32Cache
+//
+//==============================================================================
 procedure R_Reset32Cache;
 begin
   R_ResetDC32Cache;
   R_ResetDS32Cache;
 end;
 
+//==============================================================================
+//
+// R_Clear32Cache
+//
+//==============================================================================
 procedure R_Clear32Cache;
 begin
   R_ClearDC32Cache;
   R_ClearDS32Cache;
 end;
 
+//==============================================================================
+//
+// R_ShutDown32Cache
+//
+//==============================================================================
 procedure R_ShutDown32Cache;
 begin
   R_ShutDownDC32Cache;
   R_ShutDownDS32Cache;
 end;
 
+//==============================================================================
+//
+// R_CmdCacheHit
+//
+//==============================================================================
 procedure R_CmdCacheHit;
 var
   c_tot, c_miss: int64;
@@ -106,6 +146,11 @@ begin
     printf('32 bit cache not yet initialized'#13#10);
 end;
 
+//==============================================================================
+//
+// R_CmdResetCacheHit
+//
+//==============================================================================
 procedure R_CmdResetCacheHit;
 begin
   printf('32 bit cache hit factor reset. Re-initializing stats.'#13#10);
@@ -115,6 +160,11 @@ begin
   c_smiss := 0;
 end;
 
+//==============================================================================
+//
+// R_Init32Cache
+//
+//==============================================================================
 procedure R_Init32Cache;
 begin
   R_InitDC32Cache;

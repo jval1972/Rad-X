@@ -34,12 +34,32 @@ unit am_textured;
 
 interface
 
+//==============================================================================
+//
+// AM_setSubSectorDrawFuncs
+//
+//==============================================================================
 procedure AM_setSubSectorDrawFuncs;
 
+//==============================================================================
+//
+// AM_drawSubSectors
+//
+//==============================================================================
 procedure AM_drawSubSectors;
 
+//==============================================================================
+//
+// AM_InitTextured
+//
+//==============================================================================
 procedure AM_InitTextured;
 
+//==============================================================================
+//
+// AM_ShutDownTextured
+//
+//==============================================================================
 procedure AM_ShutDownTextured;
 
 implementation
@@ -85,6 +105,12 @@ var
 {$ENDIF}
 
 {$IFNDEF OPENGL}
+
+//==============================================================================
+//
+// AM_DrawSeg8
+//
+//==============================================================================
 procedure AM_DrawSeg8(xx, yy, cc: integer; const amcolormap: PByteArray);
 begin
 // JVAL Clip line if in overlay mode
@@ -102,6 +128,11 @@ begin
   fb[yy * f_w + xx] := amcolormap[cc];
 end;
 
+//==============================================================================
+//
+// AM_DrawSeg8Transparent
+//
+//==============================================================================
 procedure AM_DrawSeg8Transparent(xx, yy, cc: integer; const amcolormap: PByteArray);
 var
   b: PByte;
@@ -122,6 +153,11 @@ begin
   b^ := averagetrans8table[b^ shl 8 + amcolormap[cc]];
 end;
 
+//==============================================================================
+//
+// AM_DrawSeg32
+//
+//==============================================================================
 procedure AM_DrawSeg32(xx, yy, cc: integer; const amcolormap: PLongWordArray);
 begin
 // JVAL Clip line if in overlay mode
@@ -139,6 +175,11 @@ begin
   fb32[yy * f_w + xx] := amcolormap[cc];
 end;
 
+//==============================================================================
+//
+// AM_DrawSeg32Transparent
+//
+//==============================================================================
 procedure AM_DrawSeg32Transparent(xx, yy, cc: integer; const amcolormap: PLongWordArray);
 var
   pl: PLongWord;
@@ -170,6 +211,12 @@ var
   f_mx: integer;
 
 {$IFNDEF OPENGL}
+
+//==============================================================================
+//
+// AM_DecodeUV
+//
+//==============================================================================
 procedure AM_DecodeUV(var xx, yy: integer; const sz: integer);
 var
   tmpx: fixed_t;
@@ -190,6 +237,11 @@ begin
   xx := (xx div MAPUNIT) and sz;
 end;
 
+//==============================================================================
+//
+// AM_DecodeAngleUV
+//
+//==============================================================================
 procedure AM_DecodeAngleUV(var xx, yy: integer; const sz: integer;
   const fangx, fangy, fangsin, fangcos: fixed_t);
 var
@@ -223,6 +275,11 @@ begin
 end;
 {$ENDIF}
 
+//==============================================================================
+//
+// AM_DrawTexturedTriangle
+//
+//==============================================================================
 procedure AM_DrawTexturedTriangle(const lst: seg_ap3; const lump: integer; const sec: Psector_t;
   const aminx, amaxx: integer; const {$IFDEF OPENGL}lightlevel: integer{$ELSE}amcolormap: pointer{$ENDIF});
 var
@@ -534,6 +591,11 @@ begin
 {$ENDIF}
 end;
 
+//==============================================================================
+//
+// AM_setSubSectorDrawFuncs
+//
+//==============================================================================
 procedure AM_setSubSectorDrawFuncs;
 begin
 {$IFNDEF OPENGL}
@@ -563,6 +625,11 @@ type
 var
   amvalidcount: integer = 0;
 
+//==============================================================================
+//
+// AM_dodrawSubSectors
+//
+//==============================================================================
 function AM_dodrawSubSectors(parms: dssparams_p): integer; {$IFNDEF OPENGL}stdcall;{$ENDIF}
 var
   i, j: integer;
@@ -739,6 +806,11 @@ var
   numdssthreads: integer = 1;
 {$ENDIF}
 
+//==============================================================================
+//
+// AM_drawSubSectors
+//
+//==============================================================================
 procedure AM_drawSubSectors;
 var
   parms: {$IFNDEF OPENGL}array[0..MAXDSSTHREADS - 1] of{$ENDIF} dssparams_t;
@@ -800,6 +872,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// AM_InitTextured
+//
+//==============================================================================
 procedure AM_InitTextured;
 {$IFNDEF OPENGL}
 var
@@ -812,6 +889,11 @@ begin
 {$ENDIF}
 end;
 
+//==============================================================================
+//
+// AM_ShutDownTextured
+//
+//==============================================================================
 procedure AM_ShutDownTextured;
 {$IFNDEF OPENGL}
 var

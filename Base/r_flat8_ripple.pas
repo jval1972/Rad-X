@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -34,6 +34,11 @@ unit r_flat8_ripple;
 
 interface
 
+//==============================================================================
+//
+// R_DrawSpanMedium_RippleMT
+//
+//==============================================================================
 procedure R_DrawSpanMedium_RippleMT(const fi: pointer);
 
 implementation
@@ -46,7 +51,11 @@ uses
   r_flat8,
   r_zbuffer;
 
-
+//==============================================================================
+//
+// R_DrawSpanMedium_RippleMT
+//
+//==============================================================================
 procedure R_DrawSpanMedium_RippleMT(const fi: pointer);
 var
   ds_source: PByteArray;
@@ -104,7 +113,6 @@ begin
     {$I R_DrawSpanMedium.inc}
   end;
 end;
-
 
 end.
 

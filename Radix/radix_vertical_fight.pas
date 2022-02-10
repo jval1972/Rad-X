@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -38,12 +38,32 @@ uses
   m_fixed,
   p_mobj_h;
 
+//==============================================================================
+//
+// P_FindVericalPlayerTarget
+//
+//==============================================================================
 function P_FindVericalPlayerTarget(vthing: Pmobj_t; const z1, z2: fixed_t; const radius: fixed_t): Pmobj_t;
 
+//==============================================================================
+//
+// A_VericalLookForPlayers
+//
+//==============================================================================
 procedure A_VericalLookForPlayers(actor: Pmobj_t);
 
+//==============================================================================
+//
+// A_VerticalMissileUp
+//
+//==============================================================================
 procedure A_VerticalMissileUp(actor: Pmobj_t);
 
+//==============================================================================
+//
+// A_VerticalMissileDown
+//
+//==============================================================================
 procedure A_VerticalMissileDown(actor: Pmobj_t);
 
 implementation
@@ -65,10 +85,12 @@ uses
   p_setup,
   sc_states;
 
+//==============================================================================
 //
 // P_PtInMap
 // Checks if a given point is in map boundaries, also checks 3d floors
 //
+//==============================================================================
 function P_PtInMap(const x, y, z: fixed_t; const step: fixed_t): boolean;
 var
   s: Psubsector_t;
@@ -86,7 +108,6 @@ begin
     result := (z + step > s.sector.floorheight) and (z - step < s.sector.ceilingheight);
 end;
 
-
 var
   vsthing: Pmobj_t;
   vsz1, vsz2: fixed_t;
@@ -95,9 +116,11 @@ var
 const
   VSRADIUSSTEP = 32;
 
+//==============================================================================
 //
 // PIT_CheckVerticalSight
 //
+//==============================================================================
 function PIT_CheckVerticalSight(thing: Pmobj_t): boolean;
 var
   x1, y1, z1: fixed_t;
@@ -161,6 +184,11 @@ begin
   result := false;
 end;
 
+//==============================================================================
+//
+// P_FindVericalPlayerTarget
+//
+//==============================================================================
 function P_FindVericalPlayerTarget(vthing: Pmobj_t; const z1, z2: fixed_t; const radius: fixed_t): Pmobj_t;
 var
   i: integer;
@@ -180,9 +208,11 @@ begin
   result := nil;
 end;
 
+//==============================================================================
 //
 // A_VericalLookForPlayers(z1, z1, radius=128,[state=see])
 //
+//==============================================================================
 procedure A_VericalLookForPlayers(actor: Pmobj_t);
 var
   z1, z2: fixed_t;
@@ -224,9 +254,11 @@ begin
   end;
 end;
 
+//==============================================================================
 //
 // P_VerticalMissile
 //
+//==============================================================================
 procedure P_VerticalMissile(actor: Pmobj_t; const direction: integer);
 var
   targ, th: Pmobj_t;
@@ -310,17 +342,21 @@ begin
   P_CheckMissileSpawn(th);
 end;
 
+//==============================================================================
 //
 // A_VerticalMissileUp(missiletype: string, x, y, z, maxmomxy)
 //
+//==============================================================================
 procedure A_VerticalMissileUp(actor: Pmobj_t);
 begin
   P_VerticalMissile(actor, 1);
 end;
 
+//==============================================================================
 //
 // A_VerticalMissileDown(missiletype: string, x, y, z, maxmomxy)
 //
+//==============================================================================
 procedure A_VerticalMissileDown(actor: Pmobj_t);
 begin
   P_VerticalMissile(actor, -1);

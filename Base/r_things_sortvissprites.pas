@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -34,14 +34,39 @@ unit r_things_sortvissprites;
 
 interface
 
+//==============================================================================
+//
+// R_SortVisSprites
+//
+//==============================================================================
 procedure R_SortVisSprites;
 
+//==============================================================================
+//
+// R_SortVisSpritesMT
+//
+//==============================================================================
 procedure R_SortVisSpritesMT;
 
+//==============================================================================
+//
+// R_WaitSortVisSpritesMT
+//
+//==============================================================================
 procedure R_WaitSortVisSpritesMT;
 
+//==============================================================================
+//
+// R_InitSpriteSort
+//
+//==============================================================================
 procedure R_InitSpriteSort;
 
+//==============================================================================
+//
+// R_ShutDownSpriteSort
+//
+//==============================================================================
 procedure R_ShutDownSpriteSort;
 
 implementation
@@ -57,9 +82,12 @@ uses
   r_defs,
   r_things;
 
+//==============================================================================
+// getvissortscale
 //
 // R_SortVisSprites
 //
+//==============================================================================
 function getvissortscale(const vis: Pvissprite_t): integer;
 begin
   result := vis.scale;
@@ -71,10 +99,12 @@ begin
     inc(result);
 end;
 
+//==============================================================================
 //
 // R_SortVisSprites_SelectionSort
 // Same execution speed or faster than quicksort for small vissprite_p values
 //
+//==============================================================================
 procedure R_SortVisSprites_SelectionSort;
 var
   i, j: integer;
@@ -90,9 +120,11 @@ begin
       end;
 end;
 
+//==============================================================================
 //
 // R_SortVisSprites_QSort
 //
+//==============================================================================
 procedure R_SortVisSprites_QSort;
 
   procedure qsortvs(l, r: Integer);
@@ -156,6 +188,11 @@ var
   vis_buf_size1: integer = 0;
   vis_buf_size2: integer = 0;
 
+//==============================================================================
+//
+// R_SortVisSprites_RadixSort
+//
+//==============================================================================
 procedure R_SortVisSprites_RadixSort;
 var
   i, j: integer;
@@ -304,10 +341,13 @@ begin
 
 end;
 
+//==============================================================================
 //
 // R_SortVisSprites_MergeSort
 //
 // Algorithm from http://alexandrecmachado.blogspot.com.br/2015/02/merge-sort-for-delphi.html
+//
+//==============================================================================
 procedure R_SortVisSprites_MergeSort;
 var
   xTempListSize: Integer;
@@ -408,7 +448,11 @@ begin
   DoMergeSort(vissprites, 0, vissprite_p - 1);
 end;
 
-
+//==============================================================================
+//
+// R_SortVisSprites
+//
+//==============================================================================
 procedure R_SortVisSprites;
 begin
   if vissprite_p > 1024 then
@@ -428,12 +472,22 @@ end;
 var
   sortthread: TDThread;
 
+//==============================================================================
+//
+// R_SortVisSprites_thr
+//
+//==============================================================================
 function R_SortVisSprites_thr(p: pointer): integer; stdcall;
 begin
   R_SortVisSprites;
   Result := 0;
 end;
 
+//==============================================================================
+//
+// R_SortVisSpritesMT
+//
+//==============================================================================
 procedure R_SortVisSpritesMT;
 begin
   // Allocating temp space before activating the thread.
@@ -454,11 +508,21 @@ begin
   sortthread.Activate(nil);
 end;
 
+//==============================================================================
+//
+// R_WaitSortVisSpritesMT
+//
+//==============================================================================
 procedure R_WaitSortVisSpritesMT;
 begin
   sortthread.Wait;
 end;
 
+//==============================================================================
+//
+// R_InitSpriteSort
+//
+//==============================================================================
 procedure R_InitSpriteSort;
 begin
   vis_buf1 := nil;
@@ -468,6 +532,11 @@ begin
   sortthread := TDThread.Create(@R_SortVisSprites_thr);
 end;
 
+//==============================================================================
+//
+// R_ShutDownSpriteSort
+//
+//==============================================================================
 procedure R_ShutDownSpriteSort;
 begin
   if vis_buf_size1 > 0 then

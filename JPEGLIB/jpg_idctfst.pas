@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -57,7 +57,6 @@ unit jpg_IDctFst;
 
 { Original : jidctfst.c ; Copyright (C) 1994-1996, Thomas G. Lane. }
 
-
 interface
 
 {$I jconfig.inc}
@@ -67,10 +66,15 @@ uses
   jpg_lib,
   jpg_dct;       { Private declarations for DCT subsystem }
 
-
 { Perform dequantization and inverse DCT on one block of coefficients. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_idct_ifast 
+//
+//==============================================================================
 procedure jpeg_idct_ifast (cinfo : j_decompress_ptr;
                            compptr : jpeg_component_info_ptr;
                coef_block : JCOEFPTR;
@@ -118,18 +122,21 @@ const
   PASS1_BITS = 1;  { lose a little precision to avoid overflow }
 {$endif}
 
-
 const
   FIX_1_082392200 = INT32(Round((INT32(1) shl CONST_BITS)*1.082392200));  {277}
   FIX_1_414213562 = INT32(Round((INT32(1) shl CONST_BITS)*1.414213562));  {362}
   FIX_1_847759065 = INT32(Round((INT32(1) shl CONST_BITS)*1.847759065));  {473}
   FIX_2_613125930 = INT32(Round((INT32(1) shl CONST_BITS)*2.613125930));  {669}
 
-
 { Descale and correctly round an INT32 value that's scaled by N bits.
   We assume RIGHT_SHIFT rounds towards minus infinity, so adding
   the fudge factor is correct for either sign of X. }
 
+//==============================================================================
+//
+// DESCALE
+//
+//==============================================================================
 function DESCALE(x : INT32; n : int) : INT32;
 var
   shift_temp : INT32;
@@ -151,7 +158,6 @@ begin
     Descale :=  (shift_temp shr n);
 end;
 
-
 { Multiply a DCTELEM variable by an INT32 constant, and immediately
   descale to yield a DCTELEM result. }
 
@@ -160,7 +166,6 @@ end;
   begin
     Multiply := DCTELEM( Avar*INT32(Aconst) div (INT32(1) shl CONST_BITS));
   end;
-
 
 { Dequantize a coefficient by multiplying it by the multiplier-table
   entry; produce a DCTELEM result.  For 8-bit data a 16x16->16
@@ -179,10 +184,14 @@ end;
   end;
 {$endif}
 
-
 { Like DESCALE, but applies to a DCTELEM and produces an int.
   We assume that int right shift is unsigned if INT32 right shift is. }
 
+//==============================================================================
+//
+// IDESCALE
+//
+//==============================================================================
 function IDESCALE(x : DCTELEM; n : int) : int;
 {$ifdef BITS_IN_JSAMPLE_IS_8}
 const
@@ -212,11 +221,15 @@ begin
     IDescale :=  (ishift_temp shr n);
 end;
 
-
-
 { Perform dequantization and inverse DCT on one block of coefficients. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_idct_ifast 
+//
+//==============================================================================
 procedure jpeg_idct_ifast (cinfo : j_decompress_ptr;
                            compptr : jpeg_component_info_ptr;
                coef_block : JCOEFPTR;

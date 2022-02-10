@@ -61,18 +61,53 @@ const
   R2W_EXTRASPRITES = $100000;
   R2W_BRIEFINGSCRIPT = $200000;
 
+//==============================================================================
+//
+// Radix2WAD_Game
+//
+//==============================================================================
 procedure Radix2WAD_Game(const fin, fout: string);
 
+//==============================================================================
+//
+// Radix2Stream_Game
+//
+//==============================================================================
 procedure Radix2Stream_Game(const fin: string; const strm: TDStream);
 
+//==============================================================================
+//
+// Radix2WAD_Edit
+//
+//==============================================================================
 procedure Radix2WAD_Edit(const fin, fout: string);
 
+//==============================================================================
+//
+// Radix2Stream_Edit
+//
+//==============================================================================
 procedure Radix2Stream_Edit(const fin: string; const strm: TDStream);
 
+//==============================================================================
+//
+// Radix2WAD
+//
+//==============================================================================
 procedure Radix2WAD(const fin, fout: string; const flags: LongWord);
 
+//==============================================================================
+//
+// Radix2Stream
+//
+//==============================================================================
 procedure Radix2Stream(const fin: string; const strm: TDStream; const flags: LongWord);
 
+//==============================================================================
+//
+// Radix2CSV
+//
+//==============================================================================
 procedure Radix2CSV(const fin: string; const pathout: string);
 
 implementation
@@ -188,6 +223,11 @@ begin
   Inherited;
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.Clear
+//
+//==============================================================================
 procedure TRadixToWADConverter.Clear;
 begin
   if wadwriter <> nil then
@@ -218,6 +258,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.AddPAKFileSystemEntry
+//
+//==============================================================================
 function TRadixToWADConverter.AddPAKFileSystemEntry(const lumpname: string; const aliasname: string): boolean;
 var
   lump: integer;
@@ -234,6 +279,11 @@ begin
   PAK_AddEntry(lumps[lump].position, lumps[lump].length, aliasname, ffilename);
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.ReadLump
+//
+//==============================================================================
 function TRadixToWADConverter.ReadLump(const l: Pradixlump_tArray; const numl: integer;
   const lmp: string; var buf: pointer; var size: integer): boolean;
 var
@@ -254,6 +304,11 @@ begin
   result := false;
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.FindLump
+//
+//==============================================================================
 function TRadixToWADConverter.FindLump(const l: Pradixlump_tArray; const numl: integer;
   const lmp: string): integer;
 var
@@ -268,6 +323,11 @@ begin
   result := -1;
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.ReadHeader
+//
+//==============================================================================
 function TRadixToWADConverter.ReadHeader: boolean;
 var
   i: integer;
@@ -281,6 +341,11 @@ begin
   result := s = 'NSRes:Radix';
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.ReadDirectory
+//
+//==============================================================================
 function TRadixToWADConverter.ReadDirectory: boolean;
 begin
   numlumps := header.numlumps;
@@ -289,6 +354,11 @@ begin
   result := f.Read(lumps^, numlumps * SizeOf(radixlump_t)) = numlumps * SizeOf(radixlump_t);
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GeneratePalette
+//
+//==============================================================================
 function TRadixToWADConverter.GeneratePalette(const pname, cname: string): boolean;
 var
   p: pointer;
@@ -327,6 +397,11 @@ begin
   memfree(p, size);
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateTranslationTables
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateTranslationTables: boolean;
 var
   p1, p2, p3: pointer;
@@ -363,6 +438,11 @@ begin
   memfree(p3, size3);
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateTextures
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateTextures(const pnames, texture1: string): boolean;
 var
   position: integer;
@@ -579,6 +659,11 @@ begin
 
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateLevels
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateLevels: boolean;
 var
   i, j: integer;
@@ -600,6 +685,11 @@ begin
     end;
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateSimpleLevels
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateSimpleLevels: boolean;
 var
   i, j: integer;
@@ -621,6 +711,11 @@ begin
     end;
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateCSVs
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateCSVs(const path: string): boolean;
 var
   i, j: integer;
@@ -693,7 +788,11 @@ begin
   CreateAll('gridtable2');
 end;
 
-
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateFlats
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateFlats: boolean;
 type
   flat32x32_t = packed array[0..31, 0..31] of byte;
@@ -886,6 +985,11 @@ begin
   memfree(pointer(blumps), bnumlumps * SizeOf(radixbitmaplump_t));
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateGraphicWithOutPalette
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateGraphicWithOutPalette(const rname, wname: string;
   const solid: boolean; const opaqueindex: integer = -1): boolean;
 var
@@ -928,6 +1032,11 @@ begin
   memfree(buf, bufsize);
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateGraphicWithPalette
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateGraphicWithPalette(const rname, wname: string; const solid: boolean): boolean;
 var
   lump: integer;
@@ -956,6 +1065,11 @@ begin
   memfree(buf, bufsize);
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateOpaqueGraphicWithPalette
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateOpaqueGraphicWithPalette(const rname, wname: string; const bgcolor: byte): boolean;
 var
   lump: integer;
@@ -984,6 +1098,11 @@ begin
   memfree(buf, bufsize);
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.AddEntryFromWAD
+//
+//==============================================================================
 function TRadixToWADConverter.AddEntryFromWAD(const wname: string): boolean;
 var
   lump: integer;
@@ -1002,12 +1121,22 @@ begin
   Z_ChangeTag(buf, PU_CACHE);
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.AddEntryDirect
+//
+//==============================================================================
 function TRadixToWADConverter.AddEntryDirect(const wname: string; const buf: pointer; const size: integer): boolean;
 begin
   wadwriter.AddData(wname, buf, size);
   result := true;
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateMainGraphics
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateMainGraphics: boolean;
 var
   rname, wname: string;
@@ -1041,6 +1170,11 @@ begin
   result := true;
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateAdditionalGraphics
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateAdditionalGraphics: boolean;
 var
   i, j, patchid: integer;
@@ -1249,6 +1383,11 @@ begin
   AddWeaponNums('WeaponNumUse');
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateSmallFont
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateSmallFont: boolean;
 var
   lump: integer;
@@ -1296,7 +1435,6 @@ begin
   memset(imgout, 254, 5 * 6);
   fnt := 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.?[]!:;"`,-0123456789_';
 
-
   for ch := Chr(33) to Chr(128) do
   begin
     found := false;
@@ -1328,6 +1466,11 @@ begin
   memfree(buf, bufsize);
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateBigFonts
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateBigFonts: boolean;
 const
   NUM_BIG_FONT_COLORS = 3;
@@ -1516,7 +1659,12 @@ begin
   memfree(pointer(imgout), 18 * 21);
 end;
 
+//==============================================================================
+// TRadixToWADConverter.GenerateDosFonts
+//
 // Generate DOS font in various colors
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateDosFonts: boolean;
 const
   NUM_DOS_FONT_COLORS = 2;
@@ -1641,6 +1789,11 @@ begin
   memfree(pointer(imgout), 8 * 8);
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateMenuTranslation
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateMenuTranslation: boolean;
 var
   trn: packed array[0..255] of byte;
@@ -1873,6 +2026,11 @@ var
     $FF, $FF, $FF
   );
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateSprites
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateSprites: boolean;
 const
   MAX_SPR_INFO = 1024;
@@ -2273,7 +2431,6 @@ begin
   MakeOneSprite('BlackBioBottom', _MTRX_BIOMINE2, nil, 32, 32, false, false, 'D');
   MakeOneSprite('BlackBioChunk', _MTRX_BIOMINE2, nil, 7, 14, false, false, 'E');
   MakeOneSprite('BlackBioTop', _MTRX_BIOMINE2, nil, 31, 22, false, false, 'F');
-
 
   // MT_ALIENFODDER
   MakeRotatingSprite8('AlienFodder', _MTRX_ALIENFODDER, 3, nil, 68, 101, false, false);
@@ -2737,6 +2894,11 @@ begin
   memfree(pointer(blumps), bnumlumps * SizeOf(radixbitmaplump_t));
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateExtraSprites
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateExtraSprites: boolean;
 begin
   result := true;
@@ -2771,6 +2933,11 @@ begin
   wadwriter.AddSeparator('S_END');
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateMusic
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateMusic: boolean;
 var
   i, j: integer;
@@ -2796,6 +2963,11 @@ begin
     end;
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateCockpitOverlay
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateCockpitOverlay: boolean;
 var
   l: integer;
@@ -2836,7 +3008,6 @@ begin
     exit;
   end;
   result := true;
-
 
   bmp := TRadixBitmap.Create;
   bmp.width := 320;
@@ -2885,6 +3056,11 @@ begin
   bmp.Free;
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateSounds
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateSounds: boolean;
 var
   i: integer;
@@ -2915,6 +3091,11 @@ begin
   sndinfo.Free;
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateMissionText
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateMissionText: boolean;
 var
   rname, wname: string;
@@ -2938,6 +3119,11 @@ begin
     end;
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateMissionBriefing
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateMissionBriefing: boolean;
 var
   rname, wname: string;
@@ -2961,6 +3147,11 @@ begin
     end;
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.GenerateEndText
+//
+//==============================================================================
 function TRadixToWADConverter.GenerateEndText: boolean;
 var
   rname, wname: string;
@@ -2983,6 +3174,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.WritePK3Entry
+//
+//==============================================================================
 procedure TRadixToWADConverter.WritePK3Entry;
 begin
   if aliases = nil then
@@ -2993,6 +3189,11 @@ begin
   wadwriter.AddString(S_RADIXINF, aliases.Text);
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.Convert_Game
+//
+//==============================================================================
 procedure TRadixToWADConverter.Convert_Game(const fname: string);
 begin
   if not fexists(fname) then
@@ -3031,6 +3232,11 @@ begin
   ffilename := '';
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.Convert_Edit
+//
+//==============================================================================
 procedure TRadixToWADConverter.Convert_Edit(const fname: string);
 begin
   if not fexists(fname) then
@@ -3059,6 +3265,11 @@ begin
   ffilename := '';
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.Convert
+//
+//==============================================================================
 procedure TRadixToWADConverter.Convert(const fname: string; const flags: LongWord);
 begin
   if not fexists(fname) then
@@ -3123,16 +3334,31 @@ begin
   ffilename := '';
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.SaveToFile
+//
+//==============================================================================
 procedure TRadixToWADConverter.SaveToFile(const fname: string);
 begin
   wadwriter.SaveToFile(fname);
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.SaveToSream
+//
+//==============================================================================
 procedure TRadixToWADConverter.SaveToSream(const strm: TDStream);
 begin
   wadwriter.SaveToStream(strm);
 end;
 
+//==============================================================================
+//
+// Radix2WAD_Game
+//
+//==============================================================================
 procedure Radix2WAD_Game(const fin, fout: string);
 var
   cnv: TRadixToWADConverter;
@@ -3147,6 +3373,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// Radix2Stream_Game
+//
+//==============================================================================
 procedure Radix2Stream_Game(const fin: string; const strm: TDStream);
 var
   cnv: TRadixToWADConverter;
@@ -3161,6 +3392,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// Radix2WAD_Edit
+//
+//==============================================================================
 procedure Radix2WAD_Edit(const fin, fout: string);
 var
   cnv: TRadixToWADConverter;
@@ -3175,6 +3411,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// Radix2Stream_Edit
+//
+//==============================================================================
 procedure Radix2Stream_Edit(const fin: string; const strm: TDStream);
 var
   cnv: TRadixToWADConverter;
@@ -3189,6 +3430,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// Radix2WAD
+//
+//==============================================================================
 procedure Radix2WAD(const fin, fout: string; const flags: LongWord);
 var
   cnv: TRadixToWADConverter;
@@ -3203,6 +3449,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// Radix2Stream
+//
+//==============================================================================
 procedure Radix2Stream(const fin: string; const strm: TDStream; const flags: LongWord);
 var
   cnv: TRadixToWADConverter;
@@ -3217,6 +3468,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// Radix2CSV
+//
+//==============================================================================
 procedure Radix2CSV(const fin: string; const pathout: string);
 var
   cnv: TRadixToWADConverter;

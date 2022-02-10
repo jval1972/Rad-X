@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -95,9 +95,6 @@ const
   BITS_IN_JSAMPLE = 12;
 {$endif}
 
-
-
-
 { Maximum number of components (color channels) allowed in JPEG image.
   To meet the letter of the JPEG spec, set this to 255.  However, darn
   few applications need more than 4 channels (maybe 5 for CMYK + alpha
@@ -105,10 +102,8 @@ const
   really short on memory.  (Each allowed component costs a hundred or so
   bytes of storage, whether actually used in an image or not.) }
 
-
 const
   MAX_COMPONENTS = 10;          { maximum number of image components }
-
 
 { Basic data types.
   You may need to change these if you have a machine with unusual data
@@ -116,12 +111,10 @@ const
   or "long" not 32 bits.  We don't care whether "int" is 16 or 32 bits,
   but it had better be at least 16. }
 
-
 { Representation of a single sample (pixel element value).
   We frequently allocate large arrays of these, so it's important to keep
   them small.  But if you have memory to burn and access to char or short
   arrays is very slow on your hardware, you might want to change these. }
-
 
 {$ifdef BITS_IN_JSAMPLE_IS_8}
 { JSAMPLE should be the smallest type that will hold the values 0..255.
@@ -152,7 +145,6 @@ const
 
 {$endif} { BITS_IN_JSAMPLE = 12 }
 
-
 { Representation of a DCT frequency coefficient.
   This should be a signed value of at least 16 bits; "short" is usually OK.
   Again, we allocate large arrays of these, but you can change to int
@@ -161,12 +153,10 @@ type
   JCOEF = int;
   JCOEF_PTR = ^JCOEF;
 
-
 { Compressed datastreams are represented as arrays of JOCTET.
   These must be EXACTLY 8 bits wide, at least once they are written to
   external storage.  Note that when using the stdio data source/destination
   managers, this is also the data type passed to fread/fwrite. }
-
 
 type
   JOCTET = Byte;
@@ -177,13 +167,11 @@ type
 
   GETJOCTET = JOCTET; { A work around }
 
-
 { These typedefs are used for various table entries and so forth.
   They must be at least as wide as specified; but making them too big
   won't cost a huge amount of memory, so we don't provide special
   extraction code like we did for JSAMPLE.  (In other words, these
   typedefs live at a different point on the speed/space tradeoff curve.) }
-
 
 { UINT8 must hold at least the values 0..255. }
 
@@ -216,7 +204,6 @@ type
 
 const
   JPEG_MAX_DIMENSION = 65500;  { a tad under 64K to prevent overflows }
-
 
 { Ordering of RGB data in scanlines passed to or from the application.
   If your application wants to deal with data in the order B,G,R, just
@@ -259,7 +246,6 @@ const
 type
   MULTIPLIER = int;     { type for fastest integer multiply }
 
-
 { FAST_FLOAT should be either float or double, whichever is done faster
   by your compiler.  (Note that this type is only used in the floating point
   DCT routines, so it only matters if you've defined DCT_FLOAT_SUPPORTED.)
@@ -270,8 +256,6 @@ type
 type
   FAST_FLOAT = double; {float}
 
-
 implementation
-
 
 end.

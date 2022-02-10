@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -37,14 +37,39 @@ interface
 uses
   m_fixed;
 
+//==============================================================================
+//
+// R_PointToScreenBuffer
+//
+//==============================================================================
 function R_PointToScreenBuffer(const wx, wy, wz: fixed_t; var x, y: Integer): boolean;
 
+//==============================================================================
+//
+// R_PointToScreenBufferEx
+//
+//==============================================================================
 function R_PointToScreenBufferEx(const wx, wy, wz: fixed_t; var x, y: Integer): boolean;
 
+//==============================================================================
+//
+// R_PointToScreenBufferEx2
+//
+//==============================================================================
 function R_PointToScreenBufferEx2(const wx, wy, wz: fixed_t; var x, y: Integer; var axscale, ayscale: fixed_t): boolean;
 
+//==============================================================================
+//
+// R_ColumnToScreenBuffer
+//
+//==============================================================================
 procedure R_ColumnToScreenBuffer(const wx, wy, wz1, wz2: fixed_t; var x, y1, y2: Integer);
 
+//==============================================================================
+//
+// R_PointToScreen
+//
+//==============================================================================
 function R_PointToScreen(const wx, wy, wz: fixed_t; var x, y: Integer): boolean;
 
 implementation
@@ -54,6 +79,11 @@ uses
   r_main,
   r_draw;
 
+//==============================================================================
+//
+// R_PointToScreenBuffer
+//
+//==============================================================================
 function R_PointToScreenBuffer(const wx, wy, wz: fixed_t; var x, y: Integer): boolean;
 var
   tr_x: fixed_t;
@@ -113,6 +143,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_PointToScreenBufferEx
+//
+//==============================================================================
 function R_PointToScreenBufferEx(const wx, wy, wz: fixed_t; var x, y: Integer): boolean;
 var
   x1, y1: float;
@@ -155,6 +190,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_PointToScreenBufferEx2
+//
+//==============================================================================
 function R_PointToScreenBufferEx2(const wx, wy, wz: fixed_t; var x, y: Integer; var axscale, ayscale: fixed_t): boolean;
 var
   x1, y1: float;
@@ -199,8 +239,11 @@ begin
   end;
 end;
 
-
-
+//==============================================================================
+//
+// R_ColumnToScreenBuffer
+//
+//==============================================================================
 procedure R_ColumnToScreenBuffer(const wx, wy, wz1, wz2: fixed_t; var x, y1, y2: Integer);
 var
   tr_x: fixed_t;
@@ -224,12 +267,16 @@ begin
   y2 := centery - FixedInt_FixedMul(wz2 - viewz, xscale);
 end;
 
+//==============================================================================
+//
+// R_PointToScreen
+//
+//==============================================================================
 function R_PointToScreen(const wx, wy, wz: fixed_t; var x, y: Integer): boolean;
 begin
   result := R_PointToScreenBuffer(wx, wy, wz, x, y);
   x := x + viewwindowx;
   y := y + viewwindowy;
 end;
-
 
 end.

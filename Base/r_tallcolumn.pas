@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -36,9 +36,26 @@ uses
   m_fixed,
   r_main;
 
+//==============================================================================
+// R_DrawTallColumnMedium
+//
 // Column drawers
+//
+//==============================================================================
 procedure R_DrawTallColumnMedium;
+
+//==============================================================================
+//
+// R_DrawTallColumnHi
+//
+//==============================================================================
 procedure R_DrawTallColumnHi;
+
+//==============================================================================
+//
+// R_DrawTallColumnBase32
+//
+//==============================================================================
 procedure R_DrawTallColumnBase32;
 
 var
@@ -57,6 +74,11 @@ uses
   r_column,
   r_draw;
 
+//==============================================================================
+//
+// R_DrawTallColumnMedium
+//
+//==============================================================================
 procedure R_DrawTallColumnMedium;
 var
   count: integer;
@@ -171,6 +193,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawTallColumnBase32
+//
+//==============================================================================
 procedure R_DrawTallColumnBase32;
 var
   count: integer;
@@ -199,6 +226,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawTallColumnHi
+//
+//==============================================================================
 procedure R_DrawTallColumnHi;
 var
   count: integer;

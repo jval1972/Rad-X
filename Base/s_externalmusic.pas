@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -45,10 +45,25 @@ type
     constructor Create(const strm: TDStream); virtual;
   end;
 
+//==============================================================================
+//
+// S_ExternalMusicInit
+//
+//==============================================================================
 procedure S_ExternalMusicInit;
 
+//==============================================================================
+//
+// S_ShutDownExternalMusic
+//
+//==============================================================================
 procedure S_ShutDownExternalMusic;
 
+//==============================================================================
+//
+// S_TryLoadExternalMusic
+//
+//==============================================================================
 function S_TryLoadExternalMusic(music: Pmusicinfo_t): boolean;
 
 implementation
@@ -71,13 +86,21 @@ end;
 var
   externalmusic: TDStringList;
 
-
+//==============================================================================
+//
+// S_ExternalMusicInit
+//
+//==============================================================================
 procedure S_ExternalMusicInit;
 begin
   externalmusic := TDStringList.Create;
 end;
 
-
+//==============================================================================
+//
+// S_ShutDownExternalMusic
+//
+//==============================================================================
 procedure S_ShutDownExternalMusic;
 var
   i: integer;
@@ -97,6 +120,11 @@ const
     '.MOD', '.S3M', '.IT', '.XM'
   );
 
+//==============================================================================
+//
+// S_TryLoadExternalMusic
+//
+//==============================================================================
 function S_TryLoadExternalMusic(music: Pmusicinfo_t): boolean;
 var
   i: integer;

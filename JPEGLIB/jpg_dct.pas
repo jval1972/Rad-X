@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -44,7 +44,6 @@ interface
 uses
   jpg_morecfg;
 
-
 { A forward DCT routine is given a pointer to a work area of type DCTELEM[];
   the DCT is to be performed in-place in that buffer.  Type DCTELEM is int
   for 8-bit samples, INT32 for 12-bit samples.  (NOTE: Floating-point DCT
@@ -55,7 +54,6 @@ uses
   convention improves accuracy in integer implementations and saves some
   work in floating-point ones.
   Quantization of the output coefficients is done by jcdctmgr.c. }
-
 
 {$ifdef BITS_IN_JSAMPLE_IS_8}
 type
@@ -74,7 +72,6 @@ type
   forward_DCT_method_ptr = procedure(var data : array of DCTELEM);
   float_DCT_method_ptr = procedure(var data : array of FAST_FLOAT);
 
-
 { An inverse DCT routine is given a pointer to the input JBLOCK and a pointer
   to an output sample array.  The routine must dequantize the input data as
   well as perform the IDCT; for dequantization, it uses the multiplier table
@@ -84,12 +81,9 @@ type
   Note that the number of samples emitted by the IDCT routine is
   DCT_scaled_size * DCT_scaled_size. }
 
-
 { typedef inverse_DCT_method_ptr is declared in jpegint.h }
 
-
 { Each IDCT routine has its own ideas about the best dct_table element type. }
-
 
 type
   ISLOW_MULT_TYPE = MULTIPLIER;  { short or int, whichever is faster }

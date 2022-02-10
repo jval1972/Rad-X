@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -44,10 +44,8 @@ uses
   jpg_morecfg,
   jpg_lib;
 
-
 { jpeg_zigzag_order[i] is the zigzag-order position of the i'th element
   of a DCT block read in natural order (left to right, top to bottom). }
-
 
 {$ifdef FALSE}      { This table is not actually needed in v6a }
 
@@ -65,7 +63,6 @@ const
 
 {$endif}
 
-
 { jpeg_natural_order[i] is the natural-order position of the i'th element
   of zigzag order.
 
@@ -77,7 +74,6 @@ const
   to be stored in location 63 of the block, not somewhere random.
   The worst case would be a run-length of 15, which means we need 16
   fake entries. }
-
 
 const
   jpeg_natural_order: array[0..DCTSIZE2 + 16 - 1] of int = (
@@ -93,37 +89,81 @@ const
    63, 63, 63, 63, 63, 63, 63, 63
   );
 
-
-
 { Arithmetic utilities }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jdiv_round_up 
+//
+//==============================================================================
 function jdiv_round_up (a: long; b: long): long;
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jround_up 
+//
+//==============================================================================
 function jround_up (a: long; b: long): long;
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jcopy_sample_rows
+//
+//==============================================================================
 procedure jcopy_sample_rows(input_array: JSAMPARRAY;
                             source_row: int;
                             output_array: JSAMPARRAY; dest_row: int;
                             num_rows: int; num_cols: JDIMENSION);
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jcopy_block_row
+//
+//==============================================================================
 procedure jcopy_block_row(input_row: JBLOCKROW;
                           output_row: JBLOCKROW;
                           num_blocks: JDIMENSION);
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jzero_far 
+//
+//==============================================================================
 procedure jzero_far (target: pointer;{far} bytestozero: size_t);
 
+//==============================================================================
+//
+// FMEMZERO
+//
+//==============================================================================
 procedure FMEMZERO(target: pointer; size: size_t);
 
+//==============================================================================
+//
+// FMEMCOPY
+//
+//==============================================================================
 procedure FMEMCOPY(dest,src: pointer; size: size_t);
 
 implementation
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jdiv_round_up 
+//
+//==============================================================================
 function jdiv_round_up (a: long; b: long): long;
 { Compute a/b rounded up to next integer, ie, ceil(a/b) }
 { Assumes a >= 0, b > 0 }
@@ -131,8 +171,13 @@ begin
   jdiv_round_up := (a + b - long(1)) div b;
 end;
 
-
 {GLOBAL}
+
+//==============================================================================
+//
+// jround_up 
+//
+//==============================================================================
 function jround_up (a: long; b: long): long;
 { Compute a rounded up to next multiple of b, ie, ceil(a/b)*b }
 { Assumes a >= 0, b > 0 }
@@ -149,18 +194,27 @@ end;
   Otherwise, the routines below do it the hard way.  (The performance cost
   is not all that great, because these routines aren't very heavily used.) }
 
-
 {$ifndef NEED_FAR_POINTERS}      { normal case, same as regular macros }
+
+//==============================================================================
+//
+// FMEMZERO
+//
+//==============================================================================
 procedure FMEMZERO(target: pointer; size: size_t);
 begin
   FillChar(target^, size, 0);
 end;
 
+//==============================================================================
+//
+// FMEMCOPY
+//
+//==============================================================================
 procedure FMEMCOPY(dest,src: pointer; size: size_t);
 begin
   Move(src^, dest^, size);
 end;
-
 
 {$else}                       { 80x86 case, define if we can }
   {$ifdef USE_FMEM}
@@ -169,8 +223,13 @@ end;
   {$endif}
 {$endif}
 
-
 {GLOBAL}
+
+//==============================================================================
+//
+// jcopy_sample_rows 
+//
+//==============================================================================
 procedure jcopy_sample_rows (input_array: JSAMPARRAY; source_row: int;
                              output_array: JSAMPARRAY; dest_row: int;
                  num_rows: int; num_cols: JDIMENSION);
@@ -212,8 +271,13 @@ begin
   end;
 end;
 
-
 {GLOBAL}
+
+//==============================================================================
+//
+// jcopy_block_row 
+//
+//==============================================================================
 procedure jcopy_block_row (input_row: JBLOCKROW;
                            output_row: JBLOCKROW;
                            num_blocks: JDIMENSION);
@@ -237,8 +301,13 @@ begin
 {$endif}
 end;
 
-
 {GLOBAL}
+
+//==============================================================================
+//
+// jzero_far 
+//
+//==============================================================================
 procedure jzero_far (target: pointer;{far} bytestozero: size_t);
 { Zero out a chunk of FAR memory. }
 { This might be sample-array data, block-array data, or alloc_large data. }

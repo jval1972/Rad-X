@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION
@@ -34,6 +34,11 @@ unit i_steam;
 
 interface
 
+//==============================================================================
+//
+// QuerySteamDirectory
+//
+//==============================================================================
 function QuerySteamDirectory(const appid: integer): string;
 
 implementation
@@ -47,6 +52,11 @@ const
   KEY_WOW64_64KEY = $100;
   KEY_WOW64_32KEY = $200;
 
+//==============================================================================
+//
+// QuerySteamDirectory1
+//
+//==============================================================================
 function QuerySteamDirectory1(const flags, appid: integer): string;
 var
   reg: TRegistry;
@@ -62,6 +72,11 @@ begin
   reg.free;
 end;
 
+//==============================================================================
+//
+// QuerySteamDirectory
+//
+//==============================================================================
 function QuerySteamDirectory(const appid: integer): string;
 begin
   result := QuerySteamDirectory1(KEY_READ, appid);

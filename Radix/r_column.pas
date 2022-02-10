@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -36,10 +36,26 @@ uses
   m_fixed,
   r_main;
 
+//==============================================================================
+// R_DrawColumnMedium
+//
 // Column drawers
+//
+//==============================================================================
 procedure R_DrawColumnMedium;
+
+//==============================================================================
+//
+// R_DrawColumnHi
+//
+//==============================================================================
 procedure R_DrawColumnHi;
 
+//==============================================================================
+//
+// R_DrawColumnBase32
+//
+//==============================================================================
 procedure R_DrawColumnBase32;
 
 var
@@ -80,6 +96,8 @@ uses
   r_precalc,
   r_draw;
 
+//==============================================================================
+// R_DrawColumnMedium
 //
 // A column is a vertical slice/span from a wall texture that,
 //  given the DOOM style restrictions on the view orientation,
@@ -87,6 +105,7 @@ uses
 // Thus a special case loop for very fast rendering can
 //  be used. It has also been used with Wolfenstein 3D.
 //
+//==============================================================================
 procedure R_DrawColumnMedium;
 var
   count: integer;
@@ -201,6 +220,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawColumnBase32
+//
+//==============================================================================
 procedure R_DrawColumnBase32;
 var
   count: integer;
@@ -229,6 +253,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawColumnHi
+//
+//==============================================================================
 procedure R_DrawColumnHi;
 var
   count: integer;

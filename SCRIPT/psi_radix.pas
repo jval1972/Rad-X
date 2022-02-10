@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -34,10 +34,32 @@ unit psi_radix;
 
 interface
 
+//==============================================================================
+//
+// PS_SetHasSecondaryObjective
+//
+//==============================================================================
 procedure PS_SetHasSecondaryObjective(const value: boolean);
+
+//==============================================================================
+//
+// PS_GetHasSecondaryObjective
+//
+//==============================================================================
 function PS_GetHasSecondaryObjective: boolean;
 
+//==============================================================================
+//
+// PS_SetSecondaryObjective
+//
+//==============================================================================
 procedure PS_SetSecondaryObjective(const value: boolean);
+
+//==============================================================================
+//
+// PS_GetSecondaryObjective
+//
+//==============================================================================
 function PS_GetSecondaryObjective: boolean;
 
 implementation
@@ -47,16 +69,31 @@ uses
   d_player,
   g_game;
 
+//==============================================================================
+//
+// PS_SetHasSecondaryObjective
+//
+//==============================================================================
 procedure PS_SetHasSecondaryObjective(const value: boolean);
 begin
   levelhassecondaryobjective := value;
 end;
 
+//==============================================================================
+//
+// PS_GetHasSecondaryObjective
+//
+//==============================================================================
 function PS_GetHasSecondaryObjective: boolean;
 begin
   result := levelhassecondaryobjective;
 end;
 
+//==============================================================================
+//
+// PS_SetSecondaryObjective
+//
+//==============================================================================
 procedure PS_SetSecondaryObjective(const value: boolean);
 var
   i: integer;
@@ -66,6 +103,11 @@ begin
       players[i].secondaryobjective := value;
 end;
 
+//==============================================================================
+//
+// PS_GetSecondaryObjective
+//
+//==============================================================================
 function PS_GetSecondaryObjective: boolean;
 var
   i: integer;

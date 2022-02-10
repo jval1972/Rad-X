@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -45,6 +45,11 @@ var
   g_bigbarrelexplosion: boolean = false;
   g_bigdroneexplosion: boolean = false;
 
+//==============================================================================
+//
+// P_GetThingDamage
+//
+//==============================================================================
 function P_GetThingDamage(const th: Pmobj_t): integer;
 
 implementation
@@ -52,6 +57,11 @@ implementation
 uses
   g_game;
 
+//==============================================================================
+//
+// P_GetThingDamage
+//
+//==============================================================================
 function P_GetThingDamage(const th: Pmobj_t): integer;
 begin
   if demoplayback or demorecording then

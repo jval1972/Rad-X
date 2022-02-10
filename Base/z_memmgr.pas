@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -67,7 +67,6 @@ type
     property numitems: integer read fnumitems write fnumitems;
   end;
 
-
 implementation
 
 constructor TMemManager.Create;
@@ -87,16 +86,31 @@ begin
   inherited;
 end;
 
+//==============================================================================
+//
+// TMemManager.item2ptr
+//
+//==============================================================================
 function TMemManager.item2ptr(const id: integer): Pointer;
 begin
   result := pointer(integer(fitems[id]) + SizeOf(memmanageritem_t));
 end;
 
+//==============================================================================
+//
+// TMemManager.ptr2item
+//
+//==============================================================================
 function TMemManager.ptr2item(const ptr: Pointer): integer;
 begin
   result := Pmemmanageritem_t(Integer(ptr) - SizeOf(memmanageritem_t)).index;
 end;
 
+//==============================================================================
+//
+// TMemManager.M_Free
+//
+//==============================================================================
 procedure TMemManager.M_Free(ptr: Pointer);
 var
   i: integer;
@@ -116,6 +130,11 @@ begin
   dec(fnumitems);
 end;
 
+//==============================================================================
+//
+// TMemManager.M_FreeTags
+//
+//==============================================================================
 procedure TMemManager.M_FreeTags(lowtag, hightag: integer);
 var
   i: integer;
@@ -125,11 +144,21 @@ begin
       M_Free(item2ptr(i));
 end;
 
+//==============================================================================
+//
+// TMemManager.M_ChangeTag
+//
+//==============================================================================
 procedure TMemManager.M_ChangeTag(ptr: Pointer; tag: integer);
 begin
   fitems[ptr2item(ptr)].tag := tag;
 end;
 
+//==============================================================================
+//
+// TMemManager.M_Malloc
+//
+//==============================================================================
 function TMemManager.M_Malloc(size: integer; tag: integer; user: Pointer): pointer;
 var
   i: integer;
@@ -153,6 +182,11 @@ begin
     PPointer(user)^ := result;
 end;
 
+//==============================================================================
+//
+// TMemManager.M_Realloc
+//
+//==============================================================================
 function TMemManager.M_Realloc(ptr: Pointer; size: integer; tag: integer; user: Pointer): pointer;
 var
   tmp: pointer;

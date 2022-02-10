@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -34,6 +34,11 @@ unit p_udmf;
 
 interface
 
+//==============================================================================
+//
+// UDMF_Check
+//
+//==============================================================================
 procedure UDMF_Check(const mapname: string);
 
 implementation
@@ -74,7 +79,6 @@ type
     destructor Destroy; override;
   end;
 
-
 constructor TUDMFManager.Create;
 begin
   fthings := nil;
@@ -89,6 +93,11 @@ begin
   fnummapsectors := 0;
 end;
 
+//==============================================================================
+//
+// TUDMFManager._udmfPreproccessor
+//
+//==============================================================================
 function TUDMFManager._udmfPreproccessor(atext: string): string;
 var
   i: integer;
@@ -143,6 +152,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TUDMFManager.LoadFromString
+//
+//==============================================================================
 procedure TUDMFManager.LoadFromString(const atext: string);
 var
   sc: TScriptEngine;
@@ -717,6 +731,11 @@ begin
   sc.Free;
 end;
 
+//==============================================================================
+//
+// TUDMFManager.SaveUDMFToVanilla
+//
+//==============================================================================
 procedure TUDMFManager.SaveUDMFToVanilla(const amapname: string; const afilename: string{$IFDEF HEXEN};const bl: integer{$ENDIF});
 var
   header: wadinfo_t;
@@ -807,6 +826,11 @@ begin
   f.Free;
 end;
 
+//==============================================================================
+//
+// TUDMFManager.Clear
+//
+//==============================================================================
 procedure TUDMFManager.Clear;
 begin
   memfree(Pointer(fthings), fnumthings * SizeOf(doommapthing_t));
@@ -822,7 +846,12 @@ begin
   inherited;
 end;
 
+//==============================================================================
+// UDMF_Check
+//
 //------------------------------------------------------------------------------
+//
+//==============================================================================
 procedure UDMF_Check(const mapname: string);
 var
   udmf: TUDMFManager;

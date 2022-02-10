@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -42,6 +42,11 @@ var
 // start of a WxW tile image
   ds_source32: PLongWordArray;
 
+//==============================================================================
+//
+// R_DrawSpanNormal
+//
+//==============================================================================
 procedure R_DrawSpanNormal;
 
 implementation
@@ -54,9 +59,12 @@ uses
   r_depthbuffer,
   r_zbuffer;
 
+//==============================================================================
+// R_DrawSpanNormal
 //
 // Draws the actual span (Normal resolution).
 //
+//==============================================================================
 procedure R_DrawSpanNormal;
 var
   xfrac: fixed_t;

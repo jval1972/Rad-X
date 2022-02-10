@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -31,11 +31,33 @@ unit r_col_fz;
 
 interface
 
+//==============================================================================
+//
+// R_InitFuzzTable
+//
+//==============================================================================
 procedure R_InitFuzzTable;
 
+//==============================================================================
+// R_DrawFuzzColumn
+//
 // The Spectre/Invisibility effect.
+//
+//==============================================================================
 procedure R_DrawFuzzColumn;
+
+//==============================================================================
+//
+// R_DrawFuzzColumn32
+//
+//==============================================================================
 procedure R_DrawFuzzColumn32;
+
+//==============================================================================
+//
+// R_DrawFuzzColumnHi
+//
+//==============================================================================
 procedure R_DrawFuzzColumnHi;
 
 //
@@ -44,7 +66,6 @@ procedure R_DrawFuzzColumnHi;
 const
   FUZZTABLE = 50;
   FUZZOFF = 1;
-
 
   fuzzoffset: array[0..FUZZTABLE - 1] of integer = (
     FUZZOFF,-FUZZOFF, FUZZOFF,-FUZZOFF, FUZZOFF, FUZZOFF,-FUZZOFF,
@@ -70,6 +91,8 @@ uses
   r_column,
   r_hires;
 
+//==============================================================================
+// R_DrawFuzzColumn
 //
 // Framebuffer postprocessing.
 // Creates a fuzzy image by copying pixels
@@ -78,6 +101,7 @@ uses
 //  could create the SHADOW effect,
 //  i.e. spectres and invisible players.
 //
+//==============================================================================
 procedure R_DrawFuzzColumn;
 var
   count: integer;
@@ -122,6 +146,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawFuzzColumn32
+//
+//==============================================================================
 procedure R_DrawFuzzColumn32;
 var
   count: integer;
@@ -166,6 +195,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawFuzzColumnHi
+//
+//==============================================================================
 procedure R_DrawFuzzColumnHi;
 var
   count: integer;
@@ -203,6 +237,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_InitFuzzTable
+//
+//==============================================================================
 procedure R_InitFuzzTable;
 var
   i: integer;

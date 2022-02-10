@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -53,7 +53,6 @@ uses
   jpg_lib,
   jpg_error;
 
-
 { Pointer to routine to upsample a single component }
 type
   upsample1_ptr = procedure (cinfo: j_decompress_ptr;
@@ -64,6 +63,12 @@ type
 { Module initialization routine for upsampling. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jinit_upsampler 
+//
+//==============================================================================
 procedure jinit_upsampler (cinfo: j_decompress_ptr);
 
 implementation
@@ -102,10 +107,15 @@ type
     v_expand: array[0..MAX_COMPONENTS-1] of UINT8 ;
   end;
 
-
 { Initialize for an upsampling pass. }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// start_pass_upsample 
+//
+//==============================================================================
 procedure start_pass_upsample (cinfo: j_decompress_ptr); far;
 var
   upsample: my_upsample_ptr;
@@ -118,7 +128,6 @@ begin
   upsample^.rows_to_go := cinfo^.output_height;
 end;
 
-
 { Control routine to do upsampling (and color conversion).
 
   In this version we upsample each component independently.
@@ -126,6 +135,12 @@ end;
   color conversion a row at a time. }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// sep_upsample
+//
+//==============================================================================
 procedure sep_upsample(cinfo: j_decompress_ptr; input_buf: JSAMPIMAGE;
   var in_row_group_ctr: JDIMENSION; in_row_groups_avail: JDIMENSION;
   output_buf: JSAMPARRAY; var out_row_ctr: JDIMENSION; out_rows_avail: JDIMENSION); far;
@@ -185,10 +200,8 @@ begin
     inc(in_row_group_ctr);
 end;
 
-
 { These are the routines invoked by sep_upsample to upsample pixel values
   of a single component.  One row group is processed per call. }
-
 
 { For full-size components, we just make color_buf[ci] point at the
   input buffer, and thus avoid copying any data.  Note that this is
@@ -196,23 +209,33 @@ end;
   "consumed" until we are done color converting and emitting it. }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// fullsize_upsample
+//
+//==============================================================================
 procedure fullsize_upsample(cinfo: j_decompress_ptr; compptr: jpeg_component_info_ptr;
   input_data: JSAMPARRAY; var output_data_ptr: JSAMPARRAY); far;
 begin
   output_data_ptr := input_data;
 end;
 
-
 { This is a no-op version used for "uninteresting" components.
   These components will not be referenced by color conversion. }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// noop_upsample
+//
+//==============================================================================
 procedure noop_upsample(cinfo: j_decompress_ptr; compptr: jpeg_component_info_ptr;
   input_data: JSAMPARRAY; var output_data_ptr: JSAMPARRAY); far;
 begin
   output_data_ptr := nil;  { safety check }
 end;
-
 
 { This version handles any integral sampling ratios.
   This is not used for typical JPEG files, so it need not be fast.
@@ -224,6 +247,12 @@ end;
   you would be well advised to improve this code. }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// int_upsample
+//
+//==============================================================================
 procedure int_upsample(cinfo: j_decompress_ptr; compptr: jpeg_component_info_ptr;
   input_data: JSAMPARRAY; var output_data_ptr: JSAMPARRAY); far;
 var
@@ -275,11 +304,16 @@ begin
   end;
 end;
 
-
 { Fast processing for the common case of 2:1 horizontal and 1:1 vertical.
   It's still a box filter. }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// h2v1_upsample
+//
+//==============================================================================
 procedure h2v1_upsample(cinfo: j_decompress_ptr; compptr: jpeg_component_info_ptr;
   input_data: JSAMPARRAY; var output_data_ptr: JSAMPARRAY); far;
 var
@@ -311,11 +345,16 @@ begin
   end;
 end;
 
-
 { Fast processing for the common case of 2:1 horizontal and 2:1 vertical.
   It's still a box filter. }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// h2v2_upsample
+//
+//==============================================================================
 procedure h2v2_upsample(cinfo: j_decompress_ptr; compptr: jpeg_component_info_ptr;
   input_data: JSAMPARRAY; var output_data_ptr: JSAMPARRAY); far;
 var
@@ -353,7 +392,6 @@ begin
   end;
 end;
 
-
 { Fancy processing for the common case of 2:1 horizontal and 1:1 vertical.
 
   The upsampling algorithm is linear interpolation between pixel centers,
@@ -368,6 +406,12 @@ end;
   alternate pixel locations (a simple ordered dither pattern). }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// h2v1_fancy_upsample
+//
+//==============================================================================
 procedure h2v1_fancy_upsample(cinfo: j_decompress_ptr; compptr: jpeg_component_info_ptr;
   input_data: JSAMPARRAY; var output_data_ptr: JSAMPARRAY); far;
 var
@@ -413,7 +457,6 @@ begin
   end;
 end;
 
-
 { Fancy processing for the common case of 2:1 horizontal and 2:1 vertical.
   Again a triangle filter; see comments for h2v1 case, above.
 
@@ -421,6 +464,12 @@ end;
   context from the main buffer controller (see initialization code). }
 
 {METHODDEF}
+
+//==============================================================================
+//
+// h2v2_fancy_upsample
+//
+//==============================================================================
 procedure h2v2_fancy_upsample(cinfo: j_decompress_ptr; compptr: jpeg_component_info_ptr;
   input_data: JSAMPARRAY; var output_data_ptr: JSAMPARRAY); far;
 var
@@ -498,10 +547,15 @@ begin
   end;
 end;
 
-
 { Module initialization routine for upsampling. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jinit_upsampler 
+//
+//==============================================================================
 procedure jinit_upsampler (cinfo: j_decompress_ptr);
 var
   upsample: my_upsample_ptr;

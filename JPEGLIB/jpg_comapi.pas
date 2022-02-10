@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -46,18 +46,41 @@ uses
   but don't destroy the object itself. }
 
 {GLOBAL}
-procedure jpeg_abort (cinfo : j_common_ptr);
 
+//==============================================================================
+//
+// jpeg_abort 
+//
+//==============================================================================
+procedure jpeg_abort (cinfo : j_common_ptr);
 
 { Destruction of a JPEG object. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_destroy 
+//
+//==============================================================================
 procedure jpeg_destroy (cinfo : j_common_ptr);
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_alloc_quant_table 
+//
+//==============================================================================
 function jpeg_alloc_quant_table (cinfo : j_common_ptr) : JQUANT_TBL_PTR;
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_alloc_huff_table 
+//
+//==============================================================================
 function jpeg_alloc_huff_table (cinfo : j_common_ptr) : JHUFF_TBL_PTR;
 
 implementation
@@ -71,8 +94,13 @@ implementation
   Closing a data source or destination, if necessary, is the application's
   responsibility. }
 
-
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_abort 
+//
+//==============================================================================
 procedure jpeg_abort (cinfo : j_common_ptr);
 var
   pool : int;
@@ -103,7 +131,6 @@ begin
   end;
 end;
 
-
 { Destruction of a JPEG object.
 
   Everything gets deallocated except the master jpeg_compress_struct itself
@@ -113,8 +140,13 @@ end;
   Closing a data source or destination, if necessary, is the application's
   responsibility. }
 
-
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_destroy 
+//
+//==============================================================================
 procedure jpeg_destroy (cinfo : j_common_ptr);
 begin
   { We need only tell the memory manager to release everything. }
@@ -125,12 +157,16 @@ begin
   cinfo^.global_state := 0;    { mark it destroyed }
 end;
 
-
 { Convenience routines for allocating quantization and Huffman tables.
   (Would jutils.c be a more reasonable place to put these?) }
 
-
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_alloc_quant_table 
+//
+//==============================================================================
 function jpeg_alloc_quant_table (cinfo : j_common_ptr) : JQUANT_TBL_PTR;
 var
   tbl : JQUANT_TBL_PTR;
@@ -142,8 +178,13 @@ begin
   jpeg_alloc_quant_table := tbl;
 end;
 
-
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_alloc_huff_table 
+//
+//==============================================================================
 function jpeg_alloc_huff_table (cinfo : j_common_ptr) : JHUFF_TBL_PTR;
 var
   tbl : JHUFF_TBL_PTR;

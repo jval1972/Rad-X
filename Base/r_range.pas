@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -46,6 +46,11 @@ type
   end;
   Pmidsiderange_t = ^midsiderange_t;
 
+//==============================================================================
+//
+// R_SubtractRange
+//
+//==============================================================================
 procedure R_SubtractRange(const floorheight1, ceilingheight1, lightlevel1: integer;
                           const floorheight2, ceilingheight2, lightlevel2: integer;
                           const r: Pmidsiderange_t; var totalclip: boolean);
@@ -55,8 +60,13 @@ implementation
 uses
   d_delphi;
 
+//==============================================================================
+// R_SubtractRange
+//
 // Subtract range ceil2 - floor2 from range ceil1 - floor1
 // Note floor is greater from ceiling :)
+//
+//==============================================================================
 procedure R_SubtractRange(const floorheight1, ceilingheight1, lightlevel1: integer;
                           const floorheight2, ceilingheight2, lightlevel2: integer;
                           const r: Pmidsiderange_t; var totalclip: boolean);

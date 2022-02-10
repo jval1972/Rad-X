@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -60,14 +60,39 @@ const
 type
   scoretable_t = packed array[0..NUMSCORES - 1] of scrotetableitem_t;
 
+//==============================================================================
+//
+// RX_QueryPlayerScorePosition
+//
+//==============================================================================
 function RX_QueryPlayerScorePosition(const psc: Pplayerscore_t): integer;
 
+//==============================================================================
+//
+// RX_UpdateScoreTable
+//
+//==============================================================================
 procedure RX_UpdateScoreTable(const p: Pplayer_t; const epi, map: integer; skill: skill_t);
 
+//==============================================================================
+//
+// RX_LoadScoreTable
+//
+//==============================================================================
 procedure RX_LoadScoreTable;
 
+//==============================================================================
+//
+// RX_SaveScoreTable
+//
+//==============================================================================
 procedure RX_SaveScoreTable;
 
+//==============================================================================
+//
+// RX_GetScoreTableId
+//
+//==============================================================================
 function RX_GetScoreTableId(const id: integer): Pscrotetableitem_t;
 
 implementation
@@ -81,6 +106,11 @@ uses
 var
   scoretable: scoretable_t;
 
+//==============================================================================
+//
+// RX_CalculatePlayerSingleScore
+//
+//==============================================================================
 function RX_CalculatePlayerSingleScore(const psc: Pplayerscore_t): integer;
 begin
   result :=
@@ -92,6 +122,11 @@ begin
     psc.proficientflying_pct;
 end;
 
+//==============================================================================
+//
+// RX_SortScoreTable
+//
+//==============================================================================
 procedure RX_SortScoreTable;
 var
   i, j: integer;
@@ -107,6 +142,11 @@ begin
       end;
 end;
 
+//==============================================================================
+//
+// RX_QueryPlayerScorePosition
+//
+//==============================================================================
 function RX_QueryPlayerScorePosition(const psc: Pplayerscore_t): integer;
 var
   score: integer;
@@ -123,6 +163,11 @@ begin
   result := NUMSCORES + 1;
 end;
 
+//==============================================================================
+//
+// RX_CalcScoreSha1
+//
+//==============================================================================
 procedure RX_CalcScoreSha1(const x: integer);
 var
   s: AnsiString;
@@ -131,6 +176,11 @@ begin
   scoretable[x].sha1 := s;
 end;
 
+//==============================================================================
+//
+// RX_CheckScoreSha1
+//
+//==============================================================================
 procedure RX_CheckScoreSha1(const x: integer);
 var
   s: AnsiString;
@@ -144,6 +194,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RX_UpdateScoreTable
+//
+//==============================================================================
 procedure RX_UpdateScoreTable(const p: Pplayer_t; const epi, map: integer; skill: skill_t);
 var
   totalscore: integer;
@@ -179,6 +234,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RX_LoadScoreTable
+//
+//==============================================================================
 procedure RX_LoadScoreTable;
 var
   fname: string;
@@ -222,6 +282,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RX_SaveScoreTable
+//
+//==============================================================================
 procedure RX_SaveScoreTable;
 var
   fname: string;
@@ -246,6 +311,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RX_GetScoreTableId
+//
+//==============================================================================
 function RX_GetScoreTableId(const id: integer): Pscrotetableitem_t;
 begin
   if IsIntegerInRange(id, 0, NUMSCORES - 1) then

@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -45,14 +45,39 @@ uses
 var
   statenames: TTokenList;
 
+//==============================================================================
+//
+// SC_ParseStatedefLump
+//
+//==============================================================================
 procedure SC_ParseStatedefLump;
 
+//==============================================================================
+//
+// SC_AddRadixWeaponStates
+//
+//==============================================================================
 procedure SC_AddRadixWeaponStates;
 
+//==============================================================================
+//
+// P_GetStateFromName
+//
+//==============================================================================
 function P_GetStateFromName(const actor: Pmobj_t; const s1: string): integer;
 
+//==============================================================================
+//
+// P_GetStateFromNameWithOffsetCheck
+//
+//==============================================================================
 function P_GetStateFromNameWithOffsetCheck(const actor: Pmobj_t; const s1: string): integer;
 
+//==============================================================================
+//
+// SC_StateName
+//
+//==============================================================================
 function SC_StateName(const st: integer): string;
 
 implementation
@@ -71,6 +96,11 @@ uses
 const
   STATEDEFLUMPNAME = 'STATEDEF';
 
+//==============================================================================
+//
+// SC_ParseStatedefLump
+//
+//==============================================================================
 procedure SC_ParseStatedefLump;
 var
   i: integer;
@@ -96,7 +126,12 @@ begin
       statenames.Add(strupper(GetENumName(TypeInfo(statenum_t), Ord(st))));
 end;
 
+//==============================================================================
+// SC_AddRadixWeaponStates
+//
 // JVAL: 20200421 - Save # of new weapon states to add them to statetokens
+//
+//==============================================================================
 procedure SC_AddRadixWeaponStates;
 var
   i: integer;
@@ -105,6 +140,11 @@ begin
     statenames.Add('S_RADIXWEAPONINFO' + itoa(i));
 end;
 
+//==============================================================================
+//
+// P_GetStateFromName
+//
+//==============================================================================
 function P_GetStateFromName(const actor: Pmobj_t; const s1: string): integer;
 var
   s, st: string;
@@ -239,6 +279,11 @@ begin
   Result := -1; // JVAL: No match
 end;
 
+//==============================================================================
+//
+// P_GetStateFromNameWithOffsetCheck
+//
+//==============================================================================
 function P_GetStateFromNameWithOffsetCheck(const actor: Pmobj_t; const s1: string): integer;
 var
   s: string;
@@ -261,6 +306,11 @@ begin
     Result := P_GetStateFromName(actor, s);
 end;
 
+//==============================================================================
+//
+// SC_StateName
+//
+//==============================================================================
 function SC_StateName(const st: integer): string;
 begin
   result := statenames[st];

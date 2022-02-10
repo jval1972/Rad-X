@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -57,12 +57,24 @@ uses
   jpg_comapi;
 
 { Nomssi }
+
+//==============================================================================
+//
+// jpeg_create_decompress
+//
+//==============================================================================
 procedure jpeg_create_decompress(cinfo: j_decompress_ptr);
 
 { Initialization of a JPEG decompression object.
   The error manager must already be set up (in case memory manager fails). }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_CreateDecompress 
+//
+//==============================================================================
 procedure jpeg_CreateDecompress (cinfo: j_decompress_ptr;
                                  version: int;
                                  structsize: size_t);
@@ -70,8 +82,13 @@ procedure jpeg_CreateDecompress (cinfo: j_decompress_ptr;
 { Destruction of a JPEG decompression object }
 
 {GLOBAL}
-procedure jpeg_destroy_decompress (cinfo: j_decompress_ptr);
 
+//==============================================================================
+//
+// jpeg_destroy_decompress 
+//
+//==============================================================================
+procedure jpeg_destroy_decompress (cinfo: j_decompress_ptr);
 
 { Decompression startup: read start of JPEG datastream to see what's there.
   Need only initialize JPEG object and supply a data source before calling.
@@ -99,6 +116,12 @@ procedure jpeg_destroy_decompress (cinfo: j_decompress_ptr);
   extra error checking. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_read_header 
+//
+//==============================================================================
 function jpeg_read_header (cinfo: j_decompress_ptr;
                            require_image: boolean): int;
 
@@ -113,18 +136,35 @@ function jpeg_read_header (cinfo: j_decompress_ptr;
   method. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_consume_input 
+//
+//==============================================================================
 function jpeg_consume_input (cinfo: j_decompress_ptr): int;
 
 { Have we finished reading the input file? }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_input_complete 
+//
+//==============================================================================
 function jpeg_input_complete (cinfo: j_decompress_ptr): boolean;
 
 { Is there more than one scan? }
 
 {GLOBAL}
-function jpeg_has_multiple_scans (cinfo: j_decompress_ptr): boolean;
 
+//==============================================================================
+//
+// jpeg_has_multiple_scans 
+//
+//==============================================================================
+function jpeg_has_multiple_scans (cinfo: j_decompress_ptr): boolean;
 
 { Finish JPEG decompression.
 
@@ -134,6 +174,12 @@ function jpeg_has_multiple_scans (cinfo: j_decompress_ptr): boolean;
   a suspending data source is used. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_finish_decompress 
+//
+//==============================================================================
 function jpeg_finish_decompress (cinfo: j_decompress_ptr): boolean;
 
 implementation
@@ -142,6 +188,11 @@ uses
   d_delphi,
   jpg_deferr;
 
+//==============================================================================
+//
+// jpeg_create_decompress
+//
+//==============================================================================
 procedure jpeg_create_decompress(cinfo: j_decompress_ptr);
 begin
   jpeg_CreateDecompress(cinfo, JPEG_LIB_VERSION,
@@ -152,6 +203,12 @@ end;
   The error manager must already be set up (in case memory manager fails). }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_CreateDecompress 
+//
+//==============================================================================
 procedure jpeg_CreateDecompress (cinfo: j_decompress_ptr;
                                  version: int;
                                  structsize: size_t);
@@ -211,29 +268,44 @@ begin
   cinfo^.global_state := DSTATE_START;
 end;
 
-
 { Destruction of a JPEG decompression object }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_destroy_decompress 
+//
+//==============================================================================
 procedure jpeg_destroy_decompress (cinfo: j_decompress_ptr);
 begin
   jpeg_destroy(j_common_ptr(cinfo)); { use common routine }
 end;
 
-
 { Abort processing of a JPEG decompression operation,
   but don't destroy the object itself. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_abort_decompress 
+//
+//==============================================================================
 procedure jpeg_abort_decompress (cinfo: j_decompress_ptr);
 begin
   jpeg_abort(j_common_ptr(cinfo)); { use common routine }
 end;
 
-
 { Set default decompression parameters. }
 
 {LOCAL}
+
+//==============================================================================
+//
+// default_decompress_parms 
+//
+//==============================================================================
 procedure default_decompress_parms (cinfo: j_decompress_ptr);
 var
   cid0: int;
@@ -344,7 +416,6 @@ begin
   cinfo^.enable_2pass_quant := FALSE;
 end;
 
-
 { Decompression startup: read start of JPEG datastream to see what's there.
   Need only initialize JPEG object and supply a data source before calling.
 
@@ -371,6 +442,12 @@ end;
   extra error checking. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_read_header 
+//
+//==============================================================================
 function jpeg_read_header (cinfo: j_decompress_ptr;
                            require_image: boolean): int;
 var
@@ -402,7 +479,6 @@ begin
   jpeg_read_header := retcode;
 end;
 
-
 { Consume data in advance of what the decompressor requires.
   This can be called at any time once the decompressor object has
   been created and a data source has been set up.
@@ -414,6 +490,12 @@ end;
   method. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_consume_input 
+//
+//==============================================================================
 function jpeg_consume_input (cinfo: j_decompress_ptr): int;
 var
   retcode: int;
@@ -462,10 +544,15 @@ begin
   jpeg_consume_input := retcode;
 end;
 
-
 { Have we finished reading the input file? }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_input_complete 
+//
+//==============================================================================
 function jpeg_input_complete (cinfo: j_decompress_ptr): boolean;
 begin
   { Check for valid jpeg object }
@@ -475,10 +562,15 @@ begin
   jpeg_input_complete := cinfo^.inputctl^.eoi_reached;
 end;
 
-
 { Is there more than one scan? }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_has_multiple_scans 
+//
+//==============================================================================
 function jpeg_has_multiple_scans (cinfo: j_decompress_ptr): boolean;
 begin
   { Only valid after jpeg_read_header completes }
@@ -488,7 +580,6 @@ begin
   jpeg_has_multiple_scans := cinfo^.inputctl^.has_multiple_scans;
 end;
 
-
 { Finish JPEG decompression.
 
   This will normally just verify the file trailer and release temp storage.
@@ -497,6 +588,12 @@ end;
   a suspending data source is used. }
 
 {GLOBAL}
+
+//==============================================================================
+//
+// jpeg_finish_decompress 
+//
+//==============================================================================
 function jpeg_finish_decompress (cinfo: j_decompress_ptr): boolean;
 begin
   if ((cinfo^.global_state = DSTATE_SCANNING) or

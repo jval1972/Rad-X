@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -124,10 +124,25 @@ const
   PT_ADDTHINGS = 2;
   PT_EARLYOUT = 4;
 
+//==============================================================================
+//
+// MapBlockIntX
+//
+//==============================================================================
 function MapBlockIntX(const x: int64): integer;
 
+//==============================================================================
+//
+// MapBlockIntY
+//
+//==============================================================================
 function MapBlockIntY(const y: int64): integer;
 
+//==============================================================================
+//
+// MapToFrac
+//
+//==============================================================================
 function MapToFrac(const x: integer): integer;
 
 implementation
@@ -135,6 +150,11 @@ implementation
 uses
   p_setup;
 
+//==============================================================================
+//
+// MapBlockIntX
+//
+//==============================================================================
 function MapBlockIntX(const x: int64): integer;
 begin
   result := x shr MAPBLOCKSHIFT;
@@ -142,6 +162,11 @@ begin
     result := result and $1FF;
 end;
 
+//==============================================================================
+//
+// MapBlockIntY
+//
+//==============================================================================
 function MapBlockIntY(const y: int64): integer;
 begin
   result := y shr MAPBLOCKSHIFT;
@@ -149,6 +174,11 @@ begin
     result := result and $1FF;
 end;
 
+//==============================================================================
+//
+// MapToFrac
+//
+//==============================================================================
 function MapToFrac(const x: integer): integer; assembler;
 asm
   sar eax, MAPBTOFRAC

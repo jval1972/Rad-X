@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -37,10 +37,25 @@ interface
 uses
   d_delphi;
 
+//==============================================================================
+//
+// wipe_StartScreen
+//
+//==============================================================================
 procedure wipe_StartScreen;
 
+//==============================================================================
+//
+// wipe_EndScreen
+//
+//==============================================================================
 procedure wipe_EndScreen;
 
+//==============================================================================
+//
+// wipe_Ticker
+//
+//==============================================================================
 function wipe_Ticker(ticks: integer): boolean;
 
 {$IFDEF OPENGL}
@@ -51,6 +66,11 @@ var
 var
   w_screen32: PLongWordArray = nil;
 
+//==============================================================================
+//
+// wipe_ClearMemory
+//
+//==============================================================================
 procedure wipe_ClearMemory;
 {$ENDIF}
 
@@ -79,6 +99,12 @@ var
   fadefactor: fixed_t = 0;
 
 {$IFDEF OPENGL}
+
+//==============================================================================
+//
+// wipe_glsize
+//
+//==============================================================================
 function wipe_glsize(const value: integer): integer;
 begin
   result := 1;
@@ -87,6 +113,11 @@ begin
 end;
 {$ENDIF}
 
+//==============================================================================
+//
+// wipe_initFade
+//
+//==============================================================================
 procedure wipe_initFade;
 {$IFDEF OPENGL}
 var
@@ -108,6 +139,11 @@ begin
   fadefactor := FRACUNIT;
 end;
 
+//==============================================================================
+//
+// wipe_ColorFadeAverage
+//
+//==============================================================================
 function wipe_ColorFadeAverage(const c1, c2: LongWord; const factor: fixed_t): LongWord;
 var
   ffade: fixed_t;
@@ -125,6 +161,12 @@ begin
 end;
 
 {$IFNDEF OPENGL}
+
+//==============================================================================
+//
+// wipe_doFade_thr
+//
+//==============================================================================
 function wipe_doFade_thr(p: mt_range_p): integer; stdcall;
 var
   i: integer;
@@ -135,6 +177,11 @@ begin
 end;
 {$ENDIF}
 
+//==============================================================================
+//
+// wipe_doFade
+//
+//==============================================================================
 function wipe_doFade(ticks: integer): integer;
 var
   i: integer;
@@ -181,6 +228,11 @@ begin
     result := 0;
 end;
 
+//==============================================================================
+//
+// wipe_exitFade
+//
+//==============================================================================
 procedure wipe_exitFade;
 begin
   memfree(pointer(fade_scr_start), SCREENWIDTH * SCREENHEIGHT * SizeOf(LongWord));
@@ -188,6 +240,12 @@ begin
 end;
 
 {$IFDEF OPENGL}
+
+//==============================================================================
+//
+// wipe_ClearMemory
+//
+//==============================================================================
 procedure wipe_ClearMemory;
 begin
   if w_screen32 <> nil then
@@ -195,6 +253,11 @@ begin
 end;
 {$ENDIF}
 
+//==============================================================================
+//
+// wipe_StartScreen
+//
+//==============================================================================
 procedure wipe_StartScreen;
 begin
   fade_scr_start := malloc(SCREENWIDTH * SCREENHEIGHT * SizeOf(LongWord));
@@ -204,6 +267,11 @@ begin
 {$ENDIF}
 end;
 
+//==============================================================================
+//
+// wipe_EndScreen
+//
+//==============================================================================
 procedure wipe_EndScreen;
 begin
   fade_scr_end := malloc(SCREENWIDTH * SCREENHEIGHT * SizeOf(LongWord));
@@ -217,6 +285,11 @@ end;
 var
   fading: boolean = false;
 
+//==============================================================================
+//
+// wipe_Ticker
+//
+//==============================================================================
 function wipe_Ticker(ticks: integer): boolean;
 begin
   // initial stuff

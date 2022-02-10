@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -60,6 +60,11 @@ begin
   SetFileExt('.RADIX32');
 end;
 
+//==============================================================================
+//
+// TRadix32TextureManager.LoadHeader
+//
+//==============================================================================
 function TRadix32TextureManager.LoadHeader(stream: TDStream): boolean;
 var
   buf: PByteArray;
@@ -118,6 +123,11 @@ begin
   result := true;
 end;
 
+//==============================================================================
+//
+// TRadix32TextureManager.LoadImage
+//
+//==============================================================================
 function TRadix32TextureManager.LoadImage(stream: TDStream): boolean;
 begin
   memcpy(FBitmap.GetImage, img, head_width * head_height * 4);

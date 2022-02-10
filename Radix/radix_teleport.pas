@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -38,10 +38,25 @@ uses
   m_fixed,
   p_mobj_h;
 
+//==============================================================================
+//
+// RX_SpawnTeleportForceField
+//
+//==============================================================================
 procedure RX_SpawnTeleportForceField(const mo: Pmobj_t);
 
+//==============================================================================
+//
+// RX_SpawnTeleportForceFieldXYZ
+//
+//==============================================================================
 procedure RX_SpawnTeleportForceFieldXYZ(const x, y, z: fixed_t);
 
+//==============================================================================
+//
+// RX_DoomFogPresent
+//
+//==============================================================================
 function RX_DoomFogPresent: boolean;
 
 implementation
@@ -64,6 +79,11 @@ const
 var
   radixteleportforcefield_id: integer = -1;
 
+//==============================================================================
+//
+// RX_SpawnTeleportForceField
+//
+//==============================================================================
 procedure RX_SpawnTeleportForceField(const mo: Pmobj_t);
 var
   i: integer;
@@ -89,6 +109,11 @@ begin
   S_AmbientSound(mo.x, mo.y, 'radix/SndTelePort');
 end;
 
+//==============================================================================
+//
+// RX_SpawnTeleportForceFieldXYZ
+//
+//==============================================================================
 procedure RX_SpawnTeleportForceFieldXYZ(const x, y, z: fixed_t);
 var
   i: integer;
@@ -117,6 +142,11 @@ var
   doomfogpresent: boolean;
   doomfogpresent_checked: boolean = false;
 
+//==============================================================================
+//
+// RX_DoomFogPresent
+//
+//==============================================================================
 function RX_DoomFogPresent: boolean;
 var
   st: integer;

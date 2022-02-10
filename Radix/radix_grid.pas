@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -43,15 +43,33 @@ var
   radixgrid: radixgrid_t;
   radixmapgrid: radixmappointsgrid_t;
 
+//==============================================================================
+// RX_InitRadixGrid
 //
 // JVAL: 20200203 -  Initialize Radix Trigger Grid
 //
+//==============================================================================
 procedure RX_InitRadixGrid(const x, y: integer; const pgrid: Pradixgrid_t);
 
+//==============================================================================
+//
+// RX_InitRadixMapGrid
+//
+//==============================================================================
 procedure RX_InitRadixMapGrid(const pmgrid: Pradixmappointsgrid_t);
 
+//==============================================================================
+//
+// RX_RadixGridX
+//
+//==============================================================================
 function RX_RadixGridX: integer;
 
+//==============================================================================
+//
+// RX_RadixGridY
+//
+//==============================================================================
 function RX_RadixGridY: integer;
 
 const
@@ -64,8 +82,18 @@ type
   end;
   Pgridmovementpositions_t = ^gridmovementpositions_t;
 
+//==============================================================================
+//
+// RX_PosInGrid
+//
+//==============================================================================
 function RX_PosInGrid(const mo: Pmobj_t): gridmovementpositions_t;
 
+//==============================================================================
+//
+// RX_GridToMap
+//
+//==============================================================================
 function RX_GridToMap(const grid_id: integer; var x, y: integer): boolean;
 
 implementation
@@ -80,6 +108,11 @@ var
   grid_X_size: integer;
   grid_Y_size: integer;
 
+//==============================================================================
+//
+// RX_InitRadixGrid
+//
+//==============================================================================
 procedure RX_InitRadixGrid(const x, y: integer; const pgrid: Pradixgrid_t);
 var
   sz: integer;
@@ -98,6 +131,11 @@ begin
     memcpy(@radixgrid, pgrid, RADIXGRIDSIZE * SizeOf(smallint));
 end;
 
+//==============================================================================
+//
+// RX_InitRadixMapGrid
+//
+//==============================================================================
 procedure RX_InitRadixMapGrid(const pmgrid: Pradixmappointsgrid_t);
 begin
   if pmgrid = nil then
@@ -106,16 +144,31 @@ begin
     memcpy(@radixmapgrid, pmgrid, SizeOf(radixmappointsgrid_t));
 end;
 
+//==============================================================================
+//
+// RX_RadixGridX
+//
+//==============================================================================
 function RX_RadixGridX: integer;
 begin
   result := grid_X_size;
 end;
 
+//==============================================================================
+//
+// RX_RadixGridY
+//
+//==============================================================================
 function RX_RadixGridY: integer;
 begin
   result := grid_Y_size;
 end;
 
+//==============================================================================
+//
+// RX_PosInGrid
+//
+//==============================================================================
 function RX_PosInGrid(const mo: Pmobj_t): gridmovementpositions_t;
 var
   sec: Psector_t;
@@ -199,10 +252,12 @@ begin
   N.Free;
 end;
 
+//==============================================================================
 //
 // RX_GridToMap
 // Returns the upper-left corner of the grid rect in map (fixed_t) coordinates
 //
+//==============================================================================
 function RX_GridToMap(const grid_id: integer; var x, y: integer): boolean;
 begin
   if (grid_X_size = 0) or (grid_Y_size = 0) then

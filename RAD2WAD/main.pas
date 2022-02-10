@@ -79,6 +79,11 @@ uses
   radix_xlat_wad,
   frm_rad2wadoptions;
 
+//==============================================================================
+//
+// println
+//
+//==============================================================================
 procedure println(const s: string);
 begin
   Form1.Memo1.Lines.Add(s);
@@ -86,6 +91,11 @@ begin
     Form1.Memo1.Lines.Delete(0);
 end;
 
+//==============================================================================
+//
+// TForm1.FormCreate
+//
+//==============================================================================
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   finpfilename := '';
@@ -107,6 +117,11 @@ begin
   flags := R2W_DOOMPALETTE or R2W_DOOMTEXTURES or R2W_FLATS or R2W_SPRITES;
 end;
 
+//==============================================================================
+//
+// TForm1.BitBtn1Click
+//
+//==============================================================================
 procedure TForm1.BitBtn1Click(Sender: TObject);
 begin
   if OpenDialog1.Execute then
@@ -118,6 +133,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TForm1.BitBtn2Click
+//
+//==============================================================================
 procedure TForm1.BitBtn2Click(Sender: TObject);
 begin
   if SaveDialog1.Execute then
@@ -130,6 +150,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TForm1.BitBtn3Click
+//
+//==============================================================================
 procedure TForm1.BitBtn3Click(Sender: TObject);
 begin
   finpfilename := Trim(finpfilename);

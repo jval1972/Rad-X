@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -42,72 +42,236 @@ type
   TDynamicDoubleArray = array of double;
   TDynamicExtendedArray = array of extended;
 
+//==============================================================================
+//
+// PS_LevelTime
+//
+//==============================================================================
 function PS_LevelTime: integer;
 
+//==============================================================================
+//
+// PS_Write
+//
+//==============================================================================
 procedure PS_Write(const parm: string);
 
+//==============================================================================
+//
+// PS_WriteFmt
+//
+//==============================================================================
 procedure PS_WriteFmt(const Fmt: string; const args: array of const);
 
+//==============================================================================
+//
+// PS_Writeln
+//
+//==============================================================================
 procedure PS_Writeln(const parm: string);
 
+//==============================================================================
+//
+// PS_WritelnFmt
+//
+//==============================================================================
 procedure PS_WritelnFmt(const Fmt: string; const args: array of const);
 
+//==============================================================================
+//
+// PS_OutputDebugString
+//
+//==============================================================================
 procedure PS_OutputDebugString(const parm: string);
 
+//==============================================================================
+//
+// PS_OutputDebugStringFmt
+//
+//==============================================================================
 procedure PS_OutputDebugStringFmt(const Fmt: string; const args: array of const);
 
+//==============================================================================
+//
+// PS_BreakPoint
+//
+//==============================================================================
 procedure PS_BreakPoint(const msg: string);
 
+//==============================================================================
+//
+// PS_FineSine
+//
+//==============================================================================
 function PS_FineSine(const parm: LongWord): Integer;
 
+//==============================================================================
+//
+// PS_FineCosine
+//
+//==============================================================================
 function PS_FineCosine(const parm: LongWord): Integer;
 
+//==============================================================================
+//
+// PS_FineTangent
+//
+//==============================================================================
 function PS_FineTangent(const parm: LongWord): Integer;
 
+//==============================================================================
+//
+// PS_Tan
+//
+//==============================================================================
 function PS_Tan(const parm: Extended): Extended;
 
+//==============================================================================
+//
+// PS_Sin360
+//
+//==============================================================================
 function PS_Sin360(const parm: Extended): Extended;
 
+//==============================================================================
+//
+// PS_Cos360
+//
+//==============================================================================
 function PS_Cos360(const parm: Extended): Extended;
 
+//==============================================================================
+//
+// PS_Tan360
+//
+//==============================================================================
 function PS_Tan360(const parm: Extended): Extended;
 
+//==============================================================================
+//
+// PS_Format
+//
+//==============================================================================
 function PS_Format(const Fmt: string; const args: array of const): string;
 
+//==============================================================================
+//
+// PS_IFI
+//
+//==============================================================================
 function PS_IFI(const condition: boolean; const iftrue, iffalse: Int64): Int64;
 
+//==============================================================================
+//
+// PS_IFF
+//
+//==============================================================================
 function PS_IFF(const condition: boolean; const iftrue, iffalse: Extended): Extended;
 
+//==============================================================================
+//
+// PS_IFS
+//
+//==============================================================================
 function PS_IFS(const condition: boolean; const iftrue, iffalse: string): string;
 
+//==============================================================================
+//
+// PS_Odd
+//
+//==============================================================================
 function PS_Odd(const x: integer): boolean;
 
+//==============================================================================
+//
+// PS_Even
+//
+//==============================================================================
 function PS_Even(const x: integer): boolean;
 
+//==============================================================================
+//
+// PS_MergeIntegerArrays
+//
+//==============================================================================
 function PS_MergeIntegerArrays(const A1, A2: TDynamicIntegerArray): TDynamicIntegerArray;
 
+//==============================================================================
+//
+// PS_MergeInt64Arrays
+//
+//==============================================================================
 function PS_MergeInt64Arrays(const A1, A2: TDynamicInt64Array): TDynamicInt64Array;
 
+//==============================================================================
+//
+// PS_MergeLongWordArrays
+//
+//==============================================================================
 function PS_MergeLongWordArrays(const A1, A2: TDynamicLongWordArray): TDynamicLongWordArray;
 
+//==============================================================================
+//
+// PS_MergeSingleArrays
+//
+//==============================================================================
 function PS_MergeSingleArrays(const A1, A2: TDynamicSingleArray): TDynamicSingleArray;
 
+//==============================================================================
+//
+// PS_MergeDoubleArrays
+//
+//==============================================================================
 function PS_MergeDoubleArrays(const A1, A2: TDynamicDoubleArray): TDynamicDoubleArray;
 
+//==============================================================================
+//
+// PS_MergeExtendedArrays
+//
+//==============================================================================
 function PS_MergeExtendedArrays(const A1, A2: TDynamicExtendedArray): TDynamicExtendedArray;
 
+//==============================================================================
+//
+// PS_IsPrime
+//
+//==============================================================================
 function PS_IsPrime(const N: Int64): Boolean;
 
+//==============================================================================
+//
+// PS_RandomRange
+//
+//==============================================================================
 function PS_RandomRange(const x1, x2: integer): integer;
 
+//==============================================================================
+// PS_ConsoleCommand
+//
 // --------------------------- CONSOLE -----------------------------------------
-
+//
+//==============================================================================
 procedure PS_ConsoleCommand(const parm: string);
 
+//==============================================================================
+//
+// PS_GetConsoleStr
+//
+//==============================================================================
 function PS_GetConsoleStr(const cvar: string): string;
 
+//==============================================================================
+//
+// PS_GetConsoleInt
+//
+//==============================================================================
 function PS_GetConsoleInt(const cvar: string): integer;
 
+//==============================================================================
+//
+// PS_GetConsoleBool
+//
+//==============================================================================
 function PS_GetConsoleBool(const cvar: string): boolean;
 
 implementation
@@ -123,37 +287,72 @@ uses
   p_tick,
   tables;
 
+//==============================================================================
+//
+// PS_LevelTime
+//
+//==============================================================================
 function PS_LevelTime: integer;
 begin
   Result := leveltime;
 end;
 
+//==============================================================================
+//
+// PS_Write
+//
+//==============================================================================
 procedure PS_Write(const parm: string);
 begin
   printf(parm);
 end;
 
+//==============================================================================
+//
+// PS_WriteFmt
+//
+//==============================================================================
 procedure PS_WriteFmt(const Fmt: string; const args: array of const);
 begin
   PS_Write(PS_Format(Fmt, args));
 end;
 
+//==============================================================================
+//
+// PS_Writeln
+//
+//==============================================================================
 procedure PS_Writeln(const parm: string);
 begin
   printf(parm + #13#10);
 end;
 
+//==============================================================================
+//
+// PS_WritelnFmt
+//
+//==============================================================================
 procedure PS_WritelnFmt(const Fmt: string; const args: array of const);
 begin
   PS_Writeln(PS_Format(Fmt, args));
 end;
 
+//==============================================================================
+//
+// PS_OutputDebugString
+//
+//==============================================================================
 procedure PS_OutputDebugString(const parm: string);
 begin
   if debugfile <> nil then
     fprintf(debugfile, parm);
 end;
 
+//==============================================================================
+//
+// PS_OutputDebugStringFmt
+//
+//==============================================================================
 procedure PS_OutputDebugStringFmt(const Fmt: string; const args: array of const);
 begin
   PS_OutputDebugString(PS_Format(Fmt, args));
@@ -162,47 +361,92 @@ end;
 var
   bpmsg: string = '';
 
+//==============================================================================
+// PS_BreakPoint
+//
 // Actually for debuging the engine, not script
+//
+//==============================================================================
 procedure PS_BreakPoint(const msg: string);
 begin
   bpmsg := msg;
 end;
 
+//==============================================================================
+//
+// PS_FineSine
+//
+//==============================================================================
 function PS_FineSine(const parm: LongWord): Integer;
 begin
   Result := finesine[parm and FINEMASK];
 end;
 
+//==============================================================================
+//
+// PS_FineCosine
+//
+//==============================================================================
 function PS_FineCosine(const parm: LongWord): Integer;
 begin
   Result := finecosine[parm and FINEMASK];
 end;
 
+//==============================================================================
+//
+// PS_FineTangent
+//
+//==============================================================================
 function PS_FineTangent(const parm: LongWord): Integer;
 begin
   Result := finetangent[parm and FINEMASK];
 end;
 
+//==============================================================================
+//
+// PS_Tan
+//
+//==============================================================================
 function PS_Tan(const parm: Extended): Extended;
 begin
   Result := tan(parm);
 end;
 
+//==============================================================================
+//
+// PS_Sin360
+//
+//==============================================================================
 function PS_Sin360(const parm: Extended): Extended;
 begin
   Result := sin(parm / 360 * 2 * pi);
 end;
 
+//==============================================================================
+//
+// PS_Cos360
+//
+//==============================================================================
 function PS_Cos360(const parm: Extended): Extended;
 begin
   Result := cos(parm / 360 * 2 * pi);
 end;
 
+//==============================================================================
+//
+// PS_Tan360
+//
+//==============================================================================
 function PS_Tan360(const parm: Extended): Extended;
 begin
   Result := tan(parm / 360 * 2 * pi);
 end;
 
+//==============================================================================
+//
+// PS_Format
+//
+//==============================================================================
 function PS_Format(const Fmt: string; const args: array of const): string;
 begin
   try
@@ -213,6 +457,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// PS_IFI
+//
+//==============================================================================
 function PS_IFI(const condition: boolean; const iftrue, iffalse: Int64): Int64;
 begin
   if condition then
@@ -221,6 +470,11 @@ begin
     Result := iffalse;
 end;
 
+//==============================================================================
+//
+// PS_IFF
+//
+//==============================================================================
 function PS_IFF(const condition: boolean; const iftrue, iffalse: Extended): Extended;
 begin
   if condition then
@@ -229,6 +483,11 @@ begin
     Result := iffalse;
 end;
 
+//==============================================================================
+//
+// PS_IFS
+//
+//==============================================================================
 function PS_IFS(const condition: boolean; const iftrue, iffalse: string): string;
 begin
   if condition then
@@ -237,16 +496,31 @@ begin
     Result := iffalse;
 end;
 
+//==============================================================================
+//
+// PS_Odd
+//
+//==============================================================================
 function PS_Odd(const x: integer): boolean;
 begin
   Result := Odd(x);
 end;
 
+//==============================================================================
+//
+// PS_Even
+//
+//==============================================================================
 function PS_Even(const x: integer): boolean;
 begin
   Result := not Odd(x);
 end;
 
+//==============================================================================
+//
+// PS_MergeIntegerArrays
+//
+//==============================================================================
 function PS_MergeIntegerArrays(const A1, A2: TDynamicIntegerArray): TDynamicIntegerArray;
 var
   l1, l2: integer;
@@ -261,6 +535,11 @@ begin
     Result[l1 + i] := A2[i];
 end;
 
+//==============================================================================
+//
+// PS_MergeInt64Arrays
+//
+//==============================================================================
 function PS_MergeInt64Arrays(const A1, A2: TDynamicInt64Array): TDynamicInt64Array;
 var
   l1, l2: integer;
@@ -275,6 +554,11 @@ begin
     Result[l1 + i] := A2[i];
 end;
 
+//==============================================================================
+//
+// PS_MergeLongWordArrays
+//
+//==============================================================================
 function PS_MergeLongWordArrays(const A1, A2: TDynamicLongWordArray): TDynamicLongWordArray;
 var
   l1, l2: integer;
@@ -289,6 +573,11 @@ begin
     Result[l1 + i] := A2[i];
 end;
 
+//==============================================================================
+//
+// PS_MergeSingleArrays
+//
+//==============================================================================
 function PS_MergeSingleArrays(const A1, A2: TDynamicSingleArray): TDynamicSingleArray;
 var
   l1, l2: integer;
@@ -303,6 +592,11 @@ begin
     Result[l1 + i] := A2[i];
 end;
 
+//==============================================================================
+//
+// PS_MergeDoubleArrays
+//
+//==============================================================================
 function PS_MergeDoubleArrays(const A1, A2: TDynamicDoubleArray): TDynamicDoubleArray;
 var
   l1, l2: integer;
@@ -317,6 +611,11 @@ begin
     Result[l1 + i] := A2[i];
 end;
 
+//==============================================================================
+//
+// PS_MergeExtendedArrays
+//
+//==============================================================================
 function PS_MergeExtendedArrays(const A1, A2: TDynamicExtendedArray): TDynamicExtendedArray;
 var
   l1, l2: integer;
@@ -331,6 +630,11 @@ begin
     Result[l1 + i] := A2[i];
 end;
 
+//==============================================================================
+//
+// PS_IsPrime
+//
+//==============================================================================
 function PS_IsPrime(const N: Int64): Boolean;
 var
   Test, k: Int64;
@@ -358,6 +662,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// PS_RandomRange
+//
+//==============================================================================
 function PS_RandomRange(const x1, x2: integer): integer;
 var
   r1, r2: float;
@@ -369,11 +678,21 @@ begin
   result := round(r1 + r2);
 end;
 
+//==============================================================================
+//
+// PS_ConsoleCommand
+//
+//==============================================================================
 procedure PS_ConsoleCommand(const parm: string);
 begin
   C_AddCommand(parm);
 end;
 
+//==============================================================================
+//
+// PS_GetConsoleStr
+//
+//==============================================================================
 function PS_GetConsoleStr(const cvar: string): string;
 var
   i: integer;
@@ -416,6 +735,11 @@ begin
   Result := '';
 end;
 
+//==============================================================================
+//
+// PS_GetConsoleInt
+//
+//==============================================================================
 function PS_GetConsoleInt(const cvar: string): integer;
 var
   i: integer;
@@ -458,6 +782,11 @@ begin
   Result := 0;
 end;
 
+//==============================================================================
+//
+// PS_GetConsoleBool
+//
+//==============================================================================
 function PS_GetConsoleBool(const cvar: string): boolean;
 var
   i: integer;
@@ -496,7 +825,6 @@ begin
   end;
   Result := False;
 end;
-
 
 end.
 

@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -31,6 +31,11 @@ unit c_utils;
 
 interface
 
+//==============================================================================
+//
+// C_RegisterUtilityCommands
+//
+//==============================================================================
 procedure C_RegisterUtilityCommands;
 
 implementation
@@ -47,6 +52,11 @@ uses
   i_displaymodes,
   i_system;
 
+//==============================================================================
+//
+// C_CmdDir
+//
+//==============================================================================
 procedure C_CmdDir(const parm1, parm2: string);
 var
   mask: string;
@@ -75,6 +85,11 @@ begin
 
 end;
 
+//==============================================================================
+//
+// C_CmdCD
+//
+//==============================================================================
 procedure C_CmdCD;
 var
   cd: string;
@@ -83,6 +98,11 @@ begin
   printf('%s'#13#10, [cd]);
 end;
 
+//==============================================================================
+//
+// C_CmdCat
+//
+//==============================================================================
 procedure C_CmdCat(const parm1, parm2: string);
 var
   files: TDStringList;
@@ -123,6 +143,11 @@ begin
 
 end;
 
+//==============================================================================
+//
+// C_CmdGoToWebPage
+//
+//==============================================================================
 procedure C_CmdGoToWebPage(const parm: string);
 begin
   if fullscreen {$IFNDEF OPENGL}= FULLSCREEN_EXCLUSIVE {$ENDIF} then
@@ -134,23 +159,42 @@ begin
   I_GoToWebPage(parm);
 end;
 
-
+//==============================================================================
+//
+// C_CmdHomepage
+//
+//==============================================================================
 procedure C_CmdHomepage;
 begin
   C_CmdGoToWebPage('https://sourceforge.net/projects/rad-x/');
 end;
 
+//==============================================================================
+//
+// C_CmdHelp
+//
+//==============================================================================
 procedure C_CmdHelp;
 begin
   C_CmdGoToWebPage('https://sourceforge.net/projects/rad-x/');
 end;
 
+//==============================================================================
+//
+// C_CmdGetLatestVersion
+//
+//==============================================================================
 procedure C_CmdGetLatestVersion;
 begin
   C_ExecuteCmd('ver');
   C_CmdGoToWebPage('https://sourceforge.net/projects/rad-x/files');
 end;
 
+//==============================================================================
+//
+// C_RegisterUtilityCommands
+//
+//==============================================================================
 procedure C_RegisterUtilityCommands;
 begin
   C_AddCmd('dir, ls', @C_CmdDir);

@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -38,35 +38,91 @@ unit m_rnd;
 
 interface
 
+//==============================================================================
+// M_Random
+//
 // Returns a number from 0 to 255,
 // from a lookup table.
+//
+//==============================================================================
 function M_Random: integer;
 
+//==============================================================================
+// P_Random
+//
 // As M_Random, but used only by the play simulation.
+//
+//==============================================================================
 function P_Random: integer;
 
+//==============================================================================
+// N_Random
+//
 // JVAL: As P_Random, but used only if no compatibility mode.
+//
+//==============================================================================
 function N_Random: integer;
 
+//==============================================================================
+//
+// I_Random
+//
+//==============================================================================
 function I_Random: integer;
 
 {$IFNDEF HEXEN}
+
+//==============================================================================
+//
+// Sys_Random
+//
+//==============================================================================
 function Sys_Random: integer;
 {$ENDIF}
 
+//==============================================================================
+// C_Random
+//
 // JVAL: Using custom seed
+//
+//==============================================================================
 function C_Random(var idx: integer): integer;
 
+//==============================================================================
+// M_ClearRandom
+//
 // Fix randoms for demos.
+//
+//==============================================================================
 procedure M_ClearRandom;
 
+//==============================================================================
+//
+// P_SaveRandom
+//
+//==============================================================================
 procedure P_SaveRandom;
 
+//==============================================================================
+//
+// P_RestoreRandom
+//
+//==============================================================================
 procedure P_RestoreRandom;
 
+//==============================================================================
+// P_RandomFromSeed
+//
 // JVAL: Random number for seed
+//
+//==============================================================================
 function P_RandomFromSeed(const seed: integer): integer;
 
+//==============================================================================
+//
+// P_RandomInRange
+//
+//==============================================================================
 function P_RandomInRange(const l, h: integer): integer;
 
 var
@@ -787,7 +843,12 @@ const
   );
 {$ENDIF}
 
+//==============================================================================
+// M_Random
+//
 // Which one is deterministic?
+//
+//==============================================================================
 function M_Random: integer;
 begin
   rndindex := (rndindex + 1) and $ff;
@@ -797,6 +858,11 @@ begin
   {$ENDIF}
 end;
 
+//==============================================================================
+//
+// P_Random
+//
+//==============================================================================
 function P_Random: integer;
 begin
   prndindex := (prndindex + 1) and $ff;
@@ -806,6 +872,11 @@ begin
   {$ENDIF}
 end;
 
+//==============================================================================
+//
+// N_Random
+//
+//==============================================================================
 function N_Random: integer;
 begin
   nrndindex := (nrndindex + 1) and $ff;
@@ -815,6 +886,11 @@ begin
   {$ENDIF}
 end;
 
+//==============================================================================
+//
+// I_Random
+//
+//==============================================================================
 function I_Random: integer;
 begin
   result := Random(256);
@@ -824,6 +900,12 @@ begin
 end;
 
 {$IFNDEF HEXEN}
+
+//==============================================================================
+//
+// Sys_Random
+//
+//==============================================================================
 function Sys_Random: integer;
 begin
   sysrndindex := sysrndindex + sysrndseed + 1;
@@ -833,6 +915,11 @@ begin
 end;
 {$ENDIF}
 
+//==============================================================================
+//
+// C_Random
+//
+//==============================================================================
 function C_Random(var idx: integer): integer;
 begin
   idx := (idx + 1) and $ff;
@@ -842,6 +929,11 @@ begin
   {$ENDIF}
 end;
 
+//==============================================================================
+//
+// P_RandomFromSeed
+//
+//==============================================================================
 function P_RandomFromSeed(const seed: integer): integer;
 begin
   result := rndtable[seed and $ff];
@@ -850,6 +942,11 @@ begin
   {$ENDIF}
 end;
 
+//==============================================================================
+//
+// P_RandomInRange
+//
+//==============================================================================
 function P_RandomInRange(const l, h: integer): integer;
 begin
   result := l + round((h - l) / 255 * P_Random);
@@ -858,6 +955,11 @@ end;
 var
   stack: TIntegerStack;
 
+//==============================================================================
+//
+// M_ClearRandom
+//
+//==============================================================================
 procedure M_ClearRandom;
 begin
   rndindex := 0;
@@ -869,11 +971,21 @@ begin
   stack.Clear;
 end;
 
+//==============================================================================
+//
+// P_SaveRandom
+//
+//==============================================================================
 procedure P_SaveRandom;
 begin
   stack.Push(prndindex);
 end;
 
+//==============================================================================
+//
+// P_RestoreRandom
+//
+//==============================================================================
 procedure P_RestoreRandom;
 begin
   if not stack.Pop(prndindex) then

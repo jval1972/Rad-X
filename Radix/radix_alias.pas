@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -34,10 +34,25 @@ unit radix_alias;
 
 interface
 
+//==============================================================================
+//
+// RX_InitRadixAlias
+//
+//==============================================================================
 procedure RX_InitRadixAlias;
 
+//==============================================================================
+//
+// RX_ShutDownRadixAlias
+//
+//==============================================================================
 procedure RX_ShutDownRadixAlias;
 
+//==============================================================================
+//
+// RX_FindAliasLump
+//
+//==============================================================================
 function RX_FindAliasLump(const lumpname: string): integer;
 
 implementation
@@ -52,6 +67,11 @@ const
 var
   rx_aliases: array[0..NUM_ALIAS_LISTS - 1] of TDStringList;
 
+//==============================================================================
+//
+// RX_FindAliasList
+//
+//==============================================================================
 function RX_FindAliasList(const r_entry: string): integer;
 begin
   if r_entry = '' then
@@ -60,6 +80,11 @@ begin
     result := Ord(r_entry[1]) mod NUM_ALIAS_LISTS;
 end;
 
+//==============================================================================
+//
+// RX_ParseAlias
+//
+//==============================================================================
 procedure RX_ParseAlias(const in_text: string);
 var
   i: integer;
@@ -86,6 +111,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RX_InitRadixAlias
+//
+//==============================================================================
 procedure RX_InitRadixAlias;
 var
   i: integer;
@@ -97,6 +127,11 @@ begin
       RX_ParseAlias(W_TextLumpNum(i));
 end;
 
+//==============================================================================
+//
+// RX_ShutDownRadixAlias
+//
+//==============================================================================
 procedure RX_ShutDownRadixAlias;
 var
   i, j: integer;
@@ -109,6 +144,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RX_FindAliasLump
+//
+//==============================================================================
 function RX_FindAliasLump(const lumpname: string): integer;
 var
   lid: integer;

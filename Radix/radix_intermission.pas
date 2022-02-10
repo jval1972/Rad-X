@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -34,14 +34,29 @@ unit radix_intermission;
 
 interface
 
+//==============================================================================
+// RX_Intermission_Ticker
+//
 // Called by main loop
+//
+//==============================================================================
 procedure RX_Intermission_Ticker;
 
+//==============================================================================
+// RX_Intermission_Drawer
+//
 // Called by main loop,
 // draws the intermission directly into the screen buffer.
+//
+//==============================================================================
 procedure RX_Intermission_Drawer;
 
+//==============================================================================
+// RX_Intermission_Start
+//
 // Setup for an intermission screen.
+//
+//==============================================================================
 procedure RX_Intermission_Start;
 
 implementation
@@ -64,6 +79,11 @@ var
   in_tic: integer;
   in_struct: Pwbstartstruct_t;
 
+//==============================================================================
+//
+// RX_CheckForInput
+//
+//==============================================================================
 procedure RX_CheckForInput;
 var
   i: integer;
@@ -80,7 +100,12 @@ begin
   end;
 end;
 
+//==============================================================================
+// RX_Intermission_Ticker
+//
 // Updates stuff each tick
+//
+//==============================================================================
 procedure RX_Intermission_Ticker;
 begin
   inc(in_tic);
@@ -94,6 +119,11 @@ begin
   RX_CheckForInput;
 end;
 
+//==============================================================================
+//
+// RX_TimeToString
+//
+//==============================================================================
 function RX_TimeToString(const secs: integer): string;
 var
   t: integer;
@@ -106,6 +136,11 @@ begin
   result := result + ':' + IntToStrzFill(2, t); // Seconds
 end;
 
+//==============================================================================
+//
+// RX_FracPercentToSring
+//
+//==============================================================================
 function RX_FracPercentToSring(const pctfrac: fixed_t): string;
 begin
   sprintf(result, '%d', [(pctfrac * 100) div FRACUNIT]);
@@ -113,6 +148,11 @@ begin
     result := ' ' + result;
 end;
 
+//==============================================================================
+//
+// RX_StorePlayerScore
+//
+//==============================================================================
 procedure RX_StorePlayerScore;
 var
   score: Pplayerscore_t;
@@ -161,6 +201,11 @@ begin
       RX_UpdateScoreTable(@players[consoleplayer], gameepisode, in_struct.last + 1, gameskill);
 end;
 
+//==============================================================================
+//
+// RX_Intermission_Drawer
+//
+//==============================================================================
 procedure RX_Intermission_Drawer;
 var
   backscreen: string;
@@ -213,6 +258,11 @@ begin
   V_FullScreenStretch;
 end;
 
+//==============================================================================
+//
+// RX_Intermission_Start
+//
+//==============================================================================
 procedure RX_Intermission_Start;
 begin
   in_struct := @wminfo;

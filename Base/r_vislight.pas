@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 // DESCRIPTION:
@@ -73,10 +73,20 @@ var
   vislight_p: integer = 0;
   vislights: array[0..MAXVISLIGHTS - 1] of vislight_t;
 
+//==============================================================================
+//
+// R_NewVisLight
+//
+//==============================================================================
 function R_NewVisLight: Pvislight_t;
 
 implementation
 
+//==============================================================================
+//
+// R_NewVisLight
+//
+//==============================================================================
 function R_NewVisLight: Pvislight_t;
 begin
   if vislight_p = MAXVISLIGHTS then

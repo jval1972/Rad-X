@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2021 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -34,14 +34,39 @@ interface
 uses
   d_event;
 
+//==============================================================================
+//
+// RB_Start
+//
+//==============================================================================
 function RB_Start(const epi, map: integer): Boolean;
 
+//==============================================================================
+//
+// RB_Ticker
+//
+//==============================================================================
 procedure RB_Ticker;
 
+//==============================================================================
+//
+// RB_Drawer
+//
+//==============================================================================
 procedure RB_Drawer;
 
+//==============================================================================
+//
+// RB_Exit
+//
+//==============================================================================
 procedure RB_Exit;
 
+//==============================================================================
+//
+// RB_Responder
+//
+//==============================================================================
 function RB_Responder(ev: Pevent_t): boolean;
 
 var
@@ -116,7 +141,12 @@ var
   mapwidth: fixed_t;
   mapheight: integer;
 
+//==============================================================================
+// RB_CmdClearAnimWindow
+//
 // --- Command procs
+//
+//==============================================================================
 function RB_CmdClearAnimWindow(const cmd: Prbcommand_t): Boolean;
 begin
   curdrawinfo.curanimtex := '';
@@ -124,6 +154,11 @@ begin
   Result := True;
 end;
 
+//==============================================================================
+//
+// RB_CmdClearTextWindow
+//
+//==============================================================================
 function RB_CmdClearTextWindow(const cmd: Prbcommand_t): Boolean;
 begin
   curdrawinfo.curmsg := '';
@@ -131,6 +166,11 @@ begin
   Result := True;
 end;
 
+//==============================================================================
+//
+// RB_CmdDelay
+//
+//==============================================================================
 function RB_CmdDelay(const cmd: Prbcommand_t): Boolean;
 begin
   if acceleratestage then
@@ -145,6 +185,11 @@ begin
   Result := not cmd.active;
 end;
 
+//==============================================================================
+//
+// RB_CmdDisplayAnimation
+//
+//==============================================================================
 function RB_CmdDisplayAnimation(const cmd: Prbcommand_t): Boolean;
 var
   nanims: integer;
@@ -176,6 +221,11 @@ begin
   Result := True;
 end;
 
+//==============================================================================
+//
+// RB_CmdDisplayImage
+//
+//==============================================================================
 function RB_CmdDisplayImage(const cmd: Prbcommand_t): Boolean;
 begin
   curdrawinfo.curanimtex := cmd.sparam;
@@ -183,6 +233,11 @@ begin
   Result := True;
 end;
 
+//==============================================================================
+//
+// RB_CmdPrint
+//
+//==============================================================================
 function RB_CmdPrint(const cmd: Prbcommand_t): Boolean;
 begin
   if acceleratestage then
@@ -202,6 +257,11 @@ begin
   Result := not cmd.active;
 end;
 
+//==============================================================================
+//
+// RB_CmdScrollMapX
+//
+//==============================================================================
 function RB_CmdScrollMapX(const cmd: Prbcommand_t): Boolean;
 begin
   curdrawinfo.targmappos := cmd.iparams[0];
@@ -212,16 +272,31 @@ begin
   Result := True;
 end;
 
+//==============================================================================
+//
+// RB_CmdNextPoint
+//
+//==============================================================================
 function RB_CmdNextPoint(const cmd: Prbcommand_t): Boolean;
 begin
   Result := True;
 end;
 
+//==============================================================================
+//
+// RB_CmdShowScreen
+//
+//==============================================================================
 function RB_CmdShowScreen(const cmd: Prbcommand_t): Boolean;
 begin
   Result := True;
 end;
 
+//==============================================================================
+//
+// RB_CmdWaitAction
+//
+//==============================================================================
 function RB_CmdWaitAction(const cmd: Prbcommand_t): Boolean;
 begin
   if acceleratestage then
@@ -234,7 +309,12 @@ begin
     Result := False;
 end;
 
+//==============================================================================
+// RB_PointToRadix
+//
 // --- Map drawing
+//
+//==============================================================================
 procedure RB_PointToRadix(const pl: Pline_t; const x, y: integer; var rx, ry: integer);
 var
   sec: Psector_t;
@@ -246,16 +326,31 @@ begin
   ry := sec.radixmapYmult * (y div FRACUNIT - sec.radixmapYadd);
 end;
 
+//==============================================================================
+//
+// RB_RadixYToMapX
+//
+//==============================================================================
 function RB_RadixYToMapX(const x: integer): integer;
 begin
   Result := MAPY - Trunc((x - mapleft) / mapscale * FRACUNIT) - 1;
 end;
 
+//==============================================================================
+//
+// RB_RadixXToMapY
+//
+//==============================================================================
 function RB_RadixXToMapY(const y: integer): integer;
 begin
   Result := Trunc((y - maptop) / mapscale * FRACUNIT);
 end;
 
+//==============================================================================
+//
+// RB_PointToMap
+//
+//==============================================================================
 procedure RB_PointToMap(const pl: Pline_t; const x, y: integer; var mx, my: integer);
 var
   rx, ry: integer;
@@ -265,6 +360,11 @@ begin
   my := RB_RadixYToMapX(rx);
 end;
 
+//==============================================================================
+//
+// RB_CmdPointMap
+//
+//==============================================================================
 function RB_CmdPointMap(const cmd: Prbcommand_t): Boolean;
 var
   x, y, i: integer;
@@ -288,6 +388,11 @@ begin
   Result := True;
 end;
 
+//==============================================================================
+//
+// RB_CmdMapPrint
+//
+//==============================================================================
 function RB_CmdMapPrint(const cmd: Prbcommand_t): Boolean;
 var
   x, y, i, j, w, h: integer;
@@ -320,6 +425,11 @@ begin
   Result := True;
 end;
 
+//==============================================================================
+//
+// RB_FindBoundaries
+//
+//==============================================================================
 procedure RB_FindBoundaries;
 var
   i: integer;
@@ -377,6 +487,11 @@ begin
     mapscale := i64;
 end;
 
+//==============================================================================
+//
+// RB_DrawLine
+//
+//==============================================================================
 procedure RB_DrawLine(const pl: Pline_t; const twosided: boolean);
 var
   x1, y1, x2, y2: integer;
@@ -416,7 +531,6 @@ begin
     color := aprox_red
   else
     exit;
-
 
   RB_PointToMap(pl, pl.v1.x, pl.v1.y, x1, y1);
   RB_PointToMap(pl, pl.v2.x, pl.v2.y, x2, y2);
@@ -474,6 +588,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RB_DrawLines
+//
+//==============================================================================
 procedure RB_DrawLines(const twosided: boolean);
 var
   i: integer;
@@ -487,6 +606,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RB_CreateMap
+//
+//==============================================================================
 procedure RB_CreateMap;
 begin
   if curdrawinfo.mapcreated then
@@ -501,6 +625,11 @@ begin
   curdrawinfo.mapcreated := True;
 end;
 
+//==============================================================================
+//
+// RB_DrawMap
+//
+//==============================================================================
 procedure RB_DrawMap;
 var
   dest: PByteArray;
@@ -524,6 +653,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RB_Start
+//
+//==============================================================================
 function RB_Start(const epi, map: integer): Boolean;
 var
   utoken: string;
@@ -729,6 +863,11 @@ begin
   Result := numcommands > 0;
 end;
 
+//==============================================================================
+//
+// RB_Ticker
+//
+//==============================================================================
 procedure RB_Ticker;
 const
   SCROLLBRAKEDIST = 1024;
@@ -805,6 +944,11 @@ begin
   curdrawinfo.finished := True;
 end;
 
+//==============================================================================
+//
+// RB_DrawFrame
+//
+//==============================================================================
 procedure RB_DrawFrame(const bx, by, bw, bh: integer);
 var
   p: Ppatch_t;
@@ -894,6 +1038,11 @@ begin
   V_DrawPatch(bx + bw, by + bh, SCN_TMP, brdr_br, false);
 end;
 
+//==============================================================================
+//
+// RB_Drawer
+//
+//==============================================================================
 procedure RB_Drawer;
 var
   p: Ppatch_t;
@@ -920,12 +1069,22 @@ begin
   V_FullScreenStretch;
 end;
 
+//==============================================================================
+//
+// RB_Exit
+//
+//==============================================================================
 procedure RB_Exit;
 begin
   wipegamestate := -1;
   gamestate := GS_LEVEL;
 end;
 
+//==============================================================================
+//
+// RB_Responder
+//
+//==============================================================================
 function RB_Responder(ev: Pevent_t): boolean;
 begin
   if ev._type <> ev_keydown then

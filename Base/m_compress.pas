@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -34,13 +34,46 @@ unit m_compress;
 
 interface
 
+//==============================================================================
+//
+// M_FastPack
+//
+//==============================================================================
 function M_FastPack(Source, Target: Pointer; SourceSize: integer): integer; { Return TargetSize }
+
+//==============================================================================
+//
+// M_FastUnPack
+//
+//==============================================================================
 function M_FastUnPack(Source, Target: Pointer; SourceSize: integer): integer; {Return TargetSize }
 
+//==============================================================================
+//
+// M_PackString
+//
+//==============================================================================
 function M_PackString(Source: string): string;
+
+//==============================================================================
+//
+// M_UnPackString
+//
+//==============================================================================
 function M_UnPackString(Source: string): string;
 
+//==============================================================================
+//
+// M_PackFile
+//
+//==============================================================================
 function M_PackFile(SourceFileName, TargetFileName: string): boolean; { Return FALSE if IOError }
+
+//==============================================================================
+//
+// M_UnPackFile
+//
+//==============================================================================
 function M_UnPackFile(SourceFileName, TargetFileName: string): boolean; { Return FALSE if IOError }
 
 implementation
@@ -57,6 +90,11 @@ type
           Hi: Word);
   end;
 
+//==============================================================================
+//
+// FastPackSeg
+//
+//==============================================================================
 function FastPackSeg(Source, Target: Pointer; SourceSize: Word): Word;
 begin
   asm
@@ -147,6 +185,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// FastUnPackSeg
+//
+//==============================================================================
 function FastUnPackSeg(Source, Target: Pointer; SourceSize: Word): Word;
 begin
   asm
@@ -204,6 +247,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// M_FastPack
+//
+//==============================================================================
 function M_FastPack(Source, Target: Pointer; SourceSize: integer): integer;
 var
   w, tmp: Word;
@@ -235,6 +283,11 @@ begin
   memfree(s, $FFFF);
 end;
 
+//==============================================================================
+//
+// M_FastUnPack
+//
+//==============================================================================
 function M_FastUnPack(Source, Target: Pointer; SourceSize: integer): integer;
 var
   Increment, i: integer;
@@ -262,6 +315,11 @@ begin
   memfree(t, $FFFF);
 end;
 
+//==============================================================================
+//
+// M_PackString
+//
+//==============================================================================
 function M_PackString(Source: string): string;
 var
   PC, PC2: PChar;
@@ -279,7 +337,11 @@ begin
   memfree(pointer(PC), SS + 8);
 end;
 
-
+//==============================================================================
+//
+// M_UnPackString
+//
+//==============================================================================
 function M_UnPackString(Source: string): string;
 var
   PC, PC2: PChar;
@@ -297,6 +359,11 @@ begin
   memfree(pointer(PC), SS);
 end;
 
+//==============================================================================
+//
+// M_PackFile
+//
+//==============================================================================
 function M_PackFile(SourceFileName, TargetFileName: string): boolean; { Return FALSE if IOError }
 var
   Source, Target: Pointer;
@@ -329,6 +396,11 @@ begin
   Result := IOResult = 0;
 end;
 
+//==============================================================================
+//
+// M_UnPackFile
+//
+//==============================================================================
 function M_UnPackFile(SourceFileName, TargetFileName: string): boolean; { Return FALSE if IOError }
 var
   Source, Target: Pointer;

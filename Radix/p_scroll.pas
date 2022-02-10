@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -58,8 +58,18 @@ type
   end;
   Pscroll_t = ^scroll_t;
 
+//==============================================================================
+//
+// P_SpawnScrollers
+//
+//==============================================================================
 procedure P_SpawnScrollers;
 
+//==============================================================================
+//
+// T_Scroll
+//
+//==============================================================================
 procedure T_Scroll(s: Pscroll_t);
 
 implementation
@@ -75,6 +85,9 @@ uses
   tables,
   z_zone;
 
+//==============================================================================
+// T_Scroll
+//
 // killough 2/28/98:
 //
 // This function, with the help of r_plane.c and r_bsp.c, supports generalized
@@ -93,7 +106,8 @@ uses
 //
 // This is the main scrolling code
 // killough 3/7/98
-
+//
+//==============================================================================
 procedure T_Scroll(s: Pscroll_t);
 var
   dx, dy: fixed_t;
@@ -185,6 +199,7 @@ begin
   end;
 end;
 
+//==============================================================================
 //
 // P_AddScroller
 //
@@ -202,7 +217,7 @@ end;
 //
 // accel: non-zero if this is an accelerative effect
 //
-
+//==============================================================================
 procedure P_AddScroller(_type: scrolltype_e; dx, dy: fixed_t; control: integer;
   affectee: integer; accel: integer);
 var
@@ -223,13 +238,17 @@ begin
   P_AddThinker(@s.thinker);
 end;
 
+//==============================================================================
+// P_AddWallScroller
+//
 // Adds wall scroller. Scroll amount is rotated with respect to wall's
 // linedef first, so that scrolling towards the wall in a perpendicular
 // direction is translated into vertical motion, while scrolling along
 // the wall in a parallel direction is translated into horizontal motion.
 //
 // killough 5/25/98: cleaned up arithmetic to avoid drift due to roundoff
-
+//
+//==============================================================================
 procedure P_AddWallScroller(dx, dy: fixed_t; l: Pline_t;
   control: integer; accel: integer);
 var
@@ -261,7 +280,12 @@ const
 const
   CARRYFACTOR = 6144;
 
+//==============================================================================
+// P_SpawnScrollers
+//
 // Initialize the scrollers
+//
+//==============================================================================
 procedure P_SpawnScrollers;
 var
   i: integer;

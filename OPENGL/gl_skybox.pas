@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -34,10 +34,25 @@ interface
 uses
   r_sky;
 
+//==============================================================================
+//
+// gld_InitSky
+//
+//==============================================================================
 procedure gld_InitSky;
 
+//==============================================================================
+//
+// gld_DrawSky
+//
+//==============================================================================
 procedure gld_DrawSky;
 
+//==============================================================================
+//
+// gld_SkyDone
+//
+//==============================================================================
 procedure gld_SkyDone;
 
 implementation
@@ -56,6 +71,11 @@ var
   skytexture5: GLuint;
   skytexture6: GLuint;
 
+//==============================================================================
+//
+// gld_InitSky
+//
+//==============================================================================
 procedure gld_InitSky;
 begin
   skytexture1 := gld_LoadExternalTexture('sky1side1.png', False, GL_REPEAT);
@@ -66,6 +86,11 @@ begin
   skytexture6 := gld_LoadExternalTexture('sky1side6.png', False, GL_REPEAT);
 end;
 
+//==============================================================================
+//
+// gld_DrawSky
+//
+//==============================================================================
 procedure gld_DrawSky;
 begin
   glDisable(GL_DEPTH_TEST);
@@ -135,6 +160,11 @@ begin
   glEnable(GL_DEPTH_TEST);
 end;
 
+//==============================================================================
+//
+// gld_SkyDone
+//
+//==============================================================================
 procedure gld_SkyDone;
 begin
   glDeleteTextures(1, @skytexture1);

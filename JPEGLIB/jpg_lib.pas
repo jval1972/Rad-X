@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -34,7 +34,6 @@ unit jpg_Lib;
   and perhaps jerror.h if they want to know the exact error codes. }
 
 { Source:jpeglib.h+jpegint.h; Copyright (C) 1991-1998, Thomas G. Lane. }
-
 
 interface
 
@@ -52,10 +51,8 @@ uses
 { Version ID for the JPEG library.
   Might be useful for tests like "#if JPEG_LIB_VERSION >= 60". }
 
-
 Const
   JPEG_LIB_VERSION = 62;        { Version 6b }
-
 
 { These marker codes are exported since applications and data source modules
   are likely to want to use them. }
@@ -65,7 +62,6 @@ const
   JPEG_EOI      = $D9;  { EOI marker code }
   JPEG_APP0     = $E0;  { APP0 marker code }
   JPEG_COM      = $FE;  { COM marker code }
-
 
 { Various constants determining the sizes of things.
   All of these are specified by the JPEG standard, so don't change them
@@ -87,7 +83,6 @@ const
   sometimes emits noncompliant files doesn't mean you should too. }
   C_MAX_BLOCKS_IN_MCU = 10;     { compressor's limit on blocks per MCU }
   D_MAX_BLOCKS_IN_MCU = 10;     { decompressor's limit on blocks per MCU }
-
 
 { Data structures for images (arrays of samples and of DCT coefficients).
   On 80x86 machines, the image arrays are too big for near pointers,
@@ -118,7 +113,6 @@ type
   JBLOCK_ROWS = array[jTBlockRow] of JBLOCK;
   JBLOCKROW = ^JBLOCK_ROWS; {far} { pointer to one row of coefficient blocks }
 
-
   jTBlockarray = 0..(MaxInt div SizeOf(JBLOCKROW))-1;
   JBLOCK_array = array[jTBlockarray] of JBLOCKROW;
   JBLOCKarray = ^JBLOCK_array;    { a 2-D array of coefficient blocks }
@@ -131,7 +125,6 @@ type
   JCOEF_ROW = array[jTCoef] of JCOEF;
   JCOEFPTR = ^JCOEF_ROW; {far}   { useful in a couple of places }
 
-
 type
   jTByte = 0..(MaxInt div SizeOf(byte))-1;
   JBytearray = array[jTByte] of byte;
@@ -140,7 +133,6 @@ type
   byteptr = ^byte;
 
 { Types for JPEG compression parameters and working tables. }
-
 
 { DCT coefficient quantization tables. }
 
@@ -206,8 +198,6 @@ const
   DSTATE_BUFPOST      = 208;    { looking for SOS/EOI in jpeg_finish_output }
   DSTATE_RDCOEFS      = 209;    { reading file in jpeg_read_coefficients }
   DSTATE_STOPPING     = 210;    { looking for EOI in jpeg_finish_decompress }
-
-
 
 { Basic info about one component (color channel). }
 
@@ -281,7 +271,6 @@ type
   jpeg_component_info_array = array[jTCinfo] of jpeg_component_info;
   jpeg_component_info_list_ptr = ^jpeg_component_info_array;
 
-
 { The script for encoding a multiple-scan file is an array of these: }
 
 type
@@ -341,19 +330,16 @@ type
     JDITHER_FS                  { Floyd-Steinberg error diffusion dither }
                   );
 
-
 const
   JPOOL_PERMANENT  = 0; { lasts until master record is destroyed }
   JPOOL_IMAGE      = 1; { lasts until done with image/datastream }
   JPOOL_NUMPOOLS   = 2;
-
 
 { "Object" declarations for JPEG modules that may be supplied or called
   directly by the surrounding application.
   As with all objects in the JPEG library, these structs only define the
   publicly visible methods and state variables of a module.  Additional
   private fields may exist after the public ones. }
-
 
 { Error handler object }
 
@@ -384,7 +370,6 @@ type
   jpeg_memory_mgr_ptr = ^jpeg_memory_mgr;
   jpeg_progress_mgr_ptr = ^jpeg_progress_mgr;
 
-
 {$ifdef common}
 { Common fields between JPEG compression and decompression master structs. }
     err: jpeg_error_mgr_ptr;            { Error handler module }
@@ -405,7 +390,6 @@ type
   backing-store object.  The read/write/close method pointers are called
   by jmemmgr.c to manipulate the backing-store object; all other fields
   are private to the system-dependent backing store routines. }
-
 
   backing_store_ptr = ^backing_store_info;
   backing_store_info = record
@@ -435,7 +419,6 @@ type
     temp_name: TEMP_STRING;  { name of temp file }
   {$endif}
  end;
-
 
 { The control blocks for virtual arrays.
   Note that these blocks are allocated in the "small" pool area.
@@ -650,7 +633,6 @@ type
           out_rows_avail: JDIMENSION);
   end;
 
-
 { Routine signature for application-supplied marker processing methods.
   Need not pass marker code since it is stored in cinfo^.unread_marker. }
 
@@ -804,7 +786,6 @@ type
     last_addon_message: J_MESSAGE_CODE;   { code for last string in addon table }
   end;
 
-
 { Progress monitor object }
 
   jpeg_progress_mgr = record
@@ -816,7 +797,6 @@ type
     total_passes: int;         { total number of passes expected }
   end;
 
-
 { Data destination object for compression }
   jpeg_destination_mgr_ptr = ^jpeg_destination_mgr;
   jpeg_destination_mgr = record
@@ -827,7 +807,6 @@ type
     empty_output_buffer: function (cinfo: j_compress_ptr): boolean;
     term_destination: procedure (cinfo: j_compress_ptr);
   end;
-
 
 { Data source object for decompression }
 
@@ -845,7 +824,6 @@ type
     term_source: procedure (cinfo: j_decompress_ptr);
   end;
 
-
 { Memory manager object.
   Allocates "small" objects (a few K total), "large" objects (tens of K),
   and "really big" objects (virtual arrays with backing store if needed).
@@ -855,7 +833,6 @@ type
   to free, especially where malloc()/free() are not too speedy.
   NB: alloc routines never return nil.  They exit to error_exit if not
   successful. }
-
 
   jpeg_memory_mgr = record
     { Method pointers }
@@ -929,7 +906,6 @@ type
     initial fields!  (This would be a lot cleaner in C++.) }
   end;
 
-
 { Master record for a compression instance }
 
   jpeg_compress_struct = record
@@ -947,7 +923,6 @@ type
   { Description of source image --- these fields must be filled in by
     outer application before starting compression.  in_color_space must
     be correct before you can even call jpeg_set_defaults(). }
-
 
     image_width: JDIMENSION;         { input image width }
     image_height: JDIMENSION;        { input image height }
@@ -1067,7 +1042,6 @@ type
     script_space: jpeg_scan_info_ptr; { workspace for jpeg_simple_progression }
     script_space_size: int;
   end;
-
 
 { Master record for a decompression instance }
 
@@ -1240,7 +1214,6 @@ type
     { Remaining fields are known throughout decompressor, but generally
       should not be touched by a surrounding application. }
 
-
     { These fields are computed during decompression startup }
 
     max_h_samp_factor: int;    { largest h_samp_factor }
@@ -1257,7 +1230,6 @@ type
       v_samp_factor*DCT_scaled_size sample rows of a component per iMCU row.}
 
     sample_range_limit: range_limit_table_ptr; { table for fast range-limiting }
-
 
     { These fields are valid during any one scan.
       They describe the components and MCUs actually appearing in the scan.
@@ -1312,7 +1284,6 @@ const
   JPEG_SUSPENDED is only possible if you use a data source module that can
   give a suspension return (the stdio source module doesn't). }
 
-
 { function jpeg_consume_input (cinfo: j_decompress_ptr): int;
   Return value is one of: }
 
@@ -1320,9 +1291,6 @@ const
   JPEG_REACHED_EOI            = 2; { Reached end of image }
   JPEG_ROW_COMPLETED          = 3; { Completed one iMCU row }
   JPEG_SCAN_COMPLETED         = 4; { Completed last iMCU row of a scan }
-
-
-
 
 implementation
 

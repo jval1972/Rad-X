@@ -35,13 +35,33 @@ interface
 uses
   d_delphi;
 
+//==============================================================================
+//
+// RX_RotatebitmapBuffer90
+//
+//==============================================================================
 procedure RX_RotatebitmapBuffer90(const buf: PByteArray; const w, h: integer);
 
+//==============================================================================
+//
+// RX_FlipbitmapbufferHorz
+//
+//==============================================================================
 procedure RX_FlipbitmapbufferHorz(const buf: PByteArray; const w, h: integer);
 
+//==============================================================================
+//
+// RX_BltImageBuffer
+//
+//==============================================================================
 procedure RX_BltImageBuffer(const inbuf: PByteArray; const inw, inh: integer;
   const outbuf: PByteArray; const x1, x2: integer; const y1, y2: integer);
 
+//==============================================================================
+//
+// RX_ColorReplace
+//
+//==============================================================================
 procedure RX_ColorReplace(const buf: PByteArray; const w, h: integer; const oldc, newc: byte);
 
 type
@@ -71,6 +91,11 @@ type
 
 implementation
 
+//==============================================================================
+//
+// RX_RotatebitmapBuffer90
+//
+//==============================================================================
 procedure RX_RotatebitmapBuffer90(const buf: PByteArray; const w, h: integer);
 var
   i, j: integer;
@@ -93,6 +118,11 @@ begin
   memfree(pointer(img), w * h);
 end;
 
+//==============================================================================
+//
+// RX_FlipbitmapbufferHorz
+//
+//==============================================================================
 procedure RX_FlipbitmapbufferHorz(const buf: PByteArray; const w, h: integer);
 var
   i, j: integer;
@@ -115,6 +145,11 @@ begin
   memfree(pointer(img), w * h);
 end;
 
+//==============================================================================
+//
+// RX_BltImageBuffer
+//
+//==============================================================================
 procedure RX_BltImageBuffer(const inbuf: PByteArray; const inw, inh: integer;
   const outbuf: PByteArray; const x1, x2: integer; const y1, y2: integer);
 var
@@ -131,6 +166,11 @@ begin
     end;
 end;
 
+//==============================================================================
+//
+// RX_ColorReplace
+//
+//==============================================================================
 procedure RX_ColorReplace(const buf: PByteArray; const w, h: integer; const oldc, newc: byte);
 var
   i: integer;
@@ -157,6 +197,11 @@ begin
   inherited;
 end;
 
+//==============================================================================
+//
+// TRadixBitmap.ApplyTranslationTable
+//
+//==============================================================================
 procedure TRadixBitmap.ApplyTranslationTable(const trans: PByteArray);
 var
   i: integer;
@@ -165,6 +210,11 @@ begin
     fimg[i] := trans[fimg[i]];
 end;
 
+//==============================================================================
+//
+// TRadixBitmap.AttachImage
+//
+//==============================================================================
 procedure TRadixBitmap.AttachImage(const buf: PByteArray; const awidth, aheight: integer);
 var
   i: integer;
@@ -175,6 +225,11 @@ begin
     fimg[i] := buf[i];
 end;
 
+//==============================================================================
+//
+// TRadixBitmap.Clear
+//
+//==============================================================================
 procedure TRadixBitmap.Clear(const color: byte);
 var
   i: integer;
@@ -183,11 +238,21 @@ begin
     fimg[i] := color;
 end;
 
+//==============================================================================
+//
+// TRadixBitmap.pos2idx
+//
+//==============================================================================
 function TRadixBitmap.pos2idx(const x, y: integer): integer;
 begin
   result := x * fheight + y;
 end;
 
+//==============================================================================
+//
+// TRadixBitmap.Crop
+//
+//==============================================================================
 procedure TRadixBitmap.Crop(const nw, nh: integer);
 var
   tmp: TRadixBitmap;
@@ -206,6 +271,11 @@ begin
   tmp.Free;
 end;
 
+//==============================================================================
+//
+// TRadixBitmap.BottomCrop
+//
+//==============================================================================
 function TRadixBitmap.BottomCrop: boolean;
 var
   i: integer;
@@ -227,6 +297,11 @@ begin
   result := true;
 end;
 
+//==============================================================================
+//
+// TRadixBitmap.SetWidth
+//
+//==============================================================================
 procedure TRadixBitmap.SetWidth(const awidth: integer);
 var
   oldsz, newsz: integer;
@@ -240,6 +315,11 @@ begin
     realloc(pointer(fimg), oldsz, newsz);
 end;
 
+//==============================================================================
+//
+// TRadixBitmap.SetHeight
+//
+//==============================================================================
 procedure TRadixBitmap.SetHeight(const aheight: integer);
 var
   oldsz, newsz: integer;
@@ -253,6 +333,11 @@ begin
     realloc(pointer(fimg), oldsz, newsz);
 end;
 
+//==============================================================================
+//
+// TRadixBitmap.GetPixel
+//
+//==============================================================================
 function TRadixBitmap.GetPixel(x, y: integer): byte;
 begin
   if not IsIntegerInRange(x, 0, fwidth - 1) then
@@ -268,6 +353,11 @@ begin
   result := fimg[pos2idx(x, y)];
 end;
 
+//==============================================================================
+//
+// TRadixBitmap.SetPixel
+//
+//==============================================================================
 procedure TRadixBitmap.SetPixel(x, y: integer; const apixel: byte);
 begin
   if not IsIntegerInRange(x, 0, fwidth - 1) then

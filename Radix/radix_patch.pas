@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2020 by Jim Valavanis
+//  Copyright (C) 2004-2022 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //  DESCRIPTION:
@@ -35,18 +35,43 @@ interface
 uses
   d_delphi;
 
+//==============================================================================
+//
+// RX_CreateDoomPatch
+//
+//==============================================================================
 procedure RX_CreateDoomPatch(const img: PByteArray; const width, height: integer;
   const solid: boolean; out p: pointer; out size: integer; const offsx: integer = -255; const offsy: integer = -255);
 
+//==============================================================================
+//
+// RX_CreateDoomPatchFromLumpData
+//
+//==============================================================================
 procedure RX_CreateDoomPatchFromLumpData(const img: PByteArray;
   const solid: boolean; out p: pointer; out size: integer);
 
+//==============================================================================
+//
+// RX_CreateDoomPatchFromLumpDataPal
+//
+//==============================================================================
 procedure RX_CreateDoomPatchFromLumpDataPal(const img: PByteArray;
   const solid: boolean; const defpal: PLongWordArray; out p: pointer; out size: integer);
 
+//==============================================================================
+//
+// RX_CreateOpaqueDoomPatchFromLumpDataPal
+//
+//==============================================================================
 procedure RX_CreateOpaqueDoomPatchFromLumpDataPal(const img: PByteArray;
   const bgcolor: integer; const defpal: PLongWordArray; out p: pointer; out size: integer);
 
+//==============================================================================
+//
+// RX_CreateDoomSkyPatch
+//
+//==============================================================================
 procedure RX_CreateDoomSkyPatch(const img: PByteArray; out p: pointer; out size: integer);
 
 implementation
@@ -63,6 +88,11 @@ type
     topoffset: smallint;  // pixels below the origin
   end;
 
+//==============================================================================
+//
+// RX_CreateDoomPatch
+//
+//==============================================================================
 procedure RX_CreateDoomPatch(const img: PByteArray; const width, height: integer;
   const solid: boolean; out p: pointer; out size: integer; const offsx: integer = -255; const offsy: integer = -255);
 var
@@ -156,6 +186,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RX_CreateDoomPatchFromLumpData
+//
+//==============================================================================
 procedure RX_CreateDoomPatchFromLumpData(const img: PByteArray;
   const solid: boolean; out p: pointer; out size: integer);
 var
@@ -246,6 +281,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// RX_CreateDoomPatchFromLumpDataPal
+//
+//==============================================================================
 procedure RX_CreateDoomPatchFromLumpDataPal(const img: PByteArray;
   const solid: boolean; const defpal: PLongWordArray; out p: pointer; out size: integer);
 var
@@ -277,6 +317,11 @@ begin
   memfree(pointer(newimg), newsize);
 end;
 
+//==============================================================================
+//
+// RX_CreateOpaqueDoomPatchFromLumpDataPal
+//
+//==============================================================================
 procedure RX_CreateOpaqueDoomPatchFromLumpDataPal(const img: PByteArray;
   const bgcolor: integer; const defpal: PLongWordArray; out p: pointer; out size: integer);
 var
@@ -315,6 +360,11 @@ begin
   memfree(pointer(newimg), newsize);
 end;
 
+//==============================================================================
+//
+// RX_CreateDoomSkyPatch
+//
+//==============================================================================
 procedure RX_CreateDoomSkyPatch(const img: PByteArray; out p: pointer; out size: integer);
 var
   x, y: integer;

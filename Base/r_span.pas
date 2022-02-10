@@ -18,7 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, inc., 59 Temple Place - Suite 330, Boston, MA
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 //
 //------------------------------------------------------------------------------
@@ -36,9 +36,20 @@ uses
   m_fixed,
   tables;
 
+//==============================================================================
+// R_DrawSpanMedium
+//
 // Span blitting for rows, floor/ceiling.
 // No Sepctre effect needed.
+//
+//==============================================================================
 procedure R_DrawSpanMedium;
+
+//==============================================================================
+//
+// R_DrawSpanMedium_Ripple
+//
+//==============================================================================
 procedure R_DrawSpanMedium_Ripple;
 
 var
@@ -62,7 +73,6 @@ var
 
 // start of a 64*64 tile image
   ds_source: PByteArray;
-
 
 type
   dsscale_t = (ds64x64, ds128x128, ds256x256, ds512x512, ds1024x1024, ds2048x2048, NUMDSSCALES);
@@ -89,6 +99,8 @@ uses
   r_depthbuffer,
   r_zbuffer;
 
+//==============================================================================
+// R_DrawSpanMedium
 //
 // R_DrawSpan
 // With DOOM style restrictions on view orientation,
@@ -101,13 +113,11 @@ uses
 // In consequence, flats are not stored by column (like walls),
 //  and the inner loop has to step in texture space u and v.
 //
-
-//
 // Draws the actual span (Low resolution).
-//
 //
 // Draws the actual span (Medium resolution).
 //
+//==============================================================================
 procedure R_DrawSpanMedium;
 var
   xfrac: fixed_t;
@@ -143,6 +153,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// R_DrawSpanMedium_Ripple
+//
+//==============================================================================
 procedure R_DrawSpanMedium_Ripple;
 var
   xfrac: fixed_t;
