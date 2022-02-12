@@ -86,7 +86,7 @@ type
   TPakEntry = record // A Directory Entry Memory Image
     Pak: string[255];
     Name: string[255];
-    ShortName: string[32];
+    ShortName: string[64];
     Offset, Size: Integer;
     Hash: Integer;
     ZIP: TZipFile;
