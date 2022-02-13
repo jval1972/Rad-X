@@ -32,6 +32,7 @@ RAD works only with radix v2.0 remix edition. It will not work with v1.0 or v1.1
 History
 -------
 Use 64 characters long string for short names in PK3.
+Added "DROPPED ITEM" alias for "DROPITEM" DEHACKED field.
 
 20220206 - v.1.1.19.752.r1097
 -----------------------------
