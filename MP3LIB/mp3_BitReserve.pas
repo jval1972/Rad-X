@@ -84,6 +84,11 @@ implementation
 
 { TBitReserve }
 
+//==============================================================================
+//
+// TBitReserve.Create
+//
+//==============================================================================
 constructor TBitReserve.Create;
 var ShiftedOne, i: Cardinal;
 begin
@@ -105,6 +110,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TBitReserve.Destroy
+//
+//==============================================================================
 destructor TBitReserve.Destroy;
 begin
   FreeMem(FPutMask);

@@ -71,6 +71,11 @@ uses
   w_folders,
   w_pak;
 
+//==============================================================================
+//
+// TDDModel.Create
+//
+//==============================================================================
 constructor TDDModel.Create(const name: string;
   const xoffset, yoffset, zoffset: float;
   const xscale, yscale, zscale: float;
@@ -138,6 +143,11 @@ begin
   strm.Free;
 end;
 
+//==============================================================================
+//
+// TDDModel.Destroy
+//
+//==============================================================================
 destructor TDDModel.Destroy;
 var
   i: integer;

@@ -100,6 +100,11 @@ uses
   mdl_script_model,
   mdl_script_functions;
 
+//==============================================================================
+//
+// TMDLProcedureList.Create
+//
+//==============================================================================
 constructor TMDLProcedureList.Create;
 begin
   fList := nil;
@@ -108,6 +113,11 @@ begin
   inherited Create;
 end;
 
+//==============================================================================
+//
+// TMDLProcedureList.Destroy
+//
+//==============================================================================
 destructor TMDLProcedureList.Destroy;
 var
   i: integer;

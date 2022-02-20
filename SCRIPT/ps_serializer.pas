@@ -90,6 +90,11 @@ uses
   i_system,
   ps_defs;
 
+//==============================================================================
+//
+// TScriptSerializer.Create
+//
+//==============================================================================
 constructor TScriptSerializer.Create(const aExec: TDoomExec);
 begin
   fExec := aExec;

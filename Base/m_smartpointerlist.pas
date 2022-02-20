@@ -57,7 +57,12 @@ type
 
 implementation
 
+//==============================================================================
+// TSmartPointerList.Create
+//
 // TSmartPointerList
+//
+//==============================================================================
 constructor TSmartPointerList.Create;
 begin
   fList := nil;
@@ -66,6 +71,11 @@ begin
   inherited;
 end;
 
+//==============================================================================
+//
+// TSmartPointerList.Destroy
+//
+//==============================================================================
 destructor TSmartPointerList.Destroy;
 begin
   Clear;

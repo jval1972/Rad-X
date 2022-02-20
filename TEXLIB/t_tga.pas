@@ -428,6 +428,11 @@ begin
   memfree(buffer, hdr.width * 4);
 end;
 
+//==============================================================================
+//
+// TTGATextureManager.Create
+//
+//==============================================================================
 constructor TTGATextureManager.Create;
 begin
   inherited Create;
@@ -498,6 +503,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// TTGATextureManager.Destroy
+//
+//==============================================================================
 destructor TTGATextureManager.Destroy;
 begin
   if id <> nil then

@@ -200,6 +200,11 @@ type
     property makeallflats: boolean read fmakeallflats write fmakeallflats;
   end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.Create
+//
+//==============================================================================
 constructor TRadixToWADConverter.Create;
 begin
   f := nil;
@@ -217,6 +222,11 @@ begin
   Inherited;
 end;
 
+//==============================================================================
+//
+// TRadixToWADConverter.Destroy
+//
+//==============================================================================
 destructor TRadixToWADConverter.Destroy;
 begin
   Clear;

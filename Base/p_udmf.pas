@@ -79,6 +79,11 @@ type
     destructor Destroy; override;
   end;
 
+//==============================================================================
+//
+// TUDMFManager.Create
+//
+//==============================================================================
 constructor TUDMFManager.Create;
 begin
   fthings := nil;
@@ -840,6 +845,11 @@ begin
   memfree(Pointer(fmapsectors), fnummapsectors * SizeOf(mapsector_t));
 end;
 
+//==============================================================================
+//
+// TUDMFManager.Destroy
+//
+//==============================================================================
 destructor TUDMFManager.Destroy;
 begin
   Clear;

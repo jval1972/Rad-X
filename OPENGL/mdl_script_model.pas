@@ -227,6 +227,11 @@ uses
 var
   currentmodelloader: TDDModelLoader;
 
+//==============================================================================
+//
+// TDDModelLoader.Create
+//
+//==============================================================================
 constructor TDDModelLoader.Create;
 begin
   fNumCmds := 0;
@@ -240,6 +245,11 @@ begin
   inherited;
 end;
 
+//==============================================================================
+//
+// TDDModelLoader.Destroy
+//
+//==============================================================================
 destructor TDDModelLoader.Destroy;
 begin
   Clear;

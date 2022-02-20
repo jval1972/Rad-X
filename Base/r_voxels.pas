@@ -1524,6 +1524,11 @@ begin
   result := R_VoxelColumnsFromBuffer(voxelbuffer, voxelsize, offset, scale);
 end;
 
+//==============================================================================
+//
+// TVoxelModel.Create
+//
+//==============================================================================
 constructor TVoxelModel.Create(const name: string; const offset, scale: fixed_t; flags: LongWord);
 var
   ext: string;
@@ -1566,6 +1571,11 @@ begin
       fradius := voxelcolumns_p(frames.Numbers[i]).range;
 end;
 
+//==============================================================================
+//
+// TVoxelModel.Destroy
+//
+//==============================================================================
 destructor TVoxelModel.Destroy;
 begin
   frames.Free;

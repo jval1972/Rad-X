@@ -62,6 +62,11 @@ type
 
 implementation
 
+//==============================================================================
+//
+// TBaseModel.Create
+//
+//==============================================================================
 constructor TBaseModel.Create(const name: string;
   const xoffset, yoffset, zoffset: float;
   const xscale, yscale, zscale: float;
@@ -70,6 +75,11 @@ begin
   Inherited Create;
 end;
 
+//==============================================================================
+//
+// TBaseModel.Destroy
+//
+//==============================================================================
 destructor TBaseModel.Destroy;
 begin
   Inherited;

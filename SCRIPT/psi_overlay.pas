@@ -395,6 +395,11 @@ uses
 const
   OVR_GROWSTEP = 8;
 
+//==============================================================================
+//
+// TOverlayDrawer.Create
+//
+//==============================================================================
 constructor TOverlayDrawer.Create;
 begin
   inherited Create;
@@ -413,6 +418,11 @@ begin
   lastdrawcnt := 0;
 end;
 
+//==============================================================================
+//
+// TOverlayDrawer.Destroy
+//
+//==============================================================================
 destructor TOverlayDrawer.Destroy;
 begin
   memfree(Pointer(fdrawers), frealnumdrawers * SizeOf(overlaydrawer_t));

@@ -126,6 +126,11 @@ const
 
 { TSubBandLayer1 }
 
+//==============================================================================
+//
+// TSubBandLayer1.Create
+//
+//==============================================================================
 constructor TSubBandLayer1.Create(SubBandNumber: Cardinal);
 begin
   FSubBandNumber := SubBandNumber;

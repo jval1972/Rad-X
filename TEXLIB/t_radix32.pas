@@ -53,6 +53,11 @@ type
 
 implementation
 
+//==============================================================================
+//
+// TRadix32TextureManager.Create
+//
+//==============================================================================
 constructor TRadix32TextureManager.Create;
 begin
   img := nil;
@@ -135,6 +140,11 @@ begin
   result := true;
 end;
 
+//==============================================================================
+//
+// TRadix32TextureManager.Destroy
+//
+//==============================================================================
 destructor TRadix32TextureManager.Destroy;
 begin
   Inherited destroy;

@@ -164,8 +164,13 @@ type
     procedure AddFunc(aname: string; afunc: TExtFunc; anump: integer); overload; override;
   end;
 
+//==============================================================================
+// TActorEvaluator.Create
+//
 ////////////////////////////////////////////////////////////////////////////////
 // TActorEvaluator
+//
+//==============================================================================
 constructor TActorEvaluator.Create;
 begin
   Inherited Create;

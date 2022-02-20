@@ -195,12 +195,22 @@ begin
   FItems.Clear;
 end;
 
+//==============================================================================
+//
+// TPSLineInfoList.Create
+//
+//==============================================================================
 constructor TPSLineInfoList.Create;
 begin
   inherited Create;
   FItems := TIfList.Create;
 end;
 
+//==============================================================================
+//
+// TPSLineInfoList.Destroy
+//
+//==============================================================================
 destructor TPSLineInfoList.Destroy;
 begin
   Clear;
@@ -276,12 +286,22 @@ end;
 
 { TPSLineInfo }
 
+//==============================================================================
+//
+// TPSLineInfo.Create
+//
+//==============================================================================
 constructor TPSLineInfo.Create;
 begin
   inherited Create;
   FLineOffsets := TIfList.Create;
 end;
 
+//==============================================================================
+//
+// TPSLineInfo.Destroy
+//
+//==============================================================================
 destructor TPSLineInfo.Destroy;
 begin
   FLineOffsets.Free;
@@ -544,6 +564,11 @@ begin
   FMainFile := '';
 end;
 
+//==============================================================================
+//
+// TPSPreProcessor.Create
+//
+//==============================================================================
 constructor TPSPreProcessor.Create;
 begin
   inherited Create;
@@ -558,6 +583,11 @@ begin
   doAddStdPredefines;
 end;
 
+//==============================================================================
+//
+// TPSPreProcessor.Destroy
+//
+//==============================================================================
 destructor TPSPreProcessor.Destroy;
 begin
   FDefineState.Free;
@@ -824,6 +854,11 @@ begin
   FItems.Clear;
 end;
 
+//==============================================================================
+//
+// TPSDefineStates.Create
+//
+//==============================================================================
 constructor TPSDefineStates.Create;
 begin
   inherited Create;
@@ -841,6 +876,11 @@ begin
   FItems.Delete(i);
 end;
 
+//==============================================================================
+//
+// TPSDefineStates.Destroy
+//
+//==============================================================================
 destructor TPSDefineStates.Destroy;
 var
   i: Longint;

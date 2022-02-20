@@ -119,6 +119,11 @@ uses
   sc_engine,
   sc_evaluate_actor;
 
+//==============================================================================
+//
+// TCustomParamList.Create
+//
+//==============================================================================
 constructor TCustomParamList.Create(const tx: string);
 var
   i, j: integer;
@@ -249,6 +254,11 @@ begin
 
 end;
 
+//==============================================================================
+//
+// TCustomParamList.Destroy
+//
+//==============================================================================
 destructor TCustomParamList.Destroy;
 begin
   if fNumItems > 0 then

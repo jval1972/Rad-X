@@ -64,6 +64,11 @@ uses
   mt_utils,
   v_video;
 
+//==============================================================================
+//
+// TPatchTextureManager.Create
+//
+//==============================================================================
 constructor TPatchTextureManager.Create;
 begin
   inherited Create;
@@ -178,6 +183,11 @@ begin
   result := true;
 end;
 
+//==============================================================================
+//
+// TPatchTextureManager.Destroy
+//
+//==============================================================================
 destructor TPatchTextureManager.Destroy;
 begin
   if patch <> nil then

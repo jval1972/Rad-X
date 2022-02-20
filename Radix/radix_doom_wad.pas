@@ -96,6 +96,11 @@ type
     procedure SaveToSream(const strm: TDStream);
   end;
 
+//==============================================================================
+//
+// TWADConverter.Create
+//
+//==============================================================================
 constructor TWADConverter.Create;
 var
   i: integer;
@@ -107,6 +112,11 @@ begin
   Inherited Create;
 end;
 
+//==============================================================================
+//
+// TWADConverter.Destroy
+//
+//==============================================================================
 destructor TWADConverter.Destroy;
 begin
   Clear;
