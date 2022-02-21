@@ -3138,7 +3138,7 @@ begin
   if m.meleesound > 0 then
     AddLn('Meleesound ' + S_GetSoundNameForNum(m.meleesound));
   if m.missileheight > 0 then
-    AddLn('Missileheight ' + S_GetSoundNameForNum(m.missileheight));
+    AddLn('Missileheight ' + itoa(m.missileheight));
   if m.renderstyle <> mrs_normal then
   begin
     AddLn('Renderstyle ' + renderstyle_tokens[Ord(m.renderstyle)]);
