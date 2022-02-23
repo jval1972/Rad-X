@@ -10042,6 +10042,7 @@ function TPSPascalCompiler.ProcessSub(BlockInfo: TPSBlockInfo): Boolean;
           Result := False;
           Exit;
         end;
+        Val.SetParserPos(FParser);
       end;
       if FParser.CurrTokenId = cr then
       begin
