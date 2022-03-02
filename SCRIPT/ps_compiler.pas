@@ -5273,7 +5273,7 @@ end;
 // WriteProcVars
 //
 //==============================================================================
-procedure WriteProcVars(Func:TPSInternalProcedure; t: TPSList);
+procedure WriteProcVars(Func: TPSInternalProcedure; t: TPSList);
 var
   l: Longint;
   v: PIFPSProcVar;

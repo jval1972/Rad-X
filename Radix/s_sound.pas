@@ -295,8 +295,8 @@ function S_GetChannel(origin: pointer; sfxinfo: Psfxinfo_t): integer; forward;
 // S_AdjustSoundParams
 //
 //==============================================================================
-function S_AdjustSoundParams(listener: Pmobj_t; source:Pmobj_t;
-  vol: Pinteger; sep: Pinteger; pitch:Pinteger): boolean; forward;
+function S_AdjustSoundParams(listener: Pmobj_t; source: Pmobj_t;
+  vol: Pinteger; sep: Pinteger; pitch: Pinteger): boolean; forward;
 
 //==============================================================================
 //
@@ -1109,7 +1109,7 @@ end;
 //
 //==============================================================================
 function S_AdjustSoundParams(listener: Pmobj_t; source: Pmobj_t;
-  vol: Pinteger; sep: Pinteger; pitch:Pinteger): boolean;
+  vol: Pinteger; sep: Pinteger; pitch: Pinteger): boolean;
 var
   approx_dist: fixed_t;
   adx: fixed_t;

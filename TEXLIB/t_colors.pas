@@ -135,21 +135,21 @@ function EncodeColor24(rgb: LongWord): LongWord;
 // DecodeColor8
 //
 //==============================================================================
-function DecodeColor8(color:integer):integer;
+function DecodeColor8(color: integer): integer;
 
 //==============================================================================
 //
 // BrightenColor8
 //
 //==============================================================================
-function BrightenColor8(color:integer; light: integer): integer;
+function BrightenColor8(color: integer; light: integer): integer;
 
 //==============================================================================
 //
 // BrightenColor24
 //
 //==============================================================================
-function BrightenColor24(color:integer; light: integer): integer;
+function BrightenColor24(color: integer; light: integer): integer;
 
 //==============================================================================
 //
@@ -170,7 +170,7 @@ procedure SetRGBPalette(index: word; color: integer); overload;
 // SetRGBPalette
 //
 //==============================================================================
-procedure SetRGBPalette(index, RedValue, GreenValue, BlueValue:word); overload;
+procedure SetRGBPalette(index, RedValue, GreenValue, BlueValue: word); overload;
 
 //==============================================================================
 //
@@ -233,7 +233,7 @@ end;
 // RGB
 //
 //==============================================================================
-function RGB(RedValue, GreenValue, BlueValue : word):integer; assembler;
+function RGB(RedValue, GreenValue, BlueValue : word): integer; assembler;
 asm
   mov  ax, RedValue    // ------------------------RRRRRRRR
   shl  eax, $16        // --------RRRRRRRR----------------
@@ -379,7 +379,7 @@ end;
 // DecodeColor8
 //
 //==============================================================================
-function DecodeColor8(color: integer):integer;assembler;
+function DecodeColor8(color: integer): integer; assembler;
 asm
   mov  edx, color
   shl  edx, $2
