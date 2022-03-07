@@ -510,6 +510,7 @@ begin
 end;
 
 //==============================================================================
+//
 // S_StartSoundAtVolume
 //
 // Will start a sound at a given volume.
@@ -729,7 +730,7 @@ end;
 //==============================================================================
 procedure S_PauseSound;
 begin
-  if (mus_playing <> nil) and (not mus_paused) then
+  if (mus_playing <> nil) and not mus_paused then
   begin
     I_PauseSong(mus_playing.handle);
     mus_paused := true;
