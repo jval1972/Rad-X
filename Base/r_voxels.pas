@@ -2165,9 +2165,7 @@ begin
   begin
     ds := fdrawsegs[i];
     // determine if the drawseg obscures the sprite
-    if (ds.x1 > vis.vx2) or
-       (ds.x2 < vis.vx1) or
-       ((ds.silhouette = 0) and (ds.maskedtexturecol = nil) and (ds.thicksidecol = nil)) then
+    if ds.maskedquery or (ds.x1 > vis.vx2) or (ds.x2 < vis.vx1) then
     begin
       // does not cover sprite
       continue;
@@ -2194,7 +2192,7 @@ begin
     end;
 
     if (scale < vis.scale) or
-       ((lowscale < vis.scale) and (not R_PointOnSegSide(vis.gx, vis.gy, ds.curline))) then
+       ((lowscale < vis.scale) and not R_PointOnSegSide(vis.gx, vis.gy, ds.curline)) then
     begin
       // masked mid texture?
       if ds.thicksidecol <> nil then        // JVAL: 3d Floors
