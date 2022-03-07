@@ -1119,6 +1119,13 @@ var
   angle: angle_t;
   langle: angle_t;
 begin
+  // haleyjd 08/12/04: we cannot adjust a sound for a NULL listener
+  if listener = nil then
+  begin
+    result := true;
+    exit;
+  end;
+
   // calculate the distance to sound origin
   //  and clip it if necessary
   adx := abs(listener.x - source.x);
@@ -1130,6 +1137,15 @@ begin
     ad := ady;
   // From _GG1_ p.428. Appox. eucledian distance fast.
   approx_dist := adx + ady - ad div 2;
+
+  // killough 11/98: handle zero-distance as special case
+  if approx_dist = 0 then
+  begin
+    sep^ := NORM_SEP;
+    vol^ := snd_SfxVolume;
+    result := vol^ > 0;
+    exit;
+  end;
 
   if (gamemap <> 8) and
      (approx_dist > S_CLIPPING_DIST) then
