@@ -1962,7 +1962,7 @@ begin
   begin
     ds := fdrawsegs[i];
     // determine if the drawseg obscures the sprite
-    if ds.maskedquery or (ds.x1 > sx2) or (ds.x2 < sx1) then
+    if (ds.x1 > sx2) or (ds.x2 < sx1) or ds.maskedquery then
     begin
       // does not cover sprite
       continue;
@@ -2057,13 +2057,13 @@ begin
         begin
           if (mh <= 0) or ((plheightsec <> -1) and (viewz > sectors[plheightsec].floorheight)) then
           begin
-            for x := spr.x1 to spr.x2 do
+            for x := sx1 to sx2 do
               if (clipbot[x] = -2) or (h < clipbot[x]) then
                 clipbot[x] := h;
           end
           else if (plheightsec <> -1) and (viewz <= sectors[plheightsec].floorheight) then
           begin
-            for x := spr.x1 to spr.x2 do
+            for x := sx1 to sx2 do
               if (cliptop[x] = -2) or (h > cliptop[x]) then
                 cliptop[x] := h;
           end;
@@ -2082,13 +2082,13 @@ begin
         begin
           if (plheightsec <> -1) and (viewz >= sectors[plheightsec].ceilingheight) then
           begin
-            for x := spr.x1 to spr.x2 do
+            for x := sx1 to sx2 do
               if (clipbot[x] = -2) or (h < clipbot[x]) then
                 clipbot[x] := h;
           end
           else
           begin
-            for x := spr.x1 to spr.x2 do
+            for x := sx1 to sx2 do
               if (cliptop[x] = -2) or (h > cliptop[x]) then
                 cliptop[x] := h;
           end;
@@ -2103,7 +2103,7 @@ begin
   // all clipping has been performed, so draw the sprite
 
   // check for unclipped columns
-  for x := spr.x1 to spr.x2 do
+  for x := sx1 to sx2 do
   begin
     if clipbot[x] = -2 then
       clipbot[x] := fake3dbottomclip
