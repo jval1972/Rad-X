@@ -627,6 +627,11 @@ begin
   result := V_PreserveY(y + h) - V_PreserveY(y);
 end;
 
+//==============================================================================
+//
+// V_CopyCustomScreen8
+//
+//==============================================================================
 procedure V_CopyCustomScreen8(
   scrA: PByteArray;
   width: integer;
@@ -666,6 +671,11 @@ begin
   end
 end;
 
+//==============================================================================
+//
+// V_CopyCustomScreen32
+//
+//==============================================================================
 procedure V_CopyCustomScreen32(
   scrA: PByteArray;
   width: integer;
@@ -704,6 +714,11 @@ begin
   end
 end;
 
+//==============================================================================
+//
+// V_CopyCustomScreen
+//
+//==============================================================================
 procedure V_CopyCustomScreen(
   src: PByteArray;
   width: integer;
@@ -716,9 +731,11 @@ begin
     V_CopyCustomScreen8(src, width, height, destscrn)
 end;
 
+//==============================================================================
 //
-// V_CopyRect
+// V_CopyRect8
 //
+//==============================================================================
 procedure V_CopyRect8(
   srcx: integer;
   srcy: integer;
@@ -905,6 +922,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// V_CopyRect8_MT
+//
+//==============================================================================
 procedure V_CopyRect8_MT(
   idx, numidxs: integer;
   srcx: integer;
@@ -1111,6 +1133,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// V_CopyRect32
+//
+//==============================================================================
 procedure V_CopyRect32(
   srcx: integer;
   srcy: integer;
@@ -1337,6 +1364,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// V_CopyRect32_MT
+//
+//==============================================================================
 procedure V_CopyRect32_MT(
   idx, numidxs: integer;
   srcx: integer;
@@ -1648,6 +1680,11 @@ begin
   result := 0;
 end;
 
+//==============================================================================
+//
+// V_CopyRect
+//
+//==============================================================================
 procedure V_CopyRect(
   srcx: integer;
   srcy: integer;
@@ -1703,6 +1740,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// V_CopyAddRect
+//
+//==============================================================================
 procedure V_CopyAddRect(
   srcx: integer;
   srcy: integer;
@@ -1801,9 +1843,11 @@ begin
     V_CopyRect8(srcx, srcy, srcscrn, width, height, destx, desty, destscrn, preserve);
 end;
 
+//==============================================================================
 //
 // V_CopyRectTransparent
 //
+//==============================================================================
 procedure V_CopyRectTransparent8(
   srcx: integer;
   srcy: integer;
@@ -1885,6 +1929,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// V_CopyRectTransparent8_MT
+//
+//==============================================================================
 procedure V_CopyRectTransparent8_MT(
   idx, numidxs: integer;
   srcx: integer;
@@ -1973,6 +2022,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// V_CopyRectTransparent32
+//
+//==============================================================================
 procedure V_CopyRectTransparent32(
   srcx: integer;
   srcy: integer;
@@ -2071,6 +2125,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// V_CopyRectTransparent32_MT
+//
+//==============================================================================
 procedure V_CopyRectTransparent32_MT(
   idx, numidxs: integer;
   srcx: integer;
@@ -2231,6 +2290,11 @@ begin
   result := 0;
 end;
 
+//==============================================================================
+//
+// V_CopyRectTransparent
+//
+//==============================================================================
 procedure V_CopyRectTransparent(
   srcx: integer;
   srcy: integer;
@@ -2420,6 +2484,11 @@ begin
 end;
 {$ENDIF}
 
+//==============================================================================
+//
+// V_CopyScreenTransparent8
+//
+//==============================================================================
 procedure V_CopyScreenTransparent8(
   srcscrn: integer;
   destscrn: integer; srcoffs: integer = 0; destoffs: integer = 0; size: integer = -1);
@@ -2462,6 +2531,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// V_CopyScreenTransparent32
+//
+//==============================================================================
 procedure V_CopyScreenTransparent32(
   srcscrn: integer;
   srcoffs: integer = 0; destoffs: integer = 0; size: integer = -1);
@@ -2487,6 +2561,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// V_CopyScreenTransparent
+//
+//==============================================================================
 procedure V_CopyScreenTransparent(
   srcscrn: integer;
   destscrn: integer; srcoffs: integer = 0; destoffs: integer = 0; size: integer = -1);
@@ -3420,6 +3499,11 @@ begin
   end;
 end;
 
+//==============================================================================
+//
+// V_DrawPatchTransparent8_MT
+//
+//==============================================================================
 procedure V_DrawPatchTransparent8_MT(
   idx, numidxs: integer;
   x, y: integer; scrn: integer; patch: Ppatch_t; preserve: boolean);
@@ -3746,6 +3830,11 @@ begin
 end;
 
 {$IFNDEF OPENGL}
+//==============================================================================
+//
+// V_DrawPatchTransparent32_MT
+//
+//==============================================================================
 procedure V_DrawPatchTransparent32_MT(
   idx, numidxs: integer;
   x, y: integer; patch: Ppatch_t; preserve: boolean);
