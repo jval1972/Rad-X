@@ -1499,7 +1499,9 @@ var
   flip: boolean;
   vis: Pvissprite_t;
   ang: angle_t;
+{$IFNDEF OPENGL}
   sec: Psector_t;
+{$ENDIF}
 {$IFDEF OPENGL}
   checksides: boolean;
   modelflag: integer;
@@ -1709,8 +1711,8 @@ begin
 {$ENDIF}
   if x2 < x1 then
     exit; // SOS
-  sec := Psubsector_t(thing.subsector).sector;
 {$IFNDEF OPENGL}
+  sec := Psubsector_t(thing.subsector).sector;
   scaledtop := FixedMul(spritetopoffset[lump], infoscale);
   gzt := thing.z + scaledtop;
   {$IFDEF DOOM_OR_STRIFE}
