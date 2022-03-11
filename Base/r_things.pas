@@ -1583,7 +1583,7 @@ begin
   1:  // 8 angles
     begin
       // choose a different rotation based on player view
-      ang := R_PointToAngleEx(thing.x, thing.y);
+      ang := R_PointToAngle(thing.x, thing.y);
       rot := (ang - thing.angle + LongWord(ANG45 div 2) * 9) shr 29;
       lump := sprframe.lump[rot];
       flip := sprframe.flip[rot];
@@ -1591,7 +1591,7 @@ begin
   2:  // 16 angles
     begin
       // choose a different rotation based on player view
-      ang := R_PointToAngleEx(thing.x, thing.y);
+      ang := R_PointToAngle(thing.x, thing.y);
       rot := translaterotations[2, (ang - thing.angle + LongWord(ANG45 div 4) * 17) shr 28];
       lump := sprframe.lump[rot];
       flip := sprframe.flip[rot];
@@ -1599,7 +1599,7 @@ begin
   3:  // 32 angles
     begin
       // choose a different rotation based on player view
-      ang := R_PointToAngleEx(thing.x, thing.y);
+      ang := R_PointToAngle(thing.x, thing.y);
       rot := translaterotations[3, (ang - thing.angle + LongWord(ANG45 div 8) * 33) shr 27];
       lump := sprframe.lump[rot];
       flip := sprframe.flip[rot];
