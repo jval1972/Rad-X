@@ -107,6 +107,20 @@ procedure R_DrawMasked_SingleThread;
 //
 //==============================================================================
 procedure R_DrawMasked_MultiThread;
+
+//==============================================================================
+//
+// R_PrepareMasked
+//
+//==============================================================================
+procedure R_PrepareMasked;
+
+//==============================================================================
+//
+// R_SignalPrepareMasked
+//
+//==============================================================================
+procedure R_SignalPrepareMasked;
 {$ENDIF}
 
 var
@@ -168,6 +182,40 @@ var
   vissprites: visspritebuffer_p;
   vissprite_p: integer;
   visspritessize: Integer = 0;
+
+{$IFNDEF OPENGL}
+const
+  SPRITECACHESIZE = 8192 * 1024;
+
+var
+  spritecache: array[0..SPRITECACHESIZE - 1] of Byte;
+  spritecachepos: integer;
+  maskedpreparesignal: boolean;
+
+const
+  CACHE_OP_THICK = 1;
+  CACHE_OP_MASKED = 2;
+  CACHE_OP_THICK_AND_MASKED = 3;
+  CACHE_OP_SIL1 = 4;
+  CACHE_OP_SIL2 = 5;
+  CACHE_OP_SIL3 = 6;
+
+type
+  visspritecacheitem_t = record
+    ds: Pdrawseg_t;
+    r1, r2: integer;
+    operation: integer;
+  end;
+  Pvisspritecacheitem_t = ^visspritecacheitem_t;
+
+  visspritecache_t = record
+    fds_p: integer;
+    fdrawsegs: Pdrawsegsbuffer_t;
+    cachesize: integer;
+    cache: array[0..0] of visspritecacheitem_t;
+  end;
+  Pvisspritecache_t = ^visspritecache_t;
+{$ENDIF}
 
 implementation
 
@@ -1166,7 +1214,6 @@ begin
   else
     baseclip := viewheight - 1;
 
-// JVAL: batch column drawing
   xiscale := vis.xiscale;
   dc_x := vis.x1;
 
@@ -1191,7 +1238,7 @@ begin
     R_SpriteRenderMT;
   end
   else
-  begin
+  begin // JVAL: batch column drawing
     if do_mt and Assigned(batchspritefunc_mt) then
       dmcproc_batch := @R_DrawMaskedColumn_BatchMT
     else
@@ -1452,6 +1499,7 @@ var
   flip: boolean;
   vis: Pvissprite_t;
   ang: angle_t;
+  sec: Psector_t;
 {$IFDEF OPENGL}
   checksides: boolean;
   modelflag: integer;
@@ -1470,7 +1518,6 @@ var
   sprlights: PBytePArray; // JVAL: 3d floors
   scaledtop: fixed_t;
   vr3: fixed_t;
-//  donclip3dfloor: boolean;
 {$ENDIF}
   soffset, swidth: fixed_t;
   infoscale: fixed_t;
@@ -1662,11 +1709,12 @@ begin
 {$ENDIF}
   if x2 < x1 then
     exit; // SOS
+  sec := Psubsector_t(thing.subsector).sector;
 {$IFNDEF OPENGL}
   scaledtop := FixedMul(spritetopoffset[lump], infoscale);
   gzt := thing.z + scaledtop;
   {$IFDEF DOOM_OR_STRIFE}
-  heightsec := Psubsector_t(thing.subsector).sector.heightsec;
+  heightsec := sec.heightsec;
 
   if heightsec <> -1 then   // only clip things which are in special sectors
   begin
@@ -1703,27 +1751,27 @@ begin
   // store information in a vissprite
   vis := R_NewVisSprite;
   vis.mobjflags := thing.flags;
-  {$IFDEF HERETIC_OR_HEXEN}
-  vis.mobjflags2 := thing.flags2;
-  {$ENDIF}
-  vis.mobjflags_ex := thing.flags_ex{$IFNDEF STRIFE} or (thing.state.flags_ex and MF_EX_STATE_MASK){$ENDIF}; // JVAL: extended flags passed to vis
-  vis.mobjflags2_ex := thing.flags2_ex; // JVAL: extended flags passed to vis
+  vis.mobjflags_ex := thing.flags_ex or (thing.state.flags_ex and MF_EX_STATE_MASK); // JVAL: extended flags passed to vis
   vis.mo := thing;
   vis.scale := FixedDiv(projectiony, tz); // JVAL For correct aspect
   vis.infoscale := infoscale;
   {$IFNDEF OPENGL}
+  vis.cache := nil;
+  vis.lightcache := nil;
   {$IFDEF DOOM_OR_STRIFE}
   vis.heightsec := heightsec;
   {$ENDIF}
-  vis.voxelflag := voxelflag;  // JVAL voxel support
+  if voxelflag <> 0 then
+    vis.renderflags := VSF_VOXEL  // JVAL voxel support
+  else
+    vis.renderflags := 0;
   vis.gx := thing.x;
   vis.gy := thing.y;
   vis.gz := thing.z;
   vis.gzt := gzt;
   // foot clipping
   {$IFDEF HERETIC}
-  if (thing.flags2 and MF2_FEETARECLIPPED <> 0) and (thing.z <=
-    Psubsector_t(thing.subsector).sector.floorheight) then  // SOS 3d floors
+  if (thing.flags2 and MF2_FEETARECLIPPED <> 0) and (thing.z <= sec.floorheight) then
     vis.footclip := 10 * FRACUNIT
   else
     vis.footclip := 0;
@@ -1758,7 +1806,6 @@ begin
   iscale := FixedDiv(FRACUNIT, xscale);
 
   // JVAL: 3d Floors
-//  donclip3dfloor := false;
   sprlights := spritelights;
   if hasExtrafloors then
   begin
@@ -1770,21 +1817,12 @@ begin
     if thing.ceilingz < vis.ceilingz then
       vis.ceilingz := thing.ceilingz;
 
-    vis.drawn := false;
-
-    midn := Psubsector_t(thing.subsector).sector.midsec;
+    midn := sec.midsec;
     if midn >= 0 then
     begin
       mid := @sectors[midn];
-      if ((vis.gz >= mid.ceilingheight) and (viewz < mid.ceilingheight)) or
-         ((vis.ceilingz <= mid.floorheight) and (viewz > mid.floorheight)) then
-           vis.drawn := true;
       if vis.gz < mid.floorheight then
         sprlights := spritelights2;
-//      if thing.ceilingz < mid.ceilingheight then
-//        donclip3dfloor := viewz < mid.floorheight
-//      else if thing.floorz > mid.floorheight then
-//        donclip3dfloor := viewz > mid.ceilingheight;
     end;
   end;
 
@@ -1840,16 +1878,12 @@ begin
     vis.colormap := sprlights[index]; // JVAL: 3d Floors
   end;
 
-  vis.renderflags := 0;
   if (vis.colormap = nil) or
      {$IFDEF HEXEN}(vis.mobjflags and (MF_SHADOW or MF_ALTSHADOW) <> 0) or {$ENDIF}
      {$IFDEF STRIFE}(vis.mobjflags and MF_SHADOW <> 0) or {$ENDIF}
      (usetransparentsprites and (vis.mo <> nil) and (vis.mo.renderstyle in [mrs_translucent, mrs_add, mrs_subtract])) or
      (usetransparentsprites and (vis.mobjflags_ex and MF_EX_TRANSPARENT <> 0)) then
-    vis.renderflags := VSF_TRANSPARENCY;
-//  if donclip3dfloor then
-//    vis.renderflags := vis.renderflags or VSF_DONTCLIP3DFLOOR;
-
+    vis.renderflags := vis.renderflags or VSF_TRANSPARENCY;
 {$ENDIF}
 
 {$IFDEF OPENGL}
@@ -1921,6 +1955,203 @@ begin
 end;
 
 {$IFNDEF OPENGL}
+//==============================================================================
+//
+// R_SignalPrepareMasked;
+//
+//==============================================================================
+procedure R_SignalPrepareMasked;
+begin
+  maskedpreparesignal := true;
+end;
+
+//==============================================================================
+//
+// R_PrepareSprite
+//
+//==============================================================================
+function R_PrepareSprite(const spr: Pvissprite_t; const islight: Boolean = False): boolean;
+var
+  sx1: integer;
+  sx2: integer;
+  x: integer;
+  cache: Pvisspritecache_t;
+  item: Pvisspritecacheitem_t;
+  ds: Pdrawseg_t;
+  scale: fixed_t;
+  lowscale: fixed_t;
+  silhouette: integer;
+begin
+  if spritecachepos + SizeOf(visspritecache_t) > SPRITECACHESIZE then
+  begin
+    Result := false;
+    exit;
+  end;
+
+  cache := @spritecache[spritecachepos];
+  if islight then
+    spr.lightcache := cache
+  else
+    spr.cache := cache;
+
+  cache.cachesize := 0;
+
+  if islight then
+  begin
+    x := (spr.x2 - spr.x1) div 2;
+    sx1 := spr.x1 - x;
+    sx2 := spr.x2 + x;
+    if sx1 < 0 then
+      sx1 := 0;
+    if sx2 >= viewwidth then
+      sx2 := viewwidth - 1;
+
+    if sx2 < sx1 then
+    begin
+      Result := True;
+      exit; // SOS
+    end;
+  end
+  else if spr.renderflags and VSF_VOXEL <> 0 then
+  begin
+    sx1 := spr.vx1;
+    sx2 := spr.vx2;
+  end
+  else
+  begin
+    sx1 := spr.x1;
+    sx2 := spr.x2;
+  end;
+
+  R_GetDrawsegsForRange(sx1, sx2, cache.fdrawsegs, cache.fds_p);
+
+  // Scan drawsegs from end to start for obscuring segs.
+  // The first drawseg that has a greater scale
+  //  is the clip seg.
+  while cache.fds_p > 0 do
+  begin
+    dec(cache.fds_p);
+    ds := cache.fdrawsegs[cache.fds_p];
+    // determine if the drawseg obscures the sprite
+    if (ds.x1 > sx2) or (ds.x2 < sx1) or ds.maskedquery then
+    begin
+      // does not cover sprite
+      continue;
+    end;
+
+    if spritecachepos + SizeOf(visspritecacheitem_t) > SPRITECACHESIZE then
+    begin
+      Result := false;
+      exit;
+    end;
+
+    item := @cache.cache[cache.cachesize];
+    item.ds := ds;
+
+    if ds.x1 < sx1 then
+      item.r1 := sx1
+    else
+      item.r1 := ds.x1;
+    if ds.x2 > sx2 then
+      item.r2 := sx2
+    else
+      item.r2 := ds.x2;
+
+    if ds.scale1 > ds.scale2 then
+    begin
+      lowscale := ds.scale2;
+      scale := ds.scale1;
+    end
+    else
+    begin
+      lowscale := ds.scale1;
+      scale := ds.scale2;
+    end;
+
+    if (scale < spr.scale) or
+       ((lowscale < spr.scale) and not R_PointOnSegSide(spr.gx, spr.gy, ds.curline)) then
+    begin
+      if (ds.thicksidecol <> nil) and (ds.maskedtexturecol <> nil) then
+      begin
+        item.operation := CACHE_OP_THICK_AND_MASKED;
+        Inc(cache.cachesize);
+        continue;
+      end;
+      if ds.thicksidecol <> nil then
+      begin
+        item.operation := CACHE_OP_THICK;
+        Inc(cache.cachesize);
+        continue;
+      end;
+      if ds.maskedtexturecol <> nil then
+      begin
+        item.operation := CACHE_OP_MASKED;
+        Inc(cache.cachesize);
+        continue;
+      end;
+      continue;
+    end;
+
+    // clip this piece of the sprite
+    silhouette := ds.silhouette;
+
+    if spr.gz >= ds.bsilheight then
+      silhouette := silhouette and not SIL_BOTTOM;
+
+    if spr.gzt <= ds.tsilheight then
+      silhouette := silhouette and not SIL_TOP;
+
+    if silhouette = 1 then
+    begin
+      item.operation := CACHE_OP_SIL1;
+      Inc(cache.cachesize);
+      continue;
+    end
+    else if silhouette = 2 then
+    begin
+      item.operation := CACHE_OP_SIL2;
+      Inc(cache.cachesize);
+      continue;
+    end
+    else if silhouette = 3 then
+    begin
+      item.operation := CACHE_OP_SIL3;
+      Inc(cache.cachesize);
+      continue;
+    end;
+  end;
+
+  spritecachepos := spritecachepos + SizeOf(visspritecache_t) + (cache.cachesize - 1) * SizeOf(visspritecacheitem_t);
+  Result := True;
+end;
+
+//==============================================================================
+//
+// R_PrepareMaked
+//
+//==============================================================================
+procedure R_PrepareMasked;
+var
+  i: integer;
+  spr: Pvissprite_t;
+  dolight: Boolean;
+begin
+  spritecachepos := 0;
+  maskedpreparesignal := false;
+  dolight := uselightboost and (videomode = vm32bit);
+  for i := 0 to vissprite_p - 1 do
+  begin
+    spr := vissprites[i];
+    if dolight then
+      if spr.mobjflags_ex and MF_EX_LIGHT <> 0 then
+        if not R_PrepareSprite(spr, True) then
+          Break;
+    if not R_PrepareSprite(spr) then
+      Break;
+    if maskedpreparesignal then
+      Break;
+  end;
+end;
 
 //==============================================================================
 //
@@ -1939,6 +2170,8 @@ var
   lowscale: fixed_t;
   silhouette: integer;
   i: integer;
+  cache: Pvisspritecache_t;
+  item: Pvisspritecacheitem_t;
   size: integer;
   {$IFDEF DOOM_OR_STRIFE}
   h, mh: fixed_t;
@@ -1947,20 +2180,64 @@ var
   fds_p: integer;
   fdrawsegs: Pdrawsegsbuffer_t;
 begin
-  // JVAL voxel support
-  if spr.voxelflag <> 0 then
-  begin
-    R_DrawVoxel(spr);
-    exit;
-  end;
-
   sx1 := spr.x1;
   sx2 := spr.x2;
   size := sx2 - sx1 + 1;
   memsetsi(@clipbot[sx1], - 2, size);
   memsetsi(@cliptop[sx1], - 2, size);
 
-  R_GetDrawsegsForVissprite(spr, fdrawsegs, fds_p);
+  if spr.cache <> nil then
+  begin
+    cache := spr.cache;
+    for i := 0 to cache.cachesize - 1 do
+    begin
+      item := @cache.cache[i];
+      case item.operation of
+        CACHE_OP_THICK:
+          begin
+            R_RenderThickSideRange(item.ds, item.r1, item.r2);
+          end;
+        CACHE_OP_MASKED:
+          begin
+            R_RenderMaskedSegRange(item.ds, item.r1, item.r2);
+          end;
+        CACHE_OP_THICK_AND_MASKED:
+          begin
+            R_RenderThickSideRange(item.ds, item.r1, item.r2);
+            R_RenderMaskedSegRange(item.ds, item.r1, item.r2);
+          end;
+        CACHE_OP_SIL1:
+          begin
+            ds := item.ds;
+            for x := item.r1 to item.r2 do
+              if clipbot[x] = -2 then
+                clipbot[x] := ds.sprbottomclip[x];
+          end;
+        CACHE_OP_SIL2:
+          begin
+            ds := item.ds;
+            for x := item.r1 to item.r2 do
+              if cliptop[x] = -2 then
+                cliptop[x] := ds.sprtopclip[x];
+          end;
+        CACHE_OP_SIL3:
+          begin
+            ds := item.ds;
+            for x := item.r1 to item.r2 do
+            begin
+              if clipbot[x] = -2 then
+                clipbot[x] := ds.sprbottomclip[x];
+              if cliptop[x] = -2 then
+                cliptop[x] := ds.sprtopclip[x];
+            end;
+          end;
+      end;
+    end;
+    fdrawsegs := cache.fdrawsegs;
+    fds_p := cache.fds_p;
+  end
+  else
+    R_GetDrawsegsForVissprite(spr, fdrawsegs, fds_p);
 
   // Scan drawsegs from end to start for obscuring segs.
   // The first drawseg that has a greater scale
@@ -2146,6 +2423,8 @@ var
   x: integer;
   r1: integer;
   r2: integer;
+  cache: Pvisspritecache_t;
+  item: Pvisspritecacheitem_t;
   scale: fixed_t;
   lowscale: fixed_t;
   silhouette: integer;
@@ -2170,7 +2449,59 @@ begin
   memsetsi(@clipbot[x1], - 2, size);
   memsetsi(@cliptop[x1], - 2, size);
 
-  R_GetDrawsegsForRange(x1, x2, fdrawsegs, fds_p);
+  if spr.lightcache <> nil then
+  begin
+    cache := spr.lightcache;
+    for i := 0 to cache.cachesize - 1 do
+    begin
+      item := @cache.cache[i];
+      case item.operation of
+        CACHE_OP_THICK:
+          begin
+            R_RenderThickSideRange(item.ds, item.r1, item.r2);
+          end;
+        CACHE_OP_MASKED:
+          begin
+            R_RenderMaskedSegRange(item.ds, item.r1, item.r2);
+          end;
+        CACHE_OP_THICK_AND_MASKED:
+          begin
+            R_RenderThickSideRange(item.ds, item.r1, item.r2);
+            R_RenderMaskedSegRange(item.ds, item.r1, item.r2);
+          end;
+        CACHE_OP_SIL1:
+          begin
+            ds := item.ds;
+            for x := item.r1 to item.r2 do
+              if clipbot[x] = -2 then
+                clipbot[x] := ds.sprbottomclip[x];
+          end;
+        CACHE_OP_SIL2:
+          begin
+            ds := item.ds;
+            for x := item.r1 to item.r2 do
+              if cliptop[x] = -2 then
+                cliptop[x] := ds.sprtopclip[x];
+          end;
+        CACHE_OP_SIL3:
+          begin
+            ds := item.ds;
+            for x := item.r1 to item.r2 do
+            begin
+              if clipbot[x] = -2 then
+                clipbot[x] := ds.sprbottomclip[x];
+              if cliptop[x] = -2 then
+                cliptop[x] := ds.sprtopclip[x];
+            end;
+          end;
+      end;
+    end;
+    fdrawsegs := cache.fdrawsegs;
+    fds_p := cache.fds_p;
+  end
+  else
+    R_GetDrawsegsForRange(x1, x2, fdrawsegs, fds_p);
+
   // Scan drawsegs from end to start for obscuring segs.
   // The first drawseg that has a greater scale
   //  is the clip seg.
@@ -2299,6 +2630,7 @@ end;
 procedure R_DoDrawMasked;
 var
   pds: Pdrawseg_t;
+  spr: Pvissprite_t;
   i: integer;
 begin
   if vissprite_p > 0 then
@@ -2309,15 +2641,25 @@ begin
       // 32bit color
       for i := 0 to vissprite_p - 1 do
       begin
-        if vissprites[i].mobjflags_ex and MF_EX_LIGHT <> 0 then
-          R_DrawSpriteLight(vissprites[i]);
-        R_DrawSprite(vissprites[i]);
+        spr := vissprites[i];
+        if spr.mobjflags_ex and MF_EX_LIGHT <> 0 then
+          R_DrawSpriteLight(spr);
+        if spr.renderflags and VSF_VOXEL <> 0 then
+          R_DrawVoxel(spr)
+        else
+          R_DrawSprite(spr);
       end;
     end
     else
     begin
       for i := 0 to vissprite_p - 1 do
-        R_DrawSprite(vissprites[i]);
+      begin
+        spr := vissprites[i];
+        if spr.renderflags and VSF_VOXEL <> 0 then
+          R_DrawVoxel(spr)
+        else
+          R_DrawSprite(spr);
+      end;
     end;
   end;
 
@@ -2358,7 +2700,6 @@ end;
 //==============================================================================
 procedure R_DrawMasked_MultiThread;
 begin
-  R_WaitSortVisSpritesMT;
   if r_uselightmaps then
   begin
     R_MarkLights;

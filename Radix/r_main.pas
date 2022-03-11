@@ -2124,7 +2124,10 @@ var
 procedure R_SetupFrame(player: Pplayer_t);
 var
   i: integer;
-  cy{$IFNDEF OPENGL}, dy, dy1{$ENDIF}: fixed_t;
+  cy: fixed_t;
+{$IFNDEF OPENGL}
+  dy, dy1: fixed_t;
+{$ENDIF}
   sblocks: integer;
   sec: Psector_t;
   cm: integer;
@@ -2349,7 +2352,14 @@ end;
 var
   task_clearplanes: integer = -1;
   task_8bitlights: integer = -1;
-  task_drawseglists: integer = -1;
+  task_maskedstuff: integer = -1;
+
+procedure R_MaskedStuffMT;
+begin
+  R_SortVisSprites;
+  R_SetUpDrawSegLists;
+  R_PrepareMasked;
+end;
 
 //==============================================================================
 //
@@ -2384,10 +2394,10 @@ begin
 
   R_SortVisSpritesMT;
 
-  R_RenderMultiThreadWalls8;
+  task_maskedstuff := MT_ScheduleTask(@R_MaskedStuffMT);
+  MT_ExecutePendingTask(task_maskedstuff);
 
-  task_drawseglists := MT_ScheduleTask(@R_SetUpDrawSegLists);
-  MT_ExecutePendingTask(task_drawseglists);
+  R_RenderMultiThreadWalls8;
 
   R_DrawPlanes;
 
@@ -2400,7 +2410,8 @@ begin
   R_RenderMultiThreadFFloors8;
 
   MT_WaitTask(task_8bitlights);
-  MT_WaitTask(task_drawseglists);
+  R_SignalPrepareMasked;
+  MT_WaitTask(task_maskedstuff);
   R_DrawMasked_MultiThread;
 
   // Check for new console commands.
@@ -2447,10 +2458,10 @@ begin
 
   R_SortVisSpritesMT;
 
-  R_RenderMultiThreadWalls32;
+  task_maskedstuff := MT_ScheduleTask(@R_MaskedStuffMT);
+  MT_ExecutePendingTask(task_maskedstuff);
 
-  task_drawseglists := MT_ScheduleTask(@R_SetUpDrawSegLists);
-  MT_ExecutePendingTask(task_drawseglists);
+  R_RenderMultiThreadWalls32;
 
   R_DrawPlanes;
 
@@ -2462,7 +2473,8 @@ begin
 
   R_RenderMultiThreadFFloors32;
 
-  MT_WaitTask(task_drawseglists);
+  R_SignalPrepareMasked;
+  MT_WaitTask(task_maskedstuff);
   R_DrawMasked_MultiThread;
 
   // Check for new console commands.
