@@ -44,6 +44,7 @@ Speed optimizations in R_PointToAngleEx().
 Speed optimizations to sofrware rendering.
 Improved priority logic for sound channel selection.
 Added support for tall patches in PNG format.
+Use general purpose threads in 8 bit software rendering blit.
 
 20220206 - v.1.1.19.752.r1097
 -----------------------------

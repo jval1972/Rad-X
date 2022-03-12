@@ -118,10 +118,10 @@ uses
   DirectX,
   mt_utils,
   i_system,
-  i_mainwindow,
   i_main,
   i_threads,
   i_displaymodes,
+  i_mainwindow,
   r_hires,
   v_data,
   v_video;
@@ -204,9 +204,6 @@ begin
 end;
 
 var
-  fu8_64a, fu8_64b, fu8_64c, fu8_64d, fu8_64e, fu8_64f, fu8_64g: TDThread;
-
-var
   allocscreensize: integer;
 
 //==============================================================================
@@ -216,18 +213,6 @@ var
 //==============================================================================
 procedure I_ShutDownGraphics;
 begin
-  fu8_64a.Free;
-  fu8_64b.Free;
-  fu8_64c.Free;
-  if fu8_64d <> nil then
-    fu8_64d.Free;
-  if fu8_64e <> nil then
-    fu8_64e.Free;
-  if fu8_64f <> nil then
-    fu8_64f.Free;
-  if fu8_64g <> nil then
-    fu8_64g.Free;
-
   I_ClearInterface(IInterface(g_pDDScreen));
   I_ClearInterface(IInterface(g_pDDSPrimary));
   I_ClearInterface(IInterface(g_pDD));
@@ -240,6 +225,12 @@ end;
 
 var
   stallhack: boolean;
+
+type
+  finishupdateparms_t = record
+    start, stop: integer;
+  end;
+  Pfinishupdateparms_t = ^finishupdateparms_t;
 
 var
   curpal64: array[0..$FFFF] of Int64;
@@ -270,12 +261,12 @@ begin
 end;
 
 //==============================================================================
-// I_BlitBuffer8
+// I_FinishUpdate8
 //
-// I_BlitBuffer
+// I_FinishUpdate
 //
 //==============================================================================
-procedure I_BlitBuffer8(parms: mt_range_p);
+procedure I_FinishUpdate8(parms: Pfinishupdateparms_t);
 var
   dest: PLongWord;
   destw: PWord;
@@ -285,7 +276,7 @@ var
   srcstop: PByte;
 begin
   src := @(screens[SCN_FG][parms.start]);
-  srcstop := @(screens[SCN_FG][parms.finish]);
+  srcstop := @(screens[SCN_FG][parms.stop]);
   if bpp = 32 then
   begin
     dest := @screen[parms.start];
@@ -314,10 +305,10 @@ end;
 
 //==============================================================================
 //
-// I_BlitBuffer8_64
+// I_FinishUpdate8_64
 //
 //==============================================================================
-procedure I_BlitBuffer8_64;
+procedure I_FinishUpdate8_64;
 var
   dest: PInt64;
   src: PWord;
@@ -335,21 +326,27 @@ begin
   end;
 end;
 
+type
+  finishupdate8param_t = record
+    start, finish: integer;
+  end;
+  Pfinishupdate8param_t = ^finishupdate8param_t;
+
 //==============================================================================
 //
-// I_BlitBuffer8_64a
+// I_FinishUpdate8_64a
 //
 //==============================================================================
-function I_BlitBuffer8_64a(p: pointer): integer; stdcall;
+function I_FinishUpdate8_64a(p: pointer): integer; stdcall;
 var
   dest: PInt64;
   src: PWord;
   srcstop: PByte;
 begin
-  src := @(screens[SCN_FG][mt_range_p(p).start]);
-  srcstop := @(screens[SCN_FG][mt_range_p(p).finish]);
+  src := @(screens[SCN_FG][Pfinishupdate8param_t(p).start]);
+  srcstop := @(screens[SCN_FG][Pfinishupdate8param_t(p).finish]);
 
-  dest := @screen[mt_range_p(p).start];
+  dest := @screen[Pfinishupdate8param_t(p).start];
   while integer(src) < integer(srcstop) do
   begin
     dest^ := curpal64[src^];
@@ -366,16 +363,16 @@ end;
 //==============================================================================
 function I_Thr_FinishUpdate8(parms: pointer): integer; stdcall;
 begin
-  I_BlitBuffer8(mt_range_p(parms));
+  I_FinishUpdate8(Pfinishupdateparms_t(parms));
   result := 0;
 end;
 
 //==============================================================================
 //
-// I_BlitBuffer16
+// I_FinishUpdate16
 //
 //==============================================================================
-procedure I_BlitBuffer16;
+procedure I_FinishUpdate16;
 var
   i: integer;
   destw: PWord;
@@ -404,9 +401,8 @@ end;
 //==============================================================================
 procedure I_BlitBuffer;
 var
-  h1: integer;
-  parms1, parms2: mt_range_t;
-  p1, p2, p3, p4, p5, p6, p7, p8: mt_range_t;
+  parms1, parms2: finishupdateparms_t;
+  p1, p2, p3, p4, p5, p6, p7, p8: finishupdate8param_t;
 begin
   if (hMainWnd = 0) or (screens[SCN_FG] = nil) or (screen32 = nil) then
     exit;
@@ -418,7 +414,7 @@ begin
     // JVAL
     // Internal DelphiDoom hi-color rendering engine works in 32 bits
     // If we have a 16 bit depth desktop we get a bit slower performance ....
-      I_BlitBuffer16;
+      I_FinishUpdate16;
     end;
     // if bpp = 32 <- we don't do nothing, directly drawing was performed
   end
@@ -434,9 +430,10 @@ begin
           p1.finish := (SCREENWIDTH * SCREENHEIGHT div 2) and not 3;
           p2.start := p1.finish + 1;
           p2.finish := SCREENWIDTH * SCREENHEIGHT - 1;
-          fu8_64a.Activate(@p1);
-          I_BlitBuffer8_64a(@p2);
-          fu8_64a.Wait;
+          MT_Execute(
+            @I_FinishUpdate8_64a, @p1,
+            @I_FinishUpdate8_64a, @p2
+          );
         end
         else if I_GetNumCPUs <= 4 then
         begin
@@ -446,15 +443,11 @@ begin
           p2.finish := (2 * SCREENWIDTH * SCREENHEIGHT div 3) and not 3;
           p3.start := p2.finish + 1;
           p3.finish := SCREENWIDTH * SCREENHEIGHT - 1;
-          fu8_64a.Activate(@p1);
-          fu8_64b.Activate(@p2);
-          I_BlitBuffer8_64a(@p3);
-          while not fu8_64a.CheckJobDone do
-          begin
-            fu8_64b.CheckJobDone;
-            I_Sleep(0);
-          end;
-          fu8_64b.Wait;
+          MT_Execute(
+            @I_FinishUpdate8_64a, @p1,
+            @I_FinishUpdate8_64a, @p2,
+            @I_FinishUpdate8_64a, @p3
+          );
         end
         else if I_GetNumCPUs <= 6 then
         begin
@@ -466,18 +459,12 @@ begin
           p3.finish := (3 * SCREENWIDTH * SCREENHEIGHT div 4) and not 3;
           p4.start := p3.finish + 1;
           p4.finish := SCREENWIDTH * SCREENHEIGHT - 1;
-          fu8_64a.Activate(@p1);
-          fu8_64b.Activate(@p2);
-          fu8_64c.Activate(@p3);
-          I_BlitBuffer8_64a(@p4);
-          while not fu8_64a.CheckJobDone do
-          begin
-            fu8_64b.CheckJobDone;
-            fu8_64c.CheckJobDone;
-            I_Sleep(0);
-          end;
-          fu8_64b.Wait;
-          fu8_64c.Wait;
+          MT_Execute(
+            @I_FinishUpdate8_64a, @p1,
+            @I_FinishUpdate8_64a, @p2,
+            @I_FinishUpdate8_64a, @p3,
+            @I_FinishUpdate8_64a, @p4
+          );
         end
         else
         begin
@@ -497,51 +484,38 @@ begin
           p7.finish := (7 * SCREENWIDTH * SCREENHEIGHT div 8) and not 3;
           p8.start := p7.finish + 1;
           p8.finish := SCREENWIDTH * SCREENHEIGHT - 1;
-          fu8_64a.Activate(@p1);
-          fu8_64b.Activate(@p2);
-          fu8_64c.Activate(@p3);
-          fu8_64d.Activate(@p4);
-          fu8_64e.Activate(@p5);
-          fu8_64f.Activate(@p6);
-          fu8_64g.Activate(@p7);
-          I_BlitBuffer8_64a(@p8);
-          while not fu8_64a.CheckJobDone do
-          begin
-            fu8_64b.CheckJobDone;
-            fu8_64c.CheckJobDone;
-            fu8_64d.CheckJobDone;
-            fu8_64e.CheckJobDone;
-            fu8_64f.CheckJobDone;
-            fu8_64g.CheckJobDone;
-            I_Sleep(0);
-          end;
-          fu8_64b.Wait;
-          fu8_64c.Wait;
-          fu8_64d.Wait;
-          fu8_64e.Wait;
-          fu8_64f.Wait;
-          fu8_64g.Wait;
+          MT_Execute(
+            @I_FinishUpdate8_64a, @p1,
+            @I_FinishUpdate8_64a, @p2,
+            @I_FinishUpdate8_64a, @p3,
+            @I_FinishUpdate8_64a, @p4,
+            @I_FinishUpdate8_64a, @p5,
+            @I_FinishUpdate8_64a, @p6,
+            @I_FinishUpdate8_64a, @p7,
+            @I_FinishUpdate8_64a, @p8
+          );
         end
       end
       else
-        I_BlitBuffer8_64
+        I_FinishUpdate8_64
     end
     else
     begin
       parms1.start := 0;
       if usemultithread then
       begin
-        parms1.finish := SCREENWIDTH * SCREENHEIGHT div 2;
-        parms2.start := parms1.finish + 1;
-        parms2.finish := SCREENWIDTH * SCREENHEIGHT - 1;
-        h1 := I_CreateProcess(@I_Thr_FinishUpdate8, @parms2, false);
-        I_BlitBuffer8(@parms1);
-        I_WaitForProcess(h1, 1000);
+        parms1.stop := SCREENWIDTH * SCREENHEIGHT div 2;
+        parms2.start := parms1.stop + 1;
+        parms2.stop := SCREENWIDTH * SCREENHEIGHT - 1;
+        MT_Execute(
+          @I_Thr_FinishUpdate8, @parms1,
+          @I_Thr_FinishUpdate8, @parms2
+        );
       end
       else
       begin
-        parms1.finish := SCREENWIDTH * SCREENHEIGHT - 1;
-        I_BlitBuffer8(@parms1);
+        parms1.stop := SCREENWIDTH * SCREENHEIGHT - 1;
+        I_FinishUpdate8(@parms1);
       end;
     end;
   end;
@@ -733,23 +707,6 @@ begin
 
   I_EnumDisplayModes;
 
-  fu8_64a := TDThread.Create(I_BlitBuffer8_64a);
-  fu8_64b := TDThread.Create(I_BlitBuffer8_64a);
-  fu8_64c := TDThread.Create(I_BlitBuffer8_64a);
-  if I_GetNumCPUs > 6 then
-  begin
-    fu8_64d := TDThread.Create(I_BlitBuffer8_64a);
-    fu8_64e := TDThread.Create(I_BlitBuffer8_64a);
-    fu8_64f := TDThread.Create(I_BlitBuffer8_64a);
-    fu8_64g := TDThread.Create(I_BlitBuffer8_64a);
-  end
-  else
-  begin
-    fu8_64d := nil;
-    fu8_64e := nil;
-    fu8_64f := nil;
-    fu8_64g := nil;
-  end;
 ///////////////////////////////////////////////////////////////////////////
 // Create the main DirectDraw object
 ///////////////////////////////////////////////////////////////////////////
