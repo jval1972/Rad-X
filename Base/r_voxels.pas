@@ -2069,15 +2069,18 @@ begin
             dc_yl := last_top;
             dc_yh := last_bot;
 
-            if depthbufferactive then
+            if dc_yl <= dc_yh then
             begin
-              if renderflags and VSF_TRANSPARENCY <> 0 then
-                R_DrawBatchColumnWithDepthBufferCheckOnly(batchcolfunc, depth)
+              if depthbufferactive then
+              begin
+                if renderflags and VSF_TRANSPARENCY <> 0 then
+                  R_DrawBatchColumnWithDepthBufferCheckOnly(batchcolfunc, depth)
+                else
+                  R_DrawBatchColumnWithDepthBufferCheckWrite(batchcolfunc, depth)
+              end
               else
-                R_DrawBatchColumnWithDepthBufferCheckWrite(batchcolfunc, depth)
-            end
-            else
-              batchcolfunc;
+                batchcolfunc;
+            end;
 
             last_top := cur_top;
             last_bot := cur_bot;
@@ -2093,15 +2096,18 @@ begin
           dc_yl := last_top;
           dc_yh := last_bot;
 
-          if depthbufferactive then
+          if dc_yl <= dc_yh then
           begin
-            if renderflags and VSF_TRANSPARENCY <> 0 then
-              R_DrawBatchColumnWithDepthBufferCheckOnly(batchcolfunc, depth)
+            if depthbufferactive then
+            begin
+              if renderflags and VSF_TRANSPARENCY <> 0 then
+                R_DrawBatchColumnWithDepthBufferCheckOnly(batchcolfunc, depth)
+              else
+                R_DrawBatchColumnWithDepthBufferCheckWrite(batchcolfunc, depth)
+            end
             else
-              R_DrawBatchColumnWithDepthBufferCheckWrite(batchcolfunc, depth)
-          end
-          else
-            batchcolfunc;
+              batchcolfunc;
+          end;
         end;
 
         col := col.next;
