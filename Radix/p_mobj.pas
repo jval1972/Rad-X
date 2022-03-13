@@ -937,7 +937,7 @@ begin
         grav := grav div 2;
 
     if mo.momz = 0 then
-      mo.momz := - grav * 2
+      mo.momz := -grav * 2
     else
       mo.momz := mo.momz - grav;
 
@@ -1221,7 +1221,7 @@ begin
   // calling action functions at transitions
   if mobj.tics <> -1 then
   begin
-    mobj.tics := mobj.tics - 1;
+    dec(mobj.tics);
 
     // you can cycle through multiple states in a tic
     if mobj.tics = 0 then
@@ -1240,9 +1240,7 @@ begin
     mobj.movecount := mobj.movecount + 1;
 
     if mobj.movecount < 12 * TICRATE then
-    begin
       exit;
-    end;
 
     if leveltime and 31 <> 0 then
       exit;
