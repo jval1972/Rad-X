@@ -1144,6 +1144,7 @@ end;
 procedure P_DoMobjThinker(mobj: Pmobj_t);
 var
   onmo: Pmobj_t;
+  pl: Pplayer_t;
 begin
   // momentum movement
   if (mobj.momx <> 0) or
@@ -1156,9 +1157,7 @@ begin
       P_FixPlayerViewz(mobj.player);
 
     if not Assigned(mobj.thinker._function.acv) then
-    begin
       exit; // mobj was removed
-    end;
   end;
 
   if mobj.flags_ex and MF_EX_FLOATBOB <> 0 then
@@ -1184,12 +1183,13 @@ begin
           P_ZMovement(mobj)
         else
         begin
+          pl := mobj.player;
           if (mobj.player <> nil) and (mobj.momz < 0) then
           begin
             mobj.flags2_ex := mobj.flags2_ex or MF2_EX_ONMOBJ;
             mobj.momz := 0;
           end;
-          if (mobj.player <> nil) and (onmo.player <> nil) then
+          if (pl <> nil) and (onmo.player <> nil) then
           begin
             mobj.momx := onmo.momx;
             mobj.momy := onmo.momy;
@@ -1202,6 +1202,21 @@ begin
                 Pplayer_t(onmo.player).deltaviewheight := (PVIEWHEIGHT - Pplayer_t(onmo.player).viewheight) div 8;
               end;
               onmo.z := onmo.floorz;
+            end;
+          end
+          else if pl <> nil then
+          begin
+            if onmo.z + onmo.height - mobj.z <= 24 * FRACUNIT then
+            begin
+              pl.viewheight := pl.viewheight - onmo.z + onmo.height - mobj.z;
+              pl.deltaviewheight := _SHR3(PVIEWHEIGHT - pl.viewheight);
+              mobj.z := onmo.z + onmo.height;
+              mobj.flags2_ex := mobj.flags2_ex or MF2_EX_ONMOBJ;
+              mobj.momz := 0;
+            end
+            else
+            begin // hit the bottom of the blocking mobj
+              mobj.momz := 0;
             end;
           end;
         end;

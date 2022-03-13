@@ -524,7 +524,20 @@ end;
 
 //==============================================================================
 //
-// JVAL: 20200308 - New function
+// JVAL: 20220313 - New function
+// P_ThingHeightOffsZ
+//
+//==============================================================================
+function P_ThingHeightOffsZ(const mo: Pmobj_t): fixed_t;
+begin
+  if mo.flags and MF_SPAWNCEILING <> 0 then
+    result := mo.height
+  else
+    result := 0;
+end;
+
+//==============================================================================
+//
 // P_ThingsInSameZ
 //
 //==============================================================================
@@ -532,7 +545,7 @@ function P_ThingsInSameZ(const A, B: Pmobj_t): boolean;
 var
   Az1, Az2, Bz1, Bz2: fixed_t;
 begin
-  Az1 := A.z - A.height div 2;
+  Az1 := A.z - P_ThingHeightOffsZ(A);
   if Az1 < A.floorz then
     Az1 := A.floorz;
   Az2 := Az1 + A.height;
@@ -544,7 +557,7 @@ begin
       Az1 := A.floorz;
   end;
 
-  Bz1 := B.z - B.height div 2;
+  Bz1 := B.z - P_ThingHeightOffsZ(B);
   if Bz1 < B.floorz then
     Bz1 := B.floorz;
   Bz2 := Bz1 + B.height;
@@ -557,10 +570,10 @@ begin
   end;
 
   result :=
-    IsIntegerInRange(Az1, Bz1, Bz2) or
-    IsIntegerInRange(Az2, Bz1, Bz2) or
-    IsIntegerInRange(Bz1, Az1, Az2) or
-    IsIntegerInRange(Bz2, Az1, Az2);
+    IsIntegerInRange(Az1, Bz1 + 1, Bz2 - 1) or
+    IsIntegerInRange(Az2, Bz1 + 1, Bz2 - 1) or
+    IsIntegerInRange(Bz1, Az1 + 1, Az2 - 1) or
+    IsIntegerInRange(Bz2, Az1 + 1, Az2 - 1);
 end;
 
 //==============================================================================

@@ -46,6 +46,7 @@ Improved priority logic for sound channel selection.
 Added support for tall patches in PNG format.
 Use general purpose threads in 8 bit software rendering blit.
 Optimizations to voxel software rendering.
+Fixed to 3d colissions of actors moving up or down other actors.
 
 20220206 - v.1.1.19.752.r1097
 -----------------------------
