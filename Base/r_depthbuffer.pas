@@ -306,13 +306,13 @@ begin
   if I_GetNumCPUs <= 4 then
   begin
     ts := size div 4;
-    r1.start  := dbspan_y_min;
+    r1.start := dbspan_y_min;
     r1.finish := r1.start + ts;
-    r2.start  := r1.finish + 1;
+    r2.start := r1.finish + 1;
     r2.finish := r2.start + ts;
-    r3.start  := r2.finish + 1;
+    r3.start := r2.finish + 1;
     r3.finish := r3.start + ts;
-    r4.start  := r3.finish + 1;
+    r4.start := r3.finish + 1;
     r4.finish := dbspan_y_max;
     MT_Execute4i(
       @_thr_span_db_writer,

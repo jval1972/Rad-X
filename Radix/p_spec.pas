@@ -3854,10 +3854,10 @@ begin
 
     tmpusher := p; // MT_PUSH/MT_PULL point source
     radius := p.radius; // where force goes to zero
-    tmbbox[BOXTOP]    := p.y + radius;
+    tmbbox[BOXTOP] := p.y + radius;
     tmbbox[BOXBOTTOM] := p.y - radius;
-    tmbbox[BOXRIGHT]  := p.x + radius;
-    tmbbox[BOXLEFT]   := p.x - radius;
+    tmbbox[BOXRIGHT] := p.x + radius;
+    tmbbox[BOXLEFT] := p.x - radius;
 
     xl := MapBlockIntX(int64(tmbbox[BOXLEFT]) - int64(bmaporgx) - MAXRADIUS);
     xh := MapBlockIntX(int64(tmbbox[BOXRIGHT]) - int64(bmaporgx) + MAXRADIUS);

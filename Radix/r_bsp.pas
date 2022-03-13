@@ -211,7 +211,7 @@ begin
         end;
       end;
 
-      tempsec.lightlevel  := ss.lightlevel;
+      tempsec.lightlevel := ss.lightlevel;
 
       if floorlightlevel <> nil then
       begin

@@ -205,7 +205,7 @@ begin
     TOBuffer_Wave_Failure;
 
   // Create the data chunk that holds the waveform samples.
-  ckOut.ckid   := Ord('d') or (Ord('a') shl 8) or (Ord('t') shl 16) or (Ord('a') shl 24);
+  ckOut.ckid := Ord('d') or (Ord('a') shl 8) or (Ord('t') shl 16) or (Ord('a') shl 24);
   ckOut.cksize := 0;
   if (mmioCreateChunk(hmmioOut, @ckOut, 0) <> MMSYSERR_NOERROR) then
     TOBuffer_Wave_Failure;
