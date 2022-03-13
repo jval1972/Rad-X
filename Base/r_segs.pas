@@ -523,7 +523,7 @@ begin
       sprtopscreen := FixedInt64(t); }
 
      //t -> double (delphidoom)
-     spryscale_dbl := spryscale / FRACUNIT;
+      spryscale_dbl := spryscale / FRACUNIT;
       t := centery - texturemid_dbl * spryscale_dbl;
       if (t + (textureheight[texnum] / FRACUNIT) * spryscale_dbl < 0) or (t > SCREENHEIGHT * 2) or (t < -32000.0) then
       begin
