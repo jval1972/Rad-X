@@ -512,8 +512,8 @@ var
   wasonslope: boolean;
   oldsector: Psector_t;
   speed: fixed_t;
-  tangle, langle: angle_t;
-  anglediff, newangle: angle_t;
+{  tangle, langle: angle_t;
+  anglediff, newangle: angle_t;}
   dobounce: boolean;
   sfront, sback: Psector_t;
   ltop, lbottom: fixed_t;
