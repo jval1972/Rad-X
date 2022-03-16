@@ -1329,6 +1329,14 @@ begin
 
   end;
 
+  if stackceiling then
+  begin
+    if thing.z + FRACUNIT >= thing.floorz then
+      thing.z := thing.z - FRACUNIT;
+    result := false;
+    exit;
+  end;
+
   // the move is ok,
   // so link the thing into its new position
   oldfloorz := P_FloorHeight(thing.x, thing.y); // JVAL: Slopes
