@@ -48,6 +48,7 @@ Use general purpose threads in 8 bit software rendering blit.
 Optimizations to voxel software rendering.
 Fixes to 3d colissions of actors moving up or down other actors.
 Player movement collisions.
+Small optimizations to plane rendering (software mode).
 
 20220206 - v.1.1.19.752.r1097
 -----------------------------
