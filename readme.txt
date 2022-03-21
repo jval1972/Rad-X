@@ -49,6 +49,7 @@ Optimizations to voxel software rendering.
 Fixes to 3d colissions of actors moving up or down other actors.
 Player movement collisions.
 Small optimizations to plane rendering (software mode).
+Added SPIN field in VOXELDEF lumps, it compines DROPPEDSPIN & PLACEDSPIN behavior.
 
 20220206 - v.1.1.19.752.r1097
 -----------------------------
