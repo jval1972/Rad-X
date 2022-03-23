@@ -532,8 +532,6 @@ end;
 function FixedDivEx(const a, b: fixed_t): fixed_t;
 var
   ret: Double;
-  ad: Double;
-  bd: Double;
 begin
   if b = 0 then
   begin
@@ -544,13 +542,10 @@ begin
   end
   else
   begin
-    ad := a / FRACUNIT;
-    bd := b / FRACUNIT;
-    ret := (ad / bd) * FRACUNIT;
-    ret := Round(ret);
-    if ret < MININT then
+    ret := (a / b) * FRACUNIT;
+    if ret < MININT + 1 then
       result := MININT
-    else if ret > MAXINT then
+    else if ret > MAXINT - 1 then
       result := MAXINT
     else
       result := Round(ret);
