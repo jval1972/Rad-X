@@ -105,16 +105,17 @@
 
       // Lookup pixel from flat texture tile,
       //  transformed using light of ds_lightlevel
-      c := ds_source32[spot];
 {$IFDEF INVERSECOLORMAPS}
+        c := ds_source32[spot];
         r1 := c;
         g1 := c shr 8;
         b1 := c shr 16;
         destl^ := precal32_ic[r1 + g1 + b1];
 {$ELSE}
 {$IFDEF TRANSPARENTFLAT}
-      destl^ := R_ColorMidAverage(c, destl^);
+      destl^ := R_ColorMidAverage(ds_source32[spot], destl^);
 {$ELSE}
+      c := ds_source32[spot];
       destl^ := bf_r[c and $FF] + bf_g[(c shr 8) and $FF] + bf_b[(c shr 16) and $FF];
 {$ENDIF}
 {$ENDIF}
