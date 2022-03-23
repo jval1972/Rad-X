@@ -66,7 +66,6 @@ var
   ystep: fixed_t;
   destl: PLongWord;
   count: integer;
-  i: integer;
   spot: integer;
 
   r1, g1, b1: byte;
