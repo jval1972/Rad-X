@@ -702,19 +702,11 @@ begin
   ds_x1 := x1;
   cnt := 0;
 
-{  tsin := sin(-ds_angle / ANGLE_MAX * 2 * pi);
-  tcos := cos(-ds_angle / ANGLE_MAX * 2 * pi);
-
-  tviewx := Round(viewx * tcos - viewy * tsin);
-  tviewy := Round(viewx * tsin + viewy * tcos);}
   tsin := ds_sine;
   tcos := ds_cosine;
 
   tviewx := Round((viewx - ds_anglex) * tcos - (viewy - ds_angley) * tsin) + ds_anglex;
   tviewy := Round((viewx - ds_anglex) * tsin + (viewy - ds_angley) * tcos) + ds_angley;
-
-//  tviewx := Round(viewx * tcos - viewy * tsin) + ds_anglex;
-//  tviewy := Round(viewx * tsin + viewy * tcos) + ds_angley;
 
   // JVAL: 20200430 - For slope lightmap
   yslopey := slyslope[y];
