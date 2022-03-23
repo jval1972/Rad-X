@@ -388,7 +388,7 @@ begin
       Theta := x - xleft;
       rTheta := screenDX - Theta;
 
-      distance := Abs(Round(1.0 / (rTheta / zleft + Theta / zright)));
+      distance := Abs(Round(1.0 / (rTheta * inv_zleft + Theta * inv_zright)));
     end;
 
     len := FixedMul(distance, distscale[x]);
