@@ -51,6 +51,7 @@ Player movement collisions.
 Small optimizations to plane rendering (software mode).
 Added SPIN field in VOXELDEF lumps, it compines DROPPEDSPIN & PLACEDSPIN behavior.
 If depthbuffer is active will draw sprites from front to back to avoid overdraw.
+Fixed some glitches in software rendering regarding voxels and 3d floors.
 
 20220206 - v.1.1.19.752.r1097
 -----------------------------

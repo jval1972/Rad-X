@@ -1779,8 +1779,13 @@ begin
     {$ENDIF}
 
     mscale := mip.mipscale;
-    // Obtain sorted back to front column list
-    mipcols := mip.columnssortorder[rot];
+
+    if depthbufferactive then
+      // Obtain sorted front to back column list
+      mipcols := mip.columnssortorder[(rot + 4) and 7]
+    else
+      // Obtain sorted back to front column list
+      mipcols := mip.columnssortorder[rot];
 
     floorz := thing.floorz;
     ceilz := thing.ceilingz;
@@ -2062,9 +2067,9 @@ begin
             if depthbufferactive then
             begin
               if renderflags and VSF_TRANSPARENCY <> 0 then
-                R_DrawBatchColumnWithDepthBufferCheckOnly(batchcolfunc, depth)
+                R_DrawBatchColumnWithDepthBufferCheckOnly(batchcolfunc, scaley0)
               else
-                R_DrawBatchColumnWithDepthBufferCheckWrite(batchcolfunc, depth)
+                R_DrawBatchColumnWithDepthBufferCheckWrite(batchcolfunc, scaley0)
             end
             else
               batchcolfunc;
@@ -2107,9 +2112,9 @@ begin
               if depthbufferactive then
               begin
                 if renderflags and VSF_TRANSPARENCY <> 0 then
-                  R_DrawBatchColumnWithDepthBufferCheckOnly(batchcolfunc, depth)
+                  R_DrawBatchColumnWithDepthBufferCheckOnly(batchcolfunc, scaley0)
                 else
-                  R_DrawBatchColumnWithDepthBufferCheckWrite(batchcolfunc, depth)
+                  R_DrawBatchColumnWithDepthBufferCheckWrite(batchcolfunc, scaley0)
               end
               else
                 batchcolfunc;
@@ -2134,9 +2139,9 @@ begin
             if depthbufferactive then
             begin
               if renderflags and VSF_TRANSPARENCY <> 0 then
-                R_DrawBatchColumnWithDepthBufferCheckOnly(batchcolfunc, depth)
+                R_DrawBatchColumnWithDepthBufferCheckOnly(batchcolfunc, scaley0)
               else
-                R_DrawBatchColumnWithDepthBufferCheckWrite(batchcolfunc, depth)
+                R_DrawBatchColumnWithDepthBufferCheckWrite(batchcolfunc, scaley0)
             end
             else
               batchcolfunc;
