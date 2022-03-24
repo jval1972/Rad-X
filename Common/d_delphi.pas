@@ -1488,6 +1488,8 @@ function readablestring(const s: string): string;
 //==============================================================================
 function CharPos(const ch: Char; const s: string): integer;
 
+procedure FillDWord(const dest: Pointer; Count: Integer; Value: LongWord); assembler; register;
+
 implementation
 
 uses
@@ -6950,6 +6952,16 @@ begin
       exit;
     end;
   result := 0;
+end;
+
+procedure FillDWord(const dest: Pointer; Count: Integer; Value: LongWord); assembler; register;
+asm
+  push edi
+  mov  edi, eax  // assign Destination
+  mov  eax, ecx  // assign Value
+  mov  ecx, edx
+  rep  stosd
+  pop edi
 end;
 
 end.
