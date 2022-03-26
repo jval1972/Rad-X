@@ -270,7 +270,7 @@ begin
     else
       tmp := SourceSize;
     dec(SourceSize, tmp);
-    move(Sourc.Ptr^, s^, tmp);
+    Move(Sourc.Ptr^, s^, tmp);
     w := FastPackSeg(s, t, tmp);
     inc(Sourc.Long, tmp);
     Move(w, Targ.Ptr^, 2);
