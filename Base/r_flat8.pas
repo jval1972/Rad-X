@@ -200,7 +200,7 @@ const
 // _flat_thread_worker8
 //
 //==============================================================================
-procedure _flat_thread_worker8(const p: pointer) stdcall;
+procedure _flat_thread_worker8(const p: pointer); stdcall;
 var
   item1, item2: Pflatrenderinfo8_t;
 begin
@@ -423,7 +423,7 @@ end;
 // _flat3D_thread_worker8
 //
 //==============================================================================
-procedure _flat3D_thread_worker8(const p: pointer) stdcall;
+procedure _flat3D_thread_worker8(const p: pointer); stdcall;
 var
   item1, item2: Pflatrenderinfo8_t;
   start, finish: integer;
