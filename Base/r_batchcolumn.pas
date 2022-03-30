@@ -1472,12 +1472,12 @@ var
   count: integer;
   dest: PByte;
   b: byte;
-  u: integer;
   frac: fixed_t;
   fracstep: fixed_t;
   fraclimit: fixed_t;
   swidth: integer;
   cnt: integer;
+  tbl: PByteArray;
 begin
   count := dc_yh - dc_yl;
 
@@ -1506,11 +1506,11 @@ begin
   //  using a lighting/special effects LUT.
 
     b := dc_colormap[dc_source[(LongWord(frac) shr FRACBITS) and 127]];
-    u := b shl 8;
+    tbl := @averagetrans8table[b shl 8];
     cnt := num_batch_columns;
     while cnt > 0 do
     begin
-      dest^ := averagetrans8table[dest^ + u];
+      dest^ := tbl[dest^];
       inc(dest);
       dec(cnt);
     end;
@@ -1529,16 +1529,16 @@ end;
 procedure R_DrawColumnAverageHi_Batch;
 var
   count: integer;
-  destl: PLongWord;
+  destb: PByte;
   frac: fixed_t;
   fracstep: fixed_t;
   swidth: integer;
-  cnt: integer;
+  deststop: PByte;
 
 // For inline color averaging
   r1, g1, b1: byte;
-  r2, g2, b2: byte;
-  c3, c4, r, g, b: LongWord;
+  c3: LongWord;
+  rr, gg, bb: PByteArray;
 
 begin
   count := dc_yh - dc_yl;
@@ -1546,7 +1546,7 @@ begin
   if count < 0 then
     exit;
 
-  destl := @((ylookupl[dc_yl]^)[columnofs[dc_x]]);
+  destb := @((ylookupl[dc_yl]^)[columnofs[dc_x]]);
 
   fracstep := dc_iscale;
   frac := dc_texturemid + (dc_yl - centery) * fracstep;
@@ -1562,23 +1562,21 @@ begin
     r1 := c3;
     g1 := c3 shr 8;
     b1 := c3 shr 16;
+    rr := @average_byte[r1];
+    gg := @average_byte[g1];
+    bb := @average_byte[b1];
 
-    cnt := num_batch_columns;
-    while cnt > 0 do
+    deststop := destb;
+    inc(deststop, 4 * num_batch_columns);
+    while destb <> deststop do
     begin
-      c4 := destl^;
-      r2 := c4;
-      g2 := c4 shr 8;
-      b2 := c4 shr 16;
-      r := (r1 + r2) shr 1;
-      g := (g1 + g2) shr 1;
-      b := (b1 + b2) shr 1;
-      destl^ := r + g shl 8 + b shl 16;
-      inc(destl);
-      dec(cnt);
+      PByteArray(destb)[0] := rr[PByteArray(destb)[0]];
+      PByteArray(destb)[1] := gg[PByteArray(destb)[1]];
+      PByteArray(destb)[2] := bb[PByteArray(destb)[2]];
+      Inc(destb, 4);
     end;
 
-    destl := PLongWord(integer(destl) + swidth);
+    destb := PByte(integer(destb) + swidth);
     inc(frac, fracstep);
     dec(count);
   end;
@@ -1596,12 +1594,12 @@ var
   count: integer;
   dest: PByte;
   b: byte;
-  u: integer;
   frac: fixed_t;
   fracstep: fixed_t;
   fraclimit: fixed_t;
   swidth: integer;
   cnt: integer;
+  tbl: PByteArray;
 begin
   count := dc_yh - dc_yl;
 
@@ -1630,11 +1628,11 @@ begin
   //  using a lighting/special effects LUT.
 
     b := dc_colormap[dc_source[(LongWord(frac) shr FRACBITS) and 127]];
-    u := b shl 8;
+    tbl := @curtrans8table[b shl 8];
     cnt := num_batch_columns;
     while cnt > 0 do
     begin
-      dest^ := curtrans8table[dest^ + u];
+      dest^ := tbl[dest^];
       inc(dest);
       dec(cnt);
     end;
@@ -1780,12 +1778,12 @@ var
   count: integer;
   dest: PByte;
   b: byte;
-  u: integer;
   frac: fixed_t;
   fracstep: fixed_t;
   fraclimit: fixed_t;
   swidth: integer;
   cnt: integer;
+  tbl: PByteArray;
 begin
   count := dc_yh - dc_yl;
 
@@ -1814,11 +1812,11 @@ begin
   //  using a lighting/special effects LUT.
 
     b := dc_colormap[dc_source[(LongWord(frac) shr FRACBITS) and 127]];
-    u := b shl 8;
+    tbl := @curadd8table[b shl 8];
     cnt := num_batch_columns;
     while cnt > 0 do
     begin
-      dest^ := curadd8table[dest^ + u];
+      dest^ := tbl[dest^];
       inc(dest);
       dec(cnt);
     end;
@@ -1921,12 +1919,12 @@ var
   count: integer;
   dest: PByte;
   b: byte;
-  u: integer;
   frac: fixed_t;
   fracstep: fixed_t;
   fraclimit: fixed_t;
   swidth: integer;
   cnt: integer;
+  tbl: PByteArray;
 begin
   count := dc_yh - dc_yl;
 
@@ -1955,11 +1953,11 @@ begin
   //  using a lighting/special effects LUT.
 
     b := dc_colormap[dc_source[(LongWord(frac) shr FRACBITS) and 127]];
-    u := b shl 8;
+    tbl := @cursubtract8table[b shl 8];
     cnt := num_batch_columns;
     while cnt > 0 do
     begin
-      dest^ := cursubtract8table[dest^ + u];
+      dest^ := tbl[dest^];
       inc(dest);
       dec(cnt);
     end;

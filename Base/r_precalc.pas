@@ -82,6 +82,11 @@ var
   precalc_fog_g: array[0..255] of PIntegerArray;
   precalc_fog_b: array[0..255] of PIntegerArray;
 {$ENDIF}
+  average_byte: array[0..511] of Byte;
+  average_r: array[0..511] of LongWord;
+  average_g: array[0..511] of LongWord;
+  average_b: array[0..511] of LongWord;
+  add32_c: array[0..511] of Byte;
 
 implementation
 
@@ -160,6 +165,18 @@ begin
   begin
     l := 255 - i div 6;
     precal32_ic[i] := l + l shl 8 + l shl 16;
+  end;
+
+  for i := 0 to 511 do
+  begin
+    average_byte[i] := i div 2;
+    average_r[i] := i div 2;
+    average_g[i] := (i div 2) shl 8;
+    average_b[i] := (i div 2) shl 16;
+    if i > 255 then
+      add32_c[i] := 255
+    else
+      add32_c[i] := i;
   end;
 
 end;
