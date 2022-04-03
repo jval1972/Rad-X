@@ -105,7 +105,7 @@ uses
   m_bbox,
   p_setup,
   p_slopes, // JVAL: Slopes
-  {$IFDEF OPENGL},
+  {$IFDEF OPENGL}
   doomtype,
   r_data,
   r_visplanes,
