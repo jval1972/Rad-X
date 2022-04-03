@@ -1668,6 +1668,8 @@ var
   scaley1: fixed_t;
   scaley2: fixed_t;
   scaley3: fixed_t;
+  scaleymax: fixed_t;
+  scaleymin: fixed_t;
   mipscale: fixed_t;
   mipscale2: fixed_t;
   tmpx: fixed_t;
@@ -1702,9 +1704,9 @@ var
   xscale: fixed_t;
   t_x, t_y, t_z: fixed_t;
   t_ang: angle_t;
-  tmp_top, tmp_bottom: fixed_t;
   vprojection, vprojectiony: fixed_t;
   voxelinfscale: fixed_t;
+  needsscale: boolean;
   vx: integer;
   vx_localsimpleclip: boolean;
   vx_localceilingclip: fixed_t;
@@ -1757,6 +1759,7 @@ begin
 
     // scale y
     voxelinfscale := voxelinf.voxel.fscale;
+    needsscale := voxelinfscale <> FRACUNIT;
     vprojection := projection;
     vprojectiony := projectiony;
 
@@ -1947,6 +1950,22 @@ begin
       else if right < 0 then
         Continue;
 
+      scaleymax := scaley0;
+      if scaley1 > scaleymax then
+        scaleymax := scaley1;
+      if scaley2 > scaleymax then
+        scaleymax := scaley2;
+      if scaley3 > scaleymax then
+        scaleymax := scaley3;
+
+      scaleymin := scaley0;
+      if scaley1 < scaleymin then
+        scaleymin := scaley1;
+      if scaley2 < scaleymin then
+        scaleymin := scaley2;
+      if scaley3 < scaleymin then
+        scaleymin := scaley3;
+
       if vx_simpleclip then
       begin
         num_batch_columns := right - left;
@@ -1981,8 +2000,16 @@ begin
       while col <> nil do
       begin
       // Any optimization inside here will give good fps boost
-        topz := t_z + FixedMul(col.fixedoffset, voxelinfscale);
-        bottomz := topz - FixedMul(col.fixedlength, voxelinfscale);
+        if needsscale then
+        begin
+          topz := t_z + FixedMul(col.fixedoffset, voxelinfscale);
+          bottomz := topz - FixedMul(col.fixedlength, voxelinfscale);
+        end
+        else
+        begin
+          topz := t_z + col.fixedoffset;
+          bottomz := topz - col.fixedlength;
+        end;
         if topz > ceilz then
           topz := ceilz;
         if bottomz < floorz then
@@ -1990,38 +2017,8 @@ begin
         tr_topz := topz - viewz;
         tr_bottomz := bottomz - viewz;
 
-        top := FixedInt_FixedMul(tr_topz, scaley0);
-        bottom := FixedInt_FixedMul(tr_bottomz, scaley0);
-
-        tmp_top := FixedInt_FixedMul(tr_topz, scaley1);
-        if top < tmp_top then
-          top := tmp_top
-        else
-        begin
-          tmp_bottom := FixedInt_FixedMul(tr_bottomz, scaley1);
-          if bottom > tmp_bottom then
-            bottom := tmp_bottom;
-        end;
-
-        tmp_top := FixedInt_FixedMul(tr_topz, scaley2);
-        if top < tmp_top then
-          top := tmp_top
-        else
-        begin
-          tmp_bottom := FixedInt_FixedMul(tr_bottomz, scaley2);
-          if bottom > tmp_bottom then
-            bottom := tmp_bottom;
-        end;
-
-        tmp_top := FixedInt_FixedMul(tr_topz, scaley3);
-        if top < tmp_top then
-          top := tmp_top
-        else
-        begin
-          tmp_bottom := FixedInt_FixedMul(tr_bottomz, scaley3);
-          if bottom > tmp_bottom then
-            bottom := tmp_bottom;
-        end;
+        top := FixedInt_FixedMul(tr_topz, scaleymin);
+        bottom := FixedInt_FixedMul(tr_bottomz, scaleymax);
 
         top := centery - top;
         bottom := centery - bottom;

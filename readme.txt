@@ -54,6 +54,7 @@ If depthbuffer is active will draw sprites from front to back to avoid overdraw.
 Fixed some glitches in software rendering regarding voxels and 3d floors.
 Speed optimizations to slope software rendering.
 Small optimizations to software depthbuffer.
+Speed optimizations to voxel software rendering.
 
 20220206 - v.1.1.19.752.r1097
 -----------------------------
