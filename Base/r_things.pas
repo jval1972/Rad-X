@@ -186,6 +186,7 @@ var
 {$IFNDEF OPENGL}
 const
   SPRITECACHESIZE = 8192 * 1024;
+  SPRITECACHESIZESAFELIMIT = SPRITECACHESIZE - 256 * 1024;
 
 var
   spritecache: array[0..SPRITECACHESIZE - 1] of Byte;
@@ -1991,7 +1992,7 @@ var
   lowscale: fixed_t;
   silhouette: integer;
 begin
-  if spritecachepos + SizeOf(visspritecache_t) > SPRITECACHESIZE then
+  if spritecachepos + SizeOf(visspritecache_t) > SPRITECACHESIZESAFELIMIT then
   begin
     Result := false;
     exit;
@@ -2046,12 +2047,6 @@ begin
     begin
       // does not cover sprite
       continue;
-    end;
-
-    if spritecachepos + SizeOf(visspritecacheitem_t) > SPRITECACHESIZE then
-    begin
-      Result := false;
-      exit;
     end;
 
     item := @cache.cache[cache.cachesize];
