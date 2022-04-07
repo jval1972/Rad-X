@@ -40,9 +40,6 @@ interface
 uses
   Windows;
 
-const
-  WINDOW_STYLE = (WS_OVERLAPPED);
-
 //==============================================================================
 //
 // DoomMain
@@ -162,8 +159,8 @@ begin
     exStyle,
     WindowClass.lpszClassName,
     AppTitle,
-    WINDOW_STYLE,
-    0, 0, 0, 0,
+    WINDOW_STYLE_FS,
+    windowxpos, windowypos, 0, 0,
     0,
     0,
     HInstance,
