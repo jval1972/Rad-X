@@ -55,6 +55,7 @@ Fixed some glitches in software rendering regarding voxels and 3d floors.
 Speed optimizations to slope software rendering.
 Small optimizations to software depthbuffer.
 Speed optimizations to voxel software rendering.
+Proper windowed mode (Software & OpenGL).
 
 20220206 - v.1.1.19.752.r1097
 -----------------------------
