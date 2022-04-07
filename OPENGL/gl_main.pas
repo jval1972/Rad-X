@@ -725,6 +725,9 @@ begin
     oldfullscreen := intval(fullscreen);
   end;
 
+  if not fullscreen then
+    I_GetWindowPosition(windowxpos, windowypos);
+
   {$IFNDEF HEXEN}
   if (gamestate = GS_ENDOOM) or enterendoom then
   begin
