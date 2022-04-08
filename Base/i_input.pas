@@ -606,7 +606,7 @@ begin
   else
   begin
     val := -val;
-    mflags := mflags and (not val)
+    mflags := mflags and not val;
   end;
 end;
 
