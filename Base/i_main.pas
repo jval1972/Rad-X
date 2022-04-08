@@ -131,6 +131,7 @@ procedure DoomMain;
 var
   WindowClass: TWndClass;
   exStyle: integer;
+  caption: string;
 begin
   I_SetDPIAwareness;
 
@@ -155,10 +156,12 @@ begin
   else
     exStyle := 0;
 
+  caption := D_Version + ' - ' + D_VersionBuilt;
+
   hMainWnd := CreateWindowEx(
     exStyle,
     WindowClass.lpszClassName,
-    AppTitle,
+    PAnsiChar(caption),
     WINDOW_STYLE_FS,
     windowxpos, windowypos, 0, 0,
     0,
