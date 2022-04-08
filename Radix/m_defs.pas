@@ -1110,9 +1110,9 @@ const
      location: @autorunmode;
      setable: DFS_ALWAYS;
      defaultsvalue: '';
-     defaultivalue: 0;
-     defaultbvalue: true;
-     _type: tBoolean),
+     defaultivalue: 2;
+     defaultbvalue: false;
+     _type: tInteger),
 
     (name: 'Keyboard';
      location: nil;
