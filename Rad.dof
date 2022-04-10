@@ -113,8 +113,8 @@ RootDir=
 IncludeVerInfo=1
 AutoIncBuild=1
 MajorVer=1
-MinorVer=1
-Release=19
+MinorVer=2
+Release=20
 Build=753
 Debug=0
 PreRelease=0
@@ -126,13 +126,13 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Jim Valavanis
 FileDescription=RAD
-FileVersion=1.1.19.753
+FileVersion=1.2.20.753
 InternalName=RAD
 LegalCopyright=Copyright 2004-2022, Jim Valavanis
 LegalTrademarks=Copyright 2004-2022, Jim Valavanis
 OriginalFilename=Rad.exe
 ProductName=Rad
-ProductVersion=1.1
+ProductVersion=1.2
 Comments=https://sourceforge.net/projects/rad-x/
 [HistoryLists\hlDebugSourcePath]
 Count=1
