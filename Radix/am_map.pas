@@ -1812,7 +1812,7 @@ begin
   for i := 0 to numsectors - 1 do
   begin
     t := sectors[i].thinglist;
-    // JVAL: 20200429 - Sector thinglist consistancy
+    // JVAL: 20200429 - Sector thinglist consistency
     inc(sectorvalidcount);
     while (t <> nil) and (t.sectorvalidcount <> sectorvalidcount) do
     begin
