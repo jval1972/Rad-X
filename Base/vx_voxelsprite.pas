@@ -770,7 +770,7 @@ var
   i: integer;
   in_loop: boolean;
 begin
-  check := firstword(filename, '.'); // Input is uppercase
+  check := firstword_ch(filename, '.'); // Input is uppercase
   SetLength(check, 5); // SPRITE & FRAME
   in_loop := false;
   for i := 0 to W_NumLumps - 1 do
