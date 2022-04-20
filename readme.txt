@@ -36,6 +36,7 @@ Corrections to external textures caching in software rendering mode.
 Fixed problem with lump reading when a namespace was required.
 It will load KVX voxels even if the ".kvx" extension is not defined in VOXELDEF.
 Improved ZDoom compatiblility in VOXELDEF lumps.
+Speed optimizations to ACTORDEF parsing.
 
 20220410 - v.1.2.20.753.r1230
 -----------------------------
