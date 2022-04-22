@@ -39,6 +39,7 @@ Improved ZDoom compatiblility in VOXELDEF lumps.
 Speed optimizations to ACTORDEF parsing.
 Speed optimizations to PascalScript initialization.
 Speed optimizations to startup memo text output.
+Displays loading time at startup.
 
 20220410 - v.1.2.20.753.r1230
 -----------------------------
