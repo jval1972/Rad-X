@@ -46,6 +46,7 @@ uses
 procedure I_Init;
 
 //==============================================================================
+//
 // I_ZoneBase
 //
 // Called by startup code
@@ -407,12 +408,12 @@ uses
 {$IFNDEF FPC}
   i_startup,
 {$ENDIF}
-  i_mainwindow,
 {$IFDEF OPENGL}
   gl_main,
 {$ELSE}
   i_video,
 {$ENDIF}
+  i_mainwindow,
   d_main,
   d_net,
 {$IFDEF HEXEN}
