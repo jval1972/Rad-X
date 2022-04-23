@@ -4440,9 +4440,9 @@ var
   P: Integer;
 begin
   result := Get(Index);
-  P := AnsiPos('=', result);
+  P := CharPos('=', result);
   if P <> 0 then
-    SetLength(result, P-1)
+    SetLength(result, P - 1)
   else
     SetLength(result, 0);
 end;
@@ -4552,7 +4552,7 @@ begin
   for result := 0 to GetCount - 1 do
   begin
     S := Get(result);
-    P := AnsiPos('=', S);
+    P := CharPos('=', S);
     if (P <> 0) and (AnsiCompareText(Copy(S, 1, P - 1), Name) = 0) then
       Exit;
   end;
@@ -6857,7 +6857,7 @@ begin
   begin
     if inp[i] in splitters then
     begin
-      stmp := strtrim(stmp);
+      trimproc(stmp);
       if stmp <> '' then
       begin
         result.Add(stmp);
