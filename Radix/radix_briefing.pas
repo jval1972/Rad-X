@@ -687,11 +687,11 @@ begin
   for i := sl.Count - 1 downto 0 do
   begin
     stmp := strtrim(sl.Strings[i]);
-    if (Pos(';', stmp) = 1) or (Pos('//', stmp) = 1) or (stmp = '') then
+    if (CharPos(';', stmp) = 1) or (Pos('//', stmp) = 1) or (stmp = '') then
       sl.Delete(i)
     else
     begin
-      p := Pos(':', stmp);
+      p := CharPos(':', stmp);
       if p > 0 then
         stmp[p] := ' ';
       splitstring(stmp, s1, s2);

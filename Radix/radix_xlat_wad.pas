@@ -1630,7 +1630,7 @@ begin
 
     for ch := Chr(33) to Chr(128) do
     begin
-      fidx := Pos(ch, fnt);
+      fidx := CharPos(ch, fnt);
       if fidx > 0 then
       begin
         x := 0;

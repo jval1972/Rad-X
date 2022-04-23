@@ -1017,11 +1017,11 @@ begin
 
   Name := fixpathname(Name);
 
-  p := Pos('\', Name);
+  p := CharPos('\', Name);
   if p = 1 then
   begin
     Delete(Name, 1, 1);
-    p := Pos('\', Name);
+    p := CharPos('\', Name);
     if p = 1 then
       Exit;
   end;

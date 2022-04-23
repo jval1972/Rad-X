@@ -248,9 +248,9 @@ var
 begin
   s := SC_EvalString(s1);
   st := strtrim(strupper(strtrim(s)));
-  pps := Pos('+', st);
-  ppp := Pos('-', st);
-  ppb := Pos(' ', st);
+  pps := CharPos('+', st);
+  ppp := CharPos('-', st);
+  ppb := CharPos(' ', st);
   if (ppb = 0) and (ppp = 0) and (pps = 0) then
   begin
     Result := _stindex(st);
@@ -261,8 +261,8 @@ begin
   //       20191003 rewritten, fixed
   begin
     st := strremovespaces(st);
-    pps := Pos('+', st);
-    ppp := Pos('-', st);
+    pps := CharPos('+', st);
+    ppp := CharPos('-', st);
     if pps > 0 then
     begin
       splitstring(st, fw, sw, '+');

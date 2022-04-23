@@ -219,7 +219,7 @@ begin
     result := DEH_NextLine(s, str, counter);
     exit;
   end;
-  if Pos('#', trimmed) = 1 then
+  if CharPos('#', trimmed) = 1 then
   begin
     result := DEH_NextLine(s, str, counter);
     exit;
@@ -305,7 +305,7 @@ begin
   fnames := TDStringList.Create;
   s := TDStringList.Create;
   try
-    if Pos('.', filename) = 0 then
+    if CharPos('.', filename) = 0 then
     begin
       fnames.Add('%s.%s', [filename, 'deh']);
       fnames.Add('%s.%s', [filename, 'bex']);
@@ -477,7 +477,7 @@ begin
     exit;
   end;
 
-  if Pos('.', fname) = 0 then
+  if CharPos('.', fname) = 0 then
     fname1 := fname + '.bex'
   else
     fname1 := fname;
@@ -543,7 +543,7 @@ begin
     exit;
   end;
 
-  if Pos('.', fname) = 0 then
+  if CharPos('.', fname) = 0 then
     fname1 := fname + '.txt'
   else
     fname1 := fname;
@@ -614,7 +614,7 @@ begin
   headstr := '';
   for i := idx1 + 1 to idx2 + 1 do
     if strtrim(cs.Strings[i]) <> '' then
-      if Pos('#', strtrim(cs.Strings[i])) <> 1 then
+      if CharPos('#', strtrim(cs.Strings[i])) <> 1 then
         if Pos('//', strtrim(cs.Strings[i])) < 1 then
         begin
           if Pos('THING ', strtrim(strupper(cs.Strings[i]))) = 1 then
@@ -638,7 +638,7 @@ begin
   for i := idx1 + 1 to idx2 - 1 do
   begin
     if strtrim(cs.Strings[i]) <> '' then
-      if Pos('#', strtrim(cs.Strings[i])) <> 1 then
+      if CharPos('#', strtrim(cs.Strings[i])) <> 1 then
         if Pos('//', strtrim(cs.Strings[i])) < 1 then
           if Pos('THING ', strtrim(strupper(cs.Strings[i]))) < 1 then
           begin
@@ -673,7 +673,7 @@ begin
     exit;
   end;
 
-  if Pos('.', fname) = 0 then
+  if CharPos('.', fname) = 0 then
     fname1 := fname + '.csv'
   else
     fname1 := fname;
@@ -743,7 +743,7 @@ begin
   for i := idx1 + 1 to idx2 - 1 do
   begin
     if strtrim(cs.Strings[i]) <> '' then
-      if Pos('#', strtrim(cs.Strings[i])) <> 1 then
+      if CharPos('#', strtrim(cs.Strings[i])) <> 1 then
         if Pos('//', strtrim(cs.Strings[i])) < 1 then
           if Pos('FRAME ', strtrim(strupper(cs.Strings[i]))) <> 1 then
           begin
@@ -781,7 +781,7 @@ begin
     exit;
   end;
 
-  if Pos('.', fname) = 0 then
+  if CharPos('.', fname) = 0 then
     fname1 := fname + '.csv'
   else
     fname1 := fname;
@@ -834,7 +834,7 @@ begin
     exit;
   end;
 
-  if Pos('.', fname) = 0 then
+  if CharPos('.', fname) = 0 then
     fname1 := fname + '.csv'
   else
     fname1 := fname;
