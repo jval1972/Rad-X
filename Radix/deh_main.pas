@@ -276,7 +276,7 @@ begin
         break;
     mustnextline := true;
 
-    splitstring(str, token1, token2);
+    splitstring_ch(str, token1, token2);
 
     ////////////////////////////////////////////////////////////////////////////
     if (token1 = 'THING') or (token1 = 'NEWTHING') then
@@ -687,7 +687,7 @@ begin
           break;
         end;
 
-        splitstring(str, token1, token2, '=');
+        splitstring_ch(str, token1, token2, '=');
         state_idx := state_tokens.IndexOf(token1);
 
         if state_idx = -1 then
@@ -976,7 +976,7 @@ begin
         end;
 
       // Retrieve current think field index
-        splitstring(str, token1, token2, '=');
+        splitstring_ch(str, token1, token2, '=');
         sound_idx := sound_tokens.IndexOf(token1);
 
         if sound_idx = -1 then
