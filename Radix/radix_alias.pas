@@ -98,7 +98,7 @@ begin
     lst.Text := in_text;
     for i := lst.Count - 1 downto 0 do
     begin
-      splitstring(lst.Strings[i], w_entry, r_entry, '=');
+      splitstring_ch(lst.Strings[i], w_entry, r_entry, '=');
       lump := W_CheckNumForName(w_entry);
       if lump >= 0 then
       begin

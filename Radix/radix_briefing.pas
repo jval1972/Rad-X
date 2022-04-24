@@ -694,7 +694,7 @@ begin
       p := CharPos(':', stmp);
       if p > 0 then
         stmp[p] := ' ';
-      splitstring(stmp, s1, s2);
+      splitstring_ch(stmp, s1, s2);
       if (strupper(s1) = 'PRINT') or (strupper(s1) = 'PRINTLN') then
         if s2 = '' then
           stmp := s1 + ' "$"';

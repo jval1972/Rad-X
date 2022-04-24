@@ -1235,7 +1235,7 @@ begin
 
   s := UpperCase(Trim(s1 + ' ' + s2));
   repeat
-    splitstring(s, v1, v2);
+    splitstring_ch(s, v1, v2);
     if v1 <> '' then
     begin
       if vars.fStringList.IndexOf(v1) >= 0 then

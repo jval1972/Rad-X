@@ -100,7 +100,7 @@ var
       do_all := (Pos('#INCLUDE_ALL ', strupper(strtrim(str))) = 1) or (Pos('{$INCLUDE_ALL ', strupper(strtrim(str))) = 1) or (Pos('{$INCLUDE_ALL} ', strupper(strtrim(str))) = 1);
       if do_one or do_all then
       begin
-        splitstring(strtrim(str), s1, s2, ' ');
+        splitstring_ch(strtrim(str), s1, s2, ' ');
         s2 := strtrim(s2);
         if s2 <> '' then
         begin

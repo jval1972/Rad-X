@@ -2039,8 +2039,8 @@ begin
     Exit;
   end;
 
-  splitstring(s2, sx, tmp1, ' ');
-  splitstring(tmp1, sy, msg, ' ');
+  splitstring_ch(s2, sx, tmp1, ' ');
+  splitstring_ch(tmp1, sy, msg, ' ');
   x := atoi(sx, -1);
   y := atoi(sy, -1);
 
@@ -2081,12 +2081,12 @@ begin
     Exit;
   end;
 
-  splitstring(s2, sx, tmp1, ' ');
-  splitstring(tmp1, sy, tmp2, ' ');
+  splitstring_ch(s2, sx, tmp1, ' ');
+  splitstring_ch(tmp1, sy, tmp2, ' ');
   x := atoi(sx, -1);
   y := atoi(sy, -1);
-  splitstring(tmp2, sred, tmp1, ' ');
-  splitstring(tmp1, sgreen, sblue, ' ');
+  splitstring_ch(tmp2, sred, tmp1, ' ');
+  splitstring_ch(tmp1, sgreen, sblue, ' ');
   red := atoi(sred, 0);
   green := atoi(sgreen, 0);
   blue := atoi(sblue, 0);
