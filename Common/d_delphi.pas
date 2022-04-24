@@ -1655,9 +1655,9 @@ begin
   if code <> 0 then
   begin
     ret2 := 0;
-    if Pos('0x', s) = 1 then
+    if Pos1('0x', s) then
       val('$' + Copy(s, 3, Length(s) - 2), ret2, code)
-    else if Pos('-0x', s) = 1 then
+    else if Pos1('-0x', s) then
     begin
       val('$' + Copy(s, 4, Length(s) - 3), ret2, code);
       ret2 := -ret2;
@@ -1685,9 +1685,9 @@ begin
   if code <> 0 then
   begin
     ret2 := default;
-    if Pos('0x', s) = 1 then
+    if Pos1('0x', s) then
       val('$' + Copy(s, 3, Length(s) - 2), ret2, code)
-    else if Pos('-0x', s) = 1 then
+    else if Pos1('-0x', s) then
     begin
       val('$' + Copy(s, 4, Length(s) - 3), ret2, code);
       ret2 := -ret2;
@@ -1715,7 +1715,7 @@ begin
   if code <> 0 then
   begin
     ret2 := 0;
-    if Pos('0x', s) = 1 then
+    if Pos1('0x', s) then
       val('$' + Copy(s, 3, Length(s) - 2), ret2, code)
     else if CharPos('#', s) = 1 then
       val(Copy(s, 2, Length(s) - 1), ret2, code);
@@ -1740,7 +1740,7 @@ begin
   if code <> 0 then
   begin
     ret2 := default;
-    if Pos('0x', s) = 1 then
+    if Pos1('0x', s) then
       val('$' + Copy(s, 3, Length(s) - 2), ret2, code)
     else if CharPos('#', s) = 1 then
       val(Copy(s, 2, Length(s) - 1), ret2, code);
@@ -6941,7 +6941,7 @@ begin
   h := '0123456789ABCDEF';
   for i := 1 to Length(s) do
   begin
-    if Pos(toupper(s[i]), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') > 0 then
+    if CharPos(toupper(s[i]), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') > 0 then
       result := result + toupper(s[i])
     else
       result := result + h[Ord(s[i]) div 16 + 1] + h[Ord(s[i]) mod 16 + 1];

@@ -276,7 +276,7 @@ begin
   check := strupper(strremovespaces(name)) + '=';
   for i := mobjinfo_aliases.Count - 1 downto 0 do
   begin
-    if Pos(check, mobjinfo_aliases.Strings[i]) = 1 then
+    if Pos1(check, mobjinfo_aliases.Strings[i]) then
     begin
       splitstring(mobjinfo_aliases.Strings[i], check, snum, '=');
       result := atoi(snum);

@@ -1291,7 +1291,7 @@ begin
     Exit;
   end;
 
-  if Pos(' ', s2) > 0 then
+  if CharPos(' ', s2) > 0 then
   begin
     vars.StrVal[s1] := s2;
     Exit;

@@ -794,7 +794,7 @@ begin
       in_loop := false
     else if in_loop then
     begin
-      if Pos(check, lumpname) = 1 then
+      if Pos1(check, lumpname) then
       begin
         result := true;
         exit;

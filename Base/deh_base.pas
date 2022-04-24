@@ -224,7 +224,7 @@ begin
     result := DEH_NextLine(s, str, counter);
     exit;
   end;
-  if Pos('//', trimmed) = 1 then // JVAL: Allow // as comments also
+  if Pos1('//', trimmed) then // JVAL: Allow // as comments also
   begin
     result := DEH_NextLine(s, str, counter);
     exit;
@@ -617,7 +617,7 @@ begin
       if CharPos('#', strtrim(cs.Strings[i])) <> 1 then
         if Pos('//', strtrim(cs.Strings[i])) < 1 then
         begin
-          if Pos('THING ', strtrim(strupper(cs.Strings[i]))) = 1 then
+          if Pos1('THING ', strtrim(strupper(cs.Strings[i]))) then
           begin
             if headstr = '' then
               headstr := '"id"'
@@ -718,10 +718,10 @@ begin
   headstr := '';
   for i := idx1 + 1 to idx2 - 1 do
     if strtrim(cs.Strings[i]) <> '' then
-      if Pos('#', strtrim(cs.Strings[i])) <> 1 then
+      if not Pos1('#', strtrim(cs.Strings[i])) then
         if Pos('//', strtrim(cs.Strings[i])) < 1 then
         begin
-          if Pos('FRAME ', strtrim(strupper(cs.Strings[i]))) = 1 then
+          if Pos1('FRAME ', strtrim(strupper(cs.Strings[i]))) then
           begin
             if headstr = '' then
               headstr := '"Name";"id"'
@@ -745,7 +745,7 @@ begin
     if strtrim(cs.Strings[i]) <> '' then
       if CharPos('#', strtrim(cs.Strings[i])) <> 1 then
         if Pos('//', strtrim(cs.Strings[i])) < 1 then
-          if Pos('FRAME ', strtrim(strupper(cs.Strings[i]))) <> 1 then
+          if not Pos1('FRAME ', strtrim(strupper(cs.Strings[i]))) then
           begin
             splitstring(strtrim(cs.Strings[i]), s1, s2, '=');
             for j := 1 to length(s2) do
