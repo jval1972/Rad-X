@@ -35,7 +35,7 @@ Fixed glitch in voxel software rendering.
 Corrections to external textures caching in software rendering mode.
 Fixed problem with lump reading when a namespace was required.
 It will load KVX voxels even if the ".kvx" extension is not defined in VOXELDEF.
-Improved ZDoom compatiblility in VOXELDEF lumps.
+Improved ZDoom compatibility in VOXELDEF lumps.
 Speed optimizations to ACTORDEF parsing.
 Speed optimizations to PascalScript initialization.
 Speed optimizations to startup memo text output.
@@ -54,15 +54,15 @@ Fixed masked middle texture bleeding when player was exactly placed on the line.
 Small optimization to masked middle textute rendering.
 Fixed misspelled of "joystick" in the menus.
 Speed optimizations in R_PointToAngleEx().
-Speed optimizations to sofrware rendering.
+Speed optimizations to software rendering.
 Improved priority logic for sound channel selection.
 Added support for tall patches in PNG format.
 Use general purpose threads in 8 bit software rendering blit.
 Optimizations to voxel software rendering.
-Fixes to 3d colissions of actors moving up or down other actors.
+Fixes to 3d collisions of actors moving up or down other actors.
 Player movement collisions.
 Small optimizations to plane rendering (software mode).
-Added SPIN field in VOXELDEF lumps, it compines DROPPEDSPIN & PLACEDSPIN behavior.
+Added SPIN field in VOXELDEF lumps, it combines DROPPEDSPIN & PLACEDSPIN behavior.
 If depthbuffer is active will draw sprites from front to back to avoid overdraw.
 Fixed some glitches in software rendering regarding voxels and 3d floors.
 Speed optimizations to slope software rendering.
@@ -91,7 +91,7 @@ New ACTORDEF functions:
 Auto fix interpolation for instant changes in sectors heights and texture offsets.
 Added full_sounds console variable. When true, the mobjs will finish their sounds when removed.
 Added MF4_EX_ALWAYSFINISHSOUND & MF4_EX_NEVERFINISHSOUND mobj flags to overwrite the full_sounds console variable.
-Added A_ChangeSpriteFlip(propability: integer) ACTORDEF function.
+Added A_ChangeSpriteFlip(probability: integer) ACTORDEF function.
 Correct evaluation of angle in functions parameter's evaluation.
 Voxel glitches fix and optimization in software rendering.
 "ACTIVE SOUND" alias for "ACTION SOUND" DEHACKED field.
@@ -106,13 +106,13 @@ Speed optimizations in string manipulation.
 -----------------------------
 Mission Briefing screens.
 Fixed flags in A_ChangeVelocity() ACTORDEF function.
-Fixed MF2_EX_CANTLEAVEFLOORPIC flag behaviour.
+Fixed MF2_EX_CANTLEAVEFLOORPIC flag behavior.
 Fixed uncapped framerate bug for floor & ceiling offsets.
 Wall bouncing improvements.
 
 20211011 - v.1.0.17.750.r961
 ----------------------------
-Holds up to 2047 bytes for enviroment variables.
+Holds up to 2047 bytes for environment variables.
 Fixed potential memory corruption problem in R_MakeSpans().
 Fixed ddmodel rendering when the game is paused.
 Fixed UTF16 loading problem.
@@ -137,11 +137,11 @@ Added overlaydrawrect console command. Usage is overlaydrawrect [ticks] [x1] [y1
 Added overlaydrawpatch console command, usage is "overlaydrawpatch [ticks] [x] [y] [patch]".
 Added Overlay.DrawPatchStretched & OverlayDrawPatchStretched PascalScript functions. params -> (const ticks: Integer; const patchname: string; const x1, y1, x2, y2: Integer)
 Added overlaydrawpatchstretched console command. Usage is overlaydrawpatchstretched [ticks] [x1] [y1] [x2] [y2] [patch].
-Fixed problem with Overlay display after changing screen dimentions.
+Fixed problem with Overlay display after changing screen dimensions.
 
 20210110 - v.1.0.14.746.r914
 ----------------------------
-Floor and ceiling texure angle corrections.
+Floor and ceiling texture angle corrections.
 Texture angle in 3d floors.
 Key bindings can now accept SHIFT & CTRL keys.
 Easy angle things, rotate floor or ceiling texture around them.
@@ -165,18 +165,18 @@ Shade model in OpenGL defaults to GL_FLAT.
 Blockmap consistancy in T_Pusher().
 Does not recalc texture mapping tables if focallength has not changed.
 Corrections to Doom patch detection algorithm.
-Check for erronous width & height in command line parameter -geom.
+Check for erroneous width & height in command line parameter -geom.
 Fixed ripple effect in large flats.
 Corrected lump name character case for runtime loading.
 
 20201211 - v.1.0.1.744.r852
 ---------------------------
 Fixed memory corruption problems with the music playback thread.
-Fixed potential me﻿mory corruption problem when loading WADs without a PNAMES lump.
+Fixed potential memory corruption problem when loading WADs without a PNAMES lump.
 Fixed potential memory corruption problem when working with the original data file, or a WAD file that does not contain a disk busy patch. (STCDROM or STDISK).
 Fixed potential memory corruption problem when taking screenshots in OpenGL mode.
 Fixed potential error with the shareware data file of RADIX.
-Prevents infinite loop for erronous A_Chase() placement. ﻿
+Prevents infinite loop for erroneous A_Chase() placement. ﻿
 Corrected dehacked parsing of the "CODEP FRAME" keyword.
 Loads a bit faster due to some optimizations. 
 Fixed diskbuzy height calculation in OpenGL mode.
