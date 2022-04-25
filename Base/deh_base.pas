@@ -603,6 +603,7 @@ function DEH_MobjInfoCSV: TDStringList;
 var
   i, idx1, idx2: integer;
   s1, s2, headstr, datstr: string;
+  csstring: string;
   cs: TDStringList;
 begin
   DEH_Init;
@@ -612,12 +613,14 @@ begin
   idx2 := cs.IndexOf('# States');
 
   headstr := '';
-  for i := idx1 + 1 to idx2 + 1 do
-    if strtrim(cs.Strings[i]) <> '' then
-      if CharPos('#', strtrim(cs.Strings[i])) <> 1 then
-        if Pos('//', strtrim(cs.Strings[i])) < 1 then
+  for i := idx1 + 1 to idx2 - 1 do
+  begin
+    csstring := strtrim(cs.Strings[i]);
+    if csstring <> '' then
+      if CharPos('#', csstring) <> 1 then
+        if Pos('//', csstring) < 1 then
         begin
-          if Pos1('THING ', strtrim(strupper(cs.Strings[i]))) then
+          if Pos1('THING ', strupper(csstring)) then
           begin
             if headstr = '' then
               headstr := '"id"'
@@ -626,10 +629,12 @@ begin
           end
           else if headstr <> '' then
           begin
-            splitstring_ch(strtrim(cs.Strings[i]), s1, s2, '=');
-            headstr := headstr + ';' + '"' + strtrim(s1) + '"';
+            splitstring_ch(csstring, s1, s2, '=');
+            trimproc(s1);
+            headstr := headstr + ';' + '"' + s1 + '"';
           end;
         end;
+  end;
 
   result := TDStringList.Create;
   result.Add(headstr);
@@ -637,13 +642,17 @@ begin
   datstr := '';
   for i := idx1 + 1 to idx2 - 1 do
   begin
-    if strtrim(cs.Strings[i]) <> '' then
-      if CharPos('#', strtrim(cs.Strings[i])) <> 1 then
-        if Pos('//', strtrim(cs.Strings[i])) < 1 then
-          if Pos('THING ', strtrim(strupper(cs.Strings[i]))) < 1 then
+    csstring := strtrim(cs.Strings[i]);
+    if csstring <> '' then
+      if CharPos('#', csstring) <> 1 then
+        if Pos('//', csstring) < 1 then
+          if Pos('THING ', strupper(csstring)) < 1 then
           begin
-            splitstring_ch(strtrim(cs.Strings[i]), s1, s2, '=');
-            datstr := datstr + ';' + '"' + strtrim(s2) + '"';
+            splitstring_ch(csstring, s1, s2, '=');
+            trimproc(s2);
+            if s2 = '' then
+              s2 := '-';
+            datstr := datstr + ';' + '"' + s2 + '"';
           end
           else
           begin
@@ -698,6 +707,7 @@ function DEH_StatesCSV: TDStringList;
 var
   i, j, idx1, idx2: integer;
   s1, s2, headstr, datstr: string;
+  csstring: string;
   cs: TDStringList;
 
   function _statename(const x: integer): string;
@@ -717,11 +727,13 @@ begin
 
   headstr := '';
   for i := idx1 + 1 to idx2 - 1 do
-    if strtrim(cs.Strings[i]) <> '' then
-      if not Pos1('#', strtrim(cs.Strings[i])) then
-        if Pos('//', strtrim(cs.Strings[i])) < 1 then
+  begin
+    csstring := strtrim(cs.Strings[i]);
+    if csstring <> '' then
+      if CharPos('#', csstring) <> 1 then
+        if Pos('//', csstring) < 1 then
         begin
-          if Pos1('FRAME ', strtrim(strupper(cs.Strings[i]))) then
+          if Pos1('FRAME ', strupper(csstring)) then
           begin
             if headstr = '' then
               headstr := '"Name";"id"'
@@ -730,10 +742,11 @@ begin
           end
           else if headstr <> '' then
           begin
-            splitstring_ch(strtrim(cs.Strings[i]), s1, s2, '=');
+            splitstring_ch(csstring, s1, s2, '=');
             headstr := headstr + ';' + '"' + strtrim(s1) + '"';
           end;
         end;
+  end;
 
   result := TDStringList.Create;
   result.Add(headstr);
@@ -742,12 +755,13 @@ begin
   datstr := '';
   for i := idx1 + 1 to idx2 - 1 do
   begin
-    if strtrim(cs.Strings[i]) <> '' then
-      if CharPos('#', strtrim(cs.Strings[i])) <> 1 then
-        if Pos('//', strtrim(cs.Strings[i])) < 1 then
-          if not Pos1('FRAME ', strtrim(strupper(cs.Strings[i]))) then
+    csstring := strtrim(cs.Strings[i]);
+    if csstring <> '' then
+      if CharPos('#', csstring) <> 1 then
+        if Pos('//', csstring) < 1 then
+          if not Pos1('FRAME ', strupper(csstring)) then
           begin
-            splitstring_ch(strtrim(cs.Strings[i]), s1, s2, '=');
+            splitstring_ch(csstring, s1, s2, '=');
             for j := 1 to length(s2) do
               if s2[j] = '"' then
                 s2[j] := ' ';

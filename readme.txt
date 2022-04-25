@@ -41,6 +41,7 @@ Speed optimizations to PascalScript initialization.
 Speed optimizations to startup memo text output.
 Displays loading time at startup.
 Speed optimizations to ACTORDEF parsing.
+Optimized DEHACKED csv export.
 
 20220410 - v.1.2.20.753.r1230
 -----------------------------
