@@ -521,7 +521,7 @@ var
   i: integer;
   scmp: string;
 begin
-  scmp := fuToken;
+  scmp := strupper(fToken);
   for i := 0 to strs.Count - 1 do
   begin
     if Compare(strs.Strings[i], scmp) then
