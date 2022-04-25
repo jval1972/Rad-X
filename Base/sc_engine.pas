@@ -738,7 +738,9 @@ begin
     end;
   end;
   txt^ := Chr(0);
-  if ignonelist.IndexOf(strupper(StringVal(sc_String))) < 0 then
+  if ignonelist.Count = 0 then
+    result := true
+  else if ignonelist.IndexOf(strupper(StringVal(sc_String))) < 0 then
     result := true
   else
     Result := GetString;
