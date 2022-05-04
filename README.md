@@ -30,6 +30,8 @@ Advanced scripting (PascalScript).
 
 
 ## Downloads
+[version 1.2.21.755.r1274 (20220504 - win32)](https://sourceforge.net/projects/rad-x/files/RAD%201.2/RAD_1.2.21.755.r1274_win32.zip/download)
+
 [version 1.2.20.753.r1230 (20220410 - win32)](https://sourceforge.net/projects/rad-x/files/RAD%201.2/RAD_1.2.20.753.r1230_win32.zip/download)
 
 [version 1.1.19.752.r1097 (20220206 - win32)](https://sourceforge.net/projects/rad-x/files/RAD%201.1/RAD_1.1.19.752.r1097_win32.zip/download)
