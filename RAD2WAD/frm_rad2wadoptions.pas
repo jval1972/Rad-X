@@ -60,6 +60,8 @@ type
     Panel11: TPanel;
     Button1: TButton;
     Button2: TButton;
+    Panel10: TPanel;
+    MapsCheckBox: TCheckBox;
   private
     { Private declarations }
   public
@@ -100,6 +102,7 @@ begin
     f.MusicCheckBox.Checked := flags and R2W_MUSIC <> 0;
     f.SoundCheckBox.Checked := flags and R2W_SOUNDS <> 0;
     f.TextCheckBox.Checked := flags and (R2W_OBJECTIVES or R2W_ENDTEXT) <> 0;
+    f.MapsCheckBox.Checked := flags and R2W_DOOMLEVELS <> 0;
     f.ShowModal;
     if f.ModalResult = mrOK then
     begin
@@ -112,6 +115,7 @@ begin
       if f.MusicCheckBox.Checked then flags := flags or R2W_MUSIC;
       if f.SoundCheckBox.Checked then flags := flags or R2W_SOUNDS;
       if f.TextCheckBox.Checked then flags := flags or (R2W_OBJECTIVES or R2W_ENDTEXT);
+      if f.MapsCheckBox.Checked then flags := flags or R2W_DOOMLEVELS;
       result := true;
     end;
   finally

@@ -3,7 +3,7 @@ object OptionsForm: TOptionsForm
   Top = 205
   BorderStyle = bsDialog
   Caption = 'RAD2WAD'
-  ClientHeight = 377
+  ClientHeight = 402
   ClientWidth = 319
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -1273,9 +1273,9 @@ object OptionsForm: TOptionsForm
   end
   object Panel11: TPanel
     Left = 0
-    Top = 297
+    Top = 329
     Width = 319
-    Height = 80
+    Height = 73
     Align = alClient
     Caption = ' '
     Color = clBlack
@@ -1304,6 +1304,32 @@ object OptionsForm: TOptionsForm
       Caption = 'Cancel'
       ModalResult = 2
       TabOrder = 1
+    end
+  end
+  object Panel10: TPanel
+    Left = 0
+    Top = 297
+    Width = 319
+    Height = 32
+    Align = alTop
+    Caption = ' '
+    Color = clBlack
+    Font.Charset = GREEK_CHARSET
+    Font.Color = clWhite
+    Font.Height = -13
+    Font.Name = 'Courier New'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 10
+    object MapsCheckBox: TCheckBox
+      Left = 24
+      Top = 8
+      Width = 273
+      Height = 17
+      Caption = 'Maps'
+      Color = 4210752
+      ParentColor = False
+      TabOrder = 0
     end
   end
 end
