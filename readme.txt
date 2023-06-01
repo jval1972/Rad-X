@@ -31,6 +31,8 @@ RAD works only with radix v2.0 remix edition. It will not work with v1.0 or v1.1
 
 History
 -------
+Creative Voice File inside WAD
+
 20220504 - v.1.2.21.755.r1274
 -----------------------------
 Fixed glitch in voxel software rendering.
