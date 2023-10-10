@@ -247,9 +247,7 @@ var
   texnum: integer;
   i: integer;
   texturecolumn: integer;
-  {$IFNDEF HEXEN}
   curline: Pseg_t;
-  {$ENDIF}
   mid: Psector_t;
   midside: Pside_t;
   roverscale_dbl, roverstep_dbl: Double;
@@ -264,9 +262,7 @@ begin
 
   mid := ds.midsec;
   midside := ds.midside; //@sides[mid.midline.sidenum[0]];
-  {$IFNDEF HEXEN}
   curline := ds.curline;
-  {$ENDIF}
   texnum := texturetranslation[midside.midtexture];
 
   R_GetDCs(texnum, 0); // JVAL Also precache external texture if not loaded
@@ -653,9 +649,7 @@ var
   texnum: integer;
   i: integer;
   texturecolumn: integer;
-  {$IFNDEF HEXEN}
   curline: Pseg_t;
-  {$ENDIF}
   mid: Psector_t;
   midside: Pside_t;
   roverscale, roverstep: fixed_t;
@@ -668,9 +662,7 @@ begin
 
   mid := ds.midsec;
   midside := ds.midside; //@sides[mid.midline.sidenum[0]];
-  {$IFNDEF HEXEN}
   curline := ds.curline;
-  {$ENDIF}
   texnum := texturetranslation[midside.midtexture];
 
   R_GetDCs(texnum, 0); // JVAL Also precache external texture if not loaded
