@@ -251,7 +251,7 @@ const
 //==============================================================================
 procedure M_FixScreenshotFormat;
 begin
-  screenshotformat := strupper(strtrim(screenshotformat));
+  trimprocU(screenshotformat);
   if CharPos('.', screenshotformat) = 1 then
     Delete(screenshotformat, 1, 1);
   if screenshotformat = '' then
