@@ -217,7 +217,7 @@ begin
       printf(rsOutPut);
     end;
 
-    if (not result) and (GetLastError = ERROR_BROKEN_PIPE) then
+    if not result and (GetLastError = ERROR_BROKEN_PIPE) then
       break;  // child has died
 
     if not result then
