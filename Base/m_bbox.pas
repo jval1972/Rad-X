@@ -82,12 +82,12 @@ end;
 procedure M_AddToBox(box: Pfixed_tArray; x: fixed_t; y: fixed_t);
 begin
   if x < box[BOXLEFT] then
-    box[BOXLEFT] := x;
-  if x > box[BOXRIGHT] then
+    box[BOXLEFT] := x
+  else if x > box[BOXRIGHT] then
     box[BOXRIGHT] := x;
   if y < box[BOXBOTTOM] then
-    box[BOXBOTTOM] := y;
-  if y > box[BOXTOP] then
+    box[BOXBOTTOM] := y
+  else if y > box[BOXTOP] then
     box[BOXTOP] := y;
 end;
 
