@@ -964,7 +964,7 @@ procedure D_WadsAutoLoad(fnames: string);
 var
   s1, s2: string;
 begin
-  fnames := strtrim(fnames);
+  trimproc(fnames);
   if fnames = '' then
     exit;
 
@@ -985,7 +985,7 @@ procedure D_PaksAutoload(fnames: string);
 var
   s1, s2: string;
 begin
-  fnames := strtrim(fnames);
+  trimproc(fnames);
   if fnames = '' then
     exit;
 

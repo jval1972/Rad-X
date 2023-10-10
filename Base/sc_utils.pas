@@ -101,13 +101,13 @@ var
       if do_one or do_all then
       begin
         splitstring_ch(strtrim(str), s1, s2, ' ');
-        s2 := strtrim(s2);
+        trimproc(s2);
         if s2 <> '' then
         begin
           for j := 1 to Length(s2) do
             if s2[j] in ['"', '''', '<', '>', '}', '{'] then
               s2[j] := ' ';
-          s2 := strtrim(s2);
+          trimproc(s2);
           if s2 <> '' then
           begin
             if do_all then

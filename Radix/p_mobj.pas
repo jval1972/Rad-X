@@ -3050,7 +3050,7 @@ begin
   tmp := '';
   while sc.GetString do
     tmp := tmp + sc._String + ' ';
-  tmp := strupper(strtrim(tmp));
+  trimprocU(tmp);
 
   dn := atoi(tmp, 0);
   if dn >= 1 then

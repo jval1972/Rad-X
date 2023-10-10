@@ -368,7 +368,7 @@ begin
   while not EOF(t) and (IOResult = 0) do
   begin
     readln(t, cmd);
-    cmd := strtrim(cmd);
+    trimproc(cmd);
     if cmd <> '' then
       if not Pos1('//', cmd) then
         C_ExecuteCmd(cmd);

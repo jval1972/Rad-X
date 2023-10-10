@@ -396,7 +396,7 @@ begin
                   mobj_setflag := -1;
                   repeat
                     splitstring(token2, token3, token4, [' ', '|', ',', '+']);
-                    token3 := strtrim(token3);
+                    trimproc(token3);
                     mobj_flag := mobj_flags.IndexOf('MF_' + token3);
                     if mobj_flag = -1 then
                       mobj_flag := mobj_flags.IndexOf(token3);
@@ -431,7 +431,7 @@ begin
                   mobj_setflag := -1;
                   repeat
                     splitstring(token2, token3, token4, [' ', '|', ',', '+']);
-                    token3 := strtrim(token3);
+                    trimproc(token3);
                     mobj_flag := mobj_flags_ex.IndexOf('MF_EX_' + token3);
                     if mobj_flag = -1 then
                       mobj_flag := mobj_flags_ex.IndexOf('MF_' + token3);

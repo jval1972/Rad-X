@@ -1079,7 +1079,7 @@ var
       end;
 
       bright := false;
-      stmp := strtrim(stmp);
+      trimproc(stmp);
       if strupper(firstword(stmp)) = 'BRIGHT' then
       begin
         bright := true;
