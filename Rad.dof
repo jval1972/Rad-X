@@ -100,7 +100,7 @@ Conditionals=DOOM;
 DebugSourceDirs=F:\DelphiDoom_Release\RAD\src\Base\
 UsePackages=0
 [Parameters]
-RunParams=
+RunParams=-warp 3 6
 HostApplication=
 Launcher=
 UseLauncher=0
