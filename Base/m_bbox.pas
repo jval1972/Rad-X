@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2022 by Jim Valavanis
+//  Copyright (C) 2004-2024 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -82,12 +82,12 @@ end;
 procedure M_AddToBox(box: Pfixed_tArray; x: fixed_t; y: fixed_t);
 begin
   if x < box[BOXLEFT] then
-    box[BOXLEFT] := x
-  else if x > box[BOXRIGHT] then
+    box[BOXLEFT] := x;
+  if x > box[BOXRIGHT] then
     box[BOXRIGHT] := x;
   if y < box[BOXBOTTOM] then
-    box[BOXBOTTOM] := y
-  else if y > box[BOXTOP] then
+    box[BOXBOTTOM] := y;
+  if y > box[BOXTOP] then
     box[BOXTOP] := y;
 end;
 
