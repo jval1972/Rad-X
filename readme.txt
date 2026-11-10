@@ -4,7 +4,7 @@
 //
 //  Copyright (C) 1995 by Epic MegaGames, Inc.
 //  Copyright (C) 1993-1996 by id Software, Inc.
-//  Copyright (C) 2004-2022 by Jim Valavanis
+//  Copyright (C) 2004-2026 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -31,7 +31,8 @@ RAD works only with radix v2.0 remix edition. It will not work with v1.0 or v1.1
 
 History
 -------
-Creative Voice File inside WAD
+Creative Voice File inside WAD.
+Correctly set png screenshop filename in user screenshots.
 
 20220504 - v.1.2.21.755.r1274
 -----------------------------
