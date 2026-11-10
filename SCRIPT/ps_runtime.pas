@@ -1352,7 +1352,7 @@ const
 //  PSDynArrayGetLength
 //
 //==============================================================================
-function  PSDynArrayGetLength(arr: Pointer; aType: TPSTypeRec): Longint;
+function PSDynArrayGetLength(arr: Pointer; aType: TPSTypeRec): Longint;
 
 //==============================================================================
 //
@@ -1366,7 +1366,7 @@ procedure PSDynArraySetLength(var arr: Pointer; aType: TPSTypeRec; NewLength: Lo
 //  GetPSArrayLength
 //
 //==============================================================================
-function  GetPSArrayLength(Arr: PIFVariant): Longint;
+function GetPSArrayLength(Arr: PIFVariant): Longint;
 
 //==============================================================================
 //
@@ -2101,7 +2101,7 @@ begin
     end
     else
     begin
-      s := trim(Copy(PName, 1, i - 1));
+      s := Trim(Copy(PName, 1, i - 1));
       Delete(PName, 1, i);
     end;
     pp := GetPropInfo(PTypeInfo(Instance.ClassInfo), string(s));
@@ -3168,7 +3168,7 @@ begin
     for I := FSpecialProcList.Count - 1 downto 0 do
     begin
       p := FSpecialProcList[I];
-      IF (p^.name = '') or ((p^.namehash = fnh) and (p^.name = fname)) then
+      if (p^.name = '') or ((p^.namehash = fnh) and (p^.name = fname)) then
       begin
         if p^.P(Self, Proc, p^.tag) then
         begin
@@ -5496,7 +5496,7 @@ begin
   for i := 0 to aType.FieldTypes.Count - 1 do
   begin
     o := Longint(atype.RealFieldOffsets[i]);
-    CopyArrayContents(Pointer(IPointer(Dest)+Cardinal(o)), Pointer(IPointer(Src)+Cardinal(o)), 1, aType.FieldTypes[i]);
+    CopyArrayContents(Pointer(IPointer(Dest) + Cardinal(o)), Pointer(IPointer(Src) + Cardinal(o)), 1, aType.FieldTypes[i]);
   end;
   Result := True;
 end;
@@ -5806,7 +5806,7 @@ end;
 //  GetPSArrayLength
 //
 //==============================================================================
-function  GetPSArrayLength(Arr: PIFVariant): Longint;
+function GetPSArrayLength(Arr: PIFVariant): Longint;
 begin
   Result := PSDynArrayGetLength(PPSVariantDynamicArray(arr).Data, arr.FType);
 end;
@@ -7520,7 +7520,7 @@ begin
                     TbtU32(var1^) := TbtU32(var1^) + TbtS64(var2^);
                   {$ENDIF}
                   btChar:
-                    TbtU32(var1^) := TbtU32(var1^) +  Ord(TbtChar(var2^));
+                    TbtU32(var1^) := TbtU32(var1^) + Ord(TbtChar(var2^));
                   {$IFNDEF PS_NOWIDESTRING}
                   btWideChar:
                     TbtU32(var1^) := TbtU32(var1^) + Ord(TbtWideChar(var2^));
@@ -7558,7 +7558,7 @@ begin
                     TbtS32(var1^) := TbtS32(var1^) + TbtS64(var2^);
                   {$ENDIF}
                   btChar:
-                    TbtS32(var1^) := TbtS32(var1^) +  Ord(TbtChar(var2^));
+                    TbtS32(var1^) := TbtS32(var1^) + Ord(TbtChar(var2^));
                   {$IFNDEF PS_NOWIDESTRING}
                   btWideChar:
                     TbtS32(var1^) := TbtS32(var1^) + Ord(TbtWideChar(var2^));
@@ -7608,7 +7608,7 @@ begin
                   btCurrency:
                     TbtSingle(var1^) := TbtSingle(var1^) + TbtCurrency(var2^);
                   btVariant:
-                    TbtSingle(var1^) := TbtSingle(var1^) +  Variant(var2^);
+                    TbtSingle(var1^) := TbtSingle(var1^) + Variant(var2^);
                   else
                     raise Exception.Create(RPS_TypeMismatch);
                 end;
@@ -7648,7 +7648,7 @@ begin
                   btCurrency:
                     TbtDouble(var1^) := TbtDouble(var1^) + TbtCurrency(var2^);
                   btVariant:
-                    TbtDouble(var1^) := TbtDouble(var1^) +  Variant(var2^);
+                    TbtDouble(var1^) := TbtDouble(var1^) + Variant(var2^);
                   else
                     raise Exception.Create(RPS_TypeMismatch);
                 end;
@@ -7688,7 +7688,7 @@ begin
                   btCurrency:
                     TbtCurrency(var1^) := TbtCurrency(var1^) + TbtCurrency(var2^);
                   btVariant:
-                    TbtCurrency(var1^) := TbtCurrency(var1^) +  Variant(var2^);
+                    TbtCurrency(var1^) := TbtCurrency(var1^) + Variant(var2^);
                   else
                     raise Exception.Create(RPS_TypeMismatch);
                 end;
@@ -7728,7 +7728,7 @@ begin
                   btCurrency:
                     TbtExtended(var1^) := TbtExtended(var1^) + TbtCurrency(var2^);
                   btVariant:
-                    TbtExtended(var1^) := TbtExtended(var1^) +  Variant(var2^);
+                    TbtExtended(var1^) := TbtExtended(var1^) + Variant(var2^);
                   else
                     raise Exception.Create(RPS_TypeMismatch);
                 end;
@@ -7737,7 +7737,7 @@ begin
             btString:
               TbtString(var1^) := TbtString(var1^) + PSGetAnsiString(Var2, var2type);
             btChar:
-              TbtChar(var1^) := TbtChar(ord(TbtChar(var1^)) +  PSGetUInt(Var2, var2type));
+              TbtChar(var1^) := TbtChar(ord(TbtChar(var1^)) + PSGetUInt(Var2, var2type));
             {$IFNDEF PS_NOWIDESTRING}
             btWideChar:
               TbtWideChar(var1^) := widechar(ord(TbtWideChar(var1^)) + PSGetUInt(Var2, var2type));
@@ -7816,7 +7816,7 @@ begin
                     TbtU32(var1^) := TbtU32(var1^) - TbtS64(var2^);
                   {$ENDIF}
                   btChar:
-                    TbtU32(var1^) := TbtU32(var1^) -  Ord(TbtChar(var2^));
+                    TbtU32(var1^) := TbtU32(var1^) - Ord(TbtChar(var2^));
                   {$IFNDEF PS_NOWIDESTRING}
                   btWideChar:
                     TbtU32(var1^) := TbtU32(var1^) - Ord(TbtWideChar(var2^));
@@ -7854,7 +7854,7 @@ begin
                     TbtS32(var1^) := TbtS32(var1^) - TbtS64(var2^);
                   {$ENDIF}
                   btChar:
-                    TbtS32(var1^) := TbtS32(var1^) -  Ord(TbtChar(var2^));
+                    TbtS32(var1^) := TbtS32(var1^) - Ord(TbtChar(var2^));
                   {$IFNDEF PS_NOWIDESTRING}
                   btWideChar:
                     TbtS32(var1^) := TbtS32(var1^) - Ord(TbtWideChar(var2^));
@@ -7983,7 +7983,7 @@ begin
                   btCurrency:
                     TbtDouble(var1^) := TbtDouble(var1^) - TbtCurrency(var2^);
                   btVariant:
-                    TbtDouble(var1^) := TbtDouble(var1^) -  Variant(var2^);
+                    TbtDouble(var1^) := TbtDouble(var1^) - Variant(var2^);
                   else
                     raise Exception.Create(RPS_TypeMismatch);
                 end;
@@ -8102,7 +8102,7 @@ begin
                     TbtU32(var1^) := TbtU32(var1^) * TbtS64(var2^);
                   {$ENDIF}
                   btChar:
-                    TbtU32(var1^) := TbtU32(var1^) *  Ord(TbtChar(var2^));
+                    TbtU32(var1^) := TbtU32(var1^) * Ord(TbtChar(var2^));
                   {$IFNDEF PS_NOWIDESTRING}
                   btWideChar:
                     TbtU32(var1^) := TbtU32(var1^) * Ord(TbtWideChar(var2^));
@@ -8140,7 +8140,7 @@ begin
                     TbtS32(var1^) := TbtS32(var1^) * TbtS64(var2^);
                   {$ENDIF}
                   btChar:
-                    TbtS32(var1^) := TbtS32(var1^) *  Ord(TbtChar(var2^));
+                    TbtS32(var1^) := TbtS32(var1^) * Ord(TbtChar(var2^));
                   {$IFNDEF PS_NOWIDESTRING}
                   btWideChar:
                     TbtS32(var1^) := TbtS32(var1^) * Ord(TbtWideChar(var2^));
@@ -8190,7 +8190,7 @@ begin
                   btCurrency:
                     TbtCurrency(var1^) := TbtCurrency(var1^) * TbtCurrency(var2^);
                   btVariant:
-                    TbtCurrency(var1^) := TbtCurrency(var1^) *  Variant(var2^);
+                    TbtCurrency(var1^) := TbtCurrency(var1^) * Variant(var2^);
                   else
                     raise Exception.Create(RPS_TypeMismatch);
                 end;
@@ -8383,7 +8383,7 @@ begin
                     TbtU32(var1^) := TbtU32(var1^) div TbtS64(var2^);
                   {$ENDIF}
                   btChar:
-                    TbtU32(var1^) := TbtU32(var1^) div  Ord(TbtChar(var2^));
+                    TbtU32(var1^) := TbtU32(var1^) div Ord(TbtChar(var2^));
                   {$IFNDEF PS_NOWIDESTRING}
                   btWideChar:
                     TbtU32(var1^) := TbtU32(var1^) div Ord(TbtWideChar(var2^));
@@ -8421,7 +8421,7 @@ begin
                     TbtS32(var1^) := TbtS32(var1^) div TbtS64(var2^);
                   {$ENDIF}
                   btChar:
-                    TbtS32(var1^) := TbtS32(var1^) div  Ord(TbtChar(var2^));
+                    TbtS32(var1^) := TbtS32(var1^) div Ord(TbtChar(var2^));
                   {$IFNDEF PS_NOWIDESTRING}
                   btWideChar:
                     TbtS32(var1^) := TbtS32(var1^) div Ord(TbtWideChar(var2^));
@@ -8471,7 +8471,7 @@ begin
                   btCurrency:
                     TbtSingle(var1^) := TbtSingle(var1^) / TbtCurrency(var2^);
                   btVariant:
-                    TbtSingle(var1^) := TbtSingle(var1^) /  Variant(var2^);
+                    TbtSingle(var1^) := TbtSingle(var1^) / Variant(var2^);
                   else
                     raise Exception.Create(RPS_TypeMismatch);
                 end;
@@ -8511,7 +8511,7 @@ begin
                   btCurrency:
                     TbtCurrency(var1^) := TbtCurrency(var1^) / TbtCurrency(var2^);
                   btVariant:
-                    TbtCurrency(var1^) := TbtCurrency(var1^) /  Variant(var2^);
+                    TbtCurrency(var1^) := TbtCurrency(var1^) / Variant(var2^);
                   else
                     raise Exception.Create(RPS_TypeMismatch);
                 end;
@@ -8551,7 +8551,7 @@ begin
                   btCurrency:
                     TbtDouble(var1^) := TbtDouble(var1^) / TbtCurrency(var2^);
                   btVariant:
-                    TbtDouble(var1^) := TbtDouble(var1^) /  Variant(var2^);
+                    TbtDouble(var1^) := TbtDouble(var1^) / Variant(var2^);
                   else
                     raise Exception.Create(RPS_TypeMismatch);
                 end;
@@ -8591,7 +8591,7 @@ begin
                   btCurrency:
                     TbtExtended(var1^) := TbtExtended(var1^) / TbtCurrency(var2^);
                   btVariant:
-                    TbtExtended(var1^) := TbtExtended(var1^) /  Variant(var2^);
+                    TbtExtended(var1^) := TbtExtended(var1^) / Variant(var2^);
                   else
                     raise Exception.Create(RPS_TypeMismatch);
                 end;
@@ -8660,7 +8660,7 @@ begin
                     TbtU32(var1^) := TbtU32(var1^) mod TbtS64(var2^);
                   {$ENDIF}
                   btChar:
-                    TbtU32(var1^) := TbtU32(var1^) mod  Ord(TbtChar(var2^));
+                    TbtU32(var1^) := TbtU32(var1^) mod Ord(TbtChar(var2^));
                   {$IFNDEF PS_NOWIDESTRING}
                   btWideChar:
                     TbtU32(var1^) := TbtU32(var1^) mod Ord(TbtWideChar(var2^));
@@ -8698,7 +8698,7 @@ begin
                     TbtS32(var1^) := TbtS32(var1^) mod TbtS64(var2^);
                   {$ENDIF}
                   btChar:
-                    TbtS32(var1^) := TbtS32(var1^) mod  Ord(TbtChar(var2^));
+                    TbtS32(var1^) := TbtS32(var1^) mod Ord(TbtChar(var2^));
                   {$IFNDEF PS_NOWIDESTRING}
                   btWideChar:
                     TbtS32(var1^) := TbtS32(var1^) mod Ord(TbtWideChar(var2^));
@@ -12964,7 +12964,7 @@ begin
         {$ENDIF}
       end;
     end;
-    datap := Pointer(IPointer(datap)+ (2 * SizeOf(Pointer) + SizeOf(LongBool)));
+    datap := Pointer(IPointer(datap) + (2 * SizeOf(Pointer) + SizeOf(LongBool)));
     p := PAnsiChar(p) + Result^.ElementSize;
   end;
 end;
@@ -13099,7 +13099,7 @@ begin
           {$ENDIF}
           {$ENDIF}
       end;
-      datap := Pointer(IPointer(datap)+ (2 * SizeOf(Pointer) + SizeOf(LongBool)));
+      datap := Pointer(IPointer(datap) + (2 * SizeOf(Pointer) + SizeOf(LongBool)));
       p := Pointer(IPointer(p) + Cardinal(v^.ElementSize));
     end;
     FreeMem(v.Data, v.ElementSize * v.ItemCount);
@@ -13255,7 +13255,7 @@ end;
 procedure CheckPackagePtr(var P: PByteArr);
 begin
   {$IFDEF Win32}
-  if (word((@p[0])^) = $25FF) and (word((@p[6])^)=$C08B)then
+  if (word((@p[0])^) = $25FF) and (word((@p[6])^) = $C08B) then
   begin
     p := PPointer((@p[2])^)^;
   end;
@@ -13376,7 +13376,7 @@ begin
     Result.Dta := @PPSVariantData(avar).Data;
     if Result.aType.BaseType = btPointer then
     begin
-      Result.aType := Pointer(Pointer(IPointer(Result.dta)+ PointerSize)^);
+      Result.aType := Pointer(Pointer(IPointer(Result.dta) + PointerSize)^);
       Result.Dta := Pointer(Result.dta^);
     end;
   end;
@@ -13530,7 +13530,7 @@ begin
     n := Stack[Stack.Count - 1]
   else
     n := Stack[Stack.Count - 2];
-  if (n = nil) or (n^.FType.BaseType <> btClass)or (PPSVariantClass(n).Data = nil) then
+  if (n = nil) or (n^.FType.BaseType <> btClass) or (PPSVariantClass(n).Data = nil) then
   begin
     Caller.CMD_Err(erNullPointerException);
     Result := False;
@@ -14044,7 +14044,7 @@ begin
         Exit;
       end;
       n := NewTPSVariantIFC(Stack[Stack.Count - 2], False);
-      if (PPropInfo(p.Ext1)^.PropType^.Kind = tkMethod) and ((n.aType.BaseType = btU32) or (n.aType.BaseType = btProcPtr))then
+      if (PPropInfo(p.Ext1)^.PropType^.Kind = tkMethod) and ((n.aType.BaseType = btU32) or (n.aType.BaseType = btProcPtr)) then
       begin
         SetMethodProp(TObject(FSelf), PPropInfo(p.Ext1), MkMethod(Caller, TbtU32(n.dta^)));
       end
@@ -14108,7 +14108,7 @@ begin
     else
     begin
       n := NewTPSVariantIFC(Stack[Stack.Count - 2], False);
-      if (n.dta = nil) or (n.aType.BaseType <> btClass)then
+      if (n.dta = nil) or (n.aType.BaseType <> btClass) then
       begin
         Result := False;
         Caller.CMD_Err(erNullPointerException);
@@ -14456,14 +14456,14 @@ begin
     end; *)
 
     //if (n.aType.BaseType = btProcPtr) and (Cardinal(n.dta^) = 0) then
-    //  data := TMethod(Pointer(IPointer(n.dta^)+4)^)
+    //  data := TMethod(Pointer(IPointer(n.dta^) + 4)^)
     //else
     //  data := MkMethod(Caller, Cardinal(n.dta^));
 
     Params := TPSList.Create;
     Params.Add(@n);
 
- //   for i := Stack.Count - 2 downto Longint(Stack.Count) - paramcnt -1 do
+ //   for i := Stack.Count - 2 downto Longint(Stack.Count) - paramcnt - 1 do
  //   begin
 //      Params.Add(NewPPSVariantIFC(Stack[I], False));
 //    end;
@@ -15043,8 +15043,7 @@ end;
 // TPSRuntimeClass.RegisterConstructor
 //
 //==============================================================================
-procedure TPSRuntimeClass.RegisterConstructor(ProcPtr: Pointer;
-  const Name: TbtString);
+procedure TPSRuntimeClass.RegisterConstructor(ProcPtr: Pointer; const Name: TbtString);
 var
   P: PClassItem;
 begin
@@ -15661,7 +15660,7 @@ begin
         {$IFNDEF PS_NOINT64}
         if res^.FType.BaseType <> btS64 then
         {$ENDIF}
-          //CopyArrayContents(Pointer(Longint(Stack)-PointerSize2), @PPSVariantData(res)^.Data, 1, Res^.FType);
+          //CopyArrayContents(Pointer(Longint(Stack) - PointerSize2), @PPSVariantData(res)^.Data, 1, Res^.FType);
           CopyArrayContents(Pointer(Longint(Stack) - Longint(PointerSize2)), @PPSVariantData(res)^.Data, 1, Res^.FType);
       end;
     end;
@@ -16780,7 +16779,7 @@ begin
           {$ELSE}
             PVariant
           {$ENDIF}
-           (DispParam.rgvarg[i].pvarVal)^ := Par[High(Par)-i];
+           (DispParam.rgvarg[i].pvarVal)^ := Par[High(Par) - i];
           *)
           Move(Par[High(Par) - i],Pointer(DispParam.rgvarg[i].pvarVal)^,
            SizeOf({$IFDEF DELPHI4UP}OleVariant{$ELSE}Variant{$ENDIF}));
